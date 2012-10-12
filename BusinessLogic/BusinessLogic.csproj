@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B6848312-F867-4434-8880-F58BDCDC51A3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BusinessLogic</RootNamespace>
+    <AssemblyName>BusinessLogic</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DataAnnotationsExtensions">
+      <HintPath>..\packages\DataAnnotationsExtensions.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DataAnnotationsExtensions.ClientValidation">
+      <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="DevOne.Security.Cryptography.BCrypt">
+      <HintPath>..\packages\BCrypt.1.0.0.0\lib\DevOne.Security.Cryptography.BCrypt.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.2.0.0\lib\NETFramework40\WebActivator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
+    <Compile Include="AssetService.cs" />
+    <Compile Include="ChildService.cs" />
+    <Compile Include="ChildSupportService.cs" />
+    <Compile Include="CommunicationService.cs" />
+    <Compile Include="Contracts\BusinessServicesException.cs" />
+    <Compile Include="Contracts\IAssetService.cs" />
+    <Compile Include="Contracts\IChildService.cs" />
+    <Compile Include="Contracts\IChildSupportService.cs" />
+    <Compile Include="Contracts\ICommunicationService.cs" />
+    <Compile Include="Contracts\ICountyService.cs" />
+    <Compile Include="Contracts\ICourtService.cs" />
+    <Compile Include="Contracts\IDebtService.cs" />
+    <Compile Include="Contracts\IDecisionsService.cs" />
+    <Compile Include="Contracts\IExtraDecisionsService.cs" />
+    <Compile Include="Contracts\IExtraHolidayService.cs" />
+    <Compile Include="Contracts\IFormService.cs" />
+    <Compile Include="Contracts\IHealthService.cs" />
+    <Compile Include="Contracts\IHolidayService.cs" />
+    <Compile Include="Contracts\IHouseService.cs" />
+    <Compile Include="Contracts\IIncomeService.cs" />
+    <Compile Include="Contracts\IInformationService.cs" />
+    <Compile Include="Contracts\IMailService.cs" />
+    <Compile Include="Contracts\IOtherChildrenService.cs" />
+    <Compile Include="Contracts\IOtherChildService.cs" />
+    <Compile Include="Contracts\IParticipantService.cs" />
+    <Compile Include="Contracts\IPreexistingSupportChildService.cs" />
+    <Compile Include="Contracts\IPreexistingSupportService.cs" />
+    <Compile Include="Contracts\IPrivacyService.cs" />
+    <Compile Include="Contracts\IRealEstateService.cs" />
+    <Compile Include="Contracts\IResponsibilityService.cs" />
+    <Compile Include="Contracts\IScheduleService.cs" />
+    <Compile Include="Contracts\ISocialSecurityService.cs" />
+    <Compile Include="Contracts\ISpecialCircumstancesService.cs" />
+    <Compile Include="Contracts\ISpousalService.cs" />
+    <Compile Include="Contracts\ITaxService.cs" />
+    <Compile Include="Contracts\IUserService.cs" />
+    <Compile Include="Contracts\IVehicleService.cs" />
+    <Compile Include="CountyService.cs" />
+    <Compile Include="CourtService.cs" />
+    <Compile Include="DebtService.cs" />
+    <Compile Include="DecisionsService.cs" />
+    <Compile Include="ExtraDecisionsService.cs" />
+    <Compile Include="ExtraHolidayService.cs" />
+    <Compile Include="FormService.cs" />
+    <Compile Include="HealthService.cs" />
+    <Compile Include="Helpers\CommunicationHelper.cs" />
+    <Compile Include="Helpers\DecisionsHelper.cs" />
+    <Compile Include="Helpers\InformationHelper.cs" />
+    <Compile Include="Helpers\ParticipantHelper.cs" />
+    <Compile Include="Helpers\PrivacyHelper.cs" />
+    <Compile Include="Helpers\ResponsibilityHelper.cs" />
+    <Compile Include="HolidayService.cs" />
+    <Compile Include="HouseService.cs" />
+    <Compile Include="IncomeService.cs" />
+    <Compile Include="InformationService.cs" />
+    <Compile Include="MailService.cs" />
+    <Compile Include="Models\AccountUser.cs" />
+    <Compile Include="Models\AllDecisionsViewModel.cs" />
+    <Compile Include="Models\AllFinancialViewModel.cs" />
+    <Compile Include="Models\AllHolidaysViewModel.cs" />
+    <Compile Include="Models\AllPreexistingViewModel.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="OtherChildrenService.cs" />
+    <Compile Include="OtherChildService.cs" />
+    <Compile Include="ParticipantService.cs" />
+    <Compile Include="PreexistingSupportChildService.cs" />
+    <Compile Include="PreexistingSupportService.cs" />
+    <Compile Include="PrivacyService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RealEstateService.cs" />
+    <Compile Include="ResponsibilityService.cs" />
+    <Compile Include="ScheduleService.cs" />
+    <Compile Include="SocialSecurityService.cs" />
+    <Compile Include="SpecialCircumstancesService.cs" />
+    <Compile Include="SpousalService.cs" />
+    <Compile Include="TaxService.cs" />
+    <Compile Include="UserService.cs" />
+    <Compile Include="Validators\TextLineValidatorAttribute.cs" />
+    <Compile Include="VehicleService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Readme\Elmah.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataInterface\DataInterface.csproj">
+      <Project>{19EC6613-D8E9-4D8F-B423-E97DC11758E3}</Project>
+      <Name>DataInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataLayerContext\DataLayerContext.csproj">
+      <Project>{5D6578E5-9CD9-4AAC-B655-D61C22AEEB8F}</Project>
+      <Name>DataLayerContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{161FD438-470C-4ACA-BC77-3D8405A36D9C}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

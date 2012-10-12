@@ -1,0 +1,43 @@
+﻿@using Models.ViewModels
+@model DebtViewModel
+<div class="form-vertical wrapper hide" id="debtWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "debt" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Debt Information</h5>
+                    </div>
+                    <div class="widget-content">
+            <div class="control-group">
+                <label class="informative">
+                    How will marital debt be divided?</label>
+                <label class="radio">There is no jointly held marital debt to be considered as part of this case. Each party will keep all debt currently held in his or her name. @Html.RadioButtonFor(m => m.MaritalDebt, (int)YesNo.Yes)</label>
+                <label class="radio">Division of debt will be divided in the following manner: @Html.RadioButtonFor(m => m.MaritalDebt, (int)YesNo.No)</label>
+                @Html.ValidationMessageFor(m => m.MaritalDebt)
+            </div>
+            @if(Model.MaritalDebt.Equals((int)YesNo.Yes))
+            {
+            <div class="control-group debt-details">
+                @Html.TextAreaFor(m => m.DebtDivision, new { placeholder = "Details", @class="input-xxlarge" })
+                @Html.ValidationMessageFor(m => m.DebtDivision)
+            </div>
+                
+            }else
+            {
+            <div class="control-group debt-details hide  ">
+                @Html.TextAreaFor(m => m.DebtDivision, new { placeholder = "Details", @class="input-xxlarge" })
+                @Html.ValidationMessageFor(m => m.DebtDivision)
+            </div>
+                
+            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary domestic-part4 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary domestic-part4 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

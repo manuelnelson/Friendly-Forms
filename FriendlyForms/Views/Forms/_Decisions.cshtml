@@ -1,0 +1,146 @@
+﻿@using BusinessLogic.Models
+@using Models.ViewModels
+@model AllDecisionsViewModel
+<div class="form-vertical wrapper hide" id="decisionsWrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Decisions</h5>
+                        <div class="btn dropdown pull-right copy-button" id="copy-decisions"><a href="#" style="display:block;" data-target="#copy-decisions" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a title="all" data-id="0" href="#">All</a></li>
+                            </ul>
+                        </div>
+                </div>
+                <div class="widget-content">
+                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "decisions" }))
+                    {
+                        <h4 id="childName"></h4>
+                        <input type="hidden" id="childId" />
+                        <div class="control-group">
+                            <label class="informative">
+                                Educational Decisions</label>
+                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.Education)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">
+                                Non-Emergency Healthcare</label>
+                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.HealthCare)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">
+                                Religious Upbringing</label>
+                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.Religion)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">
+                                Extracurricular Activities</label>
+                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.ExtraCurricular)
+                        </div>
+                    }
+                    @if (Model.ExtraDecisionsViewModel.ExtraDecisions != null && Model.ExtraDecisionsViewModel.ExtraDecisions.Any())
+                    {
+
+                        foreach (var decision in Model.ExtraDecisionsViewModel.ExtraDecisions)
+                        {
+                            var name = "ExtraDecisions" + decision.Id;
+                        <div class="control-group extra-decision-item">
+                            <label class="informative" id="extra-decision-description">
+                                @decision.Description</label>
+
+                            @if (decision.DecisionMaker.Equals(1))
+                            {                            
+                                <label class="radio inline">
+                                    Father
+                                <input checked="checked" class="inline extra-decision-maker" data-val="true" data-val-number="The field must be a number." name="@name" data-val-required="The field is required."  type="radio" value="1"></label>                
+                            }
+                            else
+                            {
+                                <label class="radio inline">
+                                    Father
+                                <input class="inline extra-decision-maker" data-val="true" data-val-number="The field must be a number." name="@name" data-val-required="The field is required."  type="radio" value="1"></label>
+                            }
+                            @if (decision.DecisionMaker.Equals(2))
+                            {
+                                <label class="radio inline">
+                                    Mother 
+                                <input checked="checked" class="inline extra-decision-maker" name="@name" type="radio" value="2"></label>
+                            }
+                            else
+                            {
+                                <label class="radio inline">
+                                    Mother 
+                                <input class="inline extra-decision-maker" name="@name" type="radio" value="2"></label>
+                            }
+                            @if (decision.DecisionMaker.Equals(3))
+                            {
+                                <label class="radio inline">
+                                    Both   
+                                <input checked="checked" class="inline extra-decision-maker" name="@name"  type="radio" value="3"></label>
+                            }
+                            else
+                            {
+                                <label class="radio inline">
+                                    Both   
+                                <input class="inline extra-decision-maker"  name="@name" type="radio" value="3"></label>
+                            }
+                            <span class="field-validation-valid" data-valmsg-for="@name" data-valmsg-replace="true"></span>
+                            <input type="hidden" id="extra-decision-childId" value="@decision.ChildId" />
+                            <input type="hidden" id="extra-decision-Id" value="@decision.Id" />
+                        </div>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary child-part6 previous" value="Continue"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part6 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <br />
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Add additional decisions (Optional)</h5>
+                </div>
+                <div class="widget-content">
+                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "extraDecisions" }))
+                    {
+
+                        <div class="control-group">
+                            <label class="informative">
+                                Other Decisions</label>
+                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.ExtraDecisionsViewModel.DecisionMaker, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.ExtraDecisionsViewModel.DecisionMaker, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.ExtraDecisionsViewModel.DecisionMaker, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.ExtraDecisionsViewModel.DecisionMaker)
+                        </div>
+                        <div class="control-group">
+                            @Html.TextBoxFor(m => m.ExtraDecisionsViewModel.Description, new { placeholder = "Description" })
+                            @Html.ValidationMessageFor(m => m.ExtraDecisionsViewModel.Description)
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" id="addDecisions" value="Add">Add </button>
+    @Html.Partial("_templateExtraDecisions")
+</div>

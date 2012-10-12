@@ -1,0 +1,30 @@
+﻿@using Models.ViewModels
+@model InformationViewModel
+<div class="form-vertical wrapper hide" id="informationWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "information" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Information</h5>
+                    </div>
+                    <div class="widget-content">
+
+                        <div class="control-group">
+                            <label>
+                                Who will be able to get information about the children, like doctor's records and school reports, directly from the doctor's office or school?</label>
+                            <label class="radio">Mother @Html.RadioButtonFor(m => m.InformationAccess, (int)DecisionMaker.Mother)</label>
+                            <label class="radio">Father @Html.RadioButtonFor(m => m.InformationAccess, (int)DecisionMaker.Father)</label>
+                            <label class="radio">Both @Html.RadioButtonFor(m => m.InformationAccess, (int)DecisionMaker.Both)</label>
+                            @Html.ValidationMessageFor(m => m.InformationAccess)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary child-part5 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part5 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

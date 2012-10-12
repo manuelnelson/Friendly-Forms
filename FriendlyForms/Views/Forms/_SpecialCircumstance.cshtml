@@ -1,0 +1,124 @@
+﻿@using Models.ViewModels
+@model Models.ViewModels.SpecialCircumstancesViewModel
+<div class="form-vertical wrapper hide" id="circumstanceWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "circumstance" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Special Circumstances</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="control-group row-fluid">
+                            <label class="span4">
+                                Should your Child Support amount be adjusted due to any special circumstances?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Circumstances, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.Circumstances, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.Circumstances)
+                        </div>
+                        @if (Model.Circumstances.Equals((int)YesNo.Yes))
+                        {
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Deviation Based on High Income</label>
+                                @Html.TextBoxFor(m => m.Deviation, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Deviation)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Other Health Related Insurance</label>
+                                @Html.TextBoxFor(m => m.Health, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Health)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Life Insurance</label>
+                                @Html.TextBoxFor(m => m.Insurance, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Insurance)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Child and Dependent Care Tax Credit</label>
+                                @Html.TextBoxFor(m => m.TaxCredit, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.TaxCredit)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Visitation Related Travel Expenses</label>
+                                @Html.TextBoxFor(m => m.Visitation, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Visitation)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Alimony PAID</label>
+                                @Html.TextBoxFor(m => m.Alimony, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Alimony)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
+                                @Html.TextBoxFor(m => m.Mortgage, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Mortgage)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Permanency Plan or Foster Care Plan</label>
+                                @Html.TextBoxFor(m => m.Permanency, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Permanency)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other">
+                                <label class="span4">Other - Non-specific Deviations</label>
+                                @Html.TextBoxFor(m => m.NonSpecific, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                            </div>                                                      
+                        }
+                        else
+                        {
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Deviation Based on High Income</label>
+                                @Html.TextBoxFor(m => m.Deviation, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Deviation)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Other Health Related Insurance</label>
+                                @Html.TextBoxFor(m => m.Health, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Health)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Life Insurance</label>
+                                @Html.TextBoxFor(m => m.Insurance, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Insurance)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Child and Dependent Care Tax Credit</label>
+                                @Html.TextBoxFor(m => m.TaxCredit, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.TaxCredit)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Visitation Related Travel Expenses</label>
+                                @Html.TextBoxFor(m => m.Visitation, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Visitation)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Alimony PAID</label>
+                                @Html.TextBoxFor(m => m.Alimony, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Alimony)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
+                                @Html.TextBoxFor(m => m.Mortgage, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Mortgage)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Permanency Plan or Foster Care Plan</label>
+                                @Html.TextBoxFor(m => m.Permanency, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.Permanency)
+                            </div>                            
+                            <div class="control-group row-fluid circumstance-other hide">
+                                <label class="span4">Other - Non-specific Deviations</label>
+                                @Html.TextBoxFor(m => m.NonSpecific, new { placeholder = "Per Month" })
+                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                            </div>                                                                                  
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary financial-part5 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary financial-part5 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

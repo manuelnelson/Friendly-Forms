@@ -1,0 +1,87 @@
+﻿@using Models.ViewModels
+@model HouseViewModel
+<div class="form-vertical wrapper" id="maritalHouseWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "maritalHouse" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Marital House</h5>
+                    </div>
+                    <div class="widget-content">
+            <div class="control-group">
+                <label class="informative">
+                    Is there a marital house at issue in this case?</label>
+                <label class="radio inline">Yes @Html.RadioButtonFor(m => m.MaritalHouse, (int)YesNo.Yes, new { @class = "inline" })</label>
+                <label class="radio inline">No @Html.RadioButtonFor(m => m.MaritalHouse, (int)YesNo.No, new { @class = "inline" })</label>
+                @Html.ValidationMessageFor(m => m.MaritalHouse)
+            </div>
+            @if (Model.MaritalHouse.Equals((int)YesNo.Yes))
+            {
+                <div class="marital-house">
+                    <div class="control-group">
+                        <label class="informative">House address</label>
+                        @Html.TextBoxFor(m => m.Address, new { placeholder = "Address", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.Address)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">Retail value of the house</label>
+                        @Html.TextBoxFor(m => m.RetailValue, new { placeholder = "Value in Dollars", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.RetailValue)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">Amount of money still owed on the house</label>
+                        @Html.TextBoxFor(m => m.MoneyOwed, new { placeholder = "Dollars owed", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.MoneyOwed)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
+                        @Html.TextBoxFor(m => m.Equity, new { placeholder = "Equity in Dollars", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.Equity)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">The mortgage holder on the house</label>
+                        @Html.TextBoxFor(m => m.MortgageOwner, new { placeholder = "Mortgage holder", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.MortgageOwner)
+                    </div>
+                </div>                
+            }
+            else
+            {
+                <div class="hide marital-house">
+                    <div class="control-group">
+                        <label class="informative">House address</label>
+                        @Html.TextBoxFor(m => m.Address, new { placeholder = "Address", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.Address)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">Retail value of the house</label>
+                        @Html.TextBoxFor(m => m.RetailValue, new { placeholder = "Value in Dollars", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.RetailValue)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">Amount of money still owed on the house</label>
+                        @Html.TextBoxFor(m => m.MoneyOwed, new { placeholder = "Dollars owed", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.MoneyOwed)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
+                        @Html.TextBoxFor(m => m.Equity, new { placeholder = "Equity in Dollars", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.Equity)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">The mortgage holder on the house</label>
+                        @Html.TextBoxFor(m => m.MortgageOwner, new { placeholder = "Mortgage holder", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.MortgageOwner)
+                    </div>
+                </div>
+            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary domestic-part1 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

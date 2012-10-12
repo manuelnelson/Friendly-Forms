@@ -1,0 +1,32 @@
+﻿@using Models.ViewModels
+@model FriendlyForms.Models.DomesticMediationViewModel
+@{
+    ViewBag.Title = "Domestic Mediation";
+}
+@section Sidebar{
+    <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <ul>
+        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Child Support</a></li>
+        <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="icon-check"></i>Participants</a></li>
+    </ul>
+}
+<h4>COUNTY SUPERIOR COURT</h4>
+<h4>STATE OF GEORGIA</h4>
+<hr />
+<div class="row-fluid">
+    <div class="span6" style="border-right: solid black 2px">
+        <h5>@Model.ParticipantViewModel.PlaintiffsName</h5>
+        <span>Plaintiff</span><br />
+        <br />
+        <span>vs.</span><br />
+        <br />
+        <h5>@Model.ParticipantViewModel.DefendantsName</h5>
+        <span>Defendant</span><br />
+    </div>
+    <div class="span6">
+        <span>@Model.CourtViewModel.CaseNumber</span><br />
+        <br />
+        Civil Action Case Number
+    </div>
+</div>
+<hr />

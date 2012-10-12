@@ -1,0 +1,400 @@
+﻿@using Models.ViewModels
+@model FriendlyForms.Models.ChildSupportAllViewModel
+@{
+    ViewBag.Title = "ChildSupport";
+}
+@section Sidebar{
+    <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <ul>
+        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Child Support</a></li>
+        <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="icon-check"></i>Participants</a></li>
+    </ul>
+}
+<h4>COUNTY SUPERIOR COURT</h4>
+<h4>STATE OF GEORGIA</h4>
+<hr />
+<div class="row-fluid">
+    <div class="span6" style="border-right: solid black 2px">
+        <h5>@Model.ParticipantViewModel.PlaintiffsName</h5>
+        <span>Plaintiff</span><br />
+        <br />
+        <span>vs.</span><br />
+        <br />
+        <h5>@Model.ParticipantViewModel.DefendantsName</h5>
+        <span>Defendant</span><br />
+    </div>
+    <div class="span6">
+        <span>@Model.CourtViewModel.CaseNumber</span><br />
+        <br />
+        Civil Action Case Number
+    </div>
+</div>
+<hr />
+<div class="row-fluid">
+    <h4>Parenting Plan</h4>
+    @if (Model.CourtViewModel.AuthorOfPlan.Equals((int)AuthorOfPlan.Judge))
+    {
+        <p>
+            The parties have agreed to the terms of this plan and this information has been furnished by both 
+            parties to meet the requirements of OCGA Section 19-9-1. The parties agree on the terms of the plan and 
+            afﬁ rm the accuracy of the information provided, as shown by their signatures at the end of this order.
+        </p>        
+    }
+    else
+    {
+        <p>This plan has been prepared by the judge.</p>
+    }
+    @if (Model.CourtViewModel.PlanType.Equals((int)PlanType.NewPlan))
+    {
+        <p>This plan is a new plan</p>
+    }
+    else if (Model.CourtViewModel.PlanType.Equals((int)PlanType.ExistingPlan))
+    {
+        <p>This plan modiﬁes an existing Parenting Plan dated @Model.CourtViewModel.PlanDate</p>
+    }
+    else
+    {
+        <p>This plan modiﬁes an existing Order dated @Model.CourtViewModel.PlanDate</p>
+    }
+</div>
+<h4>Children</h4>
+@if (Model.ChildrenViewModel.Children.Any())
+{
+    foreach (var child in Model.ChildrenViewModel.Children)
+    {
+    <div class="row-fluid">
+        <div class="span4">@child.Name</div>
+        <div class="span4">
+            @if (child.DateOfBirth.HasValue)
+            {
+                <span>@child.DateOfBirth.Value.ToString("MM/dd/yyyy")</span>;
+            }
+            else
+            {
+                @:Not Provided
+                               }
+        </div>
+        <div class="span4">@Enum.GetName(typeof(Gender), child.Gender)</div>
+    </div>
+    }
+}
+else
+{
+    <p>There are no children involved.</p>
+}
+<div class="row-fluid">
+    <h4>Custody and Decision Making</h4>
+    Legal custody will shall be with 
+    @{
+        var parent = "both parents";
+        if (Model.ParticipantViewModel.PlaintiffCustodialParent.Equals((int)CustodialParent.Primary))
+        {
+            parent = "the " + @Enum.GetName(typeof(ParentRelationship), Model.ParticipantViewModel.PlaintiffRelationship);
+        }
+        else if (Model.ParticipantViewModel.DefendantCustodialParent.Equals((int)CustodialParent.Primary))
+        {
+            parent = "the " + @Enum.GetName(typeof(ParentRelationship), Model.ParticipantViewModel.DefendantRelationship);
+        }            
+    }
+    @parent
+</div>
+<h4>Primary Physical Custody</h4>
+<p>For each of the children named below, the primary physical custodian shall be:</p>
+@if (Model.ChildrenViewModel.Children.Any())
+{
+    foreach (var child in Model.ChildrenViewModel.Children)
+    {
+    <div class="row-fluid">
+        <div class="span4">@child.Name</div>
+        <div class="span4">@parent</div>
+    </div>
+    }
+}
+else
+{
+    <p>There are no children involved.</p>
+}
+<p>
+    WHERE JOINT PHYSICAL CUSTODY IS CHOSEN BY THE PARENTS OR ORDERED
+BY THE COURT, A DETAILED PLAN OF THE LIVING ARRANGEMENTS OF THE
+CHILD(REN) SHALL BE ATTACHED AND MADE A PART OF THIS PARENTING PLAN.
+</p>
+<div class="row-fluid">
+    <h4>Day-To-Day Decisions</h4>
+    <p>
+        Each parent shall make decisions regarding the day-to-day care of a child while the child is residing with that 
+        parent, including any emergency decisions affecting the health or safety of a child.
+    </p>
+</div>
+<div class="row-fluid">
+    <h4>Major Decisions</h4>
+    Major decisions regarding each child shall be made as follows:
+    @foreach (var child in Model.ChildrenViewModel.Children)
+    {
+        <h5>@child.Name</h5>
+        <p>
+            Educational Decisions: 
+            @{
+        var childDecision = Model.AllDecisionsViewModel.ChildDecisions.First(c => c.ChildId.Equals(child.Id));
+        var extraChildDecisions = Model.AllDecisionsViewModel.ChildExtraDecisions.Where(c => c.ChildId.Equals(child.Id));
+            }
+            @Enum.GetName(typeof(DecisionMaker), childDecision.Education)
+        </p>
+        <p>
+            Non-emergency health care:
+            @Enum.GetName(typeof(DecisionMaker), childDecision.HealthCare)
+        </p>
+        <p>
+            Religious upbringing:
+            @Enum.GetName(typeof(DecisionMaker), childDecision.Religion)
+        </p>
+        <p>
+            Extracurricular Activities:
+            @Enum.GetName(typeof(DecisionMaker), childDecision.ExtraCurricular)
+        </p>
+        foreach (var extra in extraChildDecisions)
+        {
+        <p>@extra.Description: @Enum.GetName(typeof(DecisionMaker), extra.DecisionMaker)</p>
+        }
+    }
+</div>
+<h4>Disagreements</h4>
+<div class="row-fluid">
+    <p>
+        Where parents have elected joint decision making in the Major Decisions Section above, please explain how any disagreements in decision-making will be resolved.
+    </p>
+</div>
+<h4>Parenting Time/Visitation Schedules</h4>
+<p>
+    The parenting schedule will begin
+    @if (Model.ScheduleViewModel.DetermineBeginDate.Equals((int)DateDetermination.Judge))
+    {
+        @: the date of the Court's Order
+    }
+    else
+    {
+        @: on @Model.ScheduleViewModel.BeginDate
+    }
+</p>
+<div class="row-fluid">
+    <p>
+        During the term of this parenting plan the mother shall have at a minimum the
+        following rights of parenting time / visitation 
+        @if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.FirstThird))
+        {
+            <span>The weekend of the first and third friday of each month</span>
+        }
+        @if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.FirstThirdFifth))
+        {
+            <span>The weekend of the first, third and fifth friday of each month</span>
+        }
+        @if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.SecondFourth))
+        {
+            <span>The weekend of the second and fourth friday of each month</span>
+        }
+        @if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.EveryOther))
+        {
+            <span>The weekend of the second and fourth friday of each month</span>
+        }
+    </p>
+    <p>
+        During the term of this parenting plan the father shall have at a minimum the
+        following rights of parenting time / visitation 
+        @if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.FirstThird))
+        {
+            <span>The weekend of the first and third friday of each month</span>
+        }
+        @if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.FirstThirdFifth))
+        {
+            <span>The weekend of the first, third and fifth friday of each month</span>
+        }
+        @if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.SecondFourth))
+        {
+            <span>The weekend of the second and fourth friday of each month</span>
+        }
+        @if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.EveryOther))
+        {
+            <span>The weekend of the second and fourth friday of each month</span>
+        }
+    </p>
+    <p>For purposes of this parenting plan, a weekend will start on Friday at @Model.ScheduleViewModel.PickedUp at @Model.ScheduleViewModel.PickupLocation and end on Sunday at @Model.ScheduleViewModel.DroppedOff at @Model.ScheduleViewModel.DropOffLocation</p>
+</div>
+<h4>Weekday Parenting</h4>
+<p>
+    During the term of this parenting plan the weekdays shall be divided as shown below:
+</p>
+<div class="row-fluid">
+    <span class="span3">Monday</span>
+    <span class="span3">@Enum.GetName(typeof(DecisionMaker), Model.ScheduleViewModel.MondayParent)</span>
+</div>
+<div class="row-fluid">
+    <span class="span3">Tuesday</span>
+    <span class="span3">@Enum.GetName(typeof(DecisionMaker), Model.ScheduleViewModel.TuesdayParent)</span>
+</div>
+<div class="row-fluid">
+    <span class="span3">Wednesday</span>
+    <span class="span3">@Enum.GetName(typeof(DecisionMaker), Model.ScheduleViewModel.WednesdayParent)</span>
+</div>
+<div class="row-fluid">
+    <span class="span3">Thursday</span>
+    <span class="span3">@Enum.GetName(typeof(DecisionMaker), Model.ScheduleViewModel.ThursdayParent)</span>
+</div>
+<div class="row-fluid">
+    <span class="span3">Friday</span>
+    <span class="span3">@Enum.GetName(typeof(DecisionMaker), Model.ScheduleViewModel.FridayParent)</span>
+</div>
+<p>For purposes of this parenting plan, a weekday will start at @Model.ScheduleViewModel.WeekdayPickup at @Model.ScheduleViewModel.WeekdayPickupLocation and end at @Model.ScheduleViewModel.WeekdayDropoff at @Model.ScheduleViewModel.WeekdayDropoffLocation</p>
+<h4>Major holidays and Vacation Periods</h4>
+@foreach (var child in Model.ChildrenViewModel.Children)
+{
+    <h4>@child.Name</h4>
+
+    <h5>Thanksgiving</h5>
+    <p>
+        Thanksgiving vacation begins from the time school is dismissed on the last day prior to the holiday until 
+    @{
+    var childHolidays = Model.HolidayViewModel.ChildHolidays.First(c => c.ChildId.Equals(child.Id));
+    var extraChildHolidays = Model.HolidayViewModel.ExtraChildHolidays.Where(c => c.ChildId.Equals(child.Id));
+    }
+        @if (childHolidays.Thanksgiving.Equals((int)Thanksgiving.Before))
+        {
+            <span>the day before returning to school.</span>
+        }
+        else if (childHolidays.Thanksgiving.Equals((int)Thanksgiving.After))
+        {
+            <span>the first day of school after the holiday.</span>
+        }
+        else
+        {
+            <span>@childHolidays.ThanksgivingOther</span>
+        }
+    </p>
+    <h5>Christmas</h5>
+    <p>
+        Christmas vacation begins from the time school is dismissed on the last day prior to the holiday until 
+    @if (childHolidays.Christmas.Equals((int)Christmas.AfterBreak))
+    {
+        <span>until returning to school after Christmas break</span>
+    }
+    else if (childHolidays.Christmas.Equals((int)Christmas.Eve))
+    {
+        <span>on Christmas Eve at @childHolidays.ChristmasTime</span>
+    }
+    else if (childHolidays.Christmas.Equals((int)Christmas.Day))
+    {
+        <span>on Christmas Day at @childHolidays.ChristmasTime</span>
+    }
+    else if (childHolidays.Christmas.Equals((int)Christmas.AfterDay))
+    {
+        <span>on the day after Christmas at @childHolidays.ChristmasTime</span>
+    }
+    else
+    {
+        <span>@childHolidays.ChristmasOther</span>
+    }
+    </p>
+    <h5>Spring Break</h5>
+    <p>
+        Spring break begins from the time school is dismissed on the last day prior to the break until 
+    @if (childHolidays.SpringBreak.Equals((int)YesNo.Yes))
+    {
+        <span>the conclusion of spring break</span>
+    }
+    else
+    {
+        <span>@childHolidays.SpringOther</span>
+    }
+    </p>
+    <h5>Summer Break</h5>
+    <p>Summber break begins @childHolidays.SummerBeginDays days after the last day of school at @childHolidays.SummerBeginTime</p>
+    <p>Summber break ends @childHolidays.SummerEndDays days after the last day of school at @childHolidays.SummerEndTime</p>
+    <p>The time spent with the children by each parent is as follows: @childHolidays.SummerDetails</p>
+    <h5>Fall Break</h5>
+    <p>
+        Fall break begins from the time school is dismissed on the last day prior to the break until 
+    @if (childHolidays.FallBreak.Equals((int)YesNo.Yes))
+    {
+        <span>the conclusion of fall break</span>
+    }
+    else
+    {
+        <span>@childHolidays.FallOther</span>
+    }
+    </p>
+    <h5>Other Holidays</h5>
+    <p>The following chart indicates the years (odd, even, or every) the children will spend with the respective parent for each holiday.</p>
+    <div class="row-fluid">
+        <div class="span4">Holiday</div>
+        <div class="span4">Mother</div>
+        <div class="span4">Father</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">MLK Day</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MlkMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MlkFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">President's Day</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.PresidentsMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.PresidentsFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Mother's Day</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MothersMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MothersFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Memorial Day</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MemorialMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MemorialFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Father's Day</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.FathersMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.FathersFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Independance Day</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.IndependenceMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.IndependenceFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Labor Day</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.LaborMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.LaborFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Halloween</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.HalloweenMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.HalloweenFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Child(ren)'s Birthdays</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.ChildrensMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.ChildrensFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Father's Birthdays</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.FathersBdayMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.FathersBdayFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Mother's Birthdays</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MothersBdayMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.MothersBdayFather)</div>
+    </div>
+    <div class="row-fluid">
+        <div class="span4">Religious Holidays</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.ReligiousMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), childHolidays.ReligiousFather)</div>
+    </div>
+    foreach (var extra in extraChildHolidays)
+    {
+    <div class="row-fluid">
+        <div class="span4">@extra.HolidayName</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), extra.HolidayMother)</div>
+        <div class="span4">@Enum.GetName(typeof(HolidayYear), extra.HolidayFather)</div>
+    </div>           
+    }
+}
+<input type="submit" id="printForm" class="btn-primary" />

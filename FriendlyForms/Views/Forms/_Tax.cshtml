@@ -1,0 +1,46 @@
+﻿@using Models.ViewModels
+@model TaxViewModel
+<div class="form-vertical wrapper hide" id="taxesWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "taxes" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Taxes</h5>
+                    </div>
+                    <div class="widget-content">
+            <div class="control-group">
+                <label class="informative">
+                    Will each party be entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final?</label>
+                <label class="radio">Yes @Html.RadioButtonFor(m => m.Taxes, (int)YesNo.Yes)</label>
+                <label class="radio">No @Html.RadioButtonFor(m => m.Taxes, (int)YesNo.No)</label>
+                @Html.ValidationMessageFor(m => m.Taxes)
+            </div>
+            @if (Model.Taxes.Equals((int)YesNo.No))
+            {
+                <div class="control-group taxes-detail">
+                <label class="informative">
+                    Describe the circumstances under which either party will be entitled to any tax deduction, allowance, credit or refund to which he or she would otherwise not be entitled, based on that individual’s circumstances at the time of filing:</label>
+                    @Html.TextAreaFor(m => m.TaxDescription, new { placeholder = "Details", @class="input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.TaxDescription)
+                </div>                          
+            }
+            else
+            {
+                <div class="control-group taxes-detail hide">
+                <label>
+                    Describe the circumstances under which either party will be entitled to any tax deduction, allowance, credit or refund to which he or she would otherwise not be entitled, based on that individual’s circumstances at the time of filing:</label>
+                    @Html.TextAreaFor(m => m.TaxDescription, new { placeholder = "Details", @class="input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.TaxDescription)
+                </div>                          
+            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary domestic-part8 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary domestic-part8 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

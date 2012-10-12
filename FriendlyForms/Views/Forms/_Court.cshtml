@@ -1,0 +1,65 @@
+﻿@using Models.ViewModels
+@model CourtViewModel
+<div class="form-vertical wrapper" id="courtWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "court" }))
+    {
+@*@Html.ValidationSummary()          *@
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Court Information</h5>                        
+                    </div>
+                    <div class="widget-content">
+                        <label class="informative">Fill in the information regarding your circumstances below.</label>
+                        <div class="control-group">
+                            <label class="informative">County</label>
+                            @Html.DropDownListFor(m => m.CountyId, new SelectList(Model.Counties, "Id", "CountyName"), "-- Select County --")
+                            @Html.ValidationMessageFor(m => m.CountyId)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">Case Number</label>
+                            @Html.TextBoxFor(m => m.CaseNumber, new { placeholder = "Case Number", @class = "hoverHelp", data_content = "Your case number can be found XXXX." })
+                            @Html.ValidationMessageFor(m => m.CaseNumber)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative hoverHelp" data-content="Was this plan prepared by a judge, or by the parties involved?">
+                                Who is the author of this plan?
+                            </label>
+                            <label class="radio">Parties agree to this plan @Html.RadioButtonFor(m => m.AuthorOfPlan, (int)AuthorOfPlan.Parties)</label>
+                            <label class="radio">Plan Prepared by a judge @Html.RadioButtonFor(m => m.AuthorOfPlan, (int)AuthorOfPlan.Judge)</label>
+                            @Html.ValidationMessageFor(m => m.AuthorOfPlan)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative hoverHelp" data-content="This plan has either been in force prior to this action or it is a new plan being enforced for the first time.">
+                                Is this a new plan or an existing plan?
+                            </label>
+                            <label class="radio">A new plan @Html.RadioButtonFor(m => m.PlanType, (int)PlanType.NewPlan, false)</label>
+                            <label class="radio">A modification of an existing plan @Html.RadioButtonFor(m => m.PlanType, (int)PlanType.ExistingPlan, false)</label>
+                            <label class="radio">A modification of an existing order @Html.RadioButtonFor(m => m.PlanType, (int)PlanType.ExistingOrder, false)</label>
+                            @Html.ValidationMessageFor(m => m.PlanType)
+                        </div>
+                        @if (Model.PlanType.Equals((int)PlanType.ExistingOrder) || Model.PlanType.Equals((int)PlanType.ExistingPlan))
+                        {
+                            <div class="control-group court-date">
+                                <label class="informative">Date of Plan</label>
+                                @Html.TextBoxFor(m => m.PlanDate, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
+                                @Html.ValidationMessageFor(m => m.PlanDate)
+                            </div>                
+                        }
+                        else
+                        {
+                            <div class="control-group court-date hide">
+                                <label class="informative">Date of plan</label>
+                                @Html.TextBoxFor(m => m.PlanDate, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
+                                @Html.ValidationMessageFor(m => m.PlanDate)
+                            </div>                
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary" id="child-part1" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>
+

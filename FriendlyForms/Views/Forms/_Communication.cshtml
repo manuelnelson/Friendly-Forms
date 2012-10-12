@@ -1,0 +1,93 @@
+﻿@using Models.ViewModels
+@model Models.ViewModels.CommunicationViewModel
+<div class="form-vertical wrapper hide" id="communicationWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "communication" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Communication</h5>
+                    </div>
+                    <div class="widget-content">
+                        <label class="informative">
+                            Define how you will communicate with your child(ren) when they are with the other parent.</label>
+                        <div class="control-group">
+                            <label>
+                                When the child(ren) is/are with the other parent, will each of you want to be able to communicate with them while they are with the other parent?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.AllowCommunication, (int)YesNo.Yes, new { @class = "inline" })</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.AllowCommunication, (int)YesNo.No, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.AllowCommunication)
+                        </div>
+                        <div class="control-group">
+                            <label>
+                                What method(s) will the parents use to communicate? (check all that apply)</label>
+                            <label class="checkbox inline ">Telephone @Html.CheckBoxFor(m => m.Telephone, new { @class = "inline" })</label>
+                            <label class="checkbox inline">Email @Html.CheckBoxFor(m => m.Email, new { @class = "inline" })</label>
+                            <label class="checkbox inline">Other @Html.CheckBoxFor(m => m.Other, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.Telephone)
+                            @Html.ValidationMessageFor(m => m.Email)
+                            @Html.ValidationMessageFor(m => m.Other)
+                        </div>
+                        @if (Model.Other)
+                        {
+                            <div class="control-group communicate-other">
+                                @Html.TextBoxFor(m => m.OtherMethod, new { placeholder = "Other method" })
+                                @Html.ValidationMessageFor(m => m.OtherMethod)
+                            </div>                
+                        }
+                        else
+                        {
+                            <div class="control-group communicate-other hide">
+                                @Html.TextBoxFor(m => m.OtherMethod, new { placeholder = "Other method" })
+                                @Html.ValidationMessageFor(m => m.OtherMethod)
+                            </div>                
+                        }
+                        <div class="control-group">
+                            <label>
+                                Should there be any limitations on the ability of one parent to communicate with the child while he/she is with the other parent?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Limitations, (int)YesNo.Yes, new { @class = "inline" })</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.Limitations, (int)YesNo.No, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.Limitations)
+                        </div>
+                        @if (Model.Limitations.Equals((int)YesNo.Yes))
+                        {
+                            <div class="control-group communicate-method">
+                                <label>
+                                    How will the father communicate?</label>
+                                @Html.TextBoxFor(m => m.FatherCommunicate, new { placeholder = "How will the father communicate", @class = "input-xxlarge  " })
+                                @Html.ValidationMessageFor(m => m.FatherCommunicate)
+                            </div>
+                            <div class="control-group communicate-method">
+                                <label>
+                                    How will the mother communicate?</label>
+                                @Html.TextBoxFor(m => m.MotherCommunicate, new { placeholder = "How will the mother communicate", @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.MotherCommunicate)
+                            </div>                
+                        }
+                        else
+                        {
+                            <div class="control-group communicate-method hide">
+                                <label>
+                                    How will the father communicate?</label>
+                                @Html.TextBoxFor(m => m.FatherCommunicate, new { placeholder = "How will the father communicate", @class = "input-xxlarge  " })
+                                @Html.ValidationMessageFor(m => m.FatherCommunicate)
+                            </div>
+                            <div class="control-group communicate-method hide">
+                                <label>
+                                    How will the mother communicate?</label>
+                                @Html.TextBoxFor(m => m.MotherCommunicate, new { placeholder = "How will the mother communicate", @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.MotherCommunicate)
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    <button class="btn btn-primary child-part8 previous" value="Continue"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part8 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

@@ -1,0 +1,88 @@
+﻿@using Models.ViewModels
+@model ParticipantViewModel
+<div class="form-vertical hide wrapper" id="participantsWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "participants" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Participants</h5>
+                    </div>
+                    <div class="widget-content">
+                        <label class="informative">
+                            Before proceeding, be sure you are able to correctly answer the following questions:
+                        </label>
+                        <ul>
+                            <li>Who is the primary custodian?</li>
+                            <li>Who is the Plaintiff?</li>
+                            <li>Who is the Defendant?</li>
+                            <li>What are the names of every child involved in this modification?</li>
+                        </ul>
+                        <div class="control-group span4">
+                            <h4>Plaintiff</h4>
+                            @(string.IsNullOrEmpty(Model.PlaintiffsName) ? Html.TextBoxFor(m => m.PlaintiffsName, new { placeholder = "Plaintiff's Name", @class = "hoverHelp", data_content = "Enter the plaintiff's full name here." }) : Html.TextBoxFor(m => m.PlaintiffsName, new { placeholder = "Plaintiff's Name", @class = "hoverHelp", data_content = "Enter the plaintiff's full name here.", @readonly = "readonly" }))
+                            @Html.ValidationMessageFor(m => m.PlaintiffsName)
+                        </div>
+                        <div class="control-group span4">
+                            <h4>Defendant</h4>
+                            @(string.IsNullOrEmpty(Model.DefendantsName) ? @Html.TextBoxFor(m => m.DefendantsName, new { placeholder = "Defendant's Name", @class = "hoverHelp", data_content = "Enter the defendants's full name here." }) : @Html.TextBoxFor(m => m.DefendantsName, new { placeholder = "Defendant's Name", @class = "hoverHelp", data_content = "Enter the defendants's full name here.", @readonly = "readonly" }))
+                            @Html.ValidationMessageFor(m => m.DefendantsName)
+                        </div>
+                        <div class="control-group span4">
+                            <label class="informative">
+                                The Plaintiff is the: 
+                            </label>
+                            <label class="radio">
+                                Father @Html.RadioButtonFor(m => m.PlaintiffRelationship, (int)ParentRelationship.Father, false)</label>
+                            <label class="radio">
+                                Mother @Html.RadioButtonFor(m => m.PlaintiffRelationship, (int)ParentRelationship.Mother, false)</label>
+                            <label class="radio hoverHelp" data-content="Only used in same sex unions">
+                                Plaintiff  @Html.RadioButtonFor(m => m.PlaintiffRelationship, (int)ParentRelationship.Plaintiff)</label>
+                            @Html.ValidationMessageFor(m => m.PlaintiffRelationship)
+                        </div>
+                        <div class="control-group span4">
+                            <label class="informative">
+                                The Defendant is the: 
+                            </label>
+                            <label class="radio">
+                                Father @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Father, false)</label>
+                            <label class="radio">
+                                Mother @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Mother, false)</label>
+                            <label class="radio hoverHelp" data-content="Only used in same sex unions">
+                                Defendant  @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Plaintiff)</label>
+                            @Html.ValidationMessageFor(m => m.DefendantRelationship)
+                        </div>
+                        <div class="control-group span4">
+                            <label class="informative">
+                                The Plaintiff is the:
+                            </label>
+                            <label class="radio">
+                                Primary Custodial Parent @Html.RadioButtonFor(m => m.PlaintiffCustodialParent, (int)CustodialParent.Primary, false)</label>
+                            <label class="radio">
+                                Non Custodial Parent @Html.RadioButtonFor(m => m.PlaintiffCustodialParent, (int)CustodialParent.NonCustodial, false)</label>
+                            @Html.ValidationMessageFor(m => m.PlaintiffCustodialParent)
+                        </div>
+                        <div class="control-group span4">
+                            <label class="informative">
+                                The Defendant is the:
+                            </label>
+                            <label class="radio">
+                                Primary Custodial Parent @Html.RadioButtonFor(m => m.DefendantCustodialParent, (int)CustodialParent.Primary, false)</label>
+                            <label class="radio">
+                                Non Custodial Parent @Html.RadioButtonFor(m => m.DefendantCustodialParent, (int)CustodialParent.NonCustodial, false)</label>
+                            @Html.ValidationMessageFor(m => m.DefendantCustodialParent)
+                        </div>
+                        <div class="row-fluid">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary child-part2 previous" value="Continue"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part2 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+
+</div>

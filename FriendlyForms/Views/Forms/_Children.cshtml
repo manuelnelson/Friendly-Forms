@@ -1,0 +1,91 @@
+﻿@model ChildrenViewModel
+@using Models.ViewModels
+<div class="form-vertical wrapper hide" id="childrenWrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Add Children</h5>
+                </div>
+                <div class="widget-content">
+                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "child" }))
+                    {
+                        <div class="control-group row-fluid other-other">
+                            <label class="span4">Name</label>
+                            @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
+                            @Html.ValidationMessageFor(m => m.Name)
+                        </div>
+                        <div class="control-group row-fluid other-other">
+                            <label class="span4">Gender</label>
+                            <label class="radio inline">Male @Html.RadioButtonFor(m => m.Gender, (int)Gender.Male, new { @class = "inline" })</label>
+                            <label class="radio inline">Female @Html.RadioButtonFor(m => m.Gender, (int)Gender.Female, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.Gender)
+                        </div>
+                        <div class="control-group row-fluid other-other">
+                            <label class="span4">Date of Birth</label>
+                            @Html.TextBoxFor(m => m.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
+                            @Html.ValidationMessageFor(m => m.DateOfBirth)
+                        </div>
+                    }
+                    <button class="btn btn-primary" id="addChild" value="Add">Add </button><br/><br/>
+                    @if (Model.Children != null && Model.Children.Any())
+                    {
+                        <div class="row-fluid child-table">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Date of Birth</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var child in Model.Children)
+                                    {
+                                        <tr>
+                                            <td class="child-name">@child.Name</td>
+                                            <td class="child-gender">@Enum.GetName(typeof(Gender), child.Gender)</td>
+                                            <td class="child-dob">
+                                                @if (child.DateOfBirth != null)
+                                                {
+                                                    @child.DateOfBirth.Value.ToString("MM/dd/yyyy")
+                                                }
+                                                else
+                                                {
+                                                    @:Not provided
+                                                }
+                                            </td>
+                                            <td class="child-id hide">
+                                                @child.Id
+                                            </td>
+                                        </tr>                                        
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row-fluid hide child-table">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Date of Birth</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>                            
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary child-part3 previous" value="Continue"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part3 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>
+@Html.Partial("_templateChild")

@@ -1,0 +1,45 @@
+﻿@using Models.ViewModels
+@model SocialSecurityViewModel
+<div class="form-vertical wrapper hide" id="socialSecurityWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "socialSecurity" }))
+    {
+@*@Html.ValidationSummary()          *@
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Social Security Payments</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="control-group row-fluid">
+                            <label class="hoverHelp span4" data-content="Old age, survivors and disability benefits for a child who is either unmarried and has not attained the age of 18, is still in secondary school and under 19 years of age, or is under a disability which began before he attained the age of 22 years of age. The child must also be a dependent of the insured individual.">
+                                Do the children receive Title II Social Security benefits from your account?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.ReceiveSocial, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.ReceiveSocial, (int)YesNo.No,new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.ReceiveSocial)
+                        </div>
+                        @if (Model.ReceiveSocial.Equals((int)YesNo.Yes))
+                        {
+                            <div class="control-group row-fluid social-social">
+                                <label class="span4">Amount per month</label>
+                                @Html.TextBoxFor(m => m.Amount, new { placeholder = "Monthly Amount"})
+                                @Html.ValidationMessageFor(m => m.Amount)
+                            </div>                            
+                        }
+                        else
+                        {
+                            <div class="control-group row-fluid social-social hide">
+                                <label class="span4">Amount per month</label>
+                                @Html.TextBoxFor(m => m.Amount, new { placeholder = "Monthly Amount"})
+                                @Html.ValidationMessageFor(m => m.Amount)
+                            </div>                            
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary financial-part2 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary financial-part2 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

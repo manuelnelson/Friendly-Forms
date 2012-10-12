@@ -1,0 +1,84 @@
+﻿@using Models.ViewModels
+@model AssetViewModel
+<div class="form-vertical wrapper hide" id="assetsWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "assets" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Assets</h5>
+                    </div>
+                    <div class="widget-content">
+            <div class="control-group">
+                <label class="informative">
+                    How will retirment assets be divided?</label>
+                <label class="radio">There are no retirement assets to be considered. @Html.RadioButtonFor(m => m.Retirement, (int)YesNo.Yes)</label>
+                <label class="radio">Division of retirement assets will occur as follows: @Html.RadioButtonFor(m => m.Retirement, (int)YesNo.No)</label>
+                @Html.ValidationMessageFor(m => m.Retirement)
+            </div>
+            @if (Model.Retirement.Equals((int)YesNo.No))
+            {
+                <div class="control-group retirement-detail">
+                    @Html.TextAreaFor(m => m.RetirementDescription, new { placeholder = "Details", @class = "input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.RetirementDescription)
+                </div>                
+            }
+            else
+            {
+                <div class="control-group retirement-detail hide">
+                    @Html.TextAreaFor(m => m.RetirementDescription, new { placeholder = "Details", @class = "input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.RetirementDescription)
+                </div>                
+            }
+            <div class="control-group">
+                <label class="informative">
+                    How will non-retirment assets be divided?</label>
+                <label class="radio">There are no non-retirement assets to be considered. @Html.RadioButtonFor(m => m.NonRetirement, (int)YesNo.Yes)</label>
+                <label class="radio">Division of non-retirement assets will occur as follows: @Html.RadioButtonFor(m => m.NonRetirement, (int)YesNo.No)</label>
+                @Html.ValidationMessageFor(m => m.NonRetirement)
+            </div>
+            @if (Model.NonRetirement.Equals((int)YesNo.No))
+            {
+                <div class="control-group non-retirement-detail">
+                    @Html.TextAreaFor(m => m.NonRetirementDescription, new { placeholder = "Details", @class = "input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.NonRetirementDescription)
+                </div>
+            }
+            else
+            {
+                <div class="control-group non-retirement-detail hide">
+                    @Html.TextAreaFor(m => m.NonRetirementDescription, new { placeholder = "Details", @class = "input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.NonRetirementDescription)
+                </div>
+            }
+            <div class="control-group">
+                <label class="informative">
+                    How will business assets and liabilites be divided?</label>
+                <label class="radio">There are no business assets or liabilities to be considered. @Html.RadioButtonFor(m => m.Business, (int)YesNo.Yes)</label>
+                <label class="radio">Division of business assets or liabilities will occur as follows:  @Html.RadioButtonFor(m => m.Business, (int)YesNo.No)</label>
+                @Html.ValidationMessageFor(m => m.Business)
+            </div>
+            @if (Model.NonRetirement.Equals((int)YesNo.No))
+            {
+                <div class="control-group business-detail">
+                    @Html.TextAreaFor(m => m.BusinessDescription, new { placeholder = "Details", @class = "input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.BusinessDescription)
+                </div>
+            }
+            else
+            {
+                <div class="control-group business-detail hide">
+                    @Html.TextAreaFor(m => m.BusinessDescription, new { placeholder = "Details", @class = "input-xxlarge" })
+                    @Html.ValidationMessageFor(m => m.BusinessDescription)
+                </div>
+            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-primary domestic-part5 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary domestic-part5 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

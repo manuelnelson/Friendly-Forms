@@ -1,0 +1,64 @@
+﻿@using Models.ViewModels
+@model OtherChildrenViewModel 
+<div class="form-vertical wrapper hide" id="otherChildrenOtherWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "otherChildrenOther" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Other parent's other children living in the home</h5>
+                    </div>
+                    <div class="widget-content">
+                        <label class="informative">If the other parent is seeking an adjustment for other qualified children in the home, please answer the questions below</label>
+                        <div class="control-group row-fluid">
+                            <label class="span4">
+                                Are the other parent legally responsible for the qualified child? (Step children do not qualify)</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.LegallyResponsible, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.LegallyResponsible, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.LegallyResponsible)
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4">
+                                Does the qualified child live in the other parent's home?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.AtHome, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.AtHome, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.AtHome)
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4">
+                                Is the other parent actually supporting the qualified child?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Support, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.Support, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.Support)
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4">
+                                Is the qualified child subject to a Preexisting Child Support Order?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Preexisting, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.Preexisting, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.Preexisting)
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4">
+                                Is the qualified child currently before the court to set, modify or enforce child support?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.InCourt, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.InCourt, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.InCourt)
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4">
+                                Enter a comment here explaining why you have included an other qualified child in the current court case.</label>
+                            @Html.TextAreaFor(m => m.Details, new{@class="inline", placeholder="Details"})
+                            @Html.ValidationMessageFor(m => m.Details)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @Html.Partial("_OtherChildrenFormOther", Model.OtherChildViewModel)
+    <button class="btn btn-primary financial-part9 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary financial-part9 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

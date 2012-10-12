@@ -1,0 +1,14 @@
+﻿@using FriendlyForms.Authentication
+<div class="btn-group pull-right">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i>@Html.Raw(((FriendlyIdentity)User.Identity).DisplayName)<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a href="@Url.Action("LogOff", "Account")">Sign Out</a></li>
+        </ul>
+    }
+    else
+    {
+        <a class="btn" href="@Url.Action("LogOn", "Account")">LOGIN</a>   
+    }
+</div>

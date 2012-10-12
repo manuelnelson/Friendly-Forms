@@ -1,0 +1,92 @@
+﻿@using Models.ViewModels
+@model VehicleViewModel
+<div class="form-vertical wrapper hide" id="vehiclesWrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Vehicles</h5>
+                </div>
+                <div class="widget-content">
+                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "vehicles" }))
+                    {
+                        <label class="informative">
+                            <br />
+                            List each vehicle under consideration in this agreement.
+                        </label>
+                        <div class="control-group">
+                            <label class="informative">Make</label>
+                            @Html.TextBoxFor(m => m.Make, new { placeholder = "Make" })
+                            @Html.ValidationMessageFor(m => m.Make)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">Model</label>
+                            @Html.TextBoxFor(m => m.VehicleModel, new { placeholder = "Model" })
+                            @Html.ValidationMessageFor(m => m.VehicleModel)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">Year</label>
+                            @Html.TextBoxFor(m => m.Year, new { placeholder = "Year" })
+                            @Html.ValidationMessageFor(m => m.Year)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">Owner</label>
+                            @Html.TextBoxFor(m => m.Owner, new { placeholder = "Owner" })
+                            @Html.ValidationMessageFor(m => m.Owner)
+                        </div>
+                    }
+                    <button class="btn btn-primary" id="addVehicle" value="Add">Add </button><br /><br />
+
+                    @if (Model.VehicleList != null && Model.VehicleList.Any())
+                    {                        
+                        <div class="row-fluid vehicle-table">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Year</th>
+                                        <th>Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var vehicle in Model.VehicleList)
+                                    {
+                                        <tr>
+                                            <td>@vehicle.Make</td>
+                                            <td>@vehicle.Model</td>
+                                            <td>@vehicle.Year</td>
+                                            <td>@vehicle.Owner</td>
+                                        </tr>                                        
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row-fluid hide vehicle-table">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Year</th>
+                                        <th>Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>  
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary domestic-part3 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary domestic-part3 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+    @Html.Partial("_templateVehicle")
+</div>

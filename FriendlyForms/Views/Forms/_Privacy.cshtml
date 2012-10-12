@@ -1,0 +1,45 @@
+﻿@using BusinessLogic.Models
+@using Models.ViewModels
+@model PrivacyViewModel
+<div class="form-vertical wrapper hide" id="privacyWrapper">
+    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "privacy" }))
+    {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Privacy</h5>
+                    </div>
+                    <div class="widget-content">
+
+                        <div class="control-group">
+                            <label>
+                                Have there been documented prior acts of family violence that would cause either of you not to want the other party to have your addresses?</label>
+                            <label class="radio">Yes @Html.RadioButtonFor(m => m.NeedPrivacy, (int)YesNo.Yes)</label>
+                            <label class="radio">No @Html.RadioButtonFor(m => m.NeedPrivacy, (int)YesNo.No)</label>
+                            @Html.ValidationMessageFor(m => m.NeedPrivacy)
+                        </div>
+                        @if (Model.NeedPrivacy.Equals((int)YesNo.Yes))
+                        {
+                            <div class="control-group" id="detailsWrapper">
+                                @Html.TextAreaFor(m => m.Details, new { placeholder = "Details of Prior Acts", rows = "4", style = "width:98%" })
+                                @Html.ValidationMessageFor(m => m.Details)
+                            </div>                
+                        }
+                        else
+                        {
+                            <div class="control-group hide" id="detailsWrapper">
+                                @Html.TextAreaFor(m => m.Details, new { placeholder = "Details of Prior Acts", rows = "4", style = "width:98%" })
+                                @Html.ValidationMessageFor(m => m.Details)
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    <button class="btn btn-primary child-part4 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part4 next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>
