@@ -151,7 +151,7 @@ namespace FriendlyForms.Controllers
             return View();
         }
         [Authorize]
-        public ActionResult ChildSupport()
+        public ActionResult Parenting()
         {
             var userId = User.FriendlyIdentity().UserId;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
@@ -254,5 +254,52 @@ namespace FriendlyForms.Controllers
                 return Json("unable to make pdf");
             }
         }
+
+        [Authorize]
+        public ActionResult DomesticMediation()
+        {
+            var userId = User.FriendlyIdentity().UserId;
+            var house = _houseService.GetByUserId(userId);
+            var property = _realEstateService.GetByUserId(userId);
+            var debt = _debtService.GetByUserId(userId);
+            var assets = _assetService.GetByUserId(userId);
+            var health = _healthService.GetByUserId(userId);
+            var spousal = _spousalService.GetByUserId(userId);
+            var taxes = _taxService.GetByUserId(userId);
+            var support = _childSupportService.GetByUserId(userId);
+            var vehicles = _vehicleService.GetByUserId(userId).ToList();
+            var participants = _participantService.GetByUserId(userId);
+            var vehicleModel = new VehicleViewModel()
+            {
+                VehicleList = vehicles
+            };
+            var formsViewModel = new FormsCompletedDomestic()
+            {
+                AssetCompleted = assets.UserId != 0,
+                RealEstateCompleted = property.UserId != 0,
+                DebtCompleted = debt.UserId != 0,
+                HealthCompleted = health.UserId != 0,
+                SpousalCompleted = spousal.UserId != 0,
+                TaxCompleted = taxes.UserId != 0,
+                ChildCompleted = support.UserId != 0,
+                VehicleCompleted = vehicles.Any()
+            };
+            var domesticModel = new DomesticMediationViewModel
+            {
+                HouseViewModel = house as HouseViewModel,
+                RealEstateViewModel = property as RealEstateViewModel,
+                VehicleViewModel = vehicleModel,
+                DebtViewModel = debt as DebtViewModel,
+                AssetViewModel = assets as AssetViewModel,
+                HealthViewModel = health as HealthViewModel,
+                SpousalViewModel = spousal as SpousalViewModel,
+                TaxViewModel = taxes as TaxViewModel,
+                ChildSupportViewModel = support as ChildSupportViewModel,
+                ParticipantsViewModel = participants as ParticipantViewModel,
+                FormsCompleted = formsViewModel
+            };
+            return View(domesticModel);
+        }
+
     }
 }

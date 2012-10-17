@@ -1,6 +1,6 @@
 ﻿@model FriendlyForms.Models.ChildSupportAllViewModel
 @{
-    ViewBag.Title = "Child Support";
+    ViewBag.Title = "Parenting";
 }
 @section Sidebar{
     @{
@@ -87,7 +87,7 @@
 @section Breadcrumb{
     <div id="breadcrumb">
         <a data-form="asdfa" href="@Url.Action("Index", "Home")" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
-        <a data-form="asdfa" href="#" class="current">Child Support</a>
+        <a data-form="asdfa" href="#" class="current">Parenting</a>
     </div>
 }
 @Html.Partial("_Court", Model.CourtViewModel)

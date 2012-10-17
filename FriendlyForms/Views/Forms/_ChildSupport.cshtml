@@ -11,56 +11,56 @@
                         <h5>Child Support</h5>
                     </div>
                     <div class="widget-content">
-            <div class="control-group">
-                <label class="informative">Child support will be paid by</label>
-                @Html.TextBoxFor(m => m.PaidBy, new { placeholder = "Paid By" })
-                @Html.ValidationMessageFor(m => m.PaidBy)
-            </div>
-            <div class="control-group">
-                <label class="informative">Child support payments will be paid to</label>
-                @Html.TextBoxFor(m => m.PaidTo, new { placeholder = "Paid To" })
-                @Html.ValidationMessageFor(m => m.PaidTo)
-            </div>
-            <div class="control-group">
-                <label class="informative">Enter the amount of monthly child support.</label>
-                @Html.TextBoxFor(m => m.MonthlyAmount, new { placeholder = "Monthly Amount" })
-                @Html.ValidationMessageFor(m => m.MonthlyAmount)
-            </div>
-            <div class="control-group">
-                <label class="informative">Effective date</label>
-                @Html.TextBoxFor(m => m.EffectiveDate, new { placeholder = "Date", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                @Html.ValidationMessageFor(m => m.EffectiveDate)
-            </div>
-            <div class="control-group">
-                <label class="informative">
-                    Is this agreement temporary or final?</label>
-                <label class="radio">This is a temporary agreement @Html.RadioButtonFor(m => m.TemporaryAgreement, (int)YesNo.Yes)</label>
-                <label class="radio">This is a final agreement. The Child Support Worksheet and Child Support Agreement are attached.  @Html.RadioButtonFor(m => m.TemporaryAgreement, (int)YesNo.No)</label>
-                @Html.ValidationMessageFor(m => m.TemporaryAgreement)
-            </div>
-            <div class="control-group">
-                <label class="informative">
-                    How will child support be paid?</label>
-                <label class="radio">Child support will be paid by payroll deduction @Html.RadioButtonFor(m => m.Payment, (int)YesNo.Yes)</label>
-                <label class="radio">This is a final agreement. The Child Support Worksheet and Child Support Agreement are attached.  @Html.RadioButtonFor(m => m.Payment, (int)YesNo.No)</label>
-                @Html.ValidationMessageFor(m => m.Payment)
-            </div>
-            @if (Model.Payment.Equals((int)YesNo.No))
-            {
-                <div class="control-group support-payday">
-                    <label class="informative">Child support payment will be due to the recipient on what day of each month? Enter number 1-31 (31 designates last day of month every month, regardless of the number of days in that particular month)</label>
-                    @Html.TextBoxFor(m => m.PaymentDay, new { placeholder = "Day" })
-                    @Html.ValidationMessageFor(m => m.PaymentDay)
-                </div>                
-            }
-            else
-            {
-                <div class="control-group support-payday hide">
-                    <label class="informative">Child support payment will be due to the recipient on what day of each month? Enter number 1-31 (31 designates last day of month every month, regardless of the number of days in that particular month)</label>
-                    @Html.TextBoxFor(m => m.PaymentDay, new { placeholder = "Day" })
-                    @Html.ValidationMessageFor(m => m.PaymentDay)
-                </div>                
-            }
+                        <div class="control-group">
+                            <label class="informative">
+                                Is this agreement temporary or final?</label>
+                            <label class="radio">This is a temporary agreement. If selected, you are not requried to fill out the Child Support Form. @Html.RadioButtonFor(m => m.TemporaryAgreement, (int)YesNo.Yes)</label>
+                            <label class="radio">This is a final agreement. This following information will automatically display here once you’ve completed the Child Support section of the application.  @Html.RadioButtonFor(m => m.TemporaryAgreement, (int)YesNo.No)</label>
+                            @Html.ValidationMessageFor(m => m.TemporaryAgreement)
+                        </div>
+                        <div class="control-group support-info">
+                            <label class="informative">Child support will be paid by</label>
+                            @Html.TextBoxFor(m => m.PaidBy, new { placeholder = "Paid By" })
+                            @Html.ValidationMessageFor(m => m.PaidBy)
+                        </div>
+                        <div class="control-group support-info">
+                            <label class="informative">Child support payments will be paid to</label>
+                            @Html.TextBoxFor(m => m.PaidTo, new { placeholder = "Paid To" })
+                            @Html.ValidationMessageFor(m => m.PaidTo)
+                        </div>
+                        <div class="control-group support-info">
+                            <label class="informative">Enter the amount of monthly child support.</label>
+                            @Html.TextBoxFor(m => m.MonthlyAmount, new { placeholder = "Monthly Amount" })
+                            @Html.ValidationMessageFor(m => m.MonthlyAmount)
+                        </div>
+                        <div class="control-group support-info">
+                            <label class="informative">Effective date</label>
+                            @Html.TextBoxFor(m => m.EffectiveDate, new { placeholder = "Date", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
+                            @Html.ValidationMessageFor(m => m.EffectiveDate)
+                        </div>
+                        <div class="control-group">
+                            <label class="informative">
+                                How will child support be paid?</label>
+                            <label class="radio">Child support will be paid by payroll deduction @Html.RadioButtonFor(m => m.Payment, (int)YesNo.Yes)</label>
+                            <label class="radio">Remitted directly from payor to payee  @Html.RadioButtonFor(m => m.Payment, (int)YesNo.No)</label>
+                            @Html.ValidationMessageFor(m => m.Payment)
+                        </div>
+                        @if (Model.Payment.Equals((int)YesNo.No))
+                        {
+                            <div class="control-group support-payday">
+                                <label class="informative">Child support payment will be due to the recipient on what day of each month? Enter number 1-31 (31 designates last day of month every month, regardless of the number of days in that particular month)</label>
+                                @Html.TextBoxFor(m => m.PaymentDay, new { placeholder = "Day" })
+                                @Html.ValidationMessageFor(m => m.PaymentDay)
+                            </div>                
+                        }
+                        else
+                        {
+                            <div class="control-group support-payday hide">
+                                <label class="informative">Child support payment will be due to the recipient on what day of each month? Enter number 1-31 (31 designates last day of month every month, regardless of the number of days in that particular month)</label>
+                                @Html.TextBoxFor(m => m.PaymentDay, new { placeholder = "Day" })
+                                @Html.ValidationMessageFor(m => m.PaymentDay)
+                            </div>                
+                        }
                     </div>
                 </div>
             </div>

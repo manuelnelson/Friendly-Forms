@@ -11,7 +11,10 @@ namespace Models
 
         public int DetermineBeginDate { get; set; }
         public DateTime? BeginDate { get; set; }
-        public string WeekendDescription { get; set; }
+        public string WeekendDayStart { get; set; }
+        public string WeekendDayEnd { get; set; }
+        public string FatherWeekendOther { get; set; }
+        public string MotherWeekendOther { get; set; }
         public DateTime PickedUp { get; set; }
         public string PickupLocation { get; set; }
         public DateTime DroppedOff { get; set; }
@@ -42,7 +45,10 @@ namespace Models
                 PickupLocation = PickupLocation,
                 UserId = UserId,
                 Weekdays = Weekdays,
-                WeekendDescription = WeekendDescription,
+                FatherWeekendOther = FatherWeekendOther,
+                MotherWeekendOther = MotherWeekendOther,
+                WeekendDayStart = WeekendDayStart,
+                WeekendDayEnd = WeekendDayEnd,
                 WeekdayDropoff = WeekdayDropoff.HasValue ? WeekdayDropoff.Value.ToString("hh:mm") : "",
                 WeekdayDropoffLocation = WeekdayDropoffLocation,
                 WeekdayPickup = WeekdayPickup.HasValue ? WeekdayPickup.Value.ToString("hh:mm") : "",                
@@ -67,7 +73,10 @@ namespace Models
             PickupLocation = update.PickupLocation;
             UserId = update.UserId;
             Weekdays = update.Weekdays;
-            WeekendDescription = update.WeekendDescription;
+            FatherWeekendOther = update.FatherWeekendOther;
+            MotherWeekendOther= update.MotherWeekendOther;
+            WeekendDayStart = update.WeekendDayStart;
+            WeekendDayEnd = update.WeekendDayEnd;
             WeekdayDropoff = update.WeekdayDropoff;
             WeekdayDropoffLocation = update.WeekdayDropoffLocation;
             WeekdayPickup = update.WeekdayPickup;

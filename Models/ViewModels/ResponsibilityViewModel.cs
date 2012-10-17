@@ -24,10 +24,8 @@ namespace Models.ViewModels
         
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
         [Display(Name = "Father costs")]
-        public string FatherCosts { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
-        [Display(Name = "Mother costs")]
-        public string MotherCosts { get; set; }
+        public string OtherDetails { get; set; }
+
 
         public IFormEntity ConvertToEntity()
         {
@@ -35,9 +33,8 @@ namespace Models.ViewModels
                 {
                     BeginningVisitation = BeginningVisitation,
                     EndVisitation = EndVisitation,
-                    FatherCosts = FatherCosts,
+                    OtherDetails = OtherDetails,
                     FatherPercentage = FatherPercentage,
-                    MotherCosts = MotherCosts,
                     MotherPercentage = MotherPercentage,
                     TransportationCosts = TransportationCosts,
                     UserId = UserId

@@ -12,9 +12,8 @@ namespace BusinessLogic.Helpers
                 {
                     BeginningVisitation = responsibility.BeginningVisitation,
                     EndVisitation = responsibility.EndVisitation,
-                    FatherCosts = responsibility.FatherCosts,
+                    OtherDetails = responsibility.OtherDetails,
                     FatherPercentage = responsibility.FatherPercentage,
-                    MotherCosts = responsibility.MotherCosts,
                     MotherPercentage = responsibility.MotherPercentage,
                     TransportationCosts = responsibility.TransportationCosts,
                     UserId = responsibility.UserId

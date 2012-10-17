@@ -349,7 +349,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="wkhtmltox0.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -424,7 +423,7 @@
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LogicPoint-Friendly.pubxml" />
     <Content Include="Scripts\friendly.js.bundle" />
-    <Content Include="Views\Forms\ChildSupport.cshtml" />
+    <Content Include="Views\Forms\Parenting.cshtml" />
     <Content Include="Views\Forms\_Participants.cshtml" />
     <Content Include="Views\Forms\_Court.cshtml" />
     <Content Include="Views\Shared\_templateErrorMessage.cshtml" />
@@ -451,7 +450,7 @@
     <Content Include="Views\Forms\_Holiday.cshtml" />
     <Content Include="Views\Forms\_templateExtraHolidays.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_LogOnPartialNew.cshtml" />
+    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
     <Content Include="Views\Forms\Financial.cshtml" />
     <Content Include="Views\Forms\_Income.cshtml" />
     <Content Include="Views\Forms\_SocialSecurity.cshtml" />
@@ -473,7 +472,7 @@
     <Content Include="Views\Forms\_OtherChildrenFormOther.cshtml" />
     <Content Include="Views\Forms\_ChildrenForm.cshtml" />
     <Content Include="Views\Output\Index.cshtml" />
-    <Content Include="Views\Output\ChildSupport.cshtml" />
+    <Content Include="Views\Output\Parenting.cshtml" />
     <Content Include="Views\Output\DomesticMediation.cshtml" />
   </ItemGroup>
   <ItemGroup>

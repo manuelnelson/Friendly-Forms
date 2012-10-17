@@ -79,7 +79,7 @@ namespace FriendlyForms.Controllers
             _specialCircumstancesService = specialCircumstancesService;
             _otherChildService = otherChildService;
         }
-        public ActionResult ChildSupport()
+        public ActionResult Parenting()
         {
             var userId = User.FriendlyIdentity().UserId;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;

@@ -34,7 +34,8 @@
     public enum CustodialParent
     {
         Primary = 1,
-        NonCustodial
+        NonCustodial,
+        Joint
     };
 
     //This seems a bit dumb to start at 1, but doing this so that the default value of 0 doesn't highlight a button

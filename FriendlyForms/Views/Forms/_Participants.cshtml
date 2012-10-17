@@ -62,6 +62,8 @@
                                 Primary Custodial Parent @Html.RadioButtonFor(m => m.PlaintiffCustodialParent, (int)CustodialParent.Primary, false)</label>
                             <label class="radio">
                                 Non Custodial Parent @Html.RadioButtonFor(m => m.PlaintiffCustodialParent, (int)CustodialParent.NonCustodial, false)</label>
+                            <label class="radio">
+                                Joint Custodial Parent @Html.RadioButtonFor(m => m.PlaintiffCustodialParent, (int)CustodialParent.Joint, false)</label>
                             @Html.ValidationMessageFor(m => m.PlaintiffCustodialParent)
                         </div>
                         <div class="control-group span4">
@@ -72,6 +74,8 @@
                                 Primary Custodial Parent @Html.RadioButtonFor(m => m.DefendantCustodialParent, (int)CustodialParent.Primary, false)</label>
                             <label class="radio">
                                 Non Custodial Parent @Html.RadioButtonFor(m => m.DefendantCustodialParent, (int)CustodialParent.NonCustodial, false)</label>
+                            <label class="radio">
+                                Joint Custodial Parent @Html.RadioButtonFor(m => m.DefendantCustodialParent, (int)CustodialParent.Joint, false)</label>
                             @Html.ValidationMessageFor(m => m.DefendantCustodialParent)
                         </div>
                         <div class="row-fluid">

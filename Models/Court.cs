@@ -9,7 +9,7 @@ namespace Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public int CountyId { get; set; }
-        public int CaseNumber { get; set; }
+        public string CaseNumber { get; set; }
         public int AuthorOfPlan { get; set; }
         public int PlanType { get; set; }
         public DateTime? PlanDate { get; set; }
@@ -19,7 +19,7 @@ namespace Models
             return new CourtViewModel
             {
                 AuthorOfPlan = AuthorOfPlan,
-                CaseNumber = CaseNumber.ToString(),
+                CaseNumber = CaseNumber,
                 CountyId = CountyId,
                 PlanType = PlanType,
                 PlanDate = PlanDate != null ? PlanDate.Value.ToString("MM/dd/yyyy") : string.Empty,

@@ -11,7 +11,7 @@ namespace Models.ViewModels
         public int UserId { get; set; }
         public int CountyId { get; set; }
         [Display(Name = "Case Number")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Case must be a number")]
+        [RegularExpression("^[0-9a-zA-Z]*$", ErrorMessage = "Case Number must be alpha-numeric")]
         public string CaseNumber { get; set; }
         [Required]
         [Display(Name = "Author of Plan")]
@@ -30,7 +30,7 @@ namespace Models.ViewModels
             return new Court
             {
                 AuthorOfPlan = this.AuthorOfPlan,
-                CaseNumber = Convert.ToInt16(this.CaseNumber),
+                CaseNumber = this.CaseNumber,
                 CountyId = this.CountyId,
                 PlanType = this.PlanType,
                 PlanDate = string.IsNullOrEmpty(PlanDate) ? (DateTime?)null : Convert.ToDateTime(PlanDate),

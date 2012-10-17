@@ -8,11 +8,12 @@
                 <div class="widget-title">
                     <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Holidays</h5>
-                        <div class="btn dropdown pull-right" id="copy-holidays"><a href="#" style="display:block;" data-target="#copy-holidays" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a title="all" data-id="0" href="#">All</a></li>
-                            </ul>
-                        </div>
+                    <div class="btn dropdown pull-right" id="copy-holidays">
+                        <a href="#" style="display: block;" data-target="#copy-holidays" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a title="all" data-id="0" href="#">All</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="widget-content">
                     @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "holiday" }))
@@ -22,14 +23,6 @@
                         <input type="hidden" id="holidayChildId" /><br />
                         <br />
                         <h4 id="holidayChildName"></h4>
-                        <div class="control-group">
-                            <label class="informative">
-                                When a holiday falls on Friday or Monday, should the holiday visitation include the weekend immediately before or after that holiday?</label>
-                            <label class="checkbox">Include the following Saturday and Sunday when holiday falls on Friday @Html.CheckBoxFor(m => m.HolidayViewModel.FridayHoliday)</label>
-                            <label class="checkbox">Include the preceding Saturday and Sunday when holiday falls on Monday @Html.CheckBoxFor(m => m.HolidayViewModel.MondayHoliday)</label>
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.FridayHoliday)
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.MondayHoliday)
-                        </div>
                         <h4>Thanksgiving Break</h4>
                         <div class="control-group">
                             <label class="informative">
@@ -57,6 +50,13 @@
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.Thanksgiving)
                         </div>                                
                         }
+                        <div class="control-group">
+                            <label class="informative">
+                                At the time of</label>
+                            @Html.TextBoxFor(m => m.HolidayViewModel.ThanksgivingTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            @Html.ValidationMessageFor(m => m.HolidayViewModel.ThanksgivingTime)
+                        </div>                
                         <h4>Christmas Break</h4>
                         <div class="control-group">
                             <label class="informative">
@@ -132,6 +132,13 @@
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringOther)
                         </div>                
                         }
+                        <div class="control-group">
+                            <label class="informative">
+                                At the time of</label>
+                            @Html.TextBoxFor(m => m.HolidayViewModel.SpringBreakTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringBreakTime)
+                        </div>                
                         <h4>Summer Break</h4>
                         <div class="control-group">
                             Summer vacation begins @Html.TextBoxFor(m => m.HolidayViewModel.SummerBeginDays, new { @class = "input-mini inline", placeholder = "#" }) days after the last day of school at @Html.TextBoxFor(m => m.HolidayViewModel.SummerBeginTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small inline" })
@@ -177,7 +184,22 @@
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.FallOther)
                         </div>                
                         }
+                        <div class="control-group">
+                            <label class="informative">
+                                At the time of</label>
+                            @Html.TextBoxFor(m => m.HolidayViewModel.FallBreakTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            @Html.ValidationMessageFor(m => m.HolidayViewModel.FallBreakTime)
+                        </div>    
                         <h4>Other Holidays</h4>
+                        <div class="control-group">
+                            <label class="informative">
+                                When a holiday falls on Friday or Monday, should the holiday visitation include the weekend immediately before or after that holiday?</label>
+                            <label class="checkbox">Include the following Saturday and Sunday when holiday falls on Friday @Html.CheckBoxFor(m => m.HolidayViewModel.FridayHoliday)</label>
+                            <label class="checkbox">Include the preceding Saturday and Sunday when holiday falls on Monday @Html.CheckBoxFor(m => m.HolidayViewModel.MondayHoliday)</label>
+                            @Html.ValidationMessageFor(m => m.HolidayViewModel.FridayHoliday)
+                            @Html.ValidationMessageFor(m => m.HolidayViewModel.MondayHoliday)
+                        </div> 
                         <label class="informative">Many people define holiday parenting time as the children being with one parent during a holiday when it falls in even-numbered years, and the other parent during that same holiday when it falls in odd-numbered years. Others are able to see that it would be to everyone’s advantage for one parent to have the children on a specific holiday every year while some people do not want to specify the parenting time for a holiday.</label>
                         <div class="row-fluid">
                             <div class="span2">&nbsp;</div>
@@ -187,16 +209,49 @@
                         <div class="control-group row-fluid holiday-parent">
                             <div class="span2">All</div>
                             <div class="span5 father-all">
-                                <label class="radio inline">Odd <input class="inline" id="allFather" name="allFather" type="radio" value="1"></label>
-                                <label class="radio inline">Even <input class="inline" id="allFather" name="allFather" type="radio" value="2"></label>                                
-                                <label class="radio inline">Every <input class="inline" id="allFather" name="allFather" type="radio" value="3"></label>                                                                
-                                <label class="radio inline">Never <input class="inline" id="allFather" name="allFather" type="radio" value="4"></label>                                                                
+                                <label class="radio inline">
+                                    Odd
+                                    <input class="inline" id="allFather" name="allFather" type="radio" value="1"></label>
+                                <label class="radio inline">
+                                    Even
+                                    <input class="inline" id="allFather" name="allFather" type="radio" value="2"></label>
+                                <label class="radio inline">
+                                    Every
+                                    <input class="inline" id="allFather" name="allFather" type="radio" value="3"></label>
+                                <label class="radio inline">
+                                    Never
+                                    <input class="inline" id="allFather" name="allFather" type="radio" value="4"></label>
                             </div>
                             <div class="span5 mother-all">
-                                <label class="radio inline">Odd <input class="inline" id="allMother" name="allMother" type="radio" value="1"></label>
-                                <label class="radio inline">Even <input class="inline" id="allMother" name="allMother" type="radio" value="2"></label>                                
-                                <label class="radio inline">Every <input class="inline" id="allMother" name="allMother" type="radio" value="3"></label>                                                                
-                                <label class="radio inline">Never <input class="inline" id="allMother" name="allMother" type="radio" value="4"></label>                                                                
+                                <label class="radio inline">
+                                    Odd
+                                    <input class="inline" id="allMother" name="allMother" type="radio" value="1"></label>
+                                <label class="radio inline">
+                                    Even
+                                    <input class="inline" id="allMother" name="allMother" type="radio" value="2"></label>
+                                <label class="radio inline">
+                                    Every
+                                    <input class="inline" id="allMother" name="allMother" type="radio" value="3"></label>
+                                <label class="radio inline">
+                                    Never
+                                    <input class="inline" id="allMother" name="allMother" type="radio" value="4"></label>
+                            </div>
+                        </div>
+                        <div class="control-group row-fluid holiday-parent">
+                            <div class="span2">Christmas Break</div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasFather, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasFather, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasFather, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasFather, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasFather)
+                            </div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasMother, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasMother, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasMother, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.ChristmasMother, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasMother)
                             </div>
                         </div>
                         <div class="control-group row-fluid holiday-parent">
@@ -231,6 +286,23 @@
                                 <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.PresidentsMother, (int)HolidayYear.Every, new { @class = "inline" })</label>
                                 <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.PresidentsMother, (int)HolidayYear.Never, new { @class = "inline" })</label>
                                 @Html.ValidationMessageFor(m => m.HolidayViewModel.PresidentsMother)
+                            </div>
+                        </div>
+                        <div class="control-group row-fluid holiday-parent">
+                            <div class="span2">Spring Break</div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakFather, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakFather, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakFather, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakFather, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringBreakFather)
+                            </div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakMother, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakMother, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakMother, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.SpringBreakMother, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringBreakMother)
                             </div>
                         </div>
                         <div class="control-group row-fluid holiday-parent">
@@ -319,6 +391,23 @@
                             </div>
                         </div>
                         <div class="control-group row-fluid holiday-parent">
+                            <div class="span2">Fall Break</div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakFather, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakFather, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakFather, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakFather, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.FallBreakFather)
+                            </div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakMother, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakMother, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakMother, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.FallBreakMother, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.FallBreakMother)
+                            </div>
+                        </div>                        
+                        <div class="control-group row-fluid holiday-parent">
                             <div class="span2">Halloween</div>
                             <div class="span5">
                                 <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.HalloweenFather, (int)HolidayYear.Odd, new { @class = "inline" })</label>
@@ -335,6 +424,23 @@
                                 @Html.ValidationMessageFor(m => m.HolidayViewModel.HalloweenMother)
                             </div>
                         </div>
+                        <div class="control-group row-fluid holiday-parent">
+                            <div class="span2">Thanksgiving Break</div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingFather, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingFather, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingFather, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingFather, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ThanksgivingFather)
+                            </div>
+                            <div class="span5">
+                                <label class="radio inline">Odd @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingMother, (int)HolidayYear.Odd, new { @class = "inline" })</label>
+                                <label class="radio inline">Even @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingMother, (int)HolidayYear.Even, new { @class = "inline" })</label>
+                                <label class="radio inline">Every @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingMother, (int)HolidayYear.Every, new { @class = "inline" })</label>
+                                <label class="radio inline">Never @Html.RadioButtonFor(m => m.HolidayViewModel.ThanksgivingMother, (int)HolidayYear.Never, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ThanksgivingMother)
+                            </div>
+                        </div>                                                
                         <div class="control-group row-fluid holiday-parent">
                             <div class="span2">Child(ren)'s Birthdays</div>
                             <div class="span5">

@@ -9,7 +9,7 @@
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-signal"></i></span>
-                        <h5>Add additional decisions (Optional)</h5>
+                        <h5>Exchange of Children</h5>
                     </div>
                     <div class="widget-content">
 
@@ -55,15 +55,9 @@
                             </div>
                             <div class="control-group responsibility-cost hide">
                                 <label>
-                                    How the father's cost will be calculated</label>
-                                @Html.TextBoxFor(m => m.FatherCosts, new { placeholder = "Father's cost", @class = "input-xxlarge" })
-                                @Html.ValidationMessageFor(m => m.FatherCosts)
-                            </div>
-                            <div class="control-group responsibility-cost hide">
-                                <label>
-                                    How the mother's cost will be calculated</label>
-                                @Html.TextBoxFor(m => m.MotherCosts, new { placeholder = "Mother's cost", @class = "input-xxlarge" })
-                                @Html.ValidationMessageFor(m => m.MotherCosts)
+                                    The parties agree that visitation-related expenses will be paid as follows:</label>
+                                @Html.TextAreaFor(m => m.OtherDetails, new { placeholder = "Description", @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.OtherDetails)
                             </div>
                                 break;
                             case 4:
@@ -81,15 +75,9 @@
                             </div>
                             <div class="control-group responsibility-cost">
                                 <label>
-                                    How the father's cost will be calculated</label>
-                                @Html.TextBoxFor(m => m.FatherCosts, new { placeholder = "Father's cost", @class = "input-xxlarge" })
-                                @Html.ValidationMessageFor(m => m.FatherCosts)
-                            </div>
-                            <div class="control-group responsibility-cost">
-                                <label>
-                                    How the mother's cost will be calculated</label>
-                                @Html.TextBoxFor(m => m.MotherCosts, new { placeholder = "Mother's cost", @class = "input-xxlarge" })
-                                @Html.ValidationMessageFor(m => m.MotherCosts)
+                                    The parties agree that visitation-related expenses will be paid as follows:</label>
+                                @Html.TextAreaFor(m => m.OtherDetails, new { placeholder = "Description", @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.OtherDetails)
                             </div>
                                 break;
                             default:
@@ -107,15 +95,9 @@
                             </div>
                             <div class="control-group responsibility-cost hide">
                                 <label>
-                                    How the father's cost will be calculated</label>
-                                @Html.TextBoxFor(m => m.FatherCosts, new { placeholder = "Father's cost", @class = "input-xxlarge" })
-                                @Html.ValidationMessageFor(m => m.FatherCosts)
-                            </div>
-                            <div class="control-group responsibility-cost hide">
-                                <label>
-                                    How the mother's cost will be calculated</label>
-                                @Html.TextBoxFor(m => m.MotherCosts, new { placeholder = "Mother's cost", @class = "input-xxlarge" })
-                                @Html.ValidationMessageFor(m => m.MotherCosts)
+                                    The parties agree that visitation-related expenses will be paid as follows:</label>
+                                @Html.TextAreaFor(m => m.OtherDetails, new { placeholder = "Description", @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.OtherDetails)
                             </div>
                                 break;
 

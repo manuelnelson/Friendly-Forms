@@ -13,8 +13,7 @@ namespace Models
         public int TransportationCosts { get; set; }
         public double FatherPercentage { get; set; }
         public double MotherPercentage { get; set; }
-        public string FatherCosts { get; set; }
-        public string MotherCosts { get; set; }
+        public string OtherDetails { get; set; }
 
         public IViewModel ConvertToModel()
         {
@@ -22,9 +21,8 @@ namespace Models
             {
                 BeginningVisitation = BeginningVisitation,
                 EndVisitation = EndVisitation,
-                FatherCosts = FatherCosts,
+                OtherDetails = OtherDetails,
                 FatherPercentage = FatherPercentage,
-                MotherCosts = MotherCosts,
                 MotherPercentage = MotherPercentage,
                 TransportationCosts = TransportationCosts,
                 UserId = UserId
@@ -36,9 +34,8 @@ namespace Models
             var update = (Responsibility)entity;
             BeginningVisitation = update.BeginningVisitation;
             EndVisitation = update.EndVisitation;
-            FatherCosts = update.FatherCosts;
+            OtherDetails = update.OtherDetails;
             FatherPercentage = update.FatherPercentage;
-            MotherCosts = update.MotherCosts;
             MotherPercentage = update.MotherPercentage;
             TransportationCosts = update.TransportationCosts;
             UserId = update.UserId;

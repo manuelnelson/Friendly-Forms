@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
 
 namespace Models.ViewModels
@@ -18,10 +17,15 @@ namespace Models.ViewModels
         public int Thanksgiving { get; set; }
         [Display(Name = "Thanksgiving details")]
         public string ThanksgivingOther { get; set; }
+        [Display(Name = "Thanksgiving Time")]
+        [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
+        [Required]
+        public string ThanksgivingTime { get; set; }
         [Required]
         public int Christmas { get; set; }
 
         [Display(Name = "Christmas Time")]
+        [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
         public string ChristmasTime { get; set; }
 
         [Display(Name = "Christmas details")]
@@ -32,6 +36,10 @@ namespace Models.ViewModels
         public int SpringBreak { get; set; }
         [Display(Name = "Spring break details")]
         public string SpringOther { get; set; }
+        [Display(Name = "Spring break Time")]
+        [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
+        [Required]
+        public string SpringBreakTime { get; set; }
         [Required]
         [Display(Name = "Begin Summer")]
         public int SummerBeginDays { get; set; }
@@ -53,6 +61,26 @@ namespace Models.ViewModels
         public int FallBreak { get; set; }
         [Display(Name = "Fall details")]
         public string FallOther { get; set; }
+        [Display(Name = "Fall break Time")]
+        [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
+        [Required]
+        public string FallBreakTime { get; set; }
+        [Required]
+        public int ChristmasFather { get; set; }
+        [Required]
+        public int ChristmasMother { get; set; }
+        [Required]
+        public int SpringBreakFather { get; set; }
+        [Required]
+        public int SpringBreakMother { get; set; }
+        [Required]
+        public int FallBreakFather { get; set; }
+        [Required]
+        public int FallBreakMother { get; set; }
+        [Required]
+        public int ThanksgivingFather { get; set; }
+        [Required]
+        public int ThanksgivingMother { get; set; }
         [Required]
         public int MlkFather { get; set; }
         [Required]
@@ -112,6 +140,9 @@ namespace Models.ViewModels
                     Christmas = Christmas,
                     ChristmasOther = ChristmasOther,
                     ChristmasTime = ChristmasTime,
+                    ThanksgivingTime = ThanksgivingTime,
+                    SpringBreakTime = SpringBreakTime,
+                    FallBreakTime = FallBreakTime,
                     FallBreak = FallBreak,
                     FallOther = FallOther,
                     FathersBdayFather = FathersBdayFather,
@@ -119,6 +150,14 @@ namespace Models.ViewModels
                     FathersFather = FathersFather,
                     FathersMother = FathersMother,
                     FridayHoliday = FridayHoliday,
+                    ChristmasFather = ChristmasFather,
+                    ChristmasMother = ChristmasMother,
+                    SpringBreakFather = SpringBreakFather,
+                    SpringBreakMother = SpringBreakMother,
+                    FallBreakFather = FallBreakFather,
+                    FallBreakMother = FallBreakMother,
+                    ThanksgivingFather = ThanksgivingFather,
+                    ThanksgivingMother = ThanksgivingMother,
                     HalloweenFather = HalloweenFather,
                     HalloweenMother = HalloweenMother,
                     IndependenceFather = IndependenceFather,

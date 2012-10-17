@@ -13,18 +13,29 @@ namespace Models
         public bool MondayHoliday { get; set; }
         public int Thanksgiving { get; set; }
         public string ThanksgivingOther { get; set; }
+        public string ThanksgivingTime { get; set; }
         public int Christmas { get; set; }
         public string ChristmasTime { get; set; }
         public string ChristmasOther { get; set; }
         public int SpringBreak { get; set; }
         public string SpringOther { get; set; }
+        public string SpringBreakTime { get; set; }
         public int SummerBeginDays { get; set; }
         public string SummerBeginTime { get; set; }
         public int SummerEndDays { get; set; }
         public string SummerEndTime { get; set; }
-        public string SummerDetails { get; set; } 
+        public string SummerDetails { get; set; }
         public int FallBreak { get; set; }
         public string FallOther { get; set; }
+        public string FallBreakTime { get; set; }
+        public int ChristmasFather { get; set; }
+        public int ChristmasMother { get; set; }
+        public int SpringBreakFather { get; set; }
+        public int SpringBreakMother { get; set; }
+        public int FallBreakFather { get; set; }
+        public int FallBreakMother { get; set; }
+        public int ThanksgivingFather { get; set; }
+        public int ThanksgivingMother { get; set; }
         public int MlkFather { get; set; }
         public int MlkMother { get; set; }
         public int PresidentsFather { get; set; }
@@ -61,6 +72,9 @@ namespace Models
                 Christmas = Christmas,
                 ChristmasOther = ChristmasOther,
                 ChristmasTime = ChristmasTime,
+                ThanksgivingTime = ThanksgivingTime,
+                SpringBreakTime = SpringBreakTime,
+                FallBreakTime = FallBreakTime,
                 FallBreak = FallBreak,
                 FallOther = FallOther,
                 FathersBdayFather = FathersBdayFather,
@@ -68,6 +82,14 @@ namespace Models
                 FathersFather = FathersFather,
                 FathersMother = FathersMother,
                 FridayHoliday = FridayHoliday,
+                ChristmasFather = ChristmasFather,
+                ChristmasMother = ChristmasMother,
+                SpringBreakFather = SpringBreakFather,
+                SpringBreakMother = SpringBreakMother,
+                FallBreakFather = FallBreakFather,
+                FallBreakMother = FallBreakMother,
+                ThanksgivingFather = ThanksgivingFather,
+                ThanksgivingMother = ThanksgivingMother,
                 HalloweenFather = HalloweenFather,
                 HalloweenMother = HalloweenMother,
                 IndependenceFather = IndependenceFather,
@@ -102,7 +124,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var updatingEntity = (Holiday)entity;            
+            var updatingEntity = (Holiday)entity;
             ChildrensFather = updatingEntity.ChildrensFather;
             ChildrensMother = updatingEntity.ChildrensMother;
             Christmas = updatingEntity.Christmas;
@@ -115,6 +137,17 @@ namespace Models
             FathersFather = updatingEntity.FathersFather;
             FathersMother = updatingEntity.FathersMother;
             FridayHoliday = updatingEntity.FridayHoliday;
+            ChristmasFather = updatingEntity.ChristmasFather;
+            ChristmasMother = updatingEntity.ChristmasMother;
+            SpringBreakFather = updatingEntity.SpringBreakFather;
+            SpringBreakMother = updatingEntity.SpringBreakMother;
+            FallBreakFather = updatingEntity.FallBreakFather;
+            FallBreakMother = updatingEntity.FallBreakMother;
+            ThanksgivingFather = updatingEntity.ThanksgivingFather;
+            ThanksgivingMother = updatingEntity.ThanksgivingMother;
+            ThanksgivingTime = updatingEntity.ThanksgivingTime;
+            SpringBreakTime = updatingEntity.SpringBreakTime;
+            FallBreakTime = updatingEntity.FallBreakTime;
             HalloweenFather = updatingEntity.HalloweenFather;
             HalloweenMother = updatingEntity.HalloweenMother;
             IndependenceFather = updatingEntity.IndependenceFather;
@@ -142,7 +175,7 @@ namespace Models
             SummerEndTime = updatingEntity.SummerEndTime;
             SummerDetails = updatingEntity.SummerDetails;
             Thanksgiving = updatingEntity.Thanksgiving;
-            ThanksgivingOther = updatingEntity.ThanksgivingOther;            
+            ThanksgivingOther = updatingEntity.ThanksgivingOther;
         }
     }
 }

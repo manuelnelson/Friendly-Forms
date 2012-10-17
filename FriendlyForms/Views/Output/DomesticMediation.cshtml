@@ -10,23 +10,114 @@
         <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="icon-check"></i>Participants</a></li>
     </ul>
 }
-<h4>COUNTY SUPERIOR COURT</h4>
-<h4>STATE OF GEORGIA</h4>
-<hr />
-<div class="row-fluid">
-    <div class="span6" style="border-right: solid black 2px">
-        <h5>@Model.ParticipantViewModel.PlaintiffsName</h5>
-        <span>Plaintiff</span><br />
-        <br />
-        <span>vs.</span><br />
-        <br />
-        <h5>@Model.ParticipantViewModel.DefendantsName</h5>
-        <span>Defendant</span><br />
-    </div>
-    <div class="span6">
-        <span>@Model.CourtViewModel.CaseNumber</span><br />
-        <br />
-        Civil Action Case Number
-    </div>
-</div>
-<hr />
+<h3>Domestic Mediation Form</h3>
+<h4>Marital House</h4>
+@if(Model.HouseViewModel.MaritalHouse.Equals((int)YesNo.No))
+{
+    <p>There is no marital home at issue in this case.</p>
+}else
+{
+    <p>The marital house is located at @Model.HouseViewModel.Address . It has an estimated equity of @Model.HouseViewModel.Equity, $@Model.HouseViewModel.RetailValue retail value, $@Model.HouseViewModel.MoneyOwed, and 
+        @Model.HouseViewModel.MortgageOwner is the mortgage owner.  The parties have agreed that issues related to the marital home will be handled in the following manner: 
+    </p>
+}
+<h4>Real Estate and Property</h4>
+@if(Model.RealEstateViewModel.RealEstate.Equals((int)YesNo.No))
+{
+    <p>There are no other real estate properties for consideration in this case.</p>
+}else
+{
+    <p>The parties agree that issues regarding real property, other than the marital home, will be handled in the following manner: @Model.RealEstateViewModel.RealEstateDescription 
+    </p>
+}
+@if(Model.RealEstateViewModel.PersonalProperty.Equals((int)PersonalProperty.AlreadyDivided))
+{
+    <p>The parties have already divided household furnishings and other personal property to their satisfaction.  All furnishings and personal property in the possession of each respective party shall be each party’s exclusive property, effective immediately, or on the effective date of the agreement as stated herein.</p>
+}
+else if (Model.RealEstateViewModel.PersonalProperty.Equals((int)PersonalProperty.Court))
+{
+    <p>The division of the parties’ personal property and household furnishings is left for the determination of the court.</p>
+}else
+{
+    <p>The parties have determined that their household furnishings and personal property will be divided as follows.  All furnishings and/or property not mentioned expressly here  will become the exclusive property of the holder of that property, effective immediately, or on the effective date of the agreement as stated herein: @Model.RealEstateViewModel.DividingProperty</p>
+}
+<h4>Vehicles</h4>
+@if(!Model.VehicleViewModel.VehicleList.Any())
+{
+    <p>There are no vehicles at issue in this case.  Each party will own and have exclusive use of the vehicle(s) currently in her or her possession, and each party will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering such vehicle(s).</p>
+}else
+{
+    foreach (var vehicle in Model.VehicleViewModel.VehicleList)
+    {
+        <p>@vehicle.Owner will have ownership and exclusive use of the @vehicle.Year @vehicle.Make @vehicle.Model. 
+            @vehicle.Owner will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering said vehicle.
+        </p> 
+    }
+}
+<h4>Debt</h4>
+@if(Model.DebtViewModel.MaritalDebt.Equals((int)YesNo.No))
+{
+    <p>There is no marital debt to be considered in this case.  Each party will be solely responsible for all debt held in his or her name.</p>
+}else
+{
+    <p>The parties agree that marital debt will be divided in the following manner: @Model.DebtViewModel.DebtDivision</p>
+}
+<h4>Assets</h4>
+<h5>Retirement</h5>
+@if(Model.AssetViewModel.Retirement.Equals((int)YesNo.No))
+{
+    <p>There are no retirement assets to be considered in this case.  All retirement assets held in either party’s name will be the exclusive property of the party in whose name those assets are held.</p>
+}else
+{
+    <p>The parties agree that marital retirement assets will be divided in the following manner: @Model.AssetViewModel.RetirementDescription</p>
+}
+<h5>Non-Retirement</h5>
+@if(Model.AssetViewModel.NonRetirement.Equals((int)YesNo.No))
+{
+    <p>There are no non-retirement assets to be considered in this case.  All non-retirement assets held in either party’s name will be the exclusive property of the party in whose name those assets are held.</p>
+}else
+{
+    <p>The parties agree that marital non-retirement assets will be divided in the following manner: @Model.AssetViewModel.NonRetirementDescription</p>
+}
+<h5>Business Assets and Liabilities</h5>
+@if(Model.AssetViewModel.Business.Equals((int)YesNo.No))
+{
+    <p>There are no business assets or liabilitiesto be considered in this case.  All business assets and/or liabilities held in either party’s name will be the exclusive property property or responsibility of the party in whose name those assets or liabilities are held.</p>
+}else
+{
+    <p>The parties agree that business assets and liabilities will be divided in the following manner: @Model.AssetViewModel.BusinessDescription</p>
+}
+<h4>Spousal Support</h4>
+@if(Model.SpousalViewModel.Spousal.Equals((int)YesNo.No))
+{
+    <p>The parties agree that there will be no provision of spousal support in this case.</p>
+}else
+{
+    <p>The parties agree that spousal support will be provided in accordance with the following: @Model.SpousalViewModel.SpousalDescription</p>
+}
+<h4>Taxes</h4>
+@if(Model.TaxViewModel.Taxes.Equals((int)YesNo.No))
+{
+    <p>The parties agree that the following will apply in regard to federal and state tax filings: @Model.TaxViewModel.TaxDescription</p>
+}else
+{
+    <p>Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
+}
+<h4>Child Support</h4>
+@if(Model.ChildSupportViewModel.TemporaryAgreement.Equals(YesNo.Yes))
+{
+    <p>This agreement is final.  For more information on child support, please refer to the Child Support Form.</p>
+}
+else
+{
+    <p>Please note that this is a temporary agreement.</p>
+}
+<p>The parties have agreed that child support will be paid by @Model.ChildSupportViewModel.PaidBy to @Model.ChildSupportViewModel.PaidTo in the amount of $@Model.ChildSupportViewModel.MonthlyAmount per month. This is will be effective starting @Model.ChildSupportViewModel.PaymentDay and will be 
+    @if(Model.ChildSupportViewModel.Payment.Equals((int)YesNo.Yes))
+    {
+        @: paid by payroll deduction.
+    }else
+    {
+        @: remitted directly from payor to payee.
+    }
+</p>

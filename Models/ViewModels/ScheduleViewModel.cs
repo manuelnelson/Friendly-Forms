@@ -15,8 +15,18 @@ namespace Models.ViewModels
         [RegularExpression(pattern: @"^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$", ErrorMessage = @"Date must be in mm/dd/yyyy format")]
         public string BeginDate { get; set; }
         [Required]
-        [Display(Name = "Details")]
-        public string WeekendDescription { get; set; }
+        [Display(Name = "Father Weekend")]
+        public string FatherWeekendOther { get; set; }
+        [Display(Name = "Mother Weekend")]
+        public string MotherWeekendOther { get; set; }
+
+        [Required]
+        [Display(Name = "Weekend Start")]
+        public string WeekendDayStart { get; set; }
+        [Required]
+        [Display(Name = "Weekend End")]
+        public string WeekendDayEnd { get; set; }
+
         [Required]
         [Display(Name = "Pick up")]
         public string PickedUp { get; set; }
@@ -72,7 +82,10 @@ namespace Models.ViewModels
                     PickupLocation = PickupLocation,
                     UserId = UserId,
                     Weekdays = Weekdays,
-                    WeekendDescription = WeekendDescription,
+                    FatherWeekendOther = FatherWeekendOther,
+                    MotherWeekendOther = MotherWeekendOther,
+                    WeekendDayEnd = WeekendDayEnd,
+                    WeekendDayStart = WeekendDayStart,
                     WeekdayDropoff = string.IsNullOrEmpty(WeekdayDropoff) ? (DateTime?)null : Convert.ToDateTime(WeekdayDropoff),                    
                     WeekdayDropoffLocation = WeekdayDropoffLocation,
                     WeekdayPickup = string.IsNullOrEmpty(WeekdayPickup) ? (DateTime?)null : Convert.ToDateTime(WeekdayPickup),                    

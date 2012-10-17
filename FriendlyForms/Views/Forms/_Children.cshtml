@@ -9,6 +9,7 @@
                     <h5>Add Children</h5>
                 </div>
                 <div class="widget-content">
+                    <p class="informative">If there are no children involved in this case, <a href="@Url.Action("Financial")" title="Financial Form">please advance to the next form</a></p>
                     @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "child" }))
                     {
                         <div class="control-group row-fluid other-other">
