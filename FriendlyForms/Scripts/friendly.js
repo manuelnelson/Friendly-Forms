@@ -14133,6 +14133,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
             type: 'POST',
             data: model,
             success: function () {
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 Friendly.NextForm(nextForm);
                 Friendly.EndLoading();
                 return false;
@@ -14159,6 +14160,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
             type: 'POST',
             data: model,
             success: function () {
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 Friendly.NextForm(nextForm);
                 Friendly.EndLoading();
                 return false;
@@ -14963,8 +14965,11 @@ $(document).ready(function () {
     
 });
 ;$(document).ready(function () {
-    $('#printForm').click(function() {
-        var html = $('#main-content').html();        
+    $('.printForm').click(function() {
+        var html = $('#main-content').html();
+        //remove button at end of form
+        html = html.replace(/<input.*>/, "");
+        Friendly.StartLoading();
         $.ajax({
             url: '/Output/PrintForm',
             type: 'POST',
@@ -14972,7 +14977,7 @@ $(document).ready(function () {
                 html: html
             },
             success: function(data) {
-                
+                Friendly.EndLoading();
             },
             error: Friendly.GenericErrorMessage
         });
@@ -15040,18 +15045,43 @@ $(document).ready(function () {
         updatePlaintiffCustodial();
     });
     $('input[name=PlaintiffCustodialParent]').change(function () {
-        var val = $('#PlaintiffCustodialParent:checked').val() % 2 + 1;
-        $('#DefendantCustodialParent[value="' + val + '"]').attr('checked', 'checked');
+        var val = $('#PlaintiffCustodialParent:checked').val();
+        switch (val) {
+            case "1":
+                $('#DefendantCustodialParent[value="2"]').attr('checked', 'checked');
+                break;
+            case "2":
+                $('#DefendantCustodialParent[value="1"]').attr('checked', 'checked');
+                break;
+            case "3":
+                $('#DefendantCustodialParent[value="3"]').attr('checked', 'checked');
+                break;
+        }
         updatePlaintiffCustodial();
     });
     $('input[name=DefendantCustodialParent]').change(function () {
         var val = $('#DefendantCustodialParent:checked').val() % 2 + 1;
-        $('#PlaintiffCustodialParent[value="' + val + '"]').attr('checked', 'checked');
+        switch (val) {
+            case "1":
+                $('#PlaintiffCustodialParent[value="2"]').attr('checked', 'checked');
+                break;
+            case "2":
+                $('#PlaintiffCustodialParent[value="1"]').attr('checked', 'checked');
+                break;
+            case "3":
+                $('#PlaintiffCustodialParent[value="3"]').attr('checked', 'checked');
+                break;
+        }
         updatePlaintiffCustodial();
     });
+    //call this function to have it update the first time when page loads
+    updatePlaintiffCustodial();
     function updatePlaintiffCustodial() {
         //get values
         var plaintiffCustodial = $('#PlaintiffCustodialParent:checked').val();
+        if(typeof (plaintiffCustodial) === 'undefined') {
+            return;
+        }
         var custodial, nonCustodial;
         if (plaintiffCustodial === "1") {
             //primary custodial
@@ -15234,7 +15264,7 @@ $(document).ready(function () {
     //Decisions Form
     $('.dropdown-toggle').dropdown();
 
-    $('#copy-decisions li a').on('click', function () {
+    $('#copy-decisions').on('click', "li a", function () {
         if (!$('#decisions').valid()) {
             return false;
         }
@@ -15245,6 +15275,8 @@ $(document).ready(function () {
                 var currChild = children[i];
                 copyDecision(currChild.Id);
             }
+        } else {
+            copyDecision(childId);
         }
     });
     function copyDecision(childId) {
@@ -15343,6 +15375,7 @@ $(document).ready(function () {
             type: 'POST',
             data: model,
             success: function () {
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 $('input[id=DecisionsViewModel_Education]').removeAttr('checked');
                 $('input[id=DecisionsViewModel_HealthCare]').removeAttr('checked');
                 $('input[id=DecisionsViewModel_Religion]').removeAttr('checked');
@@ -15412,16 +15445,14 @@ $(document).ready(function () {
             TransportationCosts: $('#TransportationCosts:checked').val(),
             FatherPercentage: 0,
             MotherPercentage: 0,
-            FatherCost: '',
-            MotherCost: ''
+            OtherDetails: ''
         };
         if (model.TransportationCosts === "3") {
             model.FatherPercentage = $('#FatherPercentage').val();
             model.MotherPercentage = $('#MotherPercentage').val();
         }
         if (model.TransportationCosts === "4") {
-            model.FatherCost = $('#FatherCost').val();
-            model.MotherCost = $('#MotherCost').val();
+            model.OtherDetails = $('#OtherDetails').val();
         }
         if ($(this).hasClass('next'))
             Friendly.SubmitForm('responsibility', 'communication', model);
@@ -15490,6 +15521,7 @@ $(document).ready(function () {
     });
     $('input[name=FatherWeekend]').change(function () {
         var checked = $('#FatherWeekend:checked').val();
+        $('.schedule-weekend-other').hide();
         switch (checked) {
             case "1":
                 $('#MotherWeekend[value="1"]').attr('checked', 'checked');
@@ -15505,11 +15537,13 @@ $(document).ready(function () {
                 break;
             case "5":
                 $('#MotherWeekend[value="5"]').attr('checked', 'checked');
+                $('.schedule-weekend-other').show();
                 break;
         }
     });
     $('input[name=MotherWeekend]').change(function () {
         var checked = $('#MotherWeekend:checked').val();
+        $('.schedule-weekend-other').hide();
         switch (checked) {
             case "1":
                 $('#FatherWeekend[value="1"]').attr('checked', 'checked');
@@ -15525,6 +15559,7 @@ $(document).ready(function () {
                 break;
             case "5":
                 $('#FatherWeekend[value="5"]').attr('checked', 'checked');
+                $('.schedule-weekend-other').show();
                 break;
         }
     });
@@ -15606,6 +15641,9 @@ $(document).ready(function () {
                 $('#HolidayViewModel_ThanksgivingOther').val(data.Holidays.ThanksgivingOther);
                 $('#HolidayViewModel_Christmas[value="' + data.Holidays.Christmas + '"]').attr('checked', 'checked');
                 $('#HolidayViewModel_ChristmasTime').val(data.Holidays.ChristmasTime);
+                $('#HolidayViewModel_SpringBreakTime').val(data.Holidays.SpringBreakTime);
+                $('#HolidayViewModel_FallBreakTime').val(data.Holidays.FallBreakTime);
+                $('#HolidayViewModel_ThanksgivingTime').val(data.Holidays.ThanksgivingTime);
                 $('#HolidayViewModel_ChristmasOther').val(data.Holidays.ChristmasOther);
                 $('#HolidayViewModel_SpringBreak[value="' + data.Holidays.SpringBreak + '"]').attr('checked', 'checked');
                 $('#HolidayViewModel_SpringOther').val(data.Holidays.SpringOther);
@@ -15616,6 +15654,14 @@ $(document).ready(function () {
                 $('#HolidayViewModel_SummerDetails').val(data.Holidays.SummerDetails);
                 $('#HolidayViewModel_FallBreak[value="' + data.Holidays.FallBreak + '"]').attr('checked', 'checked');
                 $('#HolidayViewModel_FallOther').val(data.Holidays.FallOther);
+                $('#HolidayViewModel_SpringBreakFather[value="' + data.Holidays.SpringBreakFather + '"]').attr('checked', 'checked');
+                $('#HolidayViewModel_SpringBreakMother[value="' + data.Holidays.SpringBreakMother + '"]').attr('checked', 'checked');
+                $('#HolidayViewModel_FallBreakFather[value="' + data.Holidays.FallBreakFather + '"]').attr('checked', 'checked');
+                $('#HolidayViewModel_FallBreakMother[value="' + data.Holidays.FallBreakMother + '"]').attr('checked', 'checked');
+                $('#HolidayViewModel_ThanksgivingFather[value="' + data.Holidays.ThanksgivingFather + '"]').attr('checked', 'checked');
+                $('#HolidayViewModel_ThanksgivingMother[value="' + data.Holidays.ThanksgivingMother + '"]').attr('checked', 'checked');
+                $('#HolidayViewModel_ChristmasFather[value="' + data.Holidays.ChristmasFather + '"]').attr('checked', 'checked');
+                $('#HolidayViewModel_ChristmasMother[value="' + data.Holidays.ChristmasMother + '"]').attr('checked', 'checked');
                 $('#HolidayViewModel_MlkFather[value="' + data.Holidays.MlkFather + '"]').attr('checked', 'checked');
                 $('#HolidayViewModel_MlkMother[value="' + data.Holidays.MlkMother + '"]').attr('checked', 'checked');
                 $('#HolidayViewModel_PresidentsFather[value="' + data.Holidays.PresidentsFather + '"]').attr('checked', 'checked');
@@ -15782,7 +15828,7 @@ $(document).ready(function () {
                 Friendly.SubmitForm('holiday', 'schedule', model);
                 return false;
             }
-
+            Friendly.StartLoading();
             //save current information
             $.ajax({
                 url: '/Forms/Holidays/',
@@ -15790,8 +15836,10 @@ $(document).ready(function () {
                 data: model,
                 success: function () {
                     $('#holiday')[0].reset();
+                    $('html, body').animate({scrollTop:0}, 'fast');
                     var nextChild = children[childNdx];
                     getChildHoliday(nextChild);
+                    Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
             });
@@ -15847,7 +15895,7 @@ $(document).ready(function () {
         loadChildren('holiday');
     });
     
-    $('#copy-holidays li a').on('click', function () {
+    $('#copy-holidays').on('click',"li a", function () {
         if (!$('#holiday').valid()) {
             return;
         }

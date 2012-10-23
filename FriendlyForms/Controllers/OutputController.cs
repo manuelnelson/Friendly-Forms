@@ -228,7 +228,7 @@ namespace FriendlyForms.Controllers
             try
             {
                 var contentPath = Server.MapPath("~/Content/");
-                var css = System.IO.File.ReadAllText(Path.Combine(contentPath + "pdf.css"));
+                var css = System.IO.File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
                 //var css = @"#main-content hr{border-color:red;} h4{font-size: 60px};";
                 var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style></head><body><div id=""main-content"">{1}</div></body></html>",css, html);
                 var config = new ObjectConfig();

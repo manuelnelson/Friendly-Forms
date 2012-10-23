@@ -8,7 +8,7 @@
                 <div class="widget-title">
                     <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Holidays</h5>
-                    <div class="btn dropdown pull-right" id="copy-holidays">
+                    <div class="btn dropdown pull-right copy-button" id="copy-holidays">
                         <a href="#" style="display: block;" data-target="#copy-holidays" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
                         <ul class="dropdown-menu pull-right">
                             <li><a title="all" data-id="0" href="#">All</a></li>
@@ -21,9 +21,8 @@
                         <label class="informative">
                             In this section, you will define scheduling holidays with your child(ren).</label>
                         <input type="hidden" id="holidayChildId" /><br />
-                        <br />
                         <h4 id="holidayChildName"></h4>
-                        <h4>Thanksgiving Break</h4>
+                        <h5>Thanksgiving Break</h5>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage Thanksgiving break? From the time school is dismissed on the last day prior to the holiday until:</label>
@@ -57,7 +56,7 @@
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ThanksgivingTime)
                         </div>                
-                        <h4>Christmas Break</h4>
+                        <h5>Christmas Break</h5>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage Christmas break? From the time school is dismissed on the last day prior to the holiday</label>
@@ -106,7 +105,7 @@
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
                         </div>                
                         }
-                        <h4>Spring Break</h4>
+                        <h5>Spring Break</h5>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage the start of spring break?  From the time school is dismissed on the last day prior to the break until:</label>
@@ -139,7 +138,7 @@
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringBreakTime)
                         </div>                
-                        <h4>Summer Break</h4>
+                        <h5>Summer Break</h5>
                         <div class="control-group">
                             Summer vacation begins @Html.TextBoxFor(m => m.HolidayViewModel.SummerBeginDays, new { @class = "input-mini inline", placeholder = "#" }) days after the last day of school at @Html.TextBoxFor(m => m.HolidayViewModel.SummerBeginTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small inline" })
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
@@ -158,7 +157,7 @@
                             @Html.TextAreaFor(m => m.HolidayViewModel.SummerDetails, new { @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.SummerDetails)
                         </div>
-                        <h4>Fall Break</h4>
+                        <h5>Fall Break</h5>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage the start of fall break?  From the time school is dismissed on the last day prior to the break until:</label>

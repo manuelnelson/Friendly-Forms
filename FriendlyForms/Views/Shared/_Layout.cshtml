@@ -6,6 +6,7 @@
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderCssBundle("~/Content/friendly.css.bundle", BundleOptions.Normal) : Html.RenderCssBundle("~/Content/friendly.css.bundle", BundleOptions.MinifiedAndCombined))
+    @RenderSection("Styles", required: false)
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -26,12 +27,7 @@
     <div id="content">
         <div id="content-header">
             <h1>@ViewBag.Title</h1>
-            <div class="btn-group">
-                <a class="btn btn-large tip-bottom" title="Manage Files"><i class="icon-file"></i></a>
-                <a class="btn btn-large tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
-                <a class="btn btn-large tip-bottom" title="Manage Comments"><i class="icon-comment"></i><span class="label label-important">5</span></a>
-                <a class="btn btn-large tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
-            </div>
+            @RenderSection("ButtonGroup", required: false)
         </div>
         @RenderSection("Breadcrumb", required: false)
         <div class="container-fluid" id="main-content">

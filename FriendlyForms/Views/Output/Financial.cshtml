@@ -1,0 +1,21 @@
+﻿@using Models.ViewModels
+@model BusinessLogic.Models.AllFinancialViewModel 
+@{
+    ViewBag.Title = "Financial";
+}
+@section Sidebar{
+    <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <ul>
+        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Financial</a></li>
+    </ul>
+}
+@section Styles{
+    <link href="@Url.Content("~/Content/pdf.css")" rel="stylesheet" />
+}
+@section ButtonGroup{
+    <div class="btn-group">
+        <a class="btn btn-large tip-bottom" title="To PDF"><i class="icon-print"></i></a>
+    </div>
+}
+<h3>Financial Form</h3>
+<h4>Income</h4>

@@ -42,17 +42,17 @@
                         @if (Model.PlanType.Equals((int)PlanType.ExistingOrder) || Model.PlanType.Equals((int)PlanType.ExistingPlan))
                         {
                             <div class="control-group court-date">
-                                <label class="informative">Date of Plan</label>
-                                @Html.TextBoxFor(m => m.PlanDate, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                                @Html.ValidationMessageFor(m => m.PlanDate)
+                                <label class="informative">Case Number</label>
+                                @Html.TextBoxFor(m => m.ExistCaseNumber, new { placeholder = "Case Number", @class = "hoverHelp", data_content = "Your case number can be found XXXX." })
+                                @Html.ValidationMessageFor(m => m.ExistCaseNumber)
                             </div>                
                         }
                         else
                         {
                             <div class="control-group court-date hide">
-                                <label class="informative">Date of plan</label>
-                                @Html.TextBoxFor(m => m.PlanDate, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                                @Html.ValidationMessageFor(m => m.PlanDate)
+                                <label class="informative">Case Number</label>
+                                @Html.TextBoxFor(m => m.ExistCaseNumber, new { placeholder = "Case Number", @class = "hoverHelp", data_content = "Your case number can be found XXXX." })
+                                @Html.ValidationMessageFor(m => m.ExistCaseNumber)
                             </div>                
                         }
                     </div>

@@ -515,24 +515,16 @@ h4
 
 h1, h2, h3, h4, h5, h6
 {
-    margin: 0;
+    margin: 14px 0 4px 0;
     font-family: inherit;
     font-weight: bold;
     line-height: 1;
     color: inherit;
     text-rendering: optimizelegibility;
 }
-
-h4
-{
-    display: block;
-    -webkit-margin-before: 1.33em;
-    -webkit-margin-after: 1.33em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    font-weight: bold;
+#header h1 {
+    margin: 0px;
 }
-
 #main-content hr
 {
     border-color: black;

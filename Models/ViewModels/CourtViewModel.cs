@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Models.Contract;
 
@@ -19,9 +18,9 @@ namespace Models.ViewModels
         [Required]
         [Display(Name = "Plan Type")]
         public int PlanType { get; set; }
-        [Display(Name = "Plan Date")]
-        [RegularExpression(pattern: @"^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$", ErrorMessage = @"Date must be in mm/dd/yyyy format")]
-        public string PlanDate { get; set; }
+        [Display(Name = "Case Number")]
+        [RegularExpression("^[0-9a-zA-Z]*$", ErrorMessage = "Case Number must be alpha-numeric")]
+        public string ExistCaseNumber { get; set; }
 
         public IEnumerable<County> Counties { get; set; }
 
@@ -29,12 +28,12 @@ namespace Models.ViewModels
         {
             return new Court
             {
-                AuthorOfPlan = this.AuthorOfPlan,
-                CaseNumber = this.CaseNumber,
-                CountyId = this.CountyId,
-                PlanType = this.PlanType,
-                PlanDate = string.IsNullOrEmpty(PlanDate) ? (DateTime?)null : Convert.ToDateTime(PlanDate),
-                UserId = this.UserId
+                AuthorOfPlan = AuthorOfPlan,
+                CaseNumber = CaseNumber,
+                CountyId = CountyId,
+                PlanType = PlanType,
+                ExistCaseNumber = ExistCaseNumber,
+                UserId = UserId
             };
         }
 

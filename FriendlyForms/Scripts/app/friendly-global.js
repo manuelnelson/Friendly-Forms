@@ -57,6 +57,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
             type: 'POST',
             data: model,
             success: function () {
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 Friendly.NextForm(nextForm);
                 Friendly.EndLoading();
                 return false;
@@ -83,6 +84,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
             type: 'POST',
             data: model,
             success: function () {
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 Friendly.NextForm(nextForm);
                 Friendly.EndLoading();
                 return false;

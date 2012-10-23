@@ -474,6 +474,7 @@
     <Content Include="Views\Output\Index.cshtml" />
     <Content Include="Views\Output\Parenting.cshtml" />
     <Content Include="Views\Output\DomesticMediation.cshtml" />
+    <Content Include="Views\Output\Financial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">

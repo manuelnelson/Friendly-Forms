@@ -8,11 +8,12 @@
                 <div class="widget-title">
                     <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Decisions</h5>
-                        <div class="btn dropdown pull-right copy-button" id="copy-decisions"><a href="#" style="display:block;" data-target="#copy-decisions" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a title="all" data-id="0" href="#">All</a></li>
-                            </ul>
-                        </div>
+                    <div class="btn dropdown pull-right copy-button" id="copy-decisions">
+                        <a href="#" style="display: block;" data-target="#copy-decisions" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a title="all" data-id="0" href="#">All</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="widget-content">
                     @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "decisions" }))

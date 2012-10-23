@@ -60,13 +60,33 @@
         updatePlaintiffCustodial();
     });
     $('input[name=PlaintiffCustodialParent]').change(function () {
-        var val = $('#PlaintiffCustodialParent:checked').val() % 2 + 1;
-        $('#DefendantCustodialParent[value="' + val + '"]').attr('checked', 'checked');
+        var val = $('#PlaintiffCustodialParent:checked').val();
+        switch (val) {
+            case "1":
+                $('#DefendantCustodialParent[value="2"]').attr('checked', 'checked');
+                break;
+            case "2":
+                $('#DefendantCustodialParent[value="1"]').attr('checked', 'checked');
+                break;
+            case "3":
+                $('#DefendantCustodialParent[value="3"]').attr('checked', 'checked');
+                break;
+        }
         updatePlaintiffCustodial();
     });
     $('input[name=DefendantCustodialParent]').change(function () {
         var val = $('#DefendantCustodialParent:checked').val() % 2 + 1;
-        $('#PlaintiffCustodialParent[value="' + val + '"]').attr('checked', 'checked');
+        switch (val) {
+            case "1":
+                $('#PlaintiffCustodialParent[value="2"]').attr('checked', 'checked');
+                break;
+            case "2":
+                $('#PlaintiffCustodialParent[value="1"]').attr('checked', 'checked');
+                break;
+            case "3":
+                $('#PlaintiffCustodialParent[value="3"]').attr('checked', 'checked');
+                break;
+        }
         updatePlaintiffCustodial();
     });
     //call this function to have it update the first time when page loads
@@ -370,6 +390,7 @@
             type: 'POST',
             data: model,
             success: function () {
+                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 $('input[id=DecisionsViewModel_Education]').removeAttr('checked');
                 $('input[id=DecisionsViewModel_HealthCare]').removeAttr('checked');
                 $('input[id=DecisionsViewModel_Religion]').removeAttr('checked');
@@ -822,7 +843,7 @@
                 Friendly.SubmitForm('holiday', 'schedule', model);
                 return false;
             }
-
+            Friendly.StartLoading();
             //save current information
             $.ajax({
                 url: '/Forms/Holidays/',
@@ -830,8 +851,10 @@
                 data: model,
                 success: function () {
                     $('#holiday')[0].reset();
+                    $('html, body').animate({scrollTop:0}, 'fast');
                     var nextChild = children[childNdx];
                     getChildHoliday(nextChild);
+                    Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
             });

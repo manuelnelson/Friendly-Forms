@@ -12,7 +12,7 @@ namespace Models
         public string CaseNumber { get; set; }
         public int AuthorOfPlan { get; set; }
         public int PlanType { get; set; }
-        public DateTime? PlanDate { get; set; }
+        public string ExistCaseNumber { get; set; }
 
         public IViewModel ConvertToModel()
         {
@@ -22,7 +22,7 @@ namespace Models
                 CaseNumber = CaseNumber,
                 CountyId = CountyId,
                 PlanType = PlanType,
-                PlanDate = PlanDate != null ? PlanDate.Value.ToString("MM/dd/yyyy") : string.Empty,
+                ExistCaseNumber = ExistCaseNumber,
                 UserId = UserId
             };
         }
@@ -34,10 +34,7 @@ namespace Models
             CaseNumber = update.CaseNumber;
             CountyId = update.CountyId;
             PlanType = update.PlanType;
-            if (update.PlanDate.HasValue && update.PlanDate.Value.Year == 1)
-                PlanDate = null;
-            else
-                PlanDate = update.PlanDate;            
+            ExistCaseNumber = update.ExistCaseNumber;            
             UserId = update.UserId;
         }
 

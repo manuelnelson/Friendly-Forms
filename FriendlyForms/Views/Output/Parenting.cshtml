@@ -7,8 +7,15 @@
     <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
         <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Parenting</a></li>
-        <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="icon-check"></i>Participants</a></li>
     </ul>
+}
+@section Styles{
+    <link href="@Url.Content("~/Content/pdf.css")" rel="stylesheet" />
+}
+@section ButtonGroup{
+    <div class="btn-group">
+        <a class="btn btn-large tip-bottom printForm" title="To PDF"><i class="icon-print"></i></a>
+    </div>
 }
 <h4>COUNTY SUPERIOR COURT</h4>
 <h4>STATE OF GEORGIA</h4>
@@ -50,16 +57,21 @@
     }
     else if (Model.CourtViewModel.PlanType.Equals((int)PlanType.ExistingPlan))
     {
-        <p>This plan modiﬁes an existing Parenting Plan dated @Model.CourtViewModel.PlanDate</p>
+        <p>This plan modiﬁes an existing Parenting Plan dated @Model.CourtViewModel.ExistCaseNumber</p>
     }
     else
     {
-        <p>This plan modiﬁes an existing Order dated @Model.CourtViewModel.PlanDate</p>
+        <p>This plan modiﬁes an existing Order dated @Model.CourtViewModel.ExistCaseNumber</p>
     }
 </div>
 <h4>Children</h4>
 @if (Model.ChildrenViewModel.Children.Any())
 {
+    <div class="row-fluid">
+        <div class="span4 informative">Name</div>
+        <div class="span4 informative">Date of Birth</div>
+        <div class="span4 informative">Gender</div>
+    </div>
     foreach (var child in Model.ChildrenViewModel.Children)
     {
     <div class="row-fluid">
@@ -72,7 +84,7 @@
             else
             {
                 @:Not Provided
-                               }
+            }
         </div>
         <div class="span4">@Enum.GetName(typeof(Gender), child.Gender)</div>
     </div>
@@ -497,4 +509,4 @@ else
 {
     <p>There are no minor children of the parties to be considered in this matter.</p>
 }
-<input type="submit" id="printForm" class="btn-primary" />
+<input type="submit" class="btn-primary btn printForm" value="Print to PDF" />
