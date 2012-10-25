@@ -130,7 +130,7 @@
                     $('.child-table').show();
                     $('.child-table tbody').append(result);
                     Friendly.EndLoading();
-                    Friendly.ClearForm('children');
+                    Friendly.ClearForm('child');
                     return false;
                 },
                 error: Friendly.GenericErrorMessage
@@ -836,6 +836,7 @@
             //check if we need to move to next form
             if ($(this).hasClass('next') && childNdx === children.length) {
                 //Submit form, do final check. 
+                Friendly.SubmitForm('holiday', 'holiday', model);
                 return false;
             }
             //check if we need to move to previous form

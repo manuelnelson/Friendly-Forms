@@ -106,6 +106,7 @@
                                         @Html.ValidationMessageFor(m => m.FatherWeekendOther)
                                     </div>                                    
                                 }
+                                @Html.ValidationMessageFor(m => m.FatherWeekend)
                             </div>
                             <div class="span4">
                                 <label>Mother</label>
@@ -129,7 +130,6 @@
                                     </div>                                    
                                 }
                             </div>
-                            @Html.ValidationMessageFor(m => m.FatherWeekend)
                             @Html.ValidationMessageFor(m => m.MotherWeekend)
                         </div>
                         <div class="control-group">

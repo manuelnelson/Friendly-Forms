@@ -18,20 +18,19 @@
                 <label class="radio">Division of debt will be divided in the following manner: @Html.RadioButtonFor(m => m.MaritalDebt, (int)YesNo.No)</label>
                 @Html.ValidationMessageFor(m => m.MaritalDebt)
             </div>
-            @if(Model.MaritalDebt.Equals((int)YesNo.Yes))
-            {
-            <div class="control-group debt-details">
+            @if(Model.MaritalDebt.Equals((int)YesNo.No))
+            {            
+            <div class="control-group debt-details ">
                 @Html.TextAreaFor(m => m.DebtDivision, new { placeholder = "Details", @class="input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.DebtDivision)
             </div>
                 
             }else
             {
-            <div class="control-group debt-details hide  ">
+            <div class="control-group debt-details hide">
                 @Html.TextAreaFor(m => m.DebtDivision, new { placeholder = "Details", @class="input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.DebtDivision)
-            </div>
-                
+            </div>                
             }
                     </div>
                 </div>

@@ -14380,7 +14380,7 @@ $(document).ready(function () {
 
     $('input[name=MaritalDebt]').change(function () {
         $('#DebtDivision').val('');
-        if ($('#MaritalDebt:checked').val() === "1") {
+        if ($('#MaritalDebt:checked').val() === "2") {
             $('.debt-details').show();
         } else {
             $('.debt-details').hide();
@@ -14497,6 +14497,9 @@ $(document).ready(function () {
         //check if we need to move to previous form
         if ($(this).hasClass('previous')) {
             Friendly.SubmitForm('support', 'taxes', model);
+        }
+        if ($(this).hasClass('previous')) {
+            Friendly.SubmitForm('support', 'support', model);
         }
     });
     $('input[name=Payment]').change(function () {
@@ -15115,7 +15118,7 @@ $(document).ready(function () {
                     $('.child-table').show();
                     $('.child-table tbody').append(result);
                     Friendly.EndLoading();
-                    Friendly.ClearForm('children');
+                    Friendly.ClearForm('child');
                     return false;
                 },
                 error: Friendly.GenericErrorMessage
@@ -15821,6 +15824,7 @@ $(document).ready(function () {
             //check if we need to move to next form
             if ($(this).hasClass('next') && childNdx === children.length) {
                 //Submit form, do final check. 
+                Friendly.SubmitForm('holiday', 'holiday', model);
                 return false;
             }
             //check if we need to move to previous form

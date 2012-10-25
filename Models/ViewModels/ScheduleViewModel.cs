@@ -14,7 +14,6 @@ namespace Models.ViewModels
         [Display(Name = "Begin date")]
         [RegularExpression(pattern: @"^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$", ErrorMessage = @"Date must be in mm/dd/yyyy format")]
         public string BeginDate { get; set; }
-        [Required]
         [Display(Name = "Father Weekend")]
         public string FatherWeekendOther { get; set; }
         [Display(Name = "Mother Weekend")]

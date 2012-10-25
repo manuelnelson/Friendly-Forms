@@ -109,7 +109,7 @@
 
     $('input[name=MaritalDebt]').change(function () {
         $('#DebtDivision').val('');
-        if ($('#MaritalDebt:checked').val() === "1") {
+        if ($('#MaritalDebt:checked').val() === "2") {
             $('.debt-details').show();
         } else {
             $('.debt-details').hide();
@@ -226,6 +226,9 @@
         //check if we need to move to previous form
         if ($(this).hasClass('previous')) {
             Friendly.SubmitForm('support', 'taxes', model);
+        }
+        if ($(this).hasClass('next')) {
+            Friendly.SubmitForm('support', 'support', model);
         }
     });
     $('input[name=Payment]').change(function () {
