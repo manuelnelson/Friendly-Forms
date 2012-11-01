@@ -8,7 +8,7 @@ using Models;
 
 namespace DataLayerContext
 {
-    public class DataContext : DbContext, IUnitOfWork
+    public class SplitContext : DbContext, IUnitOfWork
     {
         public DbSet<Court> Courts { get; set; }
         public DbSet<Participant> Participants { get; set; }

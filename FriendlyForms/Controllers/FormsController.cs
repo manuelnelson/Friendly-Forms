@@ -163,7 +163,6 @@ namespace FriendlyForms.Controllers
                 var childFormatted = new 
                     {
                         Name = child.Name,
-                        Gender = Enum.GetName(typeof(Gender), model.Gender),
                         DateOfBirth = child.DateOfBirth.Value.ToString("MM/dd/yyyy"),
                         Id = child.Id
                     };
@@ -174,7 +173,6 @@ namespace FriendlyForms.Controllers
                 var childFormatted = new
                 {
                     Name = child.Name,
-                    Gender = Enum.GetName(typeof(Gender), model.Gender),
                     DateOfBirth = "Not provided",
                     Id = child.Id
                 };
@@ -285,11 +283,25 @@ namespace FriendlyForms.Controllers
             var health= _healthService.GetByUserId(userId);
             var spousal = _spousalService.GetByUserId(userId);
             var taxes = _taxService.GetByUserId(userId);
+            var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
+            List<SelectListItem> nameList;
+            if (participants != null)
+            {
+                nameList = new List<SelectListItem>()
+                    {
+                        new SelectListItem() {Text = participants.PlaintiffsName, Value = participants.PlaintiffsName},
+                        new SelectListItem() {Text = participants.DefendantsName, Value = participants.DefendantsName}
+                    };
+            } else
+            {
+                nameList = new List<SelectListItem>();
+            }
             var support = _childSupportService.GetByUserId(userId);
             var vehicles = _vehicleService.GetByUserId(userId).ToList();
             var vehicleModel = new VehicleViewModel()
                 {
-                    VehicleList = vehicles
+                    VehicleList = vehicles,
+                    Names = nameList
                 };
             var formsViewModel = new FormsCompletedDomestic()
             {
@@ -497,7 +509,6 @@ namespace FriendlyForms.Controllers
                     var childFormatted = new
                         {
                             Name = child.Name,
-                            Gender = Enum.GetName(typeof (Gender), child.Gender),
                             DateOfBirth = child.DateOfBirth.Value.ToString("MM/dd/yyyy"),
                             Id = child.Id
                         };
@@ -508,7 +519,6 @@ namespace FriendlyForms.Controllers
                     var childFormatted = new
                         {
                             Name = child.Name,
-                            Gender = Enum.GetName(typeof (Gender), child.Gender),
                             DateOfBirth = child.DateOfBirth.Value.ToString("MM/dd/yyyy"),
                             Id = child.Id
                         };
@@ -527,7 +537,6 @@ namespace FriendlyForms.Controllers
                 var childFormatted = new
                 {
                     Name = child.Name,
-                    Gender = Enum.GetName(typeof(Gender), model.Gender),
                     DateOfBirth = child.DateOfBirth.Value.ToString("MM/dd/yyyy"),
                     Id = child.Id
                 };
@@ -538,7 +547,6 @@ namespace FriendlyForms.Controllers
                 var childFormatted = new
                 {
                     Name = child.Name,
-                    Gender = Enum.GetName(typeof(Gender), model.Gender),
                     DateOfBirth = "Not provided",
                     Id = child.Id
                 };
@@ -562,7 +570,6 @@ namespace FriendlyForms.Controllers
             var childFormatted = new
             {
                 Name = child.Name,
-                Gender = Enum.GetName(typeof(Gender), model.Gender),
                 DateOfBirth = child.DateOfBirth.HasValue ? child.DateOfBirth.Value.ToString("MM/dd/yyyy"): "Not Provided",
                 Id = child.Id
             };

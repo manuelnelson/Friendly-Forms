@@ -250,7 +250,6 @@
         $.each($('.child-table tbody tr'), function (ndx, item) {
             var child = {
                 Name: $(item).find('.child-name').text(),
-                Gender: $(item).find('.child-gender').text(),
                 DateOfBirth: $(item).find('.child-dob').text(),
                 Id: $(item).find('.child-id').text().trim(),
             };

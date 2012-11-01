@@ -4,7 +4,7 @@ namespace DataLayerContext.Migrations
 {
     using System.Data.Entity.Migrations;
 
-    public class Configuration : DbMigrationsConfiguration<DataContext>
+    public class Configuration : DbMigrationsConfiguration<SplitContext>
     {
         public Configuration()
         {
@@ -12,7 +12,7 @@ namespace DataLayerContext.Migrations
             AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(DataContext context)
+        protected override void Seed(SplitContext context)
         {
             //  This method will be called after migrating to the latest version.
 

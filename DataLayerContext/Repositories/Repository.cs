@@ -18,9 +18,9 @@ namespace DataLayerContext.Repositories
             set { throw new NotImplementedException(); }
         }
 
-        protected DataContext DataContext
+        protected SplitContext SplitContext
         {
-            get { return (DataContext)UnitOfWork; }
+            get { return (SplitContext)UnitOfWork; }
         }
 
         public Repository(IUnitOfWork unitOfWork)
@@ -35,7 +35,7 @@ namespace DataLayerContext.Repositories
         /// <returns></returns>
         public virtual DbSet<TEntity> GetDbSet()
         {
-            return DataContext.Set<TEntity>();
+            return SplitContext.Set<TEntity>();
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace DataLayerContext.Repositories
         /// <param name="entityState"></param>
         protected virtual void SetEntityState(object entity, EntityState entityState)
         {
-            DataContext.Entry(entity).State = entityState;
+            SplitContext.Entry(entity).State = entityState;
         }
 
         /// <summary>

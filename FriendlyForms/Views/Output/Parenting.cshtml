@@ -86,7 +86,6 @@
                 @:Not Provided
             }
         </div>
-        <div class="span4">@Enum.GetName(typeof(Gender), child.Gender)</div>
     </div>
     }
 
@@ -285,7 +284,11 @@ CHILD(REN) SHALL BE ATTACHED AND MADE A PART OF THIS PARENTING PLAN.
         <span class="span3">@Enum.GetName(typeof(DecisionMaker), Model.ScheduleViewModel.FridayParent)</span>
     </div>
     <p>For purposes of this parenting plan, a weekday will start at @Model.ScheduleViewModel.WeekdayPickup at @Model.ScheduleViewModel.WeekdayPickupLocation and end at @Model.ScheduleViewModel.WeekdayDropoff at @Model.ScheduleViewModel.WeekdayDropoffLocation</p>   
-     }    
+     }
+     if(!string.IsNullOrEmpty(Model.ScheduleViewModel.AdditionalProvisions))
+     {
+         <p>Additionally, the following provisions regarding weekday visitation will apply to the children: @Model.ScheduleViewModel.AdditionalProvisions</p>
+     }
     <h4>Major holidays and Vacation Periods</h4>
     foreach (var child in Model.ChildrenViewModel.Children)
     {
@@ -326,18 +329,18 @@ CHILD(REN) SHALL BE ATTACHED AND MADE A PART OF THIS PARENTING PLAN.
                 <span>@childHolidays.ThanksgivingOther</span>
             }
         </p>
-        <h5>Christmas</h5>
+        <h5>Winter Break</h5>
         <p>
             @if(childHolidays.ChristmasFather.Equals((int)HolidayYear.Every))
             {
-                @:The father will have visitation at Christmas every year.  
+                @:The father will have visitation at Winter Break every year.  
             }
             else if(childHolidays.ChristmasMother.Equals((int)HolidayYear.Every))
             {
-                @:The mother will have visitation at Christmas every year.  
+                @:The mother will have visitation at Winter Break every year.  
             }else
             {
-                @:The @nonCustodyParent will have visitation at Christmas in
+                @:The @nonCustodyParent will have visitation at Winter Break in
                 @(@nonCustodyParent == "Father" ? Enum.GetName(typeof (HolidayYear), childHolidays.ChristmasFather) : Enum.GetName(typeof (HolidayYear), childHolidays.ChristmasMother))
                 @:years.
             } 
@@ -345,7 +348,7 @@ CHILD(REN) SHALL BE ATTACHED AND MADE A PART OF THIS PARENTING PLAN.
             school day prior tothe holiday break, and end at @childHolidays.ChristmasTime  
             @if (childHolidays.Christmas.Equals((int)Christmas.AfterBreak))
             {
-                <span> until returning to school after Christmas break</span>
+                <span> until returning to school after Winter Break</span>
             }
             else if (childHolidays.Christmas.Equals((int)Christmas.Eve))
             {

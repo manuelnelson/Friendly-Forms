@@ -26,6 +26,14 @@
             <input class="inline" name="ExtraDecisions${Id}" type="radio" value="3">
             {{/if}}
         </label>      
+        <label class="radio inline">
+            Not Applicable
+            {{if DecisionMaker===4}}
+            <input checked="checked" class="inline extra-decision-maker" name="ExtraDecisions${Id}" type="radio" value="4">
+            {{else}}
+            <input class="inline" name="ExtraDecisions${Id}" type="radio" value="4">
+            {{/if}}
+        </label>      
         <span class="field-validation-valid" data-valmsg-for="ExtraDecisions${Id}" data-valmsg-replace="true"></span>  
         <input type="hidden" id="extra-decision-childId" value="${ChildId}" />
         <input type="hidden" id="extra-decision-Id" value="${Id}" />            

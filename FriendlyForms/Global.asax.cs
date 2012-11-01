@@ -42,7 +42,7 @@ namespace FriendlyForms
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataLayerContext.DataContext, Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataLayerContext.SplitContext, Configuration>());
 
         }
 

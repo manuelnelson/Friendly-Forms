@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="widget-content">
-                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "holiday" }))
+                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "holiday" }))
                     {
                         <label class="informative">
                             In this section, you will define scheduling holidays with your child(ren).</label>
@@ -56,11 +56,11 @@
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ThanksgivingTime)
                         </div>                
-                        <h5>Christmas Break</h5>
+                        <h5>Winter Break</h5>
                         <div class="control-group">
                             <label class="informative">
-                                How would you like to manage Christmas break? From the time school is dismissed on the last day prior to the holiday</label>
-                            <label class="radio">Until returning to school after Christmas break  @Html.RadioButtonFor(m => m.HolidayViewModel.Christmas, (int)Christmas.AfterBreak)</label>
+                                How would you like to manage Winter Break? From the time school is dismissed on the last day prior to the holiday</label>
+                            <label class="radio">Until returning to school after Winter Break @Html.RadioButtonFor(m => m.HolidayViewModel.Christmas, (int)Christmas.AfterBreak)</label>
                             <label class="radio">On Christmas Eve  @Html.RadioButtonFor(m => m.HolidayViewModel.Christmas, (int)Christmas.Eve)</label>
                             <label class="radio">On Christmas Day @Html.RadioButtonFor(m => m.HolidayViewModel.Christmas, (int)Christmas.Day)</label>
                             <label class="radio">On the day after Christmas  @Html.RadioButtonFor(m => m.HolidayViewModel.Christmas, (int)Christmas.AfterDay)</label>
@@ -91,7 +91,7 @@
                         {
                         <div class="control-group christmas-other">
                             <label class="informative">
-                                Define Christmas break time</label>
+                                Define Winter Break time</label>
                             @Html.TextAreaFor(m => m.HolidayViewModel.ChristmasOther, new { @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
                         </div>                
@@ -100,7 +100,7 @@
                         {
                         <div class="control-group christmas-other hide">
                             <label class="informative">
-                                Define Christmas break time</label>
+                                Define Winter Break time</label>
                             @Html.TextAreaFor(m => m.HolidayViewModel.ChristmasOther, new { @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
                         </div>                
@@ -654,7 +654,7 @@
     <button class="btn btn-primary child-part10 previous" value="Continue"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary child-part10 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
 
-    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "extraHolidays" }))
+    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "extraHolidays" }))
     {
         <div class="row-fluid">
             <div class="span12">

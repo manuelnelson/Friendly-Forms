@@ -22,13 +22,14 @@ namespace Models.ViewModels
         [Required]
         public string ThanksgivingTime { get; set; }
         [Required]
+        [Display(Name="Winter break")]
         public int Christmas { get; set; }
 
-        [Display(Name = "Christmas Time")]
+        [Display(Name = "Winter Break Time")]
         [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
         public string ChristmasTime { get; set; }
 
-        [Display(Name = "Christmas details")]
+        [Display(Name = "Winter break details")]
         public string ChristmasOther { get; set; }
         
         [Required]

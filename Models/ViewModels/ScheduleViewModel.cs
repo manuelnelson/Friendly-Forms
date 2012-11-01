@@ -66,6 +66,9 @@ namespace Models.ViewModels
         public int? ThursdayParent { get; set; }
         [Display(Name = "Friday parent")]
         public int? FridayParent { get; set; }
+        [Display(Name = "Additional Provisions")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        public string AdditionalProvisions { get; set; }
 
         public IFormEntity ConvertToEntity()
         {
@@ -93,6 +96,7 @@ namespace Models.ViewModels
                     TuesdayParent = TuesdayParent ?? 0,
                     WednesdayParent = WednesdayParent ?? 0,
                     ThursdayParent = ThursdayParent ?? 0,
+                    AdditionalProvisions = AdditionalProvisions,
                     FridayParent = FridayParent ?? 0                    
                 };
         }

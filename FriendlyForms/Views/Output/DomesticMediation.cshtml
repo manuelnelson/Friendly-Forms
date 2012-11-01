@@ -19,6 +19,7 @@
     <p>The marital house is located at @Model.HouseViewModel.Address . It has an estimated equity of @Model.HouseViewModel.Equity, $@Model.HouseViewModel.RetailValue retail value, $@Model.HouseViewModel.MoneyOwed, and 
         @Model.HouseViewModel.MortgageOwner is the mortgage owner.  The parties have agreed that issues related to the marital home will be handled in the following manner: 
     </p>
+    <p>The parties have agreed that issues related to the marital home will be handled in the following manner: @Model.HouseViewModel.Divide</p>
 }
 <h4>Real Estate and Property</h4>
 @if(Model.RealEstateViewModel.RealEstate.Equals((int)YesNo.No))
@@ -51,6 +52,14 @@ else if (Model.RealEstateViewModel.PersonalProperty.Equals((int)PersonalProperty
         <p>@vehicle.Owner will have ownership and exclusive use of the @vehicle.Year @vehicle.Make @vehicle.Model. 
             @vehicle.Owner will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering said vehicle.
         </p> 
+        if(vehicle.Refinanced.Equals((int)YesNo.Yes))
+        {
+            <p>@vehicle.Name will refinance this vehicle by @if (vehicle.RefinanceDate != null)
+                                                            {
+                                                                @vehicle.RefinanceDate.Value.ToString("MM/dd/yyyy")
+                                                            }
+            </p>  
+        }
     }
 }
 <h4>Debt</h4>

@@ -23,6 +23,8 @@ namespace Models.ViewModels
         [StringLength(100)]
         public string MortgageOwner { get; set; }
 
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        public string Divide { get; set; }
         public IFormEntity ConvertToEntity()
         {
             return new House()
@@ -33,6 +35,7 @@ namespace Models.ViewModels
                     MoneyOwed = MoneyOwed ?? 0,
                     MortgageOwner = MortgageOwner,
                     RetailValue = RetailValue ?? 0,
+                    Divide = Divide,
                     UserId = UserId
                 };
         }

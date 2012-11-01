@@ -12517,7 +12517,7 @@ $.format = $.validator.format;
 
 !function( $ ) {
 
-	function UTCDate(){
+	function UTCDate(){ 
 		return new Date(Date.UTC.apply(Date, arguments));
 	}
 
@@ -14279,7 +14279,8 @@ $(document).ready(function () {
             MaritalHouse: $('#MaritalHouse:checked').val(),
             MoneyOwed: $('#MoneyOwed').val().replace(",", ""),
             MortgageOwner: $('#MortgageOwner').val(),
-            RetailValue: $('#RetailValue').val().replace(",", "")
+            RetailValue: $('#RetailValue').val().replace(",", ""),
+            Divide: $('#Divide').val()
         };
         Friendly.SubmitForm('maritalHouse', 'property', model);
     });
@@ -14317,6 +14318,15 @@ $(document).ready(function () {
             $('.property-details').show();
         } else {
             $('.property-details').hide();
+        }
+    });
+    
+    $('input[name=Refinanced]').change(function () {
+        $('#RefinanceDate').val('');
+        if ($('#Refinanced:checked').val() === "1") {
+            $('.vehicle-refinance').show();
+        } else {
+            $('.vehicle-refinance').hide();
         }
     });
     //Vehicle Form    
@@ -14498,7 +14508,7 @@ $(document).ready(function () {
         if ($(this).hasClass('previous')) {
             Friendly.SubmitForm('support', 'taxes', model);
         }
-        if ($(this).hasClass('previous')) {
+        if ($(this).hasClass('next')) {
             Friendly.SubmitForm('support', 'support', model);
         }
     });
@@ -15238,7 +15248,6 @@ $(document).ready(function () {
         $.each($('.child-table tbody tr'), function (ndx, item) {
             var child = {
                 Name: $(item).find('.child-name').text(),
-                Gender: $(item).find('.child-gender').text(),
                 DateOfBirth: $(item).find('.child-dob').text(),
                 Id: $(item).find('.child-id').text().trim(),
             };

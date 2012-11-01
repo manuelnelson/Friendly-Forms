@@ -10,34 +10,13 @@
                 </div>
                 <div class="widget-content">
                     <p class="informative">If there are no children involved in this case, <a href="@Url.Action("Financial")" title="Financial Form">please advance to the next form</a></p>
-                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "child" }))
-                    {
-                        <div class="control-group row-fluid other-other">
-                            <label class="span4">Name</label>
-                            @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
-                            @Html.ValidationMessageFor(m => m.Name)
-                        </div>
-                        <div class="control-group row-fluid other-other">
-                            <label class="span4">Gender</label>
-                            <label class="radio inline">Male @Html.RadioButtonFor(m => m.Gender, (int)Gender.Male, new { @class = "inline" })</label>
-                            <label class="radio inline">Female @Html.RadioButtonFor(m => m.Gender, (int)Gender.Female, new { @class = "inline" })</label>
-                            @Html.ValidationMessageFor(m => m.Gender)
-                        </div>
-                        <div class="control-group row-fluid other-other">
-                            <label class="span4">Date of Birth</label>
-                            @Html.TextBoxFor(m => m.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                            @Html.ValidationMessageFor(m => m.DateOfBirth)
-                        </div>
-                    }
-                    <button class="btn btn-primary" id="addChild" value="Add">Add </button><br/><br/>
                     @if (Model.Children != null && Model.Children.Any())
                     {
                         <div class="row-fluid child-table">
-                            <table class="table table-bordered table-striped">
+                            <table class="table table-bordered table-striped" style="width:50%;">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Gender</th>
                                         <th>Date of Birth</th>
                                     </tr>
                                 </thead>
@@ -46,7 +25,6 @@
                                     {
                                         <tr>
                                             <td class="child-name">@child.Name</td>
-                                            <td class="child-gender">@Enum.GetName(typeof(Gender), child.Gender)</td>
                                             <td class="child-dob">
                                                 @if (child.DateOfBirth != null)
                                                 {
@@ -73,7 +51,6 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Gender</th>
                                         <th>Date of Birth</th>
                                     </tr>
                                 </thead>
@@ -82,6 +59,23 @@
                             </table>
                         </div>                            
                     }
+                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "child" }))
+                    {
+                        <div class="control-group row-fluid other-other">
+                            <label class="span2">Name</label>
+                            @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
+                            @Html.ValidationMessageFor(m => m.Name)
+                        </div>
+                        <div class="control-group row-fluid other-other">
+                            <label class="span2">Date of Birth</label>
+                            @Html.TextBoxFor(m => m.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
+                            @Html.ValidationMessageFor(m => m.DateOfBirth)
+                        </div>
+                    }
+                    <button class="btn btn-primary" id="addChild" value="Add">Add </button>
+                    <br/>
+                    <br />
+
                 </div>
             </div>
         </div>

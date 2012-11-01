@@ -21,7 +21,8 @@
     {
         Father = 1,
         Mother = 2,
-        Both = 3
+        Both = 3,
+        NotApplicable
     };
     public enum ParentRelationship
     {

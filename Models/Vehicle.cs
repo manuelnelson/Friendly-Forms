@@ -1,4 +1,5 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using Models.ViewModels;
 
 namespace Models
@@ -11,6 +12,10 @@ namespace Models
         public string Model { get; set; }
         public int Year { get; set; }
         public string Owner { get; set; }
+        public int Refinanced { get; set; }
+        public string Name { get; set; }
+        public DateTime? RefinanceDate { get; set; }
+
 
         public IViewModel ConvertToModel()
         {
@@ -20,6 +25,9 @@ namespace Models
                     VehicleModel = Model,
                     Owner = Owner,
                     UserId = UserId,
+                    RefinanceDate = RefinanceDate.HasValue ? RefinanceDate.Value.ToString("MM/dd/yyyy") : "Not Provided",
+                    Name = Name,
+                    Refinanced = Refinanced,
                     Year = Year.ToString()
                 };
         }
@@ -31,6 +39,9 @@ namespace Models
             Make = updatingEntity.Make;
             Model = updatingEntity.Model;
             Year = updatingEntity.Year;
+            Refinanced = updatingEntity.Refinanced;
+            Name = updatingEntity.Name;
+            RefinanceDate = updatingEntity.RefinanceDate;
             Owner = updatingEntity.Owner;
         }
     }

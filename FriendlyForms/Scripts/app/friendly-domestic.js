@@ -8,7 +8,8 @@
             MaritalHouse: $('#MaritalHouse:checked').val(),
             MoneyOwed: $('#MoneyOwed').val().replace(",", ""),
             MortgageOwner: $('#MortgageOwner').val(),
-            RetailValue: $('#RetailValue').val().replace(",", "")
+            RetailValue: $('#RetailValue').val().replace(",", ""),
+            Divide: $('#Divide').val()
         };
         Friendly.SubmitForm('maritalHouse', 'property', model);
     });
@@ -46,6 +47,15 @@
             $('.property-details').show();
         } else {
             $('.property-details').hide();
+        }
+    });
+    
+    $('input[name=Refinanced]').change(function () {
+        $('#RefinanceDate').val('');
+        if ($('#Refinanced:checked').val() === "1") {
+            $('.vehicle-refinance').show();
+        } else {
+            $('.vehicle-refinance').hide();
         }
     });
     //Vehicle Form    

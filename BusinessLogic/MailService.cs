@@ -23,12 +23,11 @@ namespace BusinessLogic
 
         public void SendVerificationEmail(string email, string hashedEmail)
         {
-            const string subject = "Thanks for signing up to Friendly Form!";
+            const string subject = "Thanks for signing up to Split Solutions!";
             var message = "First, we need to verify your account.  To verify your account, please click on the following link:<br><br>";
-            message += "<a href='http://www.friendlyform.com/Account/Verify?email=" + email + "&randomhash=" + hashedEmail + "' target='_blank' title='Verification'>Verify</a> <br><br>";
-            message += "We hope the application is as easy to use as possible!<br><br> -The Friendly Form Team";
+            message += "<a href='http://www.splitsolutions.com/Account/Verify?email=" + email + "&randomhash=" + hashedEmail + "' target='_blank' title='Verification'>Verify</a> <br><br>";
+            message += "We hope the application is as easy to use as possible!<br><br> -The Split Solutions Team";
             SendEmail(email, subject, message);
-
         }
 
         public void SendEmail(string email, string subject, string body)

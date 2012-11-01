@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="widget-content">
-                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "decisions" }))
+                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "decisions" }))
                     {
                         <h4 id="childName"></h4>
                         <input type="hidden" id="childId" />
@@ -26,6 +26,7 @@
                             <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Father, new { @class = "inline" })</label>
                             <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
                             <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.DecisionsViewModel.Education)
                         </div>
                         <div class="control-group">
@@ -34,6 +35,7 @@
                             <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Father, new { @class = "inline" })</label>
                             <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
                             <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.DecisionsViewModel.HealthCare)
                         </div>
                         <div class="control-group">
@@ -42,6 +44,7 @@
                             <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Father, new { @class = "inline" })</label>
                             <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
                             <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.DecisionsViewModel.Religion)
                         </div>
                         <div class="control-group">
@@ -50,6 +53,7 @@
                             <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Father, new { @class = "inline" })</label>
                             <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
                             <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.DecisionsViewModel.ExtraCurricular)
                         </div>
                     }
@@ -99,6 +103,18 @@
                                     Both   
                                 <input class="inline extra-decision-maker"  name="@name" type="radio" value="3"></label>
                             }
+                            @if (decision.DecisionMaker.Equals(4))
+                            {
+                                <label class="radio inline">
+                                    Not Applicable   
+                                <input checked="checked" class="inline extra-decision-maker" name="@name"  type="radio" value="4"></label>
+                            }
+                            else
+                            {
+                                <label class="radio inline">
+                                    Not Applicable   
+                                <input class="inline extra-decision-maker"  name="@name" type="radio" value="4"></label>
+                            }
                             <span class="field-validation-valid" data-valmsg-for="@name" data-valmsg-replace="true"></span>
                             <input type="hidden" id="extra-decision-childId" value="@decision.ChildId" />
                             <input type="hidden" id="extra-decision-Id" value="@decision.Id" />
@@ -121,7 +137,7 @@
                     <h5>Add additional decisions (Optional)</h5>
                 </div>
                 <div class="widget-content">
-                    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "extraDecisions" }))
+                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "extraDecisions" }))
                     {
 
                         <div class="control-group">
@@ -130,6 +146,7 @@
                             <label class="radio inline">Father @Html.RadioButtonFor(m => m.ExtraDecisionsViewModel.DecisionMaker, (int)DecisionMaker.Father, new { @class = "inline" })</label>
                             <label class="radio inline">Mother @Html.RadioButtonFor(m => m.ExtraDecisionsViewModel.DecisionMaker, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
                             <label class="radio inline">Both @Html.RadioButtonFor(m => m.ExtraDecisionsViewModel.DecisionMaker, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.ExtraDecisionsViewModel.DecisionMaker, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.ExtraDecisionsViewModel.DecisionMaker)
                         </div>
                         <div class="control-group">

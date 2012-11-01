@@ -1,7 +1,7 @@
 ﻿@using Models.ViewModels
 @model ScheduleViewModel
 <div class="form-vertical wrapper hide" id="scheduleWrapper">
-    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "schedule" }))
+    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "schedule" }))
     {
         <div class="row-fluid">
             <div class="span12">
@@ -118,20 +118,21 @@
                                 @if (Model.MotherWeekend.Equals((int)ParentWeekends.Other))
                                 {
                                     <div class="schedule-weekend-other">
-                                    @Html.TextBoxFor(m => m.MotherWeekendOther, new {placeholder="Description"})
-                                    @Html.ValidationMessageFor(m => m.MotherWeekendOther)
+                                        @Html.TextBoxFor(m => m.MotherWeekendOther, new {placeholder="Description"})
+                                        @Html.ValidationMessageFor(m => m.MotherWeekendOther)
                                     </div>
                                 }
                                 else
                                 {
                                     <div class="hide schedule-weekend-other">
-                                    @Html.TextBoxFor(m => m.MotherWeekendOther, new {placeholder="Description"})
-                                    @Html.ValidationMessageFor(m => m.MotherWeekendOther)
+                                        @Html.TextBoxFor(m => m.MotherWeekendOther, new {placeholder="Description"})
+                                        @Html.ValidationMessageFor(m => m.MotherWeekendOther)
                                     </div>                                    
                                 }
                             </div>
                             @Html.ValidationMessageFor(m => m.MotherWeekend)
                         </div>
+                        <h4>Weekday Visitation</h4>
                         <div class="control-group">
                             <label>
                                 Will the <span class="nonCustodial"></span> spend time with the child(ren) during weekdays?</label>
@@ -198,36 +199,36 @@
                         else
                         {
                             <label class="informative schedule-weekday hide">
-                                As the noncustodial parent, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
-                            <div class="control-group schedule-weekday hide">
+                                As the <span class="nonCustodial"></span>, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
+                            <div class="control-group schedule-weekday">
                                 <label>
                                     What time will the child(ren) be picked up on weekdays?</label>
                                 @Html.TextBoxFor(m => m.WeekdayPickup, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
                                 <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 @Html.ValidationMessageFor(m => m.WeekdayPickup)
                             </div>                            
-                            <div class="control-group schedule-weekday hide">
+                            <div class="control-group schedule-weekday">
                                 <label>
                                     Where will the child(ren) be picked up?</label>
                                 @Html.TextBoxFor(m => m.WeekdayPickupLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                                 @Html.ValidationMessageFor(m => m.WeekdayPickupLocation)
                             </div>                            
-                            <div class="control-group schedule-weekday hide">
+                            <div class="control-group schedule-weekday">
                                 <label>
                                     What time will the child(ren) be dropped off on weekdays?</label>
                                 @Html.TextBoxFor(m => m.WeekdayDropoff, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
                                 <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 @Html.ValidationMessageFor(m => m.WeekdayDropoff)
                             </div>                            
-                            <div class="control-group schedule-weekday hide">
+                            <div class="control-group schedule-weekday">
                                 <label>
                                     Where will the child(ren) be dropped off?</label>
                                 @Html.TextBoxFor(m => m.WeekdayDropoffLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                                 @Html.ValidationMessageFor(m => m.WeekdayDropoffLocation)
                             </div>
-                            <div class="control-group row-fluid schedule-weekday hide">
+                            <div class="control-group row-fluid schedule-weekday">
                                 <label>
-                                    On what weekends during the month would you prefer to parent your child(ren)?</label>
+                                    On what days during the week would you prefer to parent your child(ren)?</label>
                                 <div class="span4">
                                     <label>Father</label>
                                     <label class="radio">Monday @Html.RadioButtonFor(m => m.MondayParent, (int)DecisionMaker.Father)</label>
@@ -249,8 +250,14 @@
                                 @Html.ValidationMessageFor(m => m.WednesdayParent)
                                 @Html.ValidationMessageFor(m => m.ThursdayParent)
                                 @Html.ValidationMessageFor(m => m.FridayParent)
-                            </div>  
+                            </div>                              
                         }
+                        <div class="control-group">
+                            <label>
+                                In addition to the above weekday visitation with regard to the children, are there any additional provisions which will apply?</label>
+                            @Html.TextAreaFor(m => m.AdditionalProvisions, new { placeholder = "List Provisions Here", @class = "input-xxlarge" })
+                            @Html.ValidationMessageFor(m => m.AdditionalProvisions)
+                        </div>                            
                     </div>
                 </div>
             </div>

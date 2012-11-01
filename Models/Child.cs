@@ -10,14 +10,12 @@ namespace Models
         public virtual int UserId { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime ? DateOfBirth { get; set; }
-        public virtual int Gender { get; set; }
 
         public IViewModel ConvertToModel()
         {
             return new ChildrenViewModel()
             {
                 DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided",
-                Gender = Gender,
                 Name = Name,
                 UserId = UserId,
                 Id = Id
@@ -29,7 +27,6 @@ namespace Models
         {
             var update = (Child) entity;
             DateOfBirth = update.DateOfBirth;
-            Gender = update.Gender;
             Name = update.Name;
             UserId = update.UserId;
 

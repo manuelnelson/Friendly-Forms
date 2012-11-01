@@ -1,7 +1,7 @@
 ﻿@using Models.ViewModels
 @model HouseViewModel
 <div class="form-vertical wrapper" id="maritalHouseWrapper">
-    @using (Html.BeginForm("ChildSupport", "Forms", FormMethod.Post, new { id = "maritalHouse" }))
+    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "maritalHouse" }))
     {
         <div class="row-fluid">
             <div class="span12">
@@ -46,6 +46,11 @@
                         @Html.TextBoxFor(m => m.MortgageOwner, new { placeholder = "Mortgage holder", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.MortgageOwner)
                     </div>
+                    <div class="control-group">
+                        <label class="informative">How will you divide the marital home?</label>
+                        @Html.TextBoxFor(m => m.Divide, new { placeholder = "Description", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.Divide)
+                    </div>                
                 </div>                
             }
             else
@@ -76,6 +81,11 @@
                         @Html.TextBoxFor(m => m.MortgageOwner, new { placeholder = "Mortgage holder", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.MortgageOwner)
                     </div>
+                    <div class="control-group">
+                        <label class="informative">How will you divide the marital home?</label>
+                        @Html.TextBoxFor(m => m.Divide, new { placeholder = "List items you consider to be personal property for consideration in your case. Items such as jewelry, artwork, recreational vehicles, etc are examples of personal property", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.Divide)
+                    </div>                
                 </div>
             }
                     </div>

@@ -31,6 +31,7 @@ namespace Models
         public int WednesdayParent { get; set; }
         public int ThursdayParent { get; set; }
         public int FridayParent { get; set; }
+        public string AdditionalProvisions { get; set; }
         public IViewModel ConvertToModel()
         {
             return new ScheduleViewModel()
@@ -57,6 +58,7 @@ namespace Models
                 TuesdayParent = TuesdayParent,
                 WednesdayParent = WednesdayParent,
                 ThursdayParent = ThursdayParent,
+                AdditionalProvisions = AdditionalProvisions,
                 FridayParent = FridayParent
             };
         }
@@ -85,6 +87,7 @@ namespace Models
             TuesdayParent = update.TuesdayParent;
             WednesdayParent = update.WednesdayParent;
             ThursdayParent = update.ThursdayParent;
+            AdditionalProvisions = update.AdditionalProvisions;
             FridayParent = update.FridayParent;
         }
     }

@@ -19,9 +19,6 @@ namespace Models.ViewModels
         [RegularExpression(pattern: @"^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$", ErrorMessage = @"Date must be in mm/dd/yyyy format")]
         public string DateOfBirth { get; set; }
         
-        [Required]
-        public int Gender { get; set; }
-
         public List<Child> Children { get; set; }
 
         public IFormEntity ConvertToEntity()
@@ -29,7 +26,6 @@ namespace Models.ViewModels
             return new Child()
                 {
                     DateOfBirth = string.IsNullOrEmpty(DateOfBirth) ? (DateTime?) null : Convert.ToDateTime(DateOfBirth),
-                    Gender = Gender,
                     Name = Name,
                     UserId = UserId,
                     Id = Id

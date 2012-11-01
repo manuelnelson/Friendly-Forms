@@ -13,7 +13,7 @@ namespace Models
         public int? MoneyOwed { get; set; }
         public int? Equity { get; set; }
         public string MortgageOwner { get; set; }
-
+        public string Divide { get; set; }
         public IViewModel ConvertToModel()
         {
             return new HouseViewModel()
@@ -24,6 +24,7 @@ namespace Models
                     MoneyOwed = MoneyOwed,
                     MortgageOwner = MortgageOwner,
                     RetailValue = RetailValue,
+                    Divide = Divide,
                     UserId = UserId
                 };
         }
@@ -38,6 +39,7 @@ namespace Models
             MoneyOwed = updatingEntity.MoneyOwed;
             Equity = updatingEntity.Equity;
             MortgageOwner = updatingEntity.MortgageOwner;
+            Divide = updatingEntity.Divide;
         }
     }
 }
