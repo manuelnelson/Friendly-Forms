@@ -1444,6 +1444,36 @@ table .span24 {
 .dropdown-menu > .active > a > [class*=" icon-"] {
   background-image: url("/Content/images/glyphicons-halflings-white.png");
 }
+.icon-blue,
+#sidebar li a i.icon-blue,
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+  background-image: url("/Content/images/glyphicons-halflings-blue.png");
+}
+.icon-red,
+#sidebar li a i.icon-red,
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+  background-image: url("/Content/images/glyphicons-halflings-red.png");
+}
+.icon-green,
+#sidebar li a i.icon-green,
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+  background-image: url("/Content/images/glyphicons-halflings-green.png");
+}
 .icon-glass {
   background-position: 0      0;
 }

@@ -13,7 +13,7 @@
 
 // For the white version of the icons, just add the .icon-white class:
 // <i class="icon-inbox icon-white"></i>
-
+ 
 [class^="icon-"],
 [class*=" icon-"] {
   display: inline-block;
@@ -29,7 +29,7 @@
 }
 
 /* White icons with optional class, or on hover/active states of certain elements */
-.icon-white,
+.icon-white, 
 .nav > .active > a > [class^="icon-"],
 .nav > .active > a > [class*=" icon-"],
 .dropdown-menu > li > a:hover > [class^="icon-"],
@@ -37,8 +37,34 @@
 .dropdown-menu > .active > a > [class^="icon-"],
 .dropdown-menu > .active > a > [class*=" icon-"] {
   background-image: url("@{iconWhiteSpritePath}");
+} 
+.icon-blue, #sidebar li a i.icon-blue, 
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+  background-image: url("@{iconBlueSpritePath}");
 }
-
+.icon-red, #sidebar li a i.icon-red, 
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+  background-image: url("@{iconRedSpritePath}");
+}
+.icon-green, #sidebar li a i.icon-green, 
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+  background-image: url("@{iconGreenSpritePath}");
+}
 .icon-glass              { background-position: 0      0; }
 .icon-music              { background-position: -24px  0; }
 .icon-search             { background-position: -48px  0; }

@@ -21,12 +21,15 @@
             @if(Model.Health.Equals((int)YesNo.No))
             {
             <div class="control-group health-detail">
+                <label class="informative">
+                    How will health insurance be funded?</label>
                 @Html.TextAreaFor(m => m.HealthDescription, new { placeholder = "Details", @class="input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.HealthDescription)
-            </div>
-                
+            </div>                
             } else
             {
+                <label class="informative">
+                    How will health insurance be funded?</label>
             <div class="control-group health-detail hide">
                 @Html.TextAreaFor(m => m.HealthDescription, new { placeholder = "Details", @class="input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.HealthDescription)
@@ -37,6 +40,5 @@
             </div>
         </div>
     }
-    <button class="btn btn-primary domestic-part6 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary domestic-part6 next">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>

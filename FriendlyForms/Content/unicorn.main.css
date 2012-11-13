@@ -149,7 +149,7 @@ a:hover {
 	color: #AAAAAA;
 }
 
-#sidebar > ul > li > a > i {
+#sidebar > ul > li > a > i, #sidebar > ul > li > ul > li > a > i{
 	margin-right: 10px;
 }
 

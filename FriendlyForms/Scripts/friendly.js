@@ -14083,6 +14083,9 @@ Friendly.properties = {
         Success: 'alert-success',
         Error: 'alert-error'
     },
+    iconSuccess: 'icon-green icon-ok',
+    iconEdit: 'icon-blue icon-pencil',
+    iconError: 'icon-red icon-pencil',
     numberRegEx: /(\d{1,5})/
 };
 Friendly.StartLoading = function () {
@@ -14134,7 +14137,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
             data: model,
             success: function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
-                Friendly.NextForm(nextForm);
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 Friendly.EndLoading();
                 return false;
             },
@@ -14173,13 +14176,15 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     }
     return false;
 };
-Friendly.NextForm = function (nextForm) {
-    $('#sidebar .active').find('i').attr('class', 'icon-ok');
-    $('#' + nextForm + 'Nav').find('i').attr('class', 'icon-pencil');
+Friendly.NextForm = function (nextForm, prevIcon) {    
+    $('#sidebar .active').find('i').attr('class', prevIcon);
+    $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
     $('.wrapper').hide();
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
+    
+
     if(nextForm === 'preexistingOther') {
         if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportOtherWrapper').show();
@@ -14207,6 +14212,82 @@ Friendly.ClearForm = function (formName) {
  .removeAttr('selected');
 };
 $(document).ready(function () {
+    // === Sidebar navigation === //
+
+    $('.submenu > a').click(function (e) {
+        e.preventDefault();
+        var submenu = $(this).siblings('ul');
+        var li = $(this).parents('li');
+        var submenus = $('#sidebar li.submenu ul');
+        var submenusParents = $('#sidebar li.submenu');
+        if (li.hasClass('open')) {
+            if (($(window).width() > 768) || ($(window).width() < 479)) {
+                submenu.slideUp();
+            } else {
+                submenu.fadeOut(250);
+            }
+            li.removeClass('open');
+        } else {
+            if (($(window).width() > 768) || ($(window).width() < 479)) {
+                submenus.slideUp();
+                submenu.slideDown();
+            } else {
+                submenus.fadeOut(250);
+                submenu.fadeIn(250);
+            }
+            submenusParents.removeClass('open');
+            li.addClass('open');
+        }
+    });
+
+    var ul = $('#sidebar > ul');
+
+    $('#sidebar > a').click(function (e) {
+        e.preventDefault();
+        var sidebar = $('#sidebar');
+        if (sidebar.hasClass('open')) {
+            sidebar.removeClass('open');
+            ul.slideUp(250);
+        } else {
+            sidebar.addClass('open');
+            ul.slideDown(250);
+        }
+    });
+    // === Fixes the position of buttons group in content header and top user navigation === //
+    function fixPosition() {
+        var uwidth = $('#user-nav > ul').width();
+        $('#user-nav > ul').css({ width: uwidth, 'margin-left': '-' + uwidth / 2 + 'px' });
+
+        var cwidth = $('#content-header .btn-group').width();
+        $('#content-header .btn-group').css({ width: cwidth, 'margin-left': '-' + uwidth / 2 + 'px' });
+    }
+
+
+    // === Resize window related === //
+    $(window).resize(function () {
+        if ($(window).width() > 479) {
+            ul.css({ 'display': 'block' });
+            $('#content-header .btn-group').css({ width: 'auto' });
+        }
+        if ($(window).width() < 479) {
+            ul.css({ 'display': 'none' });
+            fixPosition();
+        }
+        if ($(window).width() > 768) {
+            $('#user-nav > ul').css({ width: 'auto', margin: '0' });
+            $('#content-header .btn-group').css({ width: 'auto' });
+        }
+    });
+
+    if ($(window).width() < 468) {
+        ul.css({ 'display': 'none' });
+        fixPosition();
+    }
+    if ($(window).width() > 479) {
+        $('#content-header .btn-group').css({ width: 'auto' });
+        ul.css({ 'display': 'block' });
+    }
+
     $(".hoverHelp").popover({
         placement: 'left',
         title: 'Tip',
@@ -14261,12 +14342,29 @@ $(document).ready(function () {
     });
     //Form Navigation
     $('.nav-item').click(function () {
-        //if($(this).find('i').hasClass('icon-lock')) {
-        //    Friendly.ShowMessage("Sorry.  This page is currently locked. Please finish previous pages prior to opening this page.");
-        //    return false;
-        //}
-        var formToShow = $(this).children(':first-child').attr('data-form');
-        Friendly.NextForm(formToShow);
+        //before we navigate away, we need to check the status of the form
+        var currentFormName = $('ul .active').children(':first-child').attr('data-form');                
+        var nextForm = $(this).children(':first-child').attr('data-form');
+        if ($('#' + currentFormName).valid()) {
+            //TODO: we need to do a check of the form to see if it's a 'generic form' where we can just grab the input
+            //go ahead and save
+            var model = Friendly.GetFormInput(currentFormName);
+            $.ajax({
+                url: '/Forms/' + currentFormName + '/',
+                type: 'POST',
+                data: model,
+                success: function () {
+                    $('html, body').animate({ scrollTop: 0 }, 'fast');
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                    Friendly.EndLoading();
+                    return false;
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        } else {
+            Friendly.NextForm(nextForm, Friendly.properties.iconError);
+        }
+        
     });
 });
 ;$(document).ready(function () {
@@ -14295,14 +14393,7 @@ $(document).ready(function () {
 
     //Property Form
     $('.domestic-part2').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('property', 'vehicles');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('property', 'maritalHouse');
-        }
+        Friendly.SubmitForm('property', 'vehicles');
     });
     $('input[name=RealEstate]').change(function () {
         $('#RealEstateDescription').val('');
@@ -14360,13 +14451,7 @@ $(document).ready(function () {
 
     $('.domestic-part3').click(function () {
         //get values
-        if ($(this).hasClass('next')) {
-            Friendly.NextForm('debt');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.NextForm('property');
-        }
+        Friendly.NextForm('debt');
         Friendly.EndLoading();
         return false;
     });
@@ -14379,13 +14464,7 @@ $(document).ready(function () {
             MaritalDebt: $('#MaritalDebt:checked').val()
         };
         //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('debt', 'assets', model);
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('debt', 'vehicles', model);
-        }
+        Friendly.SubmitForm('debt', 'assets', model);
     });
 
     $('input[name=MaritalDebt]').change(function () {
@@ -14399,13 +14478,7 @@ $(document).ready(function () {
     //Asset Form
     $('.domestic-part5').click(function () {
         //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('assets', 'healthInsurance');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('assets', 'debt');
-        }
+        Friendly.SubmitForm('assets', 'healthInsurance');
     });
 
     $('input[name=Retirement]').change(function () {
@@ -14435,14 +14508,7 @@ $(document).ready(function () {
 
     //Health Insurance
     $('.domestic-part6').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('healthInsurance', 'spousalSupport');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('healthInsurance', 'assets');
-        }
+        Friendly.SubmitForm('healthInsurance', 'spousalSupport');
     });
     $('input[name=Health]').change(function () {
         $('#HealthDescription').val('');
@@ -14455,14 +14521,7 @@ $(document).ready(function () {
 
     //Spousal Support
     $('.domestic-part7').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('spousalSupport', 'taxes');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('spousalSupport', 'healthInsurance');
-        }
+        Friendly.SubmitForm('spousalSupport', 'taxes');
     });
     $('input[name=Spousal]').change(function () {
         $('#SpousalDescription').val('');
@@ -14474,14 +14533,7 @@ $(document).ready(function () {
     });
     //Spousal Support
     $('.domestic-part8').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('taxes', 'support');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('taxes', 'spousalSupport');
-        }
+        Friendly.SubmitForm('taxes', 'support');
     });
     $('input[name=Taxes]').change(function () {
         $('#TaxDescription').val('');
@@ -14504,13 +14556,7 @@ $(document).ready(function () {
             Payment: $('#Payment:checked').val(),
             PaymentDay: $('#PaymentDay').val()
         };
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('support', 'taxes', model);
-        }
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('support', 'support', model);
-        }
+        Friendly.SubmitForm('support', 'support', model);
     });
     $('input[name=Payment]').change(function () {
         $('#PaymentDay').val('');
@@ -14523,8 +14569,7 @@ $(document).ready(function () {
 });
 ;$(document).ready(function () {
     $('.financial-part1').click(function () {
-        var model = Friendly.GetFormInput('income');
-        Friendly.SubmitForm('income', 'socialSecurity', model);
+        Friendly.SubmitForm('income', 'socialSecurity');
     });
     $('#income input[name="Employed"]').change(function () {
         $('#income #Salary').val('');
@@ -14560,15 +14605,7 @@ $(document).ready(function () {
     });
     //-----------------Social Security
     $('.financial-part2').click(function () {
-        var model = Friendly.GetFormInput('socialSecurity');
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('socialSecurity', 'preexisting', model);
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('socialSecurity', 'income', model);
-        }
+        Friendly.SubmitForm('socialSecurity', 'preexisting');
     });
 
     $('#socialSecurity input[name="ReceiveSocial"]').change(function () {
@@ -14658,29 +14695,14 @@ $(document).ready(function () {
         Friendly.EndLoading();
     });
     $('.financial-part3').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.NextForm('otherChild');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.NextForm('socialSecurity');
-        }
+        Friendly.NextForm('otherChild');
     });
 
     //----------------------Other Children---------------    
     $('.financial-part4').click(function () {
-        if ($(this).hasClass('next')) {
-            if ($('#otherChildWrapper').is(':visible')) {
-                Friendly.NextForm('circumstance');
-                return false;
-            }
-        }
-        if ($(this).hasClass('previous')) {
-            if ($('#otherChildWrapper').is(':visible')) {
-                Friendly.NextForm('preexisting');
-                return false;
-            }
+        if ($('#otherChildWrapper').is(':visible')) {
+            Friendly.NextForm('circumstance');
+            return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildren');
@@ -14727,15 +14749,7 @@ $(document).ready(function () {
     });
     //----------------------Special Circumstances---------------    
     $('.financial-part5').click(function () {
-        var model = Friendly.GetFormInput('circumstance');
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('circumstance', 'incomeOther', model);
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('circumstance', 'otherChildren', model);
-        }
+        Friendly.SubmitForm('circumstance', 'incomeOther');
     });
     $('input[name="Circumstances"]').change(function () {
         if ($('#Circumstances:checked').val() === "1") {
@@ -14780,24 +14794,11 @@ $(document).ready(function () {
         }
     });
     $('.financial-part6').click(function () {
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitFormOther('incomeOther', 'socialSecurityOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitFormOther('incomeOther', 'circumstance');
-        }
+        Friendly.SubmitFormOther('incomeOther', 'socialSecurityOther');
     });
     //---------------------------------------Social Security--------------------------------
     $('.financial-part7').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitFormOther('socialSecurityOther', 'preexistingOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitFormOther('socialSecurityOther', 'incomeOther');
-        }
+        Friendly.SubmitFormOther('socialSecurityOther', 'preexistingOther');
     });
 
     $('#socialSecurityOther input[name="ReceiveSocial"]').change(function () {
@@ -14888,29 +14889,14 @@ $(document).ready(function () {
         }
         Friendly.EndLoading();
     });
-    $('.financial-part8').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.NextForm('otherChildrenOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.NextForm('socialSecurityOther');
-        }
+    $('.financial-part8').click(function () {               
+        Friendly.NextForm('otherChildrenOther');
     });
     //----------------------Other Children---------------    
     $('.financial-part9').click(function () {
-        if ($(this).hasClass('next')) {
-            if ($('#otherChildOtherWrapper').is(':visible')) {
-                Friendly.NextForm('circumstanceOther');
-                return false;
-            }
-        }
-        if ($(this).hasClass('previous')) {
-            if ($('#otherChildOtherWrapper').is(':visible')) {
-                Friendly.NextForm('preexisting');
-                return false;
-            }
+        if ($('#otherChildOtherWrapper').is(':visible')) {
+            Friendly.NextForm('circumstanceOther');
+            return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildrenOther');
@@ -14978,23 +14964,27 @@ $(document).ready(function () {
     
 });
 ;$(document).ready(function () {
-    $('.printForm').click(function() {
-        var html = $('#main-content').html();
-        //remove button at end of form
-        html = html.replace(/<input.*>/, "");
-        Friendly.StartLoading();
-        $.ajax({
-            url: '/Output/PrintForm',
-            type: 'POST',
-            data: {
-                html: html
-            },
-            success: function(data) {
-                Friendly.EndLoading();
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
+    var html = $('#main-content').html();
+    html = html.replace(/<form.*>/, "");
+    html = html.replace(/<input.*>/, "");
+    $('#html').val(html);
+    //$('.printForm').click(function() {
+    //    var html = $('#main-content').html();
+    //    //remove button at end of form
+    //    html = html.replace(/<input.*>/, "");
+    //    Friendly.StartLoading();
+    //    $.ajax({
+    //        url: '/Output/PrintForm',
+    //        type: 'POST',
+    //        data: {
+    //            html: html
+    //        },
+    //        success: function(data) {
+    //            Friendly.EndLoading();
+    //        },
+    //        error: Friendly.GenericErrorMessage
+    //    });
+    //});
 });
 ;$(document).ready(function () {
     //Court Form
@@ -15005,7 +14995,7 @@ $(document).ready(function () {
     $('input[name=PlanType]').change(function () {
         $('#PlanDate').val('');
         if ($('#PlanType:checked').val() === "1") {
-            $('.court-date').hide();
+            $('.court-date').hide(); 
         } else {
             $('.court-date').show();
         }
@@ -15142,18 +15132,14 @@ $(document).ready(function () {
     });
 
     $('.child-part3').click(function () {
-        //get values
-        if ($(this).hasClass('next')) {
-            Friendly.NextForm('privacy');
+        if($('.child-table tr').length > 1) {
+            document.location.href = '/Forms/Parenting/';
+        } else {
+            document.location.href = '/Forms/DomesticMediation/';
         }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.NextForm('participants');
-        }
-        Friendly.EndLoading();
-        return false;
     });
-
+});
+;$(document).ready(function () {
     //----------------------Privacy Form-----------------------
     $('input[name=NeedPrivacy]').change(function () {
         if ($('#NeedPrivacy:checked').val() === "1") {
@@ -15167,19 +15153,10 @@ $(document).ready(function () {
         if ($(this).hasClass('next')) {
             Friendly.SubmitForm('privacy', 'information');
         }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('privacy', 'children');
-        }
     });
     //Information form
     $('.child-part5').click(function () {
         Friendly.StartLoading();
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('information', 'privacy');
-            return false;
-        }
         //get values
         var model = Friendly.GetFormInput('information');
         loadChildren('decision');
@@ -15466,24 +15443,7 @@ $(document).ready(function () {
         if (model.TransportationCosts === "4") {
             model.OtherDetails = $('#OtherDetails').val();
         }
-        if ($(this).hasClass('next'))
-            Friendly.SubmitForm('responsibility', 'communication', model);
-        else {
-            //save current information
-            $.ajax({
-                url: '/Forms/Responsibility/',
-                type: 'POST',
-                data: model,
-                success: function () {
-                    $('.wrapper').hide();
-                    $('.affix li').removeClass('active');
-                    childNdx = children.length - 1;
-                    var nextChild = children[childNdx];
-                    getChildDecisions(nextChild);
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
+        Friendly.SubmitForm('responsibility', 'communication', model);
     });
 
 
@@ -15507,11 +15467,7 @@ $(document).ready(function () {
     });
 
     $('.child-part8').click(function () {
-        if ($(this).hasClass('next'))
-            Friendly.SubmitForm('communication', 'schedule');
-        else {
-            Friendly.SubmitForm('communication', 'responsibility');
-        }
+        Friendly.SubmitForm('communication', 'schedule');
     });
 
     //Schedule
@@ -15578,10 +15534,6 @@ $(document).ready(function () {
 
     $('.child-part9').click(function () {
         var model = Friendly.GetFormInput('schedule');
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('schedule', 'communication', model);
-            return false;
-        }
         var formName = 'schedule';
         var nextForm = 'holiday';
         var formSelector = '#' + formName;

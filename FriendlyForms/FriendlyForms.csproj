@@ -141,12 +141,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PdfResult.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Authentication\FriendlyIdentity.cs" />
+    <Compile Include="Models\AllFormsViewModel.cs" />
     <Compile Include="Models\ChildSupportAllViewModel.cs" />
     <Compile Include="Models\DomesticMediationViewModel.cs" />
     <Compile Include="Models\OutputViewModel.cs" />
+    <Compile Include="Models\StarterViewModel.cs" />
     <Compile Include="Mvc.Bundler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -292,7 +295,8 @@
     <Content Include="Scripts\app\friendly-financial.js" />
     <Content Include="Scripts\app\friendly-global.js" />
     <Content Include="Scripts\app\friendly-output.js" />
-    <Content Include="Scripts\app\friendly.js" />
+    <Content Include="Scripts\app\friendly-starter.js" />
+    <Content Include="Scripts\app\friendly-parenting.js" />
     <Content Include="Scripts\bootstrap-affix.js" />
     <Content Include="Scripts\bootstrap-alert.js" />
     <Content Include="Scripts\bootstrap-button.js" />
@@ -477,6 +481,7 @@
     <Content Include="Views\Output\Parenting.cshtml" />
     <Content Include="Views\Output\DomesticMediation.cshtml" />
     <Content Include="Views\Output\Financial.cshtml" />
+    <Content Include="Views\Forms\Starter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">

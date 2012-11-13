@@ -1,15 +1,7 @@
 ﻿<ul class="nav btn-group">
     @if (User.Identity.IsAuthenticated)
     {
-        <li class="btn btn-inverse"><a title="" href="#"><i class="icon icon-user"></i><span class="text">Profile</span></a></li>
-        <li class="btn btn-inverse dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-folder-open"></i><span class="text">Forms</span> <span class="label label-important">3</span> <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li><a class="sAdd" title="" href="@Url.Action("Parenting", "Forms")">Parenting</a></li>
-                <li><a class="sInbox" title="" href="@Url.Action("DomesticMediation", "Forms")">Domestic Mediation</a></li>
-                <li><a class="sOutbox" title="" href="@Url.Action("Financial", "Forms")">Financial</a></li>
-            </ul>
-        </li>
-        <li class="btn btn-mini btn-inverse"><a title="" href="#"><i class="icon icon-cog"></i><span class="text">Settings</span></a></li>
+        <li class="btn btn-mini btn-inverse"><a title="" href="@Url.Action("Index", "Home")"><i class="icon icon-home"></i><span class="text">Home</span></a></li>
         <li class="btn btn-mini btn-inverse"><a title="" href="@Url.Action("LogOff", "Account")"><i class="icon icon-share-alt"></i><span class="text">Logout</span></a></li>        
     }else
     {

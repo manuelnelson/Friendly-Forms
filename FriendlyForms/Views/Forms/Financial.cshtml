@@ -1,89 +1,95 @@
-﻿@model BusinessLogic.Models.AllFinancialViewModel 
+﻿@model BusinessLogic.Models.AllFinancialViewModel
 @{
     ViewBag.Title = "Financial";
 }
 
 @section Sidebar{
     @{
-        var itemDone = "icon-ok";
-        var itemlock = "icon-lock";  
+        var itemDone = "icon-ok icon-green";
+        var itemlock = "";  
     }
     <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
-        <li class="nav-item active" id="incomeNav"><a data-form="income" href="#"><i class="icon-pencil"></i>Income</a></li>
-        @if (Model.FinancialFormsCompleted.SocialSecurity)
-        {
-            <li class="nav-item" id="socialSecurityNav"><a data-form="socialSecurity" href="#"><i class="@itemDone"></i>Social Security</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="socialSecurityNav"><a data-form="socialSecurity" href="#"><i class="@itemlock"></i>Social Security</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.Preexisting)
-        {
-            <li class="preexisting-item" id="preexistingNav"><a data-form="preexisting" href="#"><i class="@itemDone"></i>Preexisting Support</a></li>
-        }
-        else
-        {
-            <li class="preexisting-item" id="preexistingNav"><a data-form="preexisting" href="#"><i class="@itemlock"></i>Preexisting Support</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.OtherChildren)
-        {
-            <li class="nav-item" id="otherChildrenNav"><a data-form="otherChildren" href="#"><i class="@itemDone"></i>Other Children</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="otherChildrenNav"><a data-form="otherChildren" href="#"><i class="@itemlock"></i>Other Children</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.SpecialCircumstance)
-        {
-            <li class="nav-item" id="circumstanceNav"><a data-form="circumstance" href="#"><i class="@itemDone"></i>Special Circumstance</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="circumstanceNav"><a data-form="circumstance" href="#"><i class="@itemlock"></i>Special Circumstance</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.IncomeOther)
-        {
-            <li class="nav-item" id="incomeOtherNav"><a data-form="incomeOther" href="#"><i class="@itemDone"></i>Income (Other)</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="incomeOtherNav"><a data-form="incomeOther" href="#"><i class="@itemlock"></i>Income (Other)</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.SocialSecurityOther)
-        {
-            <li class="nav-item" id="socialSecurityOtherNav"><a data-form="socialSecurityOther" href="#"><i class="@itemDone"></i>Social Security (Other)</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="socialSecurityOtherNav"><a data-form="socialSecurityOther" href="#"><i class="@itemlock"></i>Social Security (Other)</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.PreexistingOther)
-        {
-            <li class="preexistingOther-item" id="preexistingOtherNav"><a data-form="preexistingOther" href="#"><i class="@itemDone"></i>Preexisting Support (Other)</a></li>
-        }
-        else
-        {
-            <li class="preexistingOther-item" id="preexistingOtherNav"><a data-form="preexistingOther" href="#"><i class="@itemlock"></i>Preexisting Support (Other)</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.OtherChildrenOther)
-        {
-            <li class="nav-item" id="otherChildrenOtherNav"><a data-form="otherChildrenOther" href="#"><i class="@itemDone"></i>Other Children (Other)</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="otherChildrenOtherNav"><a data-form="otherChildrenOther" href="#"><i class="@itemlock"></i>Other Children (Other)</a></li>
-        }
-        @if (Model.FinancialFormsCompleted.SpecialCircumstanceOther)
-        {
-            <li class="nav-item" id="circumstanceOtherNav"><a data-form="circumstanceOther" href="#"><i class="@itemDone"></i>Circumstances (Other)</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="circumstanceOtherNav"><a data-form="circumstanceOther" href="#"><i class="@itemlock"></i>Circumstances (Other)</a></li>
-        }
-
+        <li><a href="@Url.Action("DomesticMediation","Forms")"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>
+        <li><a href="@Url.Action("Parenting","Forms")"><i class="icon icon-th-list"></i>Parenting Plan</a></li>
+        <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Financial Form</a>
+            <ul style="display: block">
+                <li class="nav-item active" id="incomeNav"><a data-form="income" href="#"><i class="icon-pencil"></i>Income</a></li>
+                @if (Model.FinancialFormsCompleted.SocialSecurity)
+                {
+                    <li class="nav-item" id="socialSecurityNav"><a data-form="socialSecurity" href="#"><i class="@itemDone"></i>Social Security</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="socialSecurityNav"><a data-form="socialSecurity" href="#"><i class="@itemlock"></i>Social Security</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.Preexisting)
+                {
+                    <li class="preexisting-item" id="preexistingNav"><a data-form="preexisting" href="#"><i class="@itemDone"></i>Preexisting Support</a></li>
+                }
+                else
+                {
+                    <li class="preexisting-item" id="preexistingNav"><a data-form="preexisting" href="#"><i class="@itemlock"></i>Preexisting Support</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.OtherChildren)
+                {
+                    <li class="nav-item" id="otherChildrenNav"><a data-form="otherChildren" href="#"><i class="@itemDone"></i>Other Children</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="otherChildrenNav"><a data-form="otherChildren" href="#"><i class="@itemlock"></i>Other Children</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.SpecialCircumstance)
+                {
+                    <li class="nav-item" id="circumstanceNav"><a data-form="circumstance" href="#"><i class="@itemDone"></i>Special Circumstance</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="circumstanceNav"><a data-form="circumstance" href="#"><i class="@itemlock"></i>Special Circumstance</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.IncomeOther)
+                {
+                    <li class="nav-item" id="incomeOtherNav"><a data-form="incomeOther" href="#"><i class="@itemDone"></i>Income (Other)</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="incomeOtherNav"><a data-form="incomeOther" href="#"><i class="@itemlock"></i>Income (Other)</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.SocialSecurityOther)
+                {
+                    <li class="nav-item" id="socialSecurityOtherNav"><a data-form="socialSecurityOther" href="#"><i class="@itemDone"></i>Social Security (Other)</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="socialSecurityOtherNav"><a data-form="socialSecurityOther" href="#"><i class="@itemlock"></i>Social Security (Other)</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.PreexistingOther)
+                {
+                    <li class="preexistingOther-item" id="preexistingOtherNav"><a data-form="preexistingOther" href="#"><i class="@itemDone"></i>Preexisting Support (Other)</a></li>
+                }
+                else
+                {
+                    <li class="preexistingOther-item" id="preexistingOtherNav"><a data-form="preexistingOther" href="#"><i class="@itemlock"></i>Preexisting Support (Other)</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.OtherChildrenOther)
+                {
+                    <li class="nav-item" id="otherChildrenOtherNav"><a data-form="otherChildrenOther" href="#"><i class="@itemDone"></i>Other Children (Other)</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="otherChildrenOtherNav"><a data-form="otherChildrenOther" href="#"><i class="@itemlock"></i>Other Children (Other)</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.SpecialCircumstanceOther)
+                {
+                    <li class="nav-item" id="circumstanceOtherNav"><a data-form="circumstanceOther" href="#"><i class="@itemDone"></i>Circumstances (Other)</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="circumstanceOtherNav"><a data-form="circumstanceOther" href="#"><i class="@itemlock"></i>Circumstances (Other)</a></li>
+                }
+            </ul>
+        </li>
+        <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
     </ul>
 }
 @section Breadcrumb{

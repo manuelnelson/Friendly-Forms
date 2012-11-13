@@ -9,6 +9,14 @@
         <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Domestic Mediation</a></li>
     </ul>
 }
+@section Styles{
+    <link href="@Url.Content("~/Content/pdf.css")" rel="stylesheet" />
+}
+@section ButtonGroup{
+    <div class="btn-group">
+        <a class="btn btn-large tip-bottom printForm" title="To PDF"><i class="icon-print"></i></a>
+    </div>
+}
 <h3>Domestic Mediation Form</h3>
 <h4>Marital House</h4>
 @if(Model.HouseViewModel.MaritalHouse.Equals((int)YesNo.No))
@@ -95,6 +103,18 @@ else if (Model.RealEstateViewModel.PersonalProperty.Equals((int)PersonalProperty
 {
     <p>The parties agree that business assets and liabilities will be divided in the following manner: @Model.AssetViewModel.BusinessDescription</p>
 }
+@if(!string.IsNullOrEmpty(Model.AssetViewModel.AdditionalAssets))
+{
+    <p>Other assets or liabilities will be divided in the following manner: @Model.AssetViewModel.AdditionalAssets</p>
+}
+<h4>Health Insurance</h4>
+@if(Model.HealthViewModel.Health == (int)YesNo.Yes)
+{
+    <p>Each party is responsible for their own health insurance.</p>
+}else
+{
+    <p>The parties agree to handle health insurance costs in the following manner: @Model.HealthViewModel.HealthDescription</p>
+}
 <h4>Spousal Support</h4>
 @if(Model.SpousalViewModel.Spousal.Equals((int)YesNo.No))
 {
@@ -129,3 +149,8 @@ else
         @: remitted directly from payor to payee.
     }
 </p>
+@using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "myform", target="_blank" }))
+{
+    <input type="hidden" id="html" name="html" />
+    <input type="submit" class="btn-primary btn printForm" value="Print to PDF" />
+}

@@ -1,0 +1,39 @@
+﻿@model FriendlyForms.Models.StarterViewModel
+@{
+    ViewBag.Title = "Starter";
+}
+@section Sidebar{
+    @{
+        var itemDone = "icon-ok";
+        var itemlock = "icon-lock";  
+    }
+    <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <ul>
+        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-pencil"></i>Court</a></li>
+        @if (Model.StarterFormsCompleted.Participant)
+        {
+            <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="@itemDone"></i>Participants</a></li>
+        }
+        else
+        {
+            <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="@itemlock"></i>Participants</a></li>
+        }
+        @if (Model.StarterFormsCompleted.Children)
+        {
+            <li class="nav-item" id="childrenNav"><a data-form="children" href="#"><i class="@itemDone"></i>Children</a></li>
+        }
+        else
+        {
+            <li class="nav-item" id="childrenNav"><a data-form="children" href="#"><i class="@itemlock"></i>Children</a></li>
+        }
+    </ul>
+}
+@section Breadcrumb{
+    <div id="breadcrumb">
+        <a data-form="asdfa" href="@Url.Action("Index", "Home")" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
+        <a data-form="asdfa" href="#" class="current">Starter</a>
+    </div>
+}
+@Html.Partial("_Court", Model.CourtViewModel)
+@Html.Partial("_Participants", Model.ParticipantViewModel)
+@Html.Partial("_Children", Model.ChildrenViewModel)

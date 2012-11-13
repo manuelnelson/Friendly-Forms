@@ -1,12 +1,28 @@
-﻿@{
-    ViewBag.Title = "";
+﻿@model FriendlyForms.Models.AllFormsViewModel
+@{
+        ViewBag.Title = "Home";
 }
 @section Sidebar{
         <a href="@Url.Action("Index","Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
         <ul>
             <li class="active"><a href="@Url.Action("Index","Home")"><i class="icon icon-home"></i><span>Home</span></a></li>
-            <li><a href="@Url.Action("About","Home")"><i class="icon icon-briefcase"></i><span>About</span></a></li>
-            <li><a href="@Url.Action("About","Home")"><i class="icon icon-question-sign"></i><span>Help</span></a></li>
+            @if(User.Identity.IsAuthenticated)
+            {
+                    if(!Model.IsStarterDone)
+                    {
+                        <li><a href="@Url.Action("Starter","Forms")"><i class="icon icon-th-list"></i>Start Here</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("DomesticMediation","Forms")"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>    
+                        if(Model.HasChildren)
+                        {
+                            <li><a href="@Url.Action("Parenting","Forms")"><i class="icon icon-th-list"></i>Parenting Plan</a></li>        
+                            <li><a href="@Url.Action("Financial","Forms")"><i class="icon icon-th-list"></i>Financial Form</a></li>
+                        }
+                    }
+                    <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
+                }
         </ul>
 }
 @section Breadcrumb{

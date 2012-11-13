@@ -4,77 +4,87 @@
 }
 @section Sidebar{
     @{
-        const string itemDone = "icon-ok";
-        var itemlock = "icon-lock";  
+        var itemDone = "icon-ok icon-green";
+        var itemlock = "";  
     }
-
     <a data-form="asdfa" href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
-        <li class="nav-item active" id="maritalhouseNav"><a data-form="maritalHouse" href="#"><i class="icon-pencil"></i>Marital House</a></li>
-        @if (Model.FormsCompleted.RealEstateCompleted)
+        <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Mediation Agreement</a>
+            <ul style="display:block">
+                <li class="nav-item active" id="maritalhouseNav"><a data-form="maritalHouse" href="#"><i class="icon-pencil"></i>Marital House</a></li>
+                @if (Model.FormsCompleted.RealEstateCompleted)
+                {
+                    <li class="nav-item" id="propertyNav"><a data-form="property" href="#"><i class="@itemDone"></i>Personal Property</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="propertyNav"><a data-form="property" href="#"><i class="@itemlock"></i>Personal Property</a></li>
+                }
+                @if (Model.FormsCompleted.VehicleCompleted)
+                {
+                    <li class="nav-item" id="vehiclesNav"><a data-form="vehicles" href="#"><i class="@itemDone"></i>Vehicles</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="vehiclesNav"><a data-form="vehicles" href="#"><i class="@itemlock"></i>Vehicles</a></li>
+                }
+                @if (Model.FormsCompleted.DebtCompleted)
+                {
+                    <li class="nav-item" id="debtNav"><a data-form="debt" href="#"><i class="@itemDone"></i>Debt</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="debtNav"><a data-form="debt" href="#"><i class="@itemlock"></i>Debt</a></li>
+                }
+                @if (Model.FormsCompleted.AssetCompleted)
+                {
+                    <li class="nav-item" id="assetsNav"><a data-form="assets" href="#"><i class="@itemDone"></i>Assets</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="assetsNav"><a data-form="assets" href="#"><i class="@itemlock"></i>Assets</a></li>
+                }
+                @if (Model.FormsCompleted.HealthCompleted)
+                {
+                    <li class="nav-item" id="healthInsuranceNav"><a data-form="healthInsurance" href="#"><i class="@itemDone"></i>Health Insurance</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="healthInsuranceNav"><a data-form="healthInsurance" href="#"><i class="@itemlock"></i>Health Insurance</a></li>
+                }
+                @if (Model.FormsCompleted.SpousalCompleted)
+                {
+                    <li class="nav-item" id="spousalSupportNav"><a data-form="spousalSupport" href="#"><i class="@itemDone"></i>Spousal Support</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="spousalSupportNav"><a data-form="spousalSupport" href="#"><i class="@itemlock"></i>Spousal Support</a></li>
+                }
+                @if (Model.FormsCompleted.TaxCompleted)
+                {
+                    <li class="nav-item" id="taxesNav"><a data-form="taxes" href="#"><i class="@itemDone"></i>Taxes</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="taxesNav"><a data-form="taxes" href="#"><i class="@itemlock"></i>Taxes</a></li>
+                }
+                @if (Model.FormsCompleted.ChildCompleted)
+                {
+                    <li class="nav-item" id="supportNav"><a data-form="support" href="#"><i class="@itemDone"></i>Child Support</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="supportNav"><a data-form="support" href="#"><i class="@itemlock"></i>Child Support</a></li>
+                }
+
+            </ul>
+        </li>
+        @if(Model.HasChildren)
         {
-            <li class="nav-item" id="propertyNav"><a data-form="property" href="#"><i class="@itemDone"></i>Property</a></li>
+            <li><a href="@Url.Action("Parenting","Forms")"><i class="icon icon-th-list"></i>Parenting Plan</a></li>        
+            <li><a href="@Url.Action("Financial","Forms")"><i class="icon icon-th-list"></i>Financial Form</a></li>
         }
-        else
-        {
-            <li class="nav-item" id="propertyNav"><a data-form="property" href="#"><i class="@itemlock"></i>Property</a></li>
-        }
-        @if (Model.FormsCompleted.VehicleCompleted)
-        {
-        <li class="nav-item" id="vehiclesNav"><a data-form="vehicles" href="#"><i class="@itemDone"></i>Vehicles</a></li>
-        }
-        else
-        {
-        <li class="nav-item" id="vehiclesNav"><a data-form="vehicles" href="#"><i class="@itemlock"></i>Vehicles</a></li>
-        }
-        @if (Model.FormsCompleted.DebtCompleted)
-        {
-        <li class="nav-item" id="debtNav"><a data-form="debt" href="#"><i class="@itemDone"></i>Debt</a></li>
-        }
-        else
-        {
-        <li class="nav-item" id="debtNav"><a data-form="debt" href="#"><i class="@itemlock"></i>Debt</a></li>
-        }
-        @if (Model.FormsCompleted.AssetCompleted)
-        {
-        <li class="nav-item" id="assetsNav"><a data-form="assets" href="#"><i class="@itemDone"></i>Assets</a></li>
-        }
-        else
-        {
-        <li class="nav-item" id="assetsNav"><a data-form="assets" href="#"><i class="@itemlock"></i>Assets</a></li>
-        }
-        @if (Model.FormsCompleted.HealthCompleted)
-        {
-        <li class="nav-item" id="healthInsuranceNav"><a data-form="healthInsurance" href="#"><i class="@itemDone"></i>Health Insurance</a></li>
-        }
-        else
-        {
-        <li class="nav-item" id="healthInsuranceNav"><a data-form="healthInsurance" href="#"><i class="@itemlock"></i>Health Insurance</a></li>
-        }
-        @if (Model.FormsCompleted.SpousalCompleted)
-        {
-        <li class="nav-item" id="spousalSupportNav"><a data-form="spousalSupport" href="#"><i class="@itemDone"></i>Spousal Support</a></li>
-        }
-        else
-        {
-        <li class="nav-item" id="spousalSupportNav"><a data-form="spousalSupport" href="#"><i class="@itemlock"></i>Spousal Support</a></li>
-        }
-        @if (Model.FormsCompleted.TaxCompleted)
-        {
-        <li class="nav-item" id="taxesNav"><a data-form="taxes" href="#"><i class="@itemDone"></i>Taxes</a></li>
-        }
-        else
-        {
-        <li class="nav-item" id="taxesNav"><a data-form="taxes" href="#"><i class="@itemlock"></i>Taxes</a></li>
-        }
-        @if (Model.FormsCompleted.ChildCompleted)
-        {
-        <li class="nav-item" id="supportNav"><a data-form="support" href="#"><i class="@itemDone"></i>Child Support</a></li>
-        }
-        else
-        {
-        <li class="nav-item" id="supportNav"><a data-form="support" href="#"><i class="@itemlock"></i>Child Support</a></li>
-        }
+        <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
     </ul>
 }
 @section Breadcrumb{

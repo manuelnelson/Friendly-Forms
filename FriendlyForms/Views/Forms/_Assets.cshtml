@@ -74,11 +74,16 @@
                     @Html.ValidationMessageFor(m => m.BusinessDescription)
                 </div>
             }
+            <div class="control-group">
+                <label class="informative">
+                    Are there any other assets or liabilities to be divided?</label>
+                @Html.TextAreaFor(m => m.AdditionalAssets, new { placeholder = "Details", @class = "input-xxlarge" })
+                @Html.ValidationMessageFor(m => m.AdditionalAssets)
+            </div>
                     </div>
                 </div>
             </div>
         </div>
     }
-    <button class="btn btn-primary domestic-part5 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary domestic-part5 next">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>

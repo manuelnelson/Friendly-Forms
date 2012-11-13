@@ -79,6 +79,34 @@ namespace FriendlyForms.Controllers
             _specialCircumstancesService = specialCircumstancesService;
             _otherChildService = otherChildService;
         }
+        
+        public ActionResult Starter()
+        {
+            var userId = User.FriendlyIdentity().UserId;
+            var court = _courtService.GetByUserId(userId) as CourtViewModel;
+            var participants = _participantService.GetByUserId(userId);
+            var children = _childService.GetByUserId(userId);
+            var counties = _countyService.GetAll();
+            court.Counties = counties;
+
+            var formsViewModel = new StarterFormsCompleted()
+            {
+                Children = children.Children.Any(),
+                Participant = participants.UserId != 0,
+            };
+
+            var starterViewModel = new StarterViewModel
+            {
+                CourtViewModel = court,
+                ParticipantViewModel = participants as ParticipantViewModel,
+                ChildrenViewModel = children,
+                StarterFormsCompleted = formsViewModel
+            };
+            return View(starterViewModel);
+        }
+
+        
+        
         public ActionResult Parenting()
         {
             var userId = User.FriendlyIdentity().UserId;
@@ -325,7 +353,9 @@ namespace FriendlyForms.Controllers
                 SpousalViewModel = spousal as SpousalViewModel,
                 TaxViewModel = taxes as TaxViewModel,
                 ChildSupportViewModel = support as ChildSupportViewModel,
-                FormsCompleted = formsViewModel
+                FormsCompleted = formsViewModel,
+                //TODO: we'll need to do a check to see if there are children involved.  This will be changed later but for NOW
+                HasChildren = true
             };
             return View(domesticModel);
         }

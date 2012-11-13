@@ -13,6 +13,7 @@ namespace Models
         public string NonRetirementDescription { get; set; }
         public int Business { get; set; }
         public string BusinessDescription { get; set; }
+        public string AdditionalAssets { get; set; }
 
         public IViewModel ConvertToModel()
         {
@@ -24,6 +25,7 @@ namespace Models
                     NonRetirementDescription = NonRetirementDescription,
                     Retirement = Retirement,
                     RetirementDescription = RetirementDescription,
+                    AdditionalAssets = AdditionalAssets,
                     UserId = UserId
                 };
         }
@@ -36,6 +38,7 @@ namespace Models
             RetirementDescription = updatingEntity.RetirementDescription;
             NonRetirement = updatingEntity.NonRetirement;
             NonRetirementDescription = updatingEntity.NonRetirementDescription;
+            AdditionalAssets = updatingEntity.AdditionalAssets;
             Business = updatingEntity.Business;
             BusinessDescription = updatingEntity.BusinessDescription;
         }

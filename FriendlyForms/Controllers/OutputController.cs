@@ -165,7 +165,7 @@ namespace FriendlyForms.Controllers
             var extraHolidays = new List<ExtraHoliday>();
             if (children.Children.Any())
             {
-                decisions.AddRange(children.Children.Select(child => (Decisions) _decisionsService.GetByChildId(child.Id).ConvertToEntity()));
+                decisions.AddRange(children.Children.Select(child => (Decisions)_decisionsService.GetByChildId(child.Id).ConvertToEntity()));
             }
             if (children.Children.Any())
             {
@@ -173,7 +173,7 @@ namespace FriendlyForms.Controllers
                 {
                     var tempDecisions = _extraDecisionsService.GetByChildId(child.Id).ExtraDecisions;
                     extraDecisions.AddRange(tempDecisions);
-                }                
+                }
             }
             if (children.Children.Any())
             {
@@ -197,9 +197,9 @@ namespace FriendlyForms.Controllers
             };
             var allHolidays = new AllHolidaysViewModel
                 {
-                ChildHolidays = holidays,
-                ExtraChildHolidays= extraHolidays
-            };
+                    ChildHolidays = holidays,
+                    ExtraChildHolidays = extraHolidays
+                };
             var counties = _countyService.GetAll();
             court.Counties = counties;
 
@@ -223,36 +223,31 @@ namespace FriendlyForms.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult PrintForm(string html)
+        public ActionResult PrintForm(string html)
         {
-            try
-            {
-                var contentPath = Server.MapPath("~/Content/");
-                var css = System.IO.File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
-                //var css = @"#main-content hr{border-color:red;} h4{font-size: 60px};";
-                var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style></head><body><div id=""main-content"">{1}</div></body></html>",css, html);
-                var config = new ObjectConfig();
-                config.SetAllowLocalContent(true)
-                      .SetPrintBackground(true);
-                //config.SetUserStylesheetUri("bootstrap.css");
-                var pdfBuf = _synchronizedPechkin.Convert(config, fullHtml);
-                //contentPath = Path.Combine(contentPath, "Pdfs/newPdf.pdf");
-                
-                var fn = Path.GetTempFileName() + ".pdf"; // get temporary file name
+            var contentPath = Server.MapPath("~/Content/");
+            var css = System.IO.File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
+            //var css = @"#main-content hr{border-color:red;} h4{font-size: 60px};";
+            var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style></head><body><div id=""main-content"">{1}</div></body></html>", css, html);
+            var config = new ObjectConfig();
+            config.SetAllowLocalContent(true)
+                  .SetPrintBackground(true);            
+            var pdfBuf = _synchronizedPechkin.Convert(config, fullHtml);            
+            //Response.AppendHeader("Content-Disposition", "inline;form.pdf");
+            return File(pdfBuf, "application/pdf", "form.pdf");
 
-                var fs = new FileStream(fn, FileMode.Create); // write bytes to file
-                fs.Write(pdfBuf, 0, pdfBuf.Length);
-                fs.Close();
+            ////TODO should be an easier way to just send buffer straight to 
+            //var fs = new FileStream(fn, FileMode.Create); // write bytes to file
+            //fs.Write(pdfBuf, 0, pdfBuf.Length);
+            //fs.Close();
 
-                var myProcess = new Process {StartInfo = {FileName = fn}}; // open the file in viewer
-                myProcess.Start(); 
-                //System.IO.File.WriteAllBytes(contentPath, pdfBuf);
-                return Json("success");
-            }
-            catch (Exception ex)
-            {
-                return Json("unable to make pdf");
-            }
+            //Response.ContentType = "application/pdf";
+            //Response.AddHeader("content-disposition", "attachment; filename=" + fileName);
+            //Response.WriteFile(path);
+            //Response.End();
+            //var myProcess = new Process {StartInfo = {FileName = fn}}; // open the file in viewer
+            //myProcess.Start(); 
+            //System.IO.File.WriteAllBytes(contentPath, pdfBuf);
         }
 
         [Authorize]

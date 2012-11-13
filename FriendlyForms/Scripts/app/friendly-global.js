@@ -7,6 +7,9 @@ Friendly.properties = {
         Success: 'alert-success',
         Error: 'alert-error'
     },
+    iconSuccess: 'icon-green icon-ok',
+    iconEdit: 'icon-blue icon-pencil',
+    iconError: 'icon-red icon-pencil',
     numberRegEx: /(\d{1,5})/
 };
 Friendly.StartLoading = function () {
@@ -58,7 +61,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
             data: model,
             success: function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
-                Friendly.NextForm(nextForm);
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 Friendly.EndLoading();
                 return false;
             },
@@ -97,13 +100,15 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     }
     return false;
 };
-Friendly.NextForm = function (nextForm) {
-    $('#sidebar .active').find('i').attr('class', 'icon-ok');
-    $('#' + nextForm + 'Nav').find('i').attr('class', 'icon-pencil');
+Friendly.NextForm = function (nextForm, prevIcon) {    
+    $('#sidebar .active').find('i').attr('class', prevIcon);
+    $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
     $('.wrapper').hide();
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
+    
+
     if(nextForm === 'preexistingOther') {
         if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportOtherWrapper').show();
@@ -131,6 +136,82 @@ Friendly.ClearForm = function (formName) {
  .removeAttr('selected');
 };
 $(document).ready(function () {
+    // === Sidebar navigation === //
+
+    $('.submenu > a').click(function (e) {
+        e.preventDefault();
+        var submenu = $(this).siblings('ul');
+        var li = $(this).parents('li');
+        var submenus = $('#sidebar li.submenu ul');
+        var submenusParents = $('#sidebar li.submenu');
+        if (li.hasClass('open')) {
+            if (($(window).width() > 768) || ($(window).width() < 479)) {
+                submenu.slideUp();
+            } else {
+                submenu.fadeOut(250);
+            }
+            li.removeClass('open');
+        } else {
+            if (($(window).width() > 768) || ($(window).width() < 479)) {
+                submenus.slideUp();
+                submenu.slideDown();
+            } else {
+                submenus.fadeOut(250);
+                submenu.fadeIn(250);
+            }
+            submenusParents.removeClass('open');
+            li.addClass('open');
+        }
+    });
+
+    var ul = $('#sidebar > ul');
+
+    $('#sidebar > a').click(function (e) {
+        e.preventDefault();
+        var sidebar = $('#sidebar');
+        if (sidebar.hasClass('open')) {
+            sidebar.removeClass('open');
+            ul.slideUp(250);
+        } else {
+            sidebar.addClass('open');
+            ul.slideDown(250);
+        }
+    });
+    // === Fixes the position of buttons group in content header and top user navigation === //
+    function fixPosition() {
+        var uwidth = $('#user-nav > ul').width();
+        $('#user-nav > ul').css({ width: uwidth, 'margin-left': '-' + uwidth / 2 + 'px' });
+
+        var cwidth = $('#content-header .btn-group').width();
+        $('#content-header .btn-group').css({ width: cwidth, 'margin-left': '-' + uwidth / 2 + 'px' });
+    }
+
+
+    // === Resize window related === //
+    $(window).resize(function () {
+        if ($(window).width() > 479) {
+            ul.css({ 'display': 'block' });
+            $('#content-header .btn-group').css({ width: 'auto' });
+        }
+        if ($(window).width() < 479) {
+            ul.css({ 'display': 'none' });
+            fixPosition();
+        }
+        if ($(window).width() > 768) {
+            $('#user-nav > ul').css({ width: 'auto', margin: '0' });
+            $('#content-header .btn-group').css({ width: 'auto' });
+        }
+    });
+
+    if ($(window).width() < 468) {
+        ul.css({ 'display': 'none' });
+        fixPosition();
+    }
+    if ($(window).width() > 479) {
+        $('#content-header .btn-group').css({ width: 'auto' });
+        ul.css({ 'display': 'block' });
+    }
+
     $(".hoverHelp").popover({
         placement: 'left',
         title: 'Tip',
@@ -185,11 +266,28 @@ $(document).ready(function () {
     });
     //Form Navigation
     $('.nav-item').click(function () {
-        //if($(this).find('i').hasClass('icon-lock')) {
-        //    Friendly.ShowMessage("Sorry.  This page is currently locked. Please finish previous pages prior to opening this page.");
-        //    return false;
-        //}
-        var formToShow = $(this).children(':first-child').attr('data-form');
-        Friendly.NextForm(formToShow);
+        //before we navigate away, we need to check the status of the form
+        var currentFormName = $('ul .active').children(':first-child').attr('data-form');                
+        var nextForm = $(this).children(':first-child').attr('data-form');
+        if ($('#' + currentFormName).valid()) {
+            //TODO: we need to do a check of the form to see if it's a 'generic form' where we can just grab the input
+            //go ahead and save
+            var model = Friendly.GetFormInput(currentFormName);
+            $.ajax({
+                url: '/Forms/' + currentFormName + '/',
+                type: 'POST',
+                data: model,
+                success: function () {
+                    $('html, body').animate({ scrollTop: 0 }, 'fast');
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                    Friendly.EndLoading();
+                    return false;
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        } else {
+            Friendly.NextForm(nextForm, Friendly.properties.iconError);
+        }
+        
     });
 });

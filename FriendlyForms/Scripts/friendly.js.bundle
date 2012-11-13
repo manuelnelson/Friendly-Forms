@@ -15,4 +15,5 @@ app/friendly-global.js
 app/friendly-domestic.js
 app/friendly-financial.js
 app/friendly-output.js
-app/friendly.js  
+app/friendly-starter.js
+app/friendly-parenting.js  

@@ -24,14 +24,7 @@
 
     //Property Form
     $('.domestic-part2').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('property', 'vehicles');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('property', 'maritalHouse');
-        }
+        Friendly.SubmitForm('property', 'vehicles');
     });
     $('input[name=RealEstate]').change(function () {
         $('#RealEstateDescription').val('');
@@ -89,13 +82,7 @@
 
     $('.domestic-part3').click(function () {
         //get values
-        if ($(this).hasClass('next')) {
-            Friendly.NextForm('debt');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.NextForm('property');
-        }
+        Friendly.NextForm('debt');
         Friendly.EndLoading();
         return false;
     });
@@ -108,13 +95,7 @@
             MaritalDebt: $('#MaritalDebt:checked').val()
         };
         //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('debt', 'assets', model);
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('debt', 'vehicles', model);
-        }
+        Friendly.SubmitForm('debt', 'assets', model);
     });
 
     $('input[name=MaritalDebt]').change(function () {
@@ -128,13 +109,7 @@
     //Asset Form
     $('.domestic-part5').click(function () {
         //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('assets', 'healthInsurance');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('assets', 'debt');
-        }
+        Friendly.SubmitForm('assets', 'healthInsurance');
     });
 
     $('input[name=Retirement]').change(function () {
@@ -164,14 +139,7 @@
 
     //Health Insurance
     $('.domestic-part6').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('healthInsurance', 'spousalSupport');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('healthInsurance', 'assets');
-        }
+        Friendly.SubmitForm('healthInsurance', 'spousalSupport');
     });
     $('input[name=Health]').change(function () {
         $('#HealthDescription').val('');
@@ -184,14 +152,7 @@
 
     //Spousal Support
     $('.domestic-part7').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('spousalSupport', 'taxes');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('spousalSupport', 'healthInsurance');
-        }
+        Friendly.SubmitForm('spousalSupport', 'taxes');
     });
     $('input[name=Spousal]').change(function () {
         $('#SpousalDescription').val('');
@@ -203,14 +164,7 @@
     });
     //Spousal Support
     $('.domestic-part8').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('taxes', 'support');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('taxes', 'spousalSupport');
-        }
+        Friendly.SubmitForm('taxes', 'support');
     });
     $('input[name=Taxes]').change(function () {
         $('#TaxDescription').val('');
@@ -233,13 +187,7 @@
             Payment: $('#Payment:checked').val(),
             PaymentDay: $('#PaymentDay').val()
         };
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('support', 'taxes', model);
-        }
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('support', 'support', model);
-        }
+        Friendly.SubmitForm('support', 'support', model);
     });
     $('input[name=Payment]').change(function () {
         $('#PaymentDay').val('');

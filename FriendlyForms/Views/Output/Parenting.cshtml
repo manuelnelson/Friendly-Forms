@@ -512,4 +512,8 @@ else
 {
     <p>There are no minor children of the parties to be considered in this matter.</p>
 }
-<input type="submit" class="btn-primary btn printForm" value="Print to PDF" />
+@using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "myform", target="_blank" }))
+{
+    <input type="hidden" id="html" name="html" />
+    <input type="submit" class="btn-primary btn printForm" value="Print to PDF" />
+}

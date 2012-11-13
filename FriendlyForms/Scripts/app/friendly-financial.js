@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     $('.financial-part1').click(function () {
-        var model = Friendly.GetFormInput('income');
-        Friendly.SubmitForm('income', 'socialSecurity', model);
+        Friendly.SubmitForm('income', 'socialSecurity');
     });
     $('#income input[name="Employed"]').change(function () {
         $('#income #Salary').val('');
@@ -37,15 +36,7 @@
     });
     //-----------------Social Security
     $('.financial-part2').click(function () {
-        var model = Friendly.GetFormInput('socialSecurity');
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('socialSecurity', 'preexisting', model);
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('socialSecurity', 'income', model);
-        }
+        Friendly.SubmitForm('socialSecurity', 'preexisting');
     });
 
     $('#socialSecurity input[name="ReceiveSocial"]').change(function () {
@@ -135,29 +126,14 @@
         Friendly.EndLoading();
     });
     $('.financial-part3').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.NextForm('otherChild');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.NextForm('socialSecurity');
-        }
+        Friendly.NextForm('otherChild');
     });
 
     //----------------------Other Children---------------    
     $('.financial-part4').click(function () {
-        if ($(this).hasClass('next')) {
-            if ($('#otherChildWrapper').is(':visible')) {
-                Friendly.NextForm('circumstance');
-                return false;
-            }
-        }
-        if ($(this).hasClass('previous')) {
-            if ($('#otherChildWrapper').is(':visible')) {
-                Friendly.NextForm('preexisting');
-                return false;
-            }
+        if ($('#otherChildWrapper').is(':visible')) {
+            Friendly.NextForm('circumstance');
+            return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildren');
@@ -204,15 +180,7 @@
     });
     //----------------------Special Circumstances---------------    
     $('.financial-part5').click(function () {
-        var model = Friendly.GetFormInput('circumstance');
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('circumstance', 'incomeOther', model);
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('circumstance', 'otherChildren', model);
-        }
+        Friendly.SubmitForm('circumstance', 'incomeOther');
     });
     $('input[name="Circumstances"]').change(function () {
         if ($('#Circumstances:checked').val() === "1") {
@@ -257,24 +225,11 @@
         }
     });
     $('.financial-part6').click(function () {
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitFormOther('incomeOther', 'socialSecurityOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitFormOther('incomeOther', 'circumstance');
-        }
+        Friendly.SubmitFormOther('incomeOther', 'socialSecurityOther');
     });
     //---------------------------------------Social Security--------------------------------
     $('.financial-part7').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitFormOther('socialSecurityOther', 'preexistingOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitFormOther('socialSecurityOther', 'incomeOther');
-        }
+        Friendly.SubmitFormOther('socialSecurityOther', 'preexistingOther');
     });
 
     $('#socialSecurityOther input[name="ReceiveSocial"]').change(function () {
@@ -365,29 +320,14 @@
         }
         Friendly.EndLoading();
     });
-    $('.financial-part8').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.NextForm('otherChildrenOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.NextForm('socialSecurityOther');
-        }
+    $('.financial-part8').click(function () {               
+        Friendly.NextForm('otherChildrenOther');
     });
     //----------------------Other Children---------------    
     $('.financial-part9').click(function () {
-        if ($(this).hasClass('next')) {
-            if ($('#otherChildOtherWrapper').is(':visible')) {
-                Friendly.NextForm('circumstanceOther');
-                return false;
-            }
-        }
-        if ($(this).hasClass('previous')) {
-            if ($('#otherChildOtherWrapper').is(':visible')) {
-                Friendly.NextForm('preexisting');
-                return false;
-            }
+        if ($('#otherChildOtherWrapper').is(':visible')) {
+            Friendly.NextForm('circumstanceOther');
+            return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildrenOther');

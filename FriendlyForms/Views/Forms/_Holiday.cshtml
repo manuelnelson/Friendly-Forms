@@ -33,21 +33,21 @@
                         </div>
                         if (Model.HolidayViewModel.Thanksgiving.Equals((int)Thanksgiving.Other))
                         {
-                        <div class="control-group thanksgiving-other">
-                            <label class="informative">
-                                Input your holiday schedule</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.ThanksgivingOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.Thanksgiving)
-                        </div>                
+                            <div class="control-group thanksgiving-other">
+                                <label class="informative">
+                                    Input your holiday schedule</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.ThanksgivingOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.Thanksgiving)
+                            </div>                
                         }
                         else
                         {
-                        <div class="control-group thanksgiving-other hide">
-                            <label class="informative">
-                                Input your holiday schedule</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.ThanksgivingOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.Thanksgiving)
-                        </div>                                
+                            <div class="control-group thanksgiving-other hide">
+                                <label class="informative">
+                                    Input your holiday schedule</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.ThanksgivingOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.Thanksgiving)
+                            </div>                                
                         }
                         <div class="control-group">
                             <label class="informative">
@@ -69,41 +69,41 @@
                         </div>
                         if (Model.HolidayViewModel.Christmas.Equals((int)Christmas.Eve) || Model.HolidayViewModel.Christmas.Equals((int)Christmas.Day) || Model.HolidayViewModel.Christmas.Equals((int)Christmas.AfterDay))
                         {
-                        <div class="control-group christmas-items">
-                            <label class="informative">
-                                At the time of</label>
-                            @Html.TextBoxFor(m => m.HolidayViewModel.ChristmasTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasTime)
-                        </div>                
+                            <div class="control-group christmas-items">
+                                <label class="informative">
+                                    At the time of</label>
+                                @Html.TextBoxFor(m => m.HolidayViewModel.ChristmasTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
+                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasTime)
+                            </div>                
                         }
                         else
                         {
-                        <div class="control-group christmas-items hide">
-                            <label class="informative">
-                                At the time of</label>
-                            @Html.TextBoxFor(m => m.HolidayViewModel.ChristmasTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasTime)
-                        </div>                
+                            <div class="control-group christmas-items hide">
+                                <label class="informative">
+                                    At the time of</label>
+                                @Html.TextBoxFor(m => m.HolidayViewModel.ChristmasTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
+                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasTime)
+                            </div>                
                         }
                         if (Model.HolidayViewModel.Christmas.Equals((int)Christmas.Other))
                         {
-                        <div class="control-group christmas-other">
-                            <label class="informative">
-                                Define Winter Break time</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.ChristmasOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
-                        </div>                
+                            <div class="control-group christmas-other">
+                                <label class="informative">
+                                    Define Winter Break time</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.ChristmasOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
+                            </div>                
                         }
                         else
                         {
-                        <div class="control-group christmas-other hide">
-                            <label class="informative">
-                                Define Winter Break time</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.ChristmasOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
-                        </div>                
+                            <div class="control-group christmas-other hide">
+                                <label class="informative">
+                                    Define Winter Break time</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.ChristmasOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
+                            </div>                
                         }
                         <h5>Spring Break</h5>
                         <div class="control-group">
@@ -115,21 +115,21 @@
                         </div>
                         if (Model.HolidayViewModel.SpringBreak.Equals((int)YesNo.No))
                         {
-                        <div class="control-group spring-other">
-                            <label class="informative">
-                                Define spring break time</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.SpringOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringOther)
-                        </div>                
+                            <div class="control-group spring-other">
+                                <label class="informative">
+                                    Define spring break time</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.SpringOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringOther)
+                            </div>                
                         }
                         else
                         {
-                        <div class="control-group spring-other hide">
-                            <label class="informative">
-                                Define spring break time</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.SpringOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringOther)
-                        </div>                
+                            <div class="control-group spring-other hide">
+                                <label class="informative">
+                                    Define spring break time</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.SpringOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringOther)
+                            </div>                
                         }
                         <div class="control-group">
                             <label class="informative">
@@ -167,21 +167,21 @@
                         </div>
                         if (Model.HolidayViewModel.FallBreak.Equals((int)YesNo.No))
                         {
-                        <div class="control-group fall-other">
-                            <label class="informative">
-                                Define fall break time</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.FallOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.FallOther)
-                        </div>                
+                            <div class="control-group fall-other">
+                                <label class="informative">
+                                    Define fall break time</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.FallOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.FallOther)
+                            </div>                
                         }
                         else
                         {
-                        <div class="control-group fall-other hide">
-                            <label class="informative">
-                                Define fall break time</label>
-                            @Html.TextAreaFor(m => m.HolidayViewModel.FallOther, new { @class = "input-xxlarge" })
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.FallOther)
-                        </div>                
+                            <div class="control-group fall-other hide">
+                                <label class="informative">
+                                    Define fall break time</label>
+                                @Html.TextAreaFor(m => m.HolidayViewModel.FallOther, new { @class = "input-xxlarge" })
+                                @Html.ValidationMessageFor(m => m.HolidayViewModel.FallOther)
+                            </div>                
                         }
                         <div class="control-group">
                             <label class="informative">
@@ -514,136 +514,136 @@
                             {
                                 var fatherName = "HolidayFather" + holiday.Id;
                                 var motherName = "HolidayMother" + holiday.Id;
-                        <div class="control-group row-fluid extra-holiday-item holiday-parent">
-                            <div class="span2 extra-holiday-name">@holiday.HolidayName</div>
-                            <div class="span5">
-                                @if (holiday.HolidayFather.Equals(1))
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                
-                                }
-                                else if (holiday.HolidayFather.Equals(2))
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                                        
-                                }
-                                else if (holiday.HolidayFather.Equals(3))
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input  class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                                        
-                                }
-                                else
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                                        
-                                }
-                                <span class="field-validation-valid" data-valmsg-for="@fatherName" data-valmsg-replace="true"></span>
-                                <input type="hidden" id="extra-holiday-childId" value="@holiday.ChildId" />
-                                <input type="hidden" id="extra-holiday-Id" value="@holiday.Id" />
-                            </div>
-                            <div class="span5">
-                                @if (holiday.HolidayMother.Equals(1))
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
-                                }
-                                else if (holiday.HolidayFather.Equals(2))
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input  class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
-                                }
-                                else if (holiday.HolidayFather.Equals(3))
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input  class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
-                                }
-                                else
-                                {
-                                    <label class="radio inline">
-                                        Odd
-                                <input  class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
-                                    <label class="radio inline">
-                                        Even
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
-                                    <label class="radio inline">
-                                        Every
-                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
-                                    <label class="radio inline">
-                                        Never
-                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
-                                }
-                            </div>
-                        </div>
+                                <div class="control-group row-fluid extra-holiday-item holiday-parent">
+                                    <div class="span2 extra-holiday-name">@holiday.HolidayName</div>
+                                    <div class="span5">
+                                        @if (holiday.HolidayFather.Equals(1))
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                
+                                        }
+                                        else if (holiday.HolidayFather.Equals(2))
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                                        
+                                        }
+                                        else if (holiday.HolidayFather.Equals(3))
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input  class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                                        
+                                        }
+                                        else
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input checked="checked" class="inline extra-holiday-father" data-val="true" data-val-number="The field must be a number." name="@fatherName" data-val-required="The field is required."  type="radio" value="4"></label>                                        
+                                        }
+                                        <span class="field-validation-valid" data-valmsg-for="@fatherName" data-valmsg-replace="true"></span>
+                                        <input type="hidden" id="extra-holiday-childId" value="@holiday.ChildId" />
+                                        <input type="hidden" id="extra-holiday-Id" value="@holiday.Id" />
+                                    </div>
+                                    <div class="span5">
+                                        @if (holiday.HolidayMother.Equals(1))
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
+                                        }
+                                        else if (holiday.HolidayFather.Equals(2))
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input  class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
+                                        }
+                                        else if (holiday.HolidayFather.Equals(3))
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input  class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
+                                        }
+                                        else
+                                        {
+                                            <label class="radio inline">
+                                                Odd
+                                                <input  class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                            <label class="radio inline">
+                                                Even
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="2"></label>                
+                                            <label class="radio inline">
+                                                Every
+                                                <input class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="3"></label>                
+                                            <label class="radio inline">
+                                                Never
+                                                <input checked="checked" class="inline extra-holiday-mother" data-val="true" data-val-number="The field must be a number." name="@motherName" data-val-required="The field is required."  type="radio" value="4"></label>                
+                                        }
+                                    </div>
+                                </div>
                             }
                         }
                     }
@@ -651,7 +651,7 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary child-part10 previous" value="Continue"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part10 previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary child-part10 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
 
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "extraHolidays" }))

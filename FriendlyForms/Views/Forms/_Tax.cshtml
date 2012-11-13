@@ -22,7 +22,7 @@
             {
                 <div class="control-group taxes-detail">
                 <label class="informative">
-                    Describe the circumstances under which either party will be entitled to any tax deduction, allowance, credit or refund to which he or she would otherwise not be entitled, based on that individual’s circumstances at the time of filing:</label>
+                    How will tax filing be handled at the conclusion of this case?</label>
                     @Html.TextAreaFor(m => m.TaxDescription, new { placeholder = "Details", @class="input-xxlarge" })
                     @Html.ValidationMessageFor(m => m.TaxDescription)
                 </div>                          
@@ -31,7 +31,7 @@
             {
                 <div class="control-group taxes-detail hide">
                 <label>
-                    Describe the circumstances under which either party will be entitled to any tax deduction, allowance, credit or refund to which he or she would otherwise not be entitled, based on that individual’s circumstances at the time of filing:</label>
+                    How will tax filing be handled at the conclusion of this case?</label>
                     @Html.TextAreaFor(m => m.TaxDescription, new { placeholder = "Details", @class="input-xxlarge" })
                     @Html.ValidationMessageFor(m => m.TaxDescription)
                 </div>                          
@@ -41,6 +41,5 @@
             </div>
         </div>
     }
-    <button class="btn btn-primary domestic-part8 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary domestic-part8 next">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>

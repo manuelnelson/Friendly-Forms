@@ -13,8 +13,9 @@ namespace FriendlyForms.Models
         public SpousalViewModel SpousalViewModel { get; set; }
         public TaxViewModel TaxViewModel { get; set; }
         public ChildSupportViewModel ChildSupportViewModel { get; set; }
-        public FormsCompletedDomestic FormsCompleted { get; set; }
+        public FormsCompletedDomestic FormsCompleted { get; set; }        
         public ParticipantViewModel ParticipantsViewModel { get; set; }
+        public bool HasChildren { get; set; }
     }
 
     public class FormsCompletedDomestic

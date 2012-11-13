@@ -4,84 +4,67 @@
 }
 @section Sidebar{
     @{
-        var itemDone = "icon-ok";
-        var itemlock = "icon-lock";  
+        var itemDone = "icon-ok icon-green";
+        var itemlock = "";  
     }
     <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
-        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-pencil"></i>Court</a></li>
-        @if (Model.FormsCompleted.Participant)
-        {
-            <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="@itemDone"></i>Participants</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="@itemlock"></i>Participants</a></li>
-        }
-        @if (Model.FormsCompleted.Children)
-        {
-            <li class="nav-item" id="childrenNav"><a data-form="children" href="#"><i class="@itemDone"></i>Children</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="childrenNav"><a data-form="children" href="#"><i class="@itemlock"></i>Children</a></li>
-        }
-        @if (Model.FormsCompleted.Privacy)
-        {
-            <li class="nav-item" id="privacyNav"><a data-form="privacy" href="#"><i class="@itemDone"></i>Privacy</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="privacyNav"><a data-form="privacy" href="#"><i class="@itemlock"></i>Privacy</a></li>
-        }
-        @if (Model.FormsCompleted.Information)
-        {
-            <li class="nav-item" id="informationNav"><a data-form="information" href="#"><i class="@itemDone"></i>Information</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="informationNav"><a data-form="information" href="#"><i class="@itemlock"></i>Information</a></li>
-        }
-        @if (Model.FormsCompleted.Decisions)
-        {
-            <li class="decision-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemDone"></i>Decisions</a></li>
-        }
-        else
-        {
-            <li class="decision-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemlock"></i>Decisions</a></li>
-        }
-        @if (Model.FormsCompleted.Responsibility)
-        {
-            <li class="nav-item" id="responsibilityNav"><a data-form="responsibility" href="#"><i class="@itemDone"></i>Responsibility</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="responsibilityNav"><a data-form="responsibility" href="#"><i class="@itemlock"></i>Responsibility</a></li>
-        }
-        @if (Model.FormsCompleted.Communication)
-        {
-            <li class="nav-item" id="communicationNav"><a data-form="communication" href="#"><i class="@itemDone"></i>Communication</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="communicationNav"><a data-form="communication" href="#"><i class="@itemlock"></i>Communication</a></li>
-        }
-        @if (Model.FormsCompleted.Schedule)
-        {
-            <li class="nav-item" id="scheduleNav"><a data-form="schedule" href="#"><i class="@itemDone"></i>Schedule</a></li>
-        }
-        else
-        {
-            <li class="nav-item" id="scheduleNav"><a data-form="schedule" href="#"><i class="@itemlock"></i>Schedule</a></li>
-        }
-        @if (Model.FormsCompleted.Holiday)
-        {
-            <li class="holiday-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemDone"></i>Holidays</a></li>
-        }
-        else
-        {
-            <li class="holiday-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemlock"></i>Holidays</a></li>
-        }
+        <li><a href="@Url.Action("DomesticMediation","Forms")"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>
+        <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Parenting Plan</a>
+            <ul style="display: block">
+                <li class="nav-item active" id="privacyNav"><a href="#" data-form="court"><i class="icon-pencil"></i>Privacy</a></li>
+                @if (Model.FormsCompleted.Information)
+                {
+                    <li class="nav-item" id="informationNav"><a data-form="information" href="#"><i class="@itemDone"></i>Information</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="informationNav"><a data-form="information" href="#"><i class="@itemlock"></i>Information</a></li>
+                }
+                @if (Model.FormsCompleted.Decisions)
+                {
+                    <li class="decision-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemDone"></i>Decisions</a></li>
+                }
+                else
+                {
+                    <li class="decision-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemlock"></i>Decisions</a></li>
+                }
+                @if (Model.FormsCompleted.Responsibility)
+                {
+                    <li class="nav-item" id="responsibilityNav"><a data-form="responsibility" href="#"><i class="@itemDone"></i>Responsibility</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="responsibilityNav"><a data-form="responsibility" href="#"><i class="@itemlock"></i>Responsibility</a></li>
+                }
+                @if (Model.FormsCompleted.Communication)
+                {
+                    <li class="nav-item" id="communicationNav"><a data-form="communication" href="#"><i class="@itemDone"></i>Communication</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="communicationNav"><a data-form="communication" href="#"><i class="@itemlock"></i>Communication</a></li>
+                }
+                @if (Model.FormsCompleted.Schedule)
+                {
+                    <li class="nav-item" id="scheduleNav"><a data-form="schedule" href="#"><i class="@itemDone"></i>Schedule</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="scheduleNav"><a data-form="schedule" href="#"><i class="@itemlock"></i>Schedule</a></li>
+                }
+                @if (Model.FormsCompleted.Holiday)
+                {
+                    <li class="holiday-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemDone"></i>Holidays</a></li>
+                }
+                else
+                {
+                    <li class="holiday-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemlock"></i>Holidays</a></li>
+                }
+            </ul>
+        </li>
+        <li><a href="@Url.Action("Financial","Forms")"><i class="icon icon-th-list"></i>Financial Form</a></li>
+        <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
     </ul>
 }
 @section Breadcrumb{
@@ -90,9 +73,6 @@
         <a data-form="asdfa" href="#" class="current">Parenting</a>
     </div>
 }
-@Html.Partial("_Court", Model.CourtViewModel)
-@Html.Partial("_Participants", Model.ParticipantViewModel)
-@Html.Partial("_Children", Model.ChildrenViewModel)
 @Html.Partial("_Privacy", Model.PrivacyViewModel)
 @Html.Partial("_Information", Model.InformationViewModel)
 @Html.Partial("_Decisions", Model.AllDecisionsViewModel)
@@ -100,3 +80,5 @@
 @Html.Partial("_Communication", Model.CommunicationViewModel)
 @Html.Partial("_Schedule", Model.ScheduleViewModel)
 @Html.Partial("_Holiday", Model.HolidayViewModel)
+@* The child form below is used for the decisions form and holiday form to grab children information *@
+@Html.Partial("_Children", Model.ChildrenViewModel)

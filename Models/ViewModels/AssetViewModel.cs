@@ -30,6 +30,11 @@ namespace Models.ViewModels
         [Display(Name = "Business Description")]
         public string BusinessDescription { get; set; }
 
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [Display(Name = "Other Assets")]
+        public string AdditionalAssets { get; set; }
+
+
         public IFormEntity ConvertToEntity()
         {
             return new Assets()
@@ -40,6 +45,7 @@ namespace Models.ViewModels
                     NonRetirementDescription = NonRetirementDescription,
                     Retirement = Retirement,
                     RetirementDescription = RetirementDescription,
+                    AdditionalAssets = AdditionalAssets,
                     UserId = UserId
                 };
         }

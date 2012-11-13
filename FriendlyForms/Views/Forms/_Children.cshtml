@@ -9,7 +9,9 @@
                     <h5>Add Children</h5>
                 </div>
                 <div class="widget-content">
-                    <p class="informative">If there are no children involved in this case, <a href="@Url.Action("Financial")" title="Financial Form">please advance to the next form</a></p>
+                    <p class="informative">If there are no children involved in this case, click finish at the bottom without adding any children and you'll advance to the domestic mediation form.
+                        If there are children, add the children, then click finish.  You'll then advance to the Parenting form.
+                    </p>
                     @if (Model.Children != null && Model.Children.Any())
                     {
                         <div class="row-fluid child-table">
@@ -47,7 +49,7 @@
                     else
                     {
                         <div class="row-fluid hide child-table">
-                            <table class="table table-bordered table-striped">
+                            <table class="table table-bordered table-striped" style="width:50%;">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -80,7 +82,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary child-part3 previous" value="Continue"><i class="icon-arrow-left icon-white"></i>Previous</button>
-    <button class="btn btn-primary child-part3 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <button class="btn btn-primary child-part3" value="Done">Next Form<i class="icon-arrow-right icon-white"></i></button>
 </div>
 @Html.Partial("_templateChild")

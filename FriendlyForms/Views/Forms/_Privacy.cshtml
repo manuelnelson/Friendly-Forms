@@ -1,7 +1,7 @@
 ﻿@using BusinessLogic.Models
 @using Models.ViewModels
 @model PrivacyViewModel
-<div class="form-vertical wrapper hide" id="privacyWrapper">
+<div class="form-vertical wrapper" id="privacyWrapper">
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "privacy" }))
     {
         <div class="row-fluid">
@@ -40,6 +40,5 @@
         </div>
 
     }
-    <button class="btn btn-primary child-part4 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary child-part4 next">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>
