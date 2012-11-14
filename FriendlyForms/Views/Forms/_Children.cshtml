@@ -1,4 +1,4 @@
-﻿@model ChildrenViewModel
+﻿@model FriendlyForms.Models.ChildAllViewModel
 @using Models.ViewModels
 <div class="form-vertical wrapper hide" id="childrenWrapper">
     <div class="row-fluid">
@@ -9,10 +9,7 @@
                     <h5>Add Children</h5>
                 </div>
                 <div class="widget-content">
-                    <p class="informative">If there are no children involved in this case, click finish at the bottom without adding any children and you'll advance to the domestic mediation form.
-                        If there are children, add the children, then click finish.  You'll then advance to the Parenting form.
-                    </p>
-                    @if (Model.Children != null && Model.Children.Any())
+                    @if (Model.ChildrenViewModel.Children != null && Model.ChildrenViewModel.Children.Any())
                     {
                         <div class="row-fluid child-table">
                             <table class="table table-bordered table-striped" style="width:50%;">
@@ -23,7 +20,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var child in Model.Children)
+                                    @foreach (var child in Model.ChildrenViewModel.Children)
                                     {
                                         <tr>
                                             <td class="child-name">@child.Name</td>
@@ -61,23 +58,48 @@
                             </table>
                         </div>                            
                     }
-                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "child" }))
+                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "childForm" }))
                     {
-                        <div class="control-group row-fluid other-other">
-                            <label class="span2">Name</label>
-                            @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
-                            @Html.ValidationMessageFor(m => m.Name)
-                        </div>
-                        <div class="control-group row-fluid other-other">
-                            <label class="span2">Date of Birth</label>
-                            @Html.TextBoxFor(m => m.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                            @Html.ValidationMessageFor(m => m.DateOfBirth)
-                        </div>
+                        <div class="control-group">
+                            <label class="informative">Are there children involved in this case?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.ChildFormViewModel.ChildrenInvolved, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.ChildFormViewModel.ChildrenInvolved, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.ChildFormViewModel.ChildrenInvolved)
+                        </div>                        
                     }
-                    <button class="btn btn-primary" id="addChild" value="Add">Add </button>
-                    <br/>
-                    <br />
-
+                    @if (Model.ChildFormViewModel.ChildrenInvolved == (int) YesNo.Yes)
+                    {
+                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "child"}))
+                         {
+                             <div class="control-group row-fluid child-info">
+                                 <label class="span2">Name</label>
+                                 @Html.TextBoxFor(m => m.ChildrenViewModel.Name, new {placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here."})
+                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.Name)
+                             </div>
+                             <div class="control-group row-fluid child-info">
+                                 <label class="span2">Date of Birth</label>
+                                 @Html.TextBoxFor(m => m.ChildrenViewModel.DateOfBirth, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.DateOfBirth)
+                             </div>
+                         }
+                        <button class="btn btn-primary child-info" style="margin-bottom: 20px;" id="addChild" value="Add">Add </button>
+                    } else
+                    {
+                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "child"}))
+                         {
+                             <div class="control-group row-fluid child-info hide">
+                                 <label class="span2">Name</label>
+                                 @Html.TextBoxFor(m => m.ChildrenViewModel.Name, new {placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here."})
+                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.Name)
+                             </div>
+                             <div class="control-group row-fluid child-info hide">
+                                 <label class="span2">Date of Birth</label>
+                                 @Html.TextBoxFor(m => m.ChildrenViewModel.DateOfBirth, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.DateOfBirth)
+                             </div>
+                         }
+                        <button class="btn btn-primary child-info hide" style="margin-bottom: 20px;" id="addChild" value="Add">Add </button>                        
+                    }
                 </div>
             </div>
         </div>

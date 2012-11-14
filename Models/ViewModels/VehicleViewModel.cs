@@ -36,6 +36,8 @@ namespace Models.ViewModels
         [RegularExpression(pattern: @"^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$", ErrorMessage = @"Date must be in mm/dd/yyyy format")]
         public string RefinanceDate { get; set; }
 
+        public int VehicleFormId { get; set; }
+
         public List<Vehicle> VehicleList { get; set; }
         public List<SelectListItem> Names { get; set; }
  
@@ -51,7 +53,8 @@ namespace Models.ViewModels
                     Refinanced = Refinanced,
                     Name = Name,
                     RefinanceDate = string.IsNullOrEmpty(RefinanceDate) ? (DateTime?) null : Convert.ToDateTime(RefinanceDate),
-                    Year = Convert.ToInt16(Year)
+                    Year = Convert.ToInt16(Year),
+                    VehicleFormId = VehicleFormId
                 };
         }
     }

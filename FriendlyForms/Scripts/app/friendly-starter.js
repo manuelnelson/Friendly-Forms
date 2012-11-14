@@ -75,7 +75,7 @@
         updatePlaintiffCustodial();
     });
     $('input[name=DefendantCustodialParent]').change(function () {
-        var val = $('#DefendantCustodialParent:checked').val() % 2 + 1;
+        var val = $('#DefendantCustodialParent:checked').val();
         switch (val) {
             case "1":
                 $('#PlaintiffCustodialParent[value="2"]').attr('checked', 'checked');
@@ -115,23 +115,42 @@
 
 
     //-----------------------------------Child Form----------------------------
+    $('input[id=ChildFormViewModel_ChildrenInvolved]').change(function () {
+        Friendly.ClearForm('child');
+        if ($('#ChildFormViewModel_ChildrenInvolved:checked').val() === "1") {
+            $('.child-info').show();
+        } else {
+            $('.child-info').hide();
+        }
+    });
     $('#addChild').click(function () {
         Friendly.StartLoading();
         if ($('#child').valid()) {
             //get values
-            var model = Friendly.GetFormInput('child');
+            var childFormModel = Friendly.GetFormInput('childForm');
             $.ajax({
-                url: '/Forms/Children/',
+                url: '/Forms/ChildForm/',
                 type: 'POST',
-                data: model,
+                data: childFormModel,
                 success: function (data) {
-                    //Add child to list
-                    var result = $("#friendly-child-template").tmpl(data);
-                    $('.child-table').show();
-                    $('.child-table tbody').append(result);
-                    Friendly.EndLoading();
-                    Friendly.ClearForm('child');
-                    return false;
+                    //get values
+                    var model = Friendly.GetFormInput('child');
+                    model.ChildFormId = data;
+                    $.ajax({
+                        url: '/Forms/Children/',
+                        type: 'POST',
+                        data: model,
+                        success: function (data) {
+                            //Add child to list
+                            var result = $("#friendly-child-template").tmpl(data);
+                            $('.child-table').show();
+                            $('.child-table tbody').append(result);
+                            Friendly.EndLoading();
+                            Friendly.ClearForm('child');
+                            return false;
+                        },
+                        error: Friendly.GenericErrorMessage
+                    });
                 },
                 error: Friendly.GenericErrorMessage
             });

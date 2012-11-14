@@ -1,5 +1,5 @@
 ﻿@using Models.ViewModels
-@model FriendlyForms.Models.ChildSupportAllViewModel
+@model FriendlyForms.Models.ParentingPlanViewModel
 @{
     ViewBag.Title = "Parenting";
 }
@@ -65,14 +65,14 @@
     }
 </div>
 <h4>Children</h4>
-@if (Model.ChildrenViewModel.Children.Any())
+@if (Model.ChildAllViewModel.ChildrenViewModel.Children.Any())
 {
     <div class="row-fluid">
         <div class="span4 informative">Name</div>
         <div class="span4 informative">Date of Birth</div>
         <div class="span4 informative">Gender</div>
     </div>
-    foreach (var child in Model.ChildrenViewModel.Children)
+    foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
     {
     <div class="row-fluid">
         <div class="span4">@child.Name</div>
@@ -112,7 +112,7 @@
     </div>
     <h4>Primary Physical Custody</h4>
     <p>For each of the children named below, the primary physical custodian shall be:</p>
-    foreach (var child in Model.ChildrenViewModel.Children)
+    foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
     {
     <div class="row-fluid">
         <div class="span4">@child.Name</div>
@@ -137,7 +137,7 @@ CHILD(REN) SHALL BE ATTACHED AND MADE A PART OF THIS PARENTING PLAN.
             The parties must confer with one another prior to any decision related to non-emergency health care, education, religion, or extra-curricular activities.  The listing below indicates who will
             be the primary decision maker when when there is disagreement regarding the most appropriate decision. 
         </p>
-        @foreach (var child in Model.ChildrenViewModel.Children)
+        @foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
     {
             <h5>@child.Name</h5>
             <p>
@@ -290,7 +290,7 @@ CHILD(REN) SHALL BE ATTACHED AND MADE A PART OF THIS PARENTING PLAN.
          <p>Additionally, the following provisions regarding weekday visitation will apply to the children: @Model.ScheduleViewModel.AdditionalProvisions</p>
      }
     <h4>Major holidays and Vacation Periods</h4>
-    foreach (var child in Model.ChildrenViewModel.Children)
+    foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
     {
         <h4>@child.Name</h4>
 

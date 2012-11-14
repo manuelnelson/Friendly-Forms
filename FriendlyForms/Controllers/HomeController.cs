@@ -38,12 +38,12 @@ namespace FriendlyForms.Controllers
         private readonly IOtherChildrenService _otherChildrenService;
         private readonly ISpecialCircumstancesService _specialCircumstancesService;
         private readonly IOtherChildService _otherChildService;
-
+        private readonly IChildFormService _childFormService;
         //
         // GET: /Forms/
         public HomeController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
             IHouseService houseService, IRealEstateService realEstateService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthService healthService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService)
+            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IChildFormService childFormService )
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -74,17 +74,19 @@ namespace FriendlyForms.Controllers
             _otherChildrenService = otherChildrenService;
             _specialCircumstancesService = specialCircumstancesService;
             _otherChildService = otherChildService;
+            _childFormService = childFormService;
         }
         public ActionResult Index()
         {
             if(User.Identity.IsAuthenticated)
             {
                 var userId = User.FriendlyIdentity().UserId;
+                var childForm = _childFormService.GetByUserId(userId);
                 var children = _childService.GetByUserId(userId);
                 var childSupport = _childSupportService.GetByUserId(userId);
                 var participants = _participantService.GetByUserId(userId);
                 var specialCircumstance = _specialCircumstancesService.GetByUserId(userId);
-                if(children.Children.Any())
+                if(childForm.UserId != 0 && children.Children.Any())
                 {
                     var holidays = _holidayService.GetByChildId(children.Children.First().Id);
 
@@ -100,7 +102,7 @@ namespace FriendlyForms.Controllers
                 }
                 var allFormsViewModel = new AllFormsViewModel
                 {
-                    HasChildren = children.Children.Any(),
+                    HasChildren = childForm.UserId != 0,
                     IsDomesticDone = childSupport.UserId != 0,
                     IsStarterDone = participants.UserId != 0,
                     IsParentingDone = false,

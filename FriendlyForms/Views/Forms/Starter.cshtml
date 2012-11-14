@@ -4,12 +4,12 @@
 }
 @section Sidebar{
     @{
-        var itemDone = "icon-ok";
-        var itemlock = "icon-lock";  
+        var itemDone = "icon-ok icon-green";
+        var itemlock = "";  
     }
     <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
-        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-pencil"></i>Court</a></li>
+        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-pencil icon-blue"></i>Court</a></li>
         @if (Model.StarterFormsCompleted.Participant)
         {
             <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="@itemDone"></i>Participants</a></li>
@@ -36,4 +36,4 @@
 }
 @Html.Partial("_Court", Model.CourtViewModel)
 @Html.Partial("_Participants", Model.ParticipantViewModel)
-@Html.Partial("_Children", Model.ChildrenViewModel)
+@Html.Partial("_Children", Model.ChildAllViewModel)

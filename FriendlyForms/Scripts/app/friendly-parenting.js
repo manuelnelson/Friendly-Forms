@@ -91,7 +91,11 @@
             //add to decision and holiday dropdown
             $('.copy-button ul').append('<li><a title="all" data-id="' + child.Id + '" href="#">' + child.Name + '</a></li>');
         });
-
+        
+        if (children.length <= 1) {
+            $('.copy-wrapper').hide();
+        }
+        
         //get first child's information
         childNdx = 0;
         var firstChild = children[childNdx];

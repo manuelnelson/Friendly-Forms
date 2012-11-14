@@ -48,12 +48,13 @@ namespace FriendlyForms.Controllers
         private readonly IOtherChildrenService _otherChildrenService;
         private readonly ISpecialCircumstancesService _specialCircumstancesService;
         private readonly IOtherChildService _otherChildService;
+        private readonly IVehicleFormService _vehicleFormService;
         private readonly SynchronizedPechkin _synchronizedPechkin;
         //
         // GET: /Forms/
         public OutputController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService, ICountyService countyService,
             IHouseService houseService, IRealEstateService realEstateService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthService healthService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService)
+            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -84,7 +85,7 @@ namespace FriendlyForms.Controllers
             _otherChildrenService = otherChildrenService;
             _specialCircumstancesService = specialCircumstancesService;
             _otherChildService = otherChildService;
-
+            _vehicleFormService = vehicleFormService;
             // set it up using fluent notation
             var gc = new GlobalConfig();
             gc.SetMargins(new Margins(100, 100, 0, 100))
@@ -204,11 +205,14 @@ namespace FriendlyForms.Controllers
             court.Counties = counties;
 
             var formsViewModel = new FormsCompleted();
-            var childViewModel = new ChildSupportAllViewModel
+            var childViewModel = new ParentingPlanViewModel
             {
                 CourtViewModel = court,
                 ParticipantViewModel = participants as ParticipantViewModel,
-                ChildrenViewModel = children,
+                ChildAllViewModel = new ChildAllViewModel()
+                    {
+                        ChildrenViewModel = children,
+                    },
                 PrivacyViewModel = privacy as PrivacyViewModel,
                 InformationViewModel = information as InformationViewModel,
                 AllDecisionsViewModel = allDecisions,
@@ -263,6 +267,7 @@ namespace FriendlyForms.Controllers
             var taxes = _taxService.GetByUserId(userId);
             var support = _childSupportService.GetByUserId(userId);
             var vehicles = _vehicleService.GetByUserId(userId).ToList();
+            var vehicleForm = _vehicleFormService.GetByUserId(userId);
             var participants = _participantService.GetByUserId(userId);
             var vehicleModel = new VehicleViewModel()
             {
@@ -283,7 +288,11 @@ namespace FriendlyForms.Controllers
             {
                 HouseViewModel = house as HouseViewModel,
                 RealEstateViewModel = property as RealEstateViewModel,
-                VehicleViewModel = vehicleModel,
+                VehicleAllViewModel = new VehicleAllViewModel()
+                    {
+                      VehicleViewModel = vehicleModel,
+                      VehicleFormViewModel = vehicleForm as VehicleFormViewModel
+                    },
                 DebtViewModel = debt as DebtViewModel,
                 AssetViewModel = assets as AssetViewModel,
                 HealthViewModel = health as HealthViewModel,

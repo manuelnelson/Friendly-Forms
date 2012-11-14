@@ -1,4 +1,4 @@
-﻿@model FriendlyForms.Models.ChildSupportAllViewModel
+﻿@model FriendlyForms.Models.ParentingPlanViewModel
 @{
     ViewBag.Title = "Parenting";
 }
@@ -12,7 +12,7 @@
         <li><a href="@Url.Action("DomesticMediation","Forms")"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>
         <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Parenting Plan</a>
             <ul style="display: block">
-                <li class="nav-item active" id="privacyNav"><a href="#" data-form="court"><i class="icon-pencil"></i>Privacy</a></li>
+                <li class="nav-item active" id="privacyNav"><a href="#" data-form="privacy"><i class="icon-pencil icon-blue"></i>Supervision</a></li>
                 @if (Model.FormsCompleted.Information)
                 {
                     <li class="nav-item" id="informationNav"><a data-form="information" href="#"><i class="@itemDone"></i>Information</a></li>
@@ -81,4 +81,4 @@
 @Html.Partial("_Schedule", Model.ScheduleViewModel)
 @Html.Partial("_Holiday", Model.HolidayViewModel)
 @* The child form below is used for the decisions form and holiday form to grab children information *@
-@Html.Partial("_Children", Model.ChildrenViewModel)
+@Html.Partial("_Children", Model.ChildAllViewModel)

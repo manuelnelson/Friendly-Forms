@@ -11,7 +11,7 @@
     <ul>
         <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Mediation Agreement</a>
             <ul style="display:block">
-                <li class="nav-item active" id="maritalhouseNav"><a data-form="maritalHouse" href="#"><i class="icon-pencil"></i>Marital House</a></li>
+                <li class="nav-item active" id="maritalHouseNav"><a data-form="maritalHouse" href="#"><i class="icon-pencil icon-blue"></i>Marital House</a></li>
                 @if (Model.FormsCompleted.RealEstateCompleted)
                 {
                     <li class="nav-item" id="propertyNav"><a data-form="property" href="#"><i class="@itemDone"></i>Personal Property</a></li>
@@ -68,6 +68,7 @@
                 {
                     <li class="nav-item" id="taxesNav"><a data-form="taxes" href="#"><i class="@itemlock"></i>Taxes</a></li>
                 }
+@* Will be moved to financial from
                 @if (Model.FormsCompleted.ChildCompleted)
                 {
                     <li class="nav-item" id="supportNav"><a data-form="support" href="#"><i class="@itemDone"></i>Child Support</a></li>
@@ -75,7 +76,7 @@
                 else
                 {
                     <li class="nav-item" id="supportNav"><a data-form="support" href="#"><i class="@itemlock"></i>Child Support</a></li>
-                }
+                }*@
 
             </ul>
         </li>
@@ -95,10 +96,10 @@
 }
 @Html.Partial("_MaritalHouse", Model.HouseViewModel)
 @Html.Partial("_Property", Model.RealEstateViewModel)
-@Html.Partial("_Vehicles", Model.VehicleViewModel)
+@Html.Partial("_Vehicles", Model.VehicleAllViewModel)
 @Html.Partial("_Debt", Model.DebtViewModel)
 @Html.Partial("_Assets", Model.AssetViewModel)
 @Html.Partial("_HealthInsurance", Model.HealthViewModel)
 @Html.Partial("_SpousalSupport", Model.SpousalViewModel)
 @Html.Partial("_Tax", Model.TaxViewModel)
-@Html.Partial("_ChildSupport", Model.ChildSupportViewModel)
+@*@Html.Partial("_ChildSupport", Model.ChildSupportViewModel)*@

@@ -49,6 +49,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -62,11 +63,13 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="AssetService.cs" />
+    <Compile Include="ChildFormService.cs" />
     <Compile Include="ChildService.cs" />
     <Compile Include="ChildSupportService.cs" />
     <Compile Include="CommunicationService.cs" />
     <Compile Include="Contracts\BusinessServicesException.cs" />
     <Compile Include="Contracts\IAssetService.cs" />
+    <Compile Include="Contracts\IChildFormService.cs" />
     <Compile Include="Contracts\IChildService.cs" />
     <Compile Include="Contracts\IChildSupportService.cs" />
     <Compile Include="Contracts\ICommunicationService.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="Contracts\ISpousalService.cs" />
     <Compile Include="Contracts\ITaxService.cs" />
     <Compile Include="Contracts\IUserService.cs" />
+    <Compile Include="Contracts\IVehicleFormService.cs" />
     <Compile Include="Contracts\IVehicleService.cs" />
     <Compile Include="CountyService.cs" />
     <Compile Include="CourtService.cs" />
@@ -144,6 +148,7 @@
     <Compile Include="SpousalService.cs" />
     <Compile Include="TaxService.cs" />
     <Compile Include="UserService.cs" />
+    <Compile Include="VehicleFormService.cs" />
     <Compile Include="VehicleService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@ namespace FriendlyForms.Models
     {
         public CourtViewModel CourtViewModel { get; set; }
         public ParticipantViewModel ParticipantViewModel { get; set; }
-        public ChildrenViewModel ChildrenViewModel { get; set; }
+        public ChildAllViewModel ChildAllViewModel { get; set; }
         public StarterFormsCompleted StarterFormsCompleted { get; set; }
     }
     public class StarterFormsCompleted

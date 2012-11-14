@@ -14093,7 +14093,7 @@ Friendly.StartLoading = function () {
     $('body').css('cursor', 'wait');
 };
 Friendly.EndLoading = function () {
-    $('#loading').hide(); 
+    $('#loading').hide();
     $('body').css('cursor', 'default');
 };
 Friendly.ShowMessage = function (title, message, type, prependTo) {
@@ -14151,7 +14151,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
 };
 Friendly.SubmitFormOther = function (formName, nextForm, model) {
     Friendly.StartLoading();
-    if(typeof model === 'undefined') {
+    if (typeof model === 'undefined') {
         model = Friendly.GetFormInput(formName);
     }
     model.isOtherParent = "true";
@@ -14176,7 +14176,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     }
     return false;
 };
-Friendly.NextForm = function (nextForm, prevIcon) {    
+Friendly.NextForm = function (nextForm, prevIcon) {
     $('#sidebar .active').find('i').attr('class', prevIcon);
     $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
     $('.wrapper').hide();
@@ -14184,8 +14184,7 @@ Friendly.NextForm = function (nextForm, prevIcon) {
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
     
-
-    if(nextForm === 'preexistingOther') {
+    if (nextForm === 'preexistingOther') {
         if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportOtherWrapper').show();
         }
@@ -14337,18 +14336,18 @@ $(document).ready(function () {
         showInputs: false,
         disableFocus: true
     });
-    $('#main-content').on('click', '.close', function() {
+    $('#main-content').on('click', '.close', function () {
         $(this).parent().parent().parent().remove();
     });
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form
-        var currentFormName = $('ul .active').children(':first-child').attr('data-form');                
+        var currentFormName = $('ul .active').children(':first-child').attr('data-form');
         var nextForm = $(this).children(':first-child').attr('data-form');
-        if ($('#' + currentFormName).valid()) {
-            //TODO: we need to do a check of the form to see if it's a 'generic form' where we can just grab the input
+        var isGeneric = isGenericForm(currentFormName, nextForm);
+        if (isGeneric && $('#' + currentFormName).valid()) {
             //go ahead and save
-            var model = Friendly.GetFormInput(currentFormName);
+            var model = Friendly.GetFormInput(currentFormName, nextForm);
             $.ajax({
                 url: '/Forms/' + currentFormName + '/',
                 type: 'POST',
@@ -14361,11 +14360,36 @@ $(document).ready(function () {
                 },
                 error: Friendly.GenericErrorMessage
             });
-        } else {
+        } else if(isGeneric){
             Friendly.NextForm(nextForm, Friendly.properties.iconError);
         }
-        
     });
+    function isGenericForm(formName, nextForm) {
+        var genericForms = ['vehicles', 'children', 'decisions', 'holidays'];
+        if (genericForms.indexOf(formName) >= 0) {
+            switch (formName) {
+                case 'vehicles':
+                    if ($('#vehicleForm').valid()) {
+                        var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
+                        $.ajax({
+                            url: '/Forms/VehicleForm/',
+                            type: 'POST',
+                            data: vehicleFormModel,
+                            success: function (data) {
+                                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                            },
+                            error: Friendly.GenericErrorMessage
+                        });
+                    }else {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    }
+                    break;                                
+            }
+            return false;
+        }
+
+        return true;
+    }
 });
 ;$(document).ready(function () {
     //House Form
@@ -14412,6 +14436,7 @@ $(document).ready(function () {
         }
     });
     
+    //Vehicle Form    
     $('input[name=Refinanced]').change(function () {
         $('#RefinanceDate').val('');
         if ($('#Refinanced:checked').val() === "1") {
@@ -14420,26 +14445,44 @@ $(document).ready(function () {
             $('.vehicle-refinance').hide();
         }
     });
-    //Vehicle Form    
+    $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
+        Friendly.ClearForm('vehicles');
+        if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
+            $('.vehicle-info').show();
+        } else {
+            $('.vehicle-info').hide();
+        }
+    });
     $('#addVehicle').click(function () {
-        Friendly.StartLoading();
+        Friendly.StartLoading();        
         if ($('#vehicles').valid()) {
-            //get values
-            var model = Friendly.GetFormInput('vehicles');
+            var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
             $.ajax({
-                url: '/Forms/Vehicles/',
+                url: '/Forms/VehicleForm/',
                 type: 'POST',
-                data: model,
+                data: vehicleFormModel,
                 success: function (data) {
+                    //get values
+                    var model = Friendly.GetFormInput('vehicles');
+                    model.VehicleFormId = data;
+                    $.ajax({
+                        url: '/Forms/Vehicles/',
+                        type: 'POST',
+                        data: model,
+                        success: function (vehicle) {
+                            //Add vehicle to list
+                            $('.vehicle-table').show();
+                            var result = $("#friendly-vehicle-template").tmpl(vehicle);
+                            $('.vehicle-table tbody').append(result);
+                            Friendly.ClearForm('vehicles');
+                            Friendly.EndLoading();
+                            return false;
+                        },
+                        error: Friendly.GenericErrorMessage
+                    });
                     //Add vehicle to list
-                    $('.vehicle-table').show();
-                    var result = $("#friendly-vehicle-template").tmpl(data);
-                    $('.vehicle-table tbody').append(result);
-                    Friendly.ClearForm('vehicles');
-                    Friendly.EndLoading();
-                    return false;
                 },
-                error: Friendly.GenericErrorMessage
+                error: Friendly.GenericErrorMessage                
             });
         }
         else {
@@ -15063,7 +15106,7 @@ $(document).ready(function () {
         updatePlaintiffCustodial();
     });
     $('input[name=DefendantCustodialParent]').change(function () {
-        var val = $('#DefendantCustodialParent:checked').val() % 2 + 1;
+        var val = $('#DefendantCustodialParent:checked').val();
         switch (val) {
             case "1":
                 $('#PlaintiffCustodialParent[value="2"]').attr('checked', 'checked');
@@ -15103,23 +15146,42 @@ $(document).ready(function () {
 
 
     //-----------------------------------Child Form----------------------------
+    $('input[id=ChildFormViewModel_ChildrenInvolved]').change(function () {
+        Friendly.ClearForm('child');
+        if ($('#ChildFormViewModel_ChildrenInvolved:checked').val() === "1") {
+            $('.child-info').show();
+        } else {
+            $('.child-info').hide();
+        }
+    });
     $('#addChild').click(function () {
         Friendly.StartLoading();
         if ($('#child').valid()) {
             //get values
-            var model = Friendly.GetFormInput('child');
+            var childFormModel = Friendly.GetFormInput('childForm');
             $.ajax({
-                url: '/Forms/Children/',
+                url: '/Forms/ChildForm/',
                 type: 'POST',
-                data: model,
+                data: childFormModel,
                 success: function (data) {
-                    //Add child to list
-                    var result = $("#friendly-child-template").tmpl(data);
-                    $('.child-table').show();
-                    $('.child-table tbody').append(result);
-                    Friendly.EndLoading();
-                    Friendly.ClearForm('child');
-                    return false;
+                    //get values
+                    var model = Friendly.GetFormInput('child');
+                    model.ChildFormId = data;
+                    $.ajax({
+                        url: '/Forms/Children/',
+                        type: 'POST',
+                        data: model,
+                        success: function (data) {
+                            //Add child to list
+                            var result = $("#friendly-child-template").tmpl(data);
+                            $('.child-table').show();
+                            $('.child-table tbody').append(result);
+                            Friendly.EndLoading();
+                            Friendly.ClearForm('child');
+                            return false;
+                        },
+                        error: Friendly.GenericErrorMessage
+                    });
                 },
                 error: Friendly.GenericErrorMessage
             });

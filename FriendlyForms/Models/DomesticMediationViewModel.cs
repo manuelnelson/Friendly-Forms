@@ -6,7 +6,7 @@ namespace FriendlyForms.Models
     {
         public HouseViewModel HouseViewModel { get; set; }
         public RealEstateViewModel RealEstateViewModel { get; set; }
-        public VehicleViewModel VehicleViewModel { get; set; }
+        public VehicleAllViewModel VehicleAllViewModel { get; set; }
         public DebtViewModel DebtViewModel { get; set; }
         public AssetViewModel AssetViewModel { get; set; }
         public HealthViewModel HealthViewModel { get; set; }

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAssetRepository.cs" />
+    <Compile Include="IChildFormRepository.cs" />
     <Compile Include="IChildRepository.cs" />
     <Compile Include="IChildSupportRepository.cs" />
     <Compile Include="ICommunicationRepository.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="ITaxRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="IUserRepository.cs" />
+    <Compile Include="IVehicleFormRepository.cs" />
     <Compile Include="IVehicleRepository.cs" />
     <Compile Include="PreexistingSupportChildRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

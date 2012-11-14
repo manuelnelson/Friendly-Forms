@@ -11,6 +11,10 @@ namespace Models
         public virtual string Name { get; set; }
         public virtual DateTime ? DateOfBirth { get; set; }
 
+        public int ChildFormId { get; set; }
+        public virtual ChildForm ChildForm { get; set; }
+
+
         public IViewModel ConvertToModel()
         {
             return new ChildrenViewModel()
@@ -18,7 +22,8 @@ namespace Models
                 DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided",
                 Name = Name,
                 UserId = UserId,
-                Id = Id
+                Id = Id,
+                ChildFormId = ChildFormId
             };
 
         }
@@ -29,7 +34,7 @@ namespace Models
             DateOfBirth = update.DateOfBirth;
             Name = update.Name;
             UserId = update.UserId;
-
+            ChildFormId = update.ChildFormId;
         }
     }    
 }

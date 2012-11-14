@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
@@ -16,6 +17,7 @@ namespace FriendlyForms.Controllers
         private readonly ICourtService _courtService;
         private readonly IParticipantService _participantService;
         private readonly IChildService _childService;
+        private readonly IChildFormService _childFormService;
         private readonly IPrivacyService _privacyService;
         private readonly IInformationService _informationService;
         private readonly IDecisionsService _decisionsService;
@@ -42,12 +44,12 @@ namespace FriendlyForms.Controllers
         private readonly IOtherChildrenService _otherChildrenService;
         private readonly ISpecialCircumstancesService _specialCircumstancesService;
         private readonly IOtherChildService _otherChildService;
-
+        private readonly IVehicleFormService _vehicleFormService;
         //
         // GET: /Forms/
         public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
             IHouseService houseService, IRealEstateService realEstateService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthService healthService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService)
+            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -78,6 +80,8 @@ namespace FriendlyForms.Controllers
             _otherChildrenService = otherChildrenService;
             _specialCircumstancesService = specialCircumstancesService;
             _otherChildService = otherChildService;
+            _vehicleFormService = vehicleFormService;
+            _childFormService = childFormService;
         }
         
         public ActionResult Starter()
@@ -86,12 +90,13 @@ namespace FriendlyForms.Controllers
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId);
             var children = _childService.GetByUserId(userId);
+            var childForm = _childFormService.GetByUserId(userId);
             var counties = _countyService.GetAll();
             court.Counties = counties;
 
             var formsViewModel = new StarterFormsCompleted()
             {
-                Children = children.Children.Any(),
+                Children = childForm.UserId != 0,
                 Participant = participants.UserId != 0,
             };
 
@@ -99,7 +104,11 @@ namespace FriendlyForms.Controllers
             {
                 CourtViewModel = court,
                 ParticipantViewModel = participants as ParticipantViewModel,
-                ChildrenViewModel = children,
+                ChildAllViewModel = new ChildAllViewModel()
+                    {
+                        ChildrenViewModel = children,
+                        ChildFormViewModel = childForm as ChildFormViewModel
+                    },
                 StarterFormsCompleted = formsViewModel
             };
             return View(starterViewModel);
@@ -113,6 +122,7 @@ namespace FriendlyForms.Controllers
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId);
             var children = _childService.GetByUserId(userId);
+            var childForm = _childFormService.GetByUserId(userId);
             var privacy = _privacyService.GetByUserId(userId);
             var information = _informationService.GetByUserId(userId);
             var decisions = children.Children.Any() ? _decisionsService.GetByChildId(children.Children.First().Id) : new DecisionsViewModel();
@@ -137,7 +147,7 @@ namespace FriendlyForms.Controllers
 
             var formsViewModel = new FormsCompleted()
                 {
-                    Children = children.Children.Any(),
+                    Children = childForm.UserId != 0,
                     Communication = communication.UserId != 0,
                     Decisions = decisions.UserId != 0,
                     Holiday = holiday.UserId != 0,
@@ -148,11 +158,15 @@ namespace FriendlyForms.Controllers
                     Schedule = schedule.UserId != 0
                 };
 
-            var childViewModel = new ChildSupportAllViewModel
+            var childViewModel = new ParentingPlanViewModel
                 {
                     CourtViewModel = court,
                     ParticipantViewModel = participants as ParticipantViewModel,
-                    ChildrenViewModel = children,
+                    ChildAllViewModel = new ChildAllViewModel()
+                        {
+                            ChildrenViewModel = children,
+                            ChildFormViewModel = childForm as ChildFormViewModel
+                        },
                     PrivacyViewModel = privacy as PrivacyViewModel,
                     InformationViewModel = information as InformationViewModel,
                     AllDecisionsViewModel = allDecisions,
@@ -206,6 +220,15 @@ namespace FriendlyForms.Controllers
                 };
                 return Json(childFormatted, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [HttpPost]
+        public JsonResult ChildForm(ChildFormViewModel model)
+        {
+            //throw new HttpException(404, "Unable to find the resource");
+            model.UserId = User.FriendlyIdentity().UserId;
+            var result = _childFormService.AddOrUpdate(model);
+            return Json(result.Id);
         }
 
         [HttpPost]
@@ -325,6 +348,7 @@ namespace FriendlyForms.Controllers
                 nameList = new List<SelectListItem>();
             }
             var support = _childSupportService.GetByUserId(userId);
+            var vehicleForm = _vehicleFormService.GetByUserId(userId);
             var vehicles = _vehicleService.GetByUserId(userId).ToList();
             var vehicleModel = new VehicleViewModel()
                 {
@@ -340,13 +364,17 @@ namespace FriendlyForms.Controllers
                 SpousalCompleted = spousal.UserId != 0,
                 TaxCompleted = taxes.UserId != 0,
                 ChildCompleted = support.UserId != 0,
-                VehicleCompleted = vehicles.Any()
+                VehicleCompleted = vehicleForm.UserId != 0
             };
             var domesticModel = new DomesticMediationViewModel
             {
                 HouseViewModel = house as HouseViewModel,
                 RealEstateViewModel = property as RealEstateViewModel,
-                VehicleViewModel = vehicleModel,
+                VehicleAllViewModel = new VehicleAllViewModel()
+                    {
+                        VehicleViewModel = vehicleModel,
+                        VehicleFormViewModel = vehicleForm as VehicleFormViewModel
+                    },
                 DebtViewModel = debt as DebtViewModel,
                 AssetViewModel = assets as AssetViewModel,
                 HealthViewModel = health as HealthViewModel,
@@ -387,6 +415,13 @@ namespace FriendlyForms.Controllers
             model.UserId = User.FriendlyIdentity().UserId; 
             var vehicleadded = _vehicleService.AddOrUpdate(model);
             return Json(vehicleadded);
+        }
+        [HttpPost]
+        public JsonResult VehicleForm(VehicleFormViewModel model)
+        {
+            model.UserId = User.FriendlyIdentity().UserId;
+            var result = _vehicleFormService.AddOrUpdate(model);
+            return Json(result.Id);
         }
         [HttpPost]
         public JsonResult Assets(AssetViewModel model)

@@ -14,6 +14,7 @@ namespace DataLayerContext
         public DbSet<Participant> Participants { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Child> Children { get; set; }
+        public DbSet<ChildForm> ChildForms { get; set; }
         public DbSet<Privacy> Privacy { get; set; }
         public DbSet<Information> Information { get; set; }
         public DbSet<Decisions> Decisions { get; set; }
@@ -27,6 +28,7 @@ namespace DataLayerContext
         public DbSet<House> Houses { get; set; }
         public DbSet<RealEstateAndProperty> Properties { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<VehicleForm> VehicleForms { get; set; }
         public DbSet<Debt> Debts { get; set; }
         public DbSet<Assets> Assets{ get; set; }
         public DbSet<HealthInsurance> HealthInsurances{ get; set; }
@@ -48,6 +50,7 @@ namespace DataLayerContext
             SetupParticipantMapping(modelBuilder);
             SetupUserEntity(modelBuilder);
             SetupChildEntity(modelBuilder);
+            SetupChildFormEntity(modelBuilder);
             SetupPrivacyEntity(modelBuilder);
             SetupInformationEntity(modelBuilder);
             SetupDecisionEntity(modelBuilder);
@@ -61,6 +64,7 @@ namespace DataLayerContext
             SetupHouseEntity(modelBuilder);
             SetupPropertyEntity(modelBuilder);
             SetupVehicleEntity(modelBuilder);
+            SetupVehicleFormEntity(modelBuilder);
             SetupDebtEntity(modelBuilder);
             SetupAssetsEntity(modelBuilder);
             SetupHealthEntity(modelBuilder);
@@ -76,6 +80,14 @@ namespace DataLayerContext
             SetupOtherChildEntity(modelBuilder);
             base.OnModelCreating(modelBuilder);
         }
+
+        private void SetupChildFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ChildForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<ChildForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
+
 
         private void SetupOtherChildEntity(DbModelBuilder modelBuilder)
         {
@@ -189,6 +201,12 @@ namespace DataLayerContext
             modelBuilder.Entity<Vehicle>().Property(t => t.Make).HasMaxLength(100);
             modelBuilder.Entity<Vehicle>().Property(t => t.Model).HasMaxLength(100);
             modelBuilder.Entity<Vehicle>().Property(t => t.Owner).HasMaxLength(100);
+        }
+        private void SetupVehicleFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<VehicleForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<VehicleForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupPropertyEntity(DbModelBuilder modelBuilder)

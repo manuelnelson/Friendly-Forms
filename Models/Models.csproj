@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Assets.cs" />
     <Compile Include="Child.cs" />
+    <Compile Include="ChildForm.cs" />
     <Compile Include="ChildSupport.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="Contract\IFormEntity.cs" />
@@ -79,7 +80,9 @@
     <Compile Include="Tax.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Vehicle.cs" />
+    <Compile Include="VehicleForm.cs" />
     <Compile Include="ViewModels\AssetViewModel.cs" />
+    <Compile Include="ViewModels\ChildFormViewModel.cs" />
     <Compile Include="ViewModels\ChildrenViewModel.cs" />
     <Compile Include="ViewModels\ChildSupportViewModel.cs" />
     <Compile Include="ViewModels\CommunicationViewModel.cs" />
@@ -108,6 +111,7 @@
     <Compile Include="ViewModels\SpecialCircumstancesViewModel.cs" />
     <Compile Include="ViewModels\SpousalViewModel.cs" />
     <Compile Include="ViewModels\TaxViewModel.cs" />
+    <Compile Include="ViewModels\VehicleFormViewModel.cs" />
     <Compile Include="ViewModels\VehicleViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

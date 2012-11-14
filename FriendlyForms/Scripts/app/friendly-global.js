@@ -17,7 +17,7 @@ Friendly.StartLoading = function () {
     $('body').css('cursor', 'wait');
 };
 Friendly.EndLoading = function () {
-    $('#loading').hide(); 
+    $('#loading').hide();
     $('body').css('cursor', 'default');
 };
 Friendly.ShowMessage = function (title, message, type, prependTo) {
@@ -75,7 +75,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
 };
 Friendly.SubmitFormOther = function (formName, nextForm, model) {
     Friendly.StartLoading();
-    if(typeof model === 'undefined') {
+    if (typeof model === 'undefined') {
         model = Friendly.GetFormInput(formName);
     }
     model.isOtherParent = "true";
@@ -100,7 +100,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     }
     return false;
 };
-Friendly.NextForm = function (nextForm, prevIcon) {    
+Friendly.NextForm = function (nextForm, prevIcon) {
     $('#sidebar .active').find('i').attr('class', prevIcon);
     $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
     $('.wrapper').hide();
@@ -108,8 +108,7 @@ Friendly.NextForm = function (nextForm, prevIcon) {
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
     
-
-    if(nextForm === 'preexistingOther') {
+    if (nextForm === 'preexistingOther') {
         if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportOtherWrapper').show();
         }
@@ -261,18 +260,18 @@ $(document).ready(function () {
         showInputs: false,
         disableFocus: true
     });
-    $('#main-content').on('click', '.close', function() {
+    $('#main-content').on('click', '.close', function () {
         $(this).parent().parent().parent().remove();
     });
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form
-        var currentFormName = $('ul .active').children(':first-child').attr('data-form');                
+        var currentFormName = $('ul .active').children(':first-child').attr('data-form');
         var nextForm = $(this).children(':first-child').attr('data-form');
-        if ($('#' + currentFormName).valid()) {
-            //TODO: we need to do a check of the form to see if it's a 'generic form' where we can just grab the input
+        var isGeneric = isGenericForm(currentFormName, nextForm);
+        if (isGeneric && $('#' + currentFormName).valid()) {
             //go ahead and save
-            var model = Friendly.GetFormInput(currentFormName);
+            var model = Friendly.GetFormInput(currentFormName, nextForm);
             $.ajax({
                 url: '/Forms/' + currentFormName + '/',
                 type: 'POST',
@@ -285,9 +284,34 @@ $(document).ready(function () {
                 },
                 error: Friendly.GenericErrorMessage
             });
-        } else {
+        } else if(isGeneric){
             Friendly.NextForm(nextForm, Friendly.properties.iconError);
         }
-        
     });
+    function isGenericForm(formName, nextForm) {
+        var genericForms = ['vehicles', 'children', 'decisions', 'holidays'];
+        if (genericForms.indexOf(formName) >= 0) {
+            switch (formName) {
+                case 'vehicles':
+                    if ($('#vehicleForm').valid()) {
+                        var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
+                        $.ajax({
+                            url: '/Forms/VehicleForm/',
+                            type: 'POST',
+                            data: vehicleFormModel,
+                            success: function (data) {
+                                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                            },
+                            error: Friendly.GenericErrorMessage
+                        });
+                    }else {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    }
+                    break;                                
+            }
+            return false;
+        }
+
+        return true;
+    }
 });

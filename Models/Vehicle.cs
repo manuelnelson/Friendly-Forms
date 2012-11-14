@@ -6,7 +6,7 @@ namespace Models
 {
     public class Vehicle : IFormEntity
     {
-        public int Id { get; set; }
+        public int Id { get; set; }        
         public int UserId { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
@@ -16,6 +16,8 @@ namespace Models
         public string Name { get; set; }
         public DateTime? RefinanceDate { get; set; }
 
+        public int VehicleFormId { get; set; }
+        public virtual VehicleForm VehicleForm { get; set; }
 
         public IViewModel ConvertToModel()
         {
@@ -28,7 +30,8 @@ namespace Models
                     RefinanceDate = RefinanceDate.HasValue ? RefinanceDate.Value.ToString("MM/dd/yyyy") : "Not Provided",
                     Name = Name,
                     Refinanced = Refinanced,
-                    Year = Year.ToString()
+                    Year = Year.ToString(),
+                    VehicleFormId = VehicleFormId
                 };
         }
         
@@ -43,6 +46,7 @@ namespace Models
             Name = updatingEntity.Name;
             RefinanceDate = updatingEntity.RefinanceDate;
             Owner = updatingEntity.Owner;
+            VehicleFormId = updatingEntity.VehicleFormId;
         }
     }
 }

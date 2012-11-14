@@ -3,11 +3,11 @@ using Models.ViewModels;
 
 namespace FriendlyForms.Models
 {
-    public class ChildSupportAllViewModel
+    public class ParentingPlanViewModel
     {
         public CourtViewModel CourtViewModel { get; set; }
         public ParticipantViewModel ParticipantViewModel { get; set; }
-        public ChildrenViewModel ChildrenViewModel { get; set; }
+        public ChildAllViewModel ChildAllViewModel { get; set; }
         public PrivacyViewModel PrivacyViewModel { get; set; }
         public InformationViewModel InformationViewModel { get; set; }
         public AllDecisionsViewModel AllDecisionsViewModel { get; set; }

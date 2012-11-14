@@ -43,6 +43,7 @@
         }
     });
     
+    //Vehicle Form    
     $('input[name=Refinanced]').change(function () {
         $('#RefinanceDate').val('');
         if ($('#Refinanced:checked').val() === "1") {
@@ -51,26 +52,44 @@
             $('.vehicle-refinance').hide();
         }
     });
-    //Vehicle Form    
+    $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
+        Friendly.ClearForm('vehicles');
+        if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
+            $('.vehicle-info').show();
+        } else {
+            $('.vehicle-info').hide();
+        }
+    });
     $('#addVehicle').click(function () {
-        Friendly.StartLoading();
+        Friendly.StartLoading();        
         if ($('#vehicles').valid()) {
-            //get values
-            var model = Friendly.GetFormInput('vehicles');
+            var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
             $.ajax({
-                url: '/Forms/Vehicles/',
+                url: '/Forms/VehicleForm/',
                 type: 'POST',
-                data: model,
+                data: vehicleFormModel,
                 success: function (data) {
+                    //get values
+                    var model = Friendly.GetFormInput('vehicles');
+                    model.VehicleFormId = data;
+                    $.ajax({
+                        url: '/Forms/Vehicles/',
+                        type: 'POST',
+                        data: model,
+                        success: function (vehicle) {
+                            //Add vehicle to list
+                            $('.vehicle-table').show();
+                            var result = $("#friendly-vehicle-template").tmpl(vehicle);
+                            $('.vehicle-table tbody').append(result);
+                            Friendly.ClearForm('vehicles');
+                            Friendly.EndLoading();
+                            return false;
+                        },
+                        error: Friendly.GenericErrorMessage
+                    });
                     //Add vehicle to list
-                    $('.vehicle-table').show();
-                    var result = $("#friendly-vehicle-template").tmpl(data);
-                    $('.vehicle-table tbody').append(result);
-                    Friendly.ClearForm('vehicles');
-                    Friendly.EndLoading();
-                    return false;
                 },
-                error: Friendly.GenericErrorMessage
+                error: Friendly.GenericErrorMessage                
             });
         }
         else {
@@ -162,7 +181,7 @@
             $('.spousal-detail').hide();
         }
     });
-    //Spousal Support
+    //Taxes 
     $('.domestic-part8').click(function () {
         Friendly.SubmitForm('taxes', 'support');
     });
@@ -176,25 +195,25 @@
     });
 
     //Spousal Support
-    $('.domestic-part9').click(function () {
-        //get values
-        var model = {
-            PaidBy: $('#PaidBy').val(),
-            PaidTo: $('#PaidTo').val(),
-            MonthlyAmount: $('#MonthlyAmount:checked').val(),
-            EffectiveDate: $('#EffectiveDate').val(),
-            TemporaryAgreement: $('#TemporaryAgreement:checked').val(),
-            Payment: $('#Payment:checked').val(),
-            PaymentDay: $('#PaymentDay').val()
-        };
-        Friendly.SubmitForm('support', 'support', model);
-    });
-    $('input[name=Payment]').change(function () {
-        $('#PaymentDay').val('');
-        if ($('#Payment:checked').val() === "2") {
-            $('.support-payday').show();
-        } else {
-            $('.support-payday').hide();
-        }
-    });
+    //$('.domestic-part9').click(function () {
+    //    //get values
+    //    var model = {
+    //        PaidBy: $('#PaidBy').val(),
+    //        PaidTo: $('#PaidTo').val(),
+    //        MonthlyAmount: $('#MonthlyAmount:checked').val(),
+    //        EffectiveDate: $('#EffectiveDate').val(),
+    //        TemporaryAgreement: $('#TemporaryAgreement:checked').val(),
+    //        Payment: $('#Payment:checked').val(),
+    //        PaymentDay: $('#PaymentDay').val()
+    //    };
+    //    Friendly.SubmitForm('support', 'support', model);
+    //});
+    //$('input[name=Payment]').change(function () {
+    //    $('#PaymentDay').val('');
+    //    if ($('#Payment:checked').val() === "2") {
+    //        $('.support-payday').show();
+    //    } else {
+    //        $('.support-payday').hide();
+    //    }
+    //});
 });

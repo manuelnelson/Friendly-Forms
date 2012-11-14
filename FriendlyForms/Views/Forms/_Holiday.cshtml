@@ -8,12 +8,6 @@
                 <div class="widget-title">
                     <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Holidays</h5>
-                    <div class="btn dropdown pull-right copy-button" id="copy-holidays">
-                        <a href="#" style="display: block;" data-target="#copy-holidays" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a title="all" data-id="0" href="#">All</a></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="widget-content">
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "holiday" }))
@@ -21,7 +15,7 @@
                         <label class="informative">
                             In this section, you will define scheduling holidays with your child(ren).</label>
                         <input type="hidden" id="holidayChildId" /><br />
-                        <h4 id="holidayChildName"></h4>
+                        <h3 id="holidayChildName"></h3><br />
                         <h5>Thanksgiving Break</h5>
                         <div class="control-group">
                             <label class="informative">
@@ -651,6 +645,15 @@
             </div>
         </div>
     </div>
+    <div style="margin-bottom:20px;" class="copy-wrapper">
+    <label class="informative">To aid you in completing this section for the remaining child(ren), we suggest you use this copy button to copy your choices for your other child(ren), especially if all choices are the same. You will still have the opportunity to make changes to any of your selections on the page(s) that follow this one.</label>
+        <div class="btn btn-primary dropdown copy-button" id="copy-holidays">
+            <a href="#" style="display: block;color:white;" data-target="#copy-holidays" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share icon-white"></i></a>
+            <ul class="dropdown-menu">
+                <li><a title="all" data-id="0" href="#">All</a></li>
+            </ul>
+        </div>
+    </div>    
     <button class="btn btn-primary child-part10 previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary child-part10 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
 

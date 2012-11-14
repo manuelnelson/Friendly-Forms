@@ -8,17 +8,11 @@
                 <div class="widget-title">
                     <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Decisions</h5>
-                    <div class="btn dropdown pull-right copy-button" id="copy-decisions">
-                        <a href="#" style="display: block;" data-target="#copy-decisions" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a title="all" data-id="0" href="#">All</a></li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="widget-content">
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "decisions" }))
                     {
-                        <h4 id="childName"></h4>
+                        <h3 id="childName"></h3><br />
                         <input type="hidden" id="childId" />
                         <div class="control-group">
                             <label class="informative">
@@ -63,67 +57,76 @@
                         foreach (var decision in Model.ExtraDecisionsViewModel.ExtraDecisions)
                         {
                             var name = "ExtraDecisions" + decision.Id;
-                        <div class="control-group extra-decision-item">
-                            <label class="informative" id="extra-decision-description">
-                                @decision.Description</label>
+                            <div class="control-group extra-decision-item">
+                                <label class="informative" id="extra-decision-description">
+                                    @decision.Description</label>
 
-                            @if (decision.DecisionMaker.Equals(1))
-                            {                            
-                                <label class="radio inline">
-                                    Father
-                                <input checked="checked" class="inline extra-decision-maker" data-val="true" data-val-number="The field must be a number." name="@name" data-val-required="The field is required."  type="radio" value="1"></label>                
-                            }
-                            else
-                            {
-                                <label class="radio inline">
-                                    Father
-                                <input class="inline extra-decision-maker" data-val="true" data-val-number="The field must be a number." name="@name" data-val-required="The field is required."  type="radio" value="1"></label>
-                            }
-                            @if (decision.DecisionMaker.Equals(2))
-                            {
-                                <label class="radio inline">
-                                    Mother 
-                                <input checked="checked" class="inline extra-decision-maker" name="@name" type="radio" value="2"></label>
-                            }
-                            else
-                            {
-                                <label class="radio inline">
-                                    Mother 
-                                <input class="inline extra-decision-maker" name="@name" type="radio" value="2"></label>
-                            }
-                            @if (decision.DecisionMaker.Equals(3))
-                            {
-                                <label class="radio inline">
-                                    Both   
-                                <input checked="checked" class="inline extra-decision-maker" name="@name"  type="radio" value="3"></label>
-                            }
-                            else
-                            {
-                                <label class="radio inline">
-                                    Both   
-                                <input class="inline extra-decision-maker"  name="@name" type="radio" value="3"></label>
-                            }
-                            @if (decision.DecisionMaker.Equals(4))
-                            {
-                                <label class="radio inline">
-                                    Not Applicable   
-                                <input checked="checked" class="inline extra-decision-maker" name="@name"  type="radio" value="4"></label>
-                            }
-                            else
-                            {
-                                <label class="radio inline">
-                                    Not Applicable   
-                                <input class="inline extra-decision-maker"  name="@name" type="radio" value="4"></label>
-                            }
-                            <span class="field-validation-valid" data-valmsg-for="@name" data-valmsg-replace="true"></span>
-                            <input type="hidden" id="extra-decision-childId" value="@decision.ChildId" />
-                            <input type="hidden" id="extra-decision-Id" value="@decision.Id" />
-                        </div>
+                                @if (decision.DecisionMaker.Equals(1))
+                                {                            
+                                    <label class="radio inline">
+                                        Father
+                                        <input checked="checked" class="inline extra-decision-maker" data-val="true" data-val-number="The field must be a number." name="@name" data-val-required="The field is required."  type="radio" value="1"></label>                
+                                }
+                                else
+                                {
+                                    <label class="radio inline">
+                                        Father
+                                        <input class="inline extra-decision-maker" data-val="true" data-val-number="The field must be a number." name="@name" data-val-required="The field is required."  type="radio" value="1"></label>
+                                }
+                                @if (decision.DecisionMaker.Equals(2))
+                                {
+                                    <label class="radio inline">
+                                        Mother 
+                                        <input checked="checked" class="inline extra-decision-maker" name="@name" type="radio" value="2"></label>
+                                }
+                                else
+                                {
+                                    <label class="radio inline">
+                                        Mother 
+                                        <input class="inline extra-decision-maker" name="@name" type="radio" value="2"></label>
+                                }
+                                @if (decision.DecisionMaker.Equals(3))
+                                {
+                                    <label class="radio inline">
+                                        Both   
+                                        <input checked="checked" class="inline extra-decision-maker" name="@name"  type="radio" value="3"></label>
+                                }
+                                else
+                                {
+                                    <label class="radio inline">
+                                        Both   
+                                        <input class="inline extra-decision-maker"  name="@name" type="radio" value="3"></label>
+                                }
+                                @if (decision.DecisionMaker.Equals(4))
+                                {
+                                    <label class="radio inline">
+                                        Not Applicable   
+                                        <input checked="checked" class="inline extra-decision-maker" name="@name"  type="radio" value="4"></label>
+                                }
+                                else
+                                {
+                                    <label class="radio inline">
+                                        Not Applicable   
+                                        <input class="inline extra-decision-maker"  name="@name" type="radio" value="4"></label>
+                                }
+                                <span class="field-validation-valid" data-valmsg-for="@name" data-valmsg-replace="true"></span>
+                                <input type="hidden" id="extra-decision-childId" value="@decision.ChildId" />
+                                <input type="hidden" id="extra-decision-Id" value="@decision.Id" />
+                            </div>
 
                         }
                     }
                 </div>
             </div>
+        </div>
+    </div>
+    <div style="margin-bottom:20px;" class="copy-wrapper">
+        <label class="informative">To aid you in completing this section for the remaining child(ren), we suggest you use this copy button to copy your choices for your other child(ren), especially if all choices are the same. You will still have the opportunity to make changes to any of your selections on the page(s) that follow this one.</label>
+        <div class="btn dropdown copy-button" id="copy-decisions">
+            <a href="#" style="display: block;color:white;" data-target="#copy-decisions" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share"></i></a>
+            <ul class="dropdown-menu">
+                <li><a title="all" data-id="0" href="#">All</a></li>
+            </ul>
         </div>
     </div>
     <button class="btn btn-primary child-part6 previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>

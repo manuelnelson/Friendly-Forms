@@ -146,10 +146,12 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Authentication\FriendlyIdentity.cs" />
     <Compile Include="Models\AllFormsViewModel.cs" />
-    <Compile Include="Models\ChildSupportAllViewModel.cs" />
+    <Compile Include="Models\ChildAllViewModel.cs" />
+    <Compile Include="Models\ParentingPlanViewModel.cs" />
     <Compile Include="Models\DomesticMediationViewModel.cs" />
     <Compile Include="Models\OutputViewModel.cs" />
     <Compile Include="Models\StarterViewModel.cs" />
+    <Compile Include="Models\VehicleAllViewModel.cs" />
     <Compile Include="Mvc.Bundler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -268,6 +270,12 @@
     <Content Include="Content\images\icons\32\user.png" />
     <Content Include="Content\images\icons\32\wallet.png" />
     <Content Include="Content\images\icons\32\web.png" />
+    <Content Include="Content\images\glyphicons-halflings-blue.png" />
+    <Content Include="Content\images\glyphicons-halflings-dark-blue.png" />
+    <Content Include="Content\images\glyphicons-halflings-dark-green.png" />
+    <Content Include="Content\images\glyphicons-halflings-dark-red.png" />
+    <Content Include="Content\images\glyphicons-halflings-green.png" />
+    <Content Include="Content\images\glyphicons-halflings-red.png" />
     <Content Include="Content\images\ie-spacer.gif" />
     <Content Include="Content\images\larrow.png" />
     <Content Include="Content\images\line.png" />

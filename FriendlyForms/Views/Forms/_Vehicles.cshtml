@@ -1,5 +1,5 @@
 ﻿@using Models.ViewModels
-@model VehicleViewModel
+@model FriendlyForms.Models.VehicleAllViewModel
 <div class="form-vertical wrapper hide" id="vehiclesWrapper">
     <div class="row-fluid">
         <div class="span12">
@@ -9,8 +9,19 @@
                     <h5>Vehicles</h5>
                 </div>
                 <div class="widget-content">
-                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "vehicles" }))
-                    {                        
+                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "vehicleForm" }))
+                    {
+                        <div class="control-group">
+                            <label class="informative">Is the ownership of any vehicle(s) at issue in this case?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.VehicleFormViewModel.VehiclesInvolved, (int)YesNo.Yes, new{@class="inline"})</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.VehicleFormViewModel.VehiclesInvolved, (int)YesNo.No, new{@class="inline"})</label>
+                            @Html.ValidationMessageFor(m => m.VehicleFormViewModel.VehiclesInvolved)
+                        </div>                        
+                    }
+                    @if (Model.VehicleFormViewModel.VehiclesInvolved == (int) YesNo.Yes)
+                    {
+                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicles"}))
+                        {
                             <div class="vehicle-info">
                                 <label class="informative">
                                     <br />
@@ -18,64 +29,129 @@
                                 </label>
                                 <div class="control-group">
                                     <label class="informative">Make</label>
-                                    @Html.TextBoxFor(m => m.Make, new { placeholder = "Make" })
-                                    @Html.ValidationMessageFor(m => m.Make)
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Make, new {placeholder = "Make"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Make)
                                 </div>
                                 <div class="control-group">
                                     <label class="informative">Model</label>
-                                    @Html.TextBoxFor(m => m.VehicleModel, new { placeholder = "Model" })
-                                    @Html.ValidationMessageFor(m => m.VehicleModel)
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.VehicleModel, new {placeholder = "Model"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.VehicleModel)
                                 </div>
                                 <div class="control-group">
                                     <label class="informative">Year</label>
-                                    @Html.TextBoxFor(m => m.Year, new { placeholder = "Year" })
-                                    @Html.ValidationMessageFor(m => m.Year)
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Year, new {placeholder = "Year"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Year)
                                 </div>
                                 <div class="control-group">
                                     <label class="informative">Who will have possession of the vehicle</label>
-                                    @Html.TextBoxFor(m => m.Owner, new { placeholder = "Owner" })
-                                    @Html.ValidationMessageFor(m => m.Owner)
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Owner, new {placeholder = "Owner"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Owner)
                                 </div>
                                 <div class="control-group">
                                     <label class="informative">Will this vehicle be refinanced?</label>
-                                    <label class="radio">Yes @Html.RadioButtonFor(m => m.Refinanced, (int)YesNo.Yes)</label>
-                                    <label class="radio">No @Html.RadioButtonFor(m => m.Refinanced, (int)YesNo.No)</label>
-                                    @Html.ValidationMessageFor(m => m.Refinanced)
+                                    <label class="radio">Yes @Html.RadioButtonFor(m => m.VehicleViewModel.Refinanced, (int) YesNo.Yes)</label>
+                                    <label class="radio">No @Html.RadioButtonFor(m => m.VehicleViewModel.Refinanced, (int) YesNo.No)</label>
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Refinanced)
                                 </div>
-                                @if (Model.Refinanced.Equals((int)YesNo.Yes))
+                                @if (Model.VehicleViewModel.Refinanced.Equals((int) YesNo.Yes))
                                 {
-                                <div class="control-group vehicle-refinance">
-                                    <label class="informative">In whose name will the vehicle be refinanced</label>
-                                    @Html.DropDownListFor(m => m.Name, Model.Names)
-                                    @Html.ValidationMessageFor(m => m.Name)
-                                </div>
-                                <div class="control-group vehicle-refinance">
-                                    <label class="informative">By what date will the vehicle be refinanced?</label>
-                                    @Html.TextBoxFor(m => m.RefinanceDate, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                                    @Html.ValidationMessageFor(m => m.RefinanceDate)
-                                </div>
+                                    <div class="control-group vehicle-refinance">
+                                        <label class="informative">In whose name will the vehicle be refinanced</label>
+                                        @Html.DropDownListFor(m => m.VehicleViewModel.Name, Model.VehicleViewModel.Names)
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.Name)
+                                    </div>
+                                    <div class="control-group vehicle-refinance">
+                                        <label class="informative">By what date will the vehicle be refinanced?</label>
+                                        @Html.TextBoxFor(m => m.VehicleViewModel.RefinanceDate, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.RefinanceDate)
+                                    </div>
                                 }
                                 else
                                 {
-                                <div class="control-group vehicle-refinance hide">
-                                    <label class="informative">In whose name will the vehicle be refinanced?</label>
-                                    @Html.DropDownListFor(m => m.Name, Model.Names)
-                                    @Html.ValidationMessageFor(m => m.Name)
-                                </div>
-                                <div class="control-group vehicle-refinance hide">
-                                    <label class="informative">By what date will the vehicle be refinanced?</label>
-                                    @Html.TextBoxFor(m => m.RefinanceDate, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                                    @Html.ValidationMessageFor(m => m.RefinanceDate)
-                                </div>
+                                    <div class="control-group vehicle-refinance hide">
+                                        <label class="informative">In whose name will the vehicle be refinanced?</label>
+                                        @Html.DropDownListFor(m => m.VehicleViewModel.Name, Model.VehicleViewModel.Names)
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.Name)
+                                    </div>
+                                    <div class="control-group vehicle-refinance hide">
+                                        <label class="informative">By what date will the vehicle be refinanced?</label>
+                                        @Html.TextBoxFor(m => m.VehicleViewModel.RefinanceDate, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.RefinanceDate)
+                                    </div>
                                 }
                             </div>
                         }
-                    
-                    <button class="btn btn-primary" id="addVehicle" value="Add">Add </button>
-                    <br />
-                    <br />
+                        <button class="btn btn-primary vehicle-info" id="addVehicle" style="margin-bottom:15px;" value="Add">Add </button>
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicles"}))
+                        {
 
-                    @if (Model.VehicleList != null && Model.VehicleList.Any())
+                            <div class="vehicle-info hide">
+                                <label class="informative">
+                                    <br />
+                                    List each vehicle under consideration in this agreement.
+                                </label>
+                                <div class="control-group">
+                                    <label class="informative">Make</label>
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Make, new {placeholder = "Make"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Make)
+                                </div>
+                                <div class="control-group">
+                                    <label class="informative">Model</label>
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.VehicleModel, new {placeholder = "Model"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.VehicleModel)
+                                </div>
+                                <div class="control-group">
+                                    <label class="informative">Year</label>
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Year, new {placeholder = "Year"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Year)
+                                </div>
+                                <div class="control-group">
+                                    <label class="informative">Who will have possession of the vehicle</label>
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Owner, new {placeholder = "Owner"})
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Owner)
+                                </div>
+                                <div class="control-group">
+                                    <label class="informative">Will this vehicle be refinanced?</label>
+                                    <label class="radio">Yes @Html.RadioButtonFor(m => m.VehicleViewModel.Refinanced, (int) YesNo.Yes)</label>
+                                    <label class="radio">No @Html.RadioButtonFor(m => m.VehicleViewModel.Refinanced, (int) YesNo.No)</label>
+                                    @Html.ValidationMessageFor(m => m.VehicleViewModel.Refinanced)
+                                </div>
+                                @if (Model.VehicleViewModel.Refinanced.Equals((int) YesNo.Yes))
+                                {
+                                    <div class="control-group vehicle-refinance">
+                                        <label class="informative">In whose name will the vehicle be refinanced</label>
+                                        @Html.DropDownListFor(m => m.VehicleViewModel.Name, Model.VehicleViewModel.Names)
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.Name)
+                                    </div>
+                                    <div class="control-group vehicle-refinance">
+                                        <label class="informative">By what date will the vehicle be refinanced?</label>
+                                        @Html.TextBoxFor(m => m.VehicleViewModel.RefinanceDate, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.RefinanceDate)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="control-group vehicle-refinance hide">
+                                        <label class="informative">In whose name will the vehicle be refinanced?</label>
+                                        @Html.DropDownListFor(m => m.VehicleViewModel.Name, Model.VehicleViewModel.Names)
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.Name)
+                                    </div>
+                                    <div class="control-group vehicle-refinance hide">
+                                        <label class="informative">By what date will the vehicle be refinanced?</label>
+                                        @Html.TextBoxFor(m => m.VehicleViewModel.RefinanceDate, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                        @Html.ValidationMessageFor(m => m.VehicleViewModel.RefinanceDate)
+                                    </div>
+                                }
+                            </div>
+                        }
+                        <button class="btn btn-primary vehicle-info hide" style="margin-bottom:15px;" id="addVehicle" value="Add">Add </button>
+                    }
+                    
+
+                    @if (Model.VehicleViewModel.VehicleList != null && Model.VehicleViewModel.VehicleList.Any())
                     {                        
                         <div class="row-fluid vehicle-table">
                             <table class="table table-bordered table-striped">
@@ -88,7 +164,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var vehicle in Model.VehicleList)
+                                    @foreach (var vehicle in Model.VehicleViewModel.VehicleList)
                                     {
                                         <tr>
                                             <td>@vehicle.Make</td>

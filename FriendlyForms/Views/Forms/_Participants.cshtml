@@ -38,7 +38,7 @@
                                 Father @Html.RadioButtonFor(m => m.PlaintiffRelationship, (int)ParentRelationship.Father, false)</label>
                             <label class="radio">
                                 Mother @Html.RadioButtonFor(m => m.PlaintiffRelationship, (int)ParentRelationship.Mother, false)</label>
-                            <label class="radio hoverHelp" data-content="Only used in same sex unions">
+                            <label class="radio">
                                 Plaintiff  @Html.RadioButtonFor(m => m.PlaintiffRelationship, (int)ParentRelationship.Plaintiff)</label>
                             @Html.ValidationMessageFor(m => m.PlaintiffRelationship)
                         </div>
@@ -50,7 +50,7 @@
                                 Father @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Father, false)</label>
                             <label class="radio">
                                 Mother @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Mother, false)</label>
-                            <label class="radio hoverHelp" data-content="Only used in same sex unions">
+                            <label class="radio">
                                 Defendant  @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Plaintiff)</label>
                             @Html.ValidationMessageFor(m => m.DefendantRelationship)
                         </div>
