@@ -2,6 +2,8 @@
     var html = $('#main-content').html();
     html = html.replace(/<form.*>/, "");
     html = html.replace(/<input.*>/, "");
+    html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+    //html = html.replace(/<hr.*>/, "");
     $('#html').val(html);
     //$('.printForm').click(function() {
     //    var html = $('#main-content').html();

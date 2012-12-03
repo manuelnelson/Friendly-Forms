@@ -28,7 +28,7 @@
                 type: 'POST',
                 data: model,
                 success: function () {
-                    Friendly.NextForm(nextForm);
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                     Friendly.EndLoading();
                     return false;
                 },
@@ -72,11 +72,6 @@
             return false;
         }
         return false;
-    });
-
-    $('.decision-item').click(function () {
-        loadChildren('decision');
-        Friendly.NextForm('decision');
     });
 
     //Decisions Form
@@ -257,7 +252,7 @@
                 data: model,
                 success: function () {
                     loadChildren('holiday');
-                    Friendly.NextForm(nextForm);
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                     Friendly.EndLoading();
                     return false;
                 },

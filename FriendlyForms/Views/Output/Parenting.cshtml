@@ -1,7 +1,7 @@
 ﻿@using Models.ViewModels
 @model FriendlyForms.Models.ParentingPlanViewModel
 @{
-    ViewBag.Title = "Parenting";
+    ViewBag.Title = "";
 }
 @section Sidebar{
     <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
@@ -177,12 +177,12 @@
     <p>Visitation related expenses will be paid as follows:<br />
         @Model.ResponsibilityViewModel.OtherDetails</p>
      }
-    <h4>Communication</h4>
+    @*<h4>Communication</h4>
      if (Model.CommunicationViewModel.AllowCommunication == (int) YesNo.Yes)
      {
          <p>When the child</p>    
      }
-    <h4>Parenting Time/Visitation Schedules</h4>
+    *@<h4>Parenting Time/Visitation Schedules</h4>
     <p>During the term of this parenting plan, @nonCustodyParentName, as the non-custodial parent shall have at a minimum the following rights of parenting time/visitation:</p>
     <p>For purposes of this parenting plan, the 
         @if (!nonCustodyIsFather)
@@ -235,7 +235,7 @@
         @Model.ScheduleViewModel.WeekendDayEnd at @Model.ScheduleViewModel.DroppedOff at @Model.ScheduleViewModel.DropOffLocation.
     </p>
     <p>@nonCustodyParentName, as the non-custodial parent shall have at a minimum the following rights of parenting time/visitation on weekdays which will 
-        begin at @Model.ScheduleViewModel.WeekdayPickup at @Model.ScheduleViewModel.WeekdayPickupLocation and end at @Model.ScheduleViewModel.WeekdayDropoff at @Model.ScheduleViewModel for the following days:</p>
+        begin at @Model.ScheduleViewModel.WeekdayPickup at @Model.ScheduleViewModel.WeekdayPickupLocation and end at @Model.ScheduleViewModel.WeekdayDropoff at @Model.ScheduleViewModel.DropOffLocation for the following days:</p>
     <ul>
     @if ((Model.ScheduleViewModel.MondayParent == (int) DecisionMaker.Mother && !nonCustodyIsFather) || (Model.ScheduleViewModel.MondayParent == (int) DecisionMaker.Father && nonCustodyIsFather))
     {

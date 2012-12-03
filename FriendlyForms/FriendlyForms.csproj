@@ -68,9 +68,6 @@
     <Reference Include="Munq.MVC3">
       <HintPath>..\packages\Munq.MVC3.3.1.5\Lib\Munq.MVC3.dll</HintPath>
     </Reference>
-    <Reference Include="PdfSharp">
-      <HintPath>..\..\..\Web\Tools\PDF\PDFsharp\code\PdfSharp\bin\Release\PdfSharp.dll</HintPath>
-    </Reference>
     <Reference Include="Pechkin">
       <HintPath>..\packages\Pechkin.0.5.8.1\lib\net40\Pechkin.dll</HintPath>
     </Reference>
@@ -136,6 +133,7 @@
     <Compile Include="Authentication\UserAuthenticationTicketBuilder.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FormsController.cs" />
+    <Compile Include="Controllers\HeadersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OutputController.cs" />
     <Compile Include="Global.asax.cs">
@@ -491,6 +489,9 @@
     <Content Include="Views\Output\Financial.cshtml" />
     <Content Include="Views\Forms\Starter.cshtml" />
     <Content Include="Views\Output\_ParentingEnd.cshtml" />
+    <Content Include="Views\Headers\_Layout.cshtml" />
+    <Content Include="Views\Headers\_ViewStart.cshtml" />
+    <Content Include="Views\Headers\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">

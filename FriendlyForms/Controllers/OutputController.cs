@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
@@ -10,7 +9,6 @@ using FriendlyForms.Authentication;
 using FriendlyForms.Models;
 using Models;
 using Models.ViewModels;
-using PdfSharp.Pdf.IO;
 using Pechkin;
 using Pechkin.Synchronized;
 using System.IO;
@@ -90,7 +88,7 @@ namespace FriendlyForms.Controllers
             var globalConfig = new GlobalConfig();
             globalConfig.SetPaperSize(PaperKind.Letter);
             var margins = new Margins(100, 100, 100, 100);
-            globalConfig.SetMargins(margins);
+            globalConfig.SetMargins(margins);           
             _synchronizedPechkin = new SynchronizedPechkin(globalConfig);
         }
 
@@ -182,25 +180,28 @@ namespace FriendlyForms.Controllers
         {
             var contentPath = Server.MapPath("~/Content/");
             var css = System.IO.File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
-            //var css = @"#main-content hr{border-color:red;} h4{font-size: 60px};";
             var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style></head><body><div id=""main-content"">{1}</div></body></html>", css, html);
             var config = new ObjectConfig();
-            config.SetAllowLocalContent(true)                    
-                  .SetPrintBackground(true);
+            config.SetAllowLocalContent(true);                    
+            config.SetPrintBackground(true);
 
             var userId = User.FriendlyIdentity().UserId;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
-            var court = _courtService.GetByUserId(userId) as CourtViewModel;
-            //var htmlText = @"<span class='pull-left'>" + participants.PlaintiffsName + " v. " +
-            //               participants.DefendantsName + "</span><span class='pull-right'>CAF #" + court.CaseNumber +
-            //               "</span>";
-            config.Footer.SetFont(new Font("Times New Roman", 12F, FontStyle.Regular));
-            config.Header.SetFont(new Font("Times New Roman", 12F, FontStyle.Underline));
-            config.Header.SetLeftText("        " + participants.PlaintiffsName + "v. " + participants.DefendantsName + "        ");
-            config.Header.SetRightText("CAF #" + court.CaseNumber);
-            config.Footer.SetTexts("Plaintiff Initials_______", @"[page] of [topage]", "Defendant Initials________");
-            var pdfBuf = _synchronizedPechkin.Convert(config, fullHtml);            
-            //Response.AppendHeader("Content-Disposition", "inline;form.pdf");
+            //var court = _courtService.GetByUserId(userId) as CourtViewModel;
+
+            if (Request.Url != null)
+            {
+                var headerUrl = Request.Url.AbsoluteUri.Replace(Request.Url.LocalPath, "") + "/Headers/Header/" + userId;
+                config.Header.SetHtmlContent(headerUrl);
+            }
+            //config.Header.SetFont(new Font("Times New Roman", 9F, FontStyle.Underline));
+            //config.Header.SetContentSpacing(40.0);
+            //config.Header.SetLeftText("        " + participants.PlaintiffsName + "  v.  " + participants.DefendantsName + "        \r\n");
+            //config.Header.SetRightText("CAF #" + court.CaseNumber);
+            //config.Header.SetLineSeparator(true);            
+            config.Footer.SetFont(new Font("Times New Roman", 8F, FontStyle.Regular));
+            config.Footer.SetTexts(participants.PlaintiffsName + " Initials_______", @"[page] of [topage]", participants.DefendantsName + " Initials________");
+            var pdfBuf = _synchronizedPechkin.Convert(config, fullHtml);                        
             return File(pdfBuf, "application/pdf", "form.pdf");
 
             ////TODO should be an easier way to just send buffer straight to 

@@ -15221,6 +15221,8 @@ $(document).ready(function () {
     var html = $('#main-content').html();
     html = html.replace(/<form.*>/, "");
     html = html.replace(/<input.*>/, "");
+    html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+    //html = html.replace(/<hr.*>/, "");
     $('#html').val(html);
     //$('.printForm').click(function() {
     //    var html = $('#main-content').html();
@@ -15442,7 +15444,7 @@ $(document).ready(function () {
                 type: 'POST',
                 data: model,
                 success: function () {
-                    Friendly.NextForm(nextForm);
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                     Friendly.EndLoading();
                     return false;
                 },
@@ -15486,11 +15488,6 @@ $(document).ready(function () {
             return false;
         }
         return false;
-    });
-
-    $('.decision-item').click(function () {
-        loadChildren('decision');
-        Friendly.NextForm('decision');
     });
 
     //Decisions Form
@@ -15671,7 +15668,7 @@ $(document).ready(function () {
                 data: model,
                 success: function () {
                     loadChildren('holiday');
-                    Friendly.NextForm(nextForm);
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                     Friendly.EndLoading();
                     return false;
                 },

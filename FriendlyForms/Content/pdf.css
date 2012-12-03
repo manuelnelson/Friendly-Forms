@@ -4,6 +4,7 @@
     font-size: 15px;
     line-height: 20px;
     color: #333;
+    margin: 0;
 }
 
 .container-fluid::before, .container-fluid::after
@@ -506,15 +507,16 @@ input.span1, textarea.span1, .uneditable-input.span1
     margin-left: 0;
 }
 
-h4
+#main-content h4
 {
     font-size: 18px;
     line-height: 20px;
+    min-height: 20px;
 }
 
 h1, h2, h3, h4, h5, h6
 {
-    margin: 0 0 24px 0;
+    margin: 0 0 8px 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 1;
     color: inherit;
@@ -543,4 +545,7 @@ h6 { font-size: 12px; line-height: 20px; }
 }
 #main-content p {
     margin: 0 0 24px;
+}
+.underline {
+    text-decoration: underline;
 }
