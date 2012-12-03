@@ -12,24 +12,24 @@ namespace Models.ViewModels
         [Required]
         public int UserId { get; set; }
         [Required]
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         [StringLength(100)]
         public string Make { get; set; }
         [Required]
         [StringLength(100)]
         public string VehicleModel { get; set; }
         [Required]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Year must be a number")]
+        [RegularExpression("^[0-9]{4}$", ErrorMessage = "Year must be a number")]
         public string Year { get; set; }
         [Required]
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         [StringLength(100)]
         public string Owner { get; set; }
 
         [Required]
         public int Refinanced { get; set; }
 
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         [StringLength(100)]
         public string Name { get; set; }
 

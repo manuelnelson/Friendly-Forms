@@ -1,7 +1,7 @@
 ﻿body
 {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 13px;
+    font-family: Times, "Times New Roman", Times, serif;
+    font-size: 15px;
     line-height: 20px;
     color: #333;
 }
@@ -506,7 +506,6 @@ input.span1, textarea.span1, .uneditable-input.span1
     margin-left: 0;
 }
 
-
 h4
 {
     font-size: 18px;
@@ -515,17 +514,33 @@ h4
 
 h1, h2, h3, h4, h5, h6
 {
-    margin: 14px 0 4px 0;
-    font-family: inherit;
-    font-weight: bold;
+    margin: 0 0 24px 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 1;
     color: inherit;
     text-rendering: optimizelegibility;
 }
+h1 { font-size: 36px; line-height: 40px; font-weight: bold;}
+h2 { font-size: 30px; line-height: 40px; font-weight: bold;}
+h3 { font-size: 24px; line-height: 40px; font-weight: bold;}
+h4 { font-size: 18px; line-height: 20px; }
+h5 { font-size: 14px; line-height: 20px; }
+h6 { font-size: 12px; line-height: 20px; }
 #header h1 {
-    margin: 0px;
+    margin: 0;
 }
 #main-content hr
 {
     border-color: black;
+    margin: 0 0 10px 0;
+}
+
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+#main-content p {
+    margin: 0 0 24px;
 }

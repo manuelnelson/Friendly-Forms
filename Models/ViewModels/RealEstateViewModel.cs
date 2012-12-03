@@ -12,8 +12,7 @@ namespace Models.ViewModels
         [Display(Name = "Real Estate")]
         public int RealEstate { get; set; }
 
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$",
-            ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         [Display(Name = "Details")]
         public string RealEstateDescription { get; set; }
 
@@ -21,8 +20,7 @@ namespace Models.ViewModels
         [Display(Name = "Personal property")]
         public int PersonalProperty { get; set; }
 
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$",
-            ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         [Display(Name = "Dividing property")]
         public string DividingProperty { get; set; }
 

@@ -16,6 +16,7 @@ namespace Models.ViewModels
         [Required]
         public int Thanksgiving { get; set; }
         [Display(Name = "Thanksgiving details")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         public string ThanksgivingOther { get; set; }
         [Display(Name = "Thanksgiving Time")]
         [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
@@ -30,12 +31,14 @@ namespace Models.ViewModels
         public string ChristmasTime { get; set; }
 
         [Display(Name = "Winter break details")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         public string ChristmasOther { get; set; }
         
         [Required]
         [Display(Name = "Spring break")]
         public int SpringBreak { get; set; }
         [Display(Name = "Spring break details")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         public string SpringOther { get; set; }
         [Display(Name = "Spring break Time")]
         [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
@@ -56,11 +59,13 @@ namespace Models.ViewModels
         [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
         public string SummerEndTime { get; set; }
         [Display(Name = "Summer Details")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         public string SummerDetails { get; set; }
         [Required]
         [Display(Name = "Fall break")]
         public int FallBreak { get; set; }
         [Display(Name = "Fall details")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         public string FallOther { get; set; }
         [Display(Name = "Fall break Time")]
         [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]

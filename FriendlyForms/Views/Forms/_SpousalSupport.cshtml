@@ -14,11 +14,11 @@
             <div class="control-group">
                 <label class="informative">
                     What are the provisions for spousal support?</label>
-                <label class="radio">There will be no spousal support in this case @Html.RadioButtonFor(m => m.Spousal, (int)YesNo.Yes)</label>
-                <label class="radio">Provisions for spousal support will occur as follows @Html.RadioButtonFor(m => m.Spousal, (int)YesNo.No)</label>
+                <label class="radio">There will be no spousal support in this case @Html.RadioButtonFor(m => m.Spousal, (int)YesNo.No)</label>
+                <label class="radio">Provisions for spousal support will occur as follows @Html.RadioButtonFor(m => m.Spousal, (int)YesNo.Yes)</label>
                 @Html.ValidationMessageFor(m => m.Spousal)
             </div>
-            @if (Model.Spousal.Equals((int)YesNo.No))
+            @if (Model.Spousal.Equals((int)YesNo.Yes))
             {
                 <div class="control-group spousal-detail">
                     @Html.TextAreaFor(m => m.SpousalDescription, new { placeholder = "Details", @class="input-xxlarge" })

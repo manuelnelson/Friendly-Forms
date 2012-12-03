@@ -9,7 +9,7 @@ namespace Models.ViewModels
         public int UserId { get; set; }
         [Required]
         public int Spousal { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         [Display(Name = "Details")]
         public string SpousalDescription { get; set; }
 

@@ -10,7 +10,7 @@ namespace Models.ViewModels
         public int UserId { get; set; }
         public int CountyId { get; set; }
         [Display(Name = "Case Number")]
-        [RegularExpression("^[0-9a-zA-Z]*$", ErrorMessage = "Case Number must be alpha-numeric")]
+        [RegularExpression(@"^[0-9a-zA-Z\s-]*$", ErrorMessage = "Case Number must be alpha-numeric. Dashes are also allowed")]
         public string CaseNumber { get; set; }
         [Required]
         [Display(Name = "Author of Plan")]
@@ -19,7 +19,7 @@ namespace Models.ViewModels
         [Display(Name = "Plan Type")]
         public int PlanType { get; set; }
         [Display(Name = "Case Number")]
-        [RegularExpression("^[0-9a-zA-Z]*$", ErrorMessage = "Case Number must be alpha-numeric")]
+        [RegularExpression(@"^[0-9a-zA-Z\s-]*$", ErrorMessage = "Case Number must be alpha-numeric. Dashes are also allowed")]
         public string ExistCaseNumber { get; set; }
 
         public IEnumerable<County> Counties { get; set; }

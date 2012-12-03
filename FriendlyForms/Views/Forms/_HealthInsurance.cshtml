@@ -28,9 +28,9 @@
             </div>                
             } else
             {
+            <div class="control-group health-detail hide">
                 <label class="informative">
                     How will health insurance be funded?</label>
-            <div class="control-group health-detail hide">
                 @Html.TextAreaFor(m => m.HealthDescription, new { placeholder = "Details", @class="input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.HealthDescription)
             </div>                

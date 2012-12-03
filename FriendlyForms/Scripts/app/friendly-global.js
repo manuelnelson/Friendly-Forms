@@ -12,6 +12,8 @@ Friendly.properties = {
     iconError: 'icon-red icon-pencil',
     numberRegEx: /(\d{1,5})/
 };
+Friendly.children = [];
+Friendly.childNdx = 0;
 Friendly.StartLoading = function () {
     $('#loading').show();
     $('body').css('cursor', 'wait');
@@ -101,18 +103,26 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     return false;
 };
 Friendly.NextForm = function (nextForm, prevIcon) {
+    switch (nextForm) {
+        case 'preexistingOther':
+            if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
+                $('#supportOtherWrapper').show();
+            }
+            break;
+        case 'decisions':
+            loadChildren('decision');
+            break;
+        case 'holiday':
+            loadChildren('holiday');
+            break;
+    }
+
     $('#sidebar .active').find('i').attr('class', prevIcon);
     $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
     $('.wrapper').hide();
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
-    
-    if (nextForm === 'preexistingOther') {
-        if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-            $('#supportOtherWrapper').show();
-        }
-    }
 };
 Friendly.GetFormInput = function (formName) {
     var model = {};
@@ -134,6 +144,71 @@ Friendly.ClearForm = function (formName) {
  .removeAttr('checked')
  .removeAttr('selected');
 };
+Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
+    var allValid = true, invalidForms = [];
+
+    for (var i = 0; i < forms.length; i++) {
+        var form = forms[i];
+        if (!$('#' + form).valid()) {
+            allValid = false;
+            invalidForms.push(readableFormNames[i]);
+            $('#' + form + 'Nav').find('i').attr('class', Friendly.properties.iconError);
+        }
+    }
+    if (!allValid) {
+        var message = "The following forms are still incomplete or have errors: ";
+        for (var j = 0; j < invalidForms.length - 1; j++) {
+            message += invalidForms[j] + ", ";
+        }
+        message += invalidForms[invalidForms.length - 1];
+        Friendly.ShowMessage('Almost there!', message, Friendly.properties.messageType.Error);
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        return false;
+    }
+    $(btnClassToHide).hide();
+    $('.viewOutput').show();
+};
+Friendly.AddDecision = function (caller) {
+    if (!$('#decisions').valid()) {
+        return false;
+    }
+    saveExtraDecisions();
+    if (caller != null && $(caller).hasClass('next'))
+        Friendly.childNdx++;
+    else if (caller != null) {
+        Friendly.childNdx--;
+    }
+    var model = getDecisionModel();
+    //check if we need to move to next form
+    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+        Friendly.SubmitForm('decisions', 'responsibility', model);
+        return false;
+    }
+    //check if we need to move to previous form
+    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
+        Friendly.SubmitForm('decisions', 'information', model);
+        return false;
+    }
+
+    //save current information
+    $.ajax({
+        url: '/Forms/Decisions/',
+        type: 'POST',
+        data: model,
+        success: function () {
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            $('input[id=DecisionsViewModel_Education]').removeAttr('checked');
+            $('input[id=DecisionsViewModel_HealthCare]').removeAttr('checked');
+            $('input[id=DecisionsViewModel_Religion]').removeAttr('checked');
+            $('input[id=DecisionsViewModel_ExtraCurricular]').removeAttr('checked');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            getChildDecisions(nextChild);
+        },
+        error: Friendly.GenericErrorMessage
+    });
+    return true;
+};
+
 $(document).ready(function () {
     // === Sidebar navigation === //
 
@@ -217,6 +292,15 @@ $(document).ready(function () {
         trigger: 'hover'
     });
 
+    //I don't understand checkboxes.  This fixes it though
+    $('input[type=checkbox]').click(function () {
+        var checked = $(this).attr('checked');
+        if (checked != undefined)
+            $(this).val(true);
+        else
+            $(this).val(false);
+    });
+
     $.validator.addMethod("textlineinput", function (val, el, params) {
         if (this.optional(el)) return true;
         return val.split('\\')[0] === params;
@@ -284,12 +368,12 @@ $(document).ready(function () {
                 },
                 error: Friendly.GenericErrorMessage
             });
-        } else if(isGeneric){
+        } else if (isGeneric) {
             Friendly.NextForm(nextForm, Friendly.properties.iconError);
         }
     });
     function isGenericForm(formName, nextForm) {
-        var genericForms = ['vehicles', 'children', 'decisions', 'holidays'];
+        var genericForms = ['vehicles', 'children', 'decisions', 'holiday'];
         if (genericForms.indexOf(formName) >= 0) {
             switch (formName) {
                 case 'vehicles':
@@ -299,19 +383,123 @@ $(document).ready(function () {
                             url: '/Forms/VehicleForm/',
                             type: 'POST',
                             data: vehicleFormModel,
-                            success: function (data) {
+                            success: function () {
                                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                             },
                             error: Friendly.GenericErrorMessage
                         });
-                    }else {
+                    } else {
                         Friendly.NextForm(nextForm, Friendly.properties.iconError);
                     }
-                    break;                                
+                    break;
+                case 'children':
+                    if ($('#childForm').valid()) {
+                        var childFormModel = Friendly.GetFormInput('childForm');
+                        $.ajax({
+                            url: '/Forms/ChildForm/',
+                            type: 'POST',
+                            data: childFormModel,
+                            success: function () {
+                                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                            },
+                            error: Friendly.GenericErrorMessage
+                        });
+                    } else {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    }
+                    break;
+                case 'decisions':
+                    //First, check if current form is valid
+                    if (Friendly.AddDecision()) {
+                        //cycle through all children and make sure form is valid and saved
+                        Friendly.childNdx = 0;
+                        var child = Friendly.children[Friendly.childNdx];
+                        checkChildDecision(child, nextForm);
+                    } else {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    }
+                    break;
+                case 'holiday':
+                    //First, check if current form is valid
+                    if (AddHoliday()) {
+                        //cycle through all children and make sure form is valid and saved
+                        Friendly.childNdx = 0;
+                        var child = Friendly.children[Friendly.childNdx];
+                        checkChildHoliday(child, nextForm);
+                    } else {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    }
+                    break;
             }
             return false;
         }
 
         return true;
     }
+    function checkChildDecision(child, nextForm) {
+        $.ajax({
+            url: '/Forms/GetChildDecision/' + child.Id,
+            type: 'GET',
+            success: function (data) {
+                $('#childName').text(child.Name);
+                $('#childId').val(child.Id);
+                $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+                $('.extra-decision-item').remove();
+                Friendly.childNdx++;
+                if (Friendly.childNdx === Friendly.children.length) {
+                    if ($('#decisions').valid()) {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                        return false;
+                    } else {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                        return false;
+                    }
+                }
+                if ($('#decisions').valid()) {
+                    //recursively go to next child
+                    checkChildDecision(Friendly.children[Friendly.childNdx], nextForm);
+                    return false;
+                } else {
+                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    return false;
+                }
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    }
+    function checkChildHoliday(child, nextForm) {
+        $.ajax({
+            url: '/Forms/GetChildHoliday/' + child.Id,
+            type: 'GET',
+            success: function (data) {
+                setChildHolidayForm(data, child);
+                Friendly.childNdx++;
+                if (Friendly.childNdx === Friendly.children.length) {
+                    if ($('#holiday').valid()) {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                        return false;
+                    } else {
+                        Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                        return false;
+                    }
+                }
+                if ($('#holiday').valid()) {
+                    //recursively go to next child
+                    checkChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
+                    return false;
+                } else {
+                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    return false;
+                }
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    }
+    //will go to output forms
+    $('#ViewOutput').live('click', function () {
+        document.location.href = $(this).attr('data-url');
+    });
 });

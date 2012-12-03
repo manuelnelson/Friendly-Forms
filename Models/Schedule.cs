@@ -15,16 +15,16 @@ namespace Models
         public string WeekendDayEnd { get; set; }
         public string FatherWeekendOther { get; set; }
         public string MotherWeekendOther { get; set; }
-        public DateTime PickedUp { get; set; }
+        public string PickedUp { get; set; }
         public string PickupLocation { get; set; }
-        public DateTime DroppedOff { get; set; }
+        public string DroppedOff { get; set; }
         public string DropOffLocation { get; set; }
         public int FatherWeekend { get; set; }
         public int MotherWeekend { get; set; }
         public int Weekdays { get; set; }
-        public DateTime? WeekdayPickup { get; set; }
+        public string WeekdayPickup { get; set; }
         public string WeekdayPickupLocation { get; set; }
-        public DateTime? WeekdayDropoff { get; set; }
+        public string WeekdayDropoff { get; set; }
         public string WeekdayDropoffLocation { get; set; }
         public int MondayParent { get; set; }
         public int TuesdayParent { get; set; }
@@ -39,10 +39,10 @@ namespace Models
                 BeginDate = BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "",                
                 DetermineBeginDate = DetermineBeginDate,
                 DropOffLocation = DropOffLocation,
-                DroppedOff = DroppedOff.ToString("hh:mm"),
+                DroppedOff = DroppedOff,
                 FatherWeekend = FatherWeekend,
                 MotherWeekend = MotherWeekend,
-                PickedUp = PickedUp.ToString("hh:mm"),
+                PickedUp = PickedUp,
                 PickupLocation = PickupLocation,
                 UserId = UserId,
                 Weekdays = Weekdays,
@@ -50,9 +50,9 @@ namespace Models
                 MotherWeekendOther = MotherWeekendOther,
                 WeekendDayStart = WeekendDayStart,
                 WeekendDayEnd = WeekendDayEnd,
-                WeekdayDropoff = WeekdayDropoff.HasValue ? WeekdayDropoff.Value.ToString("hh:mm") : "",
+                WeekdayDropoff = WeekdayDropoff,
                 WeekdayDropoffLocation = WeekdayDropoffLocation,
-                WeekdayPickup = WeekdayPickup.HasValue ? WeekdayPickup.Value.ToString("hh:mm") : "",                
+                WeekdayPickup = WeekdayPickup,                
                 WeekdayPickupLocation = WeekdayPickupLocation,
                 MondayParent = MondayParent,
                 TuesdayParent = TuesdayParent,

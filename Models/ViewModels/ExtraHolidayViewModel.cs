@@ -12,7 +12,7 @@ namespace Models.ViewModels
         [Required]
         public int ChildId { get; set; }
         [Required]
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         [StringLength(100)]
         [Display(Name="Holiday Name")]
         public string HolidayName { get; set; }

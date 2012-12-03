@@ -48,7 +48,7 @@
                     </div>
                     <div class="control-group">
                         <label class="informative">How will you divide the marital home?</label>
-                        @Html.TextBoxFor(m => m.Divide, new { placeholder = "Description", @class = "marital-info" })
+                        @Html.TextAreaFor(m => m.Divide, new { placeholder = "List items you consider to be personal property for consideration in your case. Items such as jewelry, artwork, recreational vehicles, etc are examples of personal property", @class = "marital-info input-xxlarge" })
                         @Html.ValidationMessageFor(m => m.Divide)
                     </div>                
                 </div>                
@@ -83,7 +83,7 @@
                     </div>
                     <div class="control-group">
                         <label class="informative">How will you divide the marital home?</label>
-                        @Html.TextBoxFor(m => m.Divide, new { placeholder = "List items you consider to be personal property for consideration in your case. Items such as jewelry, artwork, recreational vehicles, etc are examples of personal property", @class = "marital-info" })
+                        @Html.TextAreaFor(m => m.Divide, new { placeholder = "List items you consider to be personal property for consideration in your case. Items such as jewelry, artwork, recreational vehicles, etc are examples of personal property", @class = "marital-info input-xxlarge" })
                         @Html.ValidationMessageFor(m => m.Divide)
                     </div>                
                 </div>

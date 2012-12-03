@@ -10,7 +10,7 @@ namespace Models.ViewModels
         public int Id { get; set; }
         public int UserId { get; set; }
         [Required]
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         public string Name { get; set; }
 
         [Display(Name = "Date of Birth")]

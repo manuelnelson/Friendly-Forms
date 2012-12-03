@@ -23,11 +23,11 @@
                 }
                 @if (Model.FormsCompleted.Decisions)
                 {
-                    <li class="decision-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemDone"></i>Decisions</a></li>
+                    <li class="nav-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemDone"></i>Decisions</a></li>
                 }
                 else
                 {
-                    <li class="decision-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemlock"></i>Decisions</a></li>
+                    <li class="nav-item" id="decisionsNav"><a data-form="decisions" href="#"><i class="@itemlock"></i>Decisions</a></li>
                 }
                 @if (Model.FormsCompleted.Responsibility)
                 {
@@ -55,11 +55,11 @@
                 }
                 @if (Model.FormsCompleted.Holiday)
                 {
-                    <li class="holiday-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemDone"></i>Holidays</a></li>
+                    <li class="nav-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemDone"></i>Holidays</a></li>
                 }
                 else
                 {
-                    <li class="holiday-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemlock"></i>Holidays</a></li>
+                    <li class="nav-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemlock"></i>Holidays</a></li>
                 }
             </ul>
         </li>

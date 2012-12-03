@@ -17,7 +17,7 @@ namespace Models.ViewModels
         public int? Preexisting { get; set; }
         [Display(Name = "In court")]
         public int? InCourt { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.,'_ \-\s]*$", ErrorMessage = @"Only alpha-numeric characters and [.,_-'] are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
         public string Details { get; set; }
 
         public OtherChildViewModel OtherChildViewModel { get; set; }

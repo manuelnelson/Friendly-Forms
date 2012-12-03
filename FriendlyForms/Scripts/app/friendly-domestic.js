@@ -119,7 +119,7 @@
 
     $('input[name=MaritalDebt]').change(function () {
         $('#DebtDivision').val('');
-        if ($('#MaritalDebt:checked').val() === "2") {
+        if ($('#MaritalDebt:checked').val() === "1") {
             $('.debt-details').show();
         } else {
             $('.debt-details').hide();
@@ -133,7 +133,7 @@
 
     $('input[name=Retirement]').change(function () {
         $('#RetirementDescription').val('');
-        if ($('#Retirement:checked').val() === "2") {
+        if ($('#Retirement:checked').val() === "1") {
             $('.retirement-detail').show();
         } else {
             $('.retirement-detail').hide();
@@ -141,7 +141,7 @@
     });
     $('input[name=NonRetirement]').change(function () {
         $('#NonRetirementDescription').val('');
-        if ($('#NonRetirement:checked').val() === "2") {
+        if ($('#NonRetirement:checked').val() === "1") {
             $('.non-retirement-detail').show();
         } else {
             $('.non-retirement-detail').hide();
@@ -149,7 +149,7 @@
     });
     $('input[name=Business]').change(function () {
         $('#BusinessDescription').val('');
-        if ($('#Business:checked').val() === "2") {
+        if ($('#Business:checked').val() === "1") {
             $('.business-detail').show();
         } else {
             $('.business-detail').hide();
@@ -175,7 +175,7 @@
     });
     $('input[name=Spousal]').change(function () {
         $('#SpousalDescription').val('');
-        if ($('#Spousal:checked').val() === "2") {
+        if ($('#Spousal:checked').val() === "1") {
             $('.spousal-detail').show();
         } else {
             $('.spousal-detail').hide();
@@ -183,7 +183,30 @@
     });
     //Taxes 
     $('.domestic-part8').click(function () {
-        Friendly.SubmitForm('taxes', 'support');
+        //last form.  Let's try and validate this bi-atch
+        Friendly.StartLoading();
+        var formName = 'taxes';
+        var model = Friendly.GetFormInput(formName);
+        var formSelector = '#' + formName;
+        if ($(formSelector).valid()) {
+            $.ajax({
+                url: '/Forms/' + formName + '/',
+                type: 'POST',
+                data: model,
+                success: function () {
+                    var forms = ["maritalHouse", "property", "vehicleForm", "debt", "assets", "healthInsurance", "spousalSupport", "taxes"];
+                    var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"]
+                    Friendly.ValidateForms(forms, properNames, '.domestic-part8');
+                    Friendly.EndLoading();
+                    return false;
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        } else {
+            Friendly.EndLoading();
+            return false;
+        }
+        return false;
     });
     $('input[name=Taxes]').change(function () {
         $('#TaxDescription').val('');

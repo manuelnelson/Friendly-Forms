@@ -23,14 +23,19 @@
                         <div class="control-group">
                             <label>
                                 What method(s) will the parents use to communicate? (check all that apply)</label>
-                            <label class="checkbox inline ">Telephone @Html.CheckBoxFor(m => m.Telephone, new { @class = "inline" })</label>
-                            <label class="checkbox inline">Email @Html.CheckBoxFor(m => m.Email, new { @class = "inline" })</label>
-                            <label class="checkbox inline">Other @Html.CheckBoxFor(m => m.Other, new { @class = "inline" })</label>
+                            @{
+                                var telephoneChecked = Model.Telephone ? "checked=checked" : "";
+                                var emailChecked = Model.Email ? "checked=checked" : "";
+                                var otherChecked = Model.Other ? "checked=checked" : "";
+                            }
+                            <label class="checkbox inline ">Telephone <input class="inline valid" data-val="true" data-val-required="The Telephone field is required." id="Telephone" name="Telephone" type="checkbox" value="@Model.Telephone.ToString()" @telephoneChecked></label>
+                            <label class="checkbox inline">Email <input class="inline valid" data-val="true" data-val-required="The Email field is required." id="Email" name="Email" type="checkbox" value="@Model.Email.ToString()" @emailChecked></label>
+                            <label class="checkbox inline">Other <input class="inline valid" data-val="true" data-val-required="The Other field is required." id="Other" name="Other" type="checkbox" value="@Model.Other.ToString()" @otherChecked></label>
                             @Html.ValidationMessageFor(m => m.Telephone)
                             @Html.ValidationMessageFor(m => m.Email)
                             @Html.ValidationMessageFor(m => m.Other)
-                        </div>
-                        @if (Model.Other)
+                    </div>
+                    @if (Model.Other)
                         {
                             <div class="control-group communicate-other">
                                 @Html.TextBoxFor(m => m.OtherMethod, new { placeholder = "Other method" })

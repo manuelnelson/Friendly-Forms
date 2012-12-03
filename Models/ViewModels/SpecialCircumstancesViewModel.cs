@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Models.Contract;
 
 namespace Models.ViewModels
@@ -8,16 +9,27 @@ namespace Models.ViewModels
         public int UserId { get; set; }
         public bool IsOtherParent { get; set; }
         public int Circumstances { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Deviation { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Health { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Insurance { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string TaxCredit { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string TravelExpenses { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Visitation { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Alimony { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Mortgage { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Permanency { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string NonSpecific { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string ParentingTime { get; set; }
         public IFormEntity ConvertToEntity()
         {

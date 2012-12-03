@@ -1,5 +1,4 @@
-﻿using System;
-using Models.Contract;
+﻿using Models.Contract;
 using Models.ViewModels;
 
 namespace Models

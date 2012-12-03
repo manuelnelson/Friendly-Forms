@@ -188,8 +188,16 @@
                         <div class="control-group">
                             <label class="informative">
                                 When a holiday falls on Friday or Monday, should the holiday visitation include the weekend immediately before or after that holiday?</label>
-                            <label class="checkbox">Include the following Saturday and Sunday when holiday falls on Friday @Html.CheckBoxFor(m => m.HolidayViewModel.FridayHoliday)</label>
-                            <label class="checkbox">Include the preceding Saturday and Sunday when holiday falls on Monday @Html.CheckBoxFor(m => m.HolidayViewModel.MondayHoliday)</label>
+                            @{
+                                var fridayHoliday = Model.HolidayViewModel.FridayHoliday ? "checked=checked" : "";
+                                var mondayHoliday = Model.HolidayViewModel.MondayHoliday ? "checked=checked" : "";
+                            }
+                            <label class="checkbox">Include the following Saturday and Sunday when holiday falls on Friday 
+                                <input data-val="true" data-val-required="The Friday holiday field is required." id="HolidayViewModel_FridayHoliday" name="HolidayViewModel.FridayHoliday" type="checkbox" value="@Model.HolidayViewModel.FridayHoliday.ToString()" @fridayHoliday>
+                            </label>
+                            <label class="checkbox">Include the preceding Saturday and Sunday when holiday falls on Monday 
+                                <input data-val="true" data-val-required="The MondayHoliday field is required." id="HolidayViewModel_MondayHoliday" name="HolidayViewModel.MondayHoliday" type="checkbox" value="@Model.HolidayViewModel.MondayHoliday.ToString()" @mondayHoliday>
+                            </label>
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.FridayHoliday)
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.MondayHoliday)
                         </div> 
@@ -656,6 +664,8 @@
     </div>    
     <button class="btn btn-primary child-part10 previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary child-part10 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <p class="viewOutput hide"><span class="informative" >Congratulations!</span> The parenting plan form is completely done.  Click the button below to view the output.</p>
+    <button class="btn btn-primary next viewOutput hide" id="ViewOutput" data-url='/Output/Parenting/' value="View">View Output<i class="icon-arrow-right icon-white"></i></button>
 
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "extraHolidays" }))
     {
