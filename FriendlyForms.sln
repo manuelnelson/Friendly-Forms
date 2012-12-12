@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayerContext", "DataLayerContext\DataLayerContext.csproj", "{5D6578E5-9CD9-4AAC-B655-D61C22AEEB8F}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SplitSolutionsAzure", "SplitSolutionsAzure\SplitSolutionsAzure.ccproj", "{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{5D6578E5-9CD9-4AAC-B655-D61C22AEEB8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D6578E5-9CD9-4AAC-B655-D61C22AEEB8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D6578E5-9CD9-4AAC-B655-D61C22AEEB8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

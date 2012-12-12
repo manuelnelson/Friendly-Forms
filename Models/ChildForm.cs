@@ -7,6 +7,8 @@ namespace Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public int ChildrenInvolved { get; set; }
+
         public IViewModel ConvertToModel()
         {
             return new ChildFormViewModel()
@@ -24,7 +26,6 @@ namespace Models
             ChildrenInvolved = updatingEntity.ChildrenInvolved;
         }
 
-        public int ChildrenInvolved { get; set; }
 
     }
 }

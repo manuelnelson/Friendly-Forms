@@ -11,7 +11,7 @@
             RetailValue: $('#RetailValue').val().replace(",", ""),
             Divide: $('#Divide').val()
         };
-        Friendly.SubmitForm('maritalHouse', 'property', model);
+        Friendly.SubmitForm('house', 'property', model);
     });
     $('input[name=MaritalHouse]').change(function () {
         $('.marital-info').val('');
@@ -65,21 +65,21 @@
         if ($('#vehicles').valid()) {
             var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
             $.ajax({
-                url: '/Forms/VehicleForm/',
+                url: '/api/VehicleForm?format=json',
                 type: 'POST',
                 data: vehicleFormModel,
                 success: function (data) {
                     //get values
                     var model = Friendly.GetFormInput('vehicles');
-                    model.VehicleFormId = data;
+                    model.VehicleFormId = data.VehicleForm.Id;
                     $.ajax({
-                        url: '/Forms/Vehicles/',
+                        url: '/api/Vehicles?format=json',
                         type: 'POST',
                         data: model,
-                        success: function (vehicle) {
+                        success: function (data) {
                             //Add vehicle to list
                             $('.vehicle-table').show();
-                            var result = $("#friendly-vehicle-template").tmpl(vehicle);
+                            var result = $("#friendly-vehicle-template").tmpl(data.Vehicle);
                             $('.vehicle-table tbody').append(result);
                             Friendly.ClearForm('vehicles');
                             Friendly.EndLoading();
@@ -114,7 +114,7 @@
             MaritalDebt: $('#MaritalDebt:checked').val()
         };
         //check if we need to move to next form
-        Friendly.SubmitForm('debt', 'assets', model);
+        Friendly.SubmitForm('debt', 'asset', model);
     });
 
     $('input[name=MaritalDebt]').change(function () {
@@ -128,7 +128,7 @@
     //Asset Form
     $('.domestic-part5').click(function () {
         //check if we need to move to next form
-        Friendly.SubmitForm('assets', 'healthInsurance');
+        Friendly.SubmitForm('asset', 'healthInsurance');
     });
 
     $('input[name=Retirement]').change(function () {
@@ -171,7 +171,7 @@
 
     //Spousal Support
     $('.domestic-part7').click(function () {
-        Friendly.SubmitForm('spousalSupport', 'taxes');
+        Friendly.SubmitForm('spousalSupport', 'tax');
     });
     $('input[name=Spousal]').change(function () {
         $('#SpousalDescription').val('');
@@ -185,17 +185,17 @@
     $('.domestic-part8').click(function () {
         //last form.  Let's try and validate this bi-atch
         Friendly.StartLoading();
-        var formName = 'taxes';
+        var formName = 'tax';
         var model = Friendly.GetFormInput(formName);
         var formSelector = '#' + formName;
         if ($(formSelector).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '/?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
-                    var forms = ["maritalHouse", "property", "vehicleForm", "debt", "assets", "healthInsurance", "spousalSupport", "taxes"];
-                    var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"]
+                    var forms = ["maritalHouse", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousalSupport", "tax"];
+                    var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
                     Friendly.ValidateForms(forms, properNames, '.domestic-part8');
                     Friendly.EndLoading();
                     return false;

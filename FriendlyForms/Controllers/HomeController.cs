@@ -21,11 +21,11 @@ namespace FriendlyForms.Controllers
         private readonly IScheduleService _scheduleService;
         private readonly ICountyService _countyService;
         private readonly IHouseService _houseService;
-        private readonly IRealEstateService _realEstateService;
+        private readonly IPropertyService _propertyService;
         private readonly IVehicleService _vehicleService;
         private readonly IDebtService _debtService;
         private readonly IAssetService _assetService;
-        private readonly IHealthService _healthService;
+        private readonly IHealthInsuranceService _healthInsuranceService;
         private readonly ISpousalService _spousalService;
         private readonly ITaxService _taxService;
         private readonly IChildSupportService _childSupportService;
@@ -42,7 +42,7 @@ namespace FriendlyForms.Controllers
         //
         // GET: /Forms/
         public HomeController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
-            IHouseService houseService, IRealEstateService realEstateService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthService healthService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
+            IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
             IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IChildFormService childFormService )
         {
             _courtService = courtService;
@@ -57,11 +57,11 @@ namespace FriendlyForms.Controllers
             _scheduleService = scheduleService;
             _countyService = countyService;
             _houseService = houseService;
-            _realEstateService = realEstateService;
+            _propertyService = propertyService;
             _vehicleService = vehicleService;
             _debtService = debtService;
             _assetService = assetService;
-            _healthService = healthService;
+            _healthInsuranceService = healthInsuranceService;
             _spousalService = spousalService;
             _taxService = taxService;
             _childSupportService = childSupportService;

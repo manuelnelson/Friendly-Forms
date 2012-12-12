@@ -1,4 +1,5 @@
-﻿@using ServiceStack.Mvc
+﻿@using ServiceStack.MiniProfiler
+@using ServiceStack.Mvc
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +33,7 @@
         @RenderSection("Breadcrumb", required: false)
         <div class="container-fluid" id="main-content">
             @RenderBody()
-        <hr>
+            <hr>
             <footer>
                 <p>
                     © Kick Forms 2012
@@ -40,6 +41,7 @@
             </footer>
         </div>
     </div>
+    @Html.Raw(Profiler.RenderIncludes().ToHtmlString())
     <div id="loading" class="hide">Loading...Please Wait</div>
     @Html.Partial("_templateErrorMessage")
     @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))

@@ -14131,10 +14131,14 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
     if (typeof model === 'undefined') {
         model = Friendly.GetFormInput(formName);
     }
+    model.UserId = $('#user-id').val();
     var formSelector = '#' + formName;
+    var url = '/Forms/' + formName + '/';
+    if (formName === 'assets')
+        url = '/api/' + formName + '?format=json';
     if ($(formSelector).valid()) {
         $.ajax({
-            url: '/Forms/' + formName + '/',
+            url: url,
             type: 'POST',
             data: model,
             success: function () {

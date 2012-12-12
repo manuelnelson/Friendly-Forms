@@ -52,7 +52,7 @@
         };
         if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
@@ -96,7 +96,7 @@
         saveExtraDecisions(childId);
         var model = getDecisionModel(childId);
         $.ajax({
-            url: '/Forms/Decisions/',
+            url: '/api/Decisions?format=json',
             type: 'POST',
             data: model,
             success: function () {
@@ -247,7 +247,7 @@
         var formSelector = '#' + formName;
         if ($(formSelector).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -267,7 +267,7 @@
     });
     $('#addHolidays').click(function () {
         Friendly.StartLoading();
-        var formName = 'extraHolidays';
+        var formName = 'extraHoliday';
         var model = {
             ChildId: $('#holidayChildId').val(),
             HolidayFather: $('#ExtraHolidayViewModel_HolidayFather:checked').val(),
@@ -276,7 +276,7 @@
         };
         if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
@@ -425,13 +425,14 @@
     });
     function copyHoliday(childId) {
         saveExtraHolidays(childId);
+        var formName = 'holiday';
         //do rest of the form
-        var model = Friendly.GetFormInput('holiday');
+        var model = Friendly.GetFormInput(formName);
         model.ChildId = childId;
         model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
         model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
         $.ajax({
-            url: '/Forms/Holidays/',
+            url: '/api/' + formName + '?format=json',
             type: 'POST',
             data: model,
             success: function () {
@@ -450,6 +451,7 @@ function getDecisionModel(childId) {
     };
 }
 function saveExtraDecisions(childId) {
+    var formName = 'extraDecisions';
     $.each($('.extra-decision-item'), function (ndx, item) {
         var id = $(item).children('#extra-decision-Id').val();
         var extraModel = {
@@ -462,10 +464,10 @@ function saveExtraDecisions(childId) {
         //If it does, copy over the Id
         if (typeof (childId) !== "undefined") {
             $.ajax({
-                url: '/Forms/GetChildDecision/' + childId,
+                url: '/api/' + formName + '/' + childId + '?format=json',
                 type: 'GET',
                 success: function (data) {
-                    $.each(data.ExtraDecisions, function (ndx, item) {
+                    $.each(data, function (ndx, item) {
                         if (item.Description === extraModel.Description) {
                             //We have a match
                             extraModel.Id = item.Id;
@@ -473,7 +475,7 @@ function saveExtraDecisions(childId) {
                     });
                     //Now add/update extradecisions
                     $.ajax({
-                        url: '/Forms/ExtraDecisions/',
+                        url: '/api/' + formName + '/?format=json',
                         type: 'POST',
                         data: extraModel,
                         success: function () {
@@ -487,7 +489,7 @@ function saveExtraDecisions(childId) {
         }
         //else, just update the extradecisions
         $.ajax({
-            url: '/Forms/ExtraDecisions/',
+            url: '/api/' + formName + '/?format=json',
             type: 'POST',
             data: extraModel,
             success: function () {
@@ -633,6 +635,7 @@ function setChildHolidayForm(data, child) {
     });
 }
 function saveExtraHolidays(childId) {
+    var formName = 'extraHoliday';
     $.each($('.extra-holiday-item'), function (ndx, item) {
         var id = $(item).children('#extra-holiday-Id').val();
         var extraModel = {
@@ -646,7 +649,7 @@ function saveExtraHolidays(childId) {
         //If it does, copy over the Id
         if (typeof (childId) !== "undefined") {
             $.ajax({
-                url: '/Forms/GetChildHoliday/' + childId,
+                url: '/api/' + formName + '/' + childId + "?format=json",
                 type: 'GET',
                 success: function (data) {
                     $.each(data.ExtraHolidays, function (ndx, item) {
@@ -657,7 +660,7 @@ function saveExtraHolidays(childId) {
                     });
                     //Now add/update extradecisions
                     $.ajax({
-                        url: '/Forms/ExtraHolidays/',
+                        url: '/api/' + formName + "?format=json",
                         type: 'POST',
                         data: extraModel,
                         success: function () {
@@ -670,7 +673,7 @@ function saveExtraHolidays(childId) {
             return;
         }
         $.ajax({
-            url: '/Forms/ExtraHolidays/',
+            url: '/api/' + formName + "?format=json",
             type: 'POST',
             data: extraModel,
             success: function () {
@@ -680,9 +683,10 @@ function saveExtraHolidays(childId) {
     });
 }
 function AddHoliday(caller) {
-    if ($('#holiday').valid()) {
+    var formName = 'holiday';
+    if ($('#' + formName).valid()) {
         saveExtraHolidays();
-        var model = Friendly.GetFormInput('holiday');
+        var model = Friendly.GetFormInput(formName);
         model.ChildId = $('#holidayChildId').val();
         if (caller != null && $(caller).hasClass('next'))
             Friendly.childNdx++;
@@ -694,7 +698,7 @@ function AddHoliday(caller) {
             //Submit form, do final check. 
             Friendly.StartLoading();
             $.ajax({
-                url: '/Forms/Holidays/',
+                url: '/api/' + formName + "?format=json",
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -714,11 +718,11 @@ function AddHoliday(caller) {
         Friendly.StartLoading();
         //save current information
         $.ajax({
-            url: '/Forms/Holidays/',
+            url: '/api/' + formName + "?format=json",
             type: 'POST',
             data: model,
             success: function () {
-                $('#holiday')[0].reset();
+                $('#' + formName)[0].reset();
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 var nextChild = Friendly.children[Friendly.childNdx];
                 getChildHoliday(nextChild);

@@ -9,13 +9,13 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ChildService : FormService<ChildRepository, Child, ChildrenViewModel>, IChildService
+    public class ChildService : FormService<ChildRepository, Child, ChildViewModel>, IChildService
     {
         public ChildService(ChildRepository formRepository) : base(formRepository)
         {
         }
 
-        public Child AddOrUpdate(ChildrenViewModel model)
+        public Child AddOrUpdate(ChildViewModel model)
         {
             try
             {
@@ -39,12 +39,12 @@ namespace BusinessLogic
             }
         }
 
-        public new ChildrenViewModel GetByUserId(int userId)
+        public new ChildViewModel GetByUserId(int userId)
         {
             try
             {
                 var childList = FormRepository.GetByUserId(userId);
-                return new ChildrenViewModel()
+                return new ChildViewModel()
                     {
                         Children = childList
                     };

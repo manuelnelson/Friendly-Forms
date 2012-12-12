@@ -1,4 +1,5 @@
-﻿@model FriendlyForms.Models.DomesticMediationViewModel
+﻿@using FriendlyForms.Authentication
+@model FriendlyForms.Models.DomesticMediationViewModel
 @{
     ViewBag.Title = "Domestic Mediation";
 }
@@ -11,7 +12,7 @@
     <ul>
         <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Mediation Agreement</a>
             <ul style="display:block">
-                <li class="nav-item active" id="maritalHouseNav"><a data-form="maritalHouse" href="#"><i class="icon-pencil icon-blue"></i>Marital House</a></li>
+                <li class="nav-item active" id="houseNav"><a data-form="house" href="#"><i class="icon-pencil icon-blue"></i>Marital House</a></li>
                 @if (Model.FormsCompleted.RealEstateCompleted)
                 {
                     <li class="nav-item" id="propertyNav"><a data-form="property" href="#"><i class="@itemDone"></i>Personal Property</a></li>
@@ -38,11 +39,11 @@
                 }
                 @if (Model.FormsCompleted.AssetCompleted)
                 {
-                    <li class="nav-item" id="assetsNav"><a data-form="assets" href="#"><i class="@itemDone"></i>Assets</a></li>
+                    <li class="nav-item" id="assetNav"><a data-form="asset" href="#"><i class="@itemDone"></i>Assets</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="assetsNav"><a data-form="assets" href="#"><i class="@itemlock"></i>Assets</a></li>
+                    <li class="nav-item" id="assesNav"><a data-form="asset" href="#"><i class="@itemlock"></i>Assets</a></li>
                 }
                 @if (Model.FormsCompleted.HealthCompleted)
                 {
@@ -62,11 +63,11 @@
                 }
                 @if (Model.FormsCompleted.TaxCompleted)
                 {
-                    <li class="nav-item" id="taxesNav"><a data-form="taxes" href="#"><i class="@itemDone"></i>Taxes</a></li>
+                    <li class="nav-item" id="taxNav"><a data-form="tax" href="#"><i class="@itemDone"></i>Taxes</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="taxesNav"><a data-form="taxes" href="#"><i class="@itemlock"></i>Taxes</a></li>
+                    <li class="nav-item" id="taxNav"><a data-form="tax" href="#"><i class="@itemlock"></i>Taxes</a></li>
                 }
 @* Will be moved to financial from
                 @if (Model.FormsCompleted.ChildCompleted)
@@ -94,12 +95,14 @@
         <a data-form="asdfa" href="#" class="current">Domestic Mediation</a>
     </div>
 }
+<input type="hidden" id="user-id" value="@User.FriendlyIdentity().UserId" /> 
+
 @Html.Partial("_MaritalHouse", Model.HouseViewModel)
-@Html.Partial("_Property", Model.RealEstateViewModel)
+@Html.Partial("_Property", Model.PropertyViewModel)
 @Html.Partial("_Vehicles", Model.VehicleAllViewModel)
 @Html.Partial("_Debt", Model.DebtViewModel)
 @Html.Partial("_Assets", Model.AssetViewModel)
-@Html.Partial("_HealthInsurance", Model.HealthViewModel)
+@Html.Partial("_HealthInsurance", Model.HealthInsuranceViewModel)
 @Html.Partial("_SpousalSupport", Model.SpousalViewModel)
 @Html.Partial("_Tax", Model.TaxViewModel)
 @*@Html.Partial("_ChildSupport", Model.ChildSupportViewModel)*@

@@ -1,0 +1,145 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Web;
+using BusinessLogic.Contracts;
+using Models.ViewModels;
+using ServiceStack.Common.Extensions;
+using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface;
+using ServiceStack.ServiceInterface.ServiceModel;
+
+namespace FriendlyForms.RestService
+{
+    [DataContract]
+    [Route("/Holiday/")]
+    public class ReqHoliday
+    {
+        [DataMember]
+        public int UserId { get; set; }
+        [DataMember]
+        public int ChildId { get; set; }
+        [DataMember]
+        public bool FridayHoliday { get; set; }
+        [DataMember]
+        public bool MondayHoliday { get; set; }
+        [DataMember]
+        public int Thanksgiving { get; set; }
+        [DataMember]
+        public string ThanksgivingOther { get; set; }
+        [DataMember]
+        public string ThanksgivingTime { get; set; }
+        [DataMember]
+        public int Christmas { get; set; }
+        [DataMember]
+        public string ChristmasTime { get; set; }
+        [DataMember]
+        public string ChristmasOther { get; set; }
+        [DataMember]
+        public int SpringBreak { get; set; }
+        [DataMember]
+        public string SpringOther { get; set; }
+        [DataMember]
+        public string SpringBreakTime { get; set; }
+        [DataMember]
+        public int SummerBeginDays { get; set; }
+        [DataMember]
+        public string SummerBeginTime { get; set; }
+        [DataMember]
+        public int SummerEndDays { get; set; }
+        [DataMember]
+        public string SummerEndTime { get; set; }
+        [DataMember]
+        public string SummerDetails { get; set; }
+        [DataMember]
+        public int FallBreak { get; set; }
+        [DataMember]
+        public string FallOther { get; set; }
+        [DataMember]
+        public string FallBreakTime { get; set; }
+        [DataMember]
+        public int ChristmasFather { get; set; }
+        [DataMember]
+        public int ChristmasMother { get; set; }
+        [DataMember]
+        public int SpringBreakFather { get; set; }
+        [DataMember]
+        public int SpringBreakMother { get; set; }
+        [DataMember]
+        public int FallBreakFather { get; set; }
+        [DataMember]
+        public int FallBreakMother { get; set; }
+        [DataMember]
+        public int ThanksgivingFather { get; set; }
+        [DataMember]
+        public int ThanksgivingMother { get; set; }
+        [DataMember]
+        public int MlkFather { get; set; }
+        [DataMember]
+        public int MlkMother { get; set; }
+        [DataMember]
+        public int PresidentsFather { get; set; }
+        [DataMember]
+        public int PresidentsMother { get; set; }
+        [DataMember]
+        public int MothersFather { get; set; }
+        [DataMember]
+        public int MothersMother { get; set; }
+        [DataMember]
+        public int MemorialFather { get; set; }
+        [DataMember]
+        public int MemorialMother { get; set; }
+        [DataMember]
+        public int FathersFather { get; set; }
+        [DataMember]
+        public int FathersMother { get; set; }
+        [DataMember]
+        public int IndependenceFather { get; set; }
+        [DataMember]
+        public int IndependenceMother { get; set; }
+        [DataMember]
+        public int LaborFather { get; set; }
+        [DataMember]
+        public int LaborMother { get; set; }
+        [DataMember]
+        public int HalloweenFather { get; set; }
+        [DataMember]
+        public int HalloweenMother { get; set; }
+        [DataMember]
+        public int ChildrensFather { get; set; }
+        [DataMember]
+        public int ChildrensMother { get; set; }
+        [DataMember]
+        public int MothersBdayFather { get; set; }
+        [DataMember]
+        public int MothersBdayMother { get; set; }
+        [DataMember]
+        public int FathersBdayFather { get; set; }
+        [DataMember]
+        public int FathersBdayMother { get; set; }
+        [DataMember]
+        public int ReligiousFather { get; set; }
+        [DataMember]
+        public int ReligiousMother { get; set; }
+    }
+
+    [DataContract]
+    public class RespHoliday : IHasResponseStatus
+    {
+        [DataMember]
+        public ResponseStatus ResponseStatus { get; set; }
+    }
+
+    public class HolidayRestService : Service
+    {
+        public IHolidayService HolidayService { get; set; }
+
+        public object Post(ReqHoliday request)
+        {
+            var holidayViewModel = request.TranslateTo<HolidayViewModel>();
+            HolidayService.AddOrUpdate(holidayViewModel);
+            return new RespHoliday();
+        }
+    }
+}

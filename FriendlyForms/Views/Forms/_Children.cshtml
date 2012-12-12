@@ -9,7 +9,7 @@
                     <h5>Add Children</h5>
                 </div>
                 <div class="widget-content">
-                    @if (Model.ChildrenViewModel.Children != null && Model.ChildrenViewModel.Children.Any())
+                    @if (Model.ChildViewModel.Children != null && Model.ChildViewModel.Children.Any())
                     {
                         <div class="row-fluid child-table">
                             <table class="table table-bordered table-striped" style="width:50%;">
@@ -20,7 +20,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var child in Model.ChildrenViewModel.Children)
+                                    @foreach (var child in Model.ChildViewModel.Children)
                                     {
                                         <tr>
                                             <td class="child-name">@child.Name</td>
@@ -73,13 +73,13 @@
                          {
                              <div class="control-group row-fluid child-info">
                                  <label class="span2">Name</label>
-                                 @Html.TextBoxFor(m => m.ChildrenViewModel.Name, new {placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here."})
-                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.Name)
+                                 @Html.TextBoxFor(m => m.ChildViewModel.Name, new {placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here."})
+                                 @Html.ValidationMessageFor(m => m.ChildViewModel.Name)
                              </div>
                              <div class="control-group row-fluid child-info">
                                  <label class="span2">Date of Birth</label>
-                                 @Html.TextBoxFor(m => m.ChildrenViewModel.DateOfBirth, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
-                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.DateOfBirth)
+                                 @Html.TextBoxFor(m => m.ChildViewModel.DateOfBirth, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                 @Html.ValidationMessageFor(m => m.ChildViewModel.DateOfBirth)
                              </div>
                          }
                         <button class="btn btn-primary child-info" style="margin-bottom: 20px;" id="addChild" value="Add">Add </button>
@@ -89,13 +89,13 @@
                          {
                              <div class="control-group row-fluid child-info hide">
                                  <label class="span2">Name</label>
-                                 @Html.TextBoxFor(m => m.ChildrenViewModel.Name, new {placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here."})
-                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.Name)
+                                 @Html.TextBoxFor(m => m.ChildViewModel.Name, new {placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here."})
+                                 @Html.ValidationMessageFor(m => m.ChildViewModel.Name)
                              </div>
                              <div class="control-group row-fluid child-info hide">
                                  <label class="span2">Date of Birth</label>
-                                 @Html.TextBoxFor(m => m.ChildrenViewModel.DateOfBirth, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
-                                 @Html.ValidationMessageFor(m => m.ChildrenViewModel.DateOfBirth)
+                                 @Html.TextBoxFor(m => m.ChildViewModel.DateOfBirth, new {placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy")})
+                                 @Html.ValidationMessageFor(m => m.ChildViewModel.DateOfBirth)
                              </div>
                          }
                         <button class="btn btn-primary child-info hide" style="margin-bottom: 20px;" id="addChild" value="Add">Add </button>                        

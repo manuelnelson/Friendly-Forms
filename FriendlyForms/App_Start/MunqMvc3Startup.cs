@@ -77,11 +77,11 @@ namespace FriendlyForms.App_Start {
             container.Register<IScheduleService>(c => new ScheduleService(c.Resolve<IScheduleRepository>() as ScheduleRepository));
             container.Register<ICountyService>(c => new CountyService(c.Resolve<ICountyRepository>()));
             container.Register<IHouseService>(c => new HouseService(c.Resolve<IHouseRepository>() as HouseRepository));
-            container.Register<IRealEstateService>(c => new RealEstateService(c.Resolve<IRealEstateRepository>() as RealEstateRepository));
+            container.Register<IPropertyService>(c => new PropertyService(c.Resolve<IRealEstateRepository>() as RealEstateRepository));
             container.Register<IVehicleService>(c => new VehicleService(c.Resolve<IVehicleRepository>() as VehicleRepository));
             container.Register<IDebtService>(c => new DebtService(c.Resolve<IDebtRepository>() as DebtRepository));
             container.Register<IAssetService>(c => new AssetService(c.Resolve<IAssetRepository>() as AssetRepository));
-            container.Register<IHealthService>(c => new HealthService(c.Resolve<IHealthInsuranceRepository>() as HealthInsuranceRepository));
+            container.Register<IHealthInsuranceService>(c => new HealthInsuranceService(c.Resolve<IHealthInsuranceRepository>() as HealthInsuranceRepository));
             container.Register<ISpousalService>(c => new SpousalService(c.Resolve<ISpousalRepository>() as SpousalRepository));
             container.Register<ITaxService>(c => new TaxService(c.Resolve<ITaxRepository>() as TaxRepository));
             container.Register<IChildSupportService>(c => new ChildSupportService(c.Resolve<IChildSupportRepository>() as ChildSupportRepository));

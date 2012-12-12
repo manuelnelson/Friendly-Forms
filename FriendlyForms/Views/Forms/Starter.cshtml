@@ -12,11 +12,11 @@
         <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-pencil icon-blue"></i>Court</a></li>
         @if (Model.StarterFormsCompleted.Participant)
         {
-            <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="@itemDone"></i>Participants</a></li>
+            <li class="nav-item" id="participantNav"><a href="#" data-form="participant"><i class="@itemDone"></i>Participants</a></li>
         }
         else
         {
-            <li class="nav-item" id="participantsNav"><a href="#" data-form="participants"><i class="@itemlock"></i>Participants</a></li>
+            <li class="nav-item" id="participantNav"><a href="#" data-form="participant"><i class="@itemlock"></i>Participants</a></li>
         }
         @if (Model.StarterFormsCompleted.Children)
         {

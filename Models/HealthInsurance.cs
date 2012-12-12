@@ -12,7 +12,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new HealthViewModel()
+            return new HealthInsuranceViewModel()
                 {
                     HealthDescription = HealthDescription,
                     Health = Health,

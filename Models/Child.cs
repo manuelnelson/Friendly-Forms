@@ -17,7 +17,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new ChildrenViewModel()
+            return new ChildViewModel()
             {
                 DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided",
                 Name = Name,

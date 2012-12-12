@@ -5,11 +5,11 @@ namespace FriendlyForms.Models
     public class DomesticMediationViewModel
     {
         public HouseViewModel HouseViewModel { get; set; }
-        public RealEstateViewModel RealEstateViewModel { get; set; }
+        public PropertyViewModel PropertyViewModel { get; set; }
         public VehicleAllViewModel VehicleAllViewModel { get; set; }
         public DebtViewModel DebtViewModel { get; set; }
         public AssetViewModel AssetViewModel { get; set; }
-        public HealthViewModel HealthViewModel { get; set; }
+        public HealthInsuranceViewModel HealthInsuranceViewModel { get; set; }
         public SpousalViewModel SpousalViewModel { get; set; }
         public TaxViewModel TaxViewModel { get; set; }
         public ChildSupportViewModel ChildSupportViewModel { get; set; }

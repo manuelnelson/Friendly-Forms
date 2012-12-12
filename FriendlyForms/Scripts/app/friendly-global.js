@@ -55,10 +55,11 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
     if (typeof model === 'undefined') {
         model = Friendly.GetFormInput(formName);
     }
-    var formSelector = '#' + formName;
+    model.UserId = $('#user-id').val();
+    var formSelector = '#' + formName;        
     if ($(formSelector).valid()) {
         $.ajax({
-            url: '/Forms/' + formName + '/',
+            url: '/api/' + formName + '?format=json',
             type: 'POST',
             data: model,
             success: function () {

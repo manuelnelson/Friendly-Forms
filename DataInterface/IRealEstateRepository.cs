@@ -6,7 +6,7 @@ using Models;
 
 namespace DataInterface
 {
-    public interface IRealEstateRepository : IFormRepository<RealEstateAndProperty>
+    public interface IRealEstateRepository : IFormRepository<Property>
     {
     }
 }

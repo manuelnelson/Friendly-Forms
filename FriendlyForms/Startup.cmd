@@ -1,0 +1,1 @@
+%windir%\system32\inetsrv\appcmd set config -section:system.applicationHost/applicationPools /applicationPoolDefaults.enable32BitAppOnWin64:"True" /commit:apphost

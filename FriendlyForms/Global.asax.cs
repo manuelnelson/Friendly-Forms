@@ -7,6 +7,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using DataLayerContext.Migrations;
 using FriendlyForms.Authentication;
+using ServiceStack.MiniProfiler;
 
 
 namespace FriendlyForms
@@ -26,6 +27,8 @@ namespace FriendlyForms
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("api/{*pathInfo}");
+            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
             routes.MapRoute(
                 "Default", // Route name
@@ -43,7 +46,17 @@ namespace FriendlyForms
             RegisterRoutes(RouteTable.Routes);
 
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataLayerContext.SplitContext, Configuration>());
+        }
 
+        protected void Application_BeginRequest()
+        {
+            if(Request.IsLocal)
+                Profiler.Start();
+        }
+
+        protected void Application_EndRequest()
+        {
+            Profiler.Stop();
         }
 
         //Authentication logic

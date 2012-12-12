@@ -26,7 +26,7 @@ namespace DataLayerContext
         public DbSet<ExtraHoliday> ExtraHolidays{ get; set; }
         public DbSet<County> Counties { get; set; }
         public DbSet<House> Houses { get; set; }
-        public DbSet<RealEstateAndProperty> Properties { get; set; }
+        public DbSet<Property> Properties { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleForm> VehicleForms { get; set; }
         public DbSet<Debt> Debts { get; set; }
@@ -211,8 +211,8 @@ namespace DataLayerContext
 
         private void SetupPropertyEntity(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RealEstateAndProperty>().HasKey(t => new { t.Id });
-            modelBuilder.Entity<RealEstateAndProperty>().Property(t => t.Id)
+            modelBuilder.Entity<Property>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Property>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 

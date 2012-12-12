@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     //Court Form
     $('#child-part1').click(function () {
-        Friendly.SubmitForm('court', 'participants');
+        Friendly.SubmitForm('court', 'participant');
     });
 
     $('input[name=PlanType]').change(function () {
@@ -21,11 +21,11 @@
 
         //check if we need to move to next form
         if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('participants', 'children');
+            Friendly.SubmitForm('participant', 'children');
         }
         //check if we need to move to previous form
         if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('participants', 'court');
+            Friendly.SubmitForm('participant', 'court');
         }
     });
 
@@ -129,15 +129,15 @@
             //get values
             var childFormModel = Friendly.GetFormInput('childForm');
             $.ajax({
-                url: '/Forms/ChildForm/',
+                url: '/api/ChildForm?format=json',
                 type: 'POST',
                 data: childFormModel,
                 success: function (data) {
                     //get values
                     var model = Friendly.GetFormInput('child');
-                    model.ChildFormId = data;
+                    model.ChildFormId = data.ChildForm.Id;
                     $.ajax({
-                        url: '/Forms/Children/',
+                        url: '/api/Children?format=json',
                         type: 'POST',
                         data: model,
                         success: function (data) {

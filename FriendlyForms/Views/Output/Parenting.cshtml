@@ -26,7 +26,7 @@
         <p>
             The parties have agreed to the terms of this plan and this information has been furnished by both 
             parties to meet the requirements of OCGA Section 19-9-1. The parties agree on the terms of the plan and 
-            afﬁ rm the accuracy of the information provided, as shown by their signatures at the end of this order.
+            afﬁrm the accuracy of the information provided, as shown by their signatures at the end of this order.
         </p>        
     }
     else
@@ -46,13 +46,13 @@
         <p>This plan modiﬁes an existing Order: Case Number @Model.CourtViewModel.ExistCaseNumber</p>
     }
 </div>
-@if (Model.ChildAllViewModel.ChildrenViewModel.Children.Any())
+@if (Model.ChildAllViewModel.ChildViewModel.Children.Any())
 {
     <div class="row-fluid">
         <h4 class="span4">Child's Name</h4>
         <h4 class="span4">Date of Birth</h4>
     </div>
-    foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
+    foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
     {
     <div class="row-fluid">
         <div class="span4">@child.Name</div>
@@ -97,7 +97,7 @@
     </div>
     <h4>Primary Physical Custody</h4>
     <p>For each of the children named below, the primary physical custodian shall be:</p>
-    foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
+    foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
     {
     <div class="row-fluid">
         <div class="span4">@child.Name</div>
@@ -122,7 +122,7 @@
             The parties must confer with one another prior to any decision related to non-emergency health care, education, religion, or extra-curricular activities.  The listing below indicates who will
             be the primary decision maker when when there is disagreement regarding the most appropriate decision. 
         </p>
-        @foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
+        @foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
     {
             <h5>@child.Name</h5>
             <p>
@@ -276,7 +276,7 @@
      }
     </div>
     <h4>Major holidays and Vacation Periods</h4>
-    foreach (var child in Model.ChildAllViewModel.ChildrenViewModel.Children)
+    foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
     {
         <h4>@child.Name</h4>
 

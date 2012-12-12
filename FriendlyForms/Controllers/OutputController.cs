@@ -29,11 +29,11 @@ namespace FriendlyForms.Controllers
         private readonly IScheduleService _scheduleService;
         private readonly ICountyService _countyService;
         private readonly IHouseService _houseService;
-        private readonly IRealEstateService _realEstateService;
+        private readonly IPropertyService _propertyService;
         private readonly IVehicleService _vehicleService;
         private readonly IDebtService _debtService;
         private readonly IAssetService _assetService;
-        private readonly IHealthService _healthService;
+        private readonly IHealthInsuranceService _healthInsuranceService;
         private readonly ISpousalService _spousalService;
         private readonly ITaxService _taxService;
         private readonly IChildSupportService _childSupportService;
@@ -51,7 +51,7 @@ namespace FriendlyForms.Controllers
         //
         // GET: /Forms/
         public OutputController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService, ICountyService countyService,
-            IHouseService houseService, IRealEstateService realEstateService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthService healthService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
+            IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
             IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService)
         {
             _courtService = courtService;
@@ -66,11 +66,11 @@ namespace FriendlyForms.Controllers
             _scheduleService = scheduleService;
             _countyService = countyService;
             _houseService = houseService;
-            _realEstateService = realEstateService;
+            _propertyService = propertyService;
             _vehicleService = vehicleService;
             _debtService = debtService;
             _assetService = assetService;
-            _healthService = healthService;
+            _healthInsuranceService = healthInsuranceService;
             _spousalService = spousalService;
             _taxService = taxService;
             _childSupportService = childSupportService;
@@ -160,7 +160,7 @@ namespace FriendlyForms.Controllers
                 ParticipantViewModel = participants as ParticipantViewModel,
                 ChildAllViewModel = new ChildAllViewModel()
                     {
-                        ChildrenViewModel = children,
+                        ChildViewModel = children,
                     },
                 PrivacyViewModel = privacy as PrivacyViewModel,
                 InformationViewModel = information as InformationViewModel,
@@ -223,10 +223,10 @@ namespace FriendlyForms.Controllers
         {
             var userId = User.FriendlyIdentity().UserId;
             var house = _houseService.GetByUserId(userId);
-            var property = _realEstateService.GetByUserId(userId);
+            var property = _propertyService.GetByUserId(userId);
             var debt = _debtService.GetByUserId(userId);
             var assets = _assetService.GetByUserId(userId);
-            var health = _healthService.GetByUserId(userId);
+            var health = _healthInsuranceService.GetByUserId(userId);
             var spousal = _spousalService.GetByUserId(userId);
             var taxes = _taxService.GetByUserId(userId);
             var support = _childSupportService.GetByUserId(userId);
@@ -252,7 +252,7 @@ namespace FriendlyForms.Controllers
             var domesticModel = new DomesticMediationViewModel
             {
                 HouseViewModel = house as HouseViewModel,
-                RealEstateViewModel = property as RealEstateViewModel,
+                PropertyViewModel = property as PropertyViewModel,
                 VehicleAllViewModel = new VehicleAllViewModel()
                     {
                       VehicleViewModel = vehicleModel,
@@ -260,7 +260,7 @@ namespace FriendlyForms.Controllers
                     },
                 DebtViewModel = debt as DebtViewModel,
                 AssetViewModel = assets as AssetViewModel,
-                HealthViewModel = health as HealthViewModel,
+                HealthInsuranceViewModel = health as HealthInsuranceViewModel,
                 SpousalViewModel = spousal as SpousalViewModel,
                 TaxViewModel = taxes as TaxViewModel,
                 ChildSupportViewModel = support as ChildSupportViewModel,
