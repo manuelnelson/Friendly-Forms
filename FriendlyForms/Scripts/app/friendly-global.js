@@ -349,6 +349,9 @@ $(document).ready(function () {
     $('#main-content').on('click', '.close', function () {
         $(this).parent().parent().parent().remove();
     });
+
+    $('.currency').mask('000,000,000,000,000', { reverse: true });
+    
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form

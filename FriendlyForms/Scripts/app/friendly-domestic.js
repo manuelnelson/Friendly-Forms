@@ -4,11 +4,11 @@
         //get values
         var model = {
             Address: $('#Address').val(),
-            Equity: $('#Equity').val().replace(",", ""),
+            Equity: $('#Equity').val().replace(/,/g, ""),
             MaritalHouse: $('#MaritalHouse:checked').val(),
-            MoneyOwed: $('#MoneyOwed').val().replace(",", ""),
+            MoneyOwed: $('#MoneyOwed').val().replace(/,/g, ""),
             MortgageOwner: $('#MortgageOwner').val(),
-            RetailValue: $('#RetailValue').val().replace(",", ""),
+            RetailValue: $('#RetailValue').val().replace(/,/g, ""), 
             Divide: $('#Divide').val(),
             UserId: $('#user-id').val()
         };
