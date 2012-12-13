@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -12,17 +13,19 @@ namespace Models
         public int HealthCare { get; set; }
         public int Religion { get; set; }
         public int ExtraCurricular { get; set; }
+        public string BothResolve { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new DecisionsViewModel()
-            {
-                ChildId = ChildId,
-                Education = Education,
-                ExtraCurricular = ExtraCurricular,
-                HealthCare = HealthCare,
-                Religion = Religion,
-                UserId = UserId
-            };
+            return this.TranslateTo<DecisionsViewModel>();
+            //return new DecisionsViewModel()
+            //{
+            //    ChildId = ChildId,
+            //    Education = Education,
+            //    ExtraCurricular = ExtraCurricular,
+            //    HealthCare = HealthCare,
+            //    Religion = Religion,
+            //    UserId = UserId
+            //};
         }
 
         public void Update(IFormEntity entity)
@@ -34,6 +37,7 @@ namespace Models
             HealthCare = update.HealthCare;
             Religion = update.Religion;
             UserId = update.UserId;
+            BothResolve = update.BothResolve;
         }
     }
 }

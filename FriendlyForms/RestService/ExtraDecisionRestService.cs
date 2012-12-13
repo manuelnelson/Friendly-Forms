@@ -37,6 +37,14 @@ namespace FriendlyForms.RestService
         public ResponseStatus ResponseStatus { get; set; }
     }
 
+    [DataContract]
+    public class RespExtraDecisionsPost : IHasResponseStatus
+    {
+        [DataMember]
+        public ExtraDecisions ExtraDecision { get; set; }
+        [DataMember]
+        public ResponseStatus ResponseStatus { get; set; }
+    }
 
     public class ExtraDecisionsRestService : Service
     {
@@ -51,8 +59,11 @@ namespace FriendlyForms.RestService
         public object Post(ReqExtraDecisions request)
         {
             var extraDecisionsViewModel = request.TranslateTo<ExtraDecisionsViewModel>();
-            ExtraDecisionsService.AddOrUpdate(extraDecisionsViewModel);
-            return new RespExtraDecisions();
+            var updatedDecision = ExtraDecisionsService.AddOrUpdate(extraDecisionsViewModel);
+            return new RespExtraDecisionsPost()
+                {
+                    ExtraDecision = updatedDecision
+                };
         }
     }
 }

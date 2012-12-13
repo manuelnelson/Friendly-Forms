@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -20,17 +21,22 @@ namespace Models.ViewModels
         [Display(Name = "Extra Curricular")]
         public int ExtraCurricular { get; set; }
 
+        [Display(Name = "Resolve")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
+        public string BothResolve { get; set; }
+        
         public IFormEntity ConvertToEntity()
         {
-            return new Decisions()
-                {
-                    ChildId = ChildId,
-                    Education = Education,
-                    ExtraCurricular = ExtraCurricular,
-                    HealthCare = HealthCare,
-                    Religion = Religion,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Decisions>();
+            //return new Decisions()
+            //    {
+            //        ChildId = ChildId,
+            //        Education = Education,
+            //        ExtraCurricular = ExtraCurricular,
+            //        HealthCare = HealthCare,
+            //        Religion = Religion,
+            //        UserId = UserId
+            //    };
         }
     }
 }

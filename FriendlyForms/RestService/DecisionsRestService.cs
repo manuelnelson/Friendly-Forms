@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -31,6 +28,8 @@ namespace FriendlyForms.RestService
         public int Religion { get; set; }
         [DataMember]
         public int ExtraCurricular { get; set; }
+        [DataMember]
+        public string BothResolve { get; set; }
     }
 
     [DataContract]

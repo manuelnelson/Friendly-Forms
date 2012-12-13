@@ -45,22 +45,17 @@
     $('#addDecisions').click(function () {
         Friendly.StartLoading();
         var formName = 'extraDecisions';
-        var model = {
-            ChildId: $('#childId').val().trim(),
-            DecisionMaker: $('#ExtraDecisionsViewModel_DecisionMaker:checked').val(),
-            Description: $('#ExtraDecisionsViewModel_Description').val(),
-            UserId: $('#user-id').val(),
-        };
+        var model = Friendly.GetFormInput(formName);
+        model.ChildId = $('#childId').val().trim();
         if ($('#' + formName).valid()) {
             $.ajax({
                 url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-extraDecisions-template").tmpl(data);
-                    $('#decisions').append(result);
+                    var result = $("#friendly-extraDecisions-template").tmpl(data.ExtraDecision);
+                    $('#radio-decisions').append(result);
                     $('input[id=ExtraDecisionsViewModel_DecisionMaker]').removeAttr('checked');
-                    //$('#ExtraDecisionsViewModel_DecisionMaker').removeAttr('checked');
                     $('#ExtraDecisionsViewModel_Description').val('');
                     Friendly.EndLoading();
                     return false;
@@ -74,7 +69,7 @@
         }
         return false;
     });
-
+    $('#decisions input[type=radio]').live('change', checkIfBothIsChecked);
     //Decisions Form
     $('.dropdown-toggle').dropdown();
 
@@ -95,8 +90,8 @@
     });
     function copyDecision(childId) {
         saveExtraDecisions(childId);
-        var model = getDecisionModel(childId);
-        model.UserId = $('#user-id').val();
+        var model = Friendly.GetFormInput('decisions');
+        model.ChildId = typeof(childId) === "undefined" ? $('#childId').val() : childId;
         $.ajax({
             url: '/api/Decisions?format=json',
             type: 'POST',
@@ -445,16 +440,7 @@
         });
     }
 });
-function getDecisionModel(childId) {
-    return {
-        Education: $('#DecisionsViewModel_Education:checked').val(),
-        HealthCare: $('#DecisionsViewModel_HealthCare:checked').val(),
-        Religion: $('#DecisionsViewModel_Religion:checked').val(),
-        ExtraCurricular: $('#DecisionsViewModel_ExtraCurricular:checked').val(),
-        ChildId: typeof (childId) === "undefined" ? $('#childId').val() : childId,
-        UserId: $('#user-id').val()
-    };
-}
+
 function saveExtraDecisions(childId) {
     var formName = 'extraDecisions';
     $.each($('.extra-decision-item'), function (ndx, item) {
@@ -515,19 +501,35 @@ function getChildDecisions(child) {
             $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
             $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
             $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
             $('.extra-decision-item').remove();
             $.each(data.ExtraDecisions, function (ndx, item) {
                 var result = $("#friendly-extraDecisions-template").tmpl(item);
-                $('#decisions').append(result);
+                $('#radio-decisions').append(result);
             });
+            checkIfBothIsChecked();
             //fixes possible error flag if one child isn't complete but another is
             if (data.Decisions.Education !== 0) {
                 $('#decisions').valid();
             }
-            $('#decisionsWrapper').show();
+            $('#decisionsWrapper').show(); 
         },
         error: Friendly.GenericErrorMessage
     });
+}
+function checkIfBothIsChecked() {
+    var bothChecked = false;
+    $.each($('#decisions input[type=radio]'), function (ndx, item) {
+        var id = $(item).attr('id');
+        if ($('#' + id + ':checked').val() === "3")
+            bothChecked = true;
+    });
+    if (bothChecked) {
+        $('.decision-details').show();
+    } else {
+        $('#DecisionsViewModel_BothResolve').val('');
+        $('.decision-details').hide();
+    }
 }
 //Children Decisions
 function loadChildren(form) {

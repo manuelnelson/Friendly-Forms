@@ -26,6 +26,7 @@ namespace BusinessLogic
                     existDecisions.HealthCare = entity.HealthCare;
                     existDecisions.Religion = entity.Religion;
                     existDecisions.ExtraCurricular = entity.ExtraCurricular;
+                    existDecisions.BothResolve = entity.BothResolve;
                     FormRepository.Update(existDecisions);
                     return;
                 }

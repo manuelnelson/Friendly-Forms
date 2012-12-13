@@ -12,61 +12,58 @@
                 <div class="widget-content">
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "decisions" }))
                     {
-                        <h3 id="childName"></h3><br />
+                        <h3 id="childName"></h3>
+                        <br />
                         <input type="hidden" id="childId" />
-                        <div class="control-group">
-                            <label class="informative">
-                                Educational Decisions</label>
-                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Father, new { @class = "inline" })</label>
-                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
-                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Both, new { @class = "inline" })</label>
-                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
-                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.Education)
+                        <div id="radio-decisions">
+                            <div class="control-group">
+                                <label class="informative">
+                                    Educational Decisions</label>
+                                <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                                <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                                <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                                <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.Education, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.DecisionsViewModel.Education)
+                            </div>
+                            <div class="control-group">
+                                <label class="informative">
+                                    Non-Emergency Healthcare</label>
+                                <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                                <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                                <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                                <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.DecisionsViewModel.HealthCare)
+                            </div>
+                            <div class="control-group">
+                                <label class="informative">
+                                    Religious Upbringing</label>
+                                <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                                <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                                <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                                <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.DecisionsViewModel.Religion)
+                            </div>
+                            <div class="control-group">
+                                <label class="informative">
+                                    Extracurricular Activities</label>
+                                <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Father, new { @class = "inline" })</label>
+                                <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
+                                <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Both, new { @class = "inline" })</label>
+                                <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
+                                @Html.ValidationMessageFor(m => m.DecisionsViewModel.ExtraCurricular)
+                            </div>
                         </div>
-                        <div class="control-group">
-                            <label class="informative">
-                                Non-Emergency Healthcare</label>
-                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Father, new { @class = "inline" })</label>
-                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
-                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.Both, new { @class = "inline" })</label>
-                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.HealthCare, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
-                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.HealthCare)
-                        </div>
-                        <div class="control-group">
-                            <label class="informative">
-                                Religious Upbringing</label>
-                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Father, new { @class = "inline" })</label>
-                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
-                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.Both, new { @class = "inline" })</label>
-                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.Religion, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
-                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.Religion)
-                        </div>
-                        <div class="control-group">
-                            <label class="informative">
-                                Extracurricular Activities</label>
-                            <label class="radio inline">Father @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Father, new { @class = "inline" })</label>
-                            <label class="radio inline">Mother @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Mother, new { @class = "inline" })</label>
-                            <label class="radio inline">Both @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.Both, new { @class = "inline" })</label>
-                            <label class="radio inline">Not Applicable @Html.RadioButtonFor(m => m.DecisionsViewModel.ExtraCurricular, (int)DecisionMaker.NotApplicable, new { @class = "inline" })</label>
-                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.ExtraCurricular)
-                        </div>
+                        <div class="control-group decision-details hide">
+                            <label class="informative">You have indicated that both parents have the authroity to make certain decisions. However, in case of disagreement, how will disagreements be resolved.</label>
+                            @Html.TextAreaFor(m => m.DecisionsViewModel.BothResolve, new { placeholder = "Details", @class = "input-xxlarge" })
+                            @Html.ValidationMessageFor(m => m.DecisionsViewModel.BothResolve)
+                        </div>                
+
                     }
                 </div>
             </div>
         </div>
     </div>
-    <div style="margin-bottom:20px;" class="copy-wrapper">
-        <label class="informative">To aid you in completing this section for the remaining child(ren), we suggest you use this copy button to copy your choices for your other child(ren), especially if all choices are the same. You will still have the opportunity to make changes to any of your selections on the page(s) that follow this one.</label>
-        <div class="btn btn-primary dropdown copy-button" id="copy-decisions">
-            <a href="#" style="display: block;color:white;" data-target="#copy-decisions" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share icon-white"></i></a>
-            <ul class="dropdown-menu">
-                <li><a title="all" data-id="0" href="#">All</a></li>
-            </ul>
-        </div>
-    </div>
-    <button class="btn btn-primary child-part6 previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
-    <button class="btn btn-primary child-part6 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
-    <br />
     <div class="row-fluid">
         <div class="span12">
             <div class="widget-box">
@@ -92,11 +89,23 @@
                             @Html.ValidationMessageFor(m => m.ExtraDecisionsViewModel.Description)
                         </div>
                     }
-
+                    <button class="btn btn-primary" id="addDecisions" value="Add This Decision">Add This Decision</button>
                 </div>
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" id="addDecisions" value="Add">Add </button>
+
+    <div style="margin-bottom: 20px;" class="copy-wrapper">
+        <label class="informative">To aid you in completing this section for the remaining child(ren), we suggest you use this copy button to copy your choices for your other child(ren), especially if all choices are the same. You will still have the opportunity to make changes to any of your selections on the page(s) that follow this one.</label>
+        <div class="btn btn-primary dropdown copy-button" id="copy-decisions">
+            <a href="#" style="display: block; color: white;" data-target="#copy-decisions" class="dropdown-toggle" class="btn btn-mini">Copy To<i class="icon-share icon-white"></i></a>
+            <ul class="dropdown-menu">
+                <li><a title="all" data-id="0" href="#">All</a></li>
+            </ul>
+        </div>
+    </div>
+    <button class="btn btn-primary child-part6 previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary child-part6 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <br />
     @Html.Partial("_templateExtraDecisions")
 </div>

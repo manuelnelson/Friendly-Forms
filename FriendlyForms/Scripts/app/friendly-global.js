@@ -171,7 +171,8 @@ Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
     $('.viewOutput').show();
 };
 Friendly.AddDecision = function (caller) {
-    if (!$('#decisions').valid()) {
+    var formName = 'decisions';
+    if (!$('#' + formName).valid()) {
         return false;
     }
     saveExtraDecisions();
@@ -180,21 +181,22 @@ Friendly.AddDecision = function (caller) {
     else if (caller != null) {
         Friendly.childNdx--;
     }
-    var model = getDecisionModel();
+    var model = Friendly.GetFormInput(formName);
+    model.ChildId = $('#childId').val().trim();
     //check if we need to move to next form
     if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm('decisions', 'responsibility', model);
+        Friendly.SubmitForm(formName, 'responsibility', model);
         return false;
     }
     //check if we need to move to previous form
     if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm('decisions', 'information', model);
+        Friendly.SubmitForm(formName, 'information', model);
         return false;
     }
 
     //save current information
     $.ajax({
-        url: '/api/Decisions/?format=json',
+        url: '/api/'+ formName + '/?format=json',
         type: 'POST',
         data: model,
         success: function () {
@@ -455,6 +457,7 @@ $(document).ready(function () {
                 $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
                 $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
                 $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
                 $('.extra-decision-item').remove();
                 Friendly.childNdx++;
                 if (Friendly.childNdx === Friendly.children.length) {
