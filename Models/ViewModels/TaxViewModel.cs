@@ -10,7 +10,7 @@ namespace Models.ViewModels
         [Required]
         public int Taxes { get; set; }
         [Display(Name = "Tax Description")]
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string TaxDescription { get; set; }
 
         public IFormEntity ConvertToEntity()

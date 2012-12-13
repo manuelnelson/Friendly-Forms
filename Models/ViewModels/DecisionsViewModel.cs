@@ -22,7 +22,7 @@ namespace Models.ViewModels
         public int ExtraCurricular { get; set; }
 
         [Display(Name = "Resolve")]
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string BothResolve { get; set; }
         
         public IFormEntity ConvertToEntity()

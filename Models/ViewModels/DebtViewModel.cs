@@ -10,7 +10,7 @@ namespace Models.ViewModels
         [Required]
         [Display(Name = "Marital Debt")]
         public int MaritalDebt { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Debt Division")]
         public string DebtDivision { get; set; }
 

@@ -22,7 +22,7 @@ namespace Models.ViewModels
         [Display(Name = "Mother percentage")]
         public double MotherPercentage { get; set; }
 
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Father costs")]
         public string OtherDetails { get; set; }
 

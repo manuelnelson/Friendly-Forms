@@ -71,7 +71,7 @@ namespace Models.ViewModels
         public string Fringe { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public string Other { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Other Details")]
         public string OtherDetails { get; set; }
 

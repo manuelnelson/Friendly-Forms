@@ -14,7 +14,7 @@ namespace Models.ViewModels
         [Display(Name = "Decision Maker")]
         public int DecisionMaker { get; set; }
         [Required]
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#&_\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_\% are allowed.")]
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string Description { get; set; }
 
         public List<ExtraDecisions> ExtraDecisions{ get; set; }
