@@ -1,4 +1,5 @@
-﻿@model FriendlyForms.Models.StarterViewModel
+﻿@using FriendlyForms.Authentication
+@model FriendlyForms.Models.StarterViewModel
 @{
     ViewBag.Title = "Starter";
 }
@@ -20,11 +21,11 @@
         }
         @if (Model.StarterFormsCompleted.Children)
         {
-            <li class="nav-item" id="childrenNav"><a data-form="children" href="#"><i class="@itemDone"></i>Children</a></li>
+            <li class="nav-item" id="childNav"><a data-form="child" href="#"><i class="@itemDone"></i>Children</a></li>
         }
         else
         {
-            <li class="nav-item" id="childrenNav"><a data-form="children" href="#"><i class="@itemlock"></i>Children</a></li>
+            <li class="nav-item" id="childNav"><a data-form="child" href="#"><i class="@itemlock"></i>Children</a></li>
         }
     </ul>
 }
@@ -34,6 +35,8 @@
         <a data-form="asdfa" href="#" class="current">Starter</a>
     </div>
 }
+<input type="hidden" id="user-id" value="@User.FriendlyIdentity().UserId" /> 
+
 @Html.Partial("_Court", Model.CourtViewModel)
 @Html.Partial("_Participants", Model.ParticipantViewModel)
 @Html.Partial("_Children", Model.ChildAllViewModel)

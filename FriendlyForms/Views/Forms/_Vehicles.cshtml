@@ -1,6 +1,6 @@
 ﻿@using Models.ViewModels
 @model FriendlyForms.Models.VehicleAllViewModel
-<div class="form-vertical wrapper hide" id="vehiclesWrapper">
+<div class="form-vertical wrapper hide" id="vehicleWrapper">
     <div class="row-fluid">
         <div class="span12">
             <div class="widget-box">
@@ -20,7 +20,7 @@
                     }
                     @if (Model.VehicleFormViewModel.VehiclesInvolved == (int) YesNo.Yes)
                     {
-                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicles"}))
+                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicle"}))
                         {
                             <div class="vehicle-info">
                                 <label class="informative">
@@ -85,7 +85,7 @@
                     }
                     else
                     {
-                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicles"}))
+                        using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicle"}))
                         {
 
                             <div class="vehicle-info hide">

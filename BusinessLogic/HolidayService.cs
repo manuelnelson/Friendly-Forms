@@ -18,12 +18,11 @@ namespace BusinessLogic
         /// </summary>
         /// <param name="childId"></param>
         /// <returns></returns>
-        public HolidayViewModel GetByChildId(int childId)
+        public Holiday GetByChildId(int childId)
         {
             try
             {
-                var holiday = FormRepository.GetByChildId(childId);
-                return (HolidayViewModel) (holiday == null ? new HolidayViewModel() : holiday.ConvertToModel());
+                return FormRepository.GetByChildId(childId);
             }
             catch (Exception ex)
             {

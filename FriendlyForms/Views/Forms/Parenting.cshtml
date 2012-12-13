@@ -74,6 +74,7 @@
         <a data-form="asdfa" href="#" class="current">Parenting</a>
     </div>
 }
+<input type="hidden" id="user-id" value="@User.FriendlyIdentity().UserId" /> 
 @Html.Partial("_Privacy", Model.PrivacyViewModel)
 @Html.Partial("_Information", Model.InformationViewModel)
 @Html.Partial("_Decisions", Model.AllDecisionsViewModel)

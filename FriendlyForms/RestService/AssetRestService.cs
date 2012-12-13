@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
@@ -14,7 +10,7 @@ namespace FriendlyForms.RestService
 {
         //will name it to asset/ eventually, but doing this to appease my previous stupidity
         [DataContract]
-        [Route("/assets/")]
+        [Route("/asset/")]
         public class ReqAsset
         {
             [DataMember]

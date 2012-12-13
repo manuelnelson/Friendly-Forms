@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Models;
+﻿using System.Collections.Generic;
 using Models;
 using Models.ViewModels;
 
@@ -7,6 +7,6 @@ namespace BusinessLogic.Contracts
     public interface IExtraDecisionsService
     {
         ExtraDecisions AddOrUpdate(ExtraDecisionsViewModel model);
-        ExtraDecisionsViewModel GetByChildId(int childId);
+        List<ExtraDecisions> GetByChildId(int childId);
     }
 }

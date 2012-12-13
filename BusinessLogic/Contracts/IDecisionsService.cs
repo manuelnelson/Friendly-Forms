@@ -7,6 +7,6 @@ namespace BusinessLogic.Contracts
     public interface IDecisionsService : IFormService<IDecisionRepository,Decisions>
     {
         void AddOrUpdate(DecisionsViewModel model);
-        DecisionsViewModel GetByChildId(int childId);
+        Decisions GetByChildId(int childId);
     }
 }

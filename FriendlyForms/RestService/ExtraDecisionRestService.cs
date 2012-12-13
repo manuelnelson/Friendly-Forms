@@ -44,7 +44,7 @@ namespace FriendlyForms.RestService
 
         public object Get(ReqExtraDecisions request)
         {            
-            var extraDecisions = ExtraDecisionsService.GetByChildId(request.ChildId).ExtraDecisions;
+            var extraDecisions = ExtraDecisionsService.GetByChildId(request.ChildId);
             return extraDecisions;
         }
 

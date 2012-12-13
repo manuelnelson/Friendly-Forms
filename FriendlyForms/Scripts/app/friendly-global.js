@@ -55,7 +55,6 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
     if (typeof model === 'undefined') {
         model = Friendly.GetFormInput(formName);
     }
-    model.UserId = $('#user-id').val();
     var formSelector = '#' + formName;        
     if ($(formSelector).valid()) {
         $.ajax({
@@ -86,7 +85,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     var formUrl = formName.substring(0, formName.indexOf("Other"));
     if ($(formSelector).valid()) {
         $.ajax({
-            url: '/Forms/' + formUrl + '/',
+            url: '/api/' + formUrl + '/?format=json',            
             type: 'POST',
             data: model,
             success: function () {
@@ -124,6 +123,7 @@ Friendly.NextForm = function (nextForm, prevIcon) {
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
+    Friendly.EndLoading();
 };
 Friendly.GetFormInput = function (formName) {
     var model = {};
@@ -133,6 +133,7 @@ Friendly.GetFormInput = function (formName) {
         }
         model[field.name] = field.value;
     });
+    model.UserId = $('#user-id').val();
     return model;
 };
 Friendly.ClearForm = function (formName) {
@@ -193,7 +194,7 @@ Friendly.AddDecision = function (caller) {
 
     //save current information
     $.ajax({
-        url: '/Forms/Decisions/',
+        url: '/api/Decisions/?format=json',
         type: 'POST',
         data: model,
         success: function () {
@@ -351,6 +352,7 @@ $(document).ready(function () {
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form
+        Friendly.StartLoading();
         var currentFormName = $('ul .active').children(':first-child').attr('data-form');
         var nextForm = $(this).children(':first-child').attr('data-form');
         var isGeneric = isGenericForm(currentFormName, nextForm);
@@ -358,7 +360,7 @@ $(document).ready(function () {
             //go ahead and save
             var model = Friendly.GetFormInput(currentFormName, nextForm);
             $.ajax({
-                url: '/Forms/' + currentFormName + '/',
+                url: '/api/' + currentFormName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -371,17 +373,18 @@ $(document).ready(function () {
             });
         } else if (isGeneric) {
             Friendly.NextForm(nextForm, Friendly.properties.iconError);
+            Friendly.EndLoading();
         }
     });
     function isGenericForm(formName, nextForm) {
-        var genericForms = ['vehicles', 'children', 'decisions', 'holiday'];
+        var genericForms = ['vehicle', 'children', 'decisions', 'holiday'];
         if (genericForms.indexOf(formName) >= 0) {
             switch (formName) {
-                case 'vehicles':
+                case 'vehicle':
                     if ($('#vehicleForm').valid()) {
                         var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
                         $.ajax({
-                            url: '/Forms/VehicleForm/',
+                            url: '/api/VehicleForm?format=json',
                             type: 'POST',
                             data: vehicleFormModel,
                             success: function () {
@@ -397,7 +400,7 @@ $(document).ready(function () {
                     if ($('#childForm').valid()) {
                         var childFormModel = Friendly.GetFormInput('childForm');
                         $.ajax({
-                            url: '/Forms/ChildForm/',
+                            url: '/api/ChildForm?format=json',
                             type: 'POST',
                             data: childFormModel,
                             success: function () {
@@ -430,6 +433,7 @@ $(document).ready(function () {
                     } else {
                         Friendly.NextForm(nextForm, Friendly.properties.iconError);
                     }
+                    Friendly.EndLoading();
                     break;
             }
             return false;
@@ -439,7 +443,7 @@ $(document).ready(function () {
     }
     function checkChildDecision(child, nextForm) {
         $.ajax({
-            url: '/Forms/GetChildDecision/' + child.Id,
+            url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
             type: 'GET',
             success: function (data) {
                 $('#childName').text(child.Name);
@@ -473,7 +477,7 @@ $(document).ready(function () {
     }
     function checkChildHoliday(child, nextForm) {
         $.ajax({
-            url: '/Forms/GetChildHoliday/' + child.Id,
+            url: '/api/Holiday/' + child.Id + '?format=json',
             type: 'GET',
             success: function (data) {
                 setChildHolidayForm(data, child);

@@ -38,12 +38,11 @@ namespace BusinessLogic
             }
         }
 
-        public DecisionsViewModel GetByChildId(int childId)
+        public Decisions GetByChildId(int childId)
         {
             try
             {
-                var decisions = FormRepository.GetByChildId(childId);
-                return decisions == null ? new DecisionsViewModel() : decisions.ConvertToModel() as DecisionsViewModel;
+                return FormRepository.GetByChildId(childId);
             }
             catch (Exception ex)
             {

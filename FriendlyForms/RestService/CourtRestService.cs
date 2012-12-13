@@ -13,7 +13,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Court/")]
+    [Route("/Court/","POST")]
     public class ReqCourt
     {
         [DataMember]

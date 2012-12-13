@@ -21,7 +21,7 @@
 
         //check if we need to move to next form
         if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('participant', 'children');
+            Friendly.SubmitForm('participant', 'child');
         }
         //check if we need to move to previous form
         if ($(this).hasClass('previous')) {
@@ -137,12 +137,12 @@
                     var model = Friendly.GetFormInput('child');
                     model.ChildFormId = data.ChildForm.Id;
                     $.ajax({
-                        url: '/api/Children?format=json',
+                        url: '/api/Child?format=json',
                         type: 'POST',
                         data: model,
-                        success: function (data) {
+                        success: function (child) {
                             //Add child to list
-                            var result = $("#friendly-child-template").tmpl(data);
+                            var result = $("#friendly-child-template").tmpl(child.Child);
                             $('.child-table').show();
                             $('.child-table tbody').append(result);
                             Friendly.EndLoading();

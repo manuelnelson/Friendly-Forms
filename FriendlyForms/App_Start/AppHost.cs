@@ -34,7 +34,7 @@ namespace FriendlyForms.App_Start
 	public class AppHost : AppHostBase
 	{		
 		public AppHost() //Tell ServiceStack the name and where to find your web services
-			: base("Split Solution Api", typeof(RestService.AssetRestService).Assembly) { }
+			: base("Split Solution Api", typeof(RestService.CourtRestService).Assembly) { }
 
 		public override void Configure(Funq.Container container)
 		{

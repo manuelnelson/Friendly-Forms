@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -36,12 +37,28 @@ namespace FriendlyForms.RestService
     public class RespDecisions : IHasResponseStatus
     {
         [DataMember]
+        public Decisions Decisions { get; set; }
+        [DataMember]
+        public List<ExtraDecisions> ExtraDecisions { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
     public class DecisionsRestService : Service
     {
         public IDecisionsService DecisionsService { get; set; }
+        public IExtraDecisionsService ExtraDecisionsService { get; set; }
+
+        public object Get(ReqDecisions request)
+        {
+            var decision = DecisionsService.GetByChildId(request.ChildId);
+            var extraDecisions = ExtraDecisionsService.GetByChildId(request.ChildId);
+            return new RespDecisions()
+                {
+                    Decisions     = decision,
+                    ExtraDecisions = extraDecisions
+                };
+        }
 
         public object Post(ReqDecisions request)
         {

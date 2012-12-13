@@ -1,0 +1,76 @@
+﻿@import "variables.less"; 
+@import "mixins.less";  
+
+body {
+	background-color: @bodyBackground;       
+}
+
+#header {
+    box-shadow: 0 1px 0 darken(@brown, 5%);
+	#gradient > .vertical(@headerHighlightColor, @headerBackgroundColor);
+    border-bottom: 1px solid lighten(@headerHighlightColor, 5%);      
+}
+
+#user-nav .btn-inverse { 
+    background-color: @navButtonColor;
+	#gradient > .vertical(@navButtonColorHighlight, @navButtonColor);
+	border-top-color: @navButtonColor; 
+}
+#sidebar > ul {
+	border-top: 1px solid @greenDark;
+	border-bottom: 1px solid @green;
+}
+#sidebar > ul > li {
+	border-top: 1px solid @green;
+	border-bottom: 1px solid @greenDark;
+}
+#sidebar > ul > li.active {
+	#gradient > .vertical(@greenDarkest, @greenDarker);
+}
+
+#sidebar > ul > li.open.submenu > a {
+	border-bottom: 1px solid @greenDark;
+}
+#sidebar > ul > li.open.active.submenu > a {
+	border-bottom: 1px solid @greenDark;
+}
+#sidebar > ul > li > a > .label {
+	background-color: @greenDarkest;
+} 
+#sidebar > ul > li > a:hover {
+	background-color: @greenLight;
+}
+#sidebar > ul ul {
+	border-top: 1px solid @green;
+	background-color: @greenDarker; 
+}
+#sidebar > ul ul li a {
+	border-top: 1px solid #385015;
+	border-bottom: 1px solid #314713;
+}
+#sidebar > ul ul li a:hover, #sidebar > ul ul li.active a {
+	color: #CCCCCC;
+	background-color: #385015;
+}
+
+.dropdown-menu li a:hover, .dropdown-menu .active a, .dropdown-menu .active a:hover {
+	background-color: #532424;
+}
+
+@media (max-width: 480px) {
+	#sidebar > a {
+	#gradient > .vertical(@greenDarker, @greenDarkest);
+		border-bottom: 1px solid #301616;
+	}
+	#sidebar > ul {
+		background-color: @greenDark;
+	}
+}
+@media (min-width: 481px) and (max-width: 767px) {
+	#sidebar > ul ul:before {
+		border-right: 7px solid rgba(0, 0, 0, 0.2);
+	}
+	#sidebar > ul ul:after {
+		border-right: 6px solid #13152A;
+    }
+}

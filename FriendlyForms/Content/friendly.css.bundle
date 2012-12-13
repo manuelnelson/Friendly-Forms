@@ -29,5 +29,5 @@ less/utilities.less
 less/datepicker.less
 less/responsive.less
 unicorn.main.css
-unicorn.red.css
+less/friendly-color.less
 uniform.css     

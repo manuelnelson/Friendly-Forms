@@ -9,7 +9,8 @@
             MoneyOwed: $('#MoneyOwed').val().replace(",", ""),
             MortgageOwner: $('#MortgageOwner').val(),
             RetailValue: $('#RetailValue').val().replace(",", ""),
-            Divide: $('#Divide').val()
+            Divide: $('#Divide').val(),
+            UserId: $('#user-id').val()
         };
         Friendly.SubmitForm('house', 'property', model);
     });
@@ -24,7 +25,7 @@
 
     //Property Form
     $('.domestic-part2').click(function () {
-        Friendly.SubmitForm('property', 'vehicles');
+        Friendly.SubmitForm('property', 'vehicle');
     });
     $('input[name=RealEstate]').change(function () {
         $('#RealEstateDescription').val('');
@@ -53,7 +54,7 @@
         }
     });
     $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
-        Friendly.ClearForm('vehicles');
+        Friendly.ClearForm('vehicle');
         if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
             $('.vehicle-info').show();
         } else {
@@ -61,8 +62,9 @@
         }
     });
     $('#addVehicle').click(function () {
-        Friendly.StartLoading();        
-        if ($('#vehicles').valid()) {
+        Friendly.StartLoading();
+        var formName = 'vehicle';
+        if ($('#' + formName).valid()) {
             var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
             $.ajax({
                 url: '/api/VehicleForm?format=json',
@@ -70,16 +72,16 @@
                 data: vehicleFormModel,
                 success: function (data) {
                     //get values
-                    var model = Friendly.GetFormInput('vehicles');
+                    var model = Friendly.GetFormInput(formName);
                     model.VehicleFormId = data.VehicleForm.Id;
                     $.ajax({
-                        url: '/api/Vehicles?format=json',
+                        url: '/api/' + formName + '?format=json',
                         type: 'POST',
                         data: model,
-                        success: function (data) {
+                        success: function (vehicle) {
                             //Add vehicle to list
                             $('.vehicle-table').show();
-                            var result = $("#friendly-vehicle-template").tmpl(data.Vehicle);
+                            var result = $("#friendly-vehicle-template").tmpl(vehicle.Vehicle);
                             $('.vehicle-table tbody').append(result);
                             Friendly.ClearForm('vehicles');
                             Friendly.EndLoading();
@@ -101,7 +103,12 @@
 
     $('.domestic-part3').click(function () {
         //get values
-        Friendly.NextForm('debt');
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        if ($('#vehicleForm').valid()) {
+            Friendly.NextForm('debt', Friendly.properties.iconSuccess);
+        } else {
+            Friendly.NextForm('debt', Friendly.properties.iconError);
+        }
         Friendly.EndLoading();
         return false;
     });
@@ -111,7 +118,8 @@
         //get values
         var model = {
             DebtDivision: $('#DebtDivision').val(),
-            MaritalDebt: $('#MaritalDebt:checked').val()
+            MaritalDebt: $('#MaritalDebt:checked').val(),
+            UserId: $('#user-id').val()
         };
         //check if we need to move to next form
         Friendly.SubmitForm('debt', 'asset', model);
@@ -158,7 +166,7 @@
 
     //Health Insurance
     $('.domestic-part6').click(function () {
-        Friendly.SubmitForm('healthInsurance', 'spousalSupport');
+        Friendly.SubmitForm('healthInsurance', 'spousal');
     });
     $('input[name=Health]').change(function () {
         $('#HealthDescription').val('');
@@ -171,7 +179,7 @@
 
     //Spousal Support
     $('.domestic-part7').click(function () {
-        Friendly.SubmitForm('spousalSupport', 'tax');
+        Friendly.SubmitForm('spousal', 'tax');
     });
     $('input[name=Spousal]').change(function () {
         $('#SpousalDescription').val('');
@@ -194,7 +202,7 @@
                 type: 'POST',
                 data: model,
                 success: function () {
-                    var forms = ["maritalHouse", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousalSupport", "tax"];
+                    var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
                     var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
                     Friendly.ValidateForms(forms, properNames, '.domestic-part8');
                     Friendly.EndLoading();

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -13,7 +11,9 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Holiday/")]
+
+    [Route("/Holiday/", Verbs = "POST")]
+    [Route("/Holiday/{ChildId}", Verbs = "GET")]
     public class ReqHoliday
     {
         [DataMember]
@@ -128,12 +128,28 @@ namespace FriendlyForms.RestService
     public class RespHoliday : IHasResponseStatus
     {
         [DataMember]
+        public Holiday Holidays { get; set; }
+        [DataMember]
+        public List<ExtraHoliday> ExtraHolidays { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
     public class HolidayRestService : Service
     {
         public IHolidayService HolidayService { get; set; }
+        public IExtraHolidayService ExtraHolidayService{ get; set; }
+
+        public object Get(ReqHoliday request)
+        {
+            var holiday = HolidayService.GetByChildId(request.ChildId);
+            var extraHoliday = ExtraHolidayService.GetByChildId(request.ChildId);
+            return new RespHoliday()
+            {
+                Holidays = holiday,
+                ExtraHolidays = extraHoliday
+            };
+        }
 
         public object Post(ReqHoliday request)
         {

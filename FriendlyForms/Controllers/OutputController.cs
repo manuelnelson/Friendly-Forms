@@ -115,25 +115,25 @@ namespace FriendlyForms.Controllers
             var extraHolidays = new List<ExtraHoliday>();
             if (children.Children.Any())
             {
-                decisions.AddRange(children.Children.Select(child => (Decisions)_decisionsService.GetByChildId(child.Id).ConvertToEntity()));
+                decisions.AddRange(children.Children.Select(child => _decisionsService.GetByChildId(child.Id)));
             }
             if (children.Children.Any())
             {
                 foreach (var child in children.Children)
                 {
-                    var tempDecisions = _extraDecisionsService.GetByChildId(child.Id).ExtraDecisions;
+                    var tempDecisions = _extraDecisionsService.GetByChildId(child.Id);
                     extraDecisions.AddRange(tempDecisions);
                 }
             }
             if (children.Children.Any())
             {
-                holidays.AddRange(children.Children.Select(child => (Holiday)_holidayService.GetByChildId(child.Id).ConvertToEntity()));
+                holidays.AddRange(children.Children.Select(child => _holidayService.GetByChildId(child.Id)));
             }
             if (children.Children.Any())
             {
                 foreach (var child in children.Children)
                 {
-                    var tempHolidays = _extraHolidayService.GetByChildId(child.Id).ExtraHolidays;
+                    var tempHolidays = _extraHolidayService.GetByChildId(child.Id);
                     extraHolidays.AddRange(tempHolidays);
                 }
             }

@@ -47,7 +47,7 @@ body {
 	background-image: -moz-linear-gradient(top, #431B1B 0%, #532424 100%);
 	background-image: -ms-linear-gradient(top, #431B1B 0%, #532424 100%);
 	background-image: -o-linear-gradient(top, #431B1B 0%, #532424 100%);
-	background-image: linear-gradient(top, #431B1B 0%, #532424 100%);
+	background-image: linear-gradient(top, #431B1B 0%, #532424 100%);   
 }
 
 #sidebar > ul > li.open.submenu > a {
@@ -87,7 +87,7 @@ body {
         background-image: -ms-linear-gradient(top, #532424 0%, #431B1B 100%);
         background-image: -o-linear-gradient(top, #532424 0%, #431B1B 100%);
         background-image: linear-gradient(top, #532424 0%, #431B1B 100%);
-		border-bottom: 1px solid #301616;
+		border-bottom: 1px solid #1E2B0B;
 	}
 	#sidebar > ul {
 		background-color: #6F2D2D;

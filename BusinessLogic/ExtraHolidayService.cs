@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BusinessLogic.Contracts;
 using DataLayerContext;
@@ -14,16 +15,12 @@ namespace BusinessLogic
         {
         }
 
-        public ExtraHolidayViewModel GetByChildId(int childId)
+        public List<ExtraHoliday> GetByChildId(int childId)
         {
             try
             {
-                var extraHoliday = FormRepository.GetFiltered(e=>e.ChildId.Equals(childId));
-                var extraModel = new ExtraHolidayViewModel()
-                    {
-                        ExtraHolidays = extraHoliday.ToList()
-                    };
-                return extraModel;
+                var enumerable = FormRepository.GetFiltered(e=>e.ChildId.Equals(childId));
+                return enumerable == null ? new List<ExtraHoliday>() : enumerable.ToList();
             }
             catch (Exception ex)
             {

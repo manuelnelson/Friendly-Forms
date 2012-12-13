@@ -42,16 +42,12 @@ namespace BusinessLogic
             }
         }
 
-        public ExtraDecisionsViewModel GetByChildId(int childId)
+        public List<ExtraDecisions> GetByChildId(int childId)
         {
             try
             {
                 var enumerable = _extraDecisionRepository.GetFiltered(e => e.ChildId.Equals(childId));
-                var listExtras = enumerable == null ? new List<ExtraDecisions>() : enumerable.ToList();
-                return new ExtraDecisionsViewModel
-                    {
-                        ExtraDecisions = listExtras
-                    };
+                return enumerable == null ? new List<ExtraDecisions>() : enumerable.ToList();
             }
             catch (Exception ex)
             {

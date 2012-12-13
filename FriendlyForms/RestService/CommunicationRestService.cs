@@ -9,7 +9,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Support/")]
+    [Route("/Communication/")]
     public class ReqCommunication
     {
         [DataMember]

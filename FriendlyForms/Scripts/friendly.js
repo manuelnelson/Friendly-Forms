@@ -14131,14 +14131,10 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
     if (typeof model === 'undefined') {
         model = Friendly.GetFormInput(formName);
     }
-    model.UserId = $('#user-id').val();
-    var formSelector = '#' + formName;
-    var url = '/Forms/' + formName + '/';
-    if (formName === 'assets')
-        url = '/api/' + formName + '?format=json';
+    var formSelector = '#' + formName;        
     if ($(formSelector).valid()) {
         $.ajax({
-            url: url,
+            url: '/api/' + formName + '?format=json',
             type: 'POST',
             data: model,
             success: function () {
@@ -14165,7 +14161,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     var formUrl = formName.substring(0, formName.indexOf("Other"));
     if ($(formSelector).valid()) {
         $.ajax({
-            url: '/Forms/' + formUrl + '/',
+            url: '/api/' + formUrl + '/?format=json',            
             type: 'POST',
             data: model,
             success: function () {
@@ -14203,6 +14199,7 @@ Friendly.NextForm = function (nextForm, prevIcon) {
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
+    Friendly.EndLoading();
 };
 Friendly.GetFormInput = function (formName) {
     var model = {};
@@ -14212,6 +14209,7 @@ Friendly.GetFormInput = function (formName) {
         }
         model[field.name] = field.value;
     });
+    model.UserId = $('#user-id').val();
     return model;
 };
 Friendly.ClearForm = function (formName) {
@@ -14272,7 +14270,7 @@ Friendly.AddDecision = function (caller) {
 
     //save current information
     $.ajax({
-        url: '/Forms/Decisions/',
+        url: '/api/Decisions/?format=json',
         type: 'POST',
         data: model,
         success: function () {
@@ -14430,6 +14428,7 @@ $(document).ready(function () {
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form
+        Friendly.StartLoading();
         var currentFormName = $('ul .active').children(':first-child').attr('data-form');
         var nextForm = $(this).children(':first-child').attr('data-form');
         var isGeneric = isGenericForm(currentFormName, nextForm);
@@ -14437,7 +14436,7 @@ $(document).ready(function () {
             //go ahead and save
             var model = Friendly.GetFormInput(currentFormName, nextForm);
             $.ajax({
-                url: '/Forms/' + currentFormName + '/',
+                url: '/api/' + currentFormName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -14450,17 +14449,18 @@ $(document).ready(function () {
             });
         } else if (isGeneric) {
             Friendly.NextForm(nextForm, Friendly.properties.iconError);
+            Friendly.EndLoading();
         }
     });
     function isGenericForm(formName, nextForm) {
-        var genericForms = ['vehicles', 'children', 'decisions', 'holiday'];
+        var genericForms = ['vehicle', 'children', 'decisions', 'holiday'];
         if (genericForms.indexOf(formName) >= 0) {
             switch (formName) {
-                case 'vehicles':
+                case 'vehicle':
                     if ($('#vehicleForm').valid()) {
                         var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
                         $.ajax({
-                            url: '/Forms/VehicleForm/',
+                            url: '/api/VehicleForm?format=json',
                             type: 'POST',
                             data: vehicleFormModel,
                             success: function () {
@@ -14476,7 +14476,7 @@ $(document).ready(function () {
                     if ($('#childForm').valid()) {
                         var childFormModel = Friendly.GetFormInput('childForm');
                         $.ajax({
-                            url: '/Forms/ChildForm/',
+                            url: '/api/ChildForm?format=json',
                             type: 'POST',
                             data: childFormModel,
                             success: function () {
@@ -14509,6 +14509,7 @@ $(document).ready(function () {
                     } else {
                         Friendly.NextForm(nextForm, Friendly.properties.iconError);
                     }
+                    Friendly.EndLoading();
                     break;
             }
             return false;
@@ -14518,7 +14519,7 @@ $(document).ready(function () {
     }
     function checkChildDecision(child, nextForm) {
         $.ajax({
-            url: '/Forms/GetChildDecision/' + child.Id,
+            url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
             type: 'GET',
             success: function (data) {
                 $('#childName').text(child.Name);
@@ -14552,7 +14553,7 @@ $(document).ready(function () {
     }
     function checkChildHoliday(child, nextForm) {
         $.ajax({
-            url: '/Forms/GetChildHoliday/' + child.Id,
+            url: '/api/Holiday/' + child.Id + '?format=json',
             type: 'GET',
             success: function (data) {
                 setChildHolidayForm(data, child);
@@ -14594,9 +14595,10 @@ $(document).ready(function () {
             MoneyOwed: $('#MoneyOwed').val().replace(",", ""),
             MortgageOwner: $('#MortgageOwner').val(),
             RetailValue: $('#RetailValue').val().replace(",", ""),
-            Divide: $('#Divide').val()
+            Divide: $('#Divide').val(),
+            UserId: $('#user-id').val()
         };
-        Friendly.SubmitForm('maritalHouse', 'property', model);
+        Friendly.SubmitForm('house', 'property', model);
     });
     $('input[name=MaritalHouse]').change(function () {
         $('.marital-info').val('');
@@ -14609,7 +14611,7 @@ $(document).ready(function () {
 
     //Property Form
     $('.domestic-part2').click(function () {
-        Friendly.SubmitForm('property', 'vehicles');
+        Friendly.SubmitForm('property', 'vehicle');
     });
     $('input[name=RealEstate]').change(function () {
         $('#RealEstateDescription').val('');
@@ -14638,7 +14640,7 @@ $(document).ready(function () {
         }
     });
     $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
-        Friendly.ClearForm('vehicles');
+        Friendly.ClearForm('vehicle');
         if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
             $('.vehicle-info').show();
         } else {
@@ -14646,25 +14648,26 @@ $(document).ready(function () {
         }
     });
     $('#addVehicle').click(function () {
-        Friendly.StartLoading();        
-        if ($('#vehicles').valid()) {
+        Friendly.StartLoading();
+        var formName = 'vehicle';
+        if ($('#' + formName).valid()) {
             var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
             $.ajax({
-                url: '/Forms/VehicleForm/',
+                url: '/api/VehicleForm?format=json',
                 type: 'POST',
                 data: vehicleFormModel,
                 success: function (data) {
                     //get values
-                    var model = Friendly.GetFormInput('vehicles');
-                    model.VehicleFormId = data;
+                    var model = Friendly.GetFormInput(formName);
+                    model.VehicleFormId = data.VehicleForm.Id;
                     $.ajax({
-                        url: '/Forms/Vehicles/',
+                        url: '/api/' + formName + '?format=json',
                         type: 'POST',
                         data: model,
                         success: function (vehicle) {
                             //Add vehicle to list
                             $('.vehicle-table').show();
-                            var result = $("#friendly-vehicle-template").tmpl(vehicle);
+                            var result = $("#friendly-vehicle-template").tmpl(vehicle.Vehicle);
                             $('.vehicle-table tbody').append(result);
                             Friendly.ClearForm('vehicles');
                             Friendly.EndLoading();
@@ -14686,7 +14689,12 @@ $(document).ready(function () {
 
     $('.domestic-part3').click(function () {
         //get values
-        Friendly.NextForm('debt');
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        if ($('#vehicleForm').valid()) {
+            Friendly.NextForm('debt', Friendly.properties.iconSuccess);
+        } else {
+            Friendly.NextForm('debt', Friendly.properties.iconError);
+        }
         Friendly.EndLoading();
         return false;
     });
@@ -14696,10 +14704,11 @@ $(document).ready(function () {
         //get values
         var model = {
             DebtDivision: $('#DebtDivision').val(),
-            MaritalDebt: $('#MaritalDebt:checked').val()
+            MaritalDebt: $('#MaritalDebt:checked').val(),
+            UserId: $('#user-id').val()
         };
         //check if we need to move to next form
-        Friendly.SubmitForm('debt', 'assets', model);
+        Friendly.SubmitForm('debt', 'asset', model);
     });
 
     $('input[name=MaritalDebt]').change(function () {
@@ -14713,7 +14722,7 @@ $(document).ready(function () {
     //Asset Form
     $('.domestic-part5').click(function () {
         //check if we need to move to next form
-        Friendly.SubmitForm('assets', 'healthInsurance');
+        Friendly.SubmitForm('asset', 'healthInsurance');
     });
 
     $('input[name=Retirement]').change(function () {
@@ -14743,7 +14752,7 @@ $(document).ready(function () {
 
     //Health Insurance
     $('.domestic-part6').click(function () {
-        Friendly.SubmitForm('healthInsurance', 'spousalSupport');
+        Friendly.SubmitForm('healthInsurance', 'spousal');
     });
     $('input[name=Health]').change(function () {
         $('#HealthDescription').val('');
@@ -14756,7 +14765,7 @@ $(document).ready(function () {
 
     //Spousal Support
     $('.domestic-part7').click(function () {
-        Friendly.SubmitForm('spousalSupport', 'taxes');
+        Friendly.SubmitForm('spousal', 'tax');
     });
     $('input[name=Spousal]').change(function () {
         $('#SpousalDescription').val('');
@@ -14770,17 +14779,17 @@ $(document).ready(function () {
     $('.domestic-part8').click(function () {
         //last form.  Let's try and validate this bi-atch
         Friendly.StartLoading();
-        var formName = 'taxes';
+        var formName = 'tax';
         var model = Friendly.GetFormInput(formName);
         var formSelector = '#' + formName;
         if ($(formSelector).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '/?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
-                    var forms = ["maritalHouse", "property", "vehicleForm", "debt", "assets", "healthInsurance", "spousalSupport", "taxes"];
-                    var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"]
+                    var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
+                    var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
                     Friendly.ValidateForms(forms, properNames, '.domestic-part8');
                     Friendly.EndLoading();
                     return false;
@@ -15249,7 +15258,7 @@ $(document).ready(function () {
 ;$(document).ready(function () {
     //Court Form
     $('#child-part1').click(function () {
-        Friendly.SubmitForm('court', 'participants');
+        Friendly.SubmitForm('court', 'participant');
     });
 
     $('input[name=PlanType]').change(function () {
@@ -15269,11 +15278,11 @@ $(document).ready(function () {
 
         //check if we need to move to next form
         if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('participants', 'children');
+            Friendly.SubmitForm('participant', 'child');
         }
         //check if we need to move to previous form
         if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('participants', 'court');
+            Friendly.SubmitForm('participant', 'court');
         }
     });
 
@@ -15377,20 +15386,20 @@ $(document).ready(function () {
             //get values
             var childFormModel = Friendly.GetFormInput('childForm');
             $.ajax({
-                url: '/Forms/ChildForm/',
+                url: '/api/ChildForm?format=json',
                 type: 'POST',
                 data: childFormModel,
                 success: function (data) {
                     //get values
                     var model = Friendly.GetFormInput('child');
-                    model.ChildFormId = data;
+                    model.ChildFormId = data.ChildForm.Id;
                     $.ajax({
-                        url: '/Forms/Children/',
+                        url: '/api/Child?format=json',
                         type: 'POST',
                         data: model,
-                        success: function (data) {
+                        success: function (child) {
                             //Add child to list
-                            var result = $("#friendly-child-template").tmpl(data);
+                            var result = $("#friendly-child-template").tmpl(child.Child);
                             $('.child-table').show();
                             $('.child-table tbody').append(result);
                             Friendly.EndLoading();
@@ -15444,7 +15453,7 @@ $(document).ready(function () {
         var formSelector = '#' + formName;
         if ($(formSelector).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '/?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -15468,11 +15477,12 @@ $(document).ready(function () {
         var model = {
             ChildId: $('#childId').val().trim(),
             DecisionMaker: $('#ExtraDecisionsViewModel_DecisionMaker:checked').val(),
-            Description: $('#ExtraDecisionsViewModel_Description').val()
+            Description: $('#ExtraDecisionsViewModel_Description').val(),
+            UserId: $('#user-id').val(),
         };
         if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
@@ -15515,8 +15525,9 @@ $(document).ready(function () {
     function copyDecision(childId) {
         saveExtraDecisions(childId);
         var model = getDecisionModel(childId);
+        model.UserId = $('#user-id').val();
         $.ajax({
-            url: '/Forms/Decisions/',
+            url: '/api/Decisions?format=json',
             type: 'POST',
             data: model,
             success: function () {
@@ -15562,6 +15573,7 @@ $(document).ready(function () {
             TransportationCosts: $('#TransportationCosts:checked').val(),
             FatherPercentage: 0,
             MotherPercentage: 0,
+            UserId: $('#user-id').val(),
             OtherDetails: ''
         };
         if (model.TransportationCosts === "3") {
@@ -15667,7 +15679,7 @@ $(document).ready(function () {
         var formSelector = '#' + formName;
         if ($(formSelector).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -15687,20 +15699,21 @@ $(document).ready(function () {
     });
     $('#addHolidays').click(function () {
         Friendly.StartLoading();
-        var formName = 'extraHolidays';
+        var formName = 'extraHoliday';
         var model = {
             ChildId: $('#holidayChildId').val(),
             HolidayFather: $('#ExtraHolidayViewModel_HolidayFather:checked').val(),
             HolidayMother: $('#ExtraHolidayViewModel_HolidayMother:checked').val(),
-            HolidayName: $('#ExtraHolidayViewModel_HolidayName').val()
+            HolidayName: $('#ExtraHolidayViewModel_HolidayName').val(),
+            UserId: $('#user-id').val(),
         };
         if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-extraHolidays-template").tmpl(data);
+                    var result = $("#friendly-extraHolidays-template").tmpl(data.ExtraHoliday);
                     $('#holiday').append(result);
                     $('input[id=ExtraHolidayViewModel_HolidayFather]').removeAttr('checked');
                     $('input[id=ExtraHolidayViewModel_HolidayMother]').removeAttr('checked');
@@ -15845,13 +15858,14 @@ $(document).ready(function () {
     });
     function copyHoliday(childId) {
         saveExtraHolidays(childId);
+        var formName = 'holiday';
         //do rest of the form
-        var model = Friendly.GetFormInput('holiday');
+        var model = Friendly.GetFormInput(formName);
         model.ChildId = childId;
         model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
         model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
         $.ajax({
-            url: '/Forms/Holidays/',
+            url: '/api/' + formName + '?format=json',
             type: 'POST',
             data: model,
             success: function () {
@@ -15867,9 +15881,11 @@ function getDecisionModel(childId) {
         Religion: $('#DecisionsViewModel_Religion:checked').val(),
         ExtraCurricular: $('#DecisionsViewModel_ExtraCurricular:checked').val(),
         ChildId: typeof (childId) === "undefined" ? $('#childId').val() : childId,
+        UserId: $('#user-id').val()
     };
 }
 function saveExtraDecisions(childId) {
+    var formName = 'extraDecisions';
     $.each($('.extra-decision-item'), function (ndx, item) {
         var id = $(item).children('#extra-decision-Id').val();
         var extraModel = {
@@ -15877,15 +15893,16 @@ function saveExtraDecisions(childId) {
             ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
             DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
             Description: $(item).children('#extra-decision-description').text().trim(),
+            UserId: $('#user-id').val()
         };
         //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
         //If it does, copy over the Id
         if (typeof (childId) !== "undefined") {
             $.ajax({
-                url: '/Forms/GetChildDecision/' + childId,
+                url: '/api/' + formName + '/' + childId + '?format=json',
                 type: 'GET',
                 success: function (data) {
-                    $.each(data.ExtraDecisions, function (ndx, item) {
+                    $.each(data, function (ndx, item) {
                         if (item.Description === extraModel.Description) {
                             //We have a match
                             extraModel.Id = item.Id;
@@ -15893,7 +15910,7 @@ function saveExtraDecisions(childId) {
                     });
                     //Now add/update extradecisions
                     $.ajax({
-                        url: '/Forms/ExtraDecisions/',
+                        url: '/api/' + formName + '/?format=json',
                         type: 'POST',
                         data: extraModel,
                         success: function () {
@@ -15907,7 +15924,7 @@ function saveExtraDecisions(childId) {
         }
         //else, just update the extradecisions
         $.ajax({
-            url: '/Forms/ExtraDecisions/',
+            url: '/api/' + formName + '/?format=json',
             type: 'POST',
             data: extraModel,
             success: function () {
@@ -15918,7 +15935,7 @@ function saveExtraDecisions(childId) {
 }
 function getChildDecisions(child) {
     $.ajax({
-        url: '/Forms/GetChildDecision/' + child.Id,
+        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
         type: 'GET',
         success: function (data) {
             $('#childName').text(child.Name);
@@ -15975,7 +15992,7 @@ function loadChildren(form) {
 }
 function getChildHoliday(child) {
     $.ajax({
-        url: '/Forms/GetChildHoliday/' + child.Id,
+        url: '/api/Holiday/' + child.Id + '?format=json',
         type: 'GET',
         success: function (data) {
             setChildHolidayForm(data, child);
@@ -15993,10 +16010,19 @@ function setChildHolidayForm(data, child) {
     Friendly.ClearForm('holiday');
     $('#holidayChildName').text(child.Name);
     $('#holidayChildId').val(child.Id);
-    if (data.Holidays.FridayHoliday)
+    if (data.Holidays.FridayHoliday) {
         $('#HolidayViewModel_FridayHoliday').attr('checked', 'checked');
-    if (data.Holidays.MondayHoliday)
+        $('#HolidayViewModel_FridayHoliday').val('true');
+    } else {
+        $('#HolidayViewModel_FridayHoliday').val('false');
+    }       
+    if (data.Holidays.MondayHoliday) {
         $('#HolidayViewModel_MondayHoliday').attr('checked', 'checked');
+        $('#HolidayViewModel_MondayHoliday').val('true');
+    } else {
+        $('#HolidayViewModel_MondayHoliday').val('false');
+    }
+
     $('#HolidayViewModel_Thanksgiving[value="' + data.Holidays.Thanksgiving + '"]').attr('checked', 'checked');
     $('#HolidayViewModel_ThanksgivingOther').val(data.Holidays.ThanksgivingOther);
     $('#HolidayViewModel_Christmas[value="' + data.Holidays.Christmas + '"]').attr('checked', 'checked');
@@ -16053,6 +16079,7 @@ function setChildHolidayForm(data, child) {
     });
 }
 function saveExtraHolidays(childId) {
+    var formName = 'extraHoliday';
     $.each($('.extra-holiday-item'), function (ndx, item) {
         var id = $(item).children('#extra-holiday-Id').val();
         var extraModel = {
@@ -16061,12 +16088,13 @@ function saveExtraHolidays(childId) {
             HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
             HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
             HolidayName: $(item).children('.extra-holiday-name').text(),
+            UserId: $('#user-id').val()
         };
         //If we are copying, we need to make sure that the extra holiday doesn't already exist for the current child
         //If it does, copy over the Id
         if (typeof (childId) !== "undefined") {
             $.ajax({
-                url: '/Forms/GetChildHoliday/' + childId,
+                url: '/api/' + formName + '/' + childId + "?format=json",
                 type: 'GET',
                 success: function (data) {
                     $.each(data.ExtraHolidays, function (ndx, item) {
@@ -16077,7 +16105,7 @@ function saveExtraHolidays(childId) {
                     });
                     //Now add/update extradecisions
                     $.ajax({
-                        url: '/Forms/ExtraHolidays/',
+                        url: '/api/' + formName + "?format=json",
                         type: 'POST',
                         data: extraModel,
                         success: function () {
@@ -16090,7 +16118,7 @@ function saveExtraHolidays(childId) {
             return;
         }
         $.ajax({
-            url: '/Forms/ExtraHolidays/',
+            url: '/api/' + formName + "?format=json",
             type: 'POST',
             data: extraModel,
             success: function () {
@@ -16100,9 +16128,10 @@ function saveExtraHolidays(childId) {
     });
 }
 function AddHoliday(caller) {
-    if ($('#holiday').valid()) {
+    var formName = 'holiday';
+    if ($('#' + formName).valid()) {
         saveExtraHolidays();
-        var model = Friendly.GetFormInput('holiday');
+        var model = Friendly.GetFormInput(formName);
         model.ChildId = $('#holidayChildId').val();
         if (caller != null && $(caller).hasClass('next'))
             Friendly.childNdx++;
@@ -16114,7 +16143,7 @@ function AddHoliday(caller) {
             //Submit form, do final check. 
             Friendly.StartLoading();
             $.ajax({
-                url: '/Forms/Holidays/',
+                url: '/api/' + formName + "?format=json",
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -16134,11 +16163,11 @@ function AddHoliday(caller) {
         Friendly.StartLoading();
         //save current information
         $.ajax({
-            url: '/Forms/Holidays/',
+            url: '/api/' + formName + "?format=json",
             type: 'POST',
             data: model,
             success: function () {
-                $('#holiday')[0].reset();
+                $('#' + formName)[0].reset();
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 var nextChild = Friendly.children[Friendly.childNdx];
                 getChildHoliday(nextChild);

@@ -23,11 +23,11 @@
                 }
                 @if (Model.FormsCompleted.VehicleCompleted)
                 {
-                    <li class="nav-item" id="vehiclesNav"><a data-form="vehicles" href="#"><i class="@itemDone"></i>Vehicles</a></li>
+                    <li class="nav-item" id="vehicleNav"><a data-form="vehicle" href="#"><i class="@itemDone"></i>Vehicles</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="vehiclesNav"><a data-form="vehicles" href="#"><i class="@itemlock"></i>Vehicles</a></li>
+                    <li class="nav-item" id="vehicleNav"><a data-form="vehicle" href="#"><i class="@itemlock"></i>Vehicles</a></li>
                 }
                 @if (Model.FormsCompleted.DebtCompleted)
                 {
@@ -43,7 +43,7 @@
                 }
                 else
                 {
-                    <li class="nav-item" id="assesNav"><a data-form="asset" href="#"><i class="@itemlock"></i>Assets</a></li>
+                    <li class="nav-item" id="assetNav"><a data-form="asset" href="#"><i class="@itemlock"></i>Assets</a></li>
                 }
                 @if (Model.FormsCompleted.HealthCompleted)
                 {
@@ -55,11 +55,11 @@
                 }
                 @if (Model.FormsCompleted.SpousalCompleted)
                 {
-                    <li class="nav-item" id="spousalSupportNav"><a data-form="spousalSupport" href="#"><i class="@itemDone"></i>Spousal Support</a></li>
+                    <li class="nav-item" id="spousalNav"><a data-form="spousal" href="#"><i class="@itemDone"></i>Spousal Support</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="spousalSupportNav"><a data-form="spousalSupport" href="#"><i class="@itemlock"></i>Spousal Support</a></li>
+                    <li class="nav-item" id="spousalNav"><a data-form="spousal" href="#"><i class="@itemlock"></i>Spousal Support</a></li>
                 }
                 @if (Model.FormsCompleted.TaxCompleted)
                 {

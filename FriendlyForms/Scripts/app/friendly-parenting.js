@@ -24,7 +24,7 @@
         var formSelector = '#' + formName;
         if ($(formSelector).valid()) {
             $.ajax({
-                url: '/Forms/' + formName + '/',
+                url: '/api/' + formName + '/?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {
@@ -48,7 +48,8 @@
         var model = {
             ChildId: $('#childId').val().trim(),
             DecisionMaker: $('#ExtraDecisionsViewModel_DecisionMaker:checked').val(),
-            Description: $('#ExtraDecisionsViewModel_Description').val()
+            Description: $('#ExtraDecisionsViewModel_Description').val(),
+            UserId: $('#user-id').val(),
         };
         if ($('#' + formName).valid()) {
             $.ajax({
@@ -95,6 +96,7 @@
     function copyDecision(childId) {
         saveExtraDecisions(childId);
         var model = getDecisionModel(childId);
+        model.UserId = $('#user-id').val();
         $.ajax({
             url: '/api/Decisions?format=json',
             type: 'POST',
@@ -142,6 +144,7 @@
             TransportationCosts: $('#TransportationCosts:checked').val(),
             FatherPercentage: 0,
             MotherPercentage: 0,
+            UserId: $('#user-id').val(),
             OtherDetails: ''
         };
         if (model.TransportationCosts === "3") {
@@ -272,7 +275,8 @@
             ChildId: $('#holidayChildId').val(),
             HolidayFather: $('#ExtraHolidayViewModel_HolidayFather:checked').val(),
             HolidayMother: $('#ExtraHolidayViewModel_HolidayMother:checked').val(),
-            HolidayName: $('#ExtraHolidayViewModel_HolidayName').val()
+            HolidayName: $('#ExtraHolidayViewModel_HolidayName').val(),
+            UserId: $('#user-id').val(),
         };
         if ($('#' + formName).valid()) {
             $.ajax({
@@ -280,7 +284,7 @@
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-extraHolidays-template").tmpl(data);
+                    var result = $("#friendly-extraHolidays-template").tmpl(data.ExtraHoliday);
                     $('#holiday').append(result);
                     $('input[id=ExtraHolidayViewModel_HolidayFather]').removeAttr('checked');
                     $('input[id=ExtraHolidayViewModel_HolidayMother]').removeAttr('checked');
@@ -448,6 +452,7 @@ function getDecisionModel(childId) {
         Religion: $('#DecisionsViewModel_Religion:checked').val(),
         ExtraCurricular: $('#DecisionsViewModel_ExtraCurricular:checked').val(),
         ChildId: typeof (childId) === "undefined" ? $('#childId').val() : childId,
+        UserId: $('#user-id').val()
     };
 }
 function saveExtraDecisions(childId) {
@@ -459,6 +464,7 @@ function saveExtraDecisions(childId) {
             ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
             DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
             Description: $(item).children('#extra-decision-description').text().trim(),
+            UserId: $('#user-id').val()
         };
         //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
         //If it does, copy over the Id
@@ -500,7 +506,7 @@ function saveExtraDecisions(childId) {
 }
 function getChildDecisions(child) {
     $.ajax({
-        url: '/Forms/GetChildDecision/' + child.Id,
+        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
         type: 'GET',
         success: function (data) {
             $('#childName').text(child.Name);
@@ -557,7 +563,7 @@ function loadChildren(form) {
 }
 function getChildHoliday(child) {
     $.ajax({
-        url: '/Forms/GetChildHoliday/' + child.Id,
+        url: '/api/Holiday/' + child.Id + '?format=json',
         type: 'GET',
         success: function (data) {
             setChildHolidayForm(data, child);
@@ -575,10 +581,19 @@ function setChildHolidayForm(data, child) {
     Friendly.ClearForm('holiday');
     $('#holidayChildName').text(child.Name);
     $('#holidayChildId').val(child.Id);
-    if (data.Holidays.FridayHoliday)
+    if (data.Holidays.FridayHoliday) {
         $('#HolidayViewModel_FridayHoliday').attr('checked', 'checked');
-    if (data.Holidays.MondayHoliday)
+        $('#HolidayViewModel_FridayHoliday').val('true');
+    } else {
+        $('#HolidayViewModel_FridayHoliday').val('false');
+    }       
+    if (data.Holidays.MondayHoliday) {
         $('#HolidayViewModel_MondayHoliday').attr('checked', 'checked');
+        $('#HolidayViewModel_MondayHoliday').val('true');
+    } else {
+        $('#HolidayViewModel_MondayHoliday').val('false');
+    }
+
     $('#HolidayViewModel_Thanksgiving[value="' + data.Holidays.Thanksgiving + '"]').attr('checked', 'checked');
     $('#HolidayViewModel_ThanksgivingOther').val(data.Holidays.ThanksgivingOther);
     $('#HolidayViewModel_Christmas[value="' + data.Holidays.Christmas + '"]').attr('checked', 'checked');
@@ -644,6 +659,7 @@ function saveExtraHolidays(childId) {
             HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
             HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
             HolidayName: $(item).children('.extra-holiday-name').text(),
+            UserId: $('#user-id').val()
         };
         //If we are copying, we need to make sure that the extra holiday doesn't already exist for the current child
         //If it does, copy over the Id

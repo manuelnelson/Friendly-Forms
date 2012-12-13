@@ -11,7 +11,7 @@ namespace BusinessLogic.Contracts
         /// </summary>
         /// <param name="childId"></param>
         /// <returns></returns>
-        HolidayViewModel GetByChildId(int childId);
+        Holiday GetByChildId(int childId);
 
         /// <summary>
         /// Add the holiday information to the database.
