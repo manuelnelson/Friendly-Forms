@@ -1,0 +1,32 @@
+﻿@model FriendlyForms.Models.ParentingPlanViewModel
+@using Models.ViewModels
+<h4>Communication</h4>
+@if (Model.CommunicationViewModel.AllowCommunication == (int)YesNo.Yes)
+{
+    <p>
+        When the child or children are in the physical custody of one parent, the other parent will have the right
+            to contact the child or children as follows: @Model.PpOutputFormHelper.CommunicationTypePhrase
+    </p>
+}
+else
+{
+    <p>
+        When the child or children are in the physical custody of one parent, the other parent will not have the
+            right to contact the child or children.
+    </p>
+}
+@if (Model.CommunicationViewModel.Limitations == (int)YesNo.Yes)
+{
+    <p>The following limitations apply to contact with the child(ren): @Model.CommunicationViewModel.LimitationDetails</p>
+}
+else
+{
+    <p>There are no limitations regarding communication with the child(ren).</p>
+}
+@if (Model.PrivacyViewModel.NeedPrivacy == (int)YesNo.Yes)
+{
+    <p>Due to prior act of family violence, the address of the child(ren) and victim of family violence shall be
+kept confidential. The protected parent shall promptly notify the other parent, through a third party, of
+any change in contact information necessary to conduct visitation.</p>
+}
+

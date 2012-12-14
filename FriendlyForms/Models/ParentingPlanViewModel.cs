@@ -16,7 +16,20 @@ namespace FriendlyForms.Models
         public ScheduleViewModel ScheduleViewModel { get; set; }
         public AllHolidaysViewModel HolidayViewModel { get; set; }
         public FormsCompleted FormsCompleted { get; set; }
+        //Only used for output form
+        public PpOutputFormHelper PpOutputFormHelper { get; set; }
     }
+
+    public class PpOutputFormHelper
+    {
+        public string Parent { get; set; }
+        public string NonCustodyParent { get; set; }
+        public string NonCustodyParentName { get; set; }
+        public bool NonCustodyIsFather { get; set; }
+        public string LegalCustodyPhrase { get; set; }
+        public string CommunicationTypePhrase { get; set; }
+    }
+
     public class FormsCompleted
     {
         public bool Participant { get; set; }

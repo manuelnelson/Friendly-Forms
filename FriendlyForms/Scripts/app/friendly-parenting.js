@@ -171,6 +171,14 @@
             $('.communicate-method').hide();
         }
     });
+    $('input[name=AccessOfRights]').change(function () {
+        var checked = $('#AccessOfRights:checked').val();
+        if (checked == "1") {
+            $('.communicate-rights').show();
+        } else {
+            $('.communicate-rights').hide();
+        }
+    });
 
     $('.child-part8').click(function () {
         Friendly.SubmitForm('communication', 'schedule');

@@ -142,7 +142,7 @@ namespace FriendlyForms.Controllers
                     Children = childForm.UserId != 0,
                     Communication = communication.UserId != 0,
                     Decisions = decisions.UserId != 0,
-                    Holiday = holiday.UserId != 0,
+                    Holiday = holiday != null,
                     Information = information.UserId != 0,
                     Participant = participants.UserId != 0,
                     Privacy = privacy.UserId != 0,

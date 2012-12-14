@@ -83,7 +83,7 @@
                             $('.vehicle-table').show();
                             var result = $("#friendly-vehicle-template").tmpl(vehicle.Vehicle);
                             $('.vehicle-table tbody').append(result);
-                            Friendly.ClearForm('vehicles');
+                            Friendly.ClearForm('vehicle');
                             Friendly.EndLoading();
                             return false;
                         },

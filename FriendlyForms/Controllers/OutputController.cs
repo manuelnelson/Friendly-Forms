@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
@@ -12,6 +13,7 @@ using Models.ViewModels;
 using Pechkin;
 using Pechkin.Synchronized;
 using System.IO;
+using ServiceStack;
 
 namespace FriendlyForms.Controllers
 {
@@ -105,7 +107,7 @@ namespace FriendlyForms.Controllers
         {
             var userId = User.FriendlyIdentity().UserId;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
-            var participants = _participantService.GetByUserId(userId);
+            var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
             var privacy = _privacyService.GetByUserId(userId);
             var information = _informationService.GetByUserId(userId);
@@ -138,7 +140,7 @@ namespace FriendlyForms.Controllers
                 }
             }
             var responsibility = _responsibilityService.GetByUserId(userId);
-            var communication = _communicationService.GetByUserId(userId);
+            var communication = _communicationService.GetByUserId(userId) as CommunicationViewModel;
             var schedule = _scheduleService.GetByUserId(userId);
             var allDecisions = new AllDecisionsViewModel
             {
@@ -154,6 +156,47 @@ namespace FriendlyForms.Controllers
             court.Counties = counties;
 
             var formsViewModel = new FormsCompleted();
+
+            //Setup output form
+            var outputViewModel = new PpOutputFormHelper();
+            
+            //Parents
+            outputViewModel.Parent = "Both parents";
+            outputViewModel.LegalCustodyPhrase = "The parties will share legal custody of the children";
+            if (participants != null && participants.PlaintiffCustodialParent.Equals((int)CustodialParent.Primary))
+            {
+                outputViewModel.Parent = Enum.GetName(typeof(ParentRelationship), participants.PlaintiffRelationship);
+                outputViewModel.NonCustodyParent = Enum.GetName(typeof(ParentRelationship), participants.DefendantRelationship);
+                outputViewModel.NonCustodyIsFather = outputViewModel.NonCustodyParent == Enum.GetName(typeof(ParentRelationship), ParentRelationship.Father);
+                outputViewModel.NonCustodyParentName = participants.DefendantsName;
+                outputViewModel.LegalCustodyPhrase = "The" + outputViewModel.Parent + " will be the primary legal custodian of the children";
+            }
+            else if (participants != null && participants.DefendantCustodialParent.Equals((int)CustodialParent.Primary))
+            {
+                outputViewModel.Parent = Enum.GetName(typeof(ParentRelationship), participants.DefendantRelationship);
+                outputViewModel.NonCustodyParent = Enum.GetName(typeof(ParentRelationship), participants.PlaintiffRelationship);
+                outputViewModel.NonCustodyParentName = participants.PlaintiffsName;
+                outputViewModel.LegalCustodyPhrase = "The " + outputViewModel.Parent + " will be the primary legal custodian of the children";
+            }
+
+            //Communication
+            var communicationTypes = new List<string>();
+            if (communication.Telephone)
+            {
+                communicationTypes.Add("Telephone");
+            }
+            if (communication.Email)
+            {
+                communicationTypes.Add("Email");
+            }
+            if (communication.Other)
+            {
+                communicationTypes.Add(communication.OtherMethod);
+            }
+            outputViewModel.CommunicationTypePhrase = string.Join(",", communicationTypes);
+
+
+
             var childViewModel = new ParentingPlanViewModel
             {
                 CourtViewModel = court,
@@ -166,7 +209,7 @@ namespace FriendlyForms.Controllers
                 InformationViewModel = information as InformationViewModel,
                 AllDecisionsViewModel = allDecisions,
                 ResponsibilityViewModel = responsibility as ResponsibilityViewModel,
-                CommunicationViewModel = communication as CommunicationViewModel,
+                CommunicationViewModel = communication,
                 ScheduleViewModel = schedule as ScheduleViewModel,
                 HolidayViewModel = allHolidays,
                 FormsCompleted = formsViewModel

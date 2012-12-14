@@ -1,0 +1,29 @@
+﻿@using Models.ViewModels
+@model FriendlyForms.Models.ParentingPlanViewModel
+
+<div class="row-fluid">
+    @if (Model.CourtViewModel.AuthorOfPlan.Equals((int)AuthorOfPlan.Judge))
+    {
+        <p>
+            The parties have agreed to the terms of this plan and this information has been furnished by both 
+            parties to meet the requirements of OCGA Section 19-9-1. The parties agree on the terms of the plan and 
+            afﬁrm the accuracy of the information provided, as shown by their signatures at the end of this order.
+        </p>        
+    }
+    else
+    {
+        <p>This plan has been prepared by the judge.</p>
+    }
+    @if (Model.CourtViewModel.PlanType.Equals((int)PlanType.NewPlan))
+    {
+        <p>This plan is a new plan</p>
+    }
+    else if (Model.CourtViewModel.PlanType.Equals((int)PlanType.ExistingPlan))
+    {
+        <p>This plan modiﬁes an existing Parenting Plan: Case number @Model.CourtViewModel.ExistCaseNumber</p>
+    }
+    else
+    {
+        <p>This plan modiﬁes an existing Order: Case Number @Model.CourtViewModel.ExistCaseNumber</p>
+    }
+</div>

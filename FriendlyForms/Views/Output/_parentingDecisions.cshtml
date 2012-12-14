@@ -1,0 +1,58 @@
+﻿@using Models.ViewModels
+@model FriendlyForms.Models.ParentingPlanViewModel
+<div class="row-fluid">
+    <h4>Day-To-Day Decisions</h4>
+    <p>
+        Each parent shall make decisions regarding the day-to-day care of a child while the child is residing with that 
+        parent, including any emergency decisions affecting the health or safety of a child.
+    </p>
+</div>
+<div class="row-fluid">
+    <h4>Major Decisions</h4>
+    <p>
+        The parties must confer with one another prior to any decision related to non-emergency health care, education, religion, or extra-curricular activities.  The listing below indicates who will
+            be the primary decision maker when when there is disagreement regarding the most appropriate decision. 
+    </p>
+    @{
+        var disagreements = "";
+    }
+    @foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
+    {
+        <h5>@child.Name</h5>
+        <p>
+            Educational Decisions: 
+                @{
+        var childDecision = Model.AllDecisionsViewModel.ChildDecisions.First(c => c.ChildId.Equals(child.Id));
+        var extraChildDecisions = Model.AllDecisionsViewModel.ChildExtraDecisions.Where(c => c.ChildId.Equals(child.Id));
+        //If there are multiple children, both resolve could possible vary.  Take the last 'BothResolve' for now....
+        disagreements = string.IsNullOrEmpty(childDecision.BothResolve) ? disagreements : childDecision.BothResolve;        
+                }
+            @Enum.GetName(typeof(DecisionMaker), childDecision.Education)
+        </p>
+        <p>
+            Non-emergency health care:
+                @Enum.GetName(typeof(DecisionMaker), childDecision.HealthCare)
+        </p>
+        <p>
+            Religious upbringing:
+                @Enum.GetName(typeof(DecisionMaker), childDecision.Religion)
+        </p>
+        <p>
+            Extracurricular Activities:
+                @Enum.GetName(typeof(DecisionMaker), childDecision.ExtraCurricular)
+        </p>
+        foreach (var extra in extraChildDecisions)
+        {
+        <p>@extra.Description: @Enum.GetName(typeof(DecisionMaker), extra.DecisionMaker)</p>
+        }
+    }
+</div>
+if (!string.IsNullOrEmpty(disagreements))
+        {
+    <h4>Disagreements</h4>
+<div class="row-fluid">
+    <p>
+        Where parents have elected joint decision making in the Major Decisions section above, disagreements will be resolved in the following manner: @disagreements
+    </p>
+</div>
+}

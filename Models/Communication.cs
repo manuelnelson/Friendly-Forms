@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -13,23 +14,13 @@ namespace Models
         public bool Other { get; set; }
         public string OtherMethod { get; set; }
         public int Limitations { get; set; }
-        public string FatherCommunicate { get; set; }
-        public string MotherCommunicate { get; set; }
-
+        public string LimitationDetails { get; set; }
+        public int Notification { get; set; }
+        public int AccessOfRights { get; set; }
+        public string AccessOfRightsDetails { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new CommunicationViewModel()
-            {
-                AllowCommunication = AllowCommunication,
-                Email = Email,
-                FatherCommunicate = FatherCommunicate,
-                Limitations = Limitations,
-                MotherCommunicate = MotherCommunicate,
-                Other = Other,
-                OtherMethod = OtherMethod,
-                Telephone = Telephone,
-                UserId = UserId
-            };
+            return this.TranslateTo<CommunicationViewModel>();
         }
 
         public void Update(IFormEntity entity)
@@ -37,13 +28,15 @@ namespace Models
             var update = (Communication)entity;
             AllowCommunication = update.AllowCommunication;
             Email = update.Email;
-            FatherCommunicate = update.FatherCommunicate;
+            LimitationDetails = update.LimitationDetails;
             Limitations = update.Limitations;
-            MotherCommunicate = update.MotherCommunicate;
             Other = update.Other;
             OtherMethod = update.OtherMethod;
             Telephone = update.Telephone;
             UserId = update.UserId;
+            Notification = update.Notification;
+            AccessOfRights = update.AccessOfRights;
+            AccessOfRightsDetails = update.AccessOfRightsDetails;
         }
 
 

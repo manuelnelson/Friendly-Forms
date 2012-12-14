@@ -14759,7 +14759,7 @@ $(document).ready(function () {
                 $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
                 $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
                 $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-                $('#DecisionsViewModel_BothResolve').text(data.Decisions.BothResolve);
+                $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
                 $('.extra-decision-item').remove();
                 Friendly.childNdx++;
                 if (Friendly.childNdx === Friendly.children.length) {

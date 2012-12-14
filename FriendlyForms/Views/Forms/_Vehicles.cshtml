@@ -18,6 +18,51 @@
                             @Html.ValidationMessageFor(m => m.VehicleFormViewModel.VehiclesInvolved)
                         </div>                        
                     }
+                    <br/>
+                    @if (Model.VehicleViewModel.VehicleList != null && Model.VehicleViewModel.VehicleList.Any())
+                    {                        
+                        <div class="row-fluid vehicle-table">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Manufacturer</th>
+                                        <th>Model</th>
+                                        <th>Year</th>
+                                        <th>Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var vehicle in Model.VehicleViewModel.VehicleList)
+                                    {
+                                        <tr>
+                                            <td>@vehicle.Make</td>
+                                            <td>@vehicle.Model</td>
+                                            <td>@vehicle.Year</td>
+                                            <td>@vehicle.Owner</td>
+                                        </tr>                                        
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row-fluid hide vehicle-table">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Manufacturer</th>
+                                        <th>Model</th>
+                                        <th>Year</th>
+                                        <th>Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>  
+                    }
+
                     @if (Model.VehicleFormViewModel.VehiclesInvolved == (int) YesNo.Yes)
                     {
                         using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicle"}))
@@ -28,8 +73,8 @@
                                     List each vehicle under consideration in this agreement.
                                 </label>
                                 <div class="control-group">
-                                    <label class="informative">Make</label>
-                                    @Html.TextBoxFor(m => m.VehicleViewModel.Make, new {placeholder = "Make"})
+                                    <label class="informative">Manufacturer</label>
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Make, new {placeholder = "Manufacturer"})
                                     @Html.ValidationMessageFor(m => m.VehicleViewModel.Make)
                                 </div>
                                 <div class="control-group">
@@ -94,8 +139,8 @@
                                     List each vehicle under consideration in this agreement.
                                 </label>
                                 <div class="control-group">
-                                    <label class="informative">Make</label>
-                                    @Html.TextBoxFor(m => m.VehicleViewModel.Make, new {placeholder = "Make"})
+                                    <label class="informative">Manufacturer</label>
+                                    @Html.TextBoxFor(m => m.VehicleViewModel.Make, new {placeholder = "Manufacturer"})
                                     @Html.ValidationMessageFor(m => m.VehicleViewModel.Make)
                                 </div>
                                 <div class="control-group">
@@ -151,49 +196,6 @@
                     }
                     
 
-                    @if (Model.VehicleViewModel.VehicleList != null && Model.VehicleViewModel.VehicleList.Any())
-                    {                        
-                        <div class="row-fluid vehicle-table">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Make</th>
-                                        <th>Model</th>
-                                        <th>Year</th>
-                                        <th>Owner</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var vehicle in Model.VehicleViewModel.VehicleList)
-                                    {
-                                        <tr>
-                                            <td>@vehicle.Make</td>
-                                            <td>@vehicle.Model</td>
-                                            <td>@vehicle.Year</td>
-                                            <td>@vehicle.Owner</td>
-                                        </tr>                                        
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="row-fluid hide vehicle-table">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Make</th>
-                                        <th>Model</th>
-                                        <th>Year</th>
-                                        <th>Owner</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>  
-                    }
 
                 </div>
             </div>

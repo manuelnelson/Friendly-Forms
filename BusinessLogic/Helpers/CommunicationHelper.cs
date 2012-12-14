@@ -1,5 +1,4 @@
-﻿using BusinessLogic.Models;
-using Models;
+﻿using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic.Helpers
@@ -12,9 +11,8 @@ namespace BusinessLogic.Helpers
                 {
                     AllowCommunication = communication.AllowCommunication,
                     Email = communication.Email,
-                    FatherCommunicate = communication.FatherCommunicate,
+                    LimitationDetails = communication.LimitationDetails,
                     Limitations = communication.Limitations,
-                    MotherCommunicate = communication.MotherCommunicate,
                     Other = communication.Other,
                     OtherMethod = communication.OtherMethod,
                     Telephone = communication.Telephone,

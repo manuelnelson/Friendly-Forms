@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using FriendlyForms.Authentication;
 using FriendlyForms.Models;
+using Models;
 using Models.ViewModels;
 
 namespace FriendlyForms.Controllers
@@ -88,7 +89,7 @@ namespace FriendlyForms.Controllers
                 var specialCircumstance = _specialCircumstancesService.GetByUserId(userId);
                 if(childForm.UserId != 0 && children.Children.Any())
                 {
-                    var holidays = _holidayService.GetByChildId(children.Children.First().Id);
+                    var holidays = _holidayService.GetByChildId(children.Children.First().Id) ?? new Holiday();
 
                     var allViewModel = new AllFormsViewModel
                     {

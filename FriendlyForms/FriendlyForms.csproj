@@ -599,6 +599,13 @@
     <Content Include="Startup.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Output\_parentingCourt.cshtml" />
+    <Content Include="Views\Output\_parentingChildren.cshtml" />
+    <Content Include="Views\Output\_parentingDecisions.cshtml" />
+    <Content Include="Views\Output\_parentingResponsibility.cshtml" />
+    <Content Include="Views\Output\_parentingCommunication.cshtml" />
+    <Content Include="Views\Output\_parentingSchedule.cshtml" />
+    <Content Include="Views\Output\_parentingHoliday.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">
