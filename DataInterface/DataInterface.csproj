@@ -57,6 +57,7 @@
     <Compile Include="IInformationRepository.cs" />
     <Compile Include="IOtherChildrenRepository.cs" />
     <Compile Include="IOtherChildRepository.cs" />
+    <Compile Include="IAddendumRepository.cs" />
     <Compile Include="IParticipantRepository.cs" />
     <Compile Include="IPreexistingSupportRepository.cs" />
     <Compile Include="IPrivacyRepository.cs" />

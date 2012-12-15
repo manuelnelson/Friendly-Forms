@@ -62,6 +62,7 @@
     <Compile Include="Contract\IViewModel.cs" />
     <Compile Include="OtherChild.cs" />
     <Compile Include="OtherChildren.cs" />
+    <Compile Include="Addendum.cs" />
     <Compile Include="Participant.cs" />
     <Compile Include="PreexistingSupport.cs" />
     <Compile Include="PreexistingSupportChild.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="ViewModels\InformationViewModel.cs" />
     <Compile Include="ViewModels\OtherChildrenViewModel.cs" />
     <Compile Include="ViewModels\OtherChildViewModel.cs" />
+    <Compile Include="ViewModels\AddendumViewModel.cs" />
     <Compile Include="ViewModels\ParticipantViewModel.cs" />
     <Compile Include="ViewModels\PreexistingSupportChildViewModel.cs" />
     <Compile Include="ViewModels\PreexistingSupportViewModel.cs" />

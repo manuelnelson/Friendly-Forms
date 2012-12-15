@@ -129,6 +129,7 @@
     <Compile Include="Contracts\IMailService.cs" />
     <Compile Include="Contracts\IOtherChildrenService.cs" />
     <Compile Include="Contracts\IOtherChildService.cs" />
+    <Compile Include="Contracts\IAddendumService.cs" />
     <Compile Include="Contracts\IParticipantService.cs" />
     <Compile Include="Contracts\IPreexistingSupportChildService.cs" />
     <Compile Include="Contracts\IPreexistingSupportService.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="OtherChildrenService.cs" />
     <Compile Include="OtherChildService.cs" />
+    <Compile Include="AddendumService.cs" />
     <Compile Include="ParticipantService.cs" />
     <Compile Include="PreexistingSupportChildService.cs" />
     <Compile Include="PreexistingSupportService.cs" />

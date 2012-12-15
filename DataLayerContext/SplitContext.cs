@@ -30,7 +30,8 @@ namespace DataLayerContext
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleForm> VehicleForms { get; set; }
         public DbSet<Debt> Debts { get; set; }
-        public DbSet<Assets> Assets{ get; set; }
+        public DbSet<Addendum> Addenda{ get; set; }
+        public DbSet<Assets> Assets { get; set; }
         public DbSet<HealthInsurance> HealthInsurances{ get; set; }
         public DbSet<SpousalSupport> SpousalSupports { get; set; }
         public DbSet<Tax> Taxes{ get; set; }
@@ -78,7 +79,15 @@ namespace DataLayerContext
             SetupOtherChildrenEntity(modelBuilder);
             SetupSpecialCircumstancesEntity(modelBuilder);
             SetupOtherChildEntity(modelBuilder);
+            SetupParentingAddendumEntity(modelBuilder);
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupParentingAddendumEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Addendum>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Addendum>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupChildFormEntity(DbModelBuilder modelBuilder)

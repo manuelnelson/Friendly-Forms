@@ -44,11 +44,12 @@ namespace FriendlyForms.Controllers
         private readonly ISpecialCircumstancesService _specialCircumstancesService;
         private readonly IOtherChildService _otherChildService;
         private readonly IVehicleFormService _vehicleFormService;
+        private readonly IAddendumService _addendumService;
         //
         // GET: /Forms/
         public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService)
+            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -81,6 +82,7 @@ namespace FriendlyForms.Controllers
             _otherChildService = otherChildService;
             _vehicleFormService = vehicleFormService;
             _childFormService = childFormService;
+            _addendumService = addendumService;
         }
         
         public ActionResult Starter()
@@ -129,6 +131,7 @@ namespace FriendlyForms.Controllers
             var communication = _communicationService.GetByUserId(userId);
             var schedule = _scheduleService.GetByUserId(userId);
             var holiday = children.Children.Any() ? _holidayService.GetByChildId(children.Children.First().Id) : new Holiday();
+            var addendum = _addendumService.GetByUserId(userId);
             var allDecisions = new AllDecisionsViewModel();
             var allHolidays = new AllHolidaysViewModel
                 {
@@ -147,7 +150,8 @@ namespace FriendlyForms.Controllers
                     Participant = participants.UserId != 0,
                     Privacy = privacy.UserId != 0,
                     Responsibility = responsibility.UserId != 0,
-                    Schedule = schedule.UserId != 0
+                    Schedule = schedule.UserId != 0,
+                    Addendum = addendum.UserId != 0
                 };
 
             var childViewModel = new ParentingPlanViewModel
@@ -166,6 +170,7 @@ namespace FriendlyForms.Controllers
                     CommunicationViewModel = communication as CommunicationViewModel,
                     ScheduleViewModel = schedule as ScheduleViewModel,
                     HolidayViewModel = allHolidays,
+                    AddendumViewModel = addendum as AddendumViewModel,
                     FormsCompleted = formsViewModel
                 };
             return View(childViewModel);

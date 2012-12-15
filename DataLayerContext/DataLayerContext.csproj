@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repositories\ChildFormRepository.cs" />
+    <Compile Include="Repositories\AddendumRepository.cs" />
     <Compile Include="Repositories\VehicleFormRepository.cs" />
     <Compile Include="SplitContext.cs" />
     <Compile Include="Repositories\ExtraHolidayRepository.cs" />

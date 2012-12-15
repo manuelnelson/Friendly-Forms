@@ -243,6 +243,7 @@
     <Compile Include="RestService\InformationRestService.cs" />
     <Compile Include="RestService\OtherChildrenRestService.cs" />
     <Compile Include="RestService\OtherChildRestService.cs" />
+    <Compile Include="RestService\AddendumRestService.cs" />
     <Compile Include="RestService\ParticipantRestService.cs" />
     <Compile Include="RestService\PreexistingSupportChildRestService.cs" />
     <Compile Include="RestService\PreexistingSupportRestService.cs" />
@@ -606,6 +607,7 @@
     <Content Include="Views\Output\_parentingCommunication.cshtml" />
     <Content Include="Views\Output\_parentingSchedule.cshtml" />
     <Content Include="Views\Output\_parentingHoliday.cshtml" />
+    <Content Include="Views\Forms\_Addendum.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">

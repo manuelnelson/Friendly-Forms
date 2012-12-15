@@ -27,9 +27,13 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int Limitations { get; set; }
         [DataMember]
-        public string FatherCommunicate { get; set; }
+        public string LimitationDetails { get; set; }
         [DataMember]
-        public string MotherCommunicate { get; set; }
+        public int Notification { get; set; }
+        [DataMember]
+        public int AccessOfRights { get; set; }
+        [DataMember]
+        public string AccessOfRightsDetails { get; set; }
     }
 
     [DataContract]

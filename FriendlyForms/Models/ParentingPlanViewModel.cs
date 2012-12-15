@@ -15,6 +15,7 @@ namespace FriendlyForms.Models
         public CommunicationViewModel CommunicationViewModel { get; set; }
         public ScheduleViewModel ScheduleViewModel { get; set; }
         public AllHolidaysViewModel HolidayViewModel { get; set; }
+        public AddendumViewModel AddendumViewModel { get; set; }
         public FormsCompleted FormsCompleted { get; set; }
         //Only used for output form
         public PpOutputFormHelper PpOutputFormHelper { get; set; }
@@ -41,5 +42,6 @@ namespace FriendlyForms.Models
         public bool Communication { get; set; }
         public bool Schedule { get; set; }
         public bool Holiday { get; set; }
+        public bool Addendum { get; set; }
     }
 }

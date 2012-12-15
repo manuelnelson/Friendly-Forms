@@ -62,6 +62,14 @@
                 {
                     <li class="nav-item" id="holidayNav"><a data-form="holiday" href="#"><i class="@itemlock"></i>Holidays</a></li>
                 }
+                @if (Model.FormsCompleted.Addendum)
+                {
+                    <li class="nav-item" id="addendumNav"><a data-form="addendum" href="#"><i class="@itemDone"></i>Special Considerations</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="addendumNav"><a data-form="addendum" href="#"><i class="@itemlock"></i>Special Considerations</a></li>
+                }
             </ul>
         </li>
         <li><a href="@Url.Action("Financial","Forms")"><i class="icon icon-th-list"></i>Financial Form</a></li>
@@ -82,5 +90,6 @@
 @Html.Partial("_Communication", Model.CommunicationViewModel)
 @Html.Partial("_Schedule", Model.ScheduleViewModel)
 @Html.Partial("_Holiday", Model.HolidayViewModel)
+@Html.Partial("_Addendum", Model.AddendumViewModel)
 @* The child form below is used for the decisions form and holiday form to grab children information *@
 @Html.Partial("_Children", Model.ChildAllViewModel)
