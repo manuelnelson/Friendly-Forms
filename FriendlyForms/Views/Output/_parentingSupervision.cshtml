@@ -1,0 +1,22 @@
+﻿@using Models.ViewModels
+@model FriendlyForms.Models.ParentingPlanViewModel
+
+@if (Model.PrivacyViewModel.FatherSupervision || Model.PrivacyViewModel.MotherSupervision)
+{
+    <h4>Supervision</h4>
+    <p>Supervised parenting time shall apply during the day-to-day schedule as follows: @Model.PrivacyViewModel.SupervisionHow</p>
+    <p>Supervised parenting shall take place at: @Model.PrivacyViewModel.SupervisionWhere</p>
+    <p>@Model.PrivacyViewModel.SupervisionWho will supervise the parenting time.</p>
+     switch (Model.PrivacyViewModel.SupervisionCost)
+     {
+         case (int)DecisionMaker.Father:
+             <p>The cost of supervision will be the responsibility of the Father.</p>    
+             @break;
+        case (int)DecisionMaker.Mother:
+             <p>The cost of supervision will be the responsibility of the Mother.</p>    
+             @break;            
+        case (int)DecisionMaker.Both:
+             <p>The cost of supervision will be shared equally.</p>    
+             @break;            
+     }
+}

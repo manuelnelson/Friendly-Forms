@@ -158,11 +158,13 @@ namespace FriendlyForms.Controllers
             var formsViewModel = new FormsCompleted();
 
             //Setup output form
-            var outputViewModel = new PpOutputFormHelper();
+            var outputViewModel = new PpOutputFormHelper
+                {
+                    Parent = "Both parents",
+                    LegalCustodyPhrase = "The parties will share legal custody of the children"
+                };
             
             //Parents
-            outputViewModel.Parent = "Both parents";
-            outputViewModel.LegalCustodyPhrase = "The parties will share legal custody of the children";
             if (participants != null && participants.PlaintiffCustodialParent.Equals((int)CustodialParent.Primary))
             {
                 outputViewModel.Parent = Enum.GetName(typeof(ParentRelationship), participants.PlaintiffRelationship);
@@ -212,6 +214,7 @@ namespace FriendlyForms.Controllers
                 CommunicationViewModel = communication,
                 ScheduleViewModel = schedule as ScheduleViewModel,
                 HolidayViewModel = allHolidays,
+                PpOutputFormHelper = outputViewModel,
                 FormsCompleted = formsViewModel
             };
             return View(childViewModel);

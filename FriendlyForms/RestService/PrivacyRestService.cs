@@ -18,6 +18,19 @@ namespace FriendlyForms.RestService
         public int NeedPrivacy { get; set; }
         [DataMember]
         public string Details { get; set; }
+        [DataMember]
+        public bool FatherSupervision { get; set; }
+        [DataMember]
+        public bool MotherSupervision { get; set; }
+        [DataMember]
+        public string SupervisionHow { get; set; }
+        [DataMember]
+        public string SupervisionWhere { get; set; }
+        [DataMember]
+        public string SupervisionWho { get; set; }
+        [DataMember]
+        public int? SupervisionCost { get; set; }
+
     }
 
     [DataContract]

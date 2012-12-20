@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -12,16 +13,28 @@ namespace Models.ViewModels
         [Display(Name = "Need Privacy")]
         public int NeedPrivacy { get; set; }
 
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string Details { get; set; }
+
+        [Display(Name = "Supervision Father")]
+        public bool FatherSupervision { get; set; }
+        [Display(Name = "Supervsion Mother")]
+        public bool MotherSupervision { get; set; }
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
+        [Display(Name = "Supervision How")]
+        public string SupervisionHow { get; set; }
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
+        [Display(Name = "Supervision Where")]
+        public string SupervisionWhere { get; set; }
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
+        [Display(Name = "Supervision Who")]
+        public string SupervisionWho { get; set; }
+        [Display(Name = "Supervision Costs")]
+        public int? SupervisionCost { get; set; }
 
         public IFormEntity ConvertToEntity()
         {
-            return new Privacy()
-                {
-                    Details = Details,
-                    NeedPrivacy = NeedPrivacy,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Privacy>();
         }
     }
 }
