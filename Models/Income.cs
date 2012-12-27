@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -8,70 +9,38 @@ namespace Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public bool IsOtherParent { get; set; }
-        public int Employed { get; set; }
-        public int Salary { get; set; }
-        public int SelfEmployed { get; set; }
-        public int SelfIncome { get; set; }
-        public int SelfTax { get; set; }
-        public int SelfTaxAmount { get; set; }
-        public int OtherSources { get; set; }
-        public int Commisions { get; set; }
-        public int Bonuses { get; set; }
-        public int Overtime { get; set; }
-        public int Severance { get; set; }
-        public int Retirement { get; set; }
-        public int Interest { get; set; }
-        public int Dividends { get; set; }
-        public int Trust { get; set; }
-        public int Annuities { get; set; }
-        public int Capital { get; set; }
-        public int SocialSecurity { get; set; }
-        public int Compensation { get; set; }
-        public int Unemployment { get; set; }
-        public int CivilCase { get; set; }
-        public int Gifts { get; set; }
-        public int Prizes { get; set; }
-        public int Alimony { get; set; }
-        public int Assets { get; set; }
-        public int Fringe { get; set; }
-        public int Other { get; set; }
+        public int? Employed { get; set; }
+        public int? Salary { get; set; }
+        public int? SelfEmployed { get; set; }
+        public int? SelfIncome { get; set; }
+        public int? SelfTax { get; set; }
+        public int? SelfTaxAmount { get; set; }
+        public int? OtherSources { get; set; }
+        public int? Commisions { get; set; }
+        public int? Bonuses { get; set; }
+        public int? Overtime { get; set; }
+        public int? Severance { get; set; }
+        public int? Retirement { get; set; }
+        public int? Interest { get; set; }
+        public int? Dividends { get; set; }
+        public int? Trust { get; set; }
+        public int? Annuities { get; set; }
+        public int? Capital { get; set; }
+        public int? SocialSecurity { get; set; }
+        public int? Compensation { get; set; }
+        public int? Unemployment { get; set; }
+        public int? CivilCase { get; set; }
+        public int? Gifts { get; set; }
+        public int? Prizes { get; set; }
+        public int? Alimony { get; set; }
+        public int? Assets { get; set; }
+        public int? Fringe { get; set; }
+        public int? Other { get; set; }
         public string OtherDetails { get; set; }
         
         public IViewModel ConvertToModel()
         {
-            return new IncomeViewModel()
-                {
-                    IsOtherParent = IsOtherParent,
-                    Alimony = Alimony.ToString(),
-                    Annuities = Annuities.ToString(),
-                    Assets = Assets.ToString(),
-                    Bonuses = Bonuses.ToString(),
-                    Capital = Capital.ToString(),
-                    CivilCase = CivilCase.ToString(),
-                    Commisions = Commisions.ToString(),
-                    Compensation = Compensation.ToString(),
-                    Dividends = Dividends.ToString(),
-                    Employed = Employed,
-                    Fringe = Fringe.ToString(),
-                    Gifts = Gifts.ToString(),
-                    Interest = Interest.ToString(),
-                    Other = Other.ToString(),
-                    OtherDetails = OtherDetails,
-                    OtherSources = OtherSources,
-                    Overtime = Overtime.ToString(),
-                    Prizes = Prizes.ToString(),
-                    Retirement = Retirement.ToString(),
-                    Salary = Salary.ToString(),
-                    SelfEmployed = SelfEmployed,
-                    SelfIncome = SelfIncome.ToString(),
-                    SelfTax = SelfTax,
-                    SelfTaxAmount = SelfTaxAmount.ToString(),
-                    Severance = Severance.ToString(),
-                    SocialSecurity = SocialSecurity.ToString(),
-                    Trust = Trust.ToString(),
-                    Unemployment = Unemployment.ToString(),
-                    UserId = UserId
-                };
+            return this.TranslateTo<IncomeViewModel>();
         }
 
         public void Update(IFormEntity entity)

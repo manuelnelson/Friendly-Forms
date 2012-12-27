@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -9,16 +10,10 @@ namespace Models
         public bool IsOtherParent { get; set; }
         public int UserId { get; set; }
         public int ReceiveSocial { get; set; }
-        public int Amount { get; set; } 
+        public int? Amount { get; set; } 
         public IViewModel ConvertToModel()
         {
-            return new SocialSecurityViewModel()
-                {
-                    IsOtherParent = IsOtherParent,
-                    Amount = Amount.ToString(),
-                    ReceiveSocial = ReceiveSocial,
-                    UserId = UserId
-                };
+            return this.TranslateTo<SocialSecurityViewModel>();
         }
 
         public void Update(IFormEntity entity)

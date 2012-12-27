@@ -19,7 +19,7 @@ namespace BusinessLogic
             try
             {
                 //Check if entity already exists and we need to update record
-                var entity = model.ConvertToEntity();
+                var entity = model.ConvertToEntity() as OtherChild;
                 if(model.Id != 0)
                 {
                     var existEntity = FormRepository.Get(model.Id);
@@ -31,8 +31,8 @@ namespace BusinessLogic
                     }
                 }
                 //Add entity to database
-                FormRepository.Add((OtherChild)entity);
-                return entity as OtherChild;
+                FormRepository.Add(entity);
+                return entity;
 
             }
             catch(Exception ex)

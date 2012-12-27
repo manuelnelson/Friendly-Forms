@@ -23,27 +23,27 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int Circumstances { get; set; }
         [DataMember]
-        public string Deviation { get; set; }
+        public int? Deviation { get; set; }
         [DataMember]
-        public string Health { get; set; }
+        public int? Health { get; set; }
         [DataMember]
-        public string Insurance { get; set; }
+        public int? Insurance { get; set; }
         [DataMember]
-        public string TaxCredit { get; set; }
+        public int? TaxCredit { get; set; }
         [DataMember]
-        public string TravelExpenses { get; set; }
+        public int? TravelExpenses { get; set; }
         [DataMember]
-        public string Visitation { get; set; }
+        public int? Visitation { get; set; }
         [DataMember]
-        public string Alimony { get; set; }
+        public int? Alimony { get; set; }
         [DataMember]
-        public string Mortgage { get; set; }
+        public int? Mortgage { get; set; }
         [DataMember]
-        public string Permanency { get; set; }
+        public int? Permanency { get; set; }
         [DataMember]
-        public string NonSpecific { get; set; }
+        public int? NonSpecific { get; set; }
         [DataMember]
-        public string ParentingTime { get; set; }
+        public int? ParentingTime { get; set; }
     }
 
     [DataContract]

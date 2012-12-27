@@ -82,7 +82,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     }
     model.isOtherParent = "true";
     var formSelector = '#' + formName;
-    var formUrl = formName.substring(0, formName.indexOf("Other"));
+    var formUrl = formName.substring(0, formName.lastIndexOf("Other"));
     if ($(formSelector).valid()) {
         $.ajax({
             url: '/api/' + formUrl + '/?format=json',
@@ -90,7 +90,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
             data: model,
             success: function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
-                Friendly.NextForm(nextForm);
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 Friendly.EndLoading();
                 return false;
             },
@@ -103,7 +103,16 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     return false;
 };
 Friendly.NextForm = function (nextForm, prevIcon) {
+    $('#sidebar .active').find('i').attr('class', prevIcon);
+    $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
+    $('.wrapper').hide();
+
     switch (nextForm) {
+        case 'preexistingSupport':
+            if ($('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
+                    $('#supportWrapper').show();
+                }
+            break;
         case 'preexistingOther':
             if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
                 $('#supportOtherWrapper').show();
@@ -116,10 +125,6 @@ Friendly.NextForm = function (nextForm, prevIcon) {
             loadChildren('holiday');
             break;
     }
-
-    $('#sidebar .active').find('i').attr('class', prevIcon);
-    $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
-    $('.wrapper').hide();
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
@@ -171,7 +176,7 @@ Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
-    var genericForms = ['vehicle', 'children', 'decisions', 'holiday'];
+    var genericForms = ['vehicle', 'children', 'decisions', 'holiday', 'preexistingSupport', 'preexistingSupportOther'];
     if (genericForms.indexOf(formName) >= 0) {
         switch (formName) {
             case 'vehicle':
@@ -228,7 +233,14 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                     Friendly.NextForm(nextForm, Friendly.properties.iconError);
                 }
                 Friendly.EndLoading();
+                break;                
+        case 'preexistingSupport':
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 break;
+            case 'preexistingSupportOther':
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                break;
+
         }
         return false;
     }
@@ -494,6 +506,10 @@ $(document).ready(function () {
         if (isGeneric && $('#' + currentFormName).valid()) {
             //go ahead and save
             var model = Friendly.GetFormInput(currentFormName, nextForm);
+            if (isOtherForm(currentFormName)) {
+                currentFormName = currentFormName.substring(0, currentFormName.lastIndexOf("Other"));
+                model.isOtherParent = "true";
+            }
             $.ajax({
                 url: '/api/' + currentFormName + '?format=json',
                 type: 'POST',
@@ -511,6 +527,14 @@ $(document).ready(function () {
             Friendly.EndLoading();
         }
     });
+    function isOtherForm(currentFormName) {
+        //If name of form contains other, with the exception of the OtherChildren form, then it is an 'Other' form
+        var regex = /Other/g;        
+        if (currentFormName.search(regex) != -1) {
+            return true;
+        }            
+        return false;
+    }
     //will go to output forms
     $('#ViewOutput').live('click', function () {
         document.location.href = $(this).attr('data-url');

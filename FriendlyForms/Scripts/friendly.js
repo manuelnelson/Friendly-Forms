@@ -14384,7 +14384,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     }
     model.isOtherParent = "true";
     var formSelector = '#' + formName;
-    var formUrl = formName.substring(0, formName.indexOf("Other"));
+    var formUrl = formName.substring(0, formName.lastIndexOf("Other"));
     if ($(formSelector).valid()) {
         $.ajax({
             url: '/api/' + formUrl + '/?format=json',
@@ -14392,7 +14392,7 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
             data: model,
             success: function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
-                Friendly.NextForm(nextForm);
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 Friendly.EndLoading();
                 return false;
             },
@@ -14405,7 +14405,16 @@ Friendly.SubmitFormOther = function (formName, nextForm, model) {
     return false;
 };
 Friendly.NextForm = function (nextForm, prevIcon) {
+    $('#sidebar .active').find('i').attr('class', prevIcon);
+    $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
+    $('.wrapper').hide();
+
     switch (nextForm) {
+        case 'preexistingSupport':
+            if ($('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
+                    $('#supportWrapper').show();
+                }
+            break;
         case 'preexistingOther':
             if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
                 $('#supportOtherWrapper').show();
@@ -14418,10 +14427,6 @@ Friendly.NextForm = function (nextForm, prevIcon) {
             loadChildren('holiday');
             break;
     }
-
-    $('#sidebar .active').find('i').attr('class', prevIcon);
-    $('#' + nextForm + 'Nav').find('i').attr('class', Friendly.properties.iconEdit);
-    $('.wrapper').hide();
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
     $('#' + nextForm + 'Nav').addClass('active');
@@ -14473,7 +14478,7 @@ Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
-    var genericForms = ['vehicle', 'children', 'decisions', 'holiday'];
+    var genericForms = ['vehicle', 'children', 'decisions', 'holiday', 'preexistingSupport', 'preexistingSupportOther'];
     if (genericForms.indexOf(formName) >= 0) {
         switch (formName) {
             case 'vehicle':
@@ -14530,7 +14535,14 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                     Friendly.NextForm(nextForm, Friendly.properties.iconError);
                 }
                 Friendly.EndLoading();
+                break;                
+        case 'preexistingSupport':
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 break;
+            case 'preexistingSupportOther':
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                break;
+
         }
         return false;
     }
@@ -14597,7 +14609,7 @@ Friendly.CheckChildDecision = function (child, nextForm) {
             if (Friendly.childNdx === Friendly.children.length) {
                 if ($('#decisions').valid()) {
                     Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    return true;
+                    return false;
                 } else {
                     Friendly.NextForm(nextForm, Friendly.properties.iconError);
                     return false;
@@ -14796,6 +14808,10 @@ $(document).ready(function () {
         if (isGeneric && $('#' + currentFormName).valid()) {
             //go ahead and save
             var model = Friendly.GetFormInput(currentFormName, nextForm);
+            if (isOtherForm(currentFormName)) {
+                currentFormName = currentFormName.substring(0, currentFormName.lastIndexOf("Other"));
+                model.isOtherParent = "true";
+            }
             $.ajax({
                 url: '/api/' + currentFormName + '?format=json',
                 type: 'POST',
@@ -14813,6 +14829,14 @@ $(document).ready(function () {
             Friendly.EndLoading();
         }
     });
+    function isOtherForm(currentFormName) {
+        //If name of form contains other, with the exception of the OtherChildren form, then it is an 'Other' form
+        var regex = /Other/g;        
+        if (currentFormName.search(regex) != -1) {
+            return true;
+        }            
+        return false;
+    }
     //will go to output forms
     $('#ViewOutput').live('click', function () {
         document.location.href = $(this).attr('data-url');
@@ -15104,9 +15128,9 @@ $(document).ready(function () {
             $('#income .income-other').hide();
         }
     });
-    //-----------------Social Security
+    //-----------------Social Security---------------------
     $('.financial-part2').click(function () {
-        Friendly.SubmitForm('socialSecurity', 'preexisting');
+        Friendly.SubmitForm('socialSecurity', 'preexistingSupport');
     });
 
     $('#socialSecurity input[name="ReceiveSocial"]').change(function () {
@@ -15118,15 +15142,8 @@ $(document).ready(function () {
         }
     });
     //-----------------Preexisting Support------------------
-    $('.preexisting-item').click(function () {
-        Friendly.NextForm('preexisting');
-       
-        if ($('#preexisting input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-            $('#supportWrapper').show();
-        }
-    });
-    $('#preexisting input[id="PreexistingSupportViewModel_Support"]').change(function () {
-        if ($('#preexisting input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
+    $('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]').change(function () {
+        if ($('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportWrapper').show();
         } else {
             $('#supportWrapper').hide();
@@ -15135,16 +15152,18 @@ $(document).ready(function () {
 
     $('#addSupport').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("support");
-        if ($('#support').valid()) {
+        var formName = 'support';
+        var model = Friendly.GetFormInput(formName);
+        if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/AddSupport',
+                url: '/api/PreexistingSupport/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-support-template").tmpl(data);
+                    var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
                     $('#supportWrapper .support-table tbody').append(result);
-                    Friendly.ClearForm('support');
+                    $('#supportWrapper .support-table').show();
+                    Friendly.ClearForm(formName);
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -15156,13 +15175,12 @@ $(document).ready(function () {
     $('#supportWrapper table').on('click', '.view-children', function () {
         var id = $(this).attr('data-id');
         $.ajax({
-            url: '/Forms/GetChildSupport',
-            type: 'POST',
-            data: { Id: id },
+            url: '/api/PreexistingSupportChild/' + id + '/?format=json',
+            type: 'GET',
             success: function (data) {
-                if (data.length !== 0) {
+                if (data.Children.length !== 0) {
                     $('#childWrapper .child-table tbody').empty();
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Children);
                     $('#childWrapper .child-table tbody').append(result);
                     $('#childWrapper .child-table').show();
                 } else {
@@ -15180,11 +15198,11 @@ $(document).ready(function () {
         model.PreexistingSupportId = $('#childWrapper #supportId').val();
         if ($('#child').valid()) {
             $.ajax({
-                url: '/Forms/AddChildSupport',
+                url: '/api/PreexistingSupportChild?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Child);
                     $('#childWrapper .child-table tbody').append(result);
                     $('#childWrapper .child-table').show();
                     Friendly.ClearForm('child');
@@ -15196,29 +15214,29 @@ $(document).ready(function () {
         Friendly.EndLoading();
     });
     $('.financial-part3').click(function () {
-        Friendly.NextForm('otherChild');
+        Friendly.NextForm('otherChildren', Friendly.properties.iconSuccess);
     });
 
     //----------------------Other Children---------------    
     $('.financial-part4').click(function () {
         if ($('#otherChildWrapper').is(':visible')) {
-            Friendly.NextForm('circumstance');
+            Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildren');
         if ($('#otherChildren').valid()) {
             $.ajax({
-                url: '/Forms/OtherChildren/',
+                url: '/api/OtherChildren/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {
                         //Eligible. Show add children.
-                        $('#otherChildWrapper #childrenId').val(data.Id);
+                        $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('circumstance');
+                        Friendly.NextForm('circumstance', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -15229,18 +15247,19 @@ $(document).ready(function () {
     });
     $('#addOtherChild').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("otherchild");
+        var formName = 'otherchild';
+        var model = Friendly.GetFormInput(formName);
         model.OtherChildrenId = $('#otherChildWrapper #childrenId').val();
-        if ($('#otherChildren').valid()) {
+        if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/AddOtherChild/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
                     $('#otherChildWrapper .otherChild-table tbody').append(result);
                     $('#otherChildWrapper .otherChild-table').show();
-                    Friendly.ClearForm('otherchild');
+                    Friendly.ClearForm(formName);
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -15250,7 +15269,7 @@ $(document).ready(function () {
     });
     //----------------------Special Circumstances---------------    
     $('.financial-part5').click(function () {
-        Friendly.SubmitForm('circumstance', 'incomeOther');
+        Friendly.SubmitForm('specialCircumstances', 'incomeOther');
     });
     $('input[name="Circumstances"]').change(function () {
         if ($('#Circumstances:checked').val() === "1") {
@@ -15311,15 +15330,8 @@ $(document).ready(function () {
         }
     });
     //---------------------------------------Preexisting Other--------------------------------
-    $('.preexistingOther-item').click(function () {
-        Friendly.NextForm('preexistingOther');
-
-        if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-            $('#supportOtherWrapper').show();
-        }
-    });
-    $('#preexistingOther input[id="PreexistingSupportViewModel_Support"]').change(function () {
-        if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
+    $('#preexistingSupportOther input[id="PreexistingSupportViewModel_Support"]').change(function () {
+        if ($('#preexistingSupportOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportOtherWrapper').show();
         } else {
             $('#supportOtherWrapper').hide();
@@ -15670,6 +15682,25 @@ $(document).ready(function () {
             $('#detailsWrapper').hide();
         }
     });
+    //if on or the other of the supervision checkboxes are checked, then show the rest of the data
+    $('input[name=FatherSupervision]').change(function () {
+        if ($('#MotherSupervision').is(":checked")) return;
+        if ($('#FatherSupervision').is(":checked")) {
+            $('.supervision-details').show();
+        } else {
+            $('.supervision-details').hide();
+        }
+    });
+    $('input[name=MotherSupervision]').change(function () {
+        if ($('#FatherSupervision').is(":checked")) return;
+        if ($('#MotherSupervision').is(":checked")) {
+            $('.supervision-details').show();
+        } else {
+            $('.supervision-details').hide();
+        }
+    });
+
+
     $('.child-part4').click(function () {
         //check if we need to move to next form
         if ($(this).hasClass('next')) {
@@ -15687,7 +15718,7 @@ $(document).ready(function () {
         var formSelector = '#' + formName;
         if ($(formSelector).valid()) {
             $.ajax({
-                url: '/api/' + formName + '/?format=json',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function () {

@@ -1,6 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -13,16 +13,11 @@ namespace Models.ViewModels
         [Display(Name = "Receive")]
         public int ReceiveSocial { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Amount { get; set; }
+        public int? Amount { get; set; }
+        
         public IFormEntity ConvertToEntity()
         {
-            return new SocialSecurity()
-                {
-                    IsOtherParent = IsOtherParent,
-                    Amount = Convert.ToInt32(Amount),
-                    ReceiveSocial = ReceiveSocial,
-                    UserId = UserId
-                };
+            return this.TranslateTo<SocialSecurity>();
         }
     }
 }

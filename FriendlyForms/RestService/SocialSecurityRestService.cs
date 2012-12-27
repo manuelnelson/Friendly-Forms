@@ -19,7 +19,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int ReceiveSocial { get; set; }
         [DataMember]
-        public string Amount { get; set; }
+        public int? Amount { get; set; }
     }
 
     [DataContract]

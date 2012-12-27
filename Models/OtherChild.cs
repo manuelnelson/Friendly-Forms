@@ -10,7 +10,6 @@ namespace Models
         public virtual int UserId { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
-        public virtual int Gender { get; set; }
 
         public virtual int OtherChildrenId { get; set; }
         public virtual OtherChildren OtherChildren { get; set; }
@@ -20,7 +19,6 @@ namespace Models
             return new OtherChildViewModel()
                 {
                     DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not provided",
-                    Gender = Gender,
                     Name = Name,
                     UserId = UserId,
                     Id = Id,
@@ -31,11 +29,10 @@ namespace Models
         public void Update(IFormEntity entity)
         {
             var update = (OtherChild) entity;
-            DateOfBirth = DateOfBirth;
-            Gender = Gender;
-            Name = Name;
-            UserId = UserId;
-            OtherChildrenId = OtherChildrenId;
+            DateOfBirth = update.DateOfBirth;
+            Name = update.Name;
+            UserId = update.UserId;
+            OtherChildrenId = update.OtherChildrenId;
         }
 
     }

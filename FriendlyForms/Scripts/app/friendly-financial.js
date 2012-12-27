@@ -34,9 +34,9 @@
             $('#income .income-other').hide();
         }
     });
-    //-----------------Social Security
+    //-----------------Social Security---------------------
     $('.financial-part2').click(function () {
-        Friendly.SubmitForm('socialSecurity', 'preexisting');
+        Friendly.SubmitForm('socialSecurity', 'preexistingSupport');
     });
 
     $('#socialSecurity input[name="ReceiveSocial"]').change(function () {
@@ -48,15 +48,8 @@
         }
     });
     //-----------------Preexisting Support------------------
-    $('.preexisting-item').click(function () {
-        Friendly.NextForm('preexisting');
-       
-        if ($('#preexisting input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-            $('#supportWrapper').show();
-        }
-    });
-    $('#preexisting input[id="PreexistingSupportViewModel_Support"]').change(function () {
-        if ($('#preexisting input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
+    $('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]').change(function () {
+        if ($('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportWrapper').show();
         } else {
             $('#supportWrapper').hide();
@@ -65,16 +58,18 @@
 
     $('#addSupport').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("support");
-        if ($('#support').valid()) {
+        var formName = 'support';
+        var model = Friendly.GetFormInput(formName);
+        if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/AddSupport',
+                url: '/api/PreexistingSupport/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-support-template").tmpl(data);
+                    var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
                     $('#supportWrapper .support-table tbody').append(result);
-                    Friendly.ClearForm('support');
+                    $('#supportWrapper .support-table').show();
+                    Friendly.ClearForm(formName);
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -86,13 +81,12 @@
     $('#supportWrapper table').on('click', '.view-children', function () {
         var id = $(this).attr('data-id');
         $.ajax({
-            url: '/Forms/GetChildSupport',
-            type: 'POST',
-            data: { Id: id },
+            url: '/api/PreexistingSupportChild/' + id + '/?format=json',
+            type: 'GET',
             success: function (data) {
-                if (data.length !== 0) {
+                if (data.Children.length !== 0) {
                     $('#childWrapper .child-table tbody').empty();
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Children);
                     $('#childWrapper .child-table tbody').append(result);
                     $('#childWrapper .child-table').show();
                 } else {
@@ -110,11 +104,11 @@
         model.PreexistingSupportId = $('#childWrapper #supportId').val();
         if ($('#child').valid()) {
             $.ajax({
-                url: '/Forms/AddChildSupport',
+                url: '/api/PreexistingSupportChild?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Child);
                     $('#childWrapper .child-table tbody').append(result);
                     $('#childWrapper .child-table').show();
                     Friendly.ClearForm('child');
@@ -126,29 +120,29 @@
         Friendly.EndLoading();
     });
     $('.financial-part3').click(function () {
-        Friendly.NextForm('otherChild');
+        Friendly.NextForm('otherChildren', Friendly.properties.iconSuccess);
     });
 
     //----------------------Other Children---------------    
     $('.financial-part4').click(function () {
         if ($('#otherChildWrapper').is(':visible')) {
-            Friendly.NextForm('circumstance');
+            Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildren');
         if ($('#otherChildren').valid()) {
             $.ajax({
-                url: '/Forms/OtherChildren/',
+                url: '/api/OtherChildren/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {
                         //Eligible. Show add children.
-                        $('#otherChildWrapper #childrenId').val(data.Id);
+                        $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('circumstance');
+                        Friendly.NextForm('circumstance', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -159,18 +153,19 @@
     });
     $('#addOtherChild').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("otherchild");
+        var formName = 'otherchild';
+        var model = Friendly.GetFormInput(formName);
         model.OtherChildrenId = $('#otherChildWrapper #childrenId').val();
-        if ($('#otherChildren').valid()) {
+        if ($('#' + formName).valid()) {
             $.ajax({
-                url: '/Forms/AddOtherChild/',
+                url: '/api/' + formName + '?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
                     $('#otherChildWrapper .otherChild-table tbody').append(result);
                     $('#otherChildWrapper .otherChild-table').show();
-                    Friendly.ClearForm('otherchild');
+                    Friendly.ClearForm(formName);
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -180,7 +175,7 @@
     });
     //----------------------Special Circumstances---------------    
     $('.financial-part5').click(function () {
-        Friendly.SubmitForm('circumstance', 'incomeOther');
+        Friendly.SubmitForm('specialCircumstances', 'incomeOther');
     });
     $('input[name="Circumstances"]').change(function () {
         if ($('#Circumstances:checked').val() === "1") {
@@ -229,7 +224,7 @@
     });
     //---------------------------------------Social Security--------------------------------
     $('.financial-part7').click(function () {
-        Friendly.SubmitFormOther('socialSecurityOther', 'preexistingOther');
+        Friendly.SubmitFormOther('socialSecurityOther', 'preexistingSupportOther');
     });
 
     $('#socialSecurityOther input[name="ReceiveSocial"]').change(function () {
@@ -241,15 +236,8 @@
         }
     });
     //---------------------------------------Preexisting Other--------------------------------
-    $('.preexistingOther-item').click(function () {
-        Friendly.NextForm('preexistingOther');
-
-        if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-            $('#supportOtherWrapper').show();
-        }
-    });
-    $('#preexistingOther input[id="PreexistingSupportViewModel_Support"]').change(function () {
-        if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
+    $('#preexistingSupportOther input[id="PreexistingSupportViewModel_Support"]').change(function () {
+        if ($('#preexistingSupportOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
             $('#supportOtherWrapper').show();
         } else {
             $('#supportOtherWrapper').hide();
@@ -262,11 +250,11 @@
         model.IsOtherParent = "true";
         if ($('#supportOther').valid()) {
             $.ajax({
-                url: '/Forms/AddSupport',
+                url: '/api/PreexistingSupport/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-support-template").tmpl(data);
+                    var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
                     $('#supportOtherWrapper .support-table tbody').append(result);
                     Friendly.ClearForm('supportOther');
                     Friendly.EndLoading();
@@ -280,13 +268,12 @@
     $('#supportOtherWrapper table').on('click', '.view-children', function () {
         var id = $(this).attr('data-id');
         $.ajax({
-            url: '/Forms/GetChildSupport',
-            type: 'POST',
-            data: { Id: id },
+            url: '/api/PreexistingSupportChild/' + id + '/?format=json',
+            type: 'GET',
             success: function (data) {
                 if (data.length !== 0) {                    
                     $('#childOtherWrapper .child-table tbody').empty();
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Children);
                     $('#childOtherWrapper .child-table tbody').append(result);
                     $('#childOtherWrapper .child-table').show();
                 } else {
@@ -305,11 +292,11 @@
         model.IsOtherParent = "true";
         if ($('#childOther').valid()) {
             $.ajax({
-                url: '/Forms/AddChildSupport',
+                url: '/api/PreexistingSupportChild?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Child);
                     $('#childOtherWrapper .child-table tbody').append(result);
                     $('#childOtherWrapper .child-table').show();
                     Friendly.ClearForm('childOther');
@@ -321,12 +308,12 @@
         Friendly.EndLoading();
     });
     $('.financial-part8').click(function () {               
-        Friendly.NextForm('otherChildrenOther');
+        Friendly.NextForm('otherChildrenOther', Friendly.properties.iconSuccess);
     });
     //----------------------Other Children---------------    
     $('.financial-part9').click(function () {
         if ($('#otherChildOtherWrapper').is(':visible')) {
-            Friendly.NextForm('circumstanceOther');
+            Friendly.NextForm('circumstanceOther', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
@@ -334,16 +321,16 @@
         model.IsOtherParent = "true";
         if ($('#otherChildrenOther').valid()) {
             $.ajax({
-                url: '/Forms/OtherChildren/',
+                url: '/api/OtherChildren/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {                        
                         //Eligible. Show add children.
-                        $('#otherChildOtherWrapper #childrenId').val(data.Id);
+                        $('#otherChildOtherWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
-                        Friendly.NextForm('circumstanceOther');
+                        Friendly.NextForm('circumstanceOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -358,11 +345,11 @@
         model.OtherChildrenId = $('#otherChildOtherWrapper #childrenId').val();
         if ($('#otherchildOther').valid()) {
             $.ajax({
-                url: '/Forms/AddOtherChild/',
+                url: '/api/OtherChild?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
                     $('#otherChildOtherWrapper .otherChild-table tbody').append(result);
                     $('#otherChildOtherWrapper .otherChild-table').show();
                     Friendly.ClearForm('otherchildOther');
@@ -378,11 +365,7 @@
     $('.financial-part10').click(function () {
         //check if we need to move to next form
         if ($(this).hasClass('next')) {
-            //Friendly.SubmitForm('circumstanceOther', 'incomeOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitFormOther('circumstanceOther', 'otherChildrenOther');
+            Friendly.SubmitForm('specialCircumstancesOther', 'incomeOther');
         }
     });
     $('#circumstanceOther input[name="Circumstances"]').change(function () {

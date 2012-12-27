@@ -1,6 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -13,103 +13,71 @@ namespace Models.ViewModels
         [Required]
         public int Employed { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Salary { get; set; }
+        public int? Salary { get; set; }
         [Required]
         [Display(Name = "Self Employed")]
         public int SelfEmployed { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         [Display(Name = "Income")]
-        public string SelfIncome { get; set; }
+        public int? SelfIncome { get; set; }
         [Required]
         [Display(Name = "Tax")]
         public int SelfTax { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         [Display(Name = "Amount")]
-        public string SelfTaxAmount { get; set; }
+        public int? SelfTaxAmount { get; set; }
         [Required]
         [Display(Name = "Other Sources")]
         public int OtherSources { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Commisions { get; set; }
+        public int? Commisions { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Bonuses { get; set; }
+        public int? Bonuses { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Overtime { get; set; }
+        public int? Overtime { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Severance { get; set; }
+        public int? Severance { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Retirement { get; set; }
+        public int? Retirement { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Interest { get; set; }
+        public int? Interest { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Dividends { get; set; }
+        public int? Dividends { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Trust { get; set; }
+        public int? Trust { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Annuities { get; set; }
+        public int? Annuities { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Capital { get; set; }
+        public int? Capital { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         [Display(Name = "Social Security")]
-        public string SocialSecurity { get; set; }
+        public int? SocialSecurity { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Compensation { get; set; }
+        public int? Compensation { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Unemployment { get; set; }
+        public int? Unemployment { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         [Display(Name = "Civil Case")]
-        public string CivilCase { get; set; }
+        public int? CivilCase { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Gifts { get; set; }
+        public int? Gifts { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Prizes { get; set; }
+        public int? Prizes { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Alimony { get; set; }
+        public int? Alimony { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Assets { get; set; }
+        public int? Assets { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Fringe { get; set; }
+        public int? Fringe { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public string Other { get; set; }
+        public int? Other { get; set; }
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Other Details")]
         public string OtherDetails { get; set; }
 
         public IFormEntity ConvertToEntity()
         {
-            return new Income()
-                {
-                    UserId = UserId,
-                    IsOtherParent = IsOtherParent,
-                    Employed = Employed,
-                    Salary = Convert.ToInt32(Salary),
-                    SelfEmployed = SelfEmployed,
-                    SelfIncome = Convert.ToInt32(SelfIncome),
-                    SelfTax = SelfTax,
-                    SelfTaxAmount = Convert.ToInt32(SelfTaxAmount),
-                    OtherSources = OtherSources,
-                    Commisions = Convert.ToInt32(Commisions),
-                    Bonuses = Convert.ToInt32(Bonuses),
-                    Overtime = Convert.ToInt32(Overtime),
-                    Severance = Convert.ToInt32(Severance),
-                    Retirement = Convert.ToInt32(Retirement),
-                    Interest = Convert.ToInt32(Interest),
-                    Dividends = Convert.ToInt32(Dividends),
-                    Trust = Convert.ToInt32(Trust),
-                    Annuities = Convert.ToInt32(Annuities),
-                    Capital = Convert.ToInt32(Capital),
-                    SocialSecurity = Convert.ToInt32(SocialSecurity),
-                    Compensation = Convert.ToInt32(Compensation),
-                    Unemployment = Convert.ToInt32(Unemployment),
-                    CivilCase = Convert.ToInt32(CivilCase),
-                    Gifts = Convert.ToInt32(Gifts),
-                    Prizes = Convert.ToInt32(Prizes),
-                    Alimony = Convert.ToInt32(Alimony),
-                    Assets = Convert.ToInt32(Assets),
-                    Fringe = Convert.ToInt32(Fringe),
-                    Other = Convert.ToInt32(Other),
-                    OtherDetails = OtherDetails,
-                };
+            return this.TranslateTo<Income>();
         }
     }
 }

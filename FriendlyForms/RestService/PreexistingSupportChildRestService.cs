@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
@@ -10,6 +11,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/PreexistingSupportChild/")]
+    [Route("/PreexistingSupportChild/{Id}/")]
     public class ReqPreexistingSupportChild
     {
         [DataMember]
@@ -30,18 +32,43 @@ namespace FriendlyForms.RestService
     public class RespPreexistingSupportChild : IHasResponseStatus
     {
         [DataMember]
+        public ReqPreexistingSupportChild Child { get; set; }
+        [DataMember]
+        public List<ReqPreexistingSupportChild> Children { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
     public class PreexistingSupportChildRestService : Service
     {
         public IPreexistingSupportChildService PreexistingSupportChildService { get; set; }
-
+        public object Get(ReqPreexistingSupportChild request)
+        {
+            var childrenEntities = PreexistingSupportChildService.GetChildrenBySupportId(request.Id);
+            var children = new List<ReqPreexistingSupportChild>();
+            foreach (var preexistingSupportChild in childrenEntities)
+            {
+                var child = preexistingSupportChild.TranslateTo<ReqPreexistingSupportChild>();
+                if (preexistingSupportChild.DateOfBirth != null)
+                    child.DateOfBirth = preexistingSupportChild.DateOfBirth.Value.ToShortDateString();
+                children.Add(child);
+            }
+            return new RespPreexistingSupportChild
+                {
+                    Children = children
+                };
+        }
         public object Post(ReqPreexistingSupportChild request)
         {
             var preexistingSupportChildViewModel = request.TranslateTo<PreexistingSupportChildViewModel>();
-            PreexistingSupportChildService.AddOrUpdate(preexistingSupportChildViewModel);
-            return new RespPreexistingSupportChild();
+            var preexistingSupportEntity = PreexistingSupportChildService.AddOrUpdate(preexistingSupportChildViewModel);
+            var preexistingSupport = preexistingSupportEntity.TranslateTo<ReqPreexistingSupportChild>();
+            if (preexistingSupportEntity.DateOfBirth != null)
+                preexistingSupport.DateOfBirth = preexistingSupportEntity.DateOfBirth.Value.ToShortDateString();
+            return new RespPreexistingSupportChild()
+                {
+                    Child = preexistingSupport
+                };
         }
     }
 }

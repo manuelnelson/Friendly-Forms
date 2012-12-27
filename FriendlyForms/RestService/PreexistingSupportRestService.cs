@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -34,6 +35,8 @@ namespace FriendlyForms.RestService
     public class RespPreexistingSupport : IHasResponseStatus
     {
         [DataMember]
+        public ReqPreexistingSupport PreexistingSupport { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -44,8 +47,13 @@ namespace FriendlyForms.RestService
         public object Post(ReqPreexistingSupport request)
         {
             var preexistingSupportViewModel = request.TranslateTo<PreexistingSupportViewModel>();
-            PreexistingSupportService.AddOrUpdate(preexistingSupportViewModel);
-            return new RespPreexistingSupport();
+            var entity = PreexistingSupportService.AddOrUpdate(preexistingSupportViewModel);
+            var preexistSupport = entity.TranslateTo<ReqPreexistingSupport>();
+            preexistSupport.OrderDate = entity.OrderDate.ToShortDateString();
+            return new RespPreexistingSupport()
+                {
+                    PreexistingSupport = preexistSupport
+                };
         }
     }
 }

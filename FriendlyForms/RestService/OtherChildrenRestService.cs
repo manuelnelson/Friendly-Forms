@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -37,6 +38,8 @@ namespace FriendlyForms.RestService
     public class RespOtherChildren : IHasResponseStatus
     {
         [DataMember]
+        public OtherChildren OtherChildren { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -47,8 +50,11 @@ namespace FriendlyForms.RestService
         public object Post(ReqOtherChildren request)
         {
             var otherChildrenViewModel = request.TranslateTo<OtherChildrenViewModel>();
-            OtherChildrenService.AddOrUpdate(otherChildrenViewModel);
-            return new RespOtherChildren();
+            var otherChildren = OtherChildrenService.AddOrUpdate(otherChildrenViewModel);
+            return new RespOtherChildren
+                {
+                    OtherChildren = otherChildren
+                };
         }
     }
 }

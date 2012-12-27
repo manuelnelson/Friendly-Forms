@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
@@ -25,14 +21,14 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string DateOfBirth { get; set; }
         [DataMember]
-        public int Gender { get; set; }
-        [DataMember]
         public int OtherChildrenId { get; set; }
     }
 
     [DataContract]
     public class RespOtherChild : IHasResponseStatus
     {
+        [DataMember]
+        public ReqOtherChild OtherChild { get; set; }
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
@@ -44,8 +40,14 @@ namespace FriendlyForms.RestService
         public object Post(ReqOtherChild request)
         {
             var otherChildViewModel = request.TranslateTo<OtherChildViewModel>();
-            OtherChildService.AddOrUpdate(otherChildViewModel);
-            return new RespOtherChild();
+            var otherChildEntity = OtherChildService.AddOrUpdate(otherChildViewModel);
+            var otherChild = otherChildEntity.TranslateTo<ReqOtherChild>();
+            if (otherChildEntity.DateOfBirth != null)
+                otherChild.DateOfBirth = otherChildEntity.DateOfBirth.Value.ToShortDateString();
+            return new RespOtherChild()
+                {
+                    OtherChild = otherChild
+                };
         }
     }
 }

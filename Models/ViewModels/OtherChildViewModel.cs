@@ -21,9 +21,6 @@ namespace Models.ViewModels
         [RegularExpression(pattern: @"^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$", ErrorMessage = @"Date must be in mm/dd/yyyy format")]
         public string DateOfBirth { get; set; }
 
-        [Required]
-        public int Gender { get; set; }
-
         public int OtherChildrenId { get; set; }
 
         public List<OtherChild> Children { get; set; }
@@ -34,9 +31,9 @@ namespace Models.ViewModels
             {
                 Id = Id,
                 DateOfBirth = string.IsNullOrEmpty(DateOfBirth) ? (DateTime?)null : Convert.ToDateTime(this.DateOfBirth),
-                Gender = this.Gender,
                 Name = this.Name,
                 UserId = this.UserId,
+                OtherChildrenId = OtherChildrenId
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿@model BusinessLogic.Models.AllFinancialViewModel
+﻿@using FriendlyForms.Authentication
+@model BusinessLogic.Models.AllFinancialViewModel
 @{
     ViewBag.Title = "Financial";
 }
@@ -25,11 +26,11 @@
                 }
                 @if (Model.FinancialFormsCompleted.Preexisting)
                 {
-                    <li class="preexisting-item" id="preexistingNav"><a data-form="preexisting" href="#"><i class="@itemDone"></i>Preexisting Support</a></li>
+                    <li class="nav-item" id="preexistingSupportNav"><a data-form="preexistingSupport" href="#"><i class="@itemDone"></i>Preexisting Support</a></li>
                 }
                 else
                 {
-                    <li class="preexisting-item" id="preexistingNav"><a data-form="preexisting" href="#"><i class="@itemlock"></i>Preexisting Support</a></li>
+                    <li class="nav-item" id="preexistingSupportNav"><a data-form="preexistingSupport" href="#"><i class="@itemlock"></i>Preexisting Support</a></li>
                 }
                 @if (Model.FinancialFormsCompleted.OtherChildren)
                 {
@@ -41,11 +42,11 @@
                 }
                 @if (Model.FinancialFormsCompleted.SpecialCircumstance)
                 {
-                    <li class="nav-item" id="circumstanceNav"><a data-form="circumstance" href="#"><i class="@itemDone"></i>Special Circumstance</a></li>
+                    <li class="nav-item" id="specialCircumstancesNav"><a data-form="specialCircumstances" href="#"><i class="@itemDone"></i>Special Circumstance</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="circumstanceNav"><a data-form="circumstance" href="#"><i class="@itemlock"></i>Special Circumstance</a></li>
+                    <li class="nav-item" id="specialCircumstancesNav"><a data-form="specialCircumstances" href="#"><i class="@itemlock"></i>Special Circumstance</a></li>
                 }
                 @if (Model.FinancialFormsCompleted.IncomeOther)
                 {
@@ -65,11 +66,11 @@
                 }
                 @if (Model.FinancialFormsCompleted.PreexistingOther)
                 {
-                    <li class="preexistingOther-item" id="preexistingOtherNav"><a data-form="preexistingOther" href="#"><i class="@itemDone"></i>Preexisting Support (Other)</a></li>
+                    <li class="nav-item" id="preexistingSupportOtherNav"><a data-form="preexistingSupportOther" href="#"><i class="@itemDone"></i>Preexisting Support (Other)</a></li>
                 }
                 else
                 {
-                    <li class="preexistingOther-item" id="preexistingOtherNav"><a data-form="preexistingOther" href="#"><i class="@itemlock"></i>Preexisting Support (Other)</a></li>
+                    <li class="nav-item" id="preexistingSupportOtherNav"><a data-form="preexistingSupportOther" href="#"><i class="@itemlock"></i>Preexisting Support (Other)</a></li>
                 }
                 @if (Model.FinancialFormsCompleted.OtherChildrenOther)
                 {
@@ -81,11 +82,11 @@
                 }
                 @if (Model.FinancialFormsCompleted.SpecialCircumstanceOther)
                 {
-                    <li class="nav-item" id="circumstanceOtherNav"><a data-form="circumstanceOther" href="#"><i class="@itemDone"></i>Circumstances (Other)</a></li>
+                    <li class="nav-item" id="specialCircumstancesOtherNav"><a data-form="specialCircumstancesOther" href="#"><i class="@itemDone"></i>Circumstances (Other)</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="circumstanceOtherNav"><a data-form="circumstanceOther" href="#"><i class="@itemlock"></i>Circumstances (Other)</a></li>
+                    <li class="nav-item" id="specialCircumstancesOtherNav"><a data-form="specialCircumstancesOther" href="#"><i class="@itemlock"></i>Circumstances (Other)</a></li>
                 }
             </ul>
         </li>
@@ -98,6 +99,7 @@
         <a data-form="asdfa" href="#" class="current">Financial</a>
     </div>
 }
+<input type="hidden" id="user-id" value="@User.FriendlyIdentity().UserId" /> 
 @Html.Partial("_Income", Model.IncomeViewModel)
 @Html.Partial("_SocialSecurity", Model.SocialSecurityViewModel)
 @Html.Partial("_PreexistingSupport", Model.PreexistingSupportViewModel)

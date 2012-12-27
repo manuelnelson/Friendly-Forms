@@ -1,47 +1,31 @@
-﻿using System;
-using Models.Contract;
+﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
     public class SpecialCircumstances : IFormEntity
     {
-        public virtual int Id { get; set; }
-        public virtual int UserId { get; set; }
-        public virtual bool IsOtherParent { get; set; }
-        public virtual int Circumstances { get; set; }
-        public virtual int Deviation { get; set; }
-        public virtual int Health { get; set; }
-        public virtual int Insurance { get; set; }
-        public virtual int TaxCredit { get; set; }
-        public virtual int TravelExpenses { get; set; }
-        public virtual int Visitation { get; set; }
-        public virtual int Alimony { get; set; }
-        public virtual int Mortgage { get; set; }
-        public virtual int Permanency { get; set; }
-        public virtual int NonSpecific { get; set; }
-        public virtual int ParentingTime { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public bool IsOtherParent { get; set; }
+        public int? Circumstances { get; set; }
+        public int? Deviation { get; set; }
+        public int? Health { get; set; }
+        public int? Insurance { get; set; }
+        public int? TaxCredit { get; set; }
+        public int? TravelExpenses { get; set; }
+        public int? Visitation { get; set; }
+        public int? Alimony { get; set; }
+        public int? Mortgage { get; set; }
+        public int? Permanency { get; set; }
+        public int? NonSpecific { get; set; }
+        public int? ParentingTime { get; set; }
 
 
         public IViewModel ConvertToModel()
         {
-            return new SpecialCircumstancesViewModel()
-                {
-                    IsOtherParent = IsOtherParent,
-                    Alimony = Alimony.ToString(),
-                    Circumstances = Circumstances,
-                    Deviation = Deviation.ToString(),
-                    Health = Health.ToString(),
-                    Insurance = Insurance.ToString(),
-                    Mortgage = Mortgage.ToString(),
-                    NonSpecific = NonSpecific.ToString(),
-                    ParentingTime = ParentingTime.ToString(),
-                    Permanency = Permanency.ToString(),
-                    TaxCredit = TaxCredit.ToString(),
-                    TravelExpenses = TravelExpenses.ToString(),
-                    UserId = UserId,
-                    Visitation = Visitation.ToString()
-                };
+            return this.TranslateTo<SpecialCircumstancesViewModel>();
         }
 
         public void Update(IFormEntity entity)
