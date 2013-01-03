@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function ($) {
     //Court Form
     $('#child-part1').click(function () {
         Friendly.SubmitForm('court', 'participant');

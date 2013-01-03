@@ -19,6 +19,10 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string Address { get; set; }
         [DataMember]
+        public string CityState { get; set; }
+        [DataMember]
+        public string ZipCode { get; set; }
+        [DataMember]
         public int? RetailValue { get; set; }
         [DataMember]
         public int? MoneyOwed { get; set; }

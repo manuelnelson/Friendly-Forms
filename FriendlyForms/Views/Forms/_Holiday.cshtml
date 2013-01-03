@@ -17,7 +17,7 @@
                         <input type="hidden" id="holidayChildId" /><br />
                         <h3 id="holidayChildName"></h3>
                         <br />
-                        <h5>Thanksgiving Break</h5>
+                        <h4>Thanksgiving Break</h4>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage Thanksgiving break? From the time school is dismissed on the last day prior to the holiday until:</label>
@@ -39,7 +39,7 @@
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ThanksgivingTime)
                         </div>                
-                        <h5>Winter Break</h5>
+                        <h4>Winter Break</h4>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage Winter Break? From the time school is dismissed on the last day prior to the holiday</label>
@@ -63,7 +63,7 @@
                             @Html.TextAreaFor(m => m.HolidayViewModel.ChristmasOther, new { @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ChristmasOther)
                         </div>                
-                        <h5>Spring Break</h5>
+                        <h4>Spring Break</h4>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage the start of spring break?  From the time school is dismissed on the last day prior to the break until:</label>
@@ -84,7 +84,7 @@
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringBreakTime)
                         </div>                
-                        <h5>Summer Break</h5>
+                        <h4>Summer Break</h4>
                         <div class="control-group">
                             Summer vacation begins @Html.TextBoxFor(m => m.HolidayViewModel.SummerBeginDays, new { @class = "input-mini inline", placeholder = "#" }) days after the last day of school at @Html.TextBoxFor(m => m.HolidayViewModel.SummerBeginTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small inline" })
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
@@ -103,7 +103,7 @@
                             @Html.TextAreaFor(m => m.HolidayViewModel.SummerDetails, new { @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.SummerDetails)
                         </div>
-                        <h5>Fall Break</h5>
+                        <h4>Fall Break</h4>
                         <div class="control-group">
                             <label class="informative">
                                 How would you like to manage the start of fall break?  From the time school is dismissed on the last day prior to the break until:</label>

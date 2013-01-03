@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function ($) {
     //----------------------Privacy Form-----------------------
     $('input[name=NeedPrivacy]').change(function () {
         if ($('#NeedPrivacy:checked').val() === "1") {
@@ -37,7 +37,7 @@
         Friendly.StartLoading();
         //get values
         var model = Friendly.GetFormInput('information');
-        loadChildren('decision');
+        Parenting.LoadChildren('decision');
         var formName = 'information';
         var nextForm = 'decisions';
         var formSelector = '#' + formName;
@@ -88,7 +88,7 @@
         }
         return false;
     });
-    $('#decisions input[type=radio]').live('change', checkIfBothIsChecked);
+    $('#decisions input[type=radio]').live('change', Parenting.CheckIfBothIsChecked);
     //Decisions Form
     $('.dropdown-toggle').dropdown();
 
@@ -96,32 +96,44 @@
         if (!$('#decisions').valid()) {
             return false;
         }
+        Friendly.StartLoading();
         var childId = $(this).attr('data-id');
         if (childId === "0") {
-            //all case.  Cycle through all kids (except current showing)
+            //all case.  Cycle through all kids
             for (var i = 0; i < Friendly.children.length; i++) {
                 var currChild = Friendly.children[i];
-                copyDecision(currChild.Id);
+                //only show message if last child saved completes
+                if (i == Friendly.children.length - 1)
+                    copyDecision(currChild.Id, true);
+                else
+                    copyDecision(currChild.Id, false);
             }
         } else {
-            copyDecision(childId);
+            //first save current child
+            var currChildId = $('#childId').val().trim();
+            copyDecision(currChildId, false);
+            //then save the copy to child
+            copyDecision(childId, true);
         }
+        Friendly.EndLoading();
     });
-    function copyDecision(childId) {
-        saveExtraDecisions(childId);
+    function copyDecision(childId, showMessage) {
+        Parenting.SaveExtraDecisions(childId);
         var model = Friendly.GetFormInput('decisions');
-        model.ChildId = typeof(childId) === "undefined" ? $('#childId').val() : childId;
+        model.ChildId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
         $.ajax({
             url: '/api/Decisions?format=json',
             type: 'POST',
             data: model,
             success: function () {
+                if (showMessage)
+                    Friendly.ShowMessage('Success!', 'The decisions section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#decisionsWrapper .copy-wrapper');
             },
             error: Friendly.GenericErrorMessage
         });
     }
-    $('.child-part6').click(function() {
-        Friendly.AddDecision(this);
+    $('.child-part6').click(function () {
+        Parenting.AddDecision(this);
     });
 
     //Responsibility Form
@@ -276,7 +288,7 @@
                 type: 'POST',
                 data: model,
                 success: function () {
-                    loadChildren('holiday');
+                    Parenting.LoadChildren('holiday');
                     Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                     Friendly.EndLoading();
                     return false;
@@ -388,7 +400,7 @@
     });
 
     $('.child-part10').click(function () {
-        addHoliday(this);
+        Parenting.AddHoliday(this);
     });
     //Addendum
     $('input[name=HasAddendum]').change(function () {
@@ -409,7 +421,7 @@
                 url: '/api/' + formName + "?format=json",
                 type: 'POST',
                 data: model,
-                success: function() {
+                success: function () {
                     var forms = ["privacy", "information", "decisions", "responsibility", "communication", "schedule", "holiday", "addendum"];
                     var readableForms = ["Supervision", "Information", "Decisions", "Responsibility", "Communication", "Schedule", "Holiday", "Addendum"];
                     Friendly.ValidateForms(forms, readableForms, '.child-part11');
@@ -463,28 +475,39 @@
                 break;
         }
     });
-    
-    $('#copy-holidays').on('click',"li a", function () {
+
+    $('#copy-holidays').on('click', "li a", function () {
         if (!$('#holiday').valid()) {
             return;
         }
-        var childId = $(this).attr('data-id');
+        Friendly.StartLoading();
+        var childId = $(this).attr('data-id'); 
         if (childId === "0") {
             //all case.  Cycle through all kids (except current showing)
             for (var i = 0; i < Friendly.children.length; i++) {
                 var currChild = Friendly.children[i];
-                copyHoliday(currChild.Id);
+                //only show message if last child saved completes
+                if (i == Friendly.children.length - 1)
+                    copyHoliday(currChild.Id, true);
+                else
+                    copyHoliday(currChild.Id, false);
             }
         } else {
-            copyHoliday(childId);
+            //first save current child
+            var currChildId = $('#holidayChildId').val().trim();
+            copyHoliday(currChildId, false);
+            //then save the copy to child
+            copyHoliday(childId, true);
         }
+        Friendly.EndLoading();
     });
-    function copyHoliday(childId) {
-        saveExtraHolidays(childId);
+
+    function copyHoliday(childId, showMessage) {
+        Parenting.SaveExtraHolidays(childId);
         var formName = 'holiday';
         //do rest of the form
         var model = Friendly.GetFormInput(formName);
-        model.ChildId = childId;
+        model.ChildId = typeof (childId) === "undefined" ? $('#holidayChildId').val() : childId;
         model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
         model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
         $.ajax({
@@ -492,307 +515,11 @@
             type: 'POST',
             data: model,
             success: function () {
+                if (showMessage)
+                    Friendly.ShowMessage('Success!', 'The holiday section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#holidayWrapper .copy-wrapper');
             },
             error: Friendly.GenericErrorMessage
         });
     }
 });
-function addHoliday(caller) {
-    var formName = 'holiday';
-    if ($('#' + formName).valid()) {
-        saveExtraHolidays();
-        var model = Friendly.GetFormInput(formName);
-        model.ChildId = $('#holidayChildId').val();
-        if (caller != null && $(caller).hasClass('next'))
-            Friendly.childNdx++;
-        else if (caller != null) {
-            Friendly.childNdx--;
-        }
-        //check if we need to move to next form
-        if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-            Friendly.SubmitForm('holiday', 'addendum', model);
-        }
-        //check if we need to move to previous form
-        if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-            Friendly.SubmitForm('holiday', 'schedule', model);
-            return false;
-        }
-        Friendly.StartLoading();
-        //save current information
-        $.ajax({
-            url: '/api/' + formName + "?format=json",
-            type: 'POST',
-            data: model,
-            success: function () {
-                $('#' + formName)[0].reset();
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                var nextChild = Friendly.children[Friendly.childNdx];
-                getChildHoliday(nextChild);
-                Friendly.EndLoading();
-            },
-            error: Friendly.GenericErrorMessage
-        });
-        return true;
-    }
-}
-function saveExtraDecisions(childId) {
-    var formName = 'extraDecisions';
-    $.each($('.extra-decision-item'), function (ndx, item) {
-        var id = $(item).children('#extra-decision-Id').val();
-        var extraModel = {
-            Id: typeof (childId) === "undefined" ? id : 0,
-            ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
-            DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
-            Description: $(item).children('#extra-decision-description').text().trim(),
-            UserId: $('#user-id').val()
-        };
-        //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
-        //If it does, copy over the Id
-        if (typeof (childId) !== "undefined") {
-            $.ajax({
-                url: '/api/' + formName + '/' + childId + '?format=json',
-                type: 'GET',
-                success: function (data) {
-                    $.each(data, function (ndx, item) {
-                        if (item.Description === extraModel.Description) {
-                            //We have a match
-                            extraModel.Id = item.Id;
-                        }
-                    });
-                    //Now add/update extradecisions
-                    $.ajax({
-                        url: '/api/' + formName + '/?format=json',
-                        type: 'POST',
-                        data: extraModel,
-                        success: function () {
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                },
-                error: Friendly.GenericErrorMessage
-            });
-            return;
-        }
-        //else, just update the extradecisions
-        $.ajax({
-            url: '/api/' + formName + '/?format=json',
-            type: 'POST',
-            data: extraModel,
-            success: function () {
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-}
-function getChildDecisions(child) {
-    $.ajax({
-        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
-        type: 'GET',
-        success: function (data) {
-            $('#childName').text(child.Name);
-            $('#childId').val(child.Id);
-            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
-            $('.extra-decision-item').remove();
-            $.each(data.ExtraDecisions, function (ndx, item) {
-                var result = $("#friendly-extraDecisions-template").tmpl(item);
-                $('#radio-decisions').append(result);
-            });
-            checkIfBothIsChecked();
-            //fixes possible error flag if one child isn't complete but another is
-            if (data.Decisions.Education !== 0) {
-                $('#decisions').valid();
-            }
-            $('#decisionsWrapper').show(); 
-        },
-        error: Friendly.GenericErrorMessage
-    });
-}
-function checkIfBothIsChecked() {
-    var bothChecked = false;
-    $.each($('#decisions input[type=radio]'), function (ndx, item) {
-        var id = $(item).attr('id');
-        if ($('#' + id + ':checked').val() === "3")
-            bothChecked = true;
-    });
-    if (bothChecked) {
-        $('.decision-details').show();
-    } else {
-        $('#DecisionsViewModel_BothResolve').val('');
-        $('.decision-details').hide();
-    }
-}
-//Children Decisions
-function loadChildren(form) {
-    Friendly.children = [];
-    $('.copy-button ul').empty();
-    $('.copy-button ul').append('<li><a title="all" data-id="0" href="#">All</a></li>');
-    $.each($('.child-table tbody tr'), function (ndx, item) {
-        var child = {
-            Name: $(item).find('.child-name').text(),
-            DateOfBirth: $(item).find('.child-dob').text(),
-            Id: $(item).find('.child-id').text().trim(),
-        };
-        Friendly.children.push(child);
-        //add to decision and holiday dropdown
-        $('.copy-button ul').append('<li><a title="all" data-id="' + child.Id + '" href="#">' + child.Name + '</a></li>');
-    });
-
-    if (Friendly.children.length <= 1) {
-        $('.copy-wrapper').hide();
-    }
-
-    //get first child's information
-    Friendly.childNdx = 0;
-    var firstChild = Friendly.children[Friendly.childNdx];
-    switch (form) {
-        case "decision":
-            getChildDecisions(firstChild);
-            break;
-        case "holiday":
-            getChildHoliday(firstChild);
-            break;
-    }
-}
-function getChildHoliday(child) {
-    $.ajax({
-        url: '/api/Holiday/' + child.Id + '?format=json',
-        type: 'GET',
-        success: function (data) {
-            setChildHolidayForm(data, child);
-            //fixes possible error flag if one child isn't complete but another is
-            if (data.Holidays.SpringBreakFather !== 0) {
-                $('#holiday').valid();
-            }
-            $('#holidayWrapper').show();
-            $('.holiday-item').addClass('active');
-        },
-        error: Friendly.GenericErrorMessage
-    });
-}
-function setChildHolidayForm(data, child) {
-    Friendly.ClearForm('holiday');
-    $('#holidayChildName').text(child.Name);
-    $('#holidayChildId').val(child.Id);
-    if (data.Holidays.FridayHoliday) {
-        $('#HolidayViewModel_FridayHoliday').attr('checked', 'checked');
-        $('#HolidayViewModel_FridayHoliday').val('true');
-    } else {
-        $('#HolidayViewModel_FridayHoliday').val('false');
-    }       
-    if (data.Holidays.MondayHoliday) {
-        $('#HolidayViewModel_MondayHoliday').attr('checked', 'checked');
-        $('#HolidayViewModel_MondayHoliday').val('true');
-    } else {
-        $('#HolidayViewModel_MondayHoliday').val('false');
-    }
-
-    $('#HolidayViewModel_Thanksgiving[value="' + data.Holidays.Thanksgiving + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ThanksgivingOther').val(data.Holidays.ThanksgivingOther);
-    $('#HolidayViewModel_Christmas[value="' + data.Holidays.Christmas + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChristmasTime').val(data.Holidays.ChristmasTime);
-    $('#HolidayViewModel_SpringBreakTime').val(data.Holidays.SpringBreakTime);
-    $('#HolidayViewModel_FallBreakTime').val(data.Holidays.FallBreakTime);
-    $('#HolidayViewModel_ThanksgivingTime').val(data.Holidays.ThanksgivingTime);
-    $('#HolidayViewModel_ChristmasOther').val(data.Holidays.ChristmasOther);
-    $('#HolidayViewModel_SpringBreak[value="' + data.Holidays.SpringBreak + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_SpringOther').val(data.Holidays.SpringOther);
-    $('#HolidayViewModel_SummerBeginDays').val(data.Holidays.SummerBeginDays);
-    $('#HolidayViewModel_SummerBeginTime').val(data.Holidays.SummerBeginTime);
-    $('#HolidayViewModel_SummerEndDays').val(data.Holidays.SummerEndDays);
-    $('#HolidayViewModel_SummerEndTime').val(data.Holidays.SummerEndTime);
-    $('#HolidayViewModel_SummerDetails').val(data.Holidays.SummerDetails);
-    $('#HolidayViewModel_FallBreak[value="' + data.Holidays.FallBreak + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FallOther').val(data.Holidays.FallOther);
-    $('#HolidayViewModel_SpringBreakFather[value="' + data.Holidays.SpringBreakFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_SpringBreakMother[value="' + data.Holidays.SpringBreakMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FallBreakFather[value="' + data.Holidays.FallBreakFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FallBreakMother[value="' + data.Holidays.FallBreakMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ThanksgivingFather[value="' + data.Holidays.ThanksgivingFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ThanksgivingMother[value="' + data.Holidays.ThanksgivingMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChristmasFather[value="' + data.Holidays.ChristmasFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChristmasMother[value="' + data.Holidays.ChristmasMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MlkFather[value="' + data.Holidays.MlkFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MlkMother[value="' + data.Holidays.MlkMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_PresidentsFather[value="' + data.Holidays.PresidentsFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_PresidentsMother[value="' + data.Holidays.PresidentsMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersFather[value="' + data.Holidays.MothersFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersMother[value="' + data.Holidays.MothersMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MemorialFather[value="' + data.Holidays.MemorialFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MemorialMother[value="' + data.Holidays.MemorialMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersFather[value="' + data.Holidays.FathersFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersMother[value="' + data.Holidays.FathersMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_IndependenceFather[value="' + data.Holidays.IndependenceFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_IndependenceMother[value="' + data.Holidays.IndependenceMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_LaborFather[value="' + data.Holidays.LaborFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_LaborMother[value="' + data.Holidays.LaborMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_HalloweenFather[value="' + data.Holidays.HalloweenFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_HalloweenMother[value="' + data.Holidays.HalloweenMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChildrensFather[value="' + data.Holidays.ChildrensFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChildrensMother[value="' + data.Holidays.ChildrensMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersBdayFather[value="' + data.Holidays.MothersBdayFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersBdayMother[value="' + data.Holidays.MothersBdayMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersBdayFather[value="' + data.Holidays.FathersBdayFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersBdayMother[value="' + data.Holidays.FathersBdayMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ReligiousFather[value="' + data.Holidays.ReligiousFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ReligiousMother[value="' + data.Holidays.ReligiousMother + '"]').attr('checked', 'checked');
-    $('.extra-holiday-item').remove();
-    $.each(data.ExtraHolidays, function (ndx, item) {
-        var result = $("#friendly-extraHolidays-template").tmpl(item);
-        $('#holiday').append(result);
-    });
-}
-function saveExtraHolidays(childId) {
-    var formName = 'extraHoliday';
-    $.each($('.extra-holiday-item'), function (ndx, item) {
-        var id = $(item).children('#extra-holiday-Id').val();
-        var extraModel = {
-            Id: typeof (childId) === "undefined" ? id : 0,
-            ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-holiday-childId').val() : childId,
-            HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
-            HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
-            HolidayName: $(item).children('.extra-holiday-name').text(),
-            UserId: $('#user-id').val()
-        };
-        //If we are copying, we need to make sure that the extra holiday doesn't already exist for the current child
-        //If it does, copy over the Id
-        if (typeof (childId) !== "undefined") {
-            $.ajax({
-                url: '/api/' + formName + '/' + childId + "?format=json",
-                type: 'GET',
-                success: function (data) {
-                    $.each(data.ExtraHolidays, function (ndx, item) {
-                        if (item.HolidayName === extraModel.HolidayName) {
-                            //We have a match
-                            extraModel.Id = item.Id;
-                        }
-                    });
-                    //Now add/update extradecisions
-                    $.ajax({
-                        url: '/api/' + formName + "?format=json",
-                        type: 'POST',
-                        data: extraModel,
-                        success: function () {
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                },
-                error: Friendly.GenericErrorMessage
-            });
-            return;
-        }
-        $.ajax({
-            url: '/api/' + formName + "?format=json",
-            type: 'POST',
-            data: extraModel,
-            success: function () {
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-}
-
 

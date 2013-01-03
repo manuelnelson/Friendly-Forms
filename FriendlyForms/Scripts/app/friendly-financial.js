@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(function ($) {
     $('.financial-part1').click(function () {
         Friendly.SubmitForm('income', 'socialSecurity');
     });
@@ -142,7 +142,7 @@
                         $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('circumstance', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -313,12 +313,12 @@
     //----------------------Other Children---------------    
     $('.financial-part9').click(function () {
         if ($('#otherChildOtherWrapper').is(':visible')) {
-            Friendly.NextForm('circumstanceOther', Friendly.properties.iconSuccess);
+            Friendly.NextForm('specialCircumstancesOther', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildrenOther');
-        model.IsOtherParent = "true";
+        model.IsOtherParent = "true"; 
         if ($('#otherChildrenOther').valid()) {
             $.ajax({
                 url: '/api/OtherChildren/?format=json',
@@ -330,7 +330,7 @@
                         $('#otherChildOtherWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
-                        Friendly.NextForm('circumstanceOther', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('specialCircumstancesOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -364,9 +364,7 @@
     //----------------------Special Circumstances---------------    
     $('.financial-part10').click(function () {
         //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('specialCircumstancesOther', 'incomeOther');
-        }
+        Friendly.SubmitForm('specialCircumstancesOther', 'incomeOther');
     });
     $('#circumstanceOther input[name="Circumstances"]').change(function () {
         if ($('#circumstanceOther #Circumstances:checked').val() === "1") {

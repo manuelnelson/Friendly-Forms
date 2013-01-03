@@ -12,9 +12,11 @@ bootstrap-tooltip.js
 bootstrap-popover.js
 bootstrap-datepicker.js
 bootstrap-timepicker.js
+bootstrap-typeahead.js
 app/friendly-global.js 
 app/friendly-domestic.js
 app/friendly-financial.js
 app/friendly-output.js
 app/friendly-starter.js
 app/friendly-parenting.js  
+app/friendly-parenting-global.js  

@@ -1,18 +1,36 @@
-﻿$(document).ready(function () {
+﻿$(function ($) {
     //House Form
     $('.domestic-part1').click(function () {
         //get values
-        var model = {
-            Address: $('#Address').val(),
-            Equity: $('#Equity').val().replace(/,/g, ""),
-            MaritalHouse: $('#MaritalHouse:checked').val(),
-            MoneyOwed: $('#MoneyOwed').val().replace(/,/g, ""),
-            MortgageOwner: $('#MortgageOwner').val(),
-            RetailValue: $('#RetailValue').val().replace(/,/g, ""), 
-            Divide: $('#Divide').val(),
-            UserId: $('#user-id').val()
-        };
+        var model = Friendly.GetFormInput('house');
+        model.Equity = $('#Equity').val().replace(/,/g, "");
+        model.MoneyOwed = $('#MoneyOwed').val().replace(/,/g, "");
+        model.RetailValue = $('#RetailValue').val().replace(/,/g, ""); 
         Friendly.SubmitForm('house', 'property', model);
+    });
+    $('#CityState').typeahead({
+        source: function (typeahead, query) {
+            if (query === "") {
+                return typeahead.process([]);
+            }
+            var url = 'http://ws.geonames.org/searchJSON?country=US&name_startsWith=' + query;
+            return $.ajax({
+                url: url,
+                success: function (data) {                    
+                    var cityStates = [];
+                    //limit results to 3
+                    var maxItems = data.geonames.length < 5 ? data.geonames.length : 5;
+                    for (var i = 0; i < maxItems; i++) {
+                        cityStates.push({
+                            Name: data.geonames[i].name + ', ' + data.geonames[i].adminCode1
+                        });
+                    }
+                    typeahead.process(cityStates);
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        },
+        property: "Name"
     });
     $('input[name=MaritalHouse]').change(function () {
         $('.marital-info').val('');
@@ -116,12 +134,6 @@
     //Debt Form
     $('.domestic-part4').click(function () {
         //get values
-        var model = {
-            DebtDivision: $('#DebtDivision').val(),
-            MaritalDebt: $('#MaritalDebt:checked').val(),
-            UserId: $('#user-id').val()
-        };
-        //check if we need to move to next form
         Friendly.SubmitForm('debt', 'asset', model);
     });
 

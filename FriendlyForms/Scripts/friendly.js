@@ -14300,6 +14300,330 @@ $.format = $.validator.format;
 
     $.fn.timepicker.Constructor = Timepicker
 }(window.jQuery);
+;/* =============================================================
+ * bootstrap-typeahead.js v2.0.3
+ * http://twitter.github.com/bootstrap/javascript.html#typeahead
+ * =============================================================
+ * Copyright 2012 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============================================================ */
+
+
+!function ($) {
+
+    "use strict"; // jshint ;_;
+
+
+    /* TYPEAHEAD PUBLIC CLASS DEFINITION
+     * ================================= */
+
+    var Typeahead = function (element, options) {
+        this.$element = $(element)
+        this.options = $.extend({}, $.fn.typeahead.defaults, options)
+        this.matcher = this.options.matcher || this.matcher
+        this.sorter = this.options.sorter || this.sorter
+        this.highlighter = this.options.highlighter || this.highlighter
+        this.updater = this.options.updater || this.updater
+        this.$menu = $(this.options.menu).appendTo('body')
+        this.source = this.options.source
+        this.onselect = this.options.onselect
+        this.strings = true
+        this.shown = false
+        this.listen()
+    }
+
+    Typeahead.prototype = {
+
+        constructor: Typeahead
+
+    , select: function () {
+        var val = JSON.parse(this.$menu.find('.active').attr('data-value'))
+              , text
+
+        if (!this.strings) text = val[this.options.property]
+        else text = val
+
+        this.$element.val(this.updater(text)).change()
+
+        if (typeof this.onselect == "function")
+            this.onselect(val)
+
+        return this.hide()
+    }
+
+    , updater: function (item) {
+        return item
+    }
+
+    , show: function () {
+        var pos = $.extend({}, this.$element.offset(), {
+            height: this.$element[0].offsetHeight
+        })
+
+        this.$menu.css({
+            top: pos.top + pos.height
+        , left: pos.left
+        })
+
+        this.$menu.show()
+        this.shown = true
+        return this
+    }
+
+    , hide: function () {
+        this.$menu.hide()
+        this.shown = false
+        return this
+    }
+
+    , lookup: function (event) {
+        var that = this
+          , items
+          , q
+          , value
+
+        this.query = this.$element.val()
+
+        if (typeof this.source == "function")
+            value = this.source(this, this.query)
+        if (value)
+            this.process(value)
+        else
+            this.process(this.source)
+    }
+
+    , process: function (results) {
+        var that = this
+          , items
+          , q
+
+        if (results.length && typeof results[0] != "string")
+            this.strings = false
+
+        this.query = this.$element.val()
+
+        if (!this.query) {
+            return this.shown ? this.hide() : this
+        }
+
+        items = $.grep(results, function (item) {
+            if (!that.strings)
+                item = item[that.options.property]
+
+            return that.matcher(item)
+        })
+
+        items = this.sorter(items)
+
+        if (!items.length) {
+            return this.shown ? this.hide() : this
+        }
+
+        return this.render(items.slice(0, this.options.items)).show()
+    }
+
+    , matcher: function (item) {
+        return ~item.toLowerCase().indexOf(this.query.toLowerCase())
+    }
+
+    , sorter: function (items) {
+        var beginswith = []
+          , caseSensitive = []
+          , caseInsensitive = []
+          , item
+          , sortby
+
+        while (item = items.shift()) {
+            if (this.strings) sortby = item
+            else sortby = item[this.options.property]
+
+            if (!sortby.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item)
+            else if (~sortby.indexOf(this.query)) caseSensitive.push(item)
+            else caseInsensitive.push(item)
+        }
+
+        return beginswith.concat(caseSensitive, caseInsensitive)
+    }
+
+    , highlighter: function (item) {
+        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+        return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+            return '<strong>' + match + '</strong>'
+        })
+    }
+
+    , render: function (items) {
+        var that = this
+
+        items = $(items).map(function (i, item) {
+            i = $(that.options.item).attr('data-value', JSON.stringify(item))
+            if (!that.strings)
+                item = item[that.options.property]
+            i.find('a').html(that.highlighter(item))
+            return i[0]
+        })
+
+        items.first().addClass('active')
+        this.$menu.html(items)
+        return this
+    }
+
+    , next: function (event) {
+        var active = this.$menu.find('.active').removeClass('active')
+          , next = active.next()
+
+        if (!next.length) {
+            next = $(this.$menu.find('li')[0])
+        }
+
+        next.addClass('active')
+    }
+
+    , prev: function (event) {
+        var active = this.$menu.find('.active').removeClass('active')
+          , prev = active.prev()
+
+        if (!prev.length) {
+            prev = this.$menu.find('li').last()
+        }
+
+        prev.addClass('active')
+    }
+
+    , listen: function () {
+        this.$element
+          .on('blur', $.proxy(this.blur, this))
+          .on('keypress', $.proxy(this.keypress, this))
+          .on('keyup', $.proxy(this.keyup, this))
+
+        if ($.browser.webkit || $.browser.msie) {
+            this.$element.on('keydown', $.proxy(this.keypress, this))
+        }
+
+        this.$menu
+          .on('click', $.proxy(this.click, this))
+          .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+    }
+
+    , keyup: function (e) {
+        switch (e.keyCode) {
+            case 40: // down arrow
+            case 38: // up arrow
+                break
+
+            case 9: // tab
+            case 13: // enter
+                if (!this.shown) return
+                this.select()
+                break
+
+            case 27: // escape
+                if (!this.shown) return
+                this.hide()
+                break
+
+            default:
+                this.lookup();
+        }
+
+        e.stopPropagation()
+        e.preventDefault()
+    }
+
+    , keypress: function (e) {
+        if (!this.shown) return
+
+        switch (e.keyCode) {
+            case 9: // tab
+            case 13: // enter
+            case 27: // escape
+                e.preventDefault()
+                break
+
+            case 38: // up arrow
+                if (e.type != 'keydown') break
+                e.preventDefault()
+                this.prev()
+                break
+
+            case 40: // down arrow
+                if (e.type != 'keydown') break
+                e.preventDefault()
+                this.next()
+                break
+        }
+
+        e.stopPropagation()
+    }
+
+    , blur: function (e) {
+        var that = this
+        setTimeout(function () { that.hide() }, 150)
+    }
+
+    , click: function (e) {
+        e.stopPropagation()
+        e.preventDefault()
+        this.select()
+    }
+
+    , mouseenter: function (e) {
+        this.$menu.find('.active').removeClass('active')
+        $(e.currentTarget).addClass('active')
+    }
+
+    }
+
+
+    /* TYPEAHEAD PLUGIN DEFINITION
+     * =========================== */
+
+    $.fn.typeahead = function (option) {
+        return this.each(function () {
+            var $this = $(this)
+              , data = $this.data('typeahead')
+              , options = typeof option == 'object' && option
+            if (!data) $this.data('typeahead', (data = new Typeahead(this, options)))
+            if (typeof option == 'string') data[option]()
+        })
+    }
+
+    $.fn.typeahead.defaults = {
+        source: []
+    , items: 8
+    , menu: '<ul class="typeahead dropdown-menu"></ul>'
+    , item: '<li><a href="#"></a></li>'
+    , onselect: null
+    , property: 'value'
+    }
+
+    $.fn.typeahead.Constructor = Typeahead
+
+
+    /* TYPEAHEAD DATA-API
+     * ================== */
+
+    $(function () {
+        $('body').on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
+            var $this = $(this)
+            if ($this.data('typeahead')) return
+            e.preventDefault()
+            $this.typeahead($this.data())
+        })
+    })
+
+}(window.jQuery);
 ;/* File Created: August 18, 2012 */
 window.Friendly = window.Friendly || {};
 
@@ -14337,6 +14661,7 @@ Friendly.ShowMessage = function (title, message, type, prependTo) {
         prependTo = '#main-content';
     }
     $(prependTo).prepend(result);
+    $('html, body').animate({ scrollTop: $(prependTo).offset().top }, 'fast');
 };
 Friendly.GenericErrorMessage = function (jqXHR, textStatus, errorThrown) {
     Friendly.EndLoading();
@@ -14421,10 +14746,10 @@ Friendly.NextForm = function (nextForm, prevIcon) {
             }
             break;
         case 'decisions':
-            loadChildren('decision');
+            Parenting.LoadChildren('decision');
             break;
         case 'holiday':
-            loadChildren('holiday');
+            Parenting.LoadChildren('holiday');
             break;
     }
     $('#sidebar li').removeClass('active');
@@ -14478,9 +14803,17 @@ Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
-    var genericForms = ['vehicle', 'children', 'decisions', 'holiday', 'preexistingSupport', 'preexistingSupportOther'];
+    var genericForms = ['house', 'vehicle', 'children', 'decisions', 'holiday', 'preexistingSupport', 'preexistingSupportOther'];
     if (genericForms.indexOf(formName) >= 0) {
-        switch (formName) {
+        switch (formName) { 
+            case 'house':
+                //get values
+                var model = Friendly.GetFormInput('house');
+                model.Equity = $('#Equity').val().replace(/,/g, "");
+                model.MoneyOwed = $('#MoneyOwed').val().replace(/,/g, "");
+                model.RetailValue = $('#RetailValue').val().replace(/,/g, "");
+                Friendly.SubmitForm('house', nextForm, model);
+                break;
             case 'vehicle':
                 if ($('#vehicleForm').valid()) {
                     var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
@@ -14515,28 +14848,28 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 break;
             case 'decisions':
                 //First, check if current form is valid
-                if (Friendly.AddDecision()) {
+                if (Parenting.AddDecision()) {
                     //cycle through all children and make sure form is valid and saved
                     Friendly.childNdx = 0;
                     var child = Friendly.children[Friendly.childNdx];
-                    Friendly.CheckChildDecision(child, nextForm);
+                    Parenting.CheckChildDecision(child, nextForm);
                 } else {
                     Friendly.NextForm(nextForm, Friendly.properties.iconError);
                 }
                 break;
             case 'holiday':
                 //First, check if current form is valid
-                if (addHoliday()) {
+                if (Parenting.AddHoliday()) {
                     //cycle through all children and make sure form is valid and saved
                     Friendly.childNdx = 0;
                     var child = Friendly.children[Friendly.childNdx];
-                    Friendly.CheckChildHoliday(child, nextForm);
+                    Parenting.CheckChildHoliday(child, nextForm);
                 } else {
                     Friendly.NextForm(nextForm, Friendly.properties.iconError);
                 }
                 Friendly.EndLoading();
                 break;                
-        case 'preexistingSupport':
+            case 'preexistingSupport':
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 break;
             case 'preexistingSupportOther':
@@ -14546,115 +14879,7 @@ Friendly.IsGenericForm = function (formName, nextForm) {
         }
         return false;
     }
-
     return true;
-};
-
-Friendly.AddDecision = function (caller) {
-    var formName = 'decisions';
-    if (!$('#' + formName).valid()) {
-        return false;
-    }
-    saveExtraDecisions();
-    if (caller != null && $(caller).hasClass('next'))
-        Friendly.childNdx++;
-    else if (caller != null) {
-        Friendly.childNdx--;
-    }
-    var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#childId').val().trim();
-    //check if we need to move to next form
-    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm(formName, 'responsibility', model);
-        return false;
-    }
-    //check if we need to move to previous form
-    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm(formName, 'information', model);
-        return false;
-    }
-
-    //save current information
-    $.ajax({
-        url: '/api/' + formName + '/?format=json',
-        type: 'POST',
-        data: model,
-        success: function () {
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            $('input[id=DecisionsViewModel_Education]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_HealthCare]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_Religion]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_ExtraCurricular]').removeAttr('checked');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            getChildDecisions(nextChild);
-        },
-        error: Friendly.GenericErrorMessage
-    });
-    return true;
-};
-Friendly.CheckChildDecision = function (child, nextForm) {
-    $.ajax({
-        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
-        type: 'GET',
-        success: function (data) {
-            $('#childName').text(child.Name);
-            $('#childId').val(child.Id);
-            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
-            $('.extra-decision-item').remove();
-            Friendly.childNdx++;
-            if (Friendly.childNdx === Friendly.children.length) {
-                if ($('#decisions').valid()) {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    return false;
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                    return false;
-                }
-            }
-            if ($('#decisions').valid()) {
-                //recursively go to next child
-                Friendly.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
-                return false;
-            } else {
-                Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                return false;
-            }
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
-
-Friendly.CheckChildHoliday = function (child, nextForm) {
-    $.ajax({
-        url: '/api/Holiday/' + child.Id + '?format=json',
-        type: 'GET',
-        success: function (data) {
-            setChildHolidayForm(data, child);
-            Friendly.childNdx++;
-            if (Friendly.childNdx === Friendly.children.length) {
-                if ($('#holiday').valid()) {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    return false;
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                    return false;
-                }
-            }
-            if ($('#holiday').valid()) {
-                //recursively go to next child
-                Friendly.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
-                return false;
-            } else {
-                Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                return false;
-            }
-        },
-        error: Friendly.GenericErrorMessage
-    });
 };
 
 $(document).ready(function () {
@@ -14804,6 +15029,8 @@ $(document).ready(function () {
         Friendly.StartLoading();
         var currentFormName = $('ul .active').children(':first-child').attr('data-form');
         var nextForm = $(this).children(':first-child').attr('data-form');
+        //If the data of the form doesn't need massaging or have special requirements, we go ahead and sumbit.  Otherwise, we 
+        //perform the special function in the IsGenericForm function
         var isGeneric = Friendly.IsGenericForm(currentFormName, nextForm);
         if (isGeneric && $('#' + currentFormName).valid()) {
             //go ahead and save
@@ -14842,21 +15069,39 @@ $(document).ready(function () {
         document.location.href = $(this).attr('data-url');
     });
 });
-;$(document).ready(function () {
+;$(function ($) {
     //House Form
     $('.domestic-part1').click(function () {
         //get values
-        var model = {
-            Address: $('#Address').val(),
-            Equity: $('#Equity').val().replace(/,/g, ""),
-            MaritalHouse: $('#MaritalHouse:checked').val(),
-            MoneyOwed: $('#MoneyOwed').val().replace(/,/g, ""),
-            MortgageOwner: $('#MortgageOwner').val(),
-            RetailValue: $('#RetailValue').val().replace(/,/g, ""), 
-            Divide: $('#Divide').val(),
-            UserId: $('#user-id').val()
-        };
+        var model = Friendly.GetFormInput('house');
+        model.Equity = $('#Equity').val().replace(/,/g, "");
+        model.MoneyOwed = $('#MoneyOwed').val().replace(/,/g, "");
+        model.RetailValue = $('#RetailValue').val().replace(/,/g, ""); 
         Friendly.SubmitForm('house', 'property', model);
+    });
+    $('#CityState').typeahead({
+        source: function (typeahead, query) {
+            if (query === "") {
+                return typeahead.process([]);
+            }
+            var url = 'http://ws.geonames.org/searchJSON?country=US&name_startsWith=' + query;
+            return $.ajax({
+                url: url,
+                success: function (data) {                    
+                    var cityStates = [];
+                    //limit results to 3
+                    var maxItems = data.geonames.length < 5 ? data.geonames.length : 5;
+                    for (var i = 0; i < maxItems; i++) {
+                        cityStates.push({
+                            Name: data.geonames[i].name + ', ' + data.geonames[i].adminCode1
+                        });
+                    }
+                    typeahead.process(cityStates);
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        },
+        property: "Name"
     });
     $('input[name=MaritalHouse]').change(function () {
         $('.marital-info').val('');
@@ -14960,12 +15205,6 @@ $(document).ready(function () {
     //Debt Form
     $('.domestic-part4').click(function () {
         //get values
-        var model = {
-            DebtDivision: $('#DebtDivision').val(),
-            MaritalDebt: $('#MaritalDebt:checked').val(),
-            UserId: $('#user-id').val()
-        };
-        //check if we need to move to next form
         Friendly.SubmitForm('debt', 'asset', model);
     });
 
@@ -15092,7 +15331,7 @@ $(document).ready(function () {
     //    }
     //});
 });
-;$(document).ready(function () {
+;$(function ($) {
     $('.financial-part1').click(function () {
         Friendly.SubmitForm('income', 'socialSecurity');
     });
@@ -15236,7 +15475,7 @@ $(document).ready(function () {
                         $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('circumstance', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -15318,7 +15557,7 @@ $(document).ready(function () {
     });
     //---------------------------------------Social Security--------------------------------
     $('.financial-part7').click(function () {
-        Friendly.SubmitFormOther('socialSecurityOther', 'preexistingOther');
+        Friendly.SubmitFormOther('socialSecurityOther', 'preexistingSupportOther');
     });
 
     $('#socialSecurityOther input[name="ReceiveSocial"]').change(function () {
@@ -15344,11 +15583,11 @@ $(document).ready(function () {
         model.IsOtherParent = "true";
         if ($('#supportOther').valid()) {
             $.ajax({
-                url: '/Forms/AddSupport',
+                url: '/api/PreexistingSupport/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-support-template").tmpl(data);
+                    var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
                     $('#supportOtherWrapper .support-table tbody').append(result);
                     Friendly.ClearForm('supportOther');
                     Friendly.EndLoading();
@@ -15362,13 +15601,12 @@ $(document).ready(function () {
     $('#supportOtherWrapper table').on('click', '.view-children', function () {
         var id = $(this).attr('data-id');
         $.ajax({
-            url: '/Forms/GetChildSupport',
-            type: 'POST',
-            data: { Id: id },
+            url: '/api/PreexistingSupportChild/' + id + '/?format=json',
+            type: 'GET',
             success: function (data) {
                 if (data.length !== 0) {                    
                     $('#childOtherWrapper .child-table tbody').empty();
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Children);
                     $('#childOtherWrapper .child-table tbody').append(result);
                     $('#childOtherWrapper .child-table').show();
                 } else {
@@ -15387,11 +15625,11 @@ $(document).ready(function () {
         model.IsOtherParent = "true";
         if ($('#childOther').valid()) {
             $.ajax({
-                url: '/Forms/AddChildSupport',
+                url: '/api/PreexistingSupportChild?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.Child);
                     $('#childOtherWrapper .child-table tbody').append(result);
                     $('#childOtherWrapper .child-table').show();
                     Friendly.ClearForm('childOther');
@@ -15403,29 +15641,29 @@ $(document).ready(function () {
         Friendly.EndLoading();
     });
     $('.financial-part8').click(function () {               
-        Friendly.NextForm('otherChildrenOther');
+        Friendly.NextForm('otherChildrenOther', Friendly.properties.iconSuccess);
     });
     //----------------------Other Children---------------    
     $('.financial-part9').click(function () {
         if ($('#otherChildOtherWrapper').is(':visible')) {
-            Friendly.NextForm('circumstanceOther');
+            Friendly.NextForm('specialCircumstancesOther', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildrenOther');
-        model.IsOtherParent = "true";
+        model.IsOtherParent = "true"; 
         if ($('#otherChildrenOther').valid()) {
             $.ajax({
-                url: '/Forms/OtherChildren/',
+                url: '/api/OtherChildren/?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {                        
                         //Eligible. Show add children.
-                        $('#otherChildOtherWrapper #childrenId').val(data.Id);
+                        $('#otherChildOtherWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
-                        Friendly.NextForm('circumstanceOther');
+                        Friendly.NextForm('specialCircumstancesOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -15440,11 +15678,11 @@ $(document).ready(function () {
         model.OtherChildrenId = $('#otherChildOtherWrapper #childrenId').val();
         if ($('#otherchildOther').valid()) {
             $.ajax({
-                url: '/Forms/AddOtherChild/',
+                url: '/api/OtherChild?format=json',
                 type: 'POST',
                 data: model,
                 success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data);
+                    var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
                     $('#otherChildOtherWrapper .otherChild-table tbody').append(result);
                     $('#otherChildOtherWrapper .otherChild-table').show();
                     Friendly.ClearForm('otherchildOther');
@@ -15459,13 +15697,7 @@ $(document).ready(function () {
     //----------------------Special Circumstances---------------    
     $('.financial-part10').click(function () {
         //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            //Friendly.SubmitForm('circumstanceOther', 'incomeOther');
-        }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitFormOther('circumstanceOther', 'otherChildrenOther');
-        }
+        Friendly.SubmitForm('specialCircumstancesOther', 'incomeOther');
     });
     $('#circumstanceOther input[name="Circumstances"]').change(function () {
         if ($('#circumstanceOther #Circumstances:checked').val() === "1") {
@@ -15476,7 +15708,7 @@ $(document).ready(function () {
     });
     
 });
-;$(document).ready(function () {
+;$(function ($) {
     var html = $('#main-content').html();
     html = html.replace(/<form.*>/, "");
     html = html.replace(/<input.*>/, "");
@@ -15501,7 +15733,7 @@ $(document).ready(function () {
     //    });
     //});
 });
-;$(document).ready(function () {
+;$(function ($) {
     //Court Form
     $('#child-part1').click(function () {
         Friendly.SubmitForm('court', 'participant');
@@ -15673,7 +15905,7 @@ $(document).ready(function () {
         }
     });
 });
-;$(document).ready(function () {
+;$(function ($) {
     //----------------------Privacy Form-----------------------
     $('input[name=NeedPrivacy]').change(function () {
         if ($('#NeedPrivacy:checked').val() === "1") {
@@ -15712,7 +15944,7 @@ $(document).ready(function () {
         Friendly.StartLoading();
         //get values
         var model = Friendly.GetFormInput('information');
-        loadChildren('decision');
+        Parenting.LoadChildren('decision');
         var formName = 'information';
         var nextForm = 'decisions';
         var formSelector = '#' + formName;
@@ -15763,7 +15995,7 @@ $(document).ready(function () {
         }
         return false;
     });
-    $('#decisions input[type=radio]').live('change', checkIfBothIsChecked);
+    $('#decisions input[type=radio]').live('change', Parenting.CheckIfBothIsChecked);
     //Decisions Form
     $('.dropdown-toggle').dropdown();
 
@@ -15771,32 +16003,44 @@ $(document).ready(function () {
         if (!$('#decisions').valid()) {
             return false;
         }
+        Friendly.StartLoading();
         var childId = $(this).attr('data-id');
         if (childId === "0") {
-            //all case.  Cycle through all kids (except current showing)
+            //all case.  Cycle through all kids
             for (var i = 0; i < Friendly.children.length; i++) {
                 var currChild = Friendly.children[i];
-                copyDecision(currChild.Id);
+                //only show message if last child saved completes
+                if (i == Friendly.children.length - 1)
+                    copyDecision(currChild.Id, true);
+                else
+                    copyDecision(currChild.Id, false);
             }
         } else {
-            copyDecision(childId);
+            //first save current child
+            var currChildId = $('#childId').val().trim();
+            copyDecision(currChildId, false);
+            //then save the copy to child
+            copyDecision(childId, true);
         }
+        Friendly.EndLoading();
     });
-    function copyDecision(childId) {
-        saveExtraDecisions(childId);
+    function copyDecision(childId, showMessage) {
+        Parenting.SaveExtraDecisions(childId);
         var model = Friendly.GetFormInput('decisions');
-        model.ChildId = typeof(childId) === "undefined" ? $('#childId').val() : childId;
+        model.ChildId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
         $.ajax({
             url: '/api/Decisions?format=json',
             type: 'POST',
             data: model,
             success: function () {
+                if (showMessage)
+                    Friendly.ShowMessage('Success!', 'The decisions section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#decisionsWrapper .copy-wrapper');
             },
             error: Friendly.GenericErrorMessage
         });
     }
-    $('.child-part6').click(function() {
-        Friendly.AddDecision(this);
+    $('.child-part6').click(function () {
+        Parenting.AddDecision(this);
     });
 
     //Responsibility Form
@@ -15951,7 +16195,7 @@ $(document).ready(function () {
                 type: 'POST',
                 data: model,
                 success: function () {
-                    loadChildren('holiday');
+                    Parenting.LoadChildren('holiday');
                     Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                     Friendly.EndLoading();
                     return false;
@@ -16063,7 +16307,7 @@ $(document).ready(function () {
     });
 
     $('.child-part10').click(function () {
-        addHoliday(this);
+        Parenting.AddHoliday(this);
     });
     //Addendum
     $('input[name=HasAddendum]').change(function () {
@@ -16084,7 +16328,7 @@ $(document).ready(function () {
                 url: '/api/' + formName + "?format=json",
                 type: 'POST',
                 data: model,
-                success: function() {
+                success: function () {
                     var forms = ["privacy", "information", "decisions", "responsibility", "communication", "schedule", "holiday", "addendum"];
                     var readableForms = ["Supervision", "Information", "Decisions", "Responsibility", "Communication", "Schedule", "Holiday", "Addendum"];
                     Friendly.ValidateForms(forms, readableForms, '.child-part11');
@@ -16138,28 +16382,39 @@ $(document).ready(function () {
                 break;
         }
     });
-    
-    $('#copy-holidays').on('click',"li a", function () {
+
+    $('#copy-holidays').on('click', "li a", function () {
         if (!$('#holiday').valid()) {
             return;
         }
-        var childId = $(this).attr('data-id');
+        Friendly.StartLoading();
+        var childId = $(this).attr('data-id'); 
         if (childId === "0") {
             //all case.  Cycle through all kids (except current showing)
             for (var i = 0; i < Friendly.children.length; i++) {
                 var currChild = Friendly.children[i];
-                copyHoliday(currChild.Id);
+                //only show message if last child saved completes
+                if (i == Friendly.children.length - 1)
+                    copyHoliday(currChild.Id, true);
+                else
+                    copyHoliday(currChild.Id, false);
             }
         } else {
-            copyHoliday(childId);
+            //first save current child
+            var currChildId = $('#holidayChildId').val().trim();
+            copyHoliday(currChildId, false);
+            //then save the copy to child
+            copyHoliday(childId, true);
         }
+        Friendly.EndLoading();
     });
-    function copyHoliday(childId) {
-        saveExtraHolidays(childId);
+
+    function copyHoliday(childId, showMessage) {
+        Parenting.SaveExtraHolidays(childId);
         var formName = 'holiday';
         //do rest of the form
         var model = Friendly.GetFormInput(formName);
-        model.ChildId = childId;
+        model.ChildId = typeof (childId) === "undefined" ? $('#holidayChildId').val() : childId;
         model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
         model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
         $.ajax({
@@ -16167,15 +16422,175 @@ $(document).ready(function () {
             type: 'POST',
             data: model,
             success: function () {
+                if (showMessage)
+                    Friendly.ShowMessage('Success!', 'The holiday section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#holidayWrapper .copy-wrapper');
             },
             error: Friendly.GenericErrorMessage
         });
     }
 });
-function addHoliday(caller) {
+
+
+;window.Parenting = window.Parenting || {};
+Parenting.AddDecision = function (caller) {
+    var formName = 'decisions';
+    if (!$('#' + formName).valid()) {
+        return false;
+    }
+    Parenting.SaveExtraDecisions();
+    if (caller != null && $(caller).hasClass('next'))
+        Friendly.childNdx++;
+    else if (caller != null) {
+        Friendly.childNdx--;
+    }
+    var model = Friendly.GetFormInput(formName);
+    model.ChildId = $('#childId').val().trim();
+    //check if we need to move to next form
+    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+        Friendly.SubmitForm(formName, 'responsibility', model);
+        return false;
+    }
+    //check if we need to move to previous form
+    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
+        Friendly.SubmitForm(formName, 'information', model);
+        return false;
+    }
+
+    //save current information
+    $.ajax({
+        url: '/api/' + formName + '/?format=json',
+        type: 'POST',
+        data: model,
+        success: function () {
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            $('input[id=DecisionsViewModel_Education]').removeAttr('checked');
+            $('input[id=DecisionsViewModel_HealthCare]').removeAttr('checked');
+            $('input[id=DecisionsViewModel_Religion]').removeAttr('checked');
+            $('input[id=DecisionsViewModel_ExtraCurricular]').removeAttr('checked');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Parenting.GetChildDecisions(nextChild);
+        },
+        error: Friendly.GenericErrorMessage
+    });
+    return true;
+};
+Parenting.CheckChildDecision = function (child, nextForm) {
+    $.ajax({
+        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
+        type: 'GET',
+        success: function (data) {
+            $('#childName').text(child.Name);
+            $('#childId').val(child.Id);
+            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+            $('.extra-decision-item').remove();
+            Friendly.childNdx++;
+            if (Friendly.childNdx === Friendly.children.length) {
+                if ($('#decisions').valid()) {
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                    return false;
+                } else {
+                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    return false;
+                }
+            }
+            if ($('#decisions').valid()) {
+                //recursively go to next child
+                Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
+                return false;
+            } else {
+                Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                return false;
+            }
+        },
+        error: Friendly.GenericErrorMessage
+    });
+};
+
+Parenting.CheckChildHoliday = function (child, nextForm) {
+    $.ajax({
+        url: '/api/Holiday/' + child.Id + '?format=json',
+        type: 'GET',
+        success: function (data) {
+            Parenting.SetChildHolidayForm(data, child);
+            Friendly.childNdx++;
+            if (Friendly.childNdx === Friendly.children.length) {
+                if ($('#holiday').valid()) {
+                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+                    return false;
+                } else {
+                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                    return false;
+                }
+            }
+            if ($('#holiday').valid()) {
+                //recursively go to next child
+                Parenting.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
+                return false;
+            } else {
+                Friendly.NextForm(nextForm, Friendly.properties.iconError);
+                return false;
+            }
+        },
+        error: Friendly.GenericErrorMessage
+    });
+};
+Parenting.SaveExtraDecisions = function(childId) {
+    var formName = 'extraDecisions';
+    $.each($('.extra-decision-item'), function(ndx, item) {
+        var id = $(item).children('#extra-decision-Id').val();
+        var extraModel = {
+            Id: typeof(childId) === "undefined" ? id : 0,
+            ChildId: typeof(childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
+            DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
+            Description: $(item).children('#extra-decision-description').text().trim(),
+            UserId: $('#user-id').val()
+        };
+        //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
+        //If it does, copy over the Id
+        if (typeof(childId) !== "undefined") {
+            $.ajax({
+                url: '/api/' + formName + '/' + childId + '?format=json',
+                type: 'GET',
+                success: function(data) {
+                    $.each(data, function(ndx, item) {
+                        if (item.Description === extraModel.Description) {
+                            //We have a match
+                            extraModel.Id = item.Id;
+                        }
+                    });
+                    //Now add/update extradecisions
+                    $.ajax({
+                        url: '/api/' + formName + '/?format=json',
+                        type: 'POST',
+                        data: extraModel,
+                        success: function() {
+                        },
+                        error: Friendly.GenericErrorMessage
+                    });
+                },
+                error: Friendly.GenericErrorMessage
+            });
+            return;
+        }
+        //else, just update the extradecisions
+        $.ajax({
+            url: '/api/' + formName + '/?format=json',
+            type: 'POST',
+            data: extraModel,
+            success: function() {
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    });
+};
+Parenting.AddHoliday = function(caller) {
     var formName = 'holiday';
     if ($('#' + formName).valid()) {
-        saveExtraHolidays();
+        Parenting.SaveExtraHolidays();
         var model = Friendly.GetFormInput(formName);
         model.ChildId = $('#holidayChildId').val();
         if (caller != null && $(caller).hasClass('next'))
@@ -16198,72 +16613,23 @@ function addHoliday(caller) {
             url: '/api/' + formName + "?format=json",
             type: 'POST',
             data: model,
-            success: function () {
+            success: function() {
                 $('#' + formName)[0].reset();
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 var nextChild = Friendly.children[Friendly.childNdx];
-                getChildHoliday(nextChild);
+                Parenting.GetChildHoliday(nextChild);
                 Friendly.EndLoading();
             },
             error: Friendly.GenericErrorMessage
         });
         return true;
     }
-}
-function saveExtraDecisions(childId) {
-    var formName = 'extraDecisions';
-    $.each($('.extra-decision-item'), function (ndx, item) {
-        var id = $(item).children('#extra-decision-Id').val();
-        var extraModel = {
-            Id: typeof (childId) === "undefined" ? id : 0,
-            ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
-            DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
-            Description: $(item).children('#extra-decision-description').text().trim(),
-            UserId: $('#user-id').val()
-        };
-        //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
-        //If it does, copy over the Id
-        if (typeof (childId) !== "undefined") {
-            $.ajax({
-                url: '/api/' + formName + '/' + childId + '?format=json',
-                type: 'GET',
-                success: function (data) {
-                    $.each(data, function (ndx, item) {
-                        if (item.Description === extraModel.Description) {
-                            //We have a match
-                            extraModel.Id = item.Id;
-                        }
-                    });
-                    //Now add/update extradecisions
-                    $.ajax({
-                        url: '/api/' + formName + '/?format=json',
-                        type: 'POST',
-                        data: extraModel,
-                        success: function () {
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                },
-                error: Friendly.GenericErrorMessage
-            });
-            return;
-        }
-        //else, just update the extradecisions
-        $.ajax({
-            url: '/api/' + formName + '/?format=json',
-            type: 'POST',
-            data: extraModel,
-            success: function () {
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-}
-function getChildDecisions(child) {
+};
+Parenting.GetChildDecisions = function(child) {
     $.ajax({
         url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
         type: 'GET',
-        success: function (data) {
+        success: function(data) {
             $('#childName').text(child.Name);
             $('#childId').val(child.Id);
             $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
@@ -16272,21 +16638,21 @@ function getChildDecisions(child) {
             $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
             $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
             $('.extra-decision-item').remove();
-            $.each(data.ExtraDecisions, function (ndx, item) {
+            $.each(data.ExtraDecisions, function(ndx, item) {
                 var result = $("#friendly-extraDecisions-template").tmpl(item);
                 $('#radio-decisions').append(result);
             });
-            checkIfBothIsChecked();
+            Parenting.CheckIfBothIsChecked();
             //fixes possible error flag if one child isn't complete but another is
             if (data.Decisions.Education !== 0) {
                 $('#decisions').valid();
             }
-            $('#decisionsWrapper').show(); 
+            $('#decisionsWrapper').show();
         },
         error: Friendly.GenericErrorMessage
     });
-}
-function checkIfBothIsChecked() {
+};
+Parenting.CheckIfBothIsChecked = function() {
     var bothChecked = false;
     $.each($('#decisions input[type=radio]'), function (ndx, item) {
         var id = $(item).attr('id');
@@ -16301,11 +16667,11 @@ function checkIfBothIsChecked() {
     }
 }
 //Children Decisions
-function loadChildren(form) {
+Parenting.LoadChildren = function(form) {
     Friendly.children = [];
     $('.copy-button ul').empty();
-    $('.copy-button ul').append('<li><a title="all" data-id="0" href="#">All</a></li>');
-    $.each($('.child-table tbody tr'), function (ndx, item) {
+    $('.copy-button ul').append('<li><a title="all" data-id="0">All</a></li>');
+    $.each($('.child-table tbody tr'), function(ndx, item) {
         var child = {
             Name: $(item).find('.child-name').text(),
             DateOfBirth: $(item).find('.child-dob').text(),
@@ -16313,7 +16679,7 @@ function loadChildren(form) {
         };
         Friendly.children.push(child);
         //add to decision and holiday dropdown
-        $('.copy-button ul').append('<li><a title="all" data-id="' + child.Id + '" href="#">' + child.Name + '</a></li>');
+        $('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
     });
 
     if (Friendly.children.length <= 1) {
@@ -16324,22 +16690,22 @@ function loadChildren(form) {
     Friendly.childNdx = 0;
     var firstChild = Friendly.children[Friendly.childNdx];
     switch (form) {
-        case "decision":
-            getChildDecisions(firstChild);
-            break;
-        case "holiday":
-            getChildHoliday(firstChild);
-            break;
+    case "decision":
+        Parenting.GetChildDecisions(firstChild);
+        break;
+    case "holiday":
+        Parenting.GetChildHoliday(firstChild);
+        break;
     }
-}
-function getChildHoliday(child) {
+};
+Parenting.GetChildHoliday = function(child) {
     $.ajax({
         url: '/api/Holiday/' + child.Id + '?format=json',
         type: 'GET',
         success: function (data) {
-            setChildHolidayForm(data, child);
+            Parenting.SetChildHolidayForm(data, child);
             //fixes possible error flag if one child isn't complete but another is
-            if (data.Holidays.SpringBreakFather !== 0) {
+            if (typeof (data.Holidays) !== 'undefined' && data.Holidays.SpringBreakFather !== 0) {
                 $('#holiday').valid();
             }
             $('#holidayWrapper').show();
@@ -16348,16 +16714,20 @@ function getChildHoliday(child) {
         error: Friendly.GenericErrorMessage
     });
 }
-function setChildHolidayForm(data, child) {
+
+Parenting.SetChildHolidayForm = function(data, child) {
     Friendly.ClearForm('holiday');
     $('#holidayChildName').text(child.Name);
     $('#holidayChildId').val(child.Id);
+    //check if child has data already saved
+    if (typeof(data.Holidays) === 'undefined')
+        return false;
     if (data.Holidays.FridayHoliday) {
         $('#HolidayViewModel_FridayHoliday').attr('checked', 'checked');
         $('#HolidayViewModel_FridayHoliday').val('true');
     } else {
         $('#HolidayViewModel_FridayHoliday').val('false');
-    }       
+    }
     if (data.Holidays.MondayHoliday) {
         $('#HolidayViewModel_MondayHoliday').attr('checked', 'checked');
         $('#HolidayViewModel_MondayHoliday').val('true');
@@ -16415,18 +16785,18 @@ function setChildHolidayForm(data, child) {
     $('#HolidayViewModel_ReligiousFather[value="' + data.Holidays.ReligiousFather + '"]').attr('checked', 'checked');
     $('#HolidayViewModel_ReligiousMother[value="' + data.Holidays.ReligiousMother + '"]').attr('checked', 'checked');
     $('.extra-holiday-item').remove();
-    $.each(data.ExtraHolidays, function (ndx, item) {
+    $.each(data.ExtraHolidays, function(ndx, item) {
         var result = $("#friendly-extraHolidays-template").tmpl(item);
         $('#holiday').append(result);
     });
-}
-function saveExtraHolidays(childId) {
+};
+Parenting.SaveExtraHolidays = function(childId) {
     var formName = 'extraHoliday';
-    $.each($('.extra-holiday-item'), function (ndx, item) {
+    $.each($('.extra-holiday-item'), function(ndx, item) {
         var id = $(item).children('#extra-holiday-Id').val();
         var extraModel = {
-            Id: typeof (childId) === "undefined" ? id : 0,
-            ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-holiday-childId').val() : childId,
+            Id: typeof(childId) === "undefined" ? id : 0,
+            ChildId: typeof(childId) === "undefined" ? $(item).children('#extra-holiday-childId').val() : childId,
             HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
             HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
             HolidayName: $(item).children('.extra-holiday-name').text(),
@@ -16434,12 +16804,12 @@ function saveExtraHolidays(childId) {
         };
         //If we are copying, we need to make sure that the extra holiday doesn't already exist for the current child
         //If it does, copy over the Id
-        if (typeof (childId) !== "undefined") {
+        if (typeof(childId) !== "undefined") {
             $.ajax({
                 url: '/api/' + formName + '/' + childId + "?format=json",
                 type: 'GET',
-                success: function (data) {
-                    $.each(data.ExtraHolidays, function (ndx, item) {
+                success: function(data) {
+                    $.each(data.ExtraHolidays, function(ndx, item) {
                         if (item.HolidayName === extraModel.HolidayName) {
                             //We have a match
                             extraModel.Id = item.Id;
@@ -16450,7 +16820,7 @@ function saveExtraHolidays(childId) {
                         url: '/api/' + formName + "?format=json",
                         type: 'POST',
                         data: extraModel,
-                        success: function () {
+                        success: function() {
                         },
                         error: Friendly.GenericErrorMessage
                     });
@@ -16463,12 +16833,12 @@ function saveExtraHolidays(childId) {
             url: '/api/' + formName + "?format=json",
             type: 'POST',
             data: extraModel,
-            success: function () {
+            success: function() {
             },
             error: Friendly.GenericErrorMessage
         });
     });
-}
+};
 
 
 

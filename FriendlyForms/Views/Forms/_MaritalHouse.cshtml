@@ -27,6 +27,16 @@
                         @Html.ValidationMessageFor(m => m.Address)
                     </div>
                     <div class="control-group">
+                        <label class="informative">City, State</label>
+                        @Html.TextBoxFor(m => m.CityState, new { placeholder = "City State", @class = "marital-info", autocomplete="off" })
+                        @Html.ValidationMessageFor(m => m.CityState)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">Zip Code</label>
+                        @Html.TextBoxFor(m => m.ZipCode, new { placeholder = "Zip Code", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.ZipCode)
+                    </div>
+                    <div class="control-group">
                         <label class="informative">Retail value of the house</label>
                         @Html.TextBoxFor(m => m.RetailValue, new { placeholder = "Value in Dollars", @class = "marital-info currency" })
                         @Html.ValidationMessageFor(m => m.RetailValue)
@@ -61,6 +71,17 @@
                         @Html.TextBoxFor(m => m.Address, new { placeholder = "Address", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.Address)
                     </div>
+                    <div class="control-group">
+                        <label class="informative">City, State</label>
+                        @Html.TextBoxFor(m => m.CityState, new { placeholder = "City State", @class = "marital-info", autocomplete="off" })
+                        @Html.ValidationMessageFor(m => m.CityState)
+                    </div>
+                    <div class="control-group">
+                        <label class="informative">Zip Code</label>
+                        @Html.TextBoxFor(m => m.ZipCode, new { placeholder = "Zip Code", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.ZipCode)
+                    </div>
+
                     <div class="control-group">
                         <label class="informative">Retail value of the house</label>
                         @Html.TextBoxFor(m => m.RetailValue, new { placeholder = "Value in Dollars", @class = "marital-info currency" })

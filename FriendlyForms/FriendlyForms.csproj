@@ -409,6 +409,7 @@
     <Content Include="Scripts\app\friendly-financial.js" />
     <Content Include="Scripts\app\friendly-global.js" />
     <Content Include="Scripts\app\friendly-output.js" />
+    <Content Include="Scripts\app\friendly-parenting-global.js" />
     <Content Include="Scripts\app\friendly-starter.js" />
     <Content Include="Scripts\app\friendly-parenting.js" />
     <Content Include="Scripts\bootstrap-affix.js" />
