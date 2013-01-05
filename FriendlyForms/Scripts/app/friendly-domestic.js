@@ -134,7 +134,7 @@
     //Debt Form
     $('.domestic-part4').click(function () {
         //get values
-        Friendly.SubmitForm('debt', 'asset', model);
+        Friendly.SubmitForm('debt', 'asset');
     });
 
     $('input[name=MaritalDebt]').change(function () {
