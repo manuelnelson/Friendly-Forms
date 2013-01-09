@@ -18,20 +18,6 @@
                             <label class="radio">No @Html.RadioButtonFor(m => m.NeedPrivacy, (int)YesNo.No)</label>
                             @Html.ValidationMessageFor(m => m.NeedPrivacy)
                         </div>
-                        @if (Model.NeedPrivacy.Equals((int)YesNo.Yes))
-                        {
-                            <div class="control-group" id="detailsWrapper">
-                                @Html.TextAreaFor(m => m.Details, new { placeholder = "Details of Prior Acts", rows = "4", style = "width:98%" })
-                                @Html.ValidationMessageFor(m => m.Details)
-                            </div>                
-                        }
-                        else
-                        {
-                            <div class="control-group hide" id="detailsWrapper">
-                                @Html.TextAreaFor(m => m.Details, new { placeholder = "Details of Prior Acts", rows = "4", style = "width:98%" })
-                                @Html.ValidationMessageFor(m => m.Details)
-                            </div>
-                        }
                         <div class="control-group">
                             @{
                                 var fatherChecked = Model.FatherSupervision ? "checked='checked'" : "";

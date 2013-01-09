@@ -9,7 +9,6 @@ namespace Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public int NeedPrivacy { get; set; }
-        public string Details { get; set; }
         public bool FatherSupervision { get; set; }
         public bool MotherSupervision { get; set; }
         public string SupervisionHow { get; set; }
@@ -25,7 +24,6 @@ namespace Models
         public void Update(IFormEntity entity)
         {
             var update = (Privacy)entity;
-            Details = update.Details;
             NeedPrivacy = update.NeedPrivacy;
             UserId = update.UserId;
             FatherSupervision = update.FatherSupervision;
