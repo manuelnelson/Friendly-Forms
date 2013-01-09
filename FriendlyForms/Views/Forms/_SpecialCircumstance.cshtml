@@ -12,7 +12,9 @@
                     </div>
                     <div class="widget-content">
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4"><i class="icon-question-sign icon hoverHelp" data-content="Sometimes, parents have special circumstances involving the child(ren) which they would like entered into the record.
+                                For example, perhaps they feel that a certain pediatrician should be the child's doctor, or the parents think a particular summer camp is the one a child should attend. 
+                                The textbox below is where these special circumstances can be added to the document." data-title="Additional Information"></i>
                                 Should your Child Support amount be adjusted due to any special circumstances?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Circumstances, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Circumstances, (int)YesNo.No, new{@class="inline"})</label>
