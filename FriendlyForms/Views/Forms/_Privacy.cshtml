@@ -19,20 +19,13 @@
                             @Html.ValidationMessageFor(m => m.NeedPrivacy)
                         </div>
                         <div class="control-group">
-                            @{
-                                var fatherChecked = Model.FatherSupervision ? "checked='checked'" : "";
-                                var motherChecked = Model.MotherSupervision ? "checked='checked'" : "";
-                            }
                             <label>
                                 Does either parent require supervised parenting time?</label>
-                            <label class="checkbox inline">The Father requires supervision
-                                <input class="valid inline" value="@Model.FatherSupervision.ToString()" data-val="true" id="FatherSupervision" name="FatherSupervision" type="checkbox" @fatherChecked></label>
-                            <label class="checkbox inline">The Mother requires supervision
-                                <input class="valid inline" value="@Model.MotherSupervision.ToString()" data-val="true" id="MotherSupervision" name="MotherSupervision" type="checkbox" @motherChecked></label>                            
-                            @Html.ValidationMessageFor(m => m.FatherSupervision)
-                            @Html.ValidationMessageFor(m => m.MotherSupervision)
+                            <label class="radio">Yes @Html.RadioButtonFor(m => m.NeedSupervision, (int)YesNo.Yes)</label>
+                            <label class="radio">No @Html.RadioButtonFor(m => m.NeedSupervision, (int)YesNo.No)</label>
+                            @Html.ValidationMessageFor(m => m.NeedSupervision)
                         </div> 
-                        @if (Model.FatherSupervision || Model.MotherSupervision)
+                        @if (Model.NeedSupervision == (int)YesNo.Yes)
                         {
                             <div class="supervision-details">
                                 <div class="control-group">

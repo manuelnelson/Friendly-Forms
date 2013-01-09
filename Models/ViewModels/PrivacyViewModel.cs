@@ -14,9 +14,7 @@ namespace Models.ViewModels
         public int NeedPrivacy { get; set; }
 
         [Display(Name = "Supervision Father")]
-        public bool FatherSupervision { get; set; }
-        [Display(Name = "Supervsion Mother")]
-        public bool MotherSupervision { get; set; }
+        public int NeedSupervision { get; set; }
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Supervision How")]
         public string SupervisionHow { get; set; }

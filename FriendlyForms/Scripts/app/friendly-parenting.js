@@ -1,30 +1,13 @@
 ﻿$(function ($) {
     //----------------------Privacy Form-----------------------
-    $('input[name=NeedPrivacy]').change(function () {
-        if ($('#NeedPrivacy:checked').val() === "1") {
-            $('#detailsWrapper').show();
-        } else {
-            $('#detailsWrapper').hide();
-        }
-    });
     //if on or the other of the supervision checkboxes are checked, then show the rest of the data
-    $('input[name=FatherSupervision]').change(function () {
-        if ($('#MotherSupervision').is(":checked")) return;
-        if ($('#FatherSupervision').is(":checked")) {
+    $('input[name=NeedSupervision]').change(function () {
+        if ($('#NeedSupervision:checked').val() === "1") {
             $('.supervision-details').show();
         } else {
             $('.supervision-details').hide();
         }
     });
-    $('input[name=MotherSupervision]').change(function () {
-        if ($('#FatherSupervision').is(":checked")) return;
-        if ($('#MotherSupervision').is(":checked")) {
-            $('.supervision-details').show();
-        } else {
-            $('.supervision-details').hide();
-        }
-    });
-
 
     $('.child-part4').click(function () {
         //check if we need to move to next form

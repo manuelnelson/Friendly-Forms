@@ -1,7 +1,7 @@
 ﻿@using Models.ViewModels
 @model FriendlyForms.Models.ParentingPlanViewModel
 
-@if (Model.PrivacyViewModel.FatherSupervision || Model.PrivacyViewModel.MotherSupervision)
+@if (Model.PrivacyViewModel.NeedSupervision)
 {
     <h4>Supervision</h4>
     <p>Supervised parenting time shall apply during the day-to-day schedule as follows: @Model.PrivacyViewModel.SupervisionHow</p>

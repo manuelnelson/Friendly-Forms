@@ -9,8 +9,7 @@ namespace Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public int NeedPrivacy { get; set; }
-        public bool FatherSupervision { get; set; }
-        public bool MotherSupervision { get; set; }
+        public int NeedSupervision { get; set; }
         public string SupervisionHow { get; set; }
         public string SupervisionWhere { get; set; }
         public string SupervisionWho { get; set; }
@@ -26,8 +25,7 @@ namespace Models
             var update = (Privacy)entity;
             NeedPrivacy = update.NeedPrivacy;
             UserId = update.UserId;
-            FatherSupervision = update.FatherSupervision;
-            MotherSupervision = update.MotherSupervision;
+            NeedSupervision = update.NeedSupervision;
             SupervisionHow = update.SupervisionHow;
             SupervisionWhere = update.SupervisionWhere;
             SupervisionWho = update.SupervisionWho;
