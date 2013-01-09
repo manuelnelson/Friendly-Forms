@@ -80,6 +80,9 @@ namespace Models.ViewModels
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string AdditionalProvisions { get; set; }
 
+        //This isn't in the model, just useful for the view
+        public string NonCustodialParent { get; set; }
+
         public IFormEntity ConvertToEntity()
         {
             return new Schedule()

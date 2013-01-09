@@ -21,8 +21,8 @@
             }
         else
         {
-            @:The @Model.PpOutputFormHelper.NonCustodyParent will have visitation at Thanksgiving in 
-            @(@Model.PpOutputFormHelper.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingFather) : Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingMother))
+            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Thanksgiving in 
+            @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingFather) : Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingMother))
             @:years.    
             }
         Visitation will begin at the time the school day ends on the last
@@ -53,8 +53,8 @@
             }
         else
         {
-            @:The @Model.PpOutputFormHelper.NonCustodyParent will have visitation at Winter Break in
-            @(@Model.PpOutputFormHelper.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasFather) : Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasMother))
+            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Winter Break in
+            @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasFather) : Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasMother))
             @:years.
             }
         Visitation will begin at the time the school day ends on the last
@@ -92,8 +92,8 @@
             }
         else
         {
-            @:The @Model.PpOutputFormHelper.NonCustodyParent will have visitation at Spring Break in
-            @(@Model.PpOutputFormHelper.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakFather) : Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakMother))
+            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Spring Break in
+            @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakFather) : Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakMother))
             @:years.
             }
         Visitation will begin at the time the school day ends on the last
@@ -123,8 +123,8 @@
             }
         else
         {
-            @:The @Model.PpOutputFormHelper.NonCustodyParent will have visitation at Fall Break in
-            @(@Model.PpOutputFormHelper.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakFather) : Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakMother))
+            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Fall Break in
+            @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakFather) : Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakMother))
             @:years.
             }
         Visitation will begin at the time the school day ends on the last

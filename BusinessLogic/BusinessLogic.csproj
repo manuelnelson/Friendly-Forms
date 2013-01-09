@@ -168,6 +168,7 @@
     <Compile Include="Models\AllFinancialViewModel.cs" />
     <Compile Include="Models\AllHolidaysViewModel.cs" />
     <Compile Include="Models\AllPreexistingViewModel.cs" />
+    <Compile Include="Models\CustodyInformation.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="OtherChildrenService.cs" />

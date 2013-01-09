@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BusinessLogic.Models;
-using Models;
+﻿using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic.Helpers
@@ -14,7 +9,6 @@ namespace BusinessLogic.Helpers
         {
             return new PrivacyViewModel()
                 {
-                    Details = privacy.Details,
                     NeedPrivacy = privacy.NeedPrivacy,
                     UserId = privacy.UserId
                 };

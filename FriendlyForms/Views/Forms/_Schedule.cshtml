@@ -37,7 +37,7 @@
                             </div>                
                         }
                         <label class="informative">
-                            When would the <span class="nonCustodial"></span>like to have regular parenting time with the child(ren) on weekends?</label>
+                            When would the <span class="nonCustodial">@Model.NonCustodialParent</span> like to have regular parenting time with the child(ren) on weekends?</label>
                         <div class="control-group">
                             <label>
                                 What day and time will the child(ren) be picked up on weekends?</label>
@@ -85,7 +85,7 @@
                         </div>
                         <div class="control-group row-fluid">
                             <label>
-                                On what weekends during the month would the <span class="nonCustodial"></span>prefer to parent your child(ren)?</label>
+                                On what weekends during the month would the <span class="nonCustodial">@Model.NonCustodialParent</span> prefer to parent your child(ren)?</label>
                             <div class="span4">
                                 <label>Father</label>
                                 <label class="radio">Every other weekend @Html.RadioButtonFor(m => m.FatherWeekend, (int)ParentWeekends.EveryOther)</label>
@@ -136,7 +136,7 @@
                         <h4>Weekday Visitation</h4>
                         <div class="control-group">
                             <label>
-                                Will the <span class="nonCustodial"></span>spend time with the child(ren) during weekdays?</label>
+                                Will the <span class="nonCustodial">@Model.NonCustodialParent</span> spend time with the child(ren) during weekdays?</label>
                             <label class="radio">Yes @Html.RadioButtonFor(m => m.Weekdays, (int)YesNo.Yes)</label>
                             <label class="radio">No @Html.RadioButtonFor(m => m.Weekdays, (int)YesNo.No)</label>
                             @Html.ValidationMessageFor(m => m.Weekdays)
@@ -145,7 +145,7 @@
                         {
                             <div class="schedule-weekday">
                                 <label class="informative schedule-weekday">
-                                    As the <span class="nonCustodial"></span>, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
+                                    As the <span class="nonCustodial">@Model.NonCustodialParent</span>, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
                                 <div class="control-group schedule-weekday">
                                     <label>
                                         What time will the child(ren) be picked up on weekdays?</label>
@@ -209,7 +209,7 @@
                         {
                             <div class="schedule-weekday hide">
                                 <label class="informative schedule-weekday hide">
-                                    As the <span class="nonCustodial"></span>, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
+                                    As the <span class="nonCustodial">@Model.NonCustodialParent</span>, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
                                 <div class="control-group schedule-weekday">
                                     <label>
                                         What time will the child(ren) be picked up on weekdays?</label>

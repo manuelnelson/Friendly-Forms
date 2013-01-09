@@ -21,7 +21,7 @@
 }
 <div class="row-fluid">
     <h4>Custody and Decision Making</h4>
-    <p>@Model.PpOutputFormHelper.LegalCustodyPhrase</p>
+    <p>@Model.PpOutputFormHelper.CustodyInformation.LegalCustodyPhrase</p>
 </div>
 <h4>Primary Physical Custody</h4>
 <p>For each of the children named below, the primary physical custodian shall be:</p>
@@ -29,7 +29,7 @@
 {
     <div class="row-fluid">
         <div class="span4">@child.Name</div>
-        <div class="span4">@Model.PpOutputFormHelper.Parent</div>
+        <div class="span4">@Model.PpOutputFormHelper.CustodyInformation.Parent</div>
     </div>
 }
 <p>

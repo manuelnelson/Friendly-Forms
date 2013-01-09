@@ -157,30 +157,12 @@ namespace FriendlyForms.Controllers
 
             var formsViewModel = new FormsCompleted();
 
-            //Setup output form
+            //Setup output form            
             var outputViewModel = new PpOutputFormHelper
                 {
-                    Parent = "Both parents",
-                    LegalCustodyPhrase = "The parties will share legal custody of the children"
+                    CustodyInformation = _participantService.GetCustodyInformation(participants)
                 };
             
-            //Parents
-            if (participants != null && participants.PlaintiffCustodialParent.Equals((int)CustodialParent.Primary))
-            {
-                outputViewModel.Parent = Enum.GetName(typeof(ParentRelationship), participants.PlaintiffRelationship);
-                outputViewModel.NonCustodyParent = Enum.GetName(typeof(ParentRelationship), participants.DefendantRelationship);
-                outputViewModel.NonCustodyIsFather = outputViewModel.NonCustodyParent == Enum.GetName(typeof(ParentRelationship), ParentRelationship.Father);
-                outputViewModel.NonCustodyParentName = participants.DefendantsName;
-                outputViewModel.LegalCustodyPhrase = "The" + outputViewModel.Parent + " will be the primary legal custodian of the children";
-            }
-            else if (participants != null && participants.DefendantCustodialParent.Equals((int)CustodialParent.Primary))
-            {
-                outputViewModel.Parent = Enum.GetName(typeof(ParentRelationship), participants.DefendantRelationship);
-                outputViewModel.NonCustodyParent = Enum.GetName(typeof(ParentRelationship), participants.PlaintiffRelationship);
-                outputViewModel.NonCustodyParentName = participants.PlaintiffsName;
-                outputViewModel.LegalCustodyPhrase = "The " + outputViewModel.Parent + " will be the primary legal custodian of the children";
-            }
-
             //Communication
             var communicationTypes = new List<string>();
             if (communication.Telephone)

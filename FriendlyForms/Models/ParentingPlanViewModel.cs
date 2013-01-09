@@ -23,11 +23,7 @@ namespace FriendlyForms.Models
 
     public class PpOutputFormHelper
     {
-        public string Parent { get; set; }
-        public string NonCustodyParent { get; set; }
-        public string NonCustodyParentName { get; set; }
-        public bool NonCustodyIsFather { get; set; }
-        public string LegalCustodyPhrase { get; set; }
+        public CustodyInformation CustodyInformation { get; set; }
         public string CommunicationTypePhrase { get; set; }
     }
 

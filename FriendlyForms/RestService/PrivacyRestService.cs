@@ -17,9 +17,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int NeedPrivacy { get; set; }
         [DataMember]
-        public bool FatherSupervision { get; set; }
-        [DataMember]
-        public bool MotherSupervision { get; set; }
+        public int NeedSupervision { get; set; }
         [DataMember]
         public string SupervisionHow { get; set; }
         [DataMember]

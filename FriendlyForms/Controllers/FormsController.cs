@@ -121,7 +121,7 @@ namespace FriendlyForms.Controllers
         {
             var userId = User.FriendlyIdentity().UserId;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
-            var participants = _participantService.GetByUserId(userId);
+            var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
             var childForm = _childFormService.GetByUserId(userId);
             var privacy = _privacyService.GetByUserId(userId);
@@ -129,7 +129,10 @@ namespace FriendlyForms.Controllers
             var information = _informationService.GetByUserId(userId);
             var responsibility = _responsibilityService.GetByUserId(userId);
             var communication = _communicationService.GetByUserId(userId);
-            var schedule = _scheduleService.GetByUserId(userId);
+            var schedule = _scheduleService.GetByUserId(userId) as ScheduleViewModel;
+            var custodyInformation = _participantService.GetCustodyInformation(participants);
+            if (schedule != null) schedule.NonCustodialParent = custodyInformation.NonCustodyParent;
+
             var holiday = children.Children.Any() ? _holidayService.GetByChildId(children.Children.First().Id) : new Holiday();
             var addendum = _addendumService.GetByUserId(userId);
             var allDecisions = new AllDecisionsViewModel();
@@ -157,7 +160,7 @@ namespace FriendlyForms.Controllers
             var childViewModel = new ParentingPlanViewModel
                 {
                     CourtViewModel = court,
-                    ParticipantViewModel = participants as ParticipantViewModel,
+                    ParticipantViewModel = participants,
                     ChildAllViewModel = new ChildAllViewModel()
                         {
                             ChildViewModel = children,
@@ -168,158 +171,13 @@ namespace FriendlyForms.Controllers
                     AllDecisionsViewModel = allDecisions,
                     ResponsibilityViewModel = responsibility as ResponsibilityViewModel,
                     CommunicationViewModel = communication as CommunicationViewModel,
-                    ScheduleViewModel = schedule as ScheduleViewModel,
+                    ScheduleViewModel = schedule,
                     HolidayViewModel = allHolidays,
                     AddendumViewModel = addendum as AddendumViewModel,
                     FormsCompleted = formsViewModel
                 };
             return View(childViewModel);
         }
-
-        //[HttpPost]
-        //public JsonResult Court(CourtViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId; 
-        //    _courtService.AddOrUpdate(model);
-        //    return Json("success!");
-        //}
-
-        //[HttpPost]
-        //public JsonResult Participants(ParticipantViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _participantService.AddOrUpdate(model);
-        //    return Json("success!");
-        //}
-        
-        //[HttpPost]
-        //public JsonResult Children(ChildViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    var child = _childService.AddOrUpdate(model);
-        //    if (child.DateOfBirth != null)
-        //    {
-        //        var childFormatted = new 
-        //            {
-        //                Name = child.Name,
-        //                DateOfBirth = child.DateOfBirth.Value.ToString("MM/dd/yyyy"),
-        //                Id = child.Id
-        //            };
-        //        return Json(childFormatted, JsonRequestBehavior.AllowGet);
-        //    }
-        //    else
-        //    {
-        //        var childFormatted = new
-        //        {
-        //            Name = child.Name,
-        //            DateOfBirth = "Not provided",
-        //            Id = child.Id
-        //        };
-        //        return Json(childFormatted, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
-
-        //[HttpPost]
-        //public JsonResult ChildForm(ChildFormViewModel model)
-        //{
-        //    //throw new HttpException(404, "Unable to find the resource");
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    var result = _childFormService.AddOrUpdate(model);
-        //    return Json(result.Id);
-        //}
-
-        //[HttpPost]
-        //public JsonResult Privacy(PrivacyViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _privacyService.AddOrUpdate(model);            
-        //    return Json("Success!", JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public JsonResult Information(InformationViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;            
-        //    _informationService.AddOrUpdate(model);
-        //    return Json("Success!", JsonRequestBehavior.AllowGet);
-        //}
-
-        //public JsonResult GetChildDecision(int Id)
-        //{
-        //    var decisions = _decisionsService.GetByChildId(Id).ConvertToEntity();            
-        //    var extraDecisions = _extraDecisionsService.GetByChildId(Id).ExtraDecisions;
-        //    var allDecisions = new
-        //        {
-        //            Decisions = decisions,
-        //            ExtraDecisions = extraDecisions
-        //        };
-        //    return Json(allDecisions, JsonRequestBehavior.AllowGet);
-        //}
-
-        //public JsonResult GetChildHoliday(int Id)
-        //{
-        //    var holidays = _holidayService.GetByChildId(Id).ConvertToEntity();
-        //    var extraHolidays = _extraHolidayService.GetByChildId(Id).ExtraHolidays;
-        //    var allHolidays = new
-        //    {
-        //        Holidays = holidays,
-        //        ExtraHolidays = extraHolidays
-        //    };
-        //    return Json(allHolidays, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public JsonResult Decisions(DecisionsViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _decisionsService.AddOrUpdate(model);
-        //    return Json("Success!", JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public JsonResult ExtraDecisions(ExtraDecisionsViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    var decision = _extraDecisionsService.AddOrUpdate(model);
-        //    return Json(decision);
-        //}
-
-        //[HttpPost]
-        //public JsonResult Responsibility(ResponsibilityViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _responsibilityService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult Communication(CommunicationViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _communicationService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-
-        //[HttpPost]
-        //public JsonResult Schedule(ScheduleViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _scheduleService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult Holidays(HolidayViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    var holiday = _holidayService.AddOrUpdate(model);
-        //    return Json(holiday);
-        //}
-        //[HttpPost]
-        //public JsonResult ExtraHolidays(ExtraHolidayViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    var extraHoliday = _extraHolidayService.AddOrUpdate(model);
-        //    return Json(extraHoliday);
-        //}
 
         public ActionResult DomesticMediation()
         {
@@ -384,77 +242,6 @@ namespace FriendlyForms.Controllers
             };
             return View(domesticModel);
         }
-
-        //[HttpPost]
-        //public JsonResult MaritalHouse(HouseViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _houseService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult Property(PropertyViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _propertyService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult Debt(DebtViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _debtService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult Vehicles(VehicleViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId; 
-        //    var vehicleadded = _vehicleService.AddOrUpdate(model);
-        //    return Json(vehicleadded);
-        //}
-        //[HttpPost]
-        //public JsonResult VehicleForm(VehicleFormViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    var result = _vehicleFormService.AddOrUpdate(model);
-        //    return Json(result.Id);
-        //}
-        //[HttpPost]
-        //public JsonResult Assets(AssetViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _assetService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult HealthInsurance(HealthInsuranceViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _healthInsuranceService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult SpousalSupport(SpousalViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _spousalService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult Taxes(TaxViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _taxService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
-        //[HttpPost]
-        //public JsonResult Support(ChildSupportViewModel model)
-        //{
-        //    model.UserId = User.FriendlyIdentity().UserId;
-        //    _childSupportService.AddOrUpdate(model);
-        //    return Json("Success!");
-        //}
 
         public ActionResult Financial()
         {
