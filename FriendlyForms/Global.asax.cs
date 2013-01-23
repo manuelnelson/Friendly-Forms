@@ -50,13 +50,13 @@ namespace FriendlyForms
 
         protected void Application_BeginRequest()
         {
-            if(Request.IsLocal)
-                Profiler.Start();
+            //if(Request.IsLocal)
+            //    Profiler.Start();
         }
 
         protected void Application_EndRequest()
         {
-            Profiler.Stop();
+            //Profiler.Stop();
         }
 
         //Authentication logic
