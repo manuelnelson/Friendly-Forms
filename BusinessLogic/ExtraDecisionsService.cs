@@ -46,7 +46,7 @@ namespace BusinessLogic
         {
             try
             {
-                var enumerable = _extraDecisionRepository.GetFiltered(e => e.ChildId.Equals(childId));
+                var enumerable = _extraDecisionRepository.GetFiltered(e => e.ChildId == childId);
                 return enumerable == null ? new List<ExtraDecisions>() : enumerable.ToList();
             }
             catch (Exception ex)

@@ -26,7 +26,7 @@ namespace BusinessLogic
             if (participant == null)
                 throw new ArgumentNullException();
             //Parents
-            if (participant.PlaintiffCustodialParent.Equals((int)CustodialParent.Primary))
+            if (participant.PlaintiffCustodialParent == (int)CustodialParent.Primary)
             {
                 var custodyInformation = new CustodyInformation()
                     {
@@ -38,7 +38,7 @@ namespace BusinessLogic
                 custodyInformation.LegalCustodyPhrase = "The" + custodyInformation.Parent + " will be the primary legal custodian of the children";
                 return custodyInformation;
             }
-            if (participant.DefendantCustodialParent.Equals((int)CustodialParent.Primary))
+            if (participant.DefendantCustodialParent ==(int)CustodialParent.Primary)
             {
                 var custodyInformation = new CustodyInformation()
                     {

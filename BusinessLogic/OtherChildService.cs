@@ -46,7 +46,7 @@ namespace BusinessLogic
         {
             try
             {
-                return FormRepository.GetFiltered(c => c.OtherChildrenId.Equals(otherChildrenId));
+                return FormRepository.GetFiltered(c => c.OtherChildrenId == otherChildrenId);
             }
             catch(Exception ex)
             {

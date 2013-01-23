@@ -18,7 +18,7 @@ namespace BusinessLogic
         {
             try
             {
-                var entity = FormRepository.GetFiltered(m => m.UserId.Equals(userId) && m.IsOtherParent.Equals(isOtherParent)).FirstOrDefault();
+                var entity = FormRepository.GetFiltered(m => m.UserId==userId && m.IsOtherParent==isOtherParent).FirstOrDefault();
                 return (entity == null ? new SpecialCircumstancesViewModel() : entity.ConvertToModel()) as SpecialCircumstancesViewModel;
             }
             catch (Exception ex)
@@ -34,7 +34,7 @@ namespace BusinessLogic
             {
                 //Check if entity already exists and we need to update record
                 var entity = model.ConvertToEntity() as SpecialCircumstances;
-                var existEntity = FormRepository.GetFiltered(m => m.UserId.Equals(entity.UserId) && m.IsOtherParent.Equals(entity.IsOtherParent)).FirstOrDefault();
+                var existEntity = FormRepository.GetFiltered(m => m.UserId==entity.UserId && m.IsOtherParent==entity.IsOtherParent).FirstOrDefault();
                 if (existEntity != null)
                 {
                     existEntity.Update(entity);

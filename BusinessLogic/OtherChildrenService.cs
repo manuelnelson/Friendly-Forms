@@ -18,7 +18,7 @@ namespace BusinessLogic
         {
             try
             {
-                var entity = FormRepository.GetFiltered(m => m.UserId.Equals(userId) && m.IsOtherParent.Equals(isOtherParent)).FirstOrDefault();
+                var entity = FormRepository.GetFiltered(m => m.UserId == userId && m.IsOtherParent == isOtherParent).FirstOrDefault();
                 return (entity == null ? new OtherChildrenViewModel() : entity.ConvertToModel()) as OtherChildrenViewModel;
             }
             catch (Exception ex)

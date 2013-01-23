@@ -19,7 +19,7 @@ namespace BusinessLogic
         {
             try
             {
-                var enumerable = FormRepository.GetFiltered(e=>e.ChildId.Equals(childId));
+                var enumerable = FormRepository.GetFiltered(e=>e.ChildId == childId);
                 return enumerable == null ? new List<ExtraHoliday>() : enumerable.ToList();
             }
             catch (Exception ex)

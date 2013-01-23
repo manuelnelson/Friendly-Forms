@@ -42,7 +42,7 @@ namespace BusinessLogic
         {
             try
             {
-                var vehicles = FormRepository.GetFiltered(v=>v.UserId.Equals(userId));
+                var vehicles = FormRepository.GetFiltered(v=>v.UserId==userId);
                 return vehicles;
             }
             catch (Exception ex)
