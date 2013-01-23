@@ -8,14 +8,14 @@
     <h5>Thanksgiving</h5>
     <p>
         @{
-    var childHolidays = Model.HolidayViewModel.ChildHolidays.First(c => c.ChildId.Equals(child.Id));
-    var extraChildHolidays = Model.HolidayViewModel.ExtraChildHolidays.Where(c => c.ChildId.Equals(child.Id));
+    var childHolidays = Model.HolidayViewModel.ChildHolidays.First(c => c.ChildId==(child.Id));
+    var extraChildHolidays = Model.HolidayViewModel.ExtraChildHolidays.Where(c => c.ChildId==(child.Id));
         }
-        @if (childHolidays.ThanksgivingFather.Equals((int)HolidayYear.Every))
+        @if (childHolidays.ThanksgivingFather==((int)HolidayYear.Every))
         {
             @:The father will have visitation at Thanksgiving every year.  
             }
-        else if (childHolidays.ThanksgivingMother.Equals((int)HolidayYear.Every))
+        else if (childHolidays.ThanksgivingMother==((int)HolidayYear.Every))
         {
             @:The mother will have visitation at Thanksgiving every year.  
             }
@@ -28,11 +28,11 @@
         Visitation will begin at the time the school day ends on the last
             school day prior to the holiday break, and end at @childHolidays.ThanksgivingTime on 
 
-            @if (childHolidays.Thanksgiving.Equals((int)Thanksgiving.Before))
+            @if (childHolidays.Thanksgiving==((int)Thanksgiving.Before))
             {
                 <span>the day before returning to school.</span>
             }
-            else if (childHolidays.Thanksgiving.Equals((int)Thanksgiving.After))
+            else if (childHolidays.Thanksgiving==((int)Thanksgiving.After))
             {
                 <span>the first day of school after the holiday.</span>
             }
@@ -43,11 +43,11 @@
     </p>
     <h5>Winter Break</h5>
     <p>
-        @if (childHolidays.ChristmasFather.Equals((int)HolidayYear.Every))
+        @if (childHolidays.ChristmasFather==((int)HolidayYear.Every))
         {
             @:The father will have visitation at Winter Break every year.  
             }
-        else if (childHolidays.ChristmasMother.Equals((int)HolidayYear.Every))
+        else if (childHolidays.ChristmasMother==((int)HolidayYear.Every))
         {
             @:The mother will have visitation at Winter Break every year.  
             }
@@ -59,19 +59,19 @@
             }
         Visitation will begin at the time the school day ends on the last
             school day prior to the holiday break, and end at @childHolidays.ChristmasTime
-        @if (childHolidays.Christmas.Equals((int)Christmas.AfterBreak))
+        @if (childHolidays.Christmas==((int)Christmas.AfterBreak))
         {
             <span>until returning to school after Winter Break</span>
         }
-        else if (childHolidays.Christmas.Equals((int)Christmas.Eve))
+        else if (childHolidays.Christmas==((int)Christmas.Eve))
         {
             <span>on Christmas Eve </span>
         }
-        else if (childHolidays.Christmas.Equals((int)Christmas.Day))
+        else if (childHolidays.Christmas==((int)Christmas.Day))
         {
             <span>on Christmas Day</span>
         }
-        else if (childHolidays.Christmas.Equals((int)Christmas.AfterDay))
+        else if (childHolidays.Christmas==((int)Christmas.AfterDay))
         {
             <span>on the day after Christmas</span>
         }
@@ -82,11 +82,11 @@
     </p>
     <h5>Spring Break</h5>
     <p>
-        @if (childHolidays.SpringBreakFather.Equals((int)HolidayYear.Every))
+        @if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
         {
             @:The father will have visitation at Spring Break every year.  
             }
-        else if (childHolidays.SpringBreakFather.Equals((int)HolidayYear.Every))
+        else if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
         {
             @:The mother will have visitation at Spring Break every year.  
             }
@@ -98,7 +98,7 @@
             }
         Visitation will begin at the time the school day ends on the last
             school day prior to the holiday break, and end at @childHolidays.SpringBreakTime on  
-            @if (childHolidays.SpringBreak.Equals((int)YesNo.Yes))
+            @if (childHolidays.SpringBreak==((int)YesNo.Yes))
             {
                 <span>the conclusion of spring break</span>
             }
@@ -113,11 +113,11 @@
     <p>The parties will manage summer break visitation as follows: @childHolidays.SummerDetails</p>
     <h5>Fall Break</h5>
     <p>
-        @if (childHolidays.SpringBreakFather.Equals((int)HolidayYear.Every))
+        @if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
         {
             @:The father will have visitation at Fall Break every year.  
             }
-        else if (childHolidays.SpringBreakFather.Equals((int)HolidayYear.Every))
+        else if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
         {
             @:The mother will have visitation at Fall Break every year.  
             }
@@ -129,7 +129,7 @@
             }
         Visitation will begin at the time the school day ends on the last
             school day prior to the holiday break, and end at @childHolidays.FallBreakTime on  
-            @if (childHolidays.FallBreak.Equals((int)YesNo.Yes))
+            @if (childHolidays.FallBreak==((int)YesNo.Yes))
             {
                 <span>the conclusion of fall break</span>
             }

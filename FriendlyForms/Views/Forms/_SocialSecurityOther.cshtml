@@ -19,7 +19,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.ReceiveSocial, (int)YesNo.No,new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.ReceiveSocial)
                         </div>
-                        @if (Model.ReceiveSocial.Equals((int)YesNo.Yes))
+                        @if (Model.ReceiveSocial==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid social-social">
                                 <label class="span4">Amount per month</label>

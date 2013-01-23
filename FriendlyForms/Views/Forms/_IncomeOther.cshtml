@@ -20,7 +20,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Employed, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.Employed)
                         </div>
-                        @if (Model.Employed.Equals((int)YesNo.Yes))
+                        @if (Model.Employed==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-employed">
                                 <label class="span4">Monthly Income</label>
@@ -43,7 +43,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.SelfEmployed, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.SelfEmployed)
                         </div>
-                        @if (Model.SelfEmployed.Equals((int)YesNo.Yes))
+                        @if (Model.SelfEmployed==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-self">
                                 <label class="span4">Monthly Income</label>
@@ -66,7 +66,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.SelfTax, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.SelfTax)
                         </div>
-                        @if (Model.SelfTax.Equals((int)YesNo.Yes))
+                        @if (Model.SelfTax==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-tax">
                                 <label class="span4">Monthly Income</label>
@@ -90,7 +90,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.OtherSources, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.OtherSources)
                         </div>
-                        @if (Model.OtherSources.Equals((int)YesNo.Yes))
+                        @if (Model.OtherSources==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-other">
                                 <label class="span4">Commissions, Fees, Tips</label>

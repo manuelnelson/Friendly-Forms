@@ -18,7 +18,7 @@
                 <label class="radio">No @Html.RadioButtonFor(m => m.Health, (int)YesNo.No)</label>
                 @Html.ValidationMessageFor(m => m.Health)
             </div>
-            @if(Model.Health.Equals((int)YesNo.No))
+            @if(Model.Health==((int)YesNo.No))
             {
             <div class="control-group health-detail">
                 <label class="informative">

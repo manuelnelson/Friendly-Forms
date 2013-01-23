@@ -98,7 +98,7 @@
                                     <label class="radio">No @Html.RadioButtonFor(m => m.VehicleViewModel.Refinanced, (int) YesNo.No)</label>
                                     @Html.ValidationMessageFor(m => m.VehicleViewModel.Refinanced)
                                 </div>
-                                @if (Model.VehicleViewModel.Refinanced.Equals((int) YesNo.Yes))
+                                @if (Model.VehicleViewModel.Refinanced==((int) YesNo.Yes))
                                 {
                                     <div class="control-group vehicle-refinance">
                                         <label class="informative">In whose name will the vehicle be refinanced</label>
@@ -164,7 +164,7 @@
                                     <label class="radio">No @Html.RadioButtonFor(m => m.VehicleViewModel.Refinanced, (int) YesNo.No)</label>
                                     @Html.ValidationMessageFor(m => m.VehicleViewModel.Refinanced)
                                 </div>
-                                @if (Model.VehicleViewModel.Refinanced.Equals((int) YesNo.Yes))
+                                @if (Model.VehicleViewModel.Refinanced==((int) YesNo.Yes))
                                 {
                                     <div class="control-group vehicle-refinance">
                                         <label class="informative">In whose name will the vehicle be refinanced</label>

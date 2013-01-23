@@ -18,7 +18,7 @@
                             <label class="radio">No @Html.RadioButtonFor(m => m.HasAddendum, (int)YesNo.No)</label>
                             @Html.ValidationMessageFor(m => m.HasAddendum)
                         </div>
-                        @if (Model.HasAddendum.Equals((int)YesNo.Yes))
+                        @if (Model.HasAddendum==((int)YesNo.Yes))
                         {            
                             <div class="control-group addendum-details ">
                                 @Html.TextAreaFor(m => m.AddendumDetails, new { placeholder = "Details", @class = "input-xxlarge" })

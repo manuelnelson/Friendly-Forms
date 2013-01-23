@@ -18,7 +18,7 @@
                 <label class="radio inline">No @Html.RadioButtonFor(m => m.RealEstate, (int)YesNo.No, new { @class = "inline" })</label>
                 @Html.ValidationMessageFor(m => m.RealEstate)
             </div>
-            @if (Model.RealEstate.Equals((int)YesNo.Yes))
+            @if (Model.RealEstate==((int)YesNo.Yes))
             {
                 <div class="control-group real-estate-details">
                     <label class="informative">Provide details of additional property and how it will be divided.</label>
@@ -42,7 +42,7 @@
                 <label class="radio">Will be divided in the following manner: @Html.RadioButtonFor(m => m.PersonalProperty, (int)PersonalProperty.Other)</label>
                 @Html.ValidationMessageFor(m => m.PersonalProperty)
             </div>
-            @if (Model.RealEstate.Equals((int)YesNo.Yes))
+            @if (Model.RealEstate==((int)YesNo.Yes))
             {
                 <div class="control-group property-details">
                     @Html.TextAreaFor(m => m.DividingProperty, new { placeholder = "Details",@class="input-xxlarge" })

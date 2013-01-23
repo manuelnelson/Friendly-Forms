@@ -18,7 +18,7 @@
                 <label class="radio">Division of retirement assets will occur as follows: @Html.RadioButtonFor(m => m.Retirement, (int)YesNo.Yes)</label>
                 @Html.ValidationMessageFor(m => m.Retirement)
             </div>
-            @if (Model.Retirement.Equals((int)YesNo.Yes))
+            @if (Model.Retirement==((int)YesNo.Yes))
             {
                 <div class="control-group retirement-detail">
                     @Html.TextAreaFor(m => m.RetirementDescription, new { placeholder = "Details", @class = "input-xxlarge" })
@@ -39,7 +39,7 @@
                 <label class="radio">Division of non-retirement assets will occur as follows: @Html.RadioButtonFor(m => m.NonRetirement, (int)YesNo.Yes)</label>
                 @Html.ValidationMessageFor(m => m.NonRetirement)
             </div>
-            @if (Model.NonRetirement.Equals((int)YesNo.Yes))
+            @if (Model.NonRetirement==((int)YesNo.Yes))
             {
                 <div class="control-group non-retirement-detail">
                     @Html.TextAreaFor(m => m.NonRetirementDescription, new { placeholder = "Details", @class = "input-xxlarge" })
@@ -60,7 +60,7 @@
                 <label class="radio">Division of business assets or liabilities will occur as follows:  @Html.RadioButtonFor(m => m.Business, (int)YesNo.Yes)</label>
                 @Html.ValidationMessageFor(m => m.Business)
             </div>
-            @if (Model.NonRetirement.Equals((int)YesNo.Yes))
+            @if (Model.NonRetirement==((int)YesNo.Yes))
             {
                 <div class="control-group business-detail">
                     @Html.TextAreaFor(m => m.BusinessDescription, new { placeholder = "Details", @class = "input-xxlarge" })

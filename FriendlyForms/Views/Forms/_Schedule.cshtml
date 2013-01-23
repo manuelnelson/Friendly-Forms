@@ -18,7 +18,7 @@
                             <label class="radio">Date of your choice @Html.RadioButtonFor(m => m.DetermineBeginDate, (int)DateDetermination.Parent)</label>
                             @Html.ValidationMessageFor(m => m.DetermineBeginDate)
                         </div>
-                        @if (Model.DetermineBeginDate.Equals((int)DateDetermination.Parent))
+                        @if (Model.DetermineBeginDate==((int)DateDetermination.Parent))
                         {
                             <div class="control-group schedule-date ">
                                 <label>
@@ -93,7 +93,7 @@
                                 <label class="radio">1st, 3rd and 5th weekend @Html.RadioButtonFor(m => m.FatherWeekend, (int)ParentWeekends.FirstThirdFifth)</label>
                                 <label class="radio">2nd and 4th weekend @Html.RadioButtonFor(m => m.FatherWeekend, (int)ParentWeekends.SecondFourth)</label>
                                 <label class="radio">Other @Html.RadioButtonFor(m => m.FatherWeekend, (int)ParentWeekends.Other)</label>
-                                @if (Model.FatherWeekend.Equals((int)ParentWeekends.Other))
+                                @if (Model.FatherWeekend==((int)ParentWeekends.Other))
                                 {
                                     <div class="schedule-weekend-other">
                                         @Html.TextBoxFor(m => m.FatherWeekendOther, new { placeholder = "Description" })
@@ -116,7 +116,7 @@
                                 <label class="radio">1st, 3rd and 5th weekend @Html.RadioButtonFor(m => m.MotherWeekend, (int)ParentWeekends.FirstThirdFifth)</label>
                                 <label class="radio">2nd and 4th weekend @Html.RadioButtonFor(m => m.MotherWeekend, (int)ParentWeekends.SecondFourth)</label>
                                 <label class="radio">Other @Html.RadioButtonFor(m => m.MotherWeekend, (int)ParentWeekends.Other)</label>
-                                @if (Model.MotherWeekend.Equals((int)ParentWeekends.Other))
+                                @if (Model.MotherWeekend==((int)ParentWeekends.Other))
                                 {
                                     <div class="schedule-weekend-other">
                                         @Html.TextBoxFor(m => m.MotherWeekendOther, new { placeholder = "Description" })

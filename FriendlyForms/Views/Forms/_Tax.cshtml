@@ -18,7 +18,7 @@
                 <label class="radio">No @Html.RadioButtonFor(m => m.Taxes, (int)YesNo.No)</label>
                 @Html.ValidationMessageFor(m => m.Taxes)
             </div>
-            @if (Model.Taxes.Equals((int)YesNo.No))
+            @if (Model.Taxes==((int)YesNo.No))
             {
                 <div class="control-group taxes-detail">
                 <label class="informative">

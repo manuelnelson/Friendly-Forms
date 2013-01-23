@@ -59,7 +59,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Limitations, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.Limitations)
                         </div>
-                        @if (Model.Limitations.Equals((int)YesNo.Yes))
+                        @if (Model.Limitations==((int)YesNo.Yes))
                         {
                             <div class="control-group communicate-method">
                                 <label>
@@ -91,7 +91,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.AccessOfRights, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.AccessOfRights)
                         </div>
-                        @if (Model.AccessOfRights.Equals((int)YesNo.Yes))
+                        @if (Model.AccessOfRights==((int)YesNo.Yes))
                         {
                             <div class="control-group communicate-rights">
                                 <label>

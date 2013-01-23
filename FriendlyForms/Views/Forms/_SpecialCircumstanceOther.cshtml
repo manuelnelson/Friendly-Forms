@@ -21,7 +21,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Circumstances, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.Circumstances)
                         </div>
-                        @if (Model.Circumstances.Equals((int)YesNo.Yes))
+                        @if (Model.Circumstances==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid circumstance-other">
                                 <label class="span4">Deviation Based on High Income</label>

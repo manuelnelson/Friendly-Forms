@@ -6,19 +6,19 @@
     For purposes of this parenting plan, the 
         @if (!Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather)
         {
-            if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.FirstThird))
+            if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.FirstThird))
             {
             <span>mother will have the weekend of the first and third friday of each month for visiation.</span>
             }
-            else if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.FirstThirdFifth))
+            else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.FirstThirdFifth))
             {
             <span>mother will have the weekend of the first, third and fifth friday of each month for visitation.</span>
             }
-            else if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.SecondFourth))
+            else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.SecondFourth))
             {
             <span>mother will have the weekend of the second and fourth friday of each month for visitation.</span>
             }
-            else if (Model.ScheduleViewModel.MotherWeekend.Equals((int)ParentWeekends.EveryOther))
+            else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.EveryOther))
             {
             <span>parents will alternate weekends for visitation.</span>
             }
@@ -29,19 +29,19 @@
         }
         else
         {
-            if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.FirstThird))
+            if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.FirstThird))
             {
             <span>father will have the weekend of the first and third friday of each month for visiation.</span>
             }
-            else if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.FirstThirdFifth))
+            else if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.FirstThirdFifth))
             {
             <span>father will have the weekend of the first, third and fifth friday of each month for visitation.</span>
             }
-            else if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.SecondFourth))
+            else if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.SecondFourth))
             {
             <span>father will have the weekend of the second and fourth friday of each month for visitation.</span>
             }
-            else if (Model.ScheduleViewModel.FatherWeekend.Equals((int)ParentWeekends.EveryOther))
+            else if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.EveryOther))
             {
             <span>parents will alternate weekends for visitation.</span>
             }
@@ -80,7 +80,7 @@
 </ul>
 <p>
     The parenting schedule will begin
-    @if (Model.ScheduleViewModel.DetermineBeginDate.Equals((int)DateDetermination.Judge))
+    @if (Model.ScheduleViewModel.DetermineBeginDate==((int)DateDetermination.Judge))
     {
         @: on the date of the Court's Order.
     }

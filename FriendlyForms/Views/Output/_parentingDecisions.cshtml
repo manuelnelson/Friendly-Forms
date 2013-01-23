@@ -22,8 +22,8 @@
         <p>
             Educational Decisions: 
                 @{
-                    var childDecision = Model.AllDecisionsViewModel.ChildDecisions.First(c => c.ChildId.Equals(child.Id));
-                    var extraChildDecisions = Model.AllDecisionsViewModel.ChildExtraDecisions.Where(c => c.ChildId.Equals(child.Id));
+                    var childDecision = Model.AllDecisionsViewModel.ChildDecisions.First(c => c.ChildId == (child.Id));
+                    var extraChildDecisions = Model.AllDecisionsViewModel.ChildExtraDecisions.Where(c => c.ChildId==(child.Id));
                     //If there are multiple children, both resolve could possible vary.  Take the last 'BothResolve' for now....
                     disagreements = string.IsNullOrEmpty(childDecision.BothResolve) ? disagreements : childDecision.BothResolve;        
                 }

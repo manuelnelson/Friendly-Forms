@@ -45,7 +45,7 @@
                             <label class="radio">Remitted directly from payor to payee  @Html.RadioButtonFor(m => m.Payment, (int)YesNo.No)</label>
                             @Html.ValidationMessageFor(m => m.Payment)
                         </div>
-                        @if (Model.Payment.Equals((int)YesNo.No))
+                        @if (Model.Payment==((int)YesNo.No))
                         {
                             <div class="control-group support-payday">
                                 <label class="informative">Child support payment will be due to the recipient on what day of each month? Enter number 1-31 (31 designates last day of month every month, regardless of the number of days in that particular month)</label>

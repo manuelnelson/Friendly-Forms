@@ -2,7 +2,7 @@
 @model FriendlyForms.Models.ParentingPlanViewModel
 
 <div class="row-fluid">
-    @if (Model.CourtViewModel.AuthorOfPlan.Equals((int)AuthorOfPlan.Judge))
+    @if (Model.CourtViewModel.AuthorOfPlan==((int)AuthorOfPlan.Judge))
     {
         <p>
             The parties have agreed to the terms of this plan and this information has been furnished by both 
@@ -14,11 +14,11 @@
     {
         <p>This plan has been prepared by the judge.</p>
     }
-    @if (Model.CourtViewModel.PlanType.Equals((int)PlanType.NewPlan))
+    @if (Model.CourtViewModel.PlanType==((int)PlanType.NewPlan))
     {
         <p>This plan is a new plan</p>
     }
-    else if (Model.CourtViewModel.PlanType.Equals((int)PlanType.ExistingPlan))
+    else if (Model.CourtViewModel.PlanType==((int)PlanType.ExistingPlan))
     {
         <p>This plan modiﬁes an existing Parenting Plan: Case number @Model.CourtViewModel.ExistCaseNumber</p>
     }

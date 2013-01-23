@@ -39,7 +39,7 @@
                             <label class="radio">A modification of an existing order @Html.RadioButtonFor(m => m.PlanType, (int)PlanType.ExistingOrder, false)</label>
                             @Html.ValidationMessageFor(m => m.PlanType)
                         </div>
-                        @if (Model.PlanType.Equals((int)PlanType.ExistingOrder) || Model.PlanType.Equals((int)PlanType.ExistingPlan))
+                        @if (Model.PlanType==((int)PlanType.ExistingOrder) || Model.PlanType==((int)PlanType.ExistingPlan))
                         {
                             <div class="control-group court-date">
                                 <label class="informative">Case Number</label>

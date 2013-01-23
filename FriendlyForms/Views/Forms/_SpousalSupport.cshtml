@@ -18,7 +18,7 @@
                 <label class="radio">Provisions for spousal support will occur as follows @Html.RadioButtonFor(m => m.Spousal, (int)YesNo.Yes)</label>
                 @Html.ValidationMessageFor(m => m.Spousal)
             </div>
-            @if (Model.Spousal.Equals((int)YesNo.Yes))
+            @if (Model.Spousal==((int)YesNo.Yes))
             {
                 <div class="control-group spousal-detail">
                     @Html.TextAreaFor(m => m.SpousalDescription, new { placeholder = "Details", @class="input-xxlarge" })
