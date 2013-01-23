@@ -155,7 +155,7 @@ else
     <h3>Matters concerning minor children</h3>
 </div>
 <h4>Child Support</h4>
-@if (Model.ChildSupportViewModel.TemporaryAgreement==(YesNo.Yes))
+@if (Model.ChildSupportViewModel.TemporaryAgreement==(int)(YesNo.Yes))
 {
     <p>This agreement is final.  For more information on child support, please refer to the Child Support Form.</p>
 }
