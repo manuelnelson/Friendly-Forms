@@ -8,7 +8,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class IncomeService : FormService<IncomeRepository, Income, IncomeViewModel>, IIncomeService
+    public class IncomeService : Service<IncomeRepository, Income, IncomeViewModel>, IIncomeService
     {
         public IncomeService(IncomeRepository formRepository) : base(formRepository)
         {

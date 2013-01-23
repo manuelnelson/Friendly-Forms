@@ -8,7 +8,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class SpecialCircumstancesService : FormService<SpecialCircumstancesRepository, SpecialCircumstances, SpecialCircumstancesViewModel>, ISpecialCircumstancesService
+    public class SpecialCircumstancesService : Service<SpecialCircumstancesRepository, SpecialCircumstances, SpecialCircumstancesViewModel>, ISpecialCircumstancesService
     {
         public SpecialCircumstancesService(SpecialCircumstancesRepository formRepository) : base(formRepository)
         {

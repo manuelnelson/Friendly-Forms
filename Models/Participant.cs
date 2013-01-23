@@ -5,7 +5,7 @@ namespace Models
 {
     public class Participant : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public IViewModel ConvertToModel()
         {

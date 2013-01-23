@@ -6,7 +6,7 @@ namespace Models
 {
     public class Privacy : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int NeedPrivacy { get; set; }
         public int NeedSupervision { get; set; }

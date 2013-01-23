@@ -6,7 +6,7 @@ namespace Models
 {
     public class PreexistingSupport : IFormEntity
     {
-        public virtual int Id { get; set; }
+        public virtual long Id { get; set; }
         public virtual bool IsOtherParent { get; set; }
         public virtual int UserId { get; set; }
         public virtual int Support { get; set; }
@@ -17,7 +17,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new PreexistingSupportViewModel()
+            return new PreexistingSupportViewModel
                 {
                     IsOtherParent = IsOtherParent,
                     Support = Support,

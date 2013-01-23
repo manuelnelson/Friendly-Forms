@@ -42,7 +42,7 @@ namespace BusinessLogic
             }
         }
 
-        public List<ExtraDecisions> GetByChildId(int childId)
+        public List<ExtraDecisions> GetByChildId(long childId)
         {
             try
             {

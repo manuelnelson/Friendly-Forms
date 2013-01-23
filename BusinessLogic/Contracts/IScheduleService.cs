@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IScheduleService : IFormService<ScheduleRepository, Schedule>
+    public interface IScheduleService : IService<ScheduleRepository, Schedule>
     {
     }
 }

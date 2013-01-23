@@ -7,7 +7,7 @@ namespace Models.ViewModels
 {
     public class PreexistingSupportChildViewModel : IViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         [Required]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]

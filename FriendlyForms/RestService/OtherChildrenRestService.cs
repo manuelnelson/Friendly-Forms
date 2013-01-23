@@ -14,7 +14,7 @@ namespace FriendlyForms.RestService
     public class ReqOtherChildren
     {
         [DataMember]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]

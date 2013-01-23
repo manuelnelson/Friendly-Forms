@@ -15,7 +15,7 @@ namespace FriendlyForms.RestService
     public class ReqDecisions
     {
         [DataMember]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]

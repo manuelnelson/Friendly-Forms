@@ -1,7 +1,5 @@
 ﻿using System;
 using BusinessLogic.Contracts;
-using BusinessLogic.Models;
-using DataInterface;
 using DataLayerContext.Repositories;
 using Elmah;
 using Models;
@@ -9,7 +7,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ChildService : FormService<ChildRepository, Child, ChildViewModel>, IChildService
+    public class ChildService : Service<ChildRepository, Child, ChildViewModel>, IChildService
     {
         public ChildService(ChildRepository formRepository) : base(formRepository)
         {

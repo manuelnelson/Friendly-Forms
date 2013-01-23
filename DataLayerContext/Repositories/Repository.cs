@@ -82,12 +82,34 @@ namespace DataLayerContext.Repositories
             UnitOfWork.Commit();
         }
 
+        public void RemoveAll(IEnumerable<TEntity> items)
+        {
+            var dbSet = GetDbSet();
+            foreach (var entity in items)
+            {
+                dbSet.Attach(entity);
+                dbSet.Remove(entity);
+            }
+            UnitOfWork.Commit();
+        }
+
+        public void RemoveAll(IEnumerable<long> ids)
+        {
+            var dbSet = GetDbSet();
+            foreach (var entity in ids.Select(id => dbSet.Find(id)))
+            {
+                dbSet.Attach(entity);
+                dbSet.Remove(entity);
+            }
+            UnitOfWork.Commit();
+        }
+
         /// <summary>
         /// Retrieves an entity by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual TEntity Get(int id)
+        public virtual TEntity Get(long id)
         {
             return GetDbSet().Find(id);
         }

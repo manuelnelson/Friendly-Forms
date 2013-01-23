@@ -10,9 +10,9 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public Decisions GetByChildId(int childId)
+        public Decisions GetByChildId(long childId)
         {
-            return GetDbSet().FirstOrDefault(d => d.ChildId.Equals(childId));
+            return GetDbSet().FirstOrDefault(d => d.ChildId==childId);
         }
     }
 }

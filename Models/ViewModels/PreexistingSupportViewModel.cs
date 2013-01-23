@@ -7,7 +7,7 @@ namespace Models.ViewModels
 {
     public class PreexistingSupportViewModel : IViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public bool IsOtherParent { get; set; }
         [Required]
         public int UserId { get; set; }

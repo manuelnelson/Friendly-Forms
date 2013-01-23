@@ -14,7 +14,7 @@ namespace FriendlyForms.RestService
     public class ReqVehicleForm
     {
         [DataMember]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [DataMember]
         public int VehiclesInvolved { get; set; }
         [DataMember]

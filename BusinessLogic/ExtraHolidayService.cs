@@ -9,13 +9,13 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ExtraHolidayService : FormService<ExtraHolidayRepository,ExtraHoliday,ExtraHolidayViewModel>, IExtraHolidayService
+    public class ExtraHolidayService : Service<ExtraHolidayRepository,ExtraHoliday,ExtraHolidayViewModel>, IExtraHolidayService
     {
         public ExtraHolidayService(ExtraHolidayRepository formRepository) : base(formRepository)
         {
         }
 
-        public List<ExtraHoliday> GetByChildId(int childId)
+        public List<ExtraHoliday> GetByChildId(long childId)
         {
             try
             {

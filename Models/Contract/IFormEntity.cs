@@ -2,7 +2,7 @@
 {
     public interface IFormEntity        
     {
-        int Id { get; set; }
+        long Id { get; set; }
         int UserId { get; set; }
         IViewModel ConvertToModel();
         void Update(IFormEntity entity);

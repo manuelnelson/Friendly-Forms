@@ -6,7 +6,7 @@ namespace Models
 {
     public class Court : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int CountyId { get; set; }
         public string CaseNumber { get; set; }

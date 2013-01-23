@@ -5,7 +5,7 @@ namespace Models
 {
     public class VehicleForm : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public IViewModel ConvertToModel()
         {

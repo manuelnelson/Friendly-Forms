@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class PropertyService : FormService<RealEstateRepository, Property, PropertyViewModel>, IPropertyService
+    public class PropertyService : Service<RealEstateRepository, Property, PropertyViewModel>, IPropertyService
     {
         public PropertyService(RealEstateRepository formRepository) : base(formRepository)
         {

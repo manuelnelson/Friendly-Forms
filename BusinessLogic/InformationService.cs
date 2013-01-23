@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class InformationService : FormService<InformationRepository, Information, InformationViewModel>, IInformationService
+    public class InformationService : Service<InformationRepository, Information, InformationViewModel>, IInformationService
     {
         public InformationService(InformationRepository formRepository) : base(formRepository)
         {

@@ -8,7 +8,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class SocialSecurityService : FormService<SocialSecurityRepository,SocialSecurity,SocialSecurityViewModel>, ISocialSecurityService
+    public class SocialSecurityService : Service<SocialSecurityRepository,SocialSecurity,SocialSecurityViewModel>, ISocialSecurityService
     {
         public SocialSecurityService(SocialSecurityRepository formRepository) : base(formRepository)
         {

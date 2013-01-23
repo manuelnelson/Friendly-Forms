@@ -6,7 +6,7 @@ namespace Models
 {
     public class Responsibility : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int BeginningVisitation { get; set; }
         public int EndVisitation { get; set; }

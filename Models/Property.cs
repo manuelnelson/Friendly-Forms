@@ -5,7 +5,7 @@ namespace Models
 {
     public class Property : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int RealEstate { get; set; }
         public string RealEstateDescription { get; set; }

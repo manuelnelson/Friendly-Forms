@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ResponsibilityService : FormService<ResponsibilityRepository,Responsibility,ResponsibilityViewModel>, IResponsibilityService
+    public class ResponsibilityService : Service<ResponsibilityRepository,Responsibility,ResponsibilityViewModel>, IResponsibilityService
     {
         public ResponsibilityService(ResponsibilityRepository formRepository) : base(formRepository)
         {

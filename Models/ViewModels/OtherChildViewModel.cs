@@ -8,7 +8,7 @@ namespace Models.ViewModels
 {
     public class OtherChildViewModel : IViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public int UserId { get; set; }

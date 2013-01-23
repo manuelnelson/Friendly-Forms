@@ -3,7 +3,7 @@ using Models;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IHouseService : IFormService<IHouseRepository, House>
+    public interface IHouseService : IService<IHouseRepository, House>
     {
     }
 }

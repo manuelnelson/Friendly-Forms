@@ -16,7 +16,7 @@ Friendly.children = [];
 Friendly.childNdx = 0;
 Friendly.StartLoading = function () {
     $('#loading').show();
-    $('body').css('cursor', 'wait');
+    $('body').css('cursor', 'wait'); 
 };
 Friendly.EndLoading = function () {
     $('#loading').hide();

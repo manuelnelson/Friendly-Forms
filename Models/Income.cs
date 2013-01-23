@@ -6,7 +6,7 @@ namespace Models
 {
     public class Income : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public bool IsOtherParent { get; set; }
         public int? Employed { get; set; }

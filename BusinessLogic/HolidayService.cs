@@ -7,7 +7,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class HolidayService : FormService<HolidayRepository, Holiday, HolidayViewModel>,IHolidayService
+    public class HolidayService : Service<HolidayRepository, Holiday, HolidayViewModel>,IHolidayService
     {
         public HolidayService(HolidayRepository formRepository) : base(formRepository)
         {
@@ -18,7 +18,7 @@ namespace BusinessLogic
         /// </summary>
         /// <param name="childId"></param>
         /// <returns></returns>
-        public Holiday GetByChildId(int childId)
+        public Holiday GetByChildId(long childId)
         {
             try
             {

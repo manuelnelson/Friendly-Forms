@@ -4,7 +4,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IOtherChildrenService : IFormService<IOtherChildrenRepository,OtherChildren>
+    public interface IOtherChildrenService : IService<IOtherChildrenRepository,OtherChildren>
     {
         OtherChildrenViewModel GetByUserId(int userId, bool isOtherParent = false);
     }

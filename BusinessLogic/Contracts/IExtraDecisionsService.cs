@@ -7,6 +7,6 @@ namespace BusinessLogic.Contracts
     public interface IExtraDecisionsService
     {
         ExtraDecisions AddOrUpdate(ExtraDecisionsViewModel model);
-        List<ExtraDecisions> GetByChildId(int childId);
+        List<ExtraDecisions> GetByChildId(long childId);
     }
 }

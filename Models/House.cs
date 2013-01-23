@@ -6,7 +6,7 @@ namespace Models
 {
     public class House : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int MaritalHouse { get; set; }
         public string Address { get; set; }

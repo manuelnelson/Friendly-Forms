@@ -33,11 +33,23 @@ namespace DataInterface
         void Remove(TEntity item);
 
         /// <summary>
+        /// Delete all items
+        /// </summary>
+        /// <param name="items"></param>
+        void RemoveAll(IEnumerable<TEntity> items);
+
+        /// <summary>
+        /// Delete all items by Id 
+        /// </summary>
+        /// <param name="ids"></param>
+        void RemoveAll(IEnumerable<long> ids);
+
+        /// <summary>
         /// Get element by entity key
         /// </summary>
         /// <param name="id">Entity key value</param>
         /// <returns></returns>
-        TEntity Get(int id);
+        TEntity Get(long id);
 
         /// <summary>
         /// Updates the entity in the context

@@ -6,7 +6,7 @@ namespace Models
 {
     public class OtherChildren : IFormEntity
     {
-        public virtual int Id { get; set; }
+        public virtual long Id { get; set; }
         public virtual bool IsOtherParent { get; set; }
         public virtual int UserId { get; set; }
         public virtual int LegallyResponsible { get; set; }

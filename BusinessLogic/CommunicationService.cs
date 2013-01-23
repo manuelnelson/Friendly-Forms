@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class CommunicationService : FormService<CommunicationRepository,Communication,CommunicationViewModel>, ICommunicationService
+    public class CommunicationService : Service<CommunicationRepository,Communication,CommunicationViewModel>, ICommunicationService
     {
         public CommunicationService(CommunicationRepository formRepository) : base(formRepository)
         {

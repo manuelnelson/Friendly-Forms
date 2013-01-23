@@ -5,7 +5,7 @@ namespace Models
 {
     public class HealthInsurance : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int Health { get; set; }
         public string HealthDescription { get; set; }

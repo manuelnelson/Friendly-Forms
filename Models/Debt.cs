@@ -5,7 +5,7 @@ namespace Models
 {
     public class Debt : IFormEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int MaritalDebt { get; set; }
         public string DebtDivision { get; set; }

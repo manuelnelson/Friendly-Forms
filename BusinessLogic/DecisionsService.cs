@@ -7,7 +7,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class DecisionsService : FormService<DecisionRepository, Decisions, DecisionsViewModel>, IDecisionsService
+    public class DecisionsService : Service<DecisionRepository, Decisions, DecisionsViewModel>, IDecisionsService
     {
         public DecisionsService(DecisionRepository formRepository) : base(formRepository)
         {
@@ -39,7 +39,7 @@ namespace BusinessLogic
             }
         }
 
-        public Decisions GetByChildId(int childId)
+        public Decisions GetByChildId(long childId)
         {
             try
             {

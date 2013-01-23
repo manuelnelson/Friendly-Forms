@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IVehicleService : IFormService<IVehicleRepository, Vehicle>
+    public interface IVehicleService : IService<IVehicleRepository, Vehicle>
     {
         Vehicle AddOrUpdate(VehicleViewModel model);
         new IEnumerable<Vehicle> GetByUserId(int userId);

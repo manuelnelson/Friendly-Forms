@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -10,10 +11,12 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Child/")]
+    [Route("/Child/", "PUT")]
+    [Route("/Child/", "DELETE")]
     public class ReqChild
     {
         [DataMember]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -36,7 +39,19 @@ namespace FriendlyForms.RestService
     public class ChildRestService : Service
     {
         public IChildService ChildService { get; set; }
+        public object Put(ReqChild request)
+        {
+            var child = request.TranslateTo<Child>();
+            ChildService.Update(child);
+            return null;
+        }
 
+        public object Delete(ReqChild request)
+        {
+            var child = request.TranslateTo<Child>();
+            ChildService.Delete(child);
+            return null;
+        }
         public object Post(ReqChild request)
         {
             var childViewModel = request.TranslateTo<ChildViewModel>();

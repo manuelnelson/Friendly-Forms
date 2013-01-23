@@ -14642,7 +14642,7 @@ Friendly.children = [];
 Friendly.childNdx = 0;
 Friendly.StartLoading = function () {
     $('#loading').show();
-    $('body').css('cursor', 'wait');
+    $('body').css('cursor', 'wait'); 
 };
 Friendly.EndLoading = function () {
     $('#loading').hide();
@@ -15858,6 +15858,60 @@ $(document).ready(function () {
             $('.child-info').hide();
         }
     });
+    $('.childEdit').live('click', function() {
+        var $row = $(this).parent().parent();
+        var name = $row.children('.child-name').html();
+        $row.children('.child-name').empty().append("<input data-val='true' class='input-small' data-val-regex='Only alpha-numeric characters and []@$()'!~:#&amp;_,/-?\% are allowed.' data-val-regex-pattern='^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$()'!~:#/&amp;_\-,\%]*$' data-val-required='The Name field is required.' id='Name' name='Name' placeholder='Name' type='text' value='" + name + "'>");
+        var dob = $row.children('.child-dob').html();
+        $row.children('.child-dob').empty().append("<input class='datepicker' data-date='01/18/2013' data-val='true' data-val-regex='Date must be in mm/dd/yyyy format' data-val-regex-pattern='^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$' data-val-required='The Date of Birth field is required.' id='DateOfBirth' name='DateOfBirth' placeholder='MM/DD/YYYY' type='text' value='" + dob + "'>");
+        $row.find('.childEdit, .childDelete').hide();
+        $('.datepicker').datepicker();
+        $row.find('.childDone').show();        
+    });
+    $('.childDone').live('click', function () {
+        var $row = $(this).parent().parent();
+        var name = $row.find('.child-name #Name').val();
+        var dob = $row.find('.child-dob #DateOfBirth').val();
+
+        var model = {
+            Id: $(this).attr('data-id'),
+            UserId: $('#user-id').val(),
+            Name: name,
+            DateOfBirth: dob,
+            ChildFormId: $('#childFormId').val()
+        };
+        //UPDATE
+        $.ajax({
+            url: '/api/Child?format=json',
+            type: 'PUT',
+            data: model,
+            success: function () {
+                $row.children('.child-name').empty().append(name);
+                $row.children('.child-dob').empty().append(dob);
+                $row.find('.childEdit, .childDelete').show();
+                $row.find('.childDone').hide();
+                return false;
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    });
+
+    $('.childDelete').live('click', function () {
+        var $row = $(this).parent().parent();
+        var name = $row.find('.child-name #Name').val();
+        var dob = $row.find('.child-dob #DateOfBirth').val();
+        var query = 'Id=' + $(this).attr('data-id') + '&UserId=' + $('#user-id').val() + '&Name=' + name + '&DateOfBirth=' + dob + '&ChildFormId=' + $('#childFormId').val();
+        //UPDATE
+        $.ajax({
+            url: '/api/Child?'+ query + '&format=json',
+            type: 'DELETE',
+            success: function () {
+                $row.remove();
+                return false;
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    });
     $('#addChild').click(function () {
         Friendly.StartLoading();
         if ($('#child').valid()) {
@@ -15871,6 +15925,8 @@ $(document).ready(function () {
                     //get values
                     var model = Friendly.GetFormInput('child');
                     model.ChildFormId = data.ChildForm.Id;
+                    //use this for later when editing child information
+                    $('#childFormId').val(model.ChildFormId);
                     $.ajax({
                         url: '/api/Child?format=json',
                         type: 'POST',
@@ -15907,31 +15963,14 @@ $(document).ready(function () {
 });
 ;$(function ($) {
     //----------------------Privacy Form-----------------------
-    $('input[name=NeedPrivacy]').change(function () {
-        if ($('#NeedPrivacy:checked').val() === "1") {
-            $('#detailsWrapper').show();
-        } else {
-            $('#detailsWrapper').hide();
-        }
-    });
     //if on or the other of the supervision checkboxes are checked, then show the rest of the data
-    $('input[name=FatherSupervision]').change(function () {
-        if ($('#MotherSupervision').is(":checked")) return;
-        if ($('#FatherSupervision').is(":checked")) {
+    $('input[name=NeedSupervision]').change(function () {
+        if ($('#NeedSupervision:checked').val() === "1") {
             $('.supervision-details').show();
         } else {
             $('.supervision-details').hide();
         }
     });
-    $('input[name=MotherSupervision]').change(function () {
-        if ($('#FatherSupervision').is(":checked")) return;
-        if ($('#MotherSupervision').is(":checked")) {
-            $('.supervision-details').show();
-        } else {
-            $('.supervision-details').hide();
-        }
-    });
-
 
     $('.child-part4').click(function () {
         //check if we need to move to next form

@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class AssetService : FormService<AssetRepository, Assets, AssetViewModel>, IAssetService
+    public class AssetService : Service<AssetRepository, Assets, AssetViewModel>, IAssetService
     {
         public AssetService(AssetRepository formRepository) : base(formRepository)
         {

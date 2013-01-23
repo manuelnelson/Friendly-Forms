@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
@@ -17,7 +13,7 @@ namespace FriendlyForms.RestService
     public class ReqDebt
     {
         [DataMember]
-        public int Id { get; set; }
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]

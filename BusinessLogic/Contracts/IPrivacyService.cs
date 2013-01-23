@@ -3,7 +3,7 @@ using Models;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IPrivacyService : IFormService<IPrivacyRepository, Privacy>
+    public interface IPrivacyService : IService<IPrivacyRepository, Privacy>
     {
     }
 }

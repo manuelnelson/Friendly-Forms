@@ -11,7 +11,7 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public IEnumerable<PreexistingSupportChild> GetChildrenById(int id)
+        public IEnumerable<PreexistingSupportChild> GetChildrenById(long id)
         {
             return GetDbSet().Where(p => p.PreexistingSupportId.Equals(id));
         }

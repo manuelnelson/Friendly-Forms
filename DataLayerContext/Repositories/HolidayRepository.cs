@@ -10,9 +10,9 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public Holiday GetByChildId(int childId)
+        public Holiday GetByChildId(long childId)
         {
-            return GetDbSet().FirstOrDefault(h => h.ChildId.Equals(childId));
+            return GetDbSet().FirstOrDefault(h => h.ChildId == childId);
         }
     }
 }

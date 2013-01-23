@@ -3,7 +3,7 @@ using Models;
 
 namespace BusinessLogic.Contracts
 {
-    public interface ITaxService : IFormService<ITaxRepository, Tax>
+    public interface ITaxService : IService<ITaxRepository, Tax>
     {
     }
 }
