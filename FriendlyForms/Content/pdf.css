@@ -7,6 +7,51 @@
     margin: 0;
 }
 
+
+#main-content h4
+{
+    font-size: 18px;
+    line-height: 20px;
+    min-height: 20px;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    margin: 0 0 8px 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1;
+    color: inherit;
+    text-rendering: optimizelegibility;
+}
+h1 { font-size: 36px; line-height: 40px; font-weight: bold;}
+h2 { font-size: 30px; line-height: 40px; font-weight: bold;}
+h3 { font-size: 24px; line-height: 40px; font-weight: bold;}
+h4 { font-size: 18px; line-height: 20px; }
+h5 { font-size: 14px; line-height: 20px; }
+h6 { font-size: 12px; line-height: 20px; }
+#header h1 {
+    margin: 0;
+}
+#main-content hr
+{
+    border-color: black;
+    margin: 0 0 10px 0;
+}
+
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+#main-content p {
+    margin: 0 0 24px;
+}
+.underline {
+    text-decoration: underline;
+}
+
+/*----------------------Don't change anything below this line'----------------------*/
 .container-fluid::before, .container-fluid::after
 {
     display: table;
@@ -505,47 +550,4 @@ input.span1, textarea.span1, .uneditable-input.span1
 .row-fluid .thumbnails
 {
     margin-left: 0;
-}
-
-#main-content h4
-{
-    font-size: 18px;
-    line-height: 20px;
-    min-height: 20px;
-}
-
-h1, h2, h3, h4, h5, h6
-{
-    margin: 0 0 8px 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    line-height: 1;
-    color: inherit;
-    text-rendering: optimizelegibility;
-}
-h1 { font-size: 36px; line-height: 40px; font-weight: bold;}
-h2 { font-size: 30px; line-height: 40px; font-weight: bold;}
-h3 { font-size: 24px; line-height: 40px; font-weight: bold;}
-h4 { font-size: 18px; line-height: 20px; }
-h5 { font-size: 14px; line-height: 20px; }
-h6 { font-size: 12px; line-height: 20px; }
-#header h1 {
-    margin: 0;
-}
-#main-content hr
-{
-    border-color: black;
-    margin: 0 0 10px 0;
-}
-
-.pull-right {
-  float: right;
-}
-.pull-left {
-  float: left;
-}
-#main-content p {
-    margin: 0 0 24px;
-}
-.underline {
-    text-decoration: underline;
 }
