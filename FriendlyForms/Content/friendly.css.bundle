@@ -28,6 +28,7 @@ less/accordion.less
 less/utilities.less
 less/datepicker.less
 less/responsive.less
-unicorn.main.css
+less/friendly-theme.less
 less/friendly-color.less
-uniform.css     
+less/friendly-uniform.less
+less/friendly-custom.less

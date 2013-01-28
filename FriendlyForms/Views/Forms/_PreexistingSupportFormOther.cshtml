@@ -19,22 +19,22 @@
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "supportOther" }))
                     {
                         <div class="control-group row-fluid preexisting-other">
-                            <label class="span4">Court Name</label>
+                            <label class="span4 form-question">Court Name</label>
                             @Html.TextBoxFor(m => m.CourtName, new { placeholder = "Court Name" })
                             @Html.ValidationMessageFor(m => m.CourtName)
                         </div>
                         <div class="control-group row-fluid preexisting-other">
-                            <label class="span4">Civil Action Case Number</label>
+                            <label class="span4 form-question">Civil Action Case Number</label>
                             @Html.TextBoxFor(m => m.CaseNumber, new { placeholder = "Case Number" })
                             @Html.ValidationMessageFor(m => m.CaseNumber)
                         </div>
                         <div class="control-group row-fluid preexisting-other">
-                            <label class="span4">Date of initial child support order</label>
+                            <label class="span4 form-question">Date of initial child support order</label>
                             @Html.TextBoxFor(m => m.OrderDate, new { placeholder = "Date", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
                             @Html.ValidationMessageFor(m => m.OrderDate)
                         </div>
                         <div class="control-group row-fluid preexisting-other">
-                            <label class="span4">Actual amount paid monthly for this order (do not include past due payment)</label>
+                            <label class="span4 form-question">Actual amount paid monthly for this order (do not include past due payment)</label>
                             @Html.TextBoxFor(m => m.Monthly, new { placeholder = "Per Month" })
                             @Html.ValidationMessageFor(m => m.Monthly)
                         </div>

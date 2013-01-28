@@ -12,16 +12,16 @@
                     </div>
                     <div class="widget-content">
                         <label class="informative">
-                            Define how you will communicate with your child(ren) when they are with the other parent.</label>
+                            <i class="icon icon-exclamation-sign"></i> Define how you will communicate with your child(ren) when they are with the other parent.</label>
                         <div class="control-group">
-                            <label>
+                            <label class="form-question">
                                 When the child(ren) is/are with the other parent, will each of you want to be able to communicate with them while they are with the other parent?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.AllowCommunication, (int)YesNo.Yes, new { @class = "inline" })</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.AllowCommunication, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.AllowCommunication)
                         </div>
                         <div class="control-group">
-                            <label>
+                            <label class="form-question">
                                 What method(s) will the parents use to communicate? (check all that apply)</label>
                             @{
         var telephoneChecked = Model.Telephone ? "checked=checked" : "";
@@ -53,7 +53,7 @@
                             </div>                
                         }
                         <div class="control-group">
-                            <label>
+                            <label class="form-question">
                                 Should there be any limitations on the ability of one parent to communicate with the child while he/she is with the other parent?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Limitations, (int)YesNo.Yes, new { @class = "inline" })</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Limitations, (int)YesNo.No, new { @class = "inline" })</label>
@@ -62,7 +62,7 @@
                         @if (Model.Limitations==((int)YesNo.Yes))
                         {
                             <div class="control-group communicate-method">
-                                <label>
+                                <label class="form-question">
                                     Define any limitations on communication</label>
                                 @Html.TextBoxFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.LimitationDetails)
@@ -71,21 +71,21 @@
                         else
                         {
                             <div class="control-group communicate-method hide">
-                                <label>
+                                <label class="form-question">
                                     Define any limitations on communication</label>
                                 @Html.TextBoxFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.LimitationDetails)
                             </div>
                         }
                         <div class="control-group">
-                            <label>
+                            <label class="form-question">
                                Should each parent notify the other of any changes of address or telephone number?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Notification, (int)YesNo.Yes, new { @class = "inline" })</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Notification, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.Notification)
                         </div>
                         <div class="control-group">
-                            <label>
+                            <label class="form-question">
                                 Should there be any limitations restricting access to rights of either parent?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.AccessOfRights, (int)YesNo.Yes, new { @class = "inline" })</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.AccessOfRights, (int)YesNo.No, new { @class = "inline" })</label>
@@ -94,7 +94,7 @@
                         @if (Model.AccessOfRights==((int)YesNo.Yes))
                         {
                             <div class="control-group communicate-rights">
-                                <label>
+                                <label class="form-question">
                                     How should the rights of either parent be limited?</label>
                                 @Html.TextBoxFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.AccessOfRightsDetails)
@@ -103,7 +103,7 @@
                         else
                         {
                             <div class="control-group communicate-rights hide">
-                                <label>
+                                <label class="form-question">
                                     How should the rights of either parent be limited?</label>
                                 @Html.TextBoxFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.AccessOfRightsDetails)

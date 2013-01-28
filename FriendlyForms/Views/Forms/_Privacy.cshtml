@@ -12,14 +12,14 @@
                     </div>
                     <div class="widget-content">
                         <div class="control-group">
-                            <label>
+                            <label class="form-question">
                                 Have there been documented prior acts of family violence that would cause either of you not to want the other party to have your addresses?</label>
                             <label class="radio">Yes @Html.RadioButtonFor(m => m.NeedPrivacy, (int)YesNo.Yes)</label>
                             <label class="radio">No @Html.RadioButtonFor(m => m.NeedPrivacy, (int)YesNo.No)</label>
                             @Html.ValidationMessageFor(m => m.NeedPrivacy)
                         </div>
                         <div class="control-group">
-                            <label>
+                            <label class="form-question">
                                 Does either parent require supervised parenting time?</label>
                             <label class="radio">Yes @Html.RadioButtonFor(m => m.NeedSupervision, (int)YesNo.Yes)</label>
                             <label class="radio">No @Html.RadioButtonFor(m => m.NeedSupervision, (int)YesNo.No)</label>
@@ -29,25 +29,25 @@
                         {
                             <div class="supervision-details">
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         How will supervised parenting time be applied during the day-to-day schedule?</label>
                                     @Html.TextAreaFor(m => m.SupervisionHow, new { placeholder = "Details", rows = "4", style = "width:98%" })
                                     @Html.ValidationMessageFor(m => m.SupervisionHow)
                                 </div>
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         Where will supervised parenting time take place?</label>
                                     @Html.TextBoxFor(m => m.SupervisionWhere, new { placeholder = "Where"})
                                     @Html.ValidationMessageFor(m => m.SupervisionWhere)
                                 </div>                                
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         Who will supervise the parenting time?</label>
                                     @Html.TextBoxFor(m => m.SupervisionWho, new { placeholder = "Person or organization"})
                                     @Html.ValidationMessageFor(m => m.SupervisionWho)
                                 </div>                                
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         Who will be responsible for the cost of supervision?</label>
                                     <label class="radio">Father @Html.RadioButtonFor(m => m.SupervisionCost, (int)DecisionMaker.Father)</label>
                                     <label class="radio">Mother @Html.RadioButtonFor(m => m.SupervisionCost, (int)DecisionMaker.Mother)</label>
@@ -60,25 +60,25 @@
                         {
                             <div class="supervision-details hide">
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         How will supervised parenting time be applied during the day-to-day schedule?</label>
                                     @Html.TextAreaFor(m => m.SupervisionHow, new { placeholder = "Details", rows = "4", style = "width:98%" })
                                     @Html.ValidationMessageFor(m => m.SupervisionHow)
                                 </div>
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         Where will supervised parenting time take place?</label>
                                     @Html.TextBoxFor(m => m.SupervisionWhere, new { placeholder = "Where"})
                                     @Html.ValidationMessageFor(m => m.SupervisionWhere)
                                 </div>                                
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         Who will supervise the parenting time?</label>
                                     @Html.TextBoxFor(m => m.SupervisionWho, new { placeholder = "Person or organization"})
                                     @Html.ValidationMessageFor(m => m.SupervisionWho)
                                 </div>                                
                                 <div class="control-group">
-                                    <label>
+                                    <label class="form-question">
                                         Who will be responsible for the cost of supervision?</label>
                                     <label class="radio">Father @Html.RadioButtonFor(m => m.SupervisionCost, (int)DecisionMaker.Father)</label>
                                     <label class="radio">Mother @Html.RadioButtonFor(m => m.SupervisionCost, (int)DecisionMaker.Mother)</label>

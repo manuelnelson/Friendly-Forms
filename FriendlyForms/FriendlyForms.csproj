@@ -387,6 +387,8 @@
     <Content Include="Content\images\menu-active.png" />
     <Content Include="Content\images\rarrow.png" />
     <Content Include="Content\images\sprite.png" />
+    <Content Include="Content\less\friendly-custom.less" />
+    <None Include="Content\less\friendly-uniform.less" />
     <Content Include="Content\pdf.css" />
     <Content Include="Content\unicorn.main.css" />
     <Content Include="Content\unicorn.red.css" />
@@ -538,6 +540,7 @@
     <Content Include="Content\Pdfs\ChildSupportMarkup.pdf" />
     <Content Include="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe.config" />
     <Content Include="Content\less\friendly-color.less" />
+    <Content Include="Content\less\friendly-theme.less" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LogicPoint-Friendly.pubxml" />
     <Content Include="Scripts\friendly.js.bundle" />

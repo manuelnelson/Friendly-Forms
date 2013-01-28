@@ -12,7 +12,7 @@
                     </div>
                     <div class="widget-content">
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     How will retirment assets be divided?</label>
                 <label class="radio">There are no retirement assets to be considered. @Html.RadioButtonFor(m => m.Retirement, (int)YesNo.No)</label>
                 <label class="radio">Division of retirement assets will occur as follows: @Html.RadioButtonFor(m => m.Retirement, (int)YesNo.Yes)</label>
@@ -33,7 +33,7 @@
                 </div>                
             }
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     How will non-retirment assets be divided?</label>
                 <label class="radio">There are no non-retirement assets to be considered. @Html.RadioButtonFor(m => m.NonRetirement, (int)YesNo.No)</label>
                 <label class="radio">Division of non-retirement assets will occur as follows: @Html.RadioButtonFor(m => m.NonRetirement, (int)YesNo.Yes)</label>
@@ -54,7 +54,7 @@
                 </div>
             }
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     How will business assets and liabilites be divided?</label>
                 <label class="radio">There are no business assets or liabilities to be considered. @Html.RadioButtonFor(m => m.Business, (int)YesNo.No)</label>
                 <label class="radio">Division of business assets or liabilities will occur as follows:  @Html.RadioButtonFor(m => m.Business, (int)YesNo.Yes)</label>
@@ -75,7 +75,7 @@
                 </div>
             }
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     Are there any other assets or liabilities to be divided?</label>
                 @Html.TextAreaFor(m => m.AdditionalAssets, new { placeholder = "Details", @class = "input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.AdditionalAssets)

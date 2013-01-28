@@ -12,7 +12,7 @@
                     </div>
                     <div class="widget-content">
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     Will each party be entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final?</label>
                 <label class="radio">Yes @Html.RadioButtonFor(m => m.Taxes, (int)YesNo.Yes)</label>
                 <label class="radio">No @Html.RadioButtonFor(m => m.Taxes, (int)YesNo.No)</label>
@@ -21,7 +21,7 @@
             @if (Model.Taxes==((int)YesNo.No))
             {
                 <div class="control-group taxes-detail">
-                <label class="informative">
+                <label class="form-question">
                     How will tax filing be handled at the conclusion of this case?</label>
                     @Html.TextAreaFor(m => m.TaxDescription, new { placeholder = "Details", @class="input-xxlarge" })
                     @Html.ValidationMessageFor(m => m.TaxDescription)
@@ -42,7 +42,7 @@
         </div>
     }
     <button class="btn btn-primary domestic-part8 next">Continue <i class="icon-arrow-right icon-white"></i></button>
-    <p class="viewOutput hide"><span class="informative" >Congratulations!</span> The mediation agreement form is completely done.  Click the button below to view the output.</p>
+    <p class="viewOutput hide"><span class="form-question" >Congratulations!</span> The mediation agreement form is completely done.  Click the button below to view the output.</p>
     <button class="btn btn-primary next viewOutput hide" id="ViewOutput" data-url='/Output/DomesticMediation/' value="View">View Output<i class="icon-arrow-right icon-white"></i></button>
 
 </div>

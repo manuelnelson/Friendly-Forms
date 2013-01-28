@@ -12,7 +12,7 @@
                     </div>
                     <div class="widget-content">
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     Is there a marital house at issue in this case?</label>
                 <label class="radio inline">Yes @Html.RadioButtonFor(m => m.MaritalHouse, (int)YesNo.Yes, new { @class = "inline" })</label>
                 <label class="radio inline">No @Html.RadioButtonFor(m => m.MaritalHouse, (int)YesNo.No, new { @class = "inline" })</label>
@@ -22,42 +22,42 @@
             {
                 <div class="marital-house">
                     <div class="control-group">
-                        <label class="informative">House address</label>
+                        <label class="form-question">House address</label>
                         @Html.TextBoxFor(m => m.Address, new { placeholder = "Address", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.Address)
                     </div>
                     <div class="control-group">
-                        <label class="informative">City, State</label>
+                        <label class="form-question">City, State</label>
                         @Html.TextBoxFor(m => m.CityState, new { placeholder = "City State", @class = "marital-info", autocomplete="off" })
                         @Html.ValidationMessageFor(m => m.CityState)
                     </div>
                     <div class="control-group">
-                        <label class="informative">Zip Code</label>
+                        <label class="form-question">Zip Code</label>
                         @Html.TextBoxFor(m => m.ZipCode, new { placeholder = "Zip Code", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.ZipCode)
                     </div>
                     <div class="control-group">
-                        <label class="informative">Retail value of the house</label>
+                        <label class="form-question">Retail value of the house</label>
                         @Html.TextBoxFor(m => m.RetailValue, new { placeholder = "Value in Dollars", @class = "marital-info currency" })
                         @Html.ValidationMessageFor(m => m.RetailValue)
                     </div>
                     <div class="control-group">
-                        <label class="informative">Amount of money still owed on the house</label>
+                        <label class="form-question">Amount of money still owed on the house</label>
                         @Html.TextBoxFor(m => m.MoneyOwed, new { placeholder = "Dollars owed", @class = "marital-info currency" })
                         @Html.ValidationMessageFor(m => m.MoneyOwed)
                     </div>
                     <div class="control-group">
-                        <label class="informative">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
+                        <label class="form-question">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
                         @Html.TextBoxFor(m => m.Equity, new { placeholder = "Equity in Dollars", @class = "marital-info currency" })
                         @Html.ValidationMessageFor(m => m.Equity)
                     </div>
                     <div class="control-group">
-                        <label class="informative">The mortgage holder on the house</label>
+                        <label class="form-question">The mortgage holder on the house</label>
                         @Html.TextBoxFor(m => m.MortgageOwner, new { placeholder = "Mortgage holder", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.MortgageOwner)
                     </div>
                     <div class="control-group">
-                        <label class="informative">How will you divide the marital home?</label>
+                        <label class="form-question">How will you divide the marital home?</label>
                         @Html.TextAreaFor(m => m.Divide, new { placeholder = "List items you consider to be personal property for consideration in your case. Items such as jewelry, artwork, recreational vehicles, etc are examples of personal property", @class = "marital-info input-xxlarge" })
                         @Html.ValidationMessageFor(m => m.Divide)
                     </div>                
@@ -67,43 +67,43 @@
             {
                 <div class="hide marital-house">
                     <div class="control-group">
-                        <label class="informative">House address</label>
+                        <label class="form-question">House address</label>
                         @Html.TextBoxFor(m => m.Address, new { placeholder = "Address", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.Address)
                     </div>
                     <div class="control-group">
-                        <label class="informative">City, State</label>
+                        <label class="form-question">City, State</label>
                         @Html.TextBoxFor(m => m.CityState, new { placeholder = "City State", @class = "marital-info", autocomplete="off" })
                         @Html.ValidationMessageFor(m => m.CityState)
                     </div>
                     <div class="control-group">
-                        <label class="informative">Zip Code</label>
+                        <label class="form-question">Zip Code</label>
                         @Html.TextBoxFor(m => m.ZipCode, new { placeholder = "Zip Code", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.ZipCode)
                     </div>
 
                     <div class="control-group">
-                        <label class="informative">Retail value of the house</label>
+                        <label class="form-question">Retail value of the house</label>
                         @Html.TextBoxFor(m => m.RetailValue, new { placeholder = "Value in Dollars", @class = "marital-info currency" })
                         @Html.ValidationMessageFor(m => m.RetailValue)
                     </div>
                     <div class="control-group">
-                        <label class="informative">Amount of money still owed on the house</label>
+                        <label class="form-question">Amount of money still owed on the house</label>
                         @Html.TextBoxFor(m => m.MoneyOwed, new { placeholder = "Dollars owed", @class = "marital-info currency" })
                         @Html.ValidationMessageFor(m => m.MoneyOwed)
                     </div>
                     <div class="control-group">
-                        <label class="informative">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
+                        <label class="form-question">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
                         @Html.TextBoxFor(m => m.Equity, new { placeholder = "Equity in Dollars", @class = "marital-info currency" })
                         @Html.ValidationMessageFor(m => m.Equity)
                     </div>
                     <div class="control-group">
-                        <label class="informative">The mortgage holder on the house</label>
+                        <label class="form-question">The mortgage holder on the house</label>
                         @Html.TextBoxFor(m => m.MortgageOwner, new { placeholder = "Mortgage holder", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.MortgageOwner)
                     </div>
                     <div class="control-group">
-                        <label class="informative">How will you divide the marital home?</label>
+                        <label class="form-question">How will you divide the marital home?</label>
                         @Html.TextAreaFor(m => m.Divide, new { placeholder = "List items you consider to be personal property for consideration in your case. Items such as jewelry, artwork, recreational vehicles, etc are examples of personal property", @class = "marital-info input-xxlarge" })
                         @Html.ValidationMessageFor(m => m.Divide)
                     </div>                

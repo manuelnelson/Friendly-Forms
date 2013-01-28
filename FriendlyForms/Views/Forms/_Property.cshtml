@@ -12,7 +12,7 @@
                     </div>
                     <div class="widget-content">
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     Is there any other real estate at issue in this case?</label>
                 <label class="radio inline">Yes @Html.RadioButtonFor(m => m.RealEstate, (int)YesNo.Yes, new { @class = "inline" })</label>
                 <label class="radio inline">No @Html.RadioButtonFor(m => m.RealEstate, (int)YesNo.No, new { @class = "inline" })</label>
@@ -21,7 +21,7 @@
             @if (Model.RealEstate==((int)YesNo.Yes))
             {
                 <div class="control-group real-estate-details">
-                    <label class="informative">Provide details of additional property and how it will be divided.</label>
+                    <label class="form-question">Provide details of additional property and how it will be divided.</label>
                     @Html.TextAreaFor(m => m.RealEstateDescription, new { placeholder = "Details", @class="input-xxlarge" })
                     @Html.ValidationMessageFor(m => m.RealEstateDescription)
                 </div>                
@@ -29,13 +29,13 @@
             else
             {
                 <div class="control-group real-estate-details hide">
-                    <label class="informative">Provide details of additional property and how it will be divided.</label>
+                    <label class="form-question">Provide details of additional property and how it will be divided.</label>
                     @Html.TextAreaFor(m => m.RealEstateDescription, new { placeholder = "Details", @class="input-xxlarge" })
                     @Html.ValidationMessageFor(m => m.RealEstateDescription)
                 </div>                
             }
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                     Division of the parties' household furnishings and personal property has been or will be decided in one of three ways:</label>
                 <label class="radio">Has already been divided to the satisfaction of both parties @Html.RadioButtonFor(m => m.PersonalProperty, (int)PersonalProperty.AlreadyDivided)</label>
                 <label class="radio">Will be determined by the court  @Html.RadioButtonFor(m => m.PersonalProperty, (int)PersonalProperty.Court)</label>

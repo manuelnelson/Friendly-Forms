@@ -13,12 +13,12 @@
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "otherchild" }))
                     {
                         <div class="control-group row-fluid other-other">
-                            <label class="span4">Name</label>
+                            <label class="span4 form-question">Name</label>
                             @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
                             @Html.ValidationMessageFor(m => m.Name)
                         </div>
                         <div class="control-group row-fluid other-other">
-                            <label class="span4">Date of Birth</label>
+                            <label class="span4 form-question">Date of Birth</label>
                             @Html.TextBoxFor(m => m.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
                             @Html.ValidationMessageFor(m => m.DateOfBirth)
                         </div>

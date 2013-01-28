@@ -12,9 +12,9 @@
                         <h5>Other Parent Income</h5>
                     </div>
                     <div class="widget-content">
-                        <label class="informative">You must answer the income questions below as they apply to the other parent. Refer to the last question for a list of 'other sources of income', including a place to enter Imputed Income.</label>
+                        <label class="informative"><i class="icon icon-exclamation-sign"></i> You must answer the income questions below as they apply to the other parent. Refer to the last question for a list of 'other sources of income', including a place to enter Imputed Income.</label>
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Is the other parent currently employed?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Employed, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Employed, (int)YesNo.No, new{@class="inline"})</label>
@@ -23,7 +23,7 @@
                         @if (Model.Employed==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-employed">
-                                <label class="span4">Monthly Income</label>
+                                <label class="span4 form-question">Monthly Income</label>
                                 @Html.TextBoxFor(m => m.Salary, new { placeholder = "Income/month", @class = "hoverHelp", data_content = "Gross Income includes all income from any source, before deductions for allowable taxes and excludes needs based income such as Supplemental Security Income and TANF." })
                                 @Html.ValidationMessageFor(m => m.Salary)
                             </div>                            
@@ -31,13 +31,13 @@
                         else
                         {
                             <div class="control-group income-employed hide">
-                                <label class="span4">Monthly Income</label>
+                                <label class="span4 form-question">Monthly Income</label>
                                 @Html.TextBoxFor(m => m.Salary, new { placeholder = "Income/month", @class = "hoverHelp", data_content = "Gross Income includes all income from any source, before deductions for allowable taxes and excludes needs based income such as Supplemental Security Income and TANF." })
                                 @Html.ValidationMessageFor(m => m.Salary)
                             </div>                                                        
                         }
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Is the other parent Self Employed?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SelfEmployed, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.SelfEmployed, (int)YesNo.No, new{@class="inline"})</label>
@@ -46,7 +46,7 @@
                         @if (Model.SelfEmployed==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-self">
-                                <label class="span4">Monthly Income</label>
+                                <label class="span4 form-question">Monthly Income</label>
                                 @Html.TextBoxFor(m => m.SelfIncome, new { placeholder = "Income/month", @class = "hoverHelp", data_content = "Income from self-employment is gross income from business endeavors minus ordinary and reasonable expenses necessary to produce such income. Income from business endeavors include, but are not limited to, work as an independent contractor or consultant, sales of goods or services, and rental properties." })
                                 @Html.ValidationMessageFor(m => m.SelfIncome)
                             </div>                            
@@ -54,13 +54,13 @@
                         else
                         {
                             <div class="control-group row-fluid hide income-self">
-                                <label class="span4">Monthly Income</label>
+                                <label class="span4 form-question">Monthly Income</label>
                                 @Html.TextBoxFor(m => m.SelfIncome, new { placeholder = "Income/month", @class = "hoverHelp", data_content = "Income from self-employment is gross income from business endeavors minus ordinary and reasonable expenses necessary to produce such income. Income from business endeavors include, but are not limited to, work as an independent contractor or consultant, sales of goods or services, and rental properties." })
                                 @Html.ValidationMessageFor(m => m.SelfIncome)
                             </div>                                                        
                         }
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Does the other parent have Self-Employment Income for which he/she pays Self Employment Taxes for FICA & Medicare?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SelfTax, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.SelfTax, (int)YesNo.No, new{@class="inline"})</label>
@@ -69,7 +69,7 @@
                         @if (Model.SelfTax==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-tax">
-                                <label class="span4">Monthly Income</label>
+                                <label class="span4 form-question">Monthly Income</label>
                                 @Html.TextBoxFor(m => m.SelfTaxAmount, new { placeholder = "Income/month", @class = "hoverHelp", data_content = "The credit for self-employment taxes is calculated by deducting from that Parent's monthly gross income, one-half of the amounts of self-employment taxes paid by a Parent for FICA and Medicare. The amount of self-employment taxes paid can be found on your previous year Federal Tax Form 1040, Schedule SE, Line 4. If you reported less than $400 self-employment income in the previous tax year, you will not enter an amount on Child Support Schedule B, Line 2. For the maximum amount of self-employment income that is subject to Social Security tax, see IRS Publication 533 for the current taxable year. " })
                                 @Html.ValidationMessageFor(m => m.SelfTaxAmount)
                             </div>                            
@@ -77,13 +77,13 @@
                         else
                         {
                             <div class="control-group row-fluid hide income-tax">
-                                <label class="span4">Monthly Income</label>
+                                <label class="span4 form-question">Monthly Income</label>
                                 @Html.TextBoxFor(m => m.SelfTaxAmount, new { placeholder = "Income/month", @class = "hoverHelp", data_content = "The credit for self-employment taxes is calculated by deducting from that Parent's monthly gross income, one-half of the amounts of self-employment taxes paid by a Parent for FICA and Medicare. The amount of self-employment taxes paid can be found on your previous year Federal Tax Form 1040, Schedule SE, Line 4. If you reported less than $400 self-employment income in the previous tax year, you will not enter an amount on Child Support Schedule B, Line 2. For the maximum amount of self-employment income that is subject to Social Security tax, see IRS Publication 533 for the current taxable year. " })
                                 @Html.ValidationMessageFor(m => m.SelfTaxAmount)
                             </div>                                                        
                         }
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Does the other parent have any other source of income?
                             </label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.OtherSources, (int)YesNo.Yes, new{@class="inline"})</label>
@@ -93,107 +93,107 @@
                         @if (Model.OtherSources==((int)YesNo.Yes))
                         {
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Commissions, Fees, Tips</label>
+                                <label class="span4 form-question">Commissions, Fees, Tips</label>
                                 @Html.TextBoxFor(m => m.Commisions, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Commisions)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Bonuses</label>
+                                <label class="span4 form-question">Bonuses</label>
                                 @Html.TextBoxFor(m => m.Bonuses, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Bonuses)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Overtime Payments</label>
+                                <label class="span4 form-question">Overtime Payments</label>
                                 @Html.TextBoxFor(m => m.Overtime, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Overtime)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Severance Pay</label>
+                                <label class="span4 form-question">Severance Pay</label>
                                 @Html.TextBoxFor(m => m.Severance, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Severance)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Recurring Income from Pensions or Retirement Plans</label>
+                                <label class="span4 form-question">Recurring Income from Pensions or Retirement Plans</label>
                                 @Html.TextBoxFor(m => m.Retirement, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Retirement)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Interest Income</label>
+                                <label class="span4 form-question">Interest Income</label>
                                 @Html.TextBoxFor(m => m.Interest, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Interest)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Income from Dividends</label>
+                                <label class="span4 form-question">Income from Dividends</label>
                                 @Html.TextBoxFor(m => m.Dividends, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Dividends)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Trust Income</label>
+                                <label class="span4 form-question">Trust Income</label>
                                 @Html.TextBoxFor(m => m.Trust, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Trust)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Income from Annuities</label>
+                                <label class="span4 form-question">Income from Annuities</label>
                                 @Html.TextBoxFor(m => m.Annuities, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Annuities)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Capital Gains</label>
+                                <label class="span4 form-question">Capital Gains</label>
                                 @Html.TextBoxFor(m => m.Capital, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Capital)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Social Security Disability or Retirement Benefits</label>
+                                <label class="span4 form-question">Social Security Disability or Retirement Benefits</label>
                                 @Html.TextBoxFor(m => m.SocialSecurity, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.SocialSecurity)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Worker's Compensation Benefits</label>
+                                <label class="span4 form-question">Worker's Compensation Benefits</label>
                                 @Html.TextBoxFor(m => m.Compensation, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Compensation)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Unemployment Benefits</label>
+                                <label class="span4 form-question">Unemployment Benefits</label>
                                 @Html.TextBoxFor(m => m.Unemployment, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Unemployment)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Judgments from Personal Injury or Other Civil Cases</label>
+                                <label class="span4 form-question">Judgments from Personal Injury or Other Civil Cases</label>
                                 @Html.TextBoxFor(m => m.CivilCase, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.CivilCase)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Gifts (cash or other gifts that can be converted to cash)</label>
+                                <label class="span4 form-question">Gifts (cash or other gifts that can be converted to cash)</label>
                                 @Html.TextBoxFor(m => m.Gifts, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Gifts)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Prizes/Lottery Winnings</label>
+                                <label class="span4 form-question">Prizes/Lottery Winnings</label>
                                 @Html.TextBoxFor(m => m.Prizes, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Prizes)
                             </div>                         
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Alimony & maintenance from persons not in this case</label>
+                                <label class="span4 form-question">Alimony & maintenance from persons not in this case</label>
                                 @Html.TextBoxFor(m => m.Alimony, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Alimony)
                             </div>                            
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Assets which are used for support of family</label>
+                                <label class="span4 form-question">Assets which are used for support of family</label>
                                 @Html.TextBoxFor(m => m.Assets, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Assets)
                             </div>                         
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Fringe Benefits (if significantly reduce living expenses)</label>
+                                <label class="span4 form-question">Fringe Benefits (if significantly reduce living expenses)</label>
                                 @Html.TextBoxFor(m => m.Fringe, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Fringe)
                             </div>
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Any Other Income, including Imputed Income(Do not include means-tested public assistance, such as TANF or food stamps.)</label>
+                                <label class="span4 form-question">Any Other Income, including Imputed Income(Do not include means-tested public assistance, such as TANF or food stamps.)</label>
                                 @Html.TextBoxFor(m => m.Other, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Other)
                             </div>
                             <div class="control-group row-fluid income-other">
-                                <label class="span4">Please explain the basis for Imputed Income as entered above.</label>
+                                <label class="span4 form-question">Please explain the basis for Imputed Income as entered above.</label>
                                 @Html.TextAreaFor(m => m.OtherDetails, new { placeholder = "Details", @class = "input-xxlarge" })
                                 @Html.ValidationMessageFor(m => m.OtherDetails)
                             </div>
@@ -202,107 +202,107 @@
                         else
                         {
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Commissions, Fees, Tips</label>
+                                <label class="span4 form-question">Commissions, Fees, Tips</label>
                                 @Html.TextBoxFor(m => m.Commisions, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Commisions)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Bonuses</label>
+                                <label class="span4 form-question">Bonuses</label>
                                 @Html.TextBoxFor(m => m.Bonuses, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Bonuses)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Overtime Payments</label>
+                                <label class="span4 form-question">Overtime Payments</label>
                                 @Html.TextBoxFor(m => m.Overtime, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Overtime)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Severance Pay</label>
+                                <label class="span4 form-question">Severance Pay</label>
                                 @Html.TextBoxFor(m => m.Severance, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Severance)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Recurring Income from Pensions or Retirement Plans</label>
+                                <label class="span4 form-question">Recurring Income from Pensions or Retirement Plans</label>
                                 @Html.TextBoxFor(m => m.Retirement, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Retirement)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Interest Income</label>
+                                <label class="span4 form-question">Interest Income</label>
                                 @Html.TextBoxFor(m => m.Interest, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Interest)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Income from Dividends</label>
+                                <label class="span4 form-question">Income from Dividends</label>
                                 @Html.TextBoxFor(m => m.Dividends, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Dividends)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Trust Income</label>
+                                <label class="span4 form-question">Trust Income</label>
                                 @Html.TextBoxFor(m => m.Trust, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Trust)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Income from Annuities</label>
+                                <label class="span4 form-question">Income from Annuities</label>
                                 @Html.TextBoxFor(m => m.Annuities, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Annuities)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Capital Gains</label>
+                                <label class="span4 form-question">Capital Gains</label>
                                 @Html.TextBoxFor(m => m.Capital, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Capital)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Social Security Disability or Retirement Benefits</label>
+                                <label class="span4 form-question">Social Security Disability or Retirement Benefits</label>
                                 @Html.TextBoxFor(m => m.SocialSecurity, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.SocialSecurity)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Worker's Compensation Benefits</label>
+                                <label class="span4 form-question">Worker's Compensation Benefits</label>
                                 @Html.TextBoxFor(m => m.Compensation, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Compensation)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Unemployment Benefits</label>
+                                <label class="span4 form-question">Unemployment Benefits</label>
                                 @Html.TextBoxFor(m => m.Unemployment, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Unemployment)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Judgments from Personal Injury or Other Civil Cases</label>
+                                <label class="span4 form-question">Judgments from Personal Injury or Other Civil Cases</label>
                                 @Html.TextBoxFor(m => m.CivilCase, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.CivilCase)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Gifts (cash or other gifts that can be converted to cash)</label>
+                                <label class="span4 form-question">Gifts (cash or other gifts that can be converted to cash)</label>
                                 @Html.TextBoxFor(m => m.Gifts, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Gifts)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Prizes/Lottery Winnings</label>
+                                <label class="span4 form-question">Prizes/Lottery Winnings</label>
                                 @Html.TextBoxFor(m => m.Prizes, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Prizes)
                             </div>                         
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Alimony & maintenance from persons not in this case</label>
+                                <label class="span4 form-question">Alimony & maintenance from persons not in this case</label>
                                 @Html.TextBoxFor(m => m.Alimony, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Alimony)
                             </div>                            
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Assets which are used for support of family</label>
+                                <label class="span4 form-question">Assets which are used for support of family</label>
                                 @Html.TextBoxFor(m => m.Assets, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Assets)
                             </div>                         
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Fringe Benefits (if significantly reduce living expenses)</label>
+                                <label class="span4 form-question">Fringe Benefits (if significantly reduce living expenses)</label>
                                 @Html.TextBoxFor(m => m.Fringe, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Fringe)
                             </div>
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Any Other Income, including Imputed Income(Do not include means-tested public assistance, such as TANF or food stamps.)</label>
+                                <label class="span4 form-question">Any Other Income, including Imputed Income(Do not include means-tested public assistance, such as TANF or food stamps.)</label>
                                 @Html.TextBoxFor(m => m.Other, new { placeholder = "Per Month" })
                                 @Html.ValidationMessageFor(m => m.Other)
                             </div>
                             <div class="control-group row-fluid income-other hide">
-                                <label class="span4">Please explain the basis for Imputed Income as entered above.</label>
+                                <label class="span4 form-question">Please explain the basis for Imputed Income as entered above.</label>
                                 @Html.TextAreaFor(m => m.OtherDetails, new { placeholder = "Details", @class = "input-xxlarge" })
                                 @Html.ValidationMessageFor(m => m.OtherDetails)
                             </div>                        
