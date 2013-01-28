@@ -26,132 +26,14 @@
 <div class="row-fluid" style="text-align: center;">
     <h3>Matters not concerning minor children</h3>
 </div>
-<h4>Marital House</h4>
-@if (Model.HouseViewModel.MaritalHouse==((int)YesNo.No))
-{
-    <p>There is no marital home at issue in this case.</p>
-}
-else
-{
-    <p>
-        The marital house is located at @Model.HouseViewModel.Address . @Model.HouseViewModel.MortgageOwner is the mortgage owner. The home has an estimated value of $@Model.HouseViewModel.RetailValue, with $@Model.HouseViewModel.MoneyOwed still outstanding.  After subtracting estimated real estate commissions and other sale related expenses, 
-        the value of the equity in the property is approximately $@Model.HouseViewModel.Equity.        
-    </p>
-    <p>The parties have agreed that issues related to the marital home will be handled in the following manner: @Model.HouseViewModel.Divide</p>
-}
-<h4>Other Real Estate</h4>
-@if (Model.PropertyViewModel.RealEstate==((int)YesNo.No))
-{
-    <p>There are no other real estate properties for consideration in this case.</p>
-}
-else
-{
-    <p>
-        The parties agree that issues regarding real property, other than the marital home, will be handled in the following manner: @Model.PropertyViewModel.RealEstateDescription
-    </p>
-}
-<h4>Furnishings and Personal Property</h4>
-@if (Model.PropertyViewModel.PersonalProperty==((int)PersonalProperty.AlreadyDivided))
-{
-    <p>The parties have already divided household furnishings and other personal property to their satisfaction.  All furnishings and personal property in the possession of each respective party shall be each party’s exclusive property, effective immediately, or on the effective date of the agreement as stated herein.</p>
-}
-else if (Model.PropertyViewModel.PersonalProperty==((int)PersonalProperty.Court))
-{
-    <p>The division of the parties’ personal property and household furnishings is left for the determination of the court.</p>
-}
-else
-{
-    <p>The parties have determined that their household furnishings and personal property will be divided as follows.  All furnishings and/or property not mentioned expressly here  will become the exclusive property of the holder of that property, effective immediately, or on the effective date of the agreement as stated herein: @Model.PropertyViewModel.DividingProperty</p>
-}
-<h4>Vehicles</h4>
-@if (!Model.VehicleAllViewModel.VehicleViewModel.VehicleList.Any())
-{
-    <p>There are no vehicles at issue in this case.  Each party will own and have exclusive use of the vehicle(s) currently in her or her possession, and each party will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering such vehicle(s).</p>
-}
-else
-{
-    foreach (var vehicle in Model.VehicleAllViewModel.VehicleViewModel.VehicleList)
-    {
-    <p>@vehicle.Owner will have ownership and exclusive use of the @vehicle.Year @vehicle.Make @vehicle.Model. 
-            @vehicle.Owner will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering said vehicle.
-    </p> 
-        if (vehicle.Refinanced==((int)YesNo.Yes))
-        {
-    <p>@vehicle.Name will refinance this vehicle by @if (vehicle.RefinanceDate != null)
-                                                    {
-        @vehicle.RefinanceDate.Value.ToString("MM/dd/yyyy")
-                                                    }
-    </p>  
-        }
-    }
-}
-<h4>Debt</h4>
-@if (Model.DebtViewModel.MaritalDebt==((int)YesNo.No))
-{
-    <p>There is no marital debt to be considered in this case.  Each party will be solely responsible for all debt held in his or her name.</p>
-}
-else
-{
-    <p>Division of debt will occur as follows: <br /> @Model.DebtViewModel.DebtDivision</p>
-}
-<h4>Retirement Assets</h4>
-@if (Model.AssetViewModel.Retirement==((int)YesNo.No))
-{
-    <p>There are no retirement assets to be considered in this case.  All retirement assets held in either party’s name will be the exclusive property of the party in whose name those assets are held.</p>
-}
-else
-{
-    <p>Division of retirement assets will occur as follows: <br /> @Model.AssetViewModel.RetirementDescription</p>
-}
-<h4>Non-Retirement Assets</h4>
-@if (Model.AssetViewModel.NonRetirement==((int)YesNo.No))
-{
-    <p>There are no non-retirement assets to be considered in this case.  All non-retirement assets held in either party’s name will be the exclusive property of the party in whose name those assets are held.</p>
-}
-else
-{
-    <p>Division of non-retirement assets will occur as follows: <br /> @Model.AssetViewModel.NonRetirementDescription</p>
-}
-<h4>Business Assets and Liabilities</h4>
-@if (Model.AssetViewModel.Business==((int)YesNo.No))
-{
-    <p>There are no business assets or liabilities to be considered in this case.  All business assets and/or liabilities held in either party’s name will be the exclusive property property or responsibility of the party in whose name those assets or liabilities are held.</p>
-}
-else
-{
-    <p>Division of business assets and liabilities will occur as follows: <br /> @Model.AssetViewModel.BusinessDescription</p>
-}
-@if (!string.IsNullOrEmpty(Model.AssetViewModel.AdditionalAssets))
-{
-    <p>Other assets or liabilities will be divided in the following manner: <br />@Model.AssetViewModel.AdditionalAssets</p>
-}
-<h4>Health Insurance/COBRA</h4>
-@if (Model.HealthInsuranceViewModel.Health == (int)YesNo.Yes)
-{
-    <p>Each party is responsible for their own health insurance.</p>
-}
-else
-{
-    <p>Health insurance/COBRA will occur as follows: <br /> @Model.HealthInsuranceViewModel.HealthDescription</p>
-}
-<h4>Spousal Support</h4>
-@if (Model.SpousalViewModel.Spousal==((int)YesNo.No))
-{
-    <p>The parties agree that there will be no provision of spousal support in this case.</p>
-}
-else
-{
-    <p>Provision of spousal support will occur as follows: <br /> @Model.SpousalViewModel.SpousalDescription</p>
-}
-<h4>Tax Returns, Allowances, Deductions and Refunds</h4>
-@if (Model.TaxViewModel.Taxes==((int)YesNo.No))
-{
-    <p>The parties agree that tax returns, allowances, deductions and refunds will occur as follows: <br> @Model.TaxViewModel.TaxDescription</p>
-}
-else
-{
-    <p>Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
-}
+@Html.Partial("_domesticMaritalHouse", Model)
+@Html.Partial("_domesticProperty", Model)
+@Html.Partial("_domesticVehicle", Model)
+@Html.Partial("_domesticDebt", Model)
+@Html.Partial("_domesticAsset", Model)
+@Html.Partial("_domesticHealth", Model)
+@Html.Partial("_domesticSpousal", Model)
+@Html.Partial("_domesticTaxes", Model)
 <div class="row-fluid" style="text-align: center;">
     <h3>Matters concerning minor children</h3>
 </div>

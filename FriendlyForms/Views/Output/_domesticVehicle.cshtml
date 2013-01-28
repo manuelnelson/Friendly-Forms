@@ -1,0 +1,23 @@
+﻿@using Models.ViewModels
+<h4>Vehicles</h4>
+@if (!Model.VehicleAllViewModel.VehicleViewModel.VehicleList.Any())
+{
+    <p>There are no vehicles at issue in this case.  Each party will own and have exclusive use of the vehicle(s) currently in her or her possession, and each party will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering such vehicle(s).</p>
+}
+else
+{
+    foreach (var vehicle in Model.VehicleAllViewModel.VehicleViewModel.VehicleList)
+    {
+    <p>@vehicle.Owner will have ownership and exclusive use of the @vehicle.Year @vehicle.Make @vehicle.Model. 
+            @vehicle.Owner will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering said vehicle.
+    </p> 
+        if (vehicle.Refinanced==((int)YesNo.Yes))
+        {
+    <p>@vehicle.Name will refinance this vehicle by @if (vehicle.RefinanceDate != null)
+                                                    {
+        @vehicle.RefinanceDate.Value.ToString("MM/dd/yyyy")
+                                                    }
+    </p>  
+        }
+    }
+}

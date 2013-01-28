@@ -1,0 +1,12 @@
+﻿@using Models.ViewModels
+<h4>Tax Returns, Allowances, Deductions and Refunds</h4>
+@if (Model.TaxViewModel.Taxes==((int)YesNo.No))
+{
+    <p>The parties agree that tax returns, allowances, deductions and refunds will occur as follows: <br> @Model.TaxViewModel.TaxDescription</p>
+}
+else
+{
+    <p>Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
+}
+
+
