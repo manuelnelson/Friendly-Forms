@@ -15,7 +15,11 @@
 }
 @section ButtonGroup{
     <div class="btn-group">
-        <a class="btn btn-large tip-bottom printForm" title="To PDF"><i class="icon-print"></i></a>
+        @using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "myform", target = "_blank" }))
+        {
+            <input type="hidden" id="html" name="html" />
+            <button class="btn btn-large tip-bottom printForm" title="To PDF"><i class="icon-print"></i></button>
+        }
     </div>
 }
 <div class="row-fluid" style="text-align: center;">

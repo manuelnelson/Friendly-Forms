@@ -1,6 +1,7 @@
 ﻿@using Models.ViewModels
+
 <h4>Vehicles</h4>
-@if (!Model.VehicleAllViewModel.VehicleViewModel.VehicleList.Any())
+@if (Model.VehicleAllViewModel.VehicleViewModel.VehicleList.Count ==0)
 {
     <p>There are no vehicles at issue in this case.  Each party will own and have exclusive use of the vehicle(s) currently in her or her possession, and each party will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering such vehicle(s).</p>
 }

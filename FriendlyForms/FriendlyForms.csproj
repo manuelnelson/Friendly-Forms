@@ -477,6 +477,14 @@
     <Content Include="wkhtmltox0.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Output\_domesticMaritalHouse.cshtml" />
+    <Content Include="Views\Output\_domesticProperty.cshtml" />
+    <Content Include="Views\Output\_domesticVehicle.cshtml" />
+    <Content Include="Views\Output\_domesticDebt.cshtml" />
+    <Content Include="Views\Output\_domesticAsset.cshtml" />
+    <Content Include="Views\Output\_domesticHealth.cshtml" />
+    <Content Include="Views\Output\_domesticSpousal.cshtml" />
+    <Content Include="Views\Output\_domesticTaxes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
