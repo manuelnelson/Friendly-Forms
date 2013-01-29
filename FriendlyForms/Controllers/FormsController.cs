@@ -80,11 +80,11 @@ namespace FriendlyForms.Controllers
         }
         
         [Authorize]
-        public ActionResult Starter(int userId)
+        public ActionResult Starter()
         {            
             //only show form if userId is current user, or if curerent user is lawyer of userId
 
-            if(userId == User.FriendlyIdentity().Id)
+            var userId = User.FriendlyIdentity().Id;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId);
             var children = _childService.GetByUserId(userId);
