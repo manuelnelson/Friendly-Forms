@@ -35,7 +35,7 @@ namespace BusinessLogic
                         NonCustodyParentName = participant.DefendantsName,
                     };
                 custodyInformation.NonCustodyIsFather = custodyInformation.NonCustodyParent == Enum.GetName(typeof(ParentRelationship), ParentRelationship.Father);
-                custodyInformation.LegalCustodyPhrase = "The" + custodyInformation.Parent + " will be the primary legal custodian of the children";
+                custodyInformation.LegalCustodyPhrase = "The " + custodyInformation.Parent + " will be the primary legal custodian of the children";
                 return custodyInformation;
             }
             if (participant.DefendantCustodialParent ==(int)CustodialParent.Primary)

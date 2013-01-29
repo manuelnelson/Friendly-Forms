@@ -1,15 +1,15 @@
 ﻿@using Models.ViewModels
 @model FriendlyForms.Models.ParentingPlanViewModel
 <div class="row-fluid">
-    <h4>Day-To-Day Decisions</h4>
-    <p>
+    <h2>Day-To-Day Decisions</h2>
+    <p class="indented">
         Each parent shall make decisions regarding the day-to-day care of a child while the child is residing with that 
         parent, including any emergency decisions affecting the health or safety of a child.
     </p>
 </div>
 <div class="row-fluid">
-    <h4>Major Decisions</h4>
-    <p>
+    <h2>Major Decisions</h2>
+    <p class="indented">
         The parties must confer with one another prior to any decision related to non-emergency health care, education, religion, or extra-curricular activities.  The listing below indicates who will
             be the primary decision maker when when there is disagreement regarding the most appropriate decision. 
     </p>
@@ -18,8 +18,8 @@
     }
     @foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
     {
-        <h5>@child.Name</h5>
-        <p>
+        <h3 class="indented">@child.Name</h3>
+        <p class="indented">
             Educational Decisions: 
                 @{
                     var childDecision = Model.AllDecisionsViewModel.ChildDecisions.First(c => c.ChildId == (child.Id));
@@ -43,9 +43,9 @@
 </div>
 @if (!string.IsNullOrEmpty(disagreements))
 {
-    <h4>Disagreements</h4>
+    <h2>Disagreements</h2>
     <div class="row-fluid">
-        <p>
+        <p class="indented">
             Where parents have elected joint decision making in the Major Decisions section above, disagreements will be resolved in the following manner: @disagreements
         </p>
     </div>

@@ -1,23 +1,23 @@
 ﻿@using Models.ViewModels
 @model FriendlyForms.Models.ParentingPlanViewModel
-<h4>Exchange of Children</h4>
-<p>The @Enum.GetName(typeof(DecisionMaker), @Model.ResponsibilityViewModel.BeginningVisitation) will be responsible to pick up or drop off children at the beginning of scheduled visitation periods.</p>
-<p>The @Enum.GetName(typeof(DecisionMaker), @Model.ResponsibilityViewModel.EndVisitation) will be responsible to pick up or drop off children at the end of scheduled visitation periods.</p>
+<h2>Exchange of Children</h2>
+<p class="indented">The @Enum.GetName(typeof(DecisionMaker), @Model.ResponsibilityViewModel.BeginningVisitation) will be responsible to pick up or drop off children at the beginning of scheduled visitation periods.</p>
+<p class="indented">The @Enum.GetName(typeof(DecisionMaker), @Model.ResponsibilityViewModel.EndVisitation) will be responsible to pick up or drop off children at the end of scheduled visitation periods.</p>
 @if (Model.ResponsibilityViewModel.TransportationCosts==((int)TransportationCost.Half))
 {
-    <p>Each party will be responsible to pay 1/2 of the total expenses accrued between the parties, in regard to compliance with the visitation schedule.</p>
+    <p class="indented">Each party will be responsible to pay 1/2 of the total expenses accrued between the parties, in regard to compliance with the visitation schedule.</p>
 }
 else if (Model.ResponsibilityViewModel.TransportationCosts==((int)TransportationCost.Own))
 {
-    <p>Each party will be responsible to absorb all expenses related to complying with the visitation schedule.</p>
+    <p class="indented">Each party will be responsible to absorb all expenses related to complying with the visitation schedule.</p>
 }
 else if (Model.ResponsibilityViewModel.TransportationCosts==((int)TransportationCost.Percentage))
 {
-    <p>The Mother shall pay @Model.ResponsibilityViewModel.MotherPercentage% of expenses related to compliance with the visitation schedule, and the Father shall pay the remaining expenses.</p>
+    <p class="indented">The Mother shall pay @Model.ResponsibilityViewModel.MotherPercentage% of expenses related to compliance with the visitation schedule, and the Father shall pay the remaining expenses.</p>
 }
 else
 {
-    <p>
+    <p class="indented">
         Visitation related expenses will be paid as follows:<br />
         @Model.ResponsibilityViewModel.OtherDetails
     </p>

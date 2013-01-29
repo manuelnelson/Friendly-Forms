@@ -1,9 +1,9 @@
 ﻿body
 {
     font-family: Times, "Times New Roman", Times, serif;
-    font-size: 15px;
-    line-height: 20px;
-    color: #333;
+    font-size: 25px;
+    line-height: 33px;
+    color: #000;
     margin: 0;
 }
 
@@ -49,6 +49,13 @@ h6 { font-size: 12px; line-height: 20px; }
 }
 .underline {
     text-decoration: underline;
+}
+.indented {
+    padding-left:20px;
+}
+.linehtless50 {
+    line-height:50%;
+    padding-left:20px;
 }
 
 /*----------------------Don't change anything below this line'----------------------*/
@@ -146,7 +153,6 @@ h6 { font-size: 12px; line-height: 20px; }
 {
     width: 370px;
 }
-
 .span3
 {
     width: 270px;
