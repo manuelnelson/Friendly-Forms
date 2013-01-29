@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using BusinessLogic.Contracts;
@@ -6,6 +7,8 @@ using BusinessLogic.Models;
 using FriendlyForms.Authentication;
 using FriendlyForms.Helpers;
 using FriendlyForms.Models;
+using Models;
+using Models.ViewModels;
 
 namespace FriendlyForms.Controllers
 {
@@ -13,15 +16,39 @@ namespace FriendlyForms.Controllers
     {
         private readonly IFormsAuthentication _formsAuthentication;
         private readonly IUserService _userService;
-        public AccountController(IFormsAuthentication formsAuthentication, IUserService userService)
+        private readonly IClientService _clientService;
+
+        public AccountController(IFormsAuthentication formsAuthentication, IUserService userService, IClientService clientService)
         {
             _formsAuthentication = formsAuthentication;
             _userService = userService;
+            _clientService = clientService;
         }
 
         //
         // GET: /Account/LogOn
         public ActionResult LogOn()
+        {
+            return View();
+        }
+
+        // GET: /Account/LogOn
+        [Authorize]
+        public ActionResult Admin()
+        {
+            var roleId = User.FriendlyIdentity().RoleId;
+            if(roleId == (int)Role.Default)                
+                    return RedirectToAction("AdminNoAccess", "Account");
+            var model = new AdministrationModel();
+            if(roleId == (int)Role.Lawyer)
+            {
+                model.Clients = _clientService.GetUsersClients(User.FriendlyIdentity().Id);                        
+                return View(model);                                                
+            }            
+            return RedirectToAction("AdminNoAccess", "Account");
+        }
+
+        public ActionResult AdminNoAccess()
         {
             return View();
         }
@@ -83,6 +110,7 @@ namespace FriendlyForms.Controllers
                 }
                 else
                 {
+                    //if/when we fix roles, we'll update it here
                     var user = _userService.CreateNativeUser(model.Email, model.FirstName, model.LastName, model.Password);
                     _formsAuthentication.SetAuthCookie(HttpContext, UserAuthenticationTicketBuilder.CreateAuthenticationTicket(user));
                     return RedirectToAction("Index", "Home");

@@ -5,28 +5,31 @@ using System.Net;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
-using Models.Contract;
 using ServiceStack.Common.Web;
 
 namespace BusinessLogic
 {
-    public class Service<TFormRepository, TEntity, TViewModel> : IService<TFormRepository, TEntity>
-        where TFormRepository : IFormRepository<TEntity>
-        where TEntity : class, IFormEntity  
-        where TViewModel : IViewModel, new()
+    public class Service<TRepository, TEntity> : IService<TRepository, TEntity>
+        where TRepository : IRepository<TEntity>
+        where TEntity : class
     {
-        public TFormRepository FormRepository { get; set; }
+        public TRepository Repository { get; set; }
 
-        public Service(TFormRepository formRepository)
+        public Service(TRepository repository)
         {
-            FormRepository = formRepository;
+            Repository = repository;
+        }
+
+        protected Service()
+        {
+            
         }
 
         public void Add(TEntity item)
         {
             try
             {
-                if (item != null) FormRepository.Add(item);
+                if (item != null) Repository.Add(item);
             }
             catch (Exception ex)
             {
@@ -39,7 +42,7 @@ namespace BusinessLogic
         {
             try
             {
-                FormRepository.AddAll(items);
+                Repository.AddAll(items);
             }
             catch (Exception ex)
             {
@@ -52,7 +55,7 @@ namespace BusinessLogic
         {
             try
             {
-                return FormRepository.Get(id);
+                return Repository.Get(id);
             }
             catch (Exception ex)
             {
@@ -65,7 +68,7 @@ namespace BusinessLogic
         {
             try
             {
-                return FormRepository.GetFiltered(whereExpression);
+                return Repository.GetFiltered(whereExpression);
             }
             catch (Exception ex)
             {
@@ -78,7 +81,7 @@ namespace BusinessLogic
         {
             try
             {
-                FormRepository.Update(item);
+                Repository.Update(item);
             }
             catch (Exception ex)
             {
@@ -91,7 +94,7 @@ namespace BusinessLogic
         {
             try
             {
-                FormRepository.Remove(item);
+                Repository.Remove(item);
             }
             catch (Exception ex)
             {
@@ -104,7 +107,7 @@ namespace BusinessLogic
         {
             try
             {
-                FormRepository.RemoveAll(items);
+                Repository.RemoveAll(items);
             }
             catch (Exception ex)
             {
@@ -117,7 +120,7 @@ namespace BusinessLogic
         {
             try
             {
-                FormRepository.RemoveAll(ids);
+                Repository.RemoveAll(ids);
             }
             catch (Exception ex)
             {
@@ -125,60 +128,9 @@ namespace BusinessLogic
                 throw new HttpError(HttpStatusCode.InternalServerError, "Unable to remove items");
             }
         }
-        /// <summary>
-        /// Returns TViewModel infromation by userId
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public IViewModel GetByUserId(int userId)
-        {
-            try
-            {
-                var entity = FormRepository.GetByUserId(userId);
-                return entity == null ? new TViewModel() : entity.ConvertToModel();
-            }
-            catch (Exception ex)
-            {
-                ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to retrieve information", ex);
-            }
-        }
 
-        /// <summary>
-        /// Add the TViewModel information to the database.
-        /// </summary>
-        /// <param name="model"></param>
-        public TEntity AddOrUpdate(IViewModel model)
-        {
-            try
-            {                
-                //Check if entity already exists and we need to update record
-                var entity = model.ConvertToEntity();
-                var existEntity = FormRepository.GetByUserId(model.UserId);
-                if (existEntity != null)
-                {
-                    existEntity.Update(entity);
-                    FormRepository.Update(existEntity);
-                    return existEntity;
-                }
-                //Add entity to database
-                FormRepository.Add((TEntity) entity);
-                return entity as TEntity;
-            }
-            catch (Exception ex)
-            {
-                ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to save", ex);
-            }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            
         }
     }
 }

@@ -7,7 +7,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ChildService : Service<ChildRepository, Child, ChildViewModel>, IChildService
+    public class ChildService : FormService<ChildRepository, Child, ChildViewModel>, IChildService
     {
         public ChildService(ChildRepository formRepository) : base(formRepository)
         {

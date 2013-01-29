@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
@@ -13,7 +12,6 @@ using Models.ViewModels;
 using Pechkin;
 using Pechkin.Synchronized;
 using System.IO;
-using ServiceStack;
 
 namespace FriendlyForms.Controllers
 {
@@ -105,7 +103,7 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult Parenting()
         {
-            var userId = User.FriendlyIdentity().UserId;
+            var userId = User.FriendlyIdentity().Id;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
@@ -213,7 +211,7 @@ namespace FriendlyForms.Controllers
             config.SetAllowLocalContent(true);                    
             config.SetPrintBackground(true);
 
-            var userId = User.FriendlyIdentity().UserId;
+            var userId = User.FriendlyIdentity().Id;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             //var court = _courtService.GetByUserId(userId) as CourtViewModel;
 
@@ -249,7 +247,7 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult DomesticMediation()
         {
-            var userId = User.FriendlyIdentity().UserId;
+            var userId = User.FriendlyIdentity().Id;
             var house = _houseService.GetByUserId(userId);
             var property = _propertyService.GetByUserId(userId);
             var debt = _debtService.GetByUserId(userId);

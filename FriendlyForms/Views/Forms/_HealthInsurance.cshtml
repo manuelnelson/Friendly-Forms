@@ -12,7 +12,7 @@
                     </div>
                     <div class="widget-content">
             <div class="control-group">
-                <label class="informative">
+                <label class="form-question">
                    Will the parents be solely responsible for providing their own individual health insurance following the divorce?</label>
                 <label class="radio">Yes @Html.RadioButtonFor(m => m.Health, (int)YesNo.Yes)</label>
                 <label class="radio">No @Html.RadioButtonFor(m => m.Health, (int)YesNo.No)</label>
@@ -21,7 +21,7 @@
             @if(Model.Health==((int)YesNo.No))
             {
             <div class="control-group health-detail">
-                <label class="informative">
+                <label class="form-question">
                     How will health insurance be funded?</label>
                 @Html.TextAreaFor(m => m.HealthDescription, new { placeholder = "Details", @class="input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.HealthDescription)
@@ -29,7 +29,7 @@
             } else
             {
             <div class="control-group health-detail hide">
-                <label class="informative">
+                <label class="form-question">
                     How will health insurance be funded?</label>
                 @Html.TextAreaFor(m => m.HealthDescription, new { placeholder = "Details", @class="input-xxlarge" })
                 @Html.ValidationMessageFor(m => m.HealthDescription)

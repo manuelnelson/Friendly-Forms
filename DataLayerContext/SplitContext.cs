@@ -13,6 +13,7 @@ namespace DataLayerContext
         public DbSet<Court> Courts { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Client> Clients { get; set; }
         public DbSet<Child> Children { get; set; }
         public DbSet<ChildForm> ChildForms { get; set; }
         public DbSet<Privacy> Privacy { get; set; }
@@ -44,12 +45,12 @@ namespace DataLayerContext
         public DbSet<SpecialCircumstances> SpecialCircumstanceses{ get; set; }
         public DbSet<OtherChild> OtherChild { get; set; }
 
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             SetupCourtMapping(modelBuilder);
             SetupParticipantMapping(modelBuilder);
             SetupUserEntity(modelBuilder);
+            SetupClientEntity(modelBuilder);
             SetupChildEntity(modelBuilder);
             SetupChildFormEntity(modelBuilder);
             SetupPrivacyEntity(modelBuilder);
@@ -81,6 +82,13 @@ namespace DataLayerContext
             SetupOtherChildEntity(modelBuilder);
             SetupParentingAddendumEntity(modelBuilder);
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupClientEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Client>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Client>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);            
         }
 
         private void SetupParentingAddendumEntity(DbModelBuilder modelBuilder)

@@ -95,7 +95,7 @@
         <a data-form="asdfa" href="#" class="current">Domestic Mediation</a>
     </div>
 }
-<input type="hidden" id="user-id" value="@User.FriendlyIdentity().UserId" /> 
+<input type="hidden" id="user-id" value="@User.FriendlyIdentity().Id" /> 
 
 @Html.Partial("_MaritalHouse", Model.HouseViewModel)
 @Html.Partial("_Property", Model.PropertyViewModel)

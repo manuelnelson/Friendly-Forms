@@ -4,7 +4,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IDecisionsService : IService<IDecisionRepository,Decisions>
+    public interface IDecisionsService : IFormService<IDecisionRepository,Decisions>
     {
         void AddOrUpdate(DecisionsViewModel model);
         Decisions GetByChildId(long childId);

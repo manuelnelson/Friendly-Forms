@@ -4,7 +4,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IChildService : IService<IChildRepository,Child>
+    public interface IChildService : IFormService<IChildRepository,Child>
     {
         Child AddOrUpdate(ChildViewModel model);
         new ChildViewModel GetByUserId(int userId);

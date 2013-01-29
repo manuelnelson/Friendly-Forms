@@ -68,7 +68,7 @@
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "childForm" }))
                     {
                         <div class="control-group">
-                            <label class="informative">Are there children involved in this case?</label>
+                            <label class="form-question">Are there children involved in this case?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.ChildFormViewModel.ChildrenInvolved, (int)YesNo.Yes, new { @class = "inline" })</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.ChildFormViewModel.ChildrenInvolved, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.ChildFormViewModel.ChildrenInvolved)

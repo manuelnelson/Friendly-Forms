@@ -8,6 +8,7 @@ namespace Models
         {
             CreatedDate = DateTime.UtcNow;
             FailedPasswordAttemptStart = DateTime.UtcNow.AddMonths(-1);
+            RoleId = 4;
         }
         public int Id { get; set; }
         public string Email { get; set; }
@@ -18,6 +19,6 @@ namespace Models
         public int FailedPasswordAttemptCount { get; set; }
         public DateTime FailedPasswordAttemptStart { get; set; }
         public bool Verified { get; set; }
-
+        public int? RoleId { get; set; } //1=Admin, 2=firm admin, 3=lawyer, 4 or null=client(default)
     }
 }

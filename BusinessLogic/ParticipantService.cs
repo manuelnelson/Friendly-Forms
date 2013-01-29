@@ -7,7 +7,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ParticipantService : Service<ParticipantRepository, Participant, ParticipantViewModel>, IParticipantService
+    public class ParticipantService : FormService<ParticipantRepository, Participant, ParticipantViewModel>, IParticipantService
     {
         private ParticipantRepository ParticipantRepository { get; set; }
         public ParticipantService(ParticipantRepository formRepository) : base(formRepository)

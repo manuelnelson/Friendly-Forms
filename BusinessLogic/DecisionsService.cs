@@ -7,7 +7,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class DecisionsService : Service<DecisionRepository, Decisions, DecisionsViewModel>, IDecisionsService
+    public class DecisionsService : FormService<DecisionRepository, Decisions, DecisionsViewModel>, IDecisionsService
     {
         public DecisionsService(DecisionRepository formRepository) : base(formRepository)
         {

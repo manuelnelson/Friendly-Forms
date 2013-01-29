@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using DataInterface;
-using Models.Contract;
 
 namespace BusinessLogic.Contracts
 {
     public interface IService<TRepository, TEntity> : IDisposable
-        where TRepository : IFormRepository<TEntity>
-        where TEntity : class, IFormEntity 
+        where TRepository : IRepository<TEntity>
+        where TEntity : class
     {
-        //TRepository FormRepository { get; set; }
         /// <summary>
         /// Add the entity to the database.
         /// </summary>
@@ -63,17 +61,5 @@ namespace BusinessLogic.Contracts
         /// <param name="ids"></param>
         void DeleteAll(IEnumerable<long> ids);
 
-        /// <summary>
-        /// Returns TViewModel infromation by userId
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        IViewModel GetByUserId(int userId);
-
-        /// <summary>
-        /// Add the TViewModel information to the database.
-        /// </summary>
-        /// <param name="model"></param>
-        TEntity AddOrUpdate(IViewModel model);
     }
 }

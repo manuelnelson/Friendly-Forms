@@ -47,6 +47,7 @@
     <Compile Include="Child.cs" />
     <Compile Include="ChildForm.cs" />
     <Compile Include="ChildSupport.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="Contract\IFormEntity.cs" />
     <Compile Include="County.cs" />

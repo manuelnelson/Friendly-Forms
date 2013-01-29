@@ -4,7 +4,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface ISocialSecurityService : IService<ISocialSecurityRepository,SocialSecurity>
+    public interface ISocialSecurityService : IFormService<ISocialSecurityRepository,SocialSecurity>
     {
         SocialSecurityViewModel GetByUserId(int userId, bool isOtherParent = false);
         SocialSecurity AddOrUpdate(SocialSecurityViewModel model);

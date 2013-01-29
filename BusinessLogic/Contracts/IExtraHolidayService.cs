@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IExtraHolidayService : IService<ExtraHolidayRepository,ExtraHoliday>
+    public interface IExtraHolidayService : IFormService<ExtraHolidayRepository,ExtraHoliday>
     {
         List<ExtraHoliday> GetByChildId(long childId);
         ExtraHoliday AddOrUpdate(ExtraHolidayViewModel model);

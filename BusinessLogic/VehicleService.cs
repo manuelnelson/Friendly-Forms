@@ -8,7 +8,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class VehicleService : Service<VehicleRepository, Vehicle, VehicleViewModel>, IVehicleService
+    public class VehicleService : FormService<VehicleRepository, Vehicle, VehicleViewModel>, IVehicleService
     {
         public VehicleService(VehicleRepository formRepository) : base(formRepository)
         {

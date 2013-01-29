@@ -8,7 +8,7 @@ using DataInterface;
 
 namespace DataLayerContext.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity>, IDisposable where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         public IUnitOfWork UnitOfWork { get; set; }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Web.Security;
 using BusinessLogic.Models;
+using ServiceStack.Common.Extensions;
 
 namespace FriendlyForms.Authentication
 {
@@ -33,14 +34,7 @@ namespace FriendlyForms.Authentication
 
         private static UserInfo CreateUserContextFromUser(AccountUser accountUser)
         {
-            var userContext = new UserInfo
-            {
-                UserId = accountUser.UserId,
-                DisplayName = accountUser.Name,
-                Email = accountUser.Email
-            };
-
-            return userContext;
+            return accountUser.TranslateTo<UserInfo>();
         }
     }
 }

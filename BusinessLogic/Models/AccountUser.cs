@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using BusinessLogic.Properties;
 using DataAnnotationsExtensions;
 
 namespace BusinessLogic.Models
@@ -9,14 +8,19 @@ namespace BusinessLogic.Models
         /// <summary>
         /// Gets or sets the identifier for the user.
         /// </summary>
-        public int UserId { get; set; }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the role ID for the user
+        /// </summary>
+        public int RoleId { get; set; }
 
         /// <summary>
         /// Gets or sets the user's display name.
         /// </summary>
         [StringLength(30, ErrorMessage = "Name must be less than 30 characters")]        
         [Required(AllowEmptyStrings = false)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
 
         ///// <summary>
         ///// Gets or sets the authorization identifier for the user.

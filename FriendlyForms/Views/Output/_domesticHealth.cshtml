@@ -1,0 +1,12 @@
+﻿@using Models.ViewModels
+<h4>Health Insurance/COBRA</h4>
+@if (Model.HealthInsuranceViewModel.Health == (int)YesNo.Yes)
+{
+    <p>Each party is responsible for their own health insurance.</p>
+}
+else
+{
+    <p>Health insurance/COBRA will occur as follows: <br /> @Model.HealthInsuranceViewModel.HealthDescription</p>
+}
+
+

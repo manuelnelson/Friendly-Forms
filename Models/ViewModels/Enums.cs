@@ -1,5 +1,12 @@
 ﻿namespace Models.ViewModels
 {
+    public enum Role
+    {
+        Admin =1,
+        FirmAdmin,
+        Lawyer,
+        Default
+    }
     public enum Gender
     {
         Male = 1,

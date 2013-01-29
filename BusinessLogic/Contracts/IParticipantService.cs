@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IParticipantService : IService<IParticipantRepository,Participant>
+    public interface IParticipantService : IFormService<IParticipantRepository,Participant>
     {
         CustodyInformation GetCustodyInformation(int userId);
         CustodyInformation GetCustodyInformation(ParticipantViewModel participant);

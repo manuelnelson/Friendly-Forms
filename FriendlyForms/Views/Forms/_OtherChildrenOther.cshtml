@@ -11,44 +11,44 @@
                         <h5>Other parent's other children living in the home</h5>
                     </div>
                     <div class="widget-content">
-                        <label class="informative">If the other parent is seeking an adjustment for other qualified children in the home, please answer the questions below</label>
+                        <label class="informative"><i class="icon icon-asterisk"></i> If the other parent is seeking an adjustment for other qualified children in the home, please answer the questions below</label>
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Are the other parent legally responsible for the qualified child? (Step children do not qualify)</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.LegallyResponsible, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.LegallyResponsible, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.LegallyResponsible)
                         </div>
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Does the qualified child live in the other parent's home?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.AtHome, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.AtHome, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.AtHome)
                         </div>
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Is the other parent actually supporting the qualified child?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Support, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Support, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.Support)
                         </div>
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Is the qualified child subject to a Preexisting Child Support Order?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Preexisting, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Preexisting, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.Preexisting)
                         </div>
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Is the qualified child currently before the court to set, modify or enforce child support?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.InCourt, (int)YesNo.Yes, new{@class="inline"})</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.InCourt, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.InCourt)
                         </div>
                         <div class="control-group row-fluid">
-                            <label class="span4">
+                            <label class="span4 form-question">
                                 Enter a comment here explaining why you have included an other qualified child in the current court case.</label>
                             @Html.TextAreaFor(m => m.Details, new{@class="inline", placeholder="Details"})
                             @Html.ValidationMessageFor(m => m.Details)

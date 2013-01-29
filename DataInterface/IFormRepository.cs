@@ -7,7 +7,5 @@ namespace DataInterface
         where TFormEntity : class, IFormEntity
     {
         TFormEntity GetByUserId(int userId);
-//        DbSet<TFormEntity> GetFormDbSet();
-
     }
 }

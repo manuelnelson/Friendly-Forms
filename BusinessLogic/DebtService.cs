@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class DebtService : Service<DebtRepository, Debt, DebtViewModel>, IDebtService
+    public class DebtService : FormService<DebtRepository, Debt, DebtViewModel>, IDebtService
     {
         public DebtService(DebtRepository formRepository) : base(formRepository)
         {

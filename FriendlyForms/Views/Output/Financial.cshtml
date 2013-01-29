@@ -6,6 +6,7 @@
 @section Sidebar{
     <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
+        <li><a href="@Url.Action("Index","Home")"><i class="icon icon-home"></i><span>Home</span></a></li>
         <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Financial</a></li>
     </ul>
 }
@@ -14,8 +15,12 @@
 }
 @section ButtonGroup{
     <div class="btn-group">
-        <a class="btn btn-large tip-bottom" title="To PDF"><i class="icon-print"></i></a>
+        @using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "myform", target = "_blank" }))
+        {
+            <input type="hidden" id="html" name="html" />
+            <button class="btn btn-large tip-bottom printForm" title="To PDF"><i class="icon-print"></i></button>
+        }
     </div>
-}
+    }
 <h3>Financial Form</h3>
 <h4>Income</h4>

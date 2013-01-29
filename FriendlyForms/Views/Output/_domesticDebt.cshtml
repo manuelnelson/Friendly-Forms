@@ -1,0 +1,12 @@
+﻿@using Models.ViewModels
+<h4>Debt</h4>
+@if (Model.DebtViewModel.MaritalDebt==((int)YesNo.No))
+{
+    <p>There is no marital debt to be considered in this case.  Each party will be solely responsible for all debt held in his or her name.</p>
+}
+else
+{
+    <p>Division of debt will occur as follows: <br /> @Model.DebtViewModel.DebtDivision</p>
+}
+
+
