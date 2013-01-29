@@ -20,7 +20,6 @@ namespace FriendlyForms.Controllers
         private readonly IPrivacyService _privacyService;
         private readonly IInformationService _informationService;
         private readonly IDecisionsService _decisionsService;
-        private readonly IExtraDecisionsService _extraDecisionsService;
         private readonly IResponsibilityService _responsibilityService;
         private readonly ICommunicationService _communicationService;
         private readonly IScheduleService _scheduleService;
@@ -35,11 +34,9 @@ namespace FriendlyForms.Controllers
         private readonly ITaxService _taxService;
         private readonly IChildSupportService _childSupportService;
         private readonly IHolidayService _holidayService;
-        private readonly IExtraHolidayService _extraHolidayService;
         private readonly IIncomeService _incomeService;
         private readonly ISocialSecurityService _socialSecurityService;
         private readonly IPreexistingSupportService _preexistingSupportService;
-        private readonly IPreexistingSupportChildService _preexistingSupportChildService;
         private readonly IOtherChildrenService _otherChildrenService;
         private readonly ISpecialCircumstancesService _specialCircumstancesService;
         private readonly IOtherChildService _otherChildService;
@@ -47,9 +44,9 @@ namespace FriendlyForms.Controllers
         private readonly IAddendumService _addendumService;
         //
         // GET: /Forms/
-        public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
-            IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService)
+        public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
+            IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService,
+            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -57,7 +54,6 @@ namespace FriendlyForms.Controllers
             _privacyService = privacyService;
             _informationService = informationService;
             _decisionsService = decisionService;
-            _extraDecisionsService = extraDecisionService;
             _responsibilityService = responsibilityService;
             _communicationService = communicationService;
             _scheduleService = scheduleService;
@@ -72,11 +68,9 @@ namespace FriendlyForms.Controllers
             _taxService = taxService;
             _childSupportService = childSupportService;
             _holidayService = holidayService;
-            _extraHolidayService = extraHolidayService;
             _incomeService = incomeService;
             _socialSecurityService = socialSecurityService;
             _preexistingSupportService = preexistingSupportService;
-            _preexistingSupportChildService = preexistingSupportChildService;
             _otherChildrenService = otherChildrenService;
             _specialCircumstancesService = specialCircumstancesService;
             _otherChildService = otherChildService;
@@ -85,9 +79,12 @@ namespace FriendlyForms.Controllers
             _addendumService = addendumService;
         }
         
-        public ActionResult Starter()
-        {
-            var userId = User.FriendlyIdentity().Id;
+        [Authorize]
+        public ActionResult Starter(int userId)
+        {            
+            //only show form if userId is current user, or if curerent user is lawyer of userId
+
+            if(userId == User.FriendlyIdentity().Id)
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId);
             var children = _childService.GetByUserId(userId);
@@ -116,7 +113,7 @@ namespace FriendlyForms.Controllers
         }
 
         
-        
+        [Authorize]
         public ActionResult Parenting()
         {
             var userId = User.FriendlyIdentity().Id;
@@ -179,6 +176,7 @@ namespace FriendlyForms.Controllers
             return View(childViewModel);
         }
 
+        [Authorize]
         public ActionResult DomesticMediation()
         {
             var userId = User.FriendlyIdentity().Id;
@@ -243,6 +241,7 @@ namespace FriendlyForms.Controllers
             return View(domesticModel);
         }
 
+        [Authorize]
         public ActionResult Financial()
         {
             var userId = User.FriendlyIdentity().Id;
