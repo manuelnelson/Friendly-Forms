@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class AddendumService : Service<AddendumRepository, Addendum, AddendumViewModel>, IAddendumService
+    public class AddendumService : FormService<AddendumRepository, Addendum, AddendumViewModel>, IAddendumService
     {
         public AddendumService(AddendumRepository formRepository) : base(formRepository)
         {

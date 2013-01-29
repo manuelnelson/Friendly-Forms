@@ -3,7 +3,7 @@ using Models;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IAssetService : IService<IAssetRepository, Assets>
+    public interface IAssetService : IFormService<IAssetRepository, Assets>
     {
     }
 }

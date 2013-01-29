@@ -3,7 +3,7 @@ using Models;
 
 namespace BusinessLogic.Contracts
 {
-    public interface ICommunicationService : IService<CommunicationRepository, Communication>
+    public interface ICommunicationService : IFormService<CommunicationRepository, Communication>
     {
     }
 }

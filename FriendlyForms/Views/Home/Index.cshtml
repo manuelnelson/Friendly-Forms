@@ -1,4 +1,5 @@
-﻿@model FriendlyForms.Models.AllFormsViewModel
+﻿@using FriendlyForms.Authentication
+@model FriendlyForms.Models.AllFormsViewModel
 @{
         ViewBag.Title = "Welcome";
 }
@@ -10,7 +11,7 @@
             {
                     if(!Model.IsStarterDone)
                     {
-                        <li><a href="@Url.Action("Starter","Forms")"><i class="icon icon-th-list"></i>Start Here</a></li>
+                        <li><a href="@Url.Action("Starter","Forms",new {id=@User.FriendlyIdentity().Id})"><i class="icon icon-th-list"></i>Start Here</a></li>
                     }
                     else
                     {

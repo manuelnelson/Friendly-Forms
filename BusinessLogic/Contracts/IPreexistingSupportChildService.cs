@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IPreexistingSupportChildService : IService<IPreexistingSupportChildRepository, PreexistingSupportChild>
+    public interface IPreexistingSupportChildService : IFormService<IPreexistingSupportChildRepository, PreexistingSupportChild>
    {
         IEnumerable<PreexistingSupportChild> GetChildrenBySupportId(long id);
         PreexistingSupportChild AddOrUpdate(PreexistingSupportChildViewModel model);

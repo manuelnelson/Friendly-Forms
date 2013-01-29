@@ -1,0 +1,47 @@
+﻿@model BusinessLogic.Models.AdministrationModel
+
+@{
+    ViewBag.Title = "Administration";
+}
+@section Sidebar{
+    <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <ul>
+        <li><a href="@Url.Action("Index", "Home")"><i class="icon icon-home"></i><span>Home</span></a></li>
+        <li><a href="@Url.Action("LogOff", "Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
+    </ul>
+}
+<h4>Client List</h4>
+@if (!Model.Clients.Any())
+{
+    <p>You do not have any clients at this time.</p>
+}
+else
+{
+    <div class="row-fluid child-table">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>E-mail</th>
+                    <th>Starter Form</th>
+                    <th>Parenting Form</th>
+                    <th>Domestic Form</th>
+                    <th>Financial Form</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in Model.Clients)
+                {
+                    <tr>
+                        <td>@client.FirstName  @client.LastName</td>
+                        <td>@client.Email</td>
+                        <td><a href="@Url.Action("Starter", "Forms", new { userId = @client.Id })" title="Starter form">Starter Form</a></td>
+                        <td><a href="@Url.Action("Parenting", "Forms", new { userId = @client.Id })" title="Parenting form">Parenting Form</a></td>
+                        <td><a href="@Url.Action("DomesticMediation", "Forms", new { userId = @client.Id })" title="Domestic Mediation form">Domestic Form</a></td>
+                        <td><a href="@Url.Action("Financial", "Forms", new { userId = @client.Id })" title="Financial form">Financial Form</a></td>
+                    </tr>                
+                }
+            </tbody>
+        </table>
+    </div>    
+}

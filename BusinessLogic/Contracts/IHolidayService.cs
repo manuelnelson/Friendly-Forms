@@ -4,7 +4,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IHolidayService : IService<HolidayRepository,Holiday>
+    public interface IHolidayService : IFormService<HolidayRepository,Holiday>
     {
         /// <summary>
         /// Retreives holiday infromation by childId

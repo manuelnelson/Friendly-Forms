@@ -3,7 +3,7 @@ using Models;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IChildFormService : IService<IChildFormRepository, ChildForm>
+    public interface IChildFormService : IFormService<IChildFormRepository, ChildForm>
     {
     }
 }

@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class TaxService : Service<TaxRepository, Tax, TaxViewModel>, ITaxService
+    public class TaxService : FormService<TaxRepository, Tax, TaxViewModel>, ITaxService
     {
         public TaxService(TaxRepository formRepository) : base(formRepository)
         {

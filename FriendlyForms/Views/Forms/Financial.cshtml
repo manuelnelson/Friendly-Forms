@@ -99,7 +99,7 @@
         <a data-form="asdfa" href="#" class="current">Financial</a>
     </div>
 }
-<input type="hidden" id="user-id" value="@User.FriendlyIdentity().UserId" /> 
+<input type="hidden" id="user-id" value="@User.FriendlyIdentity().Id" /> 
 @Html.Partial("_Income", Model.IncomeViewModel)
 @Html.Partial("_SocialSecurity", Model.SocialSecurityViewModel)
 @Html.Partial("_PreexistingSupport", Model.PreexistingSupportViewModel)

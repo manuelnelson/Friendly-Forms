@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class SpousalService : Service<SpousalRepository, SpousalSupport, SpousalViewModel>, ISpousalService
+    public class SpousalService : FormService<SpousalRepository, SpousalSupport, SpousalViewModel>, ISpousalService
     {
         public SpousalService(SpousalRepository formRepository) : base(formRepository)
         {

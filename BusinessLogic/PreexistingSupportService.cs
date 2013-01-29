@@ -9,7 +9,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class PreexistingSupportService : Service<PreexistingSupportRepository, PreexistingSupport, PreexistingSupportViewModel>, IPreexistingSupportService
+    public class PreexistingSupportService : FormService<PreexistingSupportRepository, PreexistingSupport, PreexistingSupportViewModel>, IPreexistingSupportService
     {
         public PreexistingSupportService(PreexistingSupportRepository formRepository) : base(formRepository)
         {

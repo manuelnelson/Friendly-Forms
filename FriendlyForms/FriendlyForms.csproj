@@ -485,6 +485,8 @@
     <Content Include="Views\Output\_domesticHealth.cshtml" />
     <Content Include="Views\Output\_domesticSpousal.cshtml" />
     <Content Include="Views\Output\_domesticTaxes.cshtml" />
+    <Content Include="Views\Account\Admin.cshtml" />
+    <Content Include="Views\Account\AdminNoAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

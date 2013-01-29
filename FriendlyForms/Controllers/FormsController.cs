@@ -87,7 +87,7 @@ namespace FriendlyForms.Controllers
         
         public ActionResult Starter()
         {
-            var userId = User.FriendlyIdentity().UserId;
+            var userId = User.FriendlyIdentity().Id;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId);
             var children = _childService.GetByUserId(userId);
@@ -119,7 +119,7 @@ namespace FriendlyForms.Controllers
         
         public ActionResult Parenting()
         {
-            var userId = User.FriendlyIdentity().UserId;
+            var userId = User.FriendlyIdentity().Id;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
@@ -181,7 +181,7 @@ namespace FriendlyForms.Controllers
 
         public ActionResult DomesticMediation()
         {
-            var userId = User.FriendlyIdentity().UserId;
+            var userId = User.FriendlyIdentity().Id;
             var house = _houseService.GetByUserId(userId);
             var property = _propertyService.GetByUserId(userId);            
             var debt = _debtService.GetByUserId(userId);
@@ -245,7 +245,7 @@ namespace FriendlyForms.Controllers
 
         public ActionResult Financial()
         {
-            var userId = User.FriendlyIdentity().UserId;
+            var userId = User.FriendlyIdentity().Id;
             var income = _incomeService.GetByUserId(userId);
             var incomeOther = _incomeService.GetByUserId(userId, isOtherParent:true);
             var social = _socialSecurityService.GetByUserId(userId);

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="Repositories\ChildFormRepository.cs" />
     <Compile Include="Repositories\AddendumRepository.cs" />
     <Compile Include="Repositories\VehicleFormRepository.cs" />

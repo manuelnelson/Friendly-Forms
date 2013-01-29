@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IResponsibilityService : IService<ResponsibilityRepository,Responsibility>
+    public interface IResponsibilityService : IFormService<ResponsibilityRepository,Responsibility>
     {
     }
 }

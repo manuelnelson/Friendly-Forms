@@ -3,7 +3,7 @@ using Models;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IHealthInsuranceService : IService<IHealthInsuranceRepository, HealthInsurance>
+    public interface IHealthInsuranceService : IFormService<IHealthInsuranceRepository, HealthInsurance>
     {
     }
 }

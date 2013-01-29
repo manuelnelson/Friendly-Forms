@@ -9,7 +9,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ExtraHolidayService : Service<ExtraHolidayRepository,ExtraHoliday,ExtraHolidayViewModel>, IExtraHolidayService
+    public class ExtraHolidayService : FormService<ExtraHolidayRepository,ExtraHoliday,ExtraHolidayViewModel>, IExtraHolidayService
     {
         public ExtraHolidayService(ExtraHolidayRepository formRepository) : base(formRepository)
         {

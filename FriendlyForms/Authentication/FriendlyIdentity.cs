@@ -2,26 +2,36 @@
 using System.Security.Principal;
 using System.Web.Security;
 using BusinessLogic.Models;
+using Models.ViewModels;
 
 namespace FriendlyForms.Authentication
 {
     [Serializable]
     public class FriendlyIdentity : IIdentity
     {
-        public FriendlyIdentity(string name, string displayName, int userId)
+        public string Name { get; private set; }
+        public string AuthenticationType{get { return "Friendly Forms"; }}
+        public bool IsAuthenticated{get { return true; }}
+        public string DisplayName { get; private set; }
+        public int Id { get; private set; }
+        public int RoleId { get; private set; }
+
+        public FriendlyIdentity(string name, string displayName, int userId, int roleId = (int)Role.Default)
         {
-            this.Name = name;
-            this.DisplayName = displayName;
-            this.UserId = userId;
+            Name = name;
+            DisplayName = displayName;
+            Id = userId;
+            RoleId = roleId;
         }
 
         public FriendlyIdentity(string name, UserInfo userInfo)
-            : this(name, userInfo.DisplayName, userInfo.UserId)
+            : this(name, userInfo.FirstName, userInfo.Id, userInfo.RoleId)
         {
             if (userInfo == null) throw new ArgumentNullException("userInfo");
-            this.UserId = userInfo.UserId;
-            this.DisplayName = userInfo.DisplayName;
-            this.Name = name;
+            Id = userInfo.Id;
+            DisplayName = userInfo.FirstName;
+            Name = name;
+            RoleId = RoleId;
         }
 
         public FriendlyIdentity(FormsAuthenticationTicket ticket)
@@ -29,21 +39,5 @@ namespace FriendlyForms.Authentication
         {
             if (ticket == null) throw new ArgumentNullException("ticket");
         }
-
-        public string Name { get; private set; }
-
-        public string AuthenticationType
-        {
-            get { return "Friendly Forms"; }
-        }
-
-        public bool IsAuthenticated
-        {
-            get { return true; }
-        }
-
-        public string DisplayName { get; private set; }
-
-        public int UserId { get; private set; }
     }
 }

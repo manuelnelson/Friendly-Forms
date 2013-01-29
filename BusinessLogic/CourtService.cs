@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class CourtService : Service<CourtRepository, Court, CourtViewModel>, ICourtService
+    public class CourtService : FormService<CourtRepository, Court, CourtViewModel>, ICourtService
     {
         public CourtService(CourtRepository formRepository) : base(formRepository)
         {

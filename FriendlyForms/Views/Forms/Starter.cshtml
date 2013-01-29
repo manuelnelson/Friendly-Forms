@@ -35,7 +35,7 @@
         <a data-form="asdfa" href="#" class="current">Starter</a>
     </div>
 }
-<input type="hidden" id="user-id" value="@User.FriendlyIdentity().UserId" /> 
+<input type="hidden" id="user-id" value="@User.FriendlyIdentity().Id" /> 
 
 @Html.Partial("_Court", Model.CourtViewModel)
 @Html.Partial("_Participants", Model.ParticipantViewModel)

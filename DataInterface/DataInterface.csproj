@@ -42,6 +42,7 @@
     <Compile Include="IChildFormRepository.cs" />
     <Compile Include="IChildRepository.cs" />
     <Compile Include="IChildSupportRepository.cs" />
+    <Compile Include="IClientRepository.cs" />
     <Compile Include="ICommunicationRepository.cs" />
     <Compile Include="ICountyRepository.cs" />
     <Compile Include="ICourtRepository.cs" />

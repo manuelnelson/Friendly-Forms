@@ -7,7 +7,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class HolidayService : Service<HolidayRepository, Holiday, HolidayViewModel>,IHolidayService
+    public class HolidayService : FormService<HolidayRepository, Holiday, HolidayViewModel>,IHolidayService
     {
         public HolidayService(HolidayRepository formRepository) : base(formRepository)
         {

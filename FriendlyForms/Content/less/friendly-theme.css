@@ -1,8 +1,31 @@
-/*-------------Came with theme--Below is Unicorn.main.css---------*/
-* {
-  outline: none !important;
-  -moz-outline: none !important;
+.clearfix {
+  *zoom: 1;
 }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+.hide-text {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+.input-block-level {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/*-------------Came with theme--Below is Unicorn.main.css---------*/
 /* Main */
 body {
   overflow-x: hidden;
@@ -10,7 +33,6 @@ body {
 a:hover {
   text-decoration: none;
 }
-/* Header */
 #header {
   height: 77px;
   position: relative;
@@ -26,9 +48,6 @@ a:hover {
   position: relative;
   top: 20px;
   width: 191px;
-}
-#header h1 a {
-  display: block;
 }
 /* Search input */
 #search {
@@ -58,7 +77,6 @@ a:hover {
 #search button:active i {
   opacity: 0.9;
 }
-/* Top user navigation */
 #user-nav {
   position: absolute;
   right: 30px;
@@ -238,17 +256,17 @@ a:hover {
   background-position: center right;
   background-repeat: no-repeat;
   font-size: 11px;
-  color: #666666;
+  color: #666;
 }
 #breadcrumb a:hover {
-  color: #333333;
+  color: #333;
 }
 #breadcrumb a:last-child {
   background-image: none;
 }
 #breadcrumb a.current {
   font-weight: bold;
-  color: #444444;
+  color: #444;
 }
 #breadcrumb a i {
   margin-right: 5px;
@@ -459,6 +477,9 @@ div.dataTables_wrapper .ui-widget-header {
   background-image: -linear-gradient(top, #fdfdfd 0%, #eaeaea 100%);
   border-bottom: 1px solid #CDCDCD;
   height: 36px;
+}
+#header h1 a {
+  display: block;
 }
 .widget-title .nav-tabs {
   border-bottom: 0 none;

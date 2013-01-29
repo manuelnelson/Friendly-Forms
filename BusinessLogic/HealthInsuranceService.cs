@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class HealthInsuranceService : Service<HealthInsuranceRepository, HealthInsurance, HealthInsuranceViewModel>, IHealthInsuranceService
+    public class HealthInsuranceService : FormService<HealthInsuranceRepository, HealthInsurance, HealthInsuranceViewModel>, IHealthInsuranceService
     {
         public HealthInsuranceService(HealthInsuranceRepository formRepository) : base(formRepository)
         {

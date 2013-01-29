@@ -5,6 +5,8 @@ using DataInterface;
 using DevOne.Security.Cryptography.BCrypt;
 using Elmah;
 using Models;
+using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace BusinessLogic
 {
@@ -21,17 +23,13 @@ namespace BusinessLogic
             _mailService = mailService;
             _salt = BCryptHelper.GenerateSalt(6);
         }
-        public void Add()
-        {
-            throw new NotImplementedException();
-        }
 
         public bool DoesNativeUserExist(string email)
         {
             return _userRepository.NativeExists(email);
         }
 
-        public AccountUser CreateNativeUser(string email, string firstName, string lastName, string password)
+        public AccountUser CreateNativeUser(string email, string firstName, string lastName, string password, int roleId = (int)Role.Default)
         {
             try
             {
@@ -43,12 +41,13 @@ namespace BusinessLogic
                     Email = email,
                     Password = hashedPwd,
                     FirstName = firstName,
-                    LastName = lastName
+                    LastName = lastName,
+                    RoleId = roleId
                 };
                 _userRepository.Add(user);
                 var hashedEmail = BCryptHelper.HashPassword(email, _salt);
                 _mailService.SendVerificationEmail(email, hashedEmail);
-                return ToServiceUser(user);
+                return user.TranslateTo<AccountUser>();                
             }
             catch (Exception ex)
             {
@@ -71,7 +70,11 @@ namespace BusinessLogic
                 throw new BusinessServicesException("Too many invalid attempts.  Please wait 10 minutes before trying to log back in.");
             }
             if (BCryptHelper.CheckPassword(password, user.Password))
-                return ToServiceUser(user);
+            {
+                user.RoleId = user.RoleId ?? (int)Role.Default;
+                return user.TranslateTo<AccountUser>();
+            }
+                
 
             //Failed password attempt.  Record
             AddFailedPasswordAttempt(user);
@@ -95,22 +98,6 @@ namespace BusinessLogic
                 user.FailedPasswordAttemptCount++;
                 _userRepository.Update(user);
             }
-        }
-
-        internal static AccountUser ToServiceUser(User dataUser)
-        {
-            if (dataUser == null)
-            {
-                return null;
-            }
-
-            var user = new AccountUser
-            {
-                UserId = dataUser.Id,
-                Name = dataUser.FirstName,
-                Email = dataUser.Email
-            };
-            return user;
         }
     }
 }

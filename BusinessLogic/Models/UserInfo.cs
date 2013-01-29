@@ -5,9 +5,10 @@ namespace BusinessLogic.Models
 {
     public class UserInfo
     {
-        public string DisplayName { get; set; }
+        public string FirstName { get; set; }
         public string Email { get; set; }
-        public int UserId { get; set; }
+        public int Id { get; set; }
+        public int RoleId { get; set; }
 
         public override string ToString()
         {

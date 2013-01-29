@@ -62,6 +62,7 @@ namespace FriendlyForms.App_Start {
             container.Register<IVehicleFormRepository>(c => new VehicleFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IChildFormRepository>(c => new ChildFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IAddendumRepository>(c => new AddendumRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IClientRepository>(c => new ClientRepository(c.Resolve<IUnitOfWork>()));
 
             //Services
             container.Register<ICourtService>(c => new CourtService(c.Resolve<ICourtRepository>() as CourtRepository));
@@ -98,6 +99,7 @@ namespace FriendlyForms.App_Start {
             container.Register<IVehicleFormService>(c => new VehicleFormService(c.Resolve<IVehicleFormRepository>() as VehicleFormRepository));
             container.Register<IChildFormService>(c => new ChildFormService(c.Resolve<IChildFormRepository>() as ChildFormRepository));
             container.Register<IAddendumService>(c => new AddendumService(c.Resolve<IAddendumRepository>() as AddendumRepository));
+            container.Register<IClientService>(c => new ClientService(c.Resolve<IClientRepository>() as ClientRepository));
 
             //Authentication
             container.Register<IFormsAuthentication>(c => new DefaultFormsAuthentication());

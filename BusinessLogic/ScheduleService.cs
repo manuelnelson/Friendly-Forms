@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ScheduleService : Service<ScheduleRepository,Schedule,ScheduleViewModel>, IScheduleService
+    public class ScheduleService : FormService<ScheduleRepository,Schedule,ScheduleViewModel>, IScheduleService
     {
         public ScheduleService(ScheduleRepository formRepository) : base(formRepository)
         {

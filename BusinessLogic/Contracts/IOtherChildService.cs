@@ -5,7 +5,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IOtherChildService : IService<IOtherChildRepository, OtherChild>
+    public interface IOtherChildService : IFormService<IOtherChildRepository, OtherChild>
     {
         OtherChild AddOrUpdate(OtherChildViewModel model);
         IEnumerable<OtherChild> GetChildrenByOtherChildrenId(long otherChildrenId);
