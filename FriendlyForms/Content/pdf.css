@@ -5,6 +5,7 @@
     line-height: 33px;
     color: #000;
     margin: 0;
+    background-color: white;
 }
 
 
@@ -18,7 +19,8 @@
 h1, h2, h3, h4, h5, h6
 {
     margin: 0 0 8px 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica
+         Neue", Helvetica, Arial, sans-serif;
     line-height: 1;
     color: inherit;
     text-rendering: optimizelegibility;
@@ -52,6 +54,9 @@ h6 { font-size: 12px; line-height: 20px; }
 }
 .indented {
     padding-left:20px;
+}
+.indentedTiny {
+    padding-left:10px;
 }
 .linehtless50 {
     line-height:50%;
