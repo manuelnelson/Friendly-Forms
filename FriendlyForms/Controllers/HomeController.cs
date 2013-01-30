@@ -46,7 +46,8 @@ namespace FriendlyForms.Controllers
                         IsDomesticDone = childSupport.UserId != 0,
                         IsStarterDone = participants.UserId != 0,
                         IsParentingDone = holidays.UserId != 0,
-                        IsFinancial = specialCircumstance.UserId != 0
+                        IsFinancial = specialCircumstance.UserId != 0,
+                        FormUserId = userId
                     };
                     return View(allViewModel);                
                 }
