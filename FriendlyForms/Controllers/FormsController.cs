@@ -86,7 +86,7 @@ namespace FriendlyForms.Controllers
         {            
             //only show form if userId is current user, or if curerent user is lawyer of userId
             var loggedInUserId = User.FriendlyIdentity().Id;
-            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            if(!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
@@ -125,7 +125,7 @@ namespace FriendlyForms.Controllers
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
             var loggedInUserId = User.FriendlyIdentity().Id;
-            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            if (!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
@@ -195,7 +195,7 @@ namespace FriendlyForms.Controllers
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
             var loggedInUserId = User.FriendlyIdentity().Id;
-            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            if (!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
@@ -267,7 +267,7 @@ namespace FriendlyForms.Controllers
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
             var loggedInUserId = User.FriendlyIdentity().Id;
-            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            if (!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
