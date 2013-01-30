@@ -486,7 +486,7 @@
     <Content Include="Views\Output\_domesticSpousal.cshtml" />
     <Content Include="Views\Output\_domesticTaxes.cshtml" />
     <Content Include="Views\Account\Admin.cshtml" />
-    <Content Include="Views\Account\AdminNoAccess.cshtml" />
+    <Content Include="Views\Shared\NotAuthorized.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

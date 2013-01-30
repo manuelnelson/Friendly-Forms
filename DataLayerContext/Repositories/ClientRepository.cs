@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DataInterface;
 using Models;
 
@@ -23,6 +24,11 @@ namespace DataLayerContext.Repositories
             //    {
             //        userId
             //    });
+        }
+
+        public bool LawyerHasClient(int lawyerId, int clientId)
+        {
+            return GetDbSet().Any(c => c.UserId == lawyerId && c.ClientUserId == clientId);
         }
     }
 }

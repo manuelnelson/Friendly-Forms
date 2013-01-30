@@ -42,11 +42,12 @@ namespace FriendlyForms.Controllers
         private readonly IOtherChildService _otherChildService;
         private readonly IVehicleFormService _vehicleFormService;
         private readonly IAddendumService _addendumService;
+        private readonly IClientService _clientService;
         //
         // GET: /Forms/
         public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
-            IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService)
+            IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IIncomeService incomeService, ISocialSecurityService socialSecurityService, 
+            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IClientService clientService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -77,14 +78,19 @@ namespace FriendlyForms.Controllers
             _vehicleFormService = vehicleFormService;
             _childFormService = childFormService;
             _addendumService = addendumService;
+            _clientService = clientService;
         }
         
         [Authorize]
         public ActionResult Starter(int userId)
         {            
             //only show form if userId is current user, or if curerent user is lawyer of userId
-
-            if(userId == User.FriendlyIdentity().Id)
+            var loggedInUserId = User.FriendlyIdentity().Id;
+            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            {
+                //no authority to view the page. show error message
+                return RedirectToAction("NotAuthorized", "Account");
+            }
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId);
             var children = _childService.GetByUserId(userId);
@@ -109,14 +115,21 @@ namespace FriendlyForms.Controllers
                     },
                 StarterFormsCompleted = formsViewModel
             };
+            starterViewModel.FormUserId = userId;
             return View(starterViewModel);
         }
 
         
         [Authorize]
-        public ActionResult Parenting()
+        public ActionResult Parenting(int userId)
         {
-            var userId = User.FriendlyIdentity().Id;
+            //only show form if userId is current user, or if curerent user is lawyer of userId
+            var loggedInUserId = User.FriendlyIdentity().Id;
+            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            {
+                //no authority to view the page. show error message
+                return RedirectToAction("NotAuthorized", "Account");
+            }
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
@@ -173,13 +186,20 @@ namespace FriendlyForms.Controllers
                     AddendumViewModel = addendum as AddendumViewModel,
                     FormsCompleted = formsViewModel
                 };
+            childViewModel.FormUserId = userId;
             return View(childViewModel);
         }
 
         [Authorize]
-        public ActionResult DomesticMediation()
+        public ActionResult DomesticMediation(int userId)
         {
-            var userId = User.FriendlyIdentity().Id;
+            //only show form if userId is current user, or if curerent user is lawyer of userId
+            var loggedInUserId = User.FriendlyIdentity().Id;
+            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            {
+                //no authority to view the page. show error message
+                return RedirectToAction("NotAuthorized", "Account");
+            }
             var house = _houseService.GetByUserId(userId);
             var property = _propertyService.GetByUserId(userId);            
             var debt = _debtService.GetByUserId(userId);
@@ -238,13 +258,20 @@ namespace FriendlyForms.Controllers
                 //TODO: we'll need to do a check to see if there are children involved.  This will be changed later but for NOW
                 HasChildren = true
             };
+            domesticModel.FormUserId = userId;
             return View(domesticModel);
         }
 
         [Authorize]
-        public ActionResult Financial()
+        public ActionResult Financial(int userId)
         {
-            var userId = User.FriendlyIdentity().Id;
+            //only show form if userId is current user, or if curerent user is lawyer of userId
+            var loggedInUserId = User.FriendlyIdentity().Id;
+            if (userId != loggedInUserId || !_clientService.LawyerHasClient(loggedInUserId, userId))
+            {
+                //no authority to view the page. show error message
+                return RedirectToAction("NotAuthorized", "Account");
+            }
             var income = _incomeService.GetByUserId(userId);
             var incomeOther = _incomeService.GetByUserId(userId, isOtherParent:true);
             var social = _socialSecurityService.GetByUserId(userId);
@@ -310,7 +337,7 @@ namespace FriendlyForms.Controllers
                     SpecialCircumstancesViewModel = circumstance,
                     SpecialCircumstancesOtherViewModel = circumstanceOther
                 };
-
+            model.FormUserId = userId;
             return View(model);
         }
 

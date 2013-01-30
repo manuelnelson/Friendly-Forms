@@ -7,8 +7,6 @@ using System.Web.Routing;
 using System.Web.Security;
 using DataLayerContext.Migrations;
 using FriendlyForms.Authentication;
-using ServiceStack.MiniProfiler;
-
 
 namespace FriendlyForms
 {

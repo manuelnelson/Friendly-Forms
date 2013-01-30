@@ -219,10 +219,11 @@
     });
 
     $('.child-part3').click(function () {
+        var formUserId = $('#user-id').val();
         if($('.child-table tr').length > 1) {
-            document.location.href = '/Forms/Parenting/';
+            document.location.href = '/Forms/Parenting/?userId='+formUserId;
         } else {
-            document.location.href = '/Forms/DomesticMediation/';
+            document.location.href = '/Forms/DomesticMediation/?userId='+formUserId;
         }
     });
 });

@@ -31,5 +31,18 @@ namespace BusinessLogic
                 throw new HttpError(HttpStatusCode.InternalServerError, "Unable to retrieve items");
             }
         }
+
+        public bool LawyerHasClient(int lawyerId, int clientId)
+        {
+            try
+            {
+                return ClientRepository.LawyerHasClient(lawyerId, clientId);
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new HttpError(HttpStatusCode.InternalServerError, "Unable to authorize");                
+            }
+        }
     }
 }

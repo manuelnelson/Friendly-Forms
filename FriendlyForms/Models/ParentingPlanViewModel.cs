@@ -19,6 +19,7 @@ namespace FriendlyForms.Models
         public FormsCompleted FormsCompleted { get; set; }
         //Only used for output form
         public PpOutputFormHelper PpOutputFormHelper { get; set; }
+        public int FormUserId { get; set; }
     }
 
     public class PpOutputFormHelper

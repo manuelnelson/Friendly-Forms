@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using BusinessLogic.Contracts;
@@ -7,7 +6,6 @@ using BusinessLogic.Models;
 using FriendlyForms.Authentication;
 using FriendlyForms.Helpers;
 using FriendlyForms.Models;
-using Models;
 using Models.ViewModels;
 
 namespace FriendlyForms.Controllers
@@ -38,24 +36,23 @@ namespace FriendlyForms.Controllers
         {
             var roleId = User.FriendlyIdentity().RoleId;
             if(roleId == (int)Role.Default)                
-                    return RedirectToAction("AdminNoAccess", "Account");
+                    return RedirectToAction("NotAuthorized", "Account");
             var model = new AdministrationModel();
             if(roleId == (int)Role.Lawyer)
             {
                 model.Clients = _clientService.GetUsersClients(User.FriendlyIdentity().Id);                        
                 return View(model);                                                
             }            
-            return RedirectToAction("AdminNoAccess", "Account");
+            return RedirectToAction("NotAuthorized", "Account");
         }
 
-        public ActionResult AdminNoAccess()
+        public ActionResult NotAuthorized()
         {
             return View();
         }
 
         //
         // POST: /Account/LogOn
-
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
@@ -80,7 +77,6 @@ namespace FriendlyForms.Controllers
 
         //
         // GET: /Account/LogOff
-
         public ActionResult LogOff()
         {
             _formsAuthentication.Signout();
@@ -97,7 +93,6 @@ namespace FriendlyForms.Controllers
 
         //
         // POST: /Account/Register
-
         [HttpPost]
         public ActionResult Boogy(RegisterModel model)
         {

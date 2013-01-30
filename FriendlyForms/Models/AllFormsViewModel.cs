@@ -12,5 +12,6 @@ namespace FriendlyForms.Models
         public bool IsDomesticDone { get; set; }
         public bool IsFinancial { get; set; }
         public bool HasChildren { get; set; }
+        public int FormUserId { get; set; }
     }
 }

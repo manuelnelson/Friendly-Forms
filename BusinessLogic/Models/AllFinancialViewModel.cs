@@ -15,6 +15,7 @@ namespace BusinessLogic.Models
         public OtherChildrenViewModel OtherChildrenOtherViewModel { get; set; }
         public SpecialCircumstancesViewModel SpecialCircumstancesOtherViewModel { get; set; }
         public FinancialFormsCompleted FinancialFormsCompleted { get; set; }
+        public int FormUserId { get; set; }
     }
 
     public class FinancialFormsCompleted
