@@ -3,9 +3,12 @@
         ViewBag.Title = "Welcome";
 }
 @section Sidebar{
-        <a href="@Url.Action("Index","Home",new {userId=@Model.FormUserId})" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    @{
+        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {userId = @Model.FormUserId}) : "/";
+    }            
+        <a href="@homeUrl" class="visible-phone"><i class="icon icon-home"></i>Home</a>
         <ul>
-            <li class="active"><a href="@Url.Action("Index","Home",new {userId=@Model.FormUserId})"><i class="icon icon-home"></i><span>Home</span></a></li>
+            <li class="active"><a href="@homeUrl"><i class="icon icon-home"></i><span>Home</span></a></li>
             @if(User.Identity.IsAuthenticated)
             {
                     if(!Model.IsStarterDone)
@@ -26,8 +29,12 @@
         </ul>
 }
 @section Breadcrumb{
+        @{
+        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {userId = @Model.FormUserId}) : "/";
+    }            
+
     <div id="breadcrumb">
-        <a href="@Url.Action("Index","Home",new {userId=@Model.FormUserId})" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
+        <a href="@homeUrl" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
     </div>
 }
 <div class="row-fluid">
