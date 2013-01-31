@@ -212,18 +212,24 @@
             });
         }
         else {
-            Friendly.EndLoading();
+            Friendly.EndLoading(); 
             return false;
         }
         return false;
     });
 
     $('.child-part3').click(function () {
-        var formUserId = $('#user-id').val();
-        if($('.child-table tr').length > 1) {
-            document.location.href = '/Forms/Parenting/?userId='+formUserId;
+        var $self = $(this);
+        if ($self.text() == 'Continue') {
+            $self.text('Next Form');
+            Friendly.ShowMessage('Please note', 'Before proceeding, please review the data you entered as you will not be able to edit this data past this point.', Friendly.properties.messageType.Success, '#starterWarning');
         } else {
-            document.location.href = '/Forms/DomesticMediation/?userId='+formUserId;
+            var formUserId = $('#user-id').val();
+            if($('.child-table tr').length > 1) {
+                document.location.href = '/Forms/Parenting/?userId='+formUserId;
+            } else {
+                document.location.href = '/Forms/DomesticMediation/?userId='+formUserId;
+            }
         }
     });
 });

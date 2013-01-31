@@ -15947,18 +15947,24 @@ $(document).ready(function () {
             });
         }
         else {
-            Friendly.EndLoading();
+            Friendly.EndLoading(); 
             return false;
         }
         return false;
     });
 
     $('.child-part3').click(function () {
-        var formUserId = $('#user-id').val();
-        if($('.child-table tr').length > 1) {
-            document.location.href = '/Forms/Parenting/?userId='+formUserId;
+        var $self = $(this);
+        if ($self.text() == 'Continue') {
+            $self.text('Next Form');
+            Friendly.ShowMessage('Please note', 'Before proceeding, please review the data you entered as you will not be able to edit this data past this point.', Friendly.properties.messageType.Warning, '#starterWarning');
         } else {
-            document.location.href = '/Forms/DomesticMediation/?userId='+formUserId;
+            var formUserId = $('#user-id').val();
+            if($('.child-table tr').length > 1) {
+                document.location.href = '/Forms/Parenting/?userId='+formUserId;
+            } else {
+                document.location.href = '/Forms/DomesticMediation/?userId='+formUserId;
+            }
         }
     });
 });
@@ -16549,7 +16555,96 @@ Parenting.CheckChildDecision = function (child, nextForm) {
         error: Friendly.GenericErrorMessage
     });
 };
-
+Parenting.SaveExtraDecisions = function (childId) {
+    var formName = 'extraDecisions';
+    $.each($('.extra-decision-item'), function (ndx, item) {
+        var id = $(item).children('#extra-decision-Id').val();
+        var extraModel = {
+            Id: typeof (childId) === "undefined" ? id : 0,
+            ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
+            DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
+            Description: $(item).children('#extra-decision-description').text().trim(),
+            UserId: $('#user-id').val()
+        };
+        //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
+        //If it does, copy over the Id
+        if (typeof (childId) !== "undefined") {
+            $.ajax({
+                url: '/api/' + formName + '/' + childId + '?format=json',
+                type: 'GET',
+                success: function (data) {
+                    $.each(data, function (ndx, item) {
+                        if (item.Description === extraModel.Description) {
+                            //We have a match
+                            extraModel.Id = item.Id;
+                        }
+                    });
+                    //Now add/update extradecisions
+                    $.ajax({
+                        url: '/api/' + formName + '/?format=json',
+                        type: 'POST',
+                        data: extraModel,
+                        success: function () {
+                        },
+                        error: Friendly.GenericErrorMessage
+                    });
+                },
+                error: Friendly.GenericErrorMessage
+            });
+            return;
+        }
+        //else, just update the extradecisions
+        $.ajax({
+            url: '/api/' + formName + '/?format=json',
+            type: 'POST',
+            data: extraModel,
+            success: function () {
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    });
+};
+Parenting.GetChildDecisions = function (child) {
+    $.ajax({
+        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
+        type: 'GET',
+        success: function (data) {
+            $('#childName').text(child.Name);
+            $('#childId').val(child.Id);
+            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+            $('.extra-decision-item').remove();
+            $.each(data.ExtraDecisions, function (ndx, item) {
+                var result = $("#friendly-extraDecisions-template").tmpl(item);
+                $('#radio-decisions').append(result);
+            });
+            Parenting.CheckIfBothIsChecked();
+            //fixes possible error flag if one child isn't complete but another is
+            if (data.Decisions.Education !== 0) {
+                $('#decisions').valid();
+            }
+            $('#decisionsWrapper').show();
+        },
+        error: Friendly.GenericErrorMessage
+    });
+};
+Parenting.CheckIfBothIsChecked = function () {
+    var bothChecked = false;
+    $.each($('#decisions input[type=radio]'), function (ndx, item) {
+        var id = $(item).attr('id');
+        if ($('#' + id + ':checked').val() === "3")
+            bothChecked = true;
+    });
+    if (bothChecked) {
+        $('.decision-details').show();
+    } else {
+        $('#DecisionsViewModel_BothResolve').val('');
+        $('.decision-details').hide();
+    }
+}
 Parenting.CheckChildHoliday = function (child, nextForm) {
     $.ajax({
         url: '/api/Holiday/' + child.Id + '?format=json',
@@ -16578,55 +16673,7 @@ Parenting.CheckChildHoliday = function (child, nextForm) {
         error: Friendly.GenericErrorMessage
     });
 };
-Parenting.SaveExtraDecisions = function(childId) {
-    var formName = 'extraDecisions';
-    $.each($('.extra-decision-item'), function(ndx, item) {
-        var id = $(item).children('#extra-decision-Id').val();
-        var extraModel = {
-            Id: typeof(childId) === "undefined" ? id : 0,
-            ChildId: typeof(childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
-            DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
-            Description: $(item).children('#extra-decision-description').text().trim(),
-            UserId: $('#user-id').val()
-        };
-        //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
-        //If it does, copy over the Id
-        if (typeof(childId) !== "undefined") {
-            $.ajax({
-                url: '/api/' + formName + '/' + childId + '?format=json',
-                type: 'GET',
-                success: function(data) {
-                    $.each(data, function(ndx, item) {
-                        if (item.Description === extraModel.Description) {
-                            //We have a match
-                            extraModel.Id = item.Id;
-                        }
-                    });
-                    //Now add/update extradecisions
-                    $.ajax({
-                        url: '/api/' + formName + '/?format=json',
-                        type: 'POST',
-                        data: extraModel,
-                        success: function() {
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                },
-                error: Friendly.GenericErrorMessage
-            });
-            return;
-        }
-        //else, just update the extradecisions
-        $.ajax({
-            url: '/api/' + formName + '/?format=json',
-            type: 'POST',
-            data: extraModel,
-            success: function() {
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-};
+
 Parenting.AddHoliday = function(caller) {
     var formName = 'holiday';
     if ($('#' + formName).valid()) {
@@ -16665,47 +16712,7 @@ Parenting.AddHoliday = function(caller) {
         return true;
     }
 };
-Parenting.GetChildDecisions = function(child) {
-    $.ajax({
-        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
-        type: 'GET',
-        success: function(data) {
-            $('#childName').text(child.Name);
-            $('#childId').val(child.Id);
-            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
-            $('.extra-decision-item').remove();
-            $.each(data.ExtraDecisions, function(ndx, item) {
-                var result = $("#friendly-extraDecisions-template").tmpl(item);
-                $('#radio-decisions').append(result);
-            });
-            Parenting.CheckIfBothIsChecked();
-            //fixes possible error flag if one child isn't complete but another is
-            if (data.Decisions.Education !== 0) {
-                $('#decisions').valid();
-            }
-            $('#decisionsWrapper').show();
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
-Parenting.CheckIfBothIsChecked = function() {
-    var bothChecked = false;
-    $.each($('#decisions input[type=radio]'), function (ndx, item) {
-        var id = $(item).attr('id');
-        if ($('#' + id + ':checked').val() === "3")
-            bothChecked = true;
-    });
-    if (bothChecked) {
-        $('.decision-details').show();
-    } else {
-        $('#DecisionsViewModel_BothResolve').val('');
-        $('.decision-details').hide();
-    }
-}
+
 //Children Decisions
 Parenting.LoadChildren = function(form) {
     Friendly.children = [];

@@ -58,7 +58,6 @@
                             @Html.TextAreaFor(m => m.DecisionsViewModel.BothResolve, new { placeholder = "Details", @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.DecisionsViewModel.BothResolve)
                         </div>                
-
                     }
                 </div>
             </div>
@@ -72,9 +71,7 @@
                     <h5>Add additional decisions (Optional)</h5>
                 </div>
                 <div class="widget-content">
-                    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "extraDecisions" }))
-                    {
-
+                    <form action="/api/extradecisions/" id="extraDecisions" method="post">
                         <div class="control-group">
                             <label class="form-question">
                                 Other Decisions</label>
@@ -88,8 +85,8 @@
                             @Html.TextBoxFor(m => m.ExtraDecisionsViewModel.Description, new { placeholder = "Description" })
                             @Html.ValidationMessageFor(m => m.ExtraDecisionsViewModel.Description)
                         </div>
-                    }
-                    <button class="btn btn-primary" id="addDecisions" value="Add This Decision">Add This Decision</button>
+                        <button class="btn btn-primary" id="addDecisions" value="Add This Decision">Add This Decision</button>
+                    </form>
                 </div>
             </div>
         </div>

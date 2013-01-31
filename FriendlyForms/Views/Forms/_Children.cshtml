@@ -79,16 +79,16 @@
                     {
                         using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "child" }))
                         {
-                        <div class="control-group row-fluid child-info">
-                            <label class="span2">Name</label>
-                            @Html.TextBoxFor(m => m.ChildViewModel.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
-                            @Html.ValidationMessageFor(m => m.ChildViewModel.Name)
-                        </div>
-                        <div class="control-group row-fluid child-info">
-                            <label class="span2">Date of Birth</label>
-                            @Html.TextBoxFor(m => m.ChildViewModel.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                            @Html.ValidationMessageFor(m => m.ChildViewModel.DateOfBirth)
-                        </div>
+                            <div class="control-group row-fluid child-info">
+                                <label class="span2">Name</label>
+                                @Html.TextBoxFor(m => m.ChildViewModel.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
+                                @Html.ValidationMessageFor(m => m.ChildViewModel.Name)
+                            </div>
+                            <div class="control-group row-fluid child-info">
+                                <label class="span2">Date of Birth</label>
+                                @Html.TextBoxFor(m => m.ChildViewModel.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
+                                @Html.ValidationMessageFor(m => m.ChildViewModel.DateOfBirth)
+                            </div>
                         }
                         <button class="btn btn-primary child-info" style="margin-bottom: 20px;" id="addChild" value="Add">Add </button>
                     }
@@ -96,16 +96,16 @@
                     {
                         using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "child" }))
                         {
-                        <div class="control-group row-fluid child-info hide">
-                            <label class="span2">Name</label>
-                            @Html.TextBoxFor(m => m.ChildViewModel.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
-                            @Html.ValidationMessageFor(m => m.ChildViewModel.Name)
-                        </div>
-                        <div class="control-group row-fluid child-info hide">
-                            <label class="span2">Date of Birth</label>
-                            @Html.TextBoxFor(m => m.ChildViewModel.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
-                            @Html.ValidationMessageFor(m => m.ChildViewModel.DateOfBirth)
-                        </div>
+                            <div class="control-group row-fluid child-info hide">
+                                <label class="span2">Name</label>
+                                @Html.TextBoxFor(m => m.ChildViewModel.Name, new { placeholder = "Name", @class = "hoverHelp", data_content = "Enter the child's full name here." })
+                                @Html.ValidationMessageFor(m => m.ChildViewModel.Name)
+                            </div>
+                            <div class="control-group row-fluid child-info hide">
+                                <label class="span2">Date of Birth</label>
+                                @Html.TextBoxFor(m => m.ChildViewModel.DateOfBirth, new { placeholder = "MM/DD/YYYY", @class = "datepicker", data_date = @DateTime.Now.ToString("MM/dd/yyyy") })
+                                @Html.ValidationMessageFor(m => m.ChildViewModel.DateOfBirth)
+                            </div>
                         }
                         <button class="btn btn-primary child-info hide" style="margin-bottom: 20px;" id="addChild" value="Add">Add </button>                        
                     }
@@ -113,6 +113,7 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary child-part3" value="Done">Next Form<i class="icon-arrow-right icon-white"></i></button>
+    <div id="starterWarning"></div>
+    <button class="btn btn-primary child-part3" value="Done">Continue<i class="icon-arrow-right icon-white"></i></button>
 </div>
 @Html.Partial("_templateChild")
