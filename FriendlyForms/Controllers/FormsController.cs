@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using FriendlyForms.Authentication;
+using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Models;
 using Models.ViewModels;
@@ -85,8 +86,7 @@ namespace FriendlyForms.Controllers
         public ActionResult Starter(int userId)
         {            
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            var loggedInUserId = User.FriendlyIdentity().Id;
-            if(!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
+            if(Authorization.IsAuthorized(User, userId))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
@@ -124,8 +124,7 @@ namespace FriendlyForms.Controllers
         public ActionResult Parenting(int userId)
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            var loggedInUserId = User.FriendlyIdentity().Id;
-            if (!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
+            if (Authorization.IsAuthorized(User, userId))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
@@ -194,8 +193,7 @@ namespace FriendlyForms.Controllers
         public ActionResult DomesticMediation(int userId)
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            var loggedInUserId = User.FriendlyIdentity().Id;
-            if (!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
+            if (Authorization.IsAuthorized(User, userId))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
@@ -266,8 +264,7 @@ namespace FriendlyForms.Controllers
         public ActionResult Financial(int userId)
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            var loggedInUserId = User.FriendlyIdentity().Id;
-            if (!(userId == loggedInUserId || _clientService.LawyerHasClient(loggedInUserId, userId)))
+            if (Authorization.IsAuthorized(User, userId))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");

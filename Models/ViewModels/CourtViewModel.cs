@@ -6,7 +6,7 @@ namespace Models.ViewModels
 {
     public class CourtViewModel : IViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int CountyId { get; set; }
         [Display(Name = "Case Number")]

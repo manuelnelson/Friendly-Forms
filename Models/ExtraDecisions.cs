@@ -4,7 +4,7 @@ namespace Models
 {
     public class ExtraDecisions
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int ChildId { get; set; }
         public int DecisionMaker { get; set; }
