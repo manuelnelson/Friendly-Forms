@@ -15957,7 +15957,7 @@ $(document).ready(function () {
         var $self = $(this);
         if ($self.text() == 'Continue') {
             $self.text('Next Form');
-            Friendly.ShowMessage('Please note', 'Before proceeding, please review the data you entered as you will not be able to edit this data past this point.', Friendly.properties.messageType.Warning, '#starterWarning');
+            Friendly.ShowMessage('Please note', 'Before proceeding, please review the data you entered as you will not be able to edit this data past this point.', Friendly.properties.messageType.Success, '#starterWarning');
         } else {
             var formUserId = $('#user-id').val();
             if($('.child-table tr').length > 1) {
@@ -16889,3 +16889,26 @@ Parenting.SaveExtraHolidays = function(childId) {
 
 
 
+;$(function ($) {
+    $('#email').submit(function (e) {
+        Friendly.StartLoading();
+        e.preventDefault();
+        var model = Friendly.GetFormInput("email");
+        if ($("#email").valid()) {
+            $.ajax({
+                url: '/api/emails?format=json',
+                type: 'POST',
+                data: model,
+                success: function () {
+                    Friendly.EndLoading();
+                    return false;
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        } else {
+            Friendly.EndLoading();
+            return false;
+        }
+        return false;
+    });
+});

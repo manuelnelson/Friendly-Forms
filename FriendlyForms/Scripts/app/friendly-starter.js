@@ -163,8 +163,8 @@
 
     $('.childDelete').live('click', function () {
         var $row = $(this).parent().parent();
-        var name = $row.find('.child-name #Name').val();
-        var dob = $row.find('.child-dob #DateOfBirth').val();
+        var name = $row.find('.child-name').text();
+        var dob = $row.find('.child-dob').text().trim();
         var query = 'Id=' + $(this).attr('data-id') + '&UserId=' + $('#user-id').val() + '&Name=' + name + '&DateOfBirth=' + dob + '&ChildFormId=' + $('#childFormId').val();
         //UPDATE
         $.ajax({
@@ -226,9 +226,9 @@
         } else {
             var formUserId = $('#user-id').val();
             if($('.child-table tr').length > 1) {
-                document.location.href = '/Forms/Parenting/?userId='+formUserId;
+                document.location.href = '/Forms/Parenting/'+formUserId;
             } else {
-                document.location.href = '/Forms/DomesticMediation/?userId='+formUserId;
+                document.location.href = '/Forms/DomesticMediation/'+formUserId;
             }
         }
     });

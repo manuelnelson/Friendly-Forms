@@ -4,7 +4,7 @@
 }
 @section Sidebar{
     @{
-        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {userId = @Model.FormUserId}) : "/";
+        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {Id= @Model.FormUserId}) : "/";
     }            
         <a href="@homeUrl" class="visible-phone"><i class="icon icon-home"></i>Home</a>
         <ul>
@@ -13,15 +13,15 @@
             {
                     if(!Model.IsStarterDone)
                     {
-                        <li><a href="@Url.Action("Starter","Forms",new {userId=@Model.FormUserId})"><i class="icon icon-th-list"></i>Start Here</a></li>
+                        <li><a href="@Url.Action("Starter","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Start Here</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("DomesticMediation","Forms",new {userId=@Model.FormUserId})"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>    
+                        <li><a href="@Url.Action("DomesticMediation","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>    
                         if(Model.HasChildren)
                         {
-                            <li><a href="@Url.Action("Parenting","Forms",new {userId=@Model.FormUserId})"><i class="icon icon-th-list"></i>Parenting Plan</a></li>        
-                            <li><a href="@Url.Action("Financial","Forms",new {userId=@Model.FormUserId})"><i class="icon icon-th-list"></i>Financial Form</a></li>
+                            <li><a href="@Url.Action("Parenting","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Parenting Plan</a></li>        
+                            <li><a href="@Url.Action("Financial","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Financial Form</a></li>
                         }
                     }
                     <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
@@ -30,7 +30,7 @@
 }
 @section Breadcrumb{
         @{
-        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {userId = @Model.FormUserId}) : "/";
+        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {Id= @Model.FormUserId}) : "/";
     }            
 
     <div id="breadcrumb">

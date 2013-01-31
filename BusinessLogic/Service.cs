@@ -20,11 +20,6 @@ namespace BusinessLogic
             Repository = repository;
         }
 
-        protected Service()
-        {
-            
-        }
-
         public void Add(TEntity item)
         {
             try
@@ -95,6 +90,19 @@ namespace BusinessLogic
             try
             {
                 Repository.Remove(item);
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new HttpError(HttpStatusCode.InternalServerError, "Unable to remove item");
+            }
+        }
+
+        public void Delete(long id)
+        {
+            try
+            {
+                Repository.Remove(id);
             }
             catch (Exception ex)
             {

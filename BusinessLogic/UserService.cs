@@ -14,13 +14,13 @@ namespace BusinessLogic
     {
         private readonly IUserRepository _userRepository;
         private readonly string _salt;
-        private readonly IMailService _mailService;
+        private readonly IEmailService _emailService;
         private const int MaxNumberOfPasswordFailedAttempts = 10;
         private const int NumberOfMinutesBeforeFailedPasswordReset = -10;
-        public UserService(IUserRepository userRepository, IMailService mailService)
+        public UserService(IUserRepository userRepository, IEmailService emailService)
         {
             _userRepository = userRepository;
-            _mailService = mailService;
+            _emailService = emailService;
             _salt = BCryptHelper.GenerateSalt(6);
         }
 
@@ -46,7 +46,7 @@ namespace BusinessLogic
                 };
                 _userRepository.Add(user);
                 var hashedEmail = BCryptHelper.HashPassword(email, _salt);
-                _mailService.SendVerificationEmail(email, hashedEmail);
+                _emailService.SendVerificationEmail(email, hashedEmail);
                 return user.TranslateTo<AccountUser>();                
             }
             catch (Exception ex)

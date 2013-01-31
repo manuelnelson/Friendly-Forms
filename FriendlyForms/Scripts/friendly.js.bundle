@@ -20,3 +20,4 @@ app/friendly-output.js
 app/friendly-starter.js
 app/friendly-parenting.js  
 app/friendly-parenting-global.js  
+app/friendly-admin.js

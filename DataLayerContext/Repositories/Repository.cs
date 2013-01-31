@@ -82,6 +82,14 @@ namespace DataLayerContext.Repositories
             UnitOfWork.Commit();
         }
 
+        public void Remove(long id)
+        {
+            var item = GetDbSet().Find(id);
+            //set as "removed"
+            GetDbSet().Remove(item);
+            UnitOfWork.Commit();
+        }
+
         public void RemoveAll(IEnumerable<TEntity> items)
         {
             var dbSet = GetDbSet();

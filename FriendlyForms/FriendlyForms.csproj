@@ -235,6 +235,7 @@
     <Compile Include="RestService\CourtRestService.cs" />
     <Compile Include="RestService\DebtRestService.cs" />
     <Compile Include="RestService\DecisionsRestService.cs" />
+    <Compile Include="RestService\EmailRestService.cs" />
     <Compile Include="RestService\ExtraDecisionRestService.cs" />
     <Compile Include="RestService\ExtraHolidayRestService.cs" />
     <Compile Include="RestService\HealthInsuranceRestService.cs" />
@@ -408,6 +409,7 @@
     </Content>
     <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="README.txt" />
+    <Content Include="Scripts\app\friendly-admin.js" />
     <Content Include="Scripts\app\friendly-domestic.js" />
     <Content Include="Scripts\app\friendly-financial.js" />
     <Content Include="Scripts\app\friendly-global.js" />
@@ -455,6 +457,7 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />

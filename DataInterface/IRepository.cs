@@ -33,6 +33,12 @@ namespace DataInterface
         void Remove(TEntity item);
 
         /// <summary>
+        /// Delete item By Id
+        /// </summary>
+        /// <param name="id"></param>
+        void Remove(long id);
+
+        /// <summary>
         /// Delete all items
         /// </summary>
         /// <param name="items"></param>

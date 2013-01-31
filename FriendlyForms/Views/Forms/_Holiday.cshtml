@@ -12,8 +12,7 @@
                 <div class="widget-content">
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "holiday" }))
                     {
-                        <label class="informative">
-                            <i class="icon icon-asterisk"></i>
+                        <label class="informative">                            
                             In this section, you will define scheduling holidays with your child(ren).</label>
                         <input type="hidden" id="holidayChildId" /><br />
                         <h3 id="holidayChildName"></h3>
@@ -23,7 +22,7 @@
                             <label class="form-question">
                                 How would you like to manage Thanksgiving Break? From the time school is dismissed on the last day prior to the holiday until:</label>
                             <label class="radio">The day before returning to school.  @Html.RadioButtonFor(m => m.HolidayViewModel.Thanksgiving, (int)Thanksgiving.Before)</label>
-                            <label class="radio">The first day of school after the holiday.  @Html.RadioButtonFor(m => m.HolidayViewModel.Thanksgiving, (int)Thanksgiving.After)</label>
+                            <label class="radio">Until returning to school after the holiday.  @Html.RadioButtonFor(m => m.HolidayViewModel.Thanksgiving, (int)Thanksgiving.After)</label>
                             <label class="radio">Other @Html.RadioButtonFor(m => m.HolidayViewModel.Thanksgiving, (int)Thanksgiving.Other)</label>
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.Thanksgiving)
                         </div>
@@ -33,7 +32,7 @@
                             @Html.TextAreaFor(m => m.HolidayViewModel.ThanksgivingOther, new { @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.ThanksgivingOther)
                         </div>                                
-                        <div class="control-group">
+                        <div class="control-group thanksgiving-time hide">
                             <label class="form-question">
                                 At the time of</label>
                             @Html.TextBoxFor(m => m.HolidayViewModel.ThanksgivingTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
@@ -77,13 +76,6 @@
                                 Define Spring Break time</label>
                             @Html.TextAreaFor(m => m.HolidayViewModel.SpringOther, new { @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringOther)
-                        </div>                
-                        <div class="control-group">
-                            <label class="form-question">
-                                At the time of</label>
-                            @Html.TextBoxFor(m => m.HolidayViewModel.SpringBreakTime, new { placeholder = "hh:mm am/pm", @class = "timepicker input-small" })
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
-                            @Html.ValidationMessageFor(m => m.HolidayViewModel.SpringBreakTime)
                         </div>                
                         <h4>Summer Break</h4>
                         <div class="control-group">

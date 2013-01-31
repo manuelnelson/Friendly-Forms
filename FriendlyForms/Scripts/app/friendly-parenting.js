@@ -417,10 +417,16 @@
     });
     $('input[name="HolidayViewModel.Thanksgiving"]').change(function () {
         var checked = $('#HolidayViewModel_Thanksgiving:checked').val();
-        if (checked === '3') {
-            $('.thanksgiving-other').show();
-        } else {
-            $('.thanksgiving-other').hide();
+        $('.thanksgiving-other').hide();
+        $('.thanksgiving-time').hide();
+        switch (checked) {
+            case '3':
+                $('.thanksgiving-other').show();
+                break;
+            case '1':
+                $('.thanksgiving-time').show();
+                break;
+        
         }
     });
     $('input[name="HolidayViewModel.SpringBreak"]').change(function () {

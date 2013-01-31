@@ -83,18 +83,18 @@ namespace FriendlyForms.Controllers
         }
         
         [Authorize]
-        public ActionResult Starter(int userId)
+        public ActionResult Starter(int Id)
         {            
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            if(Authorization.IsAuthorized(User, userId))
+            if(Authorization.IsAuthorized(User, Id))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
             }
-            var court = _courtService.GetByUserId(userId) as CourtViewModel;
-            var participants = _participantService.GetByUserId(userId);
-            var children = _childService.GetByUserId(userId);
-            var childForm = _childFormService.GetByUserId(userId);
+            var court = _courtService.GetByUserId(Id) as CourtViewModel;
+            var participants = _participantService.GetByUserId(Id);
+            var children = _childService.GetByUserId(Id);
+            var childForm = _childFormService.GetByUserId(Id);
             var counties = _countyService.GetAll();
             court.Counties = counties;
 
@@ -115,35 +115,35 @@ namespace FriendlyForms.Controllers
                     },
                 StarterFormsCompleted = formsViewModel
             };
-            starterViewModel.FormUserId = userId;
+            starterViewModel.FormUserId = Id;
             return View(starterViewModel);
         }
 
         
         [Authorize]
-        public ActionResult Parenting(int userId)
+        public ActionResult Parenting(int Id)
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            if (Authorization.IsAuthorized(User, userId))
+            if (Authorization.IsAuthorized(User, Id))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
             }
-            var court = _courtService.GetByUserId(userId) as CourtViewModel;
-            var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
-            var children = _childService.GetByUserId(userId);
-            var childForm = _childFormService.GetByUserId(userId);
-            var privacy = _privacyService.GetByUserId(userId);
-            var decisions = _decisionsService.GetByUserId(userId);
-            var information = _informationService.GetByUserId(userId);
-            var responsibility = _responsibilityService.GetByUserId(userId);
-            var communication = _communicationService.GetByUserId(userId);
-            var schedule = _scheduleService.GetByUserId(userId) as ScheduleViewModel;
+            var court = _courtService.GetByUserId(Id) as CourtViewModel;
+            var participants = _participantService.GetByUserId(Id) as ParticipantViewModel;
+            var children = _childService.GetByUserId(Id);
+            var childForm = _childFormService.GetByUserId(Id);
+            var privacy = _privacyService.GetByUserId(Id);
+            var decisions = _decisionsService.GetByUserId(Id);
+            var information = _informationService.GetByUserId(Id);
+            var responsibility = _responsibilityService.GetByUserId(Id);
+            var communication = _communicationService.GetByUserId(Id);
+            var schedule = _scheduleService.GetByUserId(Id) as ScheduleViewModel;
             var custodyInformation = _participantService.GetCustodyInformation(participants);
             if (schedule != null) schedule.NonCustodialParent = custodyInformation.NonCustodyParent;
 
             var holiday = children.Children.Any() ? _holidayService.GetByChildId(children.Children.First().Id) : new Holiday();
-            var addendum = _addendumService.GetByUserId(userId);
+            var addendum = _addendumService.GetByUserId(Id);
             var allDecisions = new AllDecisionsViewModel();
             var allHolidays = new AllHolidaysViewModel
                 {
@@ -185,27 +185,27 @@ namespace FriendlyForms.Controllers
                     AddendumViewModel = addendum as AddendumViewModel,
                     FormsCompleted = formsViewModel
                 };
-            childViewModel.FormUserId = userId;
+            childViewModel.FormUserId = Id;
             return View(childViewModel);
         }
 
         [Authorize]
-        public ActionResult DomesticMediation(int userId)
+        public ActionResult DomesticMediation(int Id)
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            if (Authorization.IsAuthorized(User, userId))
+            if (Authorization.IsAuthorized(User, Id))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
             }
-            var house = _houseService.GetByUserId(userId);
-            var property = _propertyService.GetByUserId(userId);            
-            var debt = _debtService.GetByUserId(userId);
-            var assets = _assetService.GetByUserId(userId);
-            var health= _healthInsuranceService.GetByUserId(userId);
-            var spousal = _spousalService.GetByUserId(userId);
-            var taxes = _taxService.GetByUserId(userId);
-            var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
+            var house = _houseService.GetByUserId(Id);
+            var property = _propertyService.GetByUserId(Id);            
+            var debt = _debtService.GetByUserId(Id);
+            var assets = _assetService.GetByUserId(Id);
+            var health= _healthInsuranceService.GetByUserId(Id);
+            var spousal = _spousalService.GetByUserId(Id);
+            var taxes = _taxService.GetByUserId(Id);
+            var participants = _participantService.GetByUserId(Id) as ParticipantViewModel;
             List<SelectListItem> nameList;
             if (participants != null)
             {
@@ -218,9 +218,9 @@ namespace FriendlyForms.Controllers
             {
                 nameList = new List<SelectListItem>();
             }
-            var support = _childSupportService.GetByUserId(userId);
-            var vehicleForm = _vehicleFormService.GetByUserId(userId);
-            var vehicles = _vehicleService.GetByUserId(userId).ToList();
+            var support = _childSupportService.GetByUserId(Id);
+            var vehicleForm = _vehicleFormService.GetByUserId(Id);
+            var vehicles = _vehicleService.GetByUserId(Id).ToList();
             var vehicleModel = new VehicleViewModel()
                 {
                     VehicleList = vehicles,
@@ -256,31 +256,31 @@ namespace FriendlyForms.Controllers
                 //TODO: we'll need to do a check to see if there are children involved.  This will be changed later but for NOW
                 HasChildren = true
             };
-            domesticModel.FormUserId = userId;
+            domesticModel.FormUserId = Id;
             return View(domesticModel);
         }
 
         [Authorize]
-        public ActionResult Financial(int userId)
+        public ActionResult Financial(int Id)
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            if (Authorization.IsAuthorized(User, userId))
+            if (Authorization.IsAuthorized(User, Id))
             {
                 //no authority to view the page. show error message
                 return RedirectToAction("NotAuthorized", "Account");
             }
-            var income = _incomeService.GetByUserId(userId);
-            var incomeOther = _incomeService.GetByUserId(userId, isOtherParent:true);
-            var social = _socialSecurityService.GetByUserId(userId);
-            var socialOther = _socialSecurityService.GetByUserId(userId, isOtherParent:true);
-            var preexistList = _preexistingSupportService.GetByUserId(userId);
-            var preexistListOther = _preexistingSupportService.GetByUserId(userId, isOtherParent:true);
-            var other = _otherChildrenService.GetByUserId(userId);
+            var income = _incomeService.GetByUserId(Id);
+            var incomeOther = _incomeService.GetByUserId(Id, isOtherParent:true);
+            var social = _socialSecurityService.GetByUserId(Id);
+            var socialOther = _socialSecurityService.GetByUserId(Id, isOtherParent:true);
+            var preexistList = _preexistingSupportService.GetByUserId(Id);
+            var preexistListOther = _preexistingSupportService.GetByUserId(Id, isOtherParent:true);
+            var other = _otherChildrenService.GetByUserId(Id);
             var otherChildren = _otherChildService.GetChildrenByOtherChildrenId(other.Id);
-            var otherOther = _otherChildrenService.GetByUserId(userId, isOtherParent: true);
+            var otherOther = _otherChildrenService.GetByUserId(Id, isOtherParent: true);
             var otherChildrenOther = _otherChildService.GetChildrenByOtherChildrenId(otherOther.Id);
-            var circumstance = _specialCircumstancesService.GetByUserId(userId);
-            var circumstanceOther = _specialCircumstancesService.GetByUserId(userId, isOtherParent: true);
+            var circumstance = _specialCircumstancesService.GetByUserId(Id);
+            var circumstanceOther = _specialCircumstancesService.GetByUserId(Id, isOtherParent: true);
 
             other.OtherChildViewModel = new OtherChildViewModel()
                 {
@@ -334,7 +334,7 @@ namespace FriendlyForms.Controllers
                     SpecialCircumstancesViewModel = circumstance,
                     SpecialCircumstancesOtherViewModel = circumstanceOther
                 };
-            model.FormUserId = userId;
+            model.FormUserId = Id;
             return View(model);
         }
 

@@ -136,7 +136,7 @@
     <Compile Include="Contracts\IHouseService.cs" />
     <Compile Include="Contracts\IIncomeService.cs" />
     <Compile Include="Contracts\IInformationService.cs" />
-    <Compile Include="Contracts\IMailService.cs" />
+    <Compile Include="Contracts\IEmailService.cs" />
     <Compile Include="Contracts\IOtherChildrenService.cs" />
     <Compile Include="Contracts\IOtherChildService.cs" />
     <Compile Include="Contracts\IAddendumService.cs" />
@@ -163,17 +163,11 @@
     <Compile Include="ExtraHolidayService.cs" />
     <Compile Include="FormService.cs" />
     <Compile Include="HealthInsuranceService.cs" />
-    <Compile Include="Helpers\CommunicationHelper.cs" />
-    <Compile Include="Helpers\DecisionsHelper.cs" />
-    <Compile Include="Helpers\InformationHelper.cs" />
-    <Compile Include="Helpers\ParticipantHelper.cs" />
-    <Compile Include="Helpers\PrivacyHelper.cs" />
-    <Compile Include="Helpers\ResponsibilityHelper.cs" />
     <Compile Include="HolidayService.cs" />
     <Compile Include="HouseService.cs" />
     <Compile Include="IncomeService.cs" />
     <Compile Include="InformationService.cs" />
-    <Compile Include="MailService.cs" />
+    <Compile Include="EmailService.cs" />
     <Compile Include="Models\AccountUser.cs" />
     <Compile Include="Models\AdministrationModel.cs" />
     <Compile Include="Models\AllDecisionsViewModel.cs" />
@@ -214,7 +208,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe" />
     <Content Include="Microsoft.WindowsAzure.Caching\PerformanceCounters.xml" />
   </ItemGroup>
@@ -239,6 +232,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Helpers\" />
     <Folder Include="Validators\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
