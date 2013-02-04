@@ -1,13 +1,14 @@
 ﻿@model FriendlyForms.Models.ParentingPlanViewModel
+<div class="borderBox">
 <div class="row-fluid">
-    <h2 class="span4">Child's Name</h2>
-    <h2 class="span4">Date of Birth</h2>
+    <h2 class="span6 indented">Child's Name</h2>
+    <h2 class="span6">Date of Birth</h2>
 </div>
 @foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
 {
     <div class="row-fluid">
-        <div class="span4 indented">@child.Name</div>
-        <div class="span4">
+        <div class="span6 indented40">@child.Name</div>
+        <div class="span6">
             @if (child.DateOfBirth.HasValue)
             {
                 <span class="indented">@child.DateOfBirth.Value.ToString("MM/dd/yyyy")</span>;
@@ -18,7 +19,9 @@
             }
         </div>
     </div>
+    <hr />
 }
+    </div>
 <div class="row-fluid">
     <h2>Custody and Decision Making</h2>
     <p class="indented">@Model.PpOutputFormHelper.CustodyInformation.LegalCustodyPhrase
@@ -29,9 +32,10 @@
 @foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
 {
     <div class="row-fluid">
-        <div class="span3 indented">@child.Name</div>
-        <div class="span3">@Model.PpOutputFormHelper.CustodyInformation.Parent</div>
+        <div class="span6 indented">@child.Name</div>
+        <div class="span6">@Model.PpOutputFormHelper.CustodyInformation.Parent</div>
     </div>
+    <hr />
 }
 <p class="indented">
     <br />WHERE JOINT PHYSICAL CUSTODY IS CHOSEN BY THE PARENTS OR ORDERED
