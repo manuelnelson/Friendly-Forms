@@ -8,12 +8,16 @@ namespace Models
     {
         public long Id { get; set; }
         public int UserId { get; set; }
-        public int ChildId { get; set; }
+        
         public int Education { get; set; }
         public int HealthCare { get; set; }
         public int Religion { get; set; }
         public int ExtraCurricular { get; set; }
         public string BothResolve { get; set; }
+
+        public int ChildId { get; set; }
+        public Child Child { get; set; }
+        
         public IViewModel ConvertToModel()
         {
             return this.TranslateTo<DecisionsViewModel>();

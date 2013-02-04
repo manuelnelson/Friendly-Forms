@@ -10,7 +10,7 @@
                 type: 'POST',
                 data: model,
                 success: function () {
-                    Friendly.ClearForm(formName);
+                    $('#' + formName)[0].reset(); 
                     Friendly.ShowMessage("Success!", "The e-mail was successfully sent to the client.", Friendly.properties.messageType.Success, '#' + formName);
                     Friendly.EndLoading();
                     return false;

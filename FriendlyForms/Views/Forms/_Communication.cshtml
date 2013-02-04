@@ -64,7 +64,7 @@
                             <div class="control-group communicate-method">
                                 <label class="form-question">
                                     Define any limitations on communication</label>
-                                @Html.TextBoxFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.LimitationDetails)
                             </div>
                         }
@@ -73,7 +73,7 @@
                             <div class="control-group communicate-method hide">
                                 <label class="form-question">
                                     Define any limitations on communication</label>
-                                @Html.TextBoxFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.LimitationDetails)
                             </div>
                         }
@@ -96,7 +96,7 @@
                             <div class="control-group communicate-rights">
                                 <label class="form-question">
                                     How should the rights of either parent be limited?</label>
-                                @Html.TextBoxFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.AccessOfRightsDetails)
                             </div>
                         }
@@ -105,7 +105,7 @@
                             <div class="control-group communicate-rights hide">
                                 <label class="form-question">
                                     How should the rights of either parent be limited?</label>
-                                @Html.TextBoxFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.AccessOfRightsDetails)
                             </div>
                         }

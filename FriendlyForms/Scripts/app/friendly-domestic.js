@@ -72,7 +72,7 @@
         }
     });
     $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
-        Friendly.ClearForm('vehicle');
+        $('#vehicle')[0].reset();
         if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
             $('.vehicle-info').show();
         } else {

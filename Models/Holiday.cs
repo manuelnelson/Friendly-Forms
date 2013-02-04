@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -18,7 +19,6 @@ namespace Models
         public string ChristmasOther { get; set; }
         public int SpringBreak { get; set; }
         public string SpringOther { get; set; }
-        public string SpringBreakTime { get; set; }
         public int SummerBeginDays { get; set; }
         public string SummerBeginTime { get; set; }
         public int SummerEndDays { get; set; }
@@ -26,7 +26,6 @@ namespace Models
         public string SummerDetails { get; set; }
         public int FallBreak { get; set; }
         public string FallOther { get; set; }
-        public string FallBreakTime { get; set; }
         public int ChristmasFather { get; set; }
         public int ChristmasMother { get; set; }
         public int SpringBreakFather { get; set; }
@@ -63,62 +62,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new HolidayViewModel()
-            {
-                ChildId = ChildId,
-                ChildrensFather = ChildrensFather,
-                ChildrensMother = ChildrensMother,
-                Christmas = Christmas,
-                ChristmasOther = ChristmasOther,
-                ChristmasTime = ChristmasTime,
-                ThanksgivingTime = ThanksgivingTime,
-                SpringBreakTime = SpringBreakTime,
-                FallBreakTime = FallBreakTime,
-                FallBreak = FallBreak,
-                FallOther = FallOther,
-                FathersBdayFather = FathersBdayFather,
-                FathersBdayMother = FathersBdayMother,
-                FathersFather = FathersFather,
-                FathersMother = FathersMother,
-                FridayHoliday = FridayHoliday,
-                ChristmasFather = ChristmasFather,
-                ChristmasMother = ChristmasMother,
-                SpringBreakFather = SpringBreakFather,
-                SpringBreakMother = SpringBreakMother,
-                FallBreakFather = FallBreakFather,
-                FallBreakMother = FallBreakMother,
-                ThanksgivingFather = ThanksgivingFather,
-                ThanksgivingMother = ThanksgivingMother,
-                HalloweenFather = HalloweenFather,
-                HalloweenMother = HalloweenMother,
-                IndependenceFather = IndependenceFather,
-                IndependenceMother = IndependenceMother,
-                LaborFather = LaborFather,
-                LaborMother = LaborMother,
-                MemorialFather = MemorialFather,
-                MemorialMother = MemorialMother,
-                MlkFather = MlkFather,
-                MlkMother = MlkMother,
-                MondayHoliday = MondayHoliday,
-                MothersBdayFather = MothersBdayFather,
-                MothersBdayMother = MothersBdayMother,
-                MothersFather = MothersFather,
-                MothersMother = MothersMother,
-                PresidentsFather = PresidentsFather,
-                PresidentsMother = PresidentsMother,
-                ReligiousFather = ReligiousFather,
-                ReligiousMother = ReligiousMother,
-                SpringBreak = SpringBreak,
-                SpringOther = SpringOther,
-                SummerBeginDays = SummerBeginDays,
-                SummerBeginTime = SummerBeginTime,
-                SummerEndDays = SummerEndDays,
-                SummerEndTime = SummerEndTime,
-                SummerDetails = SummerDetails,
-                Thanksgiving = Thanksgiving,
-                ThanksgivingOther = ThanksgivingOther,
-                UserId = UserId
-            };
+            return this.TranslateTo<HolidayViewModel>();
         }
 
         public void Update(IFormEntity entity)
@@ -144,9 +88,7 @@ namespace Models
             FallBreakMother = updatingEntity.FallBreakMother;
             ThanksgivingFather = updatingEntity.ThanksgivingFather;
             ThanksgivingMother = updatingEntity.ThanksgivingMother;
-            ThanksgivingTime = updatingEntity.ThanksgivingTime;
-            SpringBreakTime = updatingEntity.SpringBreakTime;
-            FallBreakTime = updatingEntity.FallBreakTime;
+            ThanksgivingTime = updatingEntity.ThanksgivingTime;            
             HalloweenFather = updatingEntity.HalloweenFather;
             HalloweenMother = updatingEntity.HalloweenMother;
             IndependenceFather = updatingEntity.IndependenceFather;

@@ -23,10 +23,6 @@
         if ($(this).hasClass('next')) {
             Friendly.SubmitForm('participant', 'child');
         }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('participant', 'court');
-        }
     });
 
     $('input[name=PlaintiffRelationship]').change(function () {
@@ -116,7 +112,7 @@
 
     //-----------------------------------Child Form----------------------------
     $('input[id=ChildFormViewModel_ChildrenInvolved]').change(function () {
-        Friendly.ClearForm('child');
+        $('#child')[0].reset();
         if ($('#ChildFormViewModel_ChildrenInvolved:checked').val() === "1") {
             $('.child-info').show();
         } else {
@@ -179,7 +175,8 @@
     });
     $('#addChild').click(function () {
         Friendly.StartLoading();
-        if ($('#child').valid()) {
+        var formName = 'child';
+        if ($('#' + formName).valid()) {
             //get values
             var childFormModel = Friendly.GetFormInput('childForm');
             $.ajax({
@@ -188,7 +185,7 @@
                 data: childFormModel,
                 success: function (data) {
                     //get values
-                    var model = Friendly.GetFormInput('child');
+                    var model = Friendly.GetFormInput(formName);
                     model.ChildFormId = data.ChildForm.Id;
                     //use this for later when editing child information
                     $('#childFormId').val(model.ChildFormId);
@@ -202,7 +199,7 @@
                             $('.child-table').show();
                             $('.child-table tbody').append(result);
                             Friendly.EndLoading();
-                            Friendly.ClearForm('child');
+                            $('#' + formName)[0].reset();
                             return false;
                         },
                         error: Friendly.GenericErrorMessage

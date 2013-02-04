@@ -1,17 +1,38 @@
 ﻿window.Parenting = window.Parenting || {};
 Parenting.AddDecision = function (caller) {
     var formName = 'decisions';
+    var model = Friendly.GetFormInput(formName);
+    model.ChildId = $('#childId').val().trim();
+    //key is for local storage
+    var key = formName + model.ChildId;
     if (!$('#' + formName).valid()) {
+        //if validation fails, save data to local storage for later retrieval
+        var saveModel = {
+            Decisions: model,
+            ExtraDecisions: []
+        };
+        $.each($('.extra-decision-item'), function(ndx, item) {
+            var id = $(item).children('#extra-decision-Id').val();
+            var extraModel = {
+                Id: typeof(model.ChildId) === "undefined" ? id : 0,
+                ChildId: typeof (model.ChildId) === "undefined" ? $(item).children('#extra-decision-childId').val() : model.ChildId,
+                DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
+                Description: $(item).children('#extra-decision-description').text().trim(),
+                UserId: $('#user-id').val()
+            };
+            saveModel.ExtraDecisions.push(extraModel);
+        });
+        $.jStorage.set(key, saveModel);
         return false;
     }
+    //delete key since form is valid (doesn't matter if it exists or not
+    $.jStorage.deleteKey(key);
     Parenting.SaveExtraDecisions();
     if (caller != null && $(caller).hasClass('next'))
         Friendly.childNdx++;
     else if (caller != null) {
         Friendly.childNdx--;
     }
-    var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#childId').val().trim();
     //check if we need to move to next form
     if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
         Friendly.SubmitForm(formName, 'responsibility', model);
@@ -55,22 +76,26 @@ Parenting.CheckChildDecision = function (child, nextForm) {
             $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
             $('.extra-decision-item').remove();
             Friendly.childNdx++;
-            if (Friendly.childNdx === Friendly.children.length) {
+            //Check if we've gone through all children. If not, continue on
+            if (Friendly.childNdx !== Friendly.children.length) {
                 if ($('#decisions').valid()) {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    return false;
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                    return false;
-                }
-            }
-            if ($('#decisions').valid()) {
-                //recursively go to next child
+                    //recursively go to next child
+                    Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
+                    return;
+                } 
+                //Record Error and recursively go to next child
+                Friendly.ChildDecisionError.push(child.Name);
                 Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
-                return false;
-            } else {
+                return;                
+            }
+            //At last child.  Advance to next form - show error if there are errors
+            if (!$('#decisions').valid()) {
+                Friendly.ChildDecisionError.push(child.Name);
+            }
+            if (Friendly.ChildDecisionError.length > 0) {
                 Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                return false;
+            } else {
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
             }
         },
         error: Friendly.GenericErrorMessage
@@ -125,29 +150,40 @@ Parenting.SaveExtraDecisions = function (childId) {
         });
     });
 };
+Parenting.SetChildDecisions = function(child, data) {
+    $('#childName').text(child.Name);
+    $('#childId').val(child.Id);
+    $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+    $('.extra-decision-item').remove();
+    $.each(data.ExtraDecisions, function(ndx, item) {
+        var result = $("#friendly-extraDecisions-template").tmpl(item);
+        $('#radio-decisions').append(result);
+    });
+    Parenting.CheckIfBothIsChecked();
+    //fixes possible error flag if one child isn't complete but another is
+    if (data.Decisions.ExtraCurricular !== 0) {
+        $('#decisions').valid();
+    }
+    $('#decisionsWrapper').show();
+};
+//get's a childs decision informaion.  Checks local storage first. If it doesn't exist, it looks for the data at the server
 Parenting.GetChildDecisions = function (child) {
+    var formName = 'decisions';
+    var key = formName + child.Id;
+    var data = $.jStorage.get(key);
+    if (data) {
+        Parenting.SetChildDecisions(child, data);
+        return;
+    }            
     $.ajax({
-        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
+        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
         type: 'GET',
         success: function (data) {
-            $('#childName').text(child.Name);
-            $('#childId').val(child.Id);
-            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
-            $('.extra-decision-item').remove();
-            $.each(data.ExtraDecisions, function (ndx, item) {
-                var result = $("#friendly-extraDecisions-template").tmpl(item);
-                $('#radio-decisions').append(result);
-            });
-            Parenting.CheckIfBothIsChecked();
-            //fixes possible error flag if one child isn't complete but another is
-            if (data.Decisions.Education !== 0) {
-                $('#decisions').valid();
-            }
-            $('#decisionsWrapper').show();
+            Parenting.SetChildDecisions(child, data);
         },
         error: Friendly.GenericErrorMessage
     });
@@ -197,41 +233,67 @@ Parenting.CheckChildHoliday = function (child, nextForm) {
 
 Parenting.AddHoliday = function(caller) {
     var formName = 'holiday';
-    if ($('#' + formName).valid()) {
-        Parenting.SaveExtraHolidays();
-        var model = Friendly.GetFormInput(formName);
-        model.ChildId = $('#holidayChildId').val();
-        if (caller != null && $(caller).hasClass('next'))
-            Friendly.childNdx++;
-        else if (caller != null) {
-            Friendly.childNdx--;
-        }
-        //check if we need to move to next form
-        if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-            Friendly.SubmitForm('holiday', 'addendum', model);
-        }
-        //check if we need to move to previous form
-        if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-            Friendly.SubmitForm('holiday', 'schedule', model);
-            return false;
-        }
-        Friendly.StartLoading();
-        //save current information
-        $.ajax({
-            url: '/api/' + formName + "?format=json",
-            type: 'POST',
-            data: model,
-            success: function() {
-                $('#' + formName)[0].reset();
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                var nextChild = Friendly.children[Friendly.childNdx];
-                Parenting.GetChildHoliday(nextChild);
-                Friendly.EndLoading();
-            },
-            error: Friendly.GenericErrorMessage
+    if (caller != null && $(caller).hasClass('next'))
+        Friendly.childNdx++;
+    else if (caller != null) {
+        Friendly.childNdx--;
+    }
+    var model = Friendly.GetFormInput(formName);
+    var childId = $('#holidayChildId').val();
+    model.ChildId = childId;
+
+    var key = formName + model.ChildId;
+    if (!$('#' + formName).valid()) {
+        //if validation fails, save data to local storage for later retrieval
+        var saveModel = {
+            Holidays: model,
+            ExtraHolidays: []
+        };
+        $.each($('.extra-holiday-item'), function(ndx, item) {
+            var id = $(item).children('#extra-holiday-Id').val();
+            var extraModel = {
+                Id: typeof(childId) === "undefined" ? id : 0,
+                ChildId: typeof(childId) === "undefined" ? $(item).children('#extra-holiday-childId').val() : childId,
+                HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
+                HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
+                HolidayName: $(item).children('.extra-holiday-name').text(),
+                UserId: $('#user-id').val()
+            };
+            saveModel.ExtraHolidays.push(extraModel);
         });
+        $.jStorage.set(key, saveModel);
+        return false;
+    }
+    //delete key since form is valid (doesn't matter if it exists or not)
+    $.jStorage.deleteKey(key);
+
+    Parenting.SaveExtraHolidays();
+    //check if we need to move to next form
+    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+        Friendly.SubmitForm('holiday', 'addendum', model);
         return true;
     }
+    //check if we need to move to previous form
+    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
+        Friendly.SubmitForm('holiday', 'schedule', model);
+        return true;
+    }
+    Friendly.StartLoading();
+    //save current information
+    $.ajax({
+        url: '/api/' + formName + "?format=json",
+        type: 'POST',
+        data: model,
+        success: function() {
+            //$('#' + formName)[0].reset();
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Parenting.GetChildHoliday(nextChild);
+            Friendly.EndLoading();
+        },
+        error: Friendly.GenericErrorMessage
+    });
+    return true;
 };
 
 //Children Decisions
@@ -246,8 +308,8 @@ Parenting.LoadChildren = function(form) {
             Id: $(item).find('.child-id').text().trim(),
         };
         Friendly.children.push(child);
-        //add to decision and holiday dropdown
-        $('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
+        //add to decision and holiday dropdown - we are removing this for now
+        //$('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
     });
 
     if (Friendly.children.length <= 1) {
@@ -266,18 +328,25 @@ Parenting.LoadChildren = function(form) {
         break;
     }
 };
-Parenting.GetChildHoliday = function(child) {
+Parenting.GetChildHoliday = function (child) {
+    var formName = 'holiday';
+    var key = formName + child.Id;
+    var data = $.jStorage.get(key);
+    if (data) {
+        Parenting.SetChildHolidayForm(data, child);
+        $('#' + formName).valid();
+        return;
+    }
     $.ajax({
-        url: '/api/Holiday/' + child.Id + '?format=json',
+        url: '/api/'+ formName + '/' + child.Id + '?format=json',
         type: 'GET',
         success: function (data) {
             Parenting.SetChildHolidayForm(data, child);
-            //fixes possible error flag if one child isn't complete but another is
+            //fixes error flag if one child isn't complete but another is
             if (typeof (data.Holidays) !== 'undefined' && data.Holidays.SpringBreakFather !== 0) {
                 $('#holiday').valid();
             }
             $('#holidayWrapper').show();
-            $('.holiday-item').addClass('active');
         },
         error: Friendly.GenericErrorMessage
     });
@@ -307,8 +376,6 @@ Parenting.SetChildHolidayForm = function(data, child) {
     $('#HolidayViewModel_ThanksgivingOther').val(data.Holidays.ThanksgivingOther);
     $('#HolidayViewModel_Christmas[value="' + data.Holidays.Christmas + '"]').attr('checked', 'checked');
     $('#HolidayViewModel_ChristmasTime').val(data.Holidays.ChristmasTime);
-    $('#HolidayViewModel_SpringBreakTime').val(data.Holidays.SpringBreakTime);
-    $('#HolidayViewModel_FallBreakTime').val(data.Holidays.FallBreakTime);
     $('#HolidayViewModel_ThanksgivingTime').val(data.Holidays.ThanksgivingTime);
     $('#HolidayViewModel_ChristmasOther').val(data.Holidays.ChristmasOther);
     $('#HolidayViewModel_SpringBreak[value="' + data.Holidays.SpringBreak + '"]').attr('checked', 'checked');
@@ -357,6 +424,11 @@ Parenting.SetChildHolidayForm = function(data, child) {
         var result = $("#friendly-extraHolidays-template").tmpl(item);
         $('#holiday').append(result);
     });
+    //fixes possible error flag if one child isn't complete but another is
+    if (data.Holidays.ReligiousMother !== 0) {
+        $('#holiday').valid();
+    }
+
 };
 Parenting.SaveExtraHolidays = function(childId) {
     var formName = 'extraHoliday';
@@ -377,7 +449,7 @@ Parenting.SaveExtraHolidays = function(childId) {
                 url: '/api/' + formName + '/' + childId + "?format=json",
                 type: 'GET',
                 success: function(data) {
-                    $.each(data.ExtraHolidays, function(ndx, item) {
+                    $.each(data, function(ndx, item) {
                         if (item.HolidayName === extraModel.HolidayName) {
                             //We have a match
                             extraModel.Id = item.Id;
