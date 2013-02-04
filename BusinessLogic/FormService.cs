@@ -12,7 +12,7 @@ namespace BusinessLogic
         where TViewModel : IViewModel, new()
     {
         public TFormRepository FormRepository { get; set; }
-        public FormService(TFormRepository formRepository) : base()
+        public FormService(TFormRepository formRepository) : base(formRepository)
         {
             FormRepository = formRepository;
         }

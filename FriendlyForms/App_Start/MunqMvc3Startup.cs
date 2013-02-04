@@ -72,8 +72,8 @@ namespace FriendlyForms.App_Start {
             container.Register<IInformationService>(c => new InformationService(c.Resolve<IInformationRepository>() as InformationRepository));
             container.Register<IDecisionsService>(c => new DecisionsService(c.Resolve<IDecisionRepository>() as DecisionRepository));
             container.Register<IExtraDecisionsService>(c => new ExtraDecisionsService(c.Resolve<IExtraDecisionRepository>()));
-            container.Register<IMailService>(c => new MailService());
-            container.Register<IUserService>(c => new UserService(c.Resolve<IUserRepository>(),c.Resolve<IMailService>()));
+            container.Register<IEmailService>(c => new EmailService());
+            container.Register<IUserService>(c => new UserService(c.Resolve<IUserRepository>(),c.Resolve<IEmailService>()));
             container.Register<IResponsibilityService>(c => new ResponsibilityService(c.Resolve<IResponsibilityRepository>() as ResponsibilityRepository));
             container.Register<ICommunicationService>(c => new CommunicationService(c.Resolve<ICommunicationRepository>() as CommunicationRepository));
             container.Register<IScheduleService>(c => new ScheduleService(c.Resolve<IScheduleRepository>() as ScheduleRepository));

@@ -41,8 +41,6 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string SpringOther { get; set; }
         [DataMember]
-        public string SpringBreakTime { get; set; }
-        [DataMember]
         public int SummerBeginDays { get; set; }
         [DataMember]
         public string SummerBeginTime { get; set; }
@@ -56,8 +54,6 @@ namespace FriendlyForms.RestService
         public int FallBreak { get; set; }
         [DataMember]
         public string FallOther { get; set; }
-        [DataMember]
-        public string FallBreakTime { get; set; }
         [DataMember]
         public int ChristmasFather { get; set; }
         [DataMember]

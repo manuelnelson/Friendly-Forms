@@ -53,11 +53,18 @@ Friendly.GenericErrorMessage = function (jqXHR, textStatus, errorThrown) {
 };
 Friendly.SubmitForm = function (formName, nextForm, model) {
     Friendly.StartLoading();
-    if (typeof model === 'undefined') {
-        model = Friendly.GetFormInput(formName);
-    }
-    var formSelector = '#' + formName;
-    if ($(formSelector).valid()) {
+    //If the data of the form doesn't need massaging or have special requirements, we go ahead and sumbit.  Otherwise, we 
+    //perform the special function in the IsGenericForm function
+    var isGeneric = Friendly.IsGenericForm(formName, nextForm);
+    if (isGeneric && $('#' + formName).valid()) {
+        //go ahead and save
+        if (typeof model === 'undefined') {
+            model = Friendly.GetFormInput(formName);
+        }
+        if (Friendly.IsOtherForm(formName)) {
+            formName = formName.substring(0, formName.lastIndexOf("Other"));
+            model.isOtherParent = "true";
+        }
         $.ajax({
             url: '/api/' + formName + '?format=json',
             type: 'POST',
@@ -66,40 +73,42 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 Friendly.EndLoading();
-                return false;
             },
             error: Friendly.GenericErrorMessage
         });
-    } else {
+    } else if (isGeneric) {
+        //Friendly.NextForm(nextForm, Friendly.properties.iconError);
         Friendly.EndLoading();
         return false;
     }
-    return false;
+    return true;
 };
-Friendly.SubmitFormOther = function (formName, nextForm, model) {
-    Friendly.StartLoading();
-    if (typeof model === 'undefined') {
-        model = Friendly.GetFormInput(formName);
-    }
-    model.isOtherParent = "true";
-    var formSelector = '#' + formName;
-    var formUrl = formName.substring(0, formName.lastIndexOf("Other"));
-    if ($(formSelector).valid()) {
+//This is a minor alteration from Submit form. Used for the IsGenericForm function
+Friendly.AjaxSubmit = function(formName, nextForm, model) {
+    if ($('#' + formName).valid()) {
+        if (typeof model === 'undefined') {
+            model = Friendly.GetFormInput(formName);
+        }
         $.ajax({
-            url: '/api/' + formUrl + '/?format=json',
+            url: '/api/' + formName + '?format=json',
             type: 'POST',
             data: model,
-            success: function () {
+            success: function() {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                Friendly.EndLoading();
-                return false;
             },
             error: Friendly.GenericErrorMessage
         });
     } else {
-        Friendly.EndLoading();
+        Friendly.NextForm(nextForm, Friendly.properties.iconError);        
         return false;
+    }
+};
+Friendly.IsOtherForm = function(formName) {
+    //If name of form contains other, with the exception of the OtherChildren form, then it is an 'Other' form
+    var regex = /Other/g;
+    if (formName.search(regex) != -1) {
+        return true;
     }
     return false;
 };
@@ -143,14 +152,15 @@ Friendly.GetFormInput = function (formName) {
     return model;
 };
 Friendly.ClearForm = function (formName) {
+    $('#' + formName + ' input, #' + formName + ' textarea')
+        .not(':button, :submit, :reset, :hidden, :radio, .timepicker')
+        .val('')
+        .removeAttr('selected');
+        
     $(':input', '#' + formName)
- .not(':button, :submit, :reset, :hidden, :radio')
- .val('')
- .removeAttr('selected');
-    $(':input', '#' + formName)
- .not(':button, :submit, :reset, :hidden,')
- .removeAttr('checked')
- .removeAttr('selected');
+     .not(':button, :submit, :reset, :hidden,')
+     .removeAttr('checked')
+     .removeAttr('selected');
 };
 Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
     var allValid = true, invalidForms = [];
@@ -177,7 +187,7 @@ Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
-    var genericForms = ['house', 'vehicle', 'children', 'decisions', 'holiday', 'preexistingSupport', 'preexistingSupportOther'];
+    var genericForms = ['house', 'vehicle', 'child', 'decisions', 'holiday', 'preexistingSupport', 'preexistingSupportOther'];
     if (genericForms.indexOf(formName) >= 0) {
         switch (formName) { 
             case 'house':
@@ -186,39 +196,13 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 model.Equity = $('#Equity').val().replace(/,/g, "");
                 model.MoneyOwed = $('#MoneyOwed').val().replace(/,/g, "");
                 model.RetailValue = $('#RetailValue').val().replace(/,/g, "");
-                Friendly.SubmitForm('house', nextForm, model);
+                Friendly.AjaxSubmit(formName, nextForm, model);
                 break;
             case 'vehicle':
-                if ($('#vehicleForm').valid()) {
-                    var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
-                    $.ajax({
-                        url: '/api/VehicleForm?format=json',
-                        type: 'POST',
-                        data: vehicleFormModel,
-                        success: function () {
-                            Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                }
+                Friendly.AjaxSubmit('vehicleForm', nextForm);
                 break;
-            case 'children':
-                if ($('#childForm').valid()) {
-                    var childFormModel = Friendly.GetFormInput('childForm');
-                    $.ajax({
-                        url: '/api/ChildForm?format=json',
-                        type: 'POST',
-                        data: childFormModel,
-                        success: function () {
-                            Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                }
+            case 'child':
+                Friendly.AjaxSubmit('childForm', nextForm);
                 break;
             case 'decisions':
                 //First, check if current form is valid
@@ -226,6 +210,7 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                     //cycle through all children and make sure form is valid and saved
                     Friendly.childNdx = 0;
                     var child = Friendly.children[Friendly.childNdx];
+                    Friendly.ChildDecisionError = [];
                     Parenting.CheckChildDecision(child, nextForm);
                 } else {
                     Friendly.NextForm(nextForm, Friendly.properties.iconError);
@@ -403,41 +388,11 @@ $(document).ready(function () {
         Friendly.StartLoading();
         var currentFormName = $('ul .active').children(':first-child').attr('data-form');
         var nextForm = $(this).children(':first-child').attr('data-form');
-        //If the data of the form doesn't need massaging or have special requirements, we go ahead and sumbit.  Otherwise, we 
-        //perform the special function in the IsGenericForm function
-        var isGeneric = Friendly.IsGenericForm(currentFormName, nextForm);
-        if (isGeneric && $('#' + currentFormName).valid()) {
-            //go ahead and save
-            var model = Friendly.GetFormInput(currentFormName, nextForm);
-            if (isOtherForm(currentFormName)) {
-                currentFormName = currentFormName.substring(0, currentFormName.lastIndexOf("Other"));
-                model.isOtherParent = "true";
-            }
-            $.ajax({
-                url: '/api/' + currentFormName + '?format=json',
-                type: 'POST',
-                data: model,
-                success: function () {
-                    $('html, body').animate({ scrollTop: 0 }, 'fast');
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    Friendly.EndLoading();
-                    return false;
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        } else if (isGeneric) {
+        if (!Friendly.SubmitForm(currentFormName, nextForm)) {
             Friendly.NextForm(nextForm, Friendly.properties.iconError);
-            Friendly.EndLoading();
         }
     });
-    function isOtherForm(currentFormName) {
-        //If name of form contains other, with the exception of the OtherChildren form, then it is an 'Other' form
-        var regex = /Other/g;        
-        if (currentFormName.search(regex) != -1) {
-            return true;
-        }            
-        return false;
-    }
+
     //will go to output forms
     $('#ViewOutput').live('click', function () {
         document.location.href = $(this).attr('data-url');

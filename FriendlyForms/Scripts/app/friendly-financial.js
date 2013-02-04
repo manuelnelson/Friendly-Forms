@@ -69,7 +69,7 @@
                     var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
                     $('#supportWrapper .support-table tbody').append(result);
                     $('#supportWrapper .support-table').show();
-                    Friendly.ClearForm(formName);
+                    $('#' + formName)[0].reset();
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -100,9 +100,10 @@
     });
     $('#addChildSupport').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("child");
+        var formName = 'child';
+        var model = Friendly.GetFormInput(formName);
         model.PreexistingSupportId = $('#childWrapper #supportId').val();
-        if ($('#child').valid()) {
+        if ($('#' + formName).valid()) {
             $.ajax({
                 url: '/api/PreexistingSupportChild?format=json',
                 type: 'POST',
@@ -111,7 +112,7 @@
                     var result = $("#friendly-childsupport-template").tmpl(data.Child);
                     $('#childWrapper .child-table tbody').append(result);
                     $('#childWrapper .child-table').show();
-                    Friendly.ClearForm('child');
+                    $('#' + formName)[0].reset();
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -165,7 +166,7 @@
                     var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
                     $('#otherChildWrapper .otherChild-table tbody').append(result);
                     $('#otherChildWrapper .otherChild-table').show();
-                    Friendly.ClearForm(formName);
+                    $('#' + formName)[0].reset();
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -220,11 +221,11 @@
         }
     });
     $('.financial-part6').click(function () {
-        Friendly.SubmitFormOther('incomeOther', 'socialSecurityOther');
+        Friendly.SubmitForm('incomeOther', 'socialSecurityOther');
     });
     //---------------------------------------Social Security--------------------------------
     $('.financial-part7').click(function () {
-        Friendly.SubmitFormOther('socialSecurityOther', 'preexistingSupportOther');
+        Friendly.SubmitForm('socialSecurityOther', 'preexistingSupportOther');
     });
 
     $('#socialSecurityOther input[name="ReceiveSocial"]').change(function () {
@@ -246,9 +247,10 @@
 
     $('#addSupportOther').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("supportOther");
+        var formName = "supportOther";
+        var model = Friendly.GetFormInput(formName);
         model.IsOtherParent = "true";
-        if ($('#supportOther').valid()) {
+        if ($('#' + formName).valid()) {
             $.ajax({
                 url: '/api/PreexistingSupport/?format=json',
                 type: 'POST',
@@ -256,7 +258,7 @@
                 success: function (data) {
                     var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
                     $('#supportOtherWrapper .support-table tbody').append(result);
-                    Friendly.ClearForm('supportOther');
+                    $('#' + formName)[0].reset();                    
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -287,10 +289,11 @@
     });
     $('#addChildSupportOther').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("childOther");
+        var formName = "childOther";
+        var model = Friendly.GetFormInput();
         model.PreexistingSupportId = $('#childOtherWrapper #supportId').val();
         model.IsOtherParent = "true";
-        if ($('#childOther').valid()) {
+        if ($('#' + formName).valid()) {
             $.ajax({
                 url: '/api/PreexistingSupportChild?format=json',
                 type: 'POST',
@@ -299,7 +302,7 @@
                     var result = $("#friendly-childsupport-template").tmpl(data.Child);
                     $('#childOtherWrapper .child-table tbody').append(result);
                     $('#childOtherWrapper .child-table').show();
-                    Friendly.ClearForm('childOther');
+                    $('#' + formName)[0].reset();
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -341,9 +344,10 @@
     });
     $('#addOtherChildOther').click(function () {
         Friendly.StartLoading();
-        var model = Friendly.GetFormInput("otherchildOther");
+        var formName = "otherchildOther";
+        var model = Friendly.GetFormInput(formName);
         model.OtherChildrenId = $('#otherChildOtherWrapper #childrenId').val();
-        if ($('#otherchildOther').valid()) {
+        if ($('#' + formName).valid()) {
             $.ajax({
                 url: '/api/OtherChild?format=json',
                 type: 'POST',
@@ -352,7 +356,7 @@
                     var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
                     $('#otherChildOtherWrapper .otherChild-table tbody').append(result);
                     $('#otherChildOtherWrapper .otherChild-table').show();
-                    Friendly.ClearForm('otherchildOther');
+                    $('#' + formName)[0].reset();
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage

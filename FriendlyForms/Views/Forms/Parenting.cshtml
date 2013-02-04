@@ -1,5 +1,4 @@
-﻿@using FriendlyForms.Authentication
-@model FriendlyForms.Models.ParentingPlanViewModel
+﻿@model FriendlyForms.Models.ParentingPlanViewModel
 @{
     ViewBag.Title = "Parenting";
 }
@@ -8,9 +7,9 @@
         var itemDone = "icon-ok icon-green";
         var itemlock = "";  
     }
-    <a href="@Url.Action("Index", "Home",new {userId=@Model.FormUserId})" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <a href="@Url.Action("Index", "Home",new {Id=@Model.FormUserId})" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
-        <li><a href="@Url.Action("DomesticMediation","Forms",new {userId=@Model.FormUserId})"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>
+        <li><a href="@Url.Action("DomesticMediation","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>
         <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Parenting Plan</a>
             <ul style="display: block">
                 <li class="nav-item active" id="privacyNav"><a href="#" data-form="privacy"><i class="icon-pencil icon-blue"></i>Supervision</a></li>
@@ -72,13 +71,13 @@
                 }
             </ul>
         </li>
-        <li><a href="@Url.Action("Financial","Forms",new {userId=@Model.FormUserId})"><i class="icon icon-th-list"></i>Financial Form</a></li>
+        <li><a href="@Url.Action("Financial","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Financial Form</a></li>
         <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
     </ul>
 }
 @section Breadcrumb{
     <div id="breadcrumb">
-        <a data-form="asdfa" href="@Url.Action("Index", "Home",new {userId=@Model.FormUserId})" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
+        <a data-form="asdfa" href="@Url.Action("Index", "Home",new {Id=@Model.FormUserId})" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
         <a data-form="asdfa" href="#" class="current">Parenting</a>
     </div>
 }

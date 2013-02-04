@@ -23,10 +23,6 @@
         if ($(this).hasClass('next')) {
             Friendly.SubmitForm('participant', 'child');
         }
-        //check if we need to move to previous form
-        if ($(this).hasClass('previous')) {
-            Friendly.SubmitForm('participant', 'court');
-        }
     });
 
     $('input[name=PlaintiffRelationship]').change(function () {
@@ -116,7 +112,7 @@
 
     //-----------------------------------Child Form----------------------------
     $('input[id=ChildFormViewModel_ChildrenInvolved]').change(function () {
-        Friendly.ClearForm('child');
+        $('#child')[0].reset();
         if ($('#ChildFormViewModel_ChildrenInvolved:checked').val() === "1") {
             $('.child-info').show();
         } else {
@@ -163,8 +159,8 @@
 
     $('.childDelete').live('click', function () {
         var $row = $(this).parent().parent();
-        var name = $row.find('.child-name #Name').val();
-        var dob = $row.find('.child-dob #DateOfBirth').val();
+        var name = $row.find('.child-name').text();
+        var dob = $row.find('.child-dob').text().trim();
         var query = 'Id=' + $(this).attr('data-id') + '&UserId=' + $('#user-id').val() + '&Name=' + name + '&DateOfBirth=' + dob + '&ChildFormId=' + $('#childFormId').val();
         //UPDATE
         $.ajax({
@@ -179,7 +175,8 @@
     });
     $('#addChild').click(function () {
         Friendly.StartLoading();
-        if ($('#child').valid()) {
+        var formName = 'child';
+        if ($('#' + formName).valid()) {
             //get values
             var childFormModel = Friendly.GetFormInput('childForm');
             $.ajax({
@@ -188,7 +185,7 @@
                 data: childFormModel,
                 success: function (data) {
                     //get values
-                    var model = Friendly.GetFormInput('child');
+                    var model = Friendly.GetFormInput(formName);
                     model.ChildFormId = data.ChildForm.Id;
                     //use this for later when editing child information
                     $('#childFormId').val(model.ChildFormId);
@@ -202,7 +199,7 @@
                             $('.child-table').show();
                             $('.child-table tbody').append(result);
                             Friendly.EndLoading();
-                            Friendly.ClearForm('child');
+                            $('#' + formName)[0].reset();
                             return false;
                         },
                         error: Friendly.GenericErrorMessage
@@ -226,9 +223,9 @@
         } else {
             var formUserId = $('#user-id').val();
             if($('.child-table tr').length > 1) {
-                document.location.href = '/Forms/Parenting/?userId='+formUserId;
+                document.location.href = '/Forms/Parenting/'+formUserId;
             } else {
-                document.location.href = '/Forms/DomesticMediation/?userId='+formUserId;
+                document.location.href = '/Forms/DomesticMediation/'+formUserId;
             }
         }
     });

@@ -50,6 +50,13 @@ namespace BusinessLogic.Contracts
         void Delete(TEntity item);
 
         /// <summary>
+        /// Deletes the entity by Id from the database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        void Delete(long id);
+
+        /// <summary>
         /// Deletes a list of entites from the database
         /// </summary>
         /// <param name="items"></param>

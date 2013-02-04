@@ -9,12 +9,12 @@ using Elmah;
 
 namespace BusinessLogic
 {
-    public class MailService : IMailService
+    public class EmailService : IEmailService
     {
         private readonly string _fromEmail;
         private readonly string _fromPassword;
         private readonly string _mailServerName;
-        public MailService()
+        public EmailService()
         {
             _fromEmail = Resources.FromEmail;
             _fromPassword = Resources.FromPassword;

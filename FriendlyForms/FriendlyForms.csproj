@@ -235,6 +235,7 @@
     <Compile Include="RestService\CourtRestService.cs" />
     <Compile Include="RestService\DebtRestService.cs" />
     <Compile Include="RestService\DecisionsRestService.cs" />
+    <Compile Include="RestService\EmailRestService.cs" />
     <Compile Include="RestService\ExtraDecisionRestService.cs" />
     <Compile Include="RestService\ExtraHolidayRestService.cs" />
     <Compile Include="RestService\HealthInsuranceRestService.cs" />
@@ -408,6 +409,7 @@
     </Content>
     <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="README.txt" />
+    <Content Include="Scripts\app\friendly-admin.js" />
     <Content Include="Scripts\app\friendly-domestic.js" />
     <Content Include="Scripts\app\friendly-financial.js" />
     <Content Include="Scripts\app\friendly-global.js" />
@@ -441,6 +443,8 @@
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\jstorage.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -455,17 +459,12 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\MicrosoftAjax.js" />
-    <Content Include="Scripts\MicrosoftAjax.debug.js" />
-    <Content Include="Scripts\MicrosoftMvcAjax.js" />
-    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
-    <Content Include="Scripts\MicrosoftMvcValidation.js" />
-    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />

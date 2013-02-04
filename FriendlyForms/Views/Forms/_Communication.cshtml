@@ -12,7 +12,7 @@
                     </div>
                     <div class="widget-content">
                         <label class="informative">
-                            <i class="icon icon-asterisk"></i> Define how you will communicate with your child(ren) when they are with the other parent.</label>
+                             Define how you will communicate with your child(ren) when they are with the other parent.</label>
                         <div class="control-group">
                             <label class="form-question">
                                 When the child(ren) is/are with the other parent, will each of you want to be able to communicate with them while they are with the other parent?</label>
@@ -64,7 +64,7 @@
                             <div class="control-group communicate-method">
                                 <label class="form-question">
                                     Define any limitations on communication</label>
-                                @Html.TextBoxFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.LimitationDetails)
                             </div>
                         }
@@ -73,7 +73,7 @@
                             <div class="control-group communicate-method hide">
                                 <label class="form-question">
                                     Define any limitations on communication</label>
-                                @Html.TextBoxFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.LimitationDetails, new { placeholder = "Details", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.LimitationDetails)
                             </div>
                         }
@@ -96,7 +96,7 @@
                             <div class="control-group communicate-rights">
                                 <label class="form-question">
                                     How should the rights of either parent be limited?</label>
-                                @Html.TextBoxFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.AccessOfRightsDetails)
                             </div>
                         }
@@ -105,7 +105,7 @@
                             <div class="control-group communicate-rights hide">
                                 <label class="form-question">
                                     How should the rights of either parent be limited?</label>
-                                @Html.TextBoxFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
+                                @Html.TextAreaFor(m => m.AccessOfRightsDetails, new { placeholder = "Explain Here", @class = "input-xxlarge  " })
                                 @Html.ValidationMessageFor(m => m.AccessOfRightsDetails)
                             </div>
                         }

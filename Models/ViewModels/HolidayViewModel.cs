@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -40,10 +41,7 @@ namespace Models.ViewModels
         [Display(Name = "Spring break details")]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string SpringOther { get; set; }
-        [Display(Name = "Spring break Time")]
-        [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
-        [Required]
-        public string SpringBreakTime { get; set; }
+
         [Required]
         [Display(Name = "Begin Summer")]
         public int SummerBeginDays { get; set; }
@@ -67,10 +65,6 @@ namespace Models.ViewModels
         [Display(Name = "Fall details")]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string FallOther { get; set; }
-        [Display(Name = "Fall break Time")]
-        [RegularExpression(@"^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$", ErrorMessage = "Time must be in hh:mm am/pm format")]
-        [Required]
-        public string FallBreakTime { get; set; }
         [Required]
         public int ChristmasFather { get; set; }
         [Required]
@@ -138,62 +132,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Holiday()
-                {
-                    ChildId = ChildId,
-                    ChildrensFather = ChildrensFather,
-                    ChildrensMother = ChildrensMother,
-                    Christmas = Christmas,
-                    ChristmasOther = ChristmasOther,
-                    ChristmasTime = ChristmasTime,
-                    ThanksgivingTime = ThanksgivingTime,
-                    SpringBreakTime = SpringBreakTime,
-                    FallBreakTime = FallBreakTime,
-                    FallBreak = FallBreak,
-                    FallOther = FallOther,
-                    FathersBdayFather = FathersBdayFather,
-                    FathersBdayMother = FathersBdayMother,
-                    FathersFather = FathersFather,
-                    FathersMother = FathersMother,
-                    FridayHoliday = FridayHoliday,
-                    ChristmasFather = ChristmasFather,
-                    ChristmasMother = ChristmasMother,
-                    SpringBreakFather = SpringBreakFather,
-                    SpringBreakMother = SpringBreakMother,
-                    FallBreakFather = FallBreakFather,
-                    FallBreakMother = FallBreakMother,
-                    ThanksgivingFather = ThanksgivingFather,
-                    ThanksgivingMother = ThanksgivingMother,
-                    HalloweenFather = HalloweenFather,
-                    HalloweenMother = HalloweenMother,
-                    IndependenceFather = IndependenceFather,
-                    IndependenceMother = IndependenceMother,
-                    LaborFather = LaborFather,
-                    LaborMother = LaborMother,
-                    MemorialFather = MemorialFather,
-                    MemorialMother = MemorialMother,
-                    MlkFather = MlkFather,
-                    MlkMother = MlkMother,
-                    MondayHoliday = MondayHoliday,
-                    MothersBdayFather = MothersBdayFather,
-                    MothersBdayMother = MothersBdayMother,
-                    MothersFather = MothersFather,
-                    MothersMother = MothersMother,
-                    PresidentsFather = PresidentsFather,
-                    PresidentsMother = PresidentsMother,
-                    ReligiousFather = ReligiousFather,
-                    ReligiousMother = ReligiousMother,
-                    SpringBreak = SpringBreak,
-                    SpringOther = SpringOther,
-                    SummerBeginDays = SummerBeginDays,
-                    SummerBeginTime = SummerBeginTime,
-                    SummerEndDays = SummerEndDays,
-                    SummerEndTime = SummerEndTime,
-                    SummerDetails = SummerDetails,
-                    Thanksgiving = Thanksgiving,
-                    ThanksgivingOther = ThanksgivingOther,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Holiday>();
         }
     }
 }
