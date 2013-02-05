@@ -1,4 +1,7 @@
 ﻿$(function ($) {
+    //let's declare the globals for this form.
+    Friendly.ChildDecisionError = [];
+    Friendly.ChildHolidayError = [];
     //----------------------Privacy Form-----------------------
     //if on or the other of the supervision checkboxes are checked, then show the rest of the data
     $('input[name=NeedSupervision]').change(function () {
@@ -84,6 +87,7 @@
         if (childId === "0") {
             //all case.  Cycle through all kids
             for (var i = 0; i < Friendly.children.length; i++) {
+                
                 var currChild = Friendly.children[i];
                 //only show message if last child saved completes
                 if (i == Friendly.children.length - 1)
@@ -102,8 +106,15 @@
     });
     function copyDecision(childId, showMessage) {
         Parenting.SaveExtraDecisions(childId);
-        var model = Friendly.GetFormInput('decisions');
-        model.ChildId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
+        var formName = 'decisions';
+        childId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
+
+        //delete from local storage
+        var key = formName + childId;
+        $.jStorage.deleteKey(key);
+
+        var model = Friendly.GetFormInput(formName);
+        model.ChildId = childId;
         $.ajax({
             url: '/api/Decisions?format=json',
             type: 'POST',
@@ -115,8 +126,25 @@
             error: Friendly.GenericErrorMessage
         });
     }
-    $('.child-part6').click(function () {
-        Parenting.AddDecision(this);
+    $('.child-part6').click(function () {        
+        //if the form isn't validated, we still need to move on
+        if (!Parenting.AddDecision(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.ChildDecisionError.push(child.Name);
+            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+                Friendly.NextForm('responsibility', Friendly.properties.iconError);
+                return;
+            }
+            //check if we need to move to previous form
+            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
+                Friendly.NextForm('information', Friendly.properties.iconError);
+                return;
+            }
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Parenting.GetChildDecisions(nextChild);
+            Friendly.EndLoading();
+        }
     });
 
     //Responsibility Form
@@ -147,23 +175,6 @@
     });
 
     $('.child-part7').click(function () {
-        //var model = {
-        //    BeginningVisitation: $('#BeginningVisitation:checked').val(),
-        //    EndVisitation: $('#EndVisitation:checked').val(),
-        //    TransportationCosts: $('#TransportationCosts:checked').val(),
-        //    FatherPercentage: 0,
-        //    MotherPercentage: 0,
-        //    UserId: $('#user-id').val(),
-        //    OtherDetails: ''
-        //};
-        //if (model.TransportationCosts === "3") {
-        //    model.FatherPercentage = $('#FatherPercentage').val();
-        //    model.MotherPercentage = $('#MotherPercentage').val();
-        //}
-        //if (model.TransportationCosts === "4") {
-        //    model.OtherDetails = $('#OtherDetails').val();
-        //}
-        //Friendly.SubmitForm('responsibility', 'communication', model);
         Friendly.SubmitForm('responsibility', 'communication');
     });
 
@@ -367,20 +378,22 @@
     $('.child-part10').click(function () {
         //if the form isn't validated, we still need to move on
         if (!Parenting.AddHoliday(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.ChildHolidayError.push(child.Name);
             if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
                 Friendly.NextForm('addendum', Friendly.properties.iconError);
-                return false;
+                return;
             }
             //check if we need to move to previous form
             if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
                 Friendly.NextForm('schedule', Friendly.properties.iconError);                
-                return false;
+                return;
             }
             $('html, body').animate({ scrollTop: 0 }, 'fast');
             var nextChild = Friendly.children[Friendly.childNdx];
             Parenting.GetChildHoliday(nextChild);
             Friendly.EndLoading();
-        }        
+        }       
     });
     //Addendum
     $('input[name=HasAddendum]').change(function () {
@@ -402,9 +415,7 @@
                 type: 'POST',
                 data: model,
                 success: function () {
-                    var forms = ["privacy", "information", "decisions", "responsibility", "communication", "schedule", "holiday", "addendum"];
-                    var readableForms = ["Supervision", "Information", "Decisions", "Responsibility", "Communication", "Schedule", "Holiday", "Addendum"];
-                    Friendly.ValidateForms(forms, readableForms, '.child-part11');
+                    Friendly.ValidateForms('.child-part11');
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -485,17 +496,23 @@
             //then save the copy to child
             copyHoliday(childId, true);
         }
-        Friendly.EndLoading();
+        Friendly.EndLoading();       
     });
 
     function copyHoliday(childId, showMessage) {
         Parenting.SaveExtraHolidays(childId);
         var formName = 'holiday';
         //do rest of the form
+        childId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
+
+        //delete from local storage
+        var key = formName + childId;
+        $.jStorage.deleteKey(key);
+
         var model = Friendly.GetFormInput(formName);
-        model.ChildId = typeof (childId) === "undefined" ? $('#holidayChildId').val() : childId;
-        model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
-        model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
+        model.ChildId = childId;
+        //model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
+        //model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
         $.ajax({
             url: '/api/' + formName + '?format=json',
             type: 'POST',
@@ -505,7 +522,7 @@
                     Friendly.ShowMessage('Success!', 'The holiday section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#holidayWrapper .copy-wrapper');
             },
             error: Friendly.GenericErrorMessage
-        });
+        });       
     }
 });
 

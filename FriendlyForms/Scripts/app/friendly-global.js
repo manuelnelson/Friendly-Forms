@@ -77,7 +77,6 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
             error: Friendly.GenericErrorMessage
         });
     } else if (isGeneric) {
-        //Friendly.NextForm(nextForm, Friendly.properties.iconError);
         Friendly.EndLoading();
         return false;
     }
@@ -162,7 +161,7 @@ Friendly.ClearForm = function (formName) {
      .removeAttr('checked')
      .removeAttr('selected');
 };
-Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
+Friendly.ValidateForms = function (btnClassToHide) {
     var allValid = true, invalidForms = [];
     //Cycles through nav tags to see if everything is complete
     var navItems = $('.nav-item');
@@ -174,16 +173,33 @@ Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
     }
     if (!allValid) {
         var message = "The following forms are still incomplete or have errors: ";
-        for (var j = 0; j < invalidForms.length - 1; j++) {
-            message += invalidForms[j] + ", ";
+        for (var j = 0; j < invalidForms.length; j++) {
+            message += Friendly.FormInvalidationMessage(invalidForms[j]);
         }
-        message += invalidForms[invalidForms.length - 1];
+        //remove last comma
+        message = message.substring(0, message.lastIndexOf(','));
         Friendly.ShowMessage('Almost there!', message, Friendly.properties.messageType.Error);
         $('html, body').animate({ scrollTop: 0 }, 'fast');
         return false;
     }
     $(btnClassToHide).hide();
     $('.viewOutput').show();
+};
+Friendly.FormInvalidationMessage = function(formName) {
+    switch (formName) {
+        case 'Decisions':
+            if(Friendly.ChildDecisionError.length > 1)
+                return "Decisions (" + Friendly.ChildDecisionError.join(',') + "), ";
+            else 
+                return "Decisions (" + Friendly.ChildDecisionError[0] + "), ";
+        case 'Holidays':
+            if (Friendly.ChildHolidayError.length > 1)
+                return "Holidays (" + Friendly.ChildHolidayError.join(',') + "), ";
+            else
+                return "Holidays (" + Friendly.ChildHolidayError[0] + "), ";
+        default:
+            return formName + ", ";
+    }
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
@@ -206,27 +222,25 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 break;
             case 'decisions':
                 //First, check if current form is valid
-                if (Parenting.AddDecision()) {
-                    //cycle through all children and make sure form is valid and saved
-                    Friendly.childNdx = 0;
-                    var child = Friendly.children[Friendly.childNdx];
-                    Friendly.ChildDecisionError = [];
-                    Parenting.CheckChildDecision(child, nextForm);
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                }
+                Parenting.AddDecision();
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                Friendly.ChildDecisionError = [];
+                Parenting.CheckChildDecision(child, nextForm);
                 break;
             case 'holiday':
                 //First, check if current form is valid
-                if (Parenting.AddHoliday()) {
-                    //cycle through all children and make sure form is valid and saved
-                    Friendly.childNdx = 0;
-                    var child = Friendly.children[Friendly.childNdx];
-                    Parenting.CheckChildHoliday(child, nextForm);
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                }
-                Friendly.EndLoading();
+                Parenting.AddHoliday();
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                Friendly.ChildHolidayError = [];
+                Parenting.CheckChildHoliday(child, nextForm);
                 break;                
             case 'preexistingSupport':
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
