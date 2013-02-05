@@ -1,6 +1,11 @@
 ﻿window.Parenting = window.Parenting || {};
 Parenting.AddDecision = function (caller) {
     var formName = 'decisions';
+    if (caller != null && $(caller).hasClass('next'))
+        Friendly.childNdx++;
+    else if (caller != null) {
+        Friendly.childNdx--;
+    }
     var model = Friendly.GetFormInput(formName);
     model.ChildId = $('#childId').val().trim();
     //key is for local storage
@@ -28,11 +33,6 @@ Parenting.AddDecision = function (caller) {
     //delete key since form is valid (doesn't matter if it exists or not
     $.jStorage.deleteKey(key);
     Parenting.SaveExtraDecisions();
-    if (caller != null && $(caller).hasClass('next'))
-        Friendly.childNdx++;
-    else if (caller != null) {
-        Friendly.childNdx--;
-    }
     //check if we need to move to next form
     if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
         Friendly.SubmitForm(formName, 'responsibility', model);
@@ -51,10 +51,6 @@ Parenting.AddDecision = function (caller) {
         data: model,
         success: function () {
             $('html, body').animate({ scrollTop: 0 }, 'fast');
-            $('input[id=DecisionsViewModel_Education]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_HealthCare]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_Religion]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_ExtraCurricular]').removeAttr('checked');
             var nextChild = Friendly.children[Friendly.childNdx];
             Parenting.GetChildDecisions(nextChild);
         },
@@ -63,22 +59,26 @@ Parenting.AddDecision = function (caller) {
     return true;
 };
 Parenting.CheckChildDecision = function (child, nextForm) {
+    var formName = 'decisions';
     $.ajax({
-        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
+        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
         type: 'GET',
         success: function (data) {
             $('#childName').text(child.Name);
             $('#childId').val(child.Id);
-            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+            Friendly.ClearForm(formName);
+            if (data.Decisions) {
+                $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+            }
             $('.extra-decision-item').remove();
             Friendly.childNdx++;
             //Check if we've gone through all children. If not, continue on
             if (Friendly.childNdx !== Friendly.children.length) {
-                if ($('#decisions').valid()) {
+                if ($('#' + formName).valid()) {
                     //recursively go to next child
                     Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
                     return;
@@ -153,6 +153,9 @@ Parenting.SaveExtraDecisions = function (childId) {
 Parenting.SetChildDecisions = function(child, data) {
     $('#childName').text(child.Name);
     $('#childId').val(child.Id);
+    if (typeof (data.Decisions) === 'undefined')
+        return false;
+
     $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
     $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
     $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
@@ -173,6 +176,7 @@ Parenting.SetChildDecisions = function(child, data) {
 //get's a childs decision informaion.  Checks local storage first. If it doesn't exist, it looks for the data at the server
 Parenting.GetChildDecisions = function (child) {
     var formName = 'decisions';
+    Friendly.ClearForm(formName);
     var key = formName + child.Id;
     var data = $.jStorage.get(key);
     if (data) {
@@ -182,7 +186,7 @@ Parenting.GetChildDecisions = function (child) {
     $.ajax({
         url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
         type: 'GET',
-        success: function (data) {
+        success: function (data) {            
             Parenting.SetChildDecisions(child, data);
         },
         error: Friendly.GenericErrorMessage
@@ -203,29 +207,33 @@ Parenting.CheckIfBothIsChecked = function () {
     }
 }
 Parenting.CheckChildHoliday = function (child, nextForm) {
+    var formName = 'holiday';
     $.ajax({
-        url: '/api/Holiday/' + child.Id + '?format=json',
+        url: '/api/' + formName + '/' + child.Id + '?format=json',
         type: 'GET',
-        success: function (data) {
+        success: function (data) {            
             Parenting.SetChildHolidayForm(data, child);
             Friendly.childNdx++;
-            if (Friendly.childNdx === Friendly.children.length) {
-                if ($('#holiday').valid()) {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    return false;
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                    return false;
+            if (Friendly.childNdx !== Friendly.children.length) {
+                if ($('#' + formName).valid()) {
+                    //recursively go to next child
+                    Parenting.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
+                    return;
                 }
-            }
-            if ($('#holiday').valid()) {
-                //recursively go to next child
+                //Record Error and recursively go to next child
+                Friendly.ChildDecisionError.push(child.Name);
                 Parenting.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
-                return false;
-            } else {
-                Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                return false;
+                return;
             }
+            //At last child.  Advance to next form - show error if there are errors
+            if (!$('#' + formName).valid()) {
+                Friendly.ChildHolidayError.push(child.Name);
+            }
+            if (Friendly.ChildHolidayError.length > 0) {
+                Friendly.NextForm(nextForm, Friendly.properties.iconError);
+            } else {
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+            }            
         },
         error: Friendly.GenericErrorMessage
     });
