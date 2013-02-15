@@ -3,6 +3,7 @@
 <div class="form-vertical wrapper hide" id="spousalWrapper">
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "spousal" }))
     {
+        <input type="hidden" id="spousalId" value="@Model.Id"/>
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">

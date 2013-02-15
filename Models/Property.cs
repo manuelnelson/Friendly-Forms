@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -14,14 +15,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new PropertyViewModel()
-                {
-                    DividingProperty = DividingProperty,
-                    PersonalProperty = PersonalProperty,
-                    RealEstate = RealEstate,
-                    RealEstateDescription = RealEstateDescription,
-                    UserId = UserId
-                };
+            return this.TranslateTo<PropertyViewModel>();
         }
 
         public void Update(IFormEntity entity)

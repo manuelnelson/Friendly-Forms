@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -26,15 +27,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Court
-            {
-                AuthorOfPlan = AuthorOfPlan,
-                CaseNumber = CaseNumber,
-                CountyId = CountyId,
-                PlanType = PlanType,
-                ExistCaseNumber = ExistCaseNumber,
-                UserId = UserId
-            };
+            return this.TranslateTo<Court>();
         }
 
     }

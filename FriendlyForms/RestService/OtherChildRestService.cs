@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -48,6 +49,13 @@ namespace FriendlyForms.RestService
                 {
                     OtherChild = otherChild
                 };
+        }
+
+        public object Put(ReqOtherChild request)
+        {
+            var otherChild = request.TranslateTo<OtherChild>();
+            OtherChildService.Update(otherChild);
+            return new RespOtherChild();
         }
     }
 }

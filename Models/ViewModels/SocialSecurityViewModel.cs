@@ -6,6 +6,7 @@ namespace Models.ViewModels
 {
     public class SocialSecurityViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
 

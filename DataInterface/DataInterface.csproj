@@ -39,6 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAssetRepository.cs" />
+    <Compile Include="IChildCareFormRepository.cs" />
+    <Compile Include="IChildCareRepository.cs" />
     <Compile Include="IChildFormRepository.cs" />
     <Compile Include="IChildRepository.cs" />
     <Compile Include="IChildSupportRepository.cs" />
@@ -52,6 +54,7 @@
     <Compile Include="IExtraHolidayRepository.cs" />
     <Compile Include="IFormRepository.cs" />
     <Compile Include="IHealthInsuranceRepository.cs" />
+    <Compile Include="IHealthRepository.cs" />
     <Compile Include="IHolidayRepository.cs" />
     <Compile Include="IHouseRepository.cs" />
     <Compile Include="IIncomeRepository.cs" />
@@ -67,7 +70,7 @@
     <Compile Include="IResponsibilityRepository.cs" />
     <Compile Include="IScheduleRepository.cs" />
     <Compile Include="ISocialSecurityRepository.cs" />
-    <Compile Include="ISpecialCircumstancesRepository.cs" />
+    <Compile Include="IDeviationsRepository.cs" />
     <Compile Include="ISpousalRepository.cs" />
     <Compile Include="ITaxRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />

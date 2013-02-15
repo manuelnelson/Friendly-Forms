@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
     public class AssetViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
         
@@ -37,17 +39,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Assets()
-                {
-                    Business = Business,
-                    BusinessDescription = BusinessDescription,
-                    NonRetirement = NonRetirement,
-                    NonRetirementDescription = NonRetirementDescription,
-                    Retirement = Retirement,
-                    RetirementDescription = RetirementDescription,
-                    AdditionalAssets = AdditionalAssets,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Assets>();
         }
     }
 }

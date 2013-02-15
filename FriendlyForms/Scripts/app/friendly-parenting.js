@@ -23,7 +23,7 @@
         Friendly.StartLoading();
         //get values
         var model = Friendly.GetFormInput('information');
-        Parenting.LoadChildren('decision');
+        Friendly.LoadChildren('decision');
         var formName = 'information';
         var nextForm = 'decisions';
         var formSelector = '#' + formName;

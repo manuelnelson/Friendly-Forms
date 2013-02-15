@@ -45,9 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Repositories\ChildCareFormRepository.cs" />
+    <Compile Include="Repositories\ChildCareRepository.cs" />
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="Repositories\ChildFormRepository.cs" />
     <Compile Include="Repositories\AddendumRepository.cs" />
+    <Compile Include="Repositories\HeathRepository.cs" />
     <Compile Include="Repositories\VehicleFormRepository.cs" />
     <Compile Include="SplitContext.cs" />
     <Compile Include="Repositories\ExtraHolidayRepository.cs" />
@@ -79,7 +82,7 @@
     <Compile Include="Repositories\ResponsibilityRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />
     <Compile Include="Repositories\SocialSecurityRepository.cs" />
-    <Compile Include="Repositories\SpecialCircumstancesRepository.cs" />
+    <Compile Include="Repositories\DeviationsRepository.cs" />
     <Compile Include="Repositories\SpousalRepository.cs" />
     <Compile Include="Repositories\TaxRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />

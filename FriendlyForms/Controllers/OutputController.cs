@@ -44,7 +44,7 @@ namespace FriendlyForms.Controllers
         private readonly IPreexistingSupportService _preexistingSupportService;
         private readonly IPreexistingSupportChildService _preexistingSupportChildService;
         private readonly IOtherChildrenService _otherChildrenService;
-        private readonly ISpecialCircumstancesService _specialCircumstancesService;
+        private readonly IDeviationsService _deviationsService;
         private readonly IOtherChildService _otherChildService;
         private readonly IVehicleFormService _vehicleFormService;
         private readonly SynchronizedPechkin _synchronizedPechkin;
@@ -52,7 +52,7 @@ namespace FriendlyForms.Controllers
         // GET: /Forms/
         public OutputController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService, ICountyService countyService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, ISpecialCircumstancesService specialCircumstancesService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService)
+            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, IDeviationsService deviationsService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -81,7 +81,7 @@ namespace FriendlyForms.Controllers
             _preexistingSupportService = preexistingSupportService;
             _preexistingSupportChildService = preexistingSupportChildService;
             _otherChildrenService = otherChildrenService;
-            _specialCircumstancesService = specialCircumstancesService;
+            _deviationsService = deviationsService;
             _otherChildService = otherChildService;
             _vehicleFormService = vehicleFormService;
             // set it up using fluent notation

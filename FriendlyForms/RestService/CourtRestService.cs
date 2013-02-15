@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -13,7 +14,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Court/","POST")]
+    [Route("/Court/")]
     public class ReqCourt
     {
         [DataMember]
@@ -36,6 +37,8 @@ namespace FriendlyForms.RestService
     public class RespCourt : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -45,8 +48,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqCourt request)
         {
-            var courtViewModel = request.TranslateTo<CourtViewModel>();
-            CourtService.AddOrUpdate(courtViewModel);
+            var court = request.TranslateTo<Court>();
+            CourtService.Add(court);
+            return new RespCourt()
+                {
+                    Id = court.Id
+                };
+        }
+        public object Put(ReqCourt request)
+        {
+            var court = request.TranslateTo<Court>();
+            CourtService.Update(court);
             return new RespCourt();
         }
     }

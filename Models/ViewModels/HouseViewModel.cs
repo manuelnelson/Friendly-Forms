@@ -6,6 +6,7 @@ namespace Models.ViewModels
 {
     public class HouseViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]
@@ -36,17 +37,6 @@ namespace Models.ViewModels
         public IFormEntity ConvertToEntity()
         {
             return this.TranslateTo<House>();
-            //return new House()
-            //    {
-            //        Address = Address,
-            //        Equity = Equity ?? 0,
-            //        MaritalHouse = MaritalHouse,
-            //        MoneyOwed = MoneyOwed ?? 0,
-            //        MortgageOwner = MortgageOwner,
-            //        RetailValue = RetailValue ?? 0,
-            //        Divide = Divide,
-            //        UserId = UserId
-            //    };
         }
     }
 }

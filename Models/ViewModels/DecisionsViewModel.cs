@@ -6,6 +6,7 @@ namespace Models.ViewModels
 {
     public class DecisionsViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]

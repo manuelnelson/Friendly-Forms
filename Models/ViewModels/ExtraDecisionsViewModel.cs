@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -21,14 +22,7 @@ namespace Models.ViewModels
 
         public ExtraDecisions ConvertToEntity()
         {
-            return new ExtraDecisions
-                {
-                    Id = Id,
-                    ChildId = ChildId,
-                    DecisionMaker = DecisionMaker,
-                    UserId = UserId,
-                    Description = Description
-                };
+            return this.TranslateTo<ExtraDecisions>();
         }
     }
 }

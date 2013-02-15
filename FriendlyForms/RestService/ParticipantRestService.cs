@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -12,6 +13,8 @@ namespace FriendlyForms.RestService
     [Route("/Participant/")]
     public class ReqParticipant
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -32,6 +35,8 @@ namespace FriendlyForms.RestService
     public class RespParticipant : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -41,8 +46,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqParticipant request)
         {
-            var participantViewModel = request.TranslateTo<ParticipantViewModel>();
-            ParticipantService.AddOrUpdate(participantViewModel);
+            var participant = request.TranslateTo<Participant>();
+            ParticipantService.Add(participant);
+            return new RespParticipant()
+                {
+                    Id = participant.Id
+                };
+        }
+        public object Put(ReqParticipant request)
+        {
+            var participant = request.TranslateTo<Participant>();
+            ParticipantService.Update(participant);
             return new RespParticipant();
         }
     }

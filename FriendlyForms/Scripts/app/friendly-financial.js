@@ -1,38 +1,73 @@
 ﻿$(function ($) {
+    //----------------------Special Circumstances---------------    
+    $('.financial-part0').click(function () {
+        Friendly.SubmitForm('deviations', 'childcare');
+    });
+    $('input[name="Deviations"]').change(function () {
+        if ($('#Deviations:checked').val() === "1") {
+            $('.deviation-other').show();
+        } else {
+            $('.deviation-other').hide();
+        }
+    });
+    $('input[name="HighLow"]').change(function () {
+        if ($('#HighLow:checked').val() === "1") {
+            $('.deviation-high').show();
+            $('.deviation-low').hide();
+        } else {
+            $('.deviation-low').show();
+            $('.deviation-high').hide();
+        }
+    });
     $('.financial-part1').click(function () {
         Friendly.SubmitForm('income', 'socialSecurity');
     });
-    $('#income input[name="Employed"]').change(function () {
-        $('#income #Salary').val('');
-        if ($('#income #Employed:checked').val() === "1") {
-            $('#income .income-employed').show();
+    $('#income input[name="HaveSalary"]').change(function () {
+        if ($('#income #HaveSalary:checked').val() === "1") {
+            $('#income .income-salary').show();
+            $('#income .income-nosalary').hide();
         } else {
-            $('#income .income-employed').hide();
+            $('#income .income-salary').hide();
+            $('#income .income-nosalary').show();
         }
     });
 
-    $('#income input[name="SelfEmployed"]').change(function () {
-        $('#income #SelfIncome').val('');
-        if ($('#income #SelfEmployed:checked').val() === "1") {
-            $('#income .income-self').show();
+    $('#income input[name="NonW2Income"]').change(function () {
+        if ($('#income #NonW2Income:checked').val() === "1") {
+            $('#income .income-nonW2').show();
         } else {
-            $('#income .income-self').hide();
+            $('#income .income-nonW2').hide();
         }
     });
-    $('#income input[name="SelfTax"]').change(function () {
-        $('#income #SelfTaxAmount').val('');
-        if ($('#income #SelfTax:checked').val() === "1") {
-            $('#income .income-tax').show();
+    //-----------------Child care---------------------
+    $('#childCareForm #ChildrenInvolved').change(function() {
+        if ($('#childCareForm #ChildrenInvolved:checked').val() === "1") {
+            $('#childCare-show').show();
         } else {
-            $('#income .income-tax').hide();
+            $('#childCare-show').hide();
         }
     });
-    $('#income input[name="OtherSources"]').change(function () {
-        if ($('#income #OtherSources:checked').val() === "1") {
-            $('#income .income-other').show();
-        } else {
-            $('#income .income-other').hide();
+    
+    $('.financial-childcare').click(function () {
+        //if the form isn't validated, we still need to move on
+        if (!Financial.AddChildCare(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.ChildCareError.push(child.Name);
+            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+                Friendly.NextForm('income', Friendly.properties.iconError);
+                return;
+            }
+            //check if we need to move to previous form
+            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
+                Friendly.NextForm('deviations', Friendly.properties.iconError);
+                return;
+            }
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Parenting.GetChildCare(nextChild);
+            Friendly.EndLoading();
         }
+        
     });
     //-----------------Social Security---------------------
     $('.financial-part2').click(function () {
@@ -143,7 +178,7 @@
                         $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -174,19 +209,32 @@
         }
         Friendly.EndLoading();
     });
-    //----------------------Special Circumstances---------------    
+    //---------------------------------------Health--------------------------------
     $('.financial-part5').click(function () {
-        Friendly.SubmitForm('specialCircumstances', 'incomeOther');
+        Friendly.SubmitForm('healths', 'incomeOther');
     });
-    $('input[name="Circumstances"]').change(function () {
-        if ($('#Circumstances:checked').val() === "1") {
-            $('.circumstance-other').show();
+    $('#healths input[name="ProvideHealth"]').change(function () {
+        $('#healths #health-provide input').val('');
+        if ($('#healths #ProvideHealth:checked').val() === "1") {
+            $('#healths #health-provide').show();
         } else {
-            $('.circumstance-other').hide();
+            $('#healths #health-provide').hide();
         }
     });
-
-    //---------------------------------------Other Parent--------------------------------
+    $('#healths .percent').focusout(function () {
+        var percentItems = $.grep($('#healths .percent'), function(element, ndx) {
+            return $(element).val() != "";
+        });
+        //only alter if 
+        var remainingVal = 0;
+        if (percentItems.length == 2) {
+            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+            percentItems = $.grep($('#healths .percent'), function (element, ndx) {
+                return $(element).val() === "";
+            });
+            $(percentItems).val(remainingVal);
+        }
+    });
     //---------------------------------------Income--------------------------------
     $('#incomeOther input[name="Employed"]').change(function () {
         $('#incomeOther #Salary').val('');
@@ -333,7 +381,7 @@
                         $('#otherChildOtherWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
-                        Friendly.NextForm('specialCircumstancesOther', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('healthsOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -364,18 +412,31 @@
         }
         Friendly.EndLoading();
     });
+    //----------------------Health Other---------------    
 
-    //----------------------Special Circumstances---------------    
     $('.financial-part10').click(function () {
-        //check if we need to move to next form
-        Friendly.SubmitForm('specialCircumstancesOther', 'incomeOther');
+        Friendly.SubmitForm('healthsOther', 'incomeOther');
     });
-    $('#circumstanceOther input[name="Circumstances"]').change(function () {
-        if ($('#circumstanceOther #Circumstances:checked').val() === "1") {
-            $('#circumstanceOther .circumstance-other').show();
+    $('#healthsOther input[name="ProvideHealth"]').change(function () {
+        $('#healthsOther #health-provide input').val('');
+        if ($('#healthsOther #ProvideHealth:checked').val() === "1") {
+            $('#healthsOther #health-provide').show();
         } else {
-            $('#circumstanceOther .circumstance-other').hide();
+            $('#healthsOther #health-provide').hide();
         }
     });
-    
+    $('#healthsOther .percent').focusout(function () {
+        var percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
+            return $(element).val() != "";
+        });
+        //only alter if 
+        var remainingVal = 0;
+        if (percentItems.length == 2) {
+            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+            percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
+                return $(element).val() === "";
+            });
+            $(percentItems).val(remainingVal);
+        }
+    });
 });

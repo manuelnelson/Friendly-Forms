@@ -60,17 +60,28 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
         //go ahead and save
         if (typeof model === 'undefined') {
             model = Friendly.GetFormInput(formName);
+            //grab form Id if it exists
+            if ($('#' + formName + 'Id').length > 0)
+                model.Id = $('#' + formName + 'Id').val();
         }
         if (Friendly.IsOtherForm(formName)) {
             formName = formName.substring(0, formName.lastIndexOf("Other"));
             model.isOtherParent = "true";
         }
+        //If there's an Id, we are updating; use PUT instead of POST
+        var submitType = 'POST';
+        
+        if (typeof model.Id != 'undefined' && model.Id != '0')
+            submitType = 'PUT';
         $.ajax({
             url: '/api/' + formName + '?format=json',
-            type: 'POST',
+            type: submitType,
             data: model,
-            success: function () {
+            success: function (data) {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
+                //update Id on form
+                if ($('#' + formName + 'Id').length > 0)
+                    $('#' + formName + 'Id').val(data.Id);
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 Friendly.EndLoading();
             },
@@ -128,10 +139,13 @@ Friendly.NextForm = function (nextForm, prevIcon) {
             }
             break;
         case 'decisions':
-            Parenting.LoadChildren('decision');
+            Friendly.LoadChildren('decision');
             break;
         case 'holiday':
-            Parenting.LoadChildren('holiday');
+            Friendly.LoadChildren('holiday');
+            break;
+        case 'childCare':
+            Friendly.LoadChildren('childCare');
             break;
     }
     $('#sidebar li').removeClass('active');
@@ -231,7 +245,18 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 Friendly.ChildDecisionError = [];
                 Parenting.CheckChildDecision(child, nextForm);
                 break;
-            case 'holiday':
+            case 'childCare':
+                //First, check if current form is valid
+                Financial.AddChildCare();
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                //Friendly.ChildCareError = [];
+                //Parenting.CheckChildCare(child, nextForm);
+                break;
+        case 'holiday':
                 //First, check if current form is valid
                 Parenting.AddHoliday();
                 //let's hide the form while we go through them
@@ -254,7 +279,41 @@ Friendly.IsGenericForm = function (formName, nextForm) {
     }
     return true;
 };
+//Children Decisions
+Friendly.LoadChildren = function (form) {
+    Friendly.children = [];
+    $('.copy-button ul').empty();
+    $('.copy-button ul').append('<li><a title="all" data-id="0">All</a></li>');
+    $.each($('.child-table tbody tr'), function (ndx, item) {
+        var child = {
+            Name: $(item).find('.child-name').text(),
+            DateOfBirth: $(item).find('.child-dob').text(),
+            Id: $(item).find('.child-id').text().trim(),
+        };
+        Friendly.children.push(child);
+        //add to decision and holiday dropdown - we are removing this for now
+        //$('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
+    });
 
+    if (Friendly.children.length <= 1) {
+        $('.copy-wrapper').hide();
+    }
+
+    //get first child's information
+    Friendly.childNdx = 0;
+    var firstChild = Friendly.children[Friendly.childNdx];
+    switch (form) {
+        case "decision":
+            Parenting.GetChildDecisions(firstChild);
+            break;
+        case "holiday":
+            Parenting.GetChildHoliday(firstChild);
+            break;
+        case "childCare":
+            Financial.GetChildCare(firstChild);
+            break;
+    }
+};
 $(document).ready(function () {
     // === Sidebar navigation === //
 

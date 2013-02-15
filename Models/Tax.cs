@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -12,12 +13,7 @@ namespace Models
         
         public IViewModel ConvertToModel()
         {
-            return new TaxViewModel()
-                {
-                    TaxDescription = TaxDescription,
-                    Taxes = Taxes,
-                    UserId = UserId
-                };
+            return this.TranslateTo<TaxViewModel>();
         }
 
         public void Update(IFormEntity entity)

@@ -304,38 +304,6 @@ Parenting.AddHoliday = function(caller) {
     return true;
 };
 
-//Children Decisions
-Parenting.LoadChildren = function(form) {
-    Friendly.children = [];
-    $('.copy-button ul').empty();
-    $('.copy-button ul').append('<li><a title="all" data-id="0">All</a></li>');
-    $.each($('.child-table tbody tr'), function(ndx, item) {
-        var child = {
-            Name: $(item).find('.child-name').text(),
-            DateOfBirth: $(item).find('.child-dob').text(),
-            Id: $(item).find('.child-id').text().trim(),
-        };
-        Friendly.children.push(child);
-        //add to decision and holiday dropdown - we are removing this for now
-        //$('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
-    });
-
-    if (Friendly.children.length <= 1) {
-        $('.copy-wrapper').hide();
-    }
-
-    //get first child's information
-    Friendly.childNdx = 0;
-    var firstChild = Friendly.children[Friendly.childNdx];
-    switch (form) {
-    case "decision":
-        Parenting.GetChildDecisions(firstChild);
-        break;
-    case "holiday":
-        Parenting.GetChildHoliday(firstChild);
-        break;
-    }
-};
 Parenting.GetChildHoliday = function (child) {
     var formName = 'holiday';
     var key = formName + child.Id;

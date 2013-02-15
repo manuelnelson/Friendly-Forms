@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -13,6 +14,8 @@ namespace FriendlyForms.RestService
         [Route("/asset/")]
         public class ReqAsset
         {
+            [DataMember]
+            public long Id { get; set; }
             [DataMember]
             public int UserId { get; set; }
             [DataMember]
@@ -35,6 +38,8 @@ namespace FriendlyForms.RestService
         public class RespAsset : IHasResponseStatus
         {
             [DataMember]
+            public long Id { get; set; }
+            [DataMember]
             public ResponseStatus ResponseStatus { get; set; }
         }
 
@@ -44,8 +49,17 @@ namespace FriendlyForms.RestService
 
             public object Post(ReqAsset request)
             {
-                var assetViewModel = request.TranslateTo<AssetViewModel>();
-                AssetService.AddOrUpdate(assetViewModel);
+                var assets = request.TranslateTo<Assets>();
+                AssetService.Add(assets);
+                return new RespAsset()
+                    {
+                        Id = assets.Id
+                    };
+            }
+            public object Put(ReqAsset request)
+            {
+                var assets = request.TranslateTo<Assets>();
+                AssetService.Update(assets);
                 return new RespAsset();
             }
         }

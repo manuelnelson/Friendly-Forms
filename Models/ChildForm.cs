@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -11,12 +12,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new ChildFormViewModel()
-            {
-                Id = Id,
-                ChildrenInvolved = ChildrenInvolved,
-                UserId = UserId
-            };
+            return this.TranslateTo<ChildFormViewModel>();
         }
 
         public void Update(IFormEntity entity)

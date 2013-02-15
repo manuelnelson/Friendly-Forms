@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
-using Models.ViewModels;
+using Models;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -17,6 +13,8 @@ namespace FriendlyForms.RestService
     public class ReqHealthInsurance
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public int UserId { get; set; }
         [DataMember]
         public int Health { get; set; }
@@ -28,6 +26,8 @@ namespace FriendlyForms.RestService
     public class RespHealthInsurance : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -37,8 +37,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqHealthInsurance request)
         {
-            var healthInsuranceViewModel = request.TranslateTo<HealthInsuranceViewModel>();
-            HealthInsuranceService.AddOrUpdate(healthInsuranceViewModel);
+            var healthInsurance = request.TranslateTo<HealthInsurance>();
+            HealthInsuranceService.Add(healthInsurance);
+            return new RespHealthInsurance()
+                {
+                    Id = healthInsurance.Id
+                };
+        }
+        public object Put(ReqHealthInsurance request)
+        {
+            var healthInsurance = request.TranslateTo<HealthInsurance>();
+            HealthInsuranceService.Update(healthInsurance);
             return new RespHealthInsurance();
         }
     }

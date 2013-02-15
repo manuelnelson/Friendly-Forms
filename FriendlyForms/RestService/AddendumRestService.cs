@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -26,6 +27,8 @@ namespace FriendlyForms.RestService
     public class RespAddendum : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -35,8 +38,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqAddendum request)
         {
-            var addendumViewModel = request.TranslateTo<AddendumViewModel>();
-            AddendumService.AddOrUpdate(addendumViewModel);
+            var addendum = request.TranslateTo<Addendum>();
+            AddendumService.Add(addendum);
+            return new RespAddendum()
+                {
+                    Id = addendum.Id
+                };
+        }
+        public object Put(ReqAddendum request)
+        {
+            var addendum = request.TranslateTo<Addendum>();
+            AddendumService.Update(addendum);
             return new RespAddendum();
         }
     }

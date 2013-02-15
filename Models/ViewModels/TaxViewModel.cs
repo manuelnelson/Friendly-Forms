@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
     public class TaxViewModel : IViewModel 
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]
@@ -15,12 +17,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Tax()
-                {
-                    TaxDescription = TaxDescription,
-                    Taxes = Taxes,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Tax>();
         }
     }
 }

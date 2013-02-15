@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Assets.cs" />
     <Compile Include="Child.cs" />
+    <Compile Include="ChildCare.cs" />
+    <Compile Include="ChildCareForm.cs" />
     <Compile Include="ChildForm.cs" />
     <Compile Include="ChildSupport.cs" />
     <Compile Include="Client.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="Decisions.cs" />
     <Compile Include="ExtraDecisions.cs" />
     <Compile Include="ExtraHoliday.cs" />
+    <Compile Include="Health.cs" />
     <Compile Include="HealthInsurance.cs" />
     <Compile Include="Holiday.cs" />
     <Compile Include="Income.cs" />
@@ -75,13 +78,15 @@
     <Compile Include="Responsibility.cs" />
     <Compile Include="Schedule.cs" />
     <Compile Include="SocialSecurity.cs" />
-    <Compile Include="SpecialCircumstances.cs" />
+    <Compile Include="Deviations.cs" />
     <Compile Include="SpousalSupport.cs" />
     <Compile Include="Tax.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Vehicle.cs" />
     <Compile Include="VehicleForm.cs" />
     <Compile Include="ViewModels\AssetViewModel.cs" />
+    <Compile Include="ViewModels\ChildCareFormViewModel.cs" />
+    <Compile Include="ViewModels\ChildCareViewModel.cs" />
     <Compile Include="ViewModels\ChildFormViewModel.cs" />
     <Compile Include="ViewModels\ChildViewModel.cs" />
     <Compile Include="ViewModels\ChildSupportViewModel.cs" />
@@ -93,6 +98,7 @@
     <Compile Include="ViewModels\ExtraDecisionsViewModel.cs" />
     <Compile Include="ViewModels\ExtraHolidayViewModel.cs" />
     <Compile Include="ViewModels\HealthInsuranceViewModel.cs" />
+    <Compile Include="ViewModels\HealthViewModel.cs" />
     <Compile Include="ViewModels\HolidayViewModel.cs" />
     <Compile Include="ViewModels\HouseViewModel.cs" />
     <Compile Include="ViewModels\IncomeViewModel.cs" />
@@ -109,7 +115,7 @@
     <Compile Include="ViewModels\ResponsibilityViewModel.cs" />
     <Compile Include="ViewModels\ScheduleViewModel.cs" />
     <Compile Include="ViewModels\SocialSecurityViewModel.cs" />
-    <Compile Include="ViewModels\SpecialCircumstancesViewModel.cs" />
+    <Compile Include="ViewModels\DeviationsViewModel.cs" />
     <Compile Include="ViewModels\SpousalViewModel.cs" />
     <Compile Include="ViewModels\TaxViewModel.cs" />
     <Compile Include="ViewModels\VehicleFormViewModel.cs" />

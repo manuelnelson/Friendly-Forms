@@ -66,5 +66,11 @@ namespace FriendlyForms.RestService
                     ExtraHoliday = extraHoliday
                 };
         }
+        public object Put(ReqExtraHoliday request)
+        {
+            var extraHoliday = request.TranslateTo<ExtraHoliday>();
+            ExtraHolidayService.Update(extraHoliday);
+            return new RespExtraHolidayPost();
+        }
     }
 }

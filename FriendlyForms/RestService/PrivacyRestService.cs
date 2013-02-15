@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -12,6 +13,8 @@ namespace FriendlyForms.RestService
     [Route("/Privacy/")]
     public class ReqPrivacy
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -33,6 +36,8 @@ namespace FriendlyForms.RestService
     public class RespPrivacy : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -42,8 +47,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqPrivacy request)
         {
-            var privacyViewModel = request.TranslateTo<PrivacyViewModel>();
-            PrivacyService.AddOrUpdate(privacyViewModel);
+            var privacy = request.TranslateTo<Privacy>();
+            PrivacyService.Add(privacy);
+            return new RespPrivacy()
+                {
+                    Id = privacy.Id
+                };
+        }
+        public object Put(ReqPrivacy request)
+        {
+            var privacy = request.TranslateTo<Privacy>();
+            PrivacyService.Update(privacy);
             return new RespPrivacy();
         }
     }

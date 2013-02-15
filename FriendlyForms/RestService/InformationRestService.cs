@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -13,6 +14,8 @@ namespace FriendlyForms.RestService
     public class ReqInformation
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public int UserId { get; set; }
         [DataMember]
         public int InformationAccess { get; set; }
@@ -21,6 +24,8 @@ namespace FriendlyForms.RestService
     [DataContract]
     public class RespInformation : IHasResponseStatus
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
@@ -31,8 +36,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqInformation request)
         {
-            var informationViewModel = request.TranslateTo<InformationViewModel>();
-            InformationService.AddOrUpdate(informationViewModel);
+            var information = request.TranslateTo<Information>();
+            InformationService.Add(information);
+            return new RespInformation()
+                {
+                    Id = information.Id
+                };
+        }
+        public object Put(ReqInformation request)
+        {
+            var information = request.TranslateTo<Information>();
+            InformationService.Update(information);
             return new RespInformation();
         }
     }

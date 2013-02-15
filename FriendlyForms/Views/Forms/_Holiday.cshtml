@@ -12,6 +12,7 @@
                 <div class="widget-content">
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "holiday" }))
                     {
+                        <input type="hidden" id="holidayId" value="@Model.HolidayViewModel.Id"/>
                         <label class="informative">                            
                             In this section, you will define scheduling holidays with your child(ren).</label>
                         <input type="hidden" id="holidayChildId" /><br />

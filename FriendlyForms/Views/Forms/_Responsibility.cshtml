@@ -1,9 +1,9 @@
-﻿@using BusinessLogic.Models
-@using Models.ViewModels
+﻿@using Models.ViewModels
 @model ResponsibilityViewModel
 <div class="form-vertical wrapper hide" id="responsibilityWrapper">
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "responsibility" }))
     {
+        <input type="hidden" id="responsibilityId" value="@Model.Id"/>        
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">

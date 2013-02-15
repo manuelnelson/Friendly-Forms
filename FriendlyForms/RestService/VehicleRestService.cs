@@ -58,5 +58,11 @@ namespace FriendlyForms.RestService
                     Vehicle = updatedVehicle
                 };
         }
+        public object Put(ReqVehicle request)
+        {
+            var vehicle = request.TranslateTo<Vehicle>();
+            VehicleService.Update(vehicle);
+            return new RespVehicle();
+        }
     }
 }

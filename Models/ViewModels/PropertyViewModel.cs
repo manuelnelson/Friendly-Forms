@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
     public class PropertyViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
 
@@ -26,14 +28,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Property()
-                {
-                    DividingProperty = DividingProperty,
-                    PersonalProperty = PersonalProperty,
-                    RealEstate = RealEstate,
-                    RealEstateDescription = RealEstateDescription,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Property>();
         }
     }
 }
