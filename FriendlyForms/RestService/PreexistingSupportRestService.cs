@@ -55,5 +55,11 @@ namespace FriendlyForms.RestService
                     PreexistingSupport = preexistSupport
                 };
         }
+        public object Put(ReqPreexistingSupport request)
+        {
+            var preexistingSupport = request.TranslateTo<PreexistingSupport>();
+            PreexistingSupportService.Update(preexistingSupport);
+            return new RespPreexistingSupport();
+        }
     }
 }

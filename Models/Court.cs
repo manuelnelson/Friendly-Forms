@@ -1,6 +1,7 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -16,15 +17,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new CourtViewModel
-            {
-                AuthorOfPlan = AuthorOfPlan,
-                CaseNumber = CaseNumber,
-                CountyId = CountyId,
-                PlanType = PlanType,
-                ExistCaseNumber = ExistCaseNumber,
-                UserId = UserId
-            };
+            return this.TranslateTo<CourtViewModel>();
         }
 
         public void Update(IFormEntity entity)

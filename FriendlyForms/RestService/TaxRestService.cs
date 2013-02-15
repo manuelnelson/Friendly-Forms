@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
-using Models.ViewModels;
+using Models;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -17,6 +13,8 @@ namespace FriendlyForms.RestService
     public class ReqTax
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public int UserId { get; set; }
         [DataMember]
         public int Taxes { get; set; }
@@ -28,6 +26,8 @@ namespace FriendlyForms.RestService
     public class RespTax : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -37,8 +37,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqTax request)
         {
-            var taxViewModel = request.TranslateTo<TaxViewModel>();
-            TaxService.AddOrUpdate(taxViewModel);
+            var tax = request.TranslateTo<Tax>();
+            TaxService.Add(tax);
+            return new RespTax()
+                {
+                    Id = tax.Id
+                };
+        }
+        public object Put(ReqTax request)
+        {
+            var tax = request.TranslateTo<Tax>();
+            TaxService.Update(tax);
             return new RespTax();
         }
     }

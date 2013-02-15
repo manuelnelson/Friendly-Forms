@@ -57,12 +57,15 @@ namespace FriendlyForms.App_Start {
             container.Register<IPreexistingSupportChildRepository>(c => new PreexistingSupportChildRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IPreexistingSupportRepository>(c => new PreexistingSupportRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IOtherChildrenRepository>(c => new OtherChildrenRepository(c.Resolve<IUnitOfWork>()));
-            container.Register<ISpecialCircumstancesRepository>(c => new SpecialCircumstancesRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IDeviationsRepository>(c => new DeviationsRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IOtherChildRepository>(c => new OtherChildRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IVehicleFormRepository>(c => new VehicleFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IChildFormRepository>(c => new ChildFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IAddendumRepository>(c => new AddendumRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IClientRepository>(c => new ClientRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IHealthRepository>(c => new HealthRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IChildCareRepository>(c => new ChildCareRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IChildCareFormRepository>(c => new ChildCareFormRepository(c.Resolve<IUnitOfWork>()));
 
             //Services
             container.Register<ICourtService>(c => new CourtService(c.Resolve<ICourtRepository>() as CourtRepository));
@@ -94,12 +97,15 @@ namespace FriendlyForms.App_Start {
             container.Register<IPreexistingSupportChildService>(c => new PreexistingSupportChildService(c.Resolve<IPreexistingSupportChildRepository>() as PreexistingSupportChildRepository));
             container.Register<IPreexistingSupportService>(c => new PreexistingSupportService(c.Resolve<IPreexistingSupportRepository>() as PreexistingSupportRepository));
             container.Register<IOtherChildrenService>(c => new OtherChildrenService(c.Resolve<IOtherChildrenRepository>() as OtherChildrenRepository));
-            container.Register<ISpecialCircumstancesService>(c => new SpecialCircumstancesService(c.Resolve<ISpecialCircumstancesRepository>() as SpecialCircumstancesRepository));
+            container.Register<IDeviationsService>(c => new DeviationsService(c.Resolve<IDeviationsRepository>() as DeviationsRepository));
             container.Register<IOtherChildService>(c => new OtherChildService(c.Resolve<IOtherChildRepository>() as OtherChildRepository));
             container.Register<IVehicleFormService>(c => new VehicleFormService(c.Resolve<IVehicleFormRepository>() as VehicleFormRepository));
             container.Register<IChildFormService>(c => new ChildFormService(c.Resolve<IChildFormRepository>() as ChildFormRepository));
             container.Register<IAddendumService>(c => new AddendumService(c.Resolve<IAddendumRepository>() as AddendumRepository));
             container.Register<IClientService>(c => new ClientService(c.Resolve<IClientRepository>() as ClientRepository));
+            container.Register<IHealthService>(c => new HealthService(c.Resolve<IHealthRepository>() as HealthRepository));
+            container.Register<IChildCareService>(c => new ChildCareService(c.Resolve<IChildCareRepository>() as ChildCareRepository));
+            container.Register<IChildCareFormService>(c => new ChildCareFormService(c.Resolve<IChildCareFormRepository>() as ChildCareFormRepository));
 
             //Authentication
             container.Register<IFormsAuthentication>(c => new DefaultFormsAuthentication());

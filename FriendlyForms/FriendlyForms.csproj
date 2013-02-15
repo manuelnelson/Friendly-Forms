@@ -218,6 +218,7 @@
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Authentication\FriendlyIdentity.cs" />
+    <Compile Include="Models\FinancialViewModel.cs" />
     <Compile Include="Models\AllFormsViewModel.cs" />
     <Compile Include="Models\ChildAllViewModel.cs" />
     <Compile Include="Models\ParentingPlanViewModel.cs" />
@@ -228,6 +229,8 @@
     <Compile Include="Mvc.Bundler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestService\AssetRestService.cs" />
+    <Compile Include="RestService\ChildCareFormRestService.cs" />
+    <Compile Include="RestService\ChildCareRestService.cs" />
     <Compile Include="RestService\ChildFormRestService.cs" />
     <Compile Include="RestService\ChildRestService.cs" />
     <Compile Include="RestService\ChildSupportRestService.cs" />
@@ -239,6 +242,7 @@
     <Compile Include="RestService\ExtraDecisionRestService.cs" />
     <Compile Include="RestService\ExtraHolidayRestService.cs" />
     <Compile Include="RestService\HealthInsuranceRestService.cs" />
+    <Compile Include="RestService\HealthRestService.cs" />
     <Compile Include="RestService\HolidayRestService.cs" />
     <Compile Include="RestService\HouseRestService.cs" />
     <Compile Include="RestService\IncomeRestService.cs" />
@@ -254,7 +258,7 @@
     <Compile Include="RestService\ResponsibilityRestService.cs" />
     <Compile Include="RestService\ScheduleRestService.cs" />
     <Compile Include="RestService\SocialSecurityRestService.cs" />
-    <Compile Include="RestService\SpecialCircumstancesRestService.cs" />
+    <Compile Include="RestService\DeviationsRestService.cs" />
     <Compile Include="RestService\SpousalRestService.cs" />
     <Compile Include="RestService\TaxRestService.cs" />
     <Compile Include="RestService\VehicleFormRestService.cs" />
@@ -411,6 +415,7 @@
     <Content Include="README.txt" />
     <Content Include="Scripts\app\friendly-admin.js" />
     <Content Include="Scripts\app\friendly-domestic.js" />
+    <Content Include="Scripts\app\friendly-financial-global.js" />
     <Content Include="Scripts\app\friendly-financial.js" />
     <Content Include="Scripts\app\friendly-global.js" />
     <Content Include="Scripts\app\friendly-output.js" />
@@ -487,6 +492,10 @@
     <Content Include="Views\Output\_domesticTaxes.cshtml" />
     <Content Include="Views\Account\Admin.cshtml" />
     <Content Include="Views\Shared\NotAuthorized.cshtml" />
+    <Content Include="Views\Forms\_Health.cshtml" />
+    <Content Include="Views\Forms\_HealthOther.cshtml" />
+    <Content Include="Views\Forms\_ChildCareForm.cshtml" />
+    <Content Include="Views\Forms\_templateChildCare.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -587,7 +596,7 @@
     <Content Include="Views\Forms\_SocialSecurity.cshtml" />
     <Content Include="Views\Forms\_PreexistingSupport.cshtml" />
     <Content Include="Views\Forms\_OtherChildren.cshtml" />
-    <Content Include="Views\Forms\_SpecialCircumstance.cshtml" />
+    <Content Include="Views\Forms\_Deviations.cshtml" />
     <Content Include="Views\Forms\_PreexistingSupportForm.cshtml" />
     <Content Include="Views\Forms\_PreexistingChildForm.cshtml" />
     <Content Include="Views\Forms\_templateSupport.cshtml" />
@@ -595,7 +604,6 @@
     <Content Include="Views\Forms\_OtherChildrenForm.cshtml" />
     <Content Include="Views\Forms\_IncomeOther.cshtml" />
     <Content Include="Views\Forms\_SocialSecurityOther.cshtml" />
-    <Content Include="Views\Forms\_SpecialCircumstanceOther.cshtml" />
     <Content Include="Views\Forms\_PreexistingSupportOther.cshtml" />
     <Content Include="Views\Forms\_PreexistingSupportFormOther.cshtml" />
     <Content Include="Views\Forms\_PreexistingChildFormOther.cshtml" />

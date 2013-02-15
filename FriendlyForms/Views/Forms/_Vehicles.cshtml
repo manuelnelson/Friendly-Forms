@@ -11,6 +11,7 @@
                 <div class="widget-content">
                     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "vehicleForm" }))
                     {
+                        <input type="hidden" id="vehicleFormId" value="@Model.VehicleFormViewModel.Id"/>
                         <div class="control-group">
                             <label class="form-question">Is the ownership of any vehicle(s) at issue in this case?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.VehicleFormViewModel.VehiclesInvolved, (int)YesNo.Yes, new{@class="inline"})</label>
@@ -197,7 +198,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary domestic-part3 previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary domestic-part3 next">Continue <i class="icon-arrow-right icon-white"></i></button>
     @Html.Partial("_templateVehicle")
 </div>

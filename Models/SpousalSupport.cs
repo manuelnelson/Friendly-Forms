@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -11,12 +12,7 @@ namespace Models
         public string SpousalDescription { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new SpousalViewModel()
-                {
-                    SpousalDescription = SpousalDescription,
-                    Spousal = Spousal,
-                    UserId = UserId
-                };
+            return this.TranslateTo<SpousalViewModel>();
         }
 
         public void Update(IFormEntity entity)

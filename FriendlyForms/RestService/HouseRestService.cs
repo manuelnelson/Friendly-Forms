@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -12,6 +13,8 @@ namespace FriendlyForms.RestService
     [Route("/House/")]
     public class ReqHouse
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -39,6 +42,8 @@ namespace FriendlyForms.RestService
     public class RespHouse : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -48,8 +53,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqHouse request)
         {
-            var houseViewModel = request.TranslateTo<HouseViewModel>();
-            HouseService.AddOrUpdate(houseViewModel);
+            var house = request.TranslateTo<House>();
+            HouseService.Add(house);
+            return new RespHouse()
+                {
+                    Id = house.Id
+                };
+        }
+        public object Put(ReqHouse request)
+        {
+            var house = request.TranslateTo<House>();
+            HouseService.Update(house);
             return new RespHouse();
         }
     }

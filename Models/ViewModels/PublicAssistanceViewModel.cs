@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
     public class PublicAssistanceViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]
@@ -14,12 +16,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new PublicAssistance()
-                {
-                    Assistance = Assistance,
-                    UserId = UserId,
-                    OtherAssistance = OtherAssistance
-                };
+            return this.TranslateTo<PublicAssistance>();
         }
     }
 }

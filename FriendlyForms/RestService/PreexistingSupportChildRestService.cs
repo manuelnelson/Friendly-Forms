@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -69,6 +70,12 @@ namespace FriendlyForms.RestService
                 {
                     Child = preexistingSupport
                 };
+        }
+        public object Put(ReqPreexistingSupportChild request)
+        {
+            var preexistingSupportChild = request.TranslateTo<PreexistingSupportChild>();
+            PreexistingSupportChildService.Update(preexistingSupportChild);
+            return new RespPreexistingSupportChild();
         }
     }
 }

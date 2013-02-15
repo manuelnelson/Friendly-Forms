@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -7,18 +8,16 @@ namespace Models
     {
         public long Id { get; set; }
         public int UserId { get; set; }
+        public string PlaintiffsName { get; set; }
+        public int PlaintiffRelationship { get; set; }
+        public int PlaintiffCustodialParent { get; set; }
+        public string DefendantsName { get; set; }
+        public int DefendantRelationship { get; set; }
+        public int DefendantCustodialParent { get; set; }
+
         public IViewModel ConvertToModel()
         {
-            return new ParticipantViewModel()
-            {
-                DefendantRelationship = DefendantRelationship,
-                DefendantCustodialParent = DefendantCustodialParent,
-                DefendantsName = DefendantsName,
-                PlaintiffCustodialParent = PlaintiffCustodialParent,
-                PlaintiffRelationship = PlaintiffRelationship,
-                PlaintiffsName = PlaintiffsName,
-                UserId = UserId
-            };
+            return this.TranslateTo<ParticipantViewModel>();
         }
 
         public void Update(IFormEntity entity)
@@ -33,11 +32,5 @@ namespace Models
             UserId = update.UserId;
         }
 
-        public string PlaintiffsName { get; set; }
-        public int PlaintiffRelationship { get; set; }
-        public int PlaintiffCustodialParent { get; set; }
-        public string DefendantsName { get; set; }
-        public int DefendantRelationship { get; set; }
-        public int DefendantCustodialParent { get; set; }
     }
 }

@@ -12,10 +12,12 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
 
-    [Route("/Holiday/", Verbs = "POST")]
+    [Route("/Holiday/")]
     [Route("/Holiday/{ChildId}", Verbs = "GET")]
     public class ReqHoliday
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -124,6 +126,8 @@ namespace FriendlyForms.RestService
     public class RespHoliday : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public Holiday Holidays { get; set; }
         [DataMember]
         public List<ExtraHoliday> ExtraHolidays { get; set; }
@@ -149,8 +153,21 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqHoliday request)
         {
-            var holidayViewModel = request.TranslateTo<HolidayViewModel>();
-            HolidayService.AddOrUpdate(holidayViewModel);
+            var holiday = request.TranslateTo<HolidayViewModel>();
+            HolidayService.AddOrUpdate(holiday);
+            return new RespHoliday();
+
+            //var holiday = request.TranslateTo<Holiday>();
+            //HolidayService.Add(holiday);
+            //return new RespHoliday
+            //    {
+            //        Id = holiday.Id
+            //    };
+        }
+        public object Put(ReqHoliday request)
+        {
+            var holiday = request.TranslateTo<Holiday>();
+            HolidayService.Update(holiday);
             return new RespHoliday();
         }
     }

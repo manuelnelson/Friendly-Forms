@@ -1,4 +1,5 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 
@@ -9,13 +10,12 @@ namespace Models
         public long Id { get; set; }
         public int UserId { get; set; }
         public bool IsOtherParent { get; set; }
-        public int? Employed { get; set; }
-        public int? Salary { get; set; }
-        public int? SelfEmployed { get; set; }
+        public int HaveSalary { get; set; }
+        public int? OtherIncome { get; set; }
+        public int? W2Income { get; set; }
+        public int? NonW2Income { get; set; }
         public int? SelfIncome { get; set; }
-        public int? SelfTax { get; set; }
-        public int? SelfTaxAmount { get; set; }
-        public int? OtherSources { get; set; }
+        public int? SelfIncomeNoDeductions { get; set; }
         public int? Commisions { get; set; }
         public int? Bonuses { get; set; }
         public int? Overtime { get; set; }
@@ -45,37 +45,39 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var updatedEntity = (Income) entity;
-            IsOtherParent = updatedEntity.IsOtherParent;
-            UserId = updatedEntity.UserId;
-            Employed = updatedEntity.Employed;
-            Salary = updatedEntity.Salary;
-            SelfEmployed = updatedEntity.SelfEmployed;
-            SelfIncome = updatedEntity.SelfIncome;
-            SelfTax = updatedEntity.SelfTax;
-            SelfTaxAmount = updatedEntity.SelfTaxAmount;
-            OtherSources = updatedEntity.OtherSources;
-            Commisions = updatedEntity.Commisions;
-            Bonuses = updatedEntity.Bonuses;
-            Overtime = updatedEntity.Overtime;
-            Severance = updatedEntity.Severance;
-            Retirement = updatedEntity.Retirement;
-            Interest = updatedEntity.Interest;
-            Dividends = updatedEntity.Dividends;
-            Trust = updatedEntity.Trust;
-            Annuities = updatedEntity.Annuities;
-            Capital = updatedEntity.Capital;
-            SocialSecurity = updatedEntity.SocialSecurity;
-            Compensation = updatedEntity.Compensation;
-            Unemployment = updatedEntity.Unemployment;
-            CivilCase = updatedEntity.CivilCase;
-            Gifts = updatedEntity.Gifts;
-            Prizes = updatedEntity.Prizes;
-            Alimony = updatedEntity.Alimony;
-            Assets = updatedEntity.Assets;
-            Fringe = updatedEntity.Fringe;
-            Other = updatedEntity.Other;
-            OtherDetails = updatedEntity.OtherDetails;            
+            throw new NotImplementedException();
+            //var updatedEntity = (Income) entity;
+            //this
+            //IsOtherParent = updatedEntity.IsOtherParent;
+            //UserId = updatedEntity.UserId;
+            //Employed = updatedEntity.Employed;
+            //Salary = updatedEntity.Salary;
+            //SelfEmployed = updatedEntity.SelfEmployed;
+            //SelfIncome = updatedEntity.SelfIncome;
+            //SelfTax = updatedEntity.SelfTax;
+            //SelfTaxAmount = updatedEntity.SelfTaxAmount;
+            //OtherSources = updatedEntity.OtherSources;
+            //Commisions = updatedEntity.Commisions;
+            //Bonuses = updatedEntity.Bonuses;
+            //Overtime = updatedEntity.Overtime;
+            //Severance = updatedEntity.Severance;
+            //Retirement = updatedEntity.Retirement;
+            //Interest = updatedEntity.Interest;
+            //Dividends = updatedEntity.Dividends;
+            //Trust = updatedEntity.Trust;
+            //Annuities = updatedEntity.Annuities;
+            //Capital = updatedEntity.Capital;
+            //SocialSecurity = updatedEntity.SocialSecurity;
+            //Compensation = updatedEntity.Compensation;
+            //Unemployment = updatedEntity.Unemployment;
+            //CivilCase = updatedEntity.CivilCase;
+            //Gifts = updatedEntity.Gifts;
+            //Prizes = updatedEntity.Prizes;
+            //Alimony = updatedEntity.Alimony;
+            //Assets = updatedEntity.Assets;
+            //Fringe = updatedEntity.Fringe;
+            //Other = updatedEntity.Other;
+            //OtherDetails = updatedEntity.OtherDetails;            
         }
     }
 }

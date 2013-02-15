@@ -21,15 +21,6 @@ namespace Models
         public IViewModel ConvertToModel()
         {
             return this.TranslateTo<DecisionsViewModel>();
-            //return new DecisionsViewModel()
-            //{
-            //    ChildId = ChildId,
-            //    Education = Education,
-            //    ExtraCurricular = ExtraCurricular,
-            //    HealthCare = HealthCare,
-            //    Religion = Religion,
-            //    UserId = UserId
-            //};
         }
 
         public void Update(IFormEntity entity)

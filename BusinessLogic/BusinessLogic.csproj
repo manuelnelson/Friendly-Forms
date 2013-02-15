@@ -112,6 +112,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="AssetService.cs" />
+    <Compile Include="ChildCareFormService.cs" />
+    <Compile Include="ChildCareService.cs" />
     <Compile Include="ChildFormService.cs" />
     <Compile Include="ChildService.cs" />
     <Compile Include="ChildSupportService.cs" />
@@ -119,6 +121,8 @@
     <Compile Include="CommunicationService.cs" />
     <Compile Include="Contracts\BusinessServicesException.cs" />
     <Compile Include="Contracts\IAssetService.cs" />
+    <Compile Include="Contracts\IChildCareFormService.cs" />
+    <Compile Include="Contracts\IChildCareService.cs" />
     <Compile Include="Contracts\IChildFormService.cs" />
     <Compile Include="Contracts\IChildService.cs" />
     <Compile Include="Contracts\IChildSupportService.cs" />
@@ -132,6 +136,7 @@
     <Compile Include="Contracts\IExtraHolidayService.cs" />
     <Compile Include="Contracts\IFormService.cs" />
     <Compile Include="Contracts\IHealthInsuranceService.cs" />
+    <Compile Include="Contracts\IHealthService.cs" />
     <Compile Include="Contracts\IHolidayService.cs" />
     <Compile Include="Contracts\IHouseService.cs" />
     <Compile Include="Contracts\IIncomeService.cs" />
@@ -149,7 +154,7 @@
     <Compile Include="Contracts\IScheduleService.cs" />
     <Compile Include="Contracts\IService.cs" />
     <Compile Include="Contracts\ISocialSecurityService.cs" />
-    <Compile Include="Contracts\ISpecialCircumstancesService.cs" />
+    <Compile Include="Contracts\IDeviationsService.cs" />
     <Compile Include="Contracts\ISpousalService.cs" />
     <Compile Include="Contracts\ITaxService.cs" />
     <Compile Include="Contracts\IUserService.cs" />
@@ -163,6 +168,7 @@
     <Compile Include="ExtraHolidayService.cs" />
     <Compile Include="FormService.cs" />
     <Compile Include="HealthInsuranceService.cs" />
+    <Compile Include="HealthService.cs" />
     <Compile Include="HolidayService.cs" />
     <Compile Include="HouseService.cs" />
     <Compile Include="IncomeService.cs" />
@@ -171,7 +177,6 @@
     <Compile Include="Models\AccountUser.cs" />
     <Compile Include="Models\AdministrationModel.cs" />
     <Compile Include="Models\AllDecisionsViewModel.cs" />
-    <Compile Include="Models\AllFinancialViewModel.cs" />
     <Compile Include="Models\AllHolidaysViewModel.cs" />
     <Compile Include="Models\AllPreexistingViewModel.cs" />
     <Compile Include="Models\CustodyInformation.cs" />
@@ -195,7 +200,7 @@
     <Compile Include="ScheduleService.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="SocialSecurityService.cs" />
-    <Compile Include="SpecialCircumstancesService.cs" />
+    <Compile Include="DeviationsService.cs" />
     <Compile Include="SpousalService.cs" />
     <Compile Include="TaxService.cs" />
     <Compile Include="UserService.cs" />

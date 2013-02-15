@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -12,6 +13,8 @@ namespace FriendlyForms.RestService
     [Route("/SocialSecurity/")]
     public class ReqSocialSecurity
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -26,6 +29,8 @@ namespace FriendlyForms.RestService
     public class RespSocialSecurity : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -35,8 +40,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqSocialSecurity request)
         {
-            var socialSecurityViewModel = request.TranslateTo<SocialSecurityViewModel>();
-            SocialSecurityService.AddOrUpdate(socialSecurityViewModel);
+            var socialSecurity = request.TranslateTo<SocialSecurity>();
+            SocialSecurityService.Add(socialSecurity);
+            return new RespSocialSecurity
+                {
+                    Id = socialSecurity.Id
+                };
+        }
+        public object Put(ReqSocialSecurity request)
+        {
+            var socialSecurity = request.TranslateTo<SocialSecurity>();
+            SocialSecurityService.Update(socialSecurity);
             return new RespSocialSecurity();
         }
     }

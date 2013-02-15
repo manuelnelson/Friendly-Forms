@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -16,6 +17,8 @@ namespace FriendlyForms.RestService
     [Route("/Support/")]
     public class ReqChildSupport
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -51,6 +54,12 @@ namespace FriendlyForms.RestService
         {
             var childSupportViewModel = request.TranslateTo<ChildSupportViewModel>();
             ChildSupportService.AddOrUpdate(childSupportViewModel);
+            return new RespChildSupport();
+        }
+        public object Put(ReqChildSupport request)
+        {
+            var childSupport = request.TranslateTo<ChildSupport>();
+            ChildSupportService.Update(childSupport);
             return new RespChildSupport();
         }
     }

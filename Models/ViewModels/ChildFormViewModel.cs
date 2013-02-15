@@ -1,4 +1,5 @@
 ﻿using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -11,12 +12,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new ChildForm()
-            {
-                Id = Id,
-                UserId = UserId,
-                ChildrenInvolved = ChildrenInvolved
-            };
+            return this.TranslateTo<ChildForm>();
         }
 
     }

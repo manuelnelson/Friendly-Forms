@@ -1,6 +1,6 @@
-﻿using System;
-using Models.Contract;
+﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -15,14 +15,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new ExtraHolidayViewModel()
-                {
-                    ChildId = ChildId,
-                    HolidayFather = HolidayFather,
-                    HolidayMother = HolidayMother,
-                    HolidayName = HolidayName,
-                    UserId = UserId
-                };
+            return this.TranslateTo<ExtraHolidayViewModel>();
         }
 
         public void Update(IFormEntity entity)

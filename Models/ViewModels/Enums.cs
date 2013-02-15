@@ -53,7 +53,12 @@
         No,
         Unknown
     };
-
+    
+    public enum HighLow
+    {
+        High = 1,
+        Low
+    };
     public enum TransportationCost
     {
         Own = 1,

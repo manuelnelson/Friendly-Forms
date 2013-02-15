@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
-using Models.ViewModels;
+using Models;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -12,6 +12,8 @@ namespace FriendlyForms.RestService
     [Route("/Responsibility/")]
     public class ReqResponsibility
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -32,6 +34,8 @@ namespace FriendlyForms.RestService
     public class RespResponsibility : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -41,8 +45,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqResponsibility request)
         {
-            var responsibilityViewModel = request.TranslateTo<ResponsibilityViewModel>();
-            ResponsibilityService.AddOrUpdate(responsibilityViewModel);
+            var responsibility = request.TranslateTo<Responsibility>();
+            ResponsibilityService.Add(responsibility);
+            return new RespResponsibility
+                {
+                    Id = responsibility.Id
+                };
+        }
+        public object Put(ReqResponsibility request)
+        {
+            var responsibility = request.TranslateTo<Responsibility>();
+            ResponsibilityService.Update(responsibility);
             return new RespResponsibility();
         }
     }

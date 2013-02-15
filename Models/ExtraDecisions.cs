@@ -1,4 +1,5 @@
 ﻿using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -12,14 +13,7 @@ namespace Models
 
         public ExtraDecisionsViewModel ConvertToModel()
         {
-            return new ExtraDecisionsViewModel()
-                {
-                    ChildId = ChildId,
-                    DecisionMaker = DecisionMaker,
-                    Description = Description,
-                    Id = Id,
-                    UserId = UserId
-                };
+            return this.TranslateTo<ExtraDecisionsViewModel>();
         }
     }
 }

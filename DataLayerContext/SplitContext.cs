@@ -42,8 +42,10 @@ namespace DataLayerContext
         public DbSet<PreexistingSupportChild> PreexistingSupportChildren{ get; set; }
         public DbSet<PreexistingSupport> PreexistingSupports { get; set; }
         public DbSet<OtherChildren> OtherChildrens{ get; set; }
-        public DbSet<SpecialCircumstances> SpecialCircumstanceses{ get; set; }
+        public DbSet<Deviations> Deviations{ get; set; }
         public DbSet<OtherChild> OtherChild { get; set; }
+        public DbSet<Health> Health{ get; set; }
+        public DbSet<ChildCareForm> ChildCareForm { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -69,7 +71,7 @@ namespace DataLayerContext
             SetupVehicleFormEntity(modelBuilder);
             SetupDebtEntity(modelBuilder);
             SetupAssetsEntity(modelBuilder);
-            SetupHealthEntity(modelBuilder);
+            SetupHealthInsuranceEntity(modelBuilder);
             SetupSpousalEntity(modelBuilder);
             SetupTaxEntity(modelBuilder);
             SetupChildSupportEntity(modelBuilder);
@@ -78,10 +80,34 @@ namespace DataLayerContext
             SetupPreexistingEntity(modelBuilder);
             SetupPreexistingChildEntity(modelBuilder);
             SetupOtherChildrenEntity(modelBuilder);
-            SetupSpecialCircumstancesEntity(modelBuilder);
+            SetupDeviationsEntity(modelBuilder);
             SetupOtherChildEntity(modelBuilder);
             SetupParentingAddendumEntity(modelBuilder);
+            SetupHealthEntity(modelBuilder);
+            SetupChildCareFormEntity(modelBuilder);
+            SetupChildCareEntity(modelBuilder);
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupChildCareEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ChildCare>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<ChildCare>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
+
+        private void SetupChildCareFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ChildCareForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<ChildCareForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);            
+        }
+
+        private void SetupHealthEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Health>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Health>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupClientEntity(DbModelBuilder modelBuilder)
@@ -114,10 +140,10 @@ namespace DataLayerContext
             modelBuilder.Entity<OtherChild>().Property(t => t.Name).HasMaxLength(100);
         }
 
-        private void SetupSpecialCircumstancesEntity(DbModelBuilder modelBuilder)
+        private void SetupDeviationsEntity(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SpecialCircumstances>().HasKey(t => new { t.Id });
-            modelBuilder.Entity<SpecialCircumstances>().Property(t => t.Id)
+            modelBuilder.Entity<Deviations>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Deviations>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
@@ -188,7 +214,7 @@ namespace DataLayerContext
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
-        private void SetupHealthEntity(DbModelBuilder modelBuilder)
+        private void SetupHealthInsuranceEntity(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<HealthInsurance>().HasKey(t => new { t.Id });
             modelBuilder.Entity<HealthInsurance>().Property(t => t.Id)

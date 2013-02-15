@@ -6,29 +6,27 @@ namespace Models.ViewModels
 {
     public class IncomeViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
-
         public bool IsOtherParent { get; set; }
         [Required]
-        public int Employed { get; set; }
+        public int HaveSalary { get; set; }
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
+        [Display(Name = "Other Income")]
+        public int? OtherIncome { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? Salary { get; set; }
-        [Required]
-        [Display(Name = "Self Employed")]
-        public int SelfEmployed { get; set; }
+        [Display(Name = "W2 Income")]
+        public int? W2Income { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        [Display(Name = "Non W2 Income")]
+        public int? NonW2Income { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         [Display(Name = "Income")]
         public int? SelfIncome { get; set; }
-        [Required]
-        [Display(Name = "Tax")]
-        public int SelfTax { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        [Display(Name = "Amount")]
-        public int? SelfTaxAmount { get; set; }
-        [Required]
-        [Display(Name = "Other Sources")]
-        public int OtherSources { get; set; }
+        [Display(Name = "Income No Deductions")]
+        public int? SelfIncomeNoDeductions { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? Commisions { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]

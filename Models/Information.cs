@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -10,11 +11,7 @@ namespace Models
         public int InformationAccess { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new InformationViewModel
-            {
-                UserId = UserId,
-                InformationAccess = InformationAccess
-            };
+            return this.TranslateTo<InformationViewModel>();
         }
 
         public void Update(IFormEntity entity)

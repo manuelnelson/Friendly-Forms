@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -17,17 +18,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new AssetViewModel()
-                {
-                    BusinessDescription = BusinessDescription,
-                    Business = Business,
-                    NonRetirement = NonRetirement,
-                    NonRetirementDescription = NonRetirementDescription,
-                    Retirement = Retirement,
-                    RetirementDescription = RetirementDescription,
-                    AdditionalAssets = AdditionalAssets,
-                    UserId = UserId
-                };
+            return this.TranslateTo<AssetViewModel>();
         }
 
         public void Update(IFormEntity entity)

@@ -65,5 +65,11 @@ namespace FriendlyForms.RestService
                     ExtraDecision = updatedDecision
                 };
         }
+        public object Put(ReqExtraDecisions request)
+        {
+            var extraDecisions = request.TranslateTo<ExtraDecisions>();
+            //ExtraDecisionsService.Update(extraDecisions);
+            return new RespExtraDecisionsPost();
+        }
     }
 }

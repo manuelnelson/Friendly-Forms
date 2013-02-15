@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
-using Models.ViewModels;
+using Models;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -13,23 +13,23 @@ namespace FriendlyForms.RestService
     public class ReqIncome
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public int UserId { get; set; }
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]
-        public int Employed { get; set; }
+        public int HaveSalary { get; set; }
         [DataMember]
-        public string Salary { get; set; }
+        public int? OtherIncome { get; set; }
         [DataMember]
-        public int SelfEmployed { get; set; }
+        public int? W2Income { get; set; }
         [DataMember]
-        public string SelfIncome { get; set; }
+        public int? NonW2Income { get; set; }
         [DataMember]
-        public int SelfTax { get; set; }
+        public int? SelfIncome { get; set; }
         [DataMember]
-        public string SelfTaxAmount { get; set; }
-        [DataMember]
-        public int OtherSources { get; set; }
+        public int? SelfIncomeNoDeductions { get; set; }
         [DataMember]
         public string Commisions { get; set; }
         [DataMember]
@@ -78,6 +78,8 @@ namespace FriendlyForms.RestService
     public class RespIncome : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -87,8 +89,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqIncome request)
         {
-            var incomeViewModel = request.TranslateTo<IncomeViewModel>();
-            IncomeService.AddOrUpdate(incomeViewModel);
+            var income = request.TranslateTo<Income>();
+            IncomeService.Add(income);
+            return new RespIncome()
+                {
+                    Id = income.Id
+                };
+        }
+        public object Put(ReqIncome request)
+        {
+            var income = request.TranslateTo<Income>();
+            IncomeService.Update(income);
             return new RespIncome();
         }
     }

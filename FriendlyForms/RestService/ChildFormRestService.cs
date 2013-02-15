@@ -43,5 +43,11 @@ namespace FriendlyForms.RestService
                     ChildForm = updatedChildForm
                 };
         }
+        public object Put(ReqChildForm request)
+        {
+            var childForm = request.TranslateTo<ChildForm>();
+            ChildFormService.Update(childForm);
+            return new RespChildForm();
+        }
     }
 }

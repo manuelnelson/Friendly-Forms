@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
     public class ResponsibilityViewModel : IViewModel 
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]
@@ -29,16 +31,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Responsibility()
-                {
-                    BeginningVisitation = BeginningVisitation,
-                    EndVisitation = EndVisitation,
-                    OtherDetails = OtherDetails,
-                    FatherPercentage = FatherPercentage,
-                    MotherPercentage = MotherPercentage,
-                    TransportationCosts = TransportationCosts,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Responsibility>();
         }
     }
 }

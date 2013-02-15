@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -11,12 +12,7 @@ namespace Models
         public string DebtDivision { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new DebtViewModel()
-                {
-                    DebtDivision = DebtDivision,
-                    MaritalDebt = MaritalDebt,
-                    UserId = UserId
-                };
+            return this.TranslateTo<DebtViewModel>();
         }
 
         public void Update(IFormEntity entity)

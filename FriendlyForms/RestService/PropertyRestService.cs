@@ -5,6 +5,7 @@ using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
+using Property = Models.Property;
 
 namespace FriendlyForms.RestService
 {
@@ -12,6 +13,8 @@ namespace FriendlyForms.RestService
     [Route("/Property/")]
     public class ReqProperty
     {
+        [DataMember]
+        public long Id { get; set; }
         [DataMember]
         public int UserId { get; set; }
         [DataMember]
@@ -28,6 +31,8 @@ namespace FriendlyForms.RestService
     public class RespProperty : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -37,8 +42,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqProperty request)
         {
-            var propertyViewModel = request.TranslateTo<PropertyViewModel>();
-            PropertyService.AddOrUpdate(propertyViewModel);
+            var property = request.TranslateTo<Property>();
+            PropertyService.Add(property);
+            return new RespProperty()
+                {
+                    Id = property.Id
+                };
+        }
+        public object Put(ReqProperty request)
+        {
+            var property = request.TranslateTo<Property>();
+            PropertyService.Update(property);
             return new RespProperty();
         }
     }

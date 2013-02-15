@@ -36,6 +36,8 @@ namespace FriendlyForms.RestService
     public class RespDecisions : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public Decisions Decisions { get; set; }
         [DataMember]
         public List<ExtraDecisions> ExtraDecisions { get; set; }
@@ -61,8 +63,14 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqDecisions request)
         {
-            var decisionsViewModel = request.TranslateTo<DecisionsViewModel>();
-            DecisionsService.AddOrUpdate(decisionsViewModel);
+            var decisions = request.TranslateTo<DecisionsViewModel>();
+            DecisionsService.AddOrUpdate(decisions);
+            return new RespDecisions();
+        }
+        public object Put(ReqDecisions request)
+        {
+            var decisions = request.TranslateTo<Decisions>();
+            DecisionsService.Update(decisions);
             return new RespDecisions();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -9,12 +10,7 @@ namespace Models
         public int UserId { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new VehicleFormViewModel()
-            {
-                Id = Id,
-                VehiclesInvolved = VehiclesInvolved,
-                UserId = UserId
-            };
+            return this.TranslateTo<VehicleFormViewModel>();
         }
 
         public void Update(IFormEntity entity)

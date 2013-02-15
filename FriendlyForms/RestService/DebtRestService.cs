@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
@@ -26,6 +27,8 @@ namespace FriendlyForms.RestService
     public class RespDebt : IHasResponseStatus
     {
         [DataMember]
+        public long Id { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
 
@@ -35,8 +38,17 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqDebt request)
         {
-            var debtViewModel = request.TranslateTo<DebtViewModel>();
-            DebtService.AddOrUpdate(debtViewModel);
+            var debt = request.TranslateTo<Debt>();
+            DebtService.Add(debt);
+            return new RespDebt()
+                {
+                    Id = debt.Id
+                };
+        }
+        public object Put(ReqDebt request)
+        {
+            var debt = request.TranslateTo<Debt>();
+            DebtService.Update(debt);
             return new RespDebt();
         }
     }

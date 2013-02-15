@@ -1,6 +1,7 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.Common.Extensions;
 
 namespace Models
 {
@@ -17,16 +18,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new ResponsibilityViewModel()
-            {
-                BeginningVisitation = BeginningVisitation,
-                EndVisitation = EndVisitation,
-                OtherDetails = OtherDetails,
-                FatherPercentage = FatherPercentage,
-                MotherPercentage = MotherPercentage,
-                TransportationCosts = TransportationCosts,
-                UserId = UserId
-            };
+            return this.TranslateTo<ResponsibilityViewModel>();
         }
 
         public void Update(IFormEntity entity)

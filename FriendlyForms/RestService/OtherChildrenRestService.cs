@@ -56,5 +56,11 @@ namespace FriendlyForms.RestService
                     OtherChildren = otherChildren
                 };
         }
+        public object Put(ReqOtherChildren request)
+        {
+            var otherChildren = request.TranslateTo<OtherChildren>();
+            OtherChildrenService.Update(otherChildren);
+            return new RespOtherChildren();
+        }
     }
 }

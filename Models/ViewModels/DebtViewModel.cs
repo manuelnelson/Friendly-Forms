@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
     public class DebtViewModel : IViewModel
     {
+        public long Id { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]
@@ -16,12 +18,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Debt()
-                {
-                    DebtDivision = DebtDivision,
-                    MaritalDebt = MaritalDebt,
-                    UserId = UserId
-                };
+            return this.TranslateTo<Debt>();
         }
     }
 }

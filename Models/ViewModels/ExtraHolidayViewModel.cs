@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
@@ -27,15 +28,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new ExtraHoliday()
-            {
-                Id = Id,
-                ChildId = ChildId,
-                HolidayFather = HolidayFather,
-                HolidayMother = HolidayMother,
-                HolidayName = HolidayName,
-                UserId = UserId
-            };
+            return this.TranslateTo<ExtraHoliday>();
         }
     }
 }

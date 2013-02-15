@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels
 {
     public class ParticipantViewModel : IViewModel
     {
+        public long Id { get; set; }
         public int UserId { get; set; }
         [Required]
         [Display(Name = "Plaintiff's Name")]
@@ -34,16 +36,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Participant()
-            {
-                DefendantCustodialParent = this.DefendantCustodialParent,
-                DefendantRelationship = this.DefendantRelationship,
-                DefendantsName = this.DefendantsName,
-                PlaintiffCustodialParent = this.PlaintiffCustodialParent,
-                PlaintiffRelationship = this.PlaintiffRelationship,
-                PlaintiffsName = this.PlaintiffsName,
-                UserId = this.UserId
-            };
+            return this.TranslateTo<Participant>();
         } 
     }
 
