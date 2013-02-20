@@ -1,12 +1,12 @@
 ﻿@using Models.ViewModels
-<h4>Spousal Support</h4>
+<h2>Spousal Support</h2>
 @if (Model.SpousalViewModel.Spousal==((int)YesNo.No))
 {
-    <p>The parties agree that there will be no provision of spousal support in this case.</p>
+    <p class="indented">The parties agree that there will be no provision of spousal support in this case.</p>
 }
 else
 {
-    <p>Provision of spousal support will occur as follows: <br /> @Model.SpousalViewModel.SpousalDescription</p>
+    <p class="indented">Provision of spousal support will occur as follows: <br /> @Model.SpousalViewModel.SpousalDescription</p>
 }
 
 
