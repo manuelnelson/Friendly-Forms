@@ -58,22 +58,22 @@
             @:years.
             }
         Visitation will begin at the time the school day ends on the last
-            school day prior to the holiday break, and end at @childHolidays.ChristmasTime
+            school day prior to the holiday break, and end at 
         @if (childHolidays.Christmas==((int)Christmas.AfterBreak))
         {
-            <span>until returning to school after Winter Break</span>
+            <span>the beginning of the school day after Winter Break.</span>
         }
         else if (childHolidays.Christmas==((int)Christmas.Eve))
         {
-            <span>on Christmas Eve </span>
+            <span>@childHolidays.ChristmasTime on Christmas Eve.</span>
         }
         else if (childHolidays.Christmas==((int)Christmas.Day))
         {
-            <span>on Christmas Day</span>
+            <span>@childHolidays.ChristmasTime on Christmas Day.</span>
         }
         else if (childHolidays.Christmas==((int)Christmas.AfterDay))
         {
-            <span>on the day after Christmas</span>
+            <span>@childHolidays.ChristmasTime on the day after Christmas.</span>
         }
         else
         {
@@ -100,7 +100,7 @@
             school day prior to the holiday break, and end at  
             @if (childHolidays.SpringBreak==((int)YesNo.Yes))
             {
-                <span>the conclusion of spring break</span>
+                <span>the conclusion of spring break.</span>
             }
             else
             {

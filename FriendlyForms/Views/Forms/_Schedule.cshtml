@@ -65,6 +65,8 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Where will the child(ren) be picked up?</label>
+                            <label>
+                                In the box below, finish the following sentence: The child(ren) will be picked up...</label>
                             @Html.TextBoxFor(m => m.PickupLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.PickupLocation)
                         </div>
@@ -80,6 +82,8 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Where will the child(ren) be dropped off?</label>
+                            <label>
+                                In the box below, finish the following sentence: The child(ren) will be dropped off...</label>
                             @Html.TextBoxFor(m => m.DropOffLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                             @Html.ValidationMessageFor(m => m.DropOffLocation)
                         </div>
@@ -144,7 +148,7 @@
                         @if (Model.Weekdays == (int)YesNo.Yes)
                         {
                             <div class="schedule-weekday">
-                                <label class="class="form-question" schedule-weekday">
+                                <label class="form-question schedule-weekday">
                                     As the <span class="nonCustodial">@Model.NonCustodialParent</span>, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
                                 <div class="control-group schedule-weekday">
                                     <label  class="form-question">
@@ -156,6 +160,8 @@
                                 <div class="control-group schedule-weekday">
                                     <label class="form-question">
                                         Where will the child(ren) be picked up?</label>
+                                    <label>
+                                        In the box below, finish the following sentence: The child(ren) will be picked up...</label>
                                     @Html.TextBoxFor(m => m.WeekdayPickupLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                                     @Html.ValidationMessageFor(m => m.WeekdayPickupLocation)
                                 </div>
@@ -169,6 +175,8 @@
                                 <div class="control-group schedule-weekday">
                                     <label class="form-question">
                                         Where will the child(ren) be dropped off?</label>
+                                    <label>
+                                        In the box below, finish the following sentence: The child(ren) will be dropped off...</label>
                                     @Html.TextBoxFor(m => m.WeekdayDropoffLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                                     @Html.ValidationMessageFor(m => m.WeekdayDropoffLocation)
                                 </div>
@@ -220,6 +228,8 @@
                                 <div class="control-group schedule-weekday">
                                     <label class="form-question">
                                         Where will the child(ren) be picked up?</label>
+                                    <label>
+                                        In the box below, finish the following sentence: The child(ren) will be picked up...</label>
                                     @Html.TextBoxFor(m => m.WeekdayPickupLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                                     @Html.ValidationMessageFor(m => m.WeekdayPickupLocation)
                                 </div>
@@ -233,6 +243,8 @@
                                 <div class="control-group schedule-weekday">
                                     <label class="form-question">
                                         Where will the child(ren) be dropped off?</label>
+                                    <label>
+                                        In the box below, finish the following sentence: The child(ren) will be dropped off...</label>
                                     @Html.TextBoxFor(m => m.WeekdayDropoffLocation, new { placeholder = "Location", @class = "input-xxlarge" })
                                     @Html.ValidationMessageFor(m => m.WeekdayDropoffLocation)
                                 </div>

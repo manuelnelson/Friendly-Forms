@@ -1,27 +1,28 @@
 ﻿@model FriendlyForms.Models.ParentingPlanViewModel
 <div class="borderBox">
-<div class="row-fluid">
-    <h2 class="span6 indented">Child's Name</h2>
-    <h2 class="span6">Date of Birth</h2>
-</div>
-@foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
-{
     <div class="row-fluid">
-        <div class="span6 indented40">@child.Name</div>
-        <div class="span6">
-            @if (child.DateOfBirth.HasValue)
-            {
-                <span class="indented">@child.DateOfBirth.Value.ToString("MM/dd/yyyy")</span>;
-            }
-            else
-            {
-                @:Not Provided
-            }
+        <h2 class="span6 indented">Child's Name</h2>
+        <h2 class="span6">Date of Birth</h2>
+    </div>
+    @foreach (var child in Model.ChildAllViewModel.ChildViewModel.Children)
+    {
+        <div class="row-fluid">
+            <div class="span6 indented40">@child.Name</div>
+            <div class="span6">
+                @if (child.DateOfBirth.HasValue)
+                {
+                    <span class="indented">@child.DateOfBirth.Value.ToString("MM/dd/yyyy")</span>;
+                }
+                else
+                {
+                    @:Not Provided
+                }
+            </div>
         </div>
-    </div>
-    <hr />
-}
-    </div>
+        <hr />
+    }
+</div>
+<br />
 <div class="row-fluid">
     <h2>Custody and Decision Making</h2>
     <p class="indented">@Model.PpOutputFormHelper.CustodyInformation.LegalCustodyPhrase</p>
