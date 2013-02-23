@@ -59,7 +59,7 @@
                     </div>
                     <div class="control-group">
                         <label class="form-question">How will you divide the marital home?</label>
-                        @Html.TextAreaFor(m => m.Divide, new { placeholder = "List items you consider to be personal property for consideration in your case. Items such as jewelry, artwork, recreational vehicles, etc are examples of personal property", @class = "marital-info input-xxlarge" })
+                        @Html.TextAreaFor(m => m.Divide, new { placeholder = "Describe how assets and liabilities related to the marital home will be divided. Keep in mind how issues like the amount necessary to pay off the existing mortgage, current equity in the home, and the costs to maintain the home, or any need for the mortgage to be refinanced will be addressed.", @class = "marital-info input-xxlarge" })
                         @Html.ValidationMessageFor(m => m.Divide)
                     </div>                
                 </div>                
