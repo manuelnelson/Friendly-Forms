@@ -175,7 +175,7 @@ namespace FriendlyForms.Controllers
             {
                 communicationTypes.Add(communication.OtherMethod);
             }
-            outputViewModel.CommunicationTypePhrase = string.Join(",", communicationTypes);
+            outputViewModel.CommunicationTypePhrase = string.Join(", ", communicationTypes);
 
 
 

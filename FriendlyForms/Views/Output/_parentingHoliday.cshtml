@@ -8,31 +8,33 @@
     <h3 class="indented">Thanksgiving</h3>
     <p class="indented">
         @{
-    var childHolidays = Model.HolidayViewModel.ChildHolidays.First(c => c.ChildId==(child.Id));
-    var extraChildHolidays = Model.HolidayViewModel.ExtraChildHolidays.Where(c => c.ChildId==(child.Id));
+    var childHolidays = Model.HolidayViewModel.ChildHolidays.First(c => c.ChildId == (child.Id));
+    var extraChildHolidays = Model.HolidayViewModel.ExtraChildHolidays.Where(c => c.ChildId == (child.Id));
         }
-        @if (childHolidays.ThanksgivingFather==((int)HolidayYear.Every))
+        @if (childHolidays.ThanksgivingFather == ((int)HolidayYear.Every))
         {
-            @:The father will have visitation at Thanksgiving every year.  
-            }
-        else if (childHolidays.ThanksgivingMother==((int)HolidayYear.Every))
+            @:The Father will have visitation at Thanksgiving Every year.  
+        }
+        else if (childHolidays.ThanksgivingMother == ((int)HolidayYear.Every))
         {
-            @:The mother will have visitation at Thanksgiving every year.  
+            @:The Mother will have visitation at Thanksgiving Every year.  
             }
         else
         {
-            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Thanksgiving in 
+            @:For Thanksgiving, the @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation in 
             @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingFather) : Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingMother))
-            @:years.    
-            }
+            @:years, the @Model.PpOutputFormHelper.CustodyInformation.Parent will have visitation in 
+            @(@Model.PpOutputFormHelper.CustodyInformation.Parent == "Mother" ? Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingMother) : Enum.GetName(typeof(HolidayYear), childHolidays.ThanksgivingFather))
+            @:years.
+        }
         Visitation will begin at the time the school day ends on the last
-            school day prior to the holiday break, and end at @childHolidays.ThanksgivingTime on 
+			school day prior to the holiday break, and end at @childHolidays.ThanksgivingTime on 
 
-            @if (childHolidays.Thanksgiving==((int)Thanksgiving.Before))
+            @if (childHolidays.Thanksgiving == ((int)Thanksgiving.Before))
             {
                 <span>the day before returning to school.</span>
             }
-            else if (childHolidays.Thanksgiving==((int)Thanksgiving.After))
+            else if (childHolidays.Thanksgiving == ((int)Thanksgiving.After))
             {
                 <span>the first day of school after the holiday.</span>
             }
@@ -43,37 +45,39 @@
     </p>
     <h3 class="indented">Winter Break</h3>
     <p class="indented">
-        @if (childHolidays.ChristmasFather==((int)HolidayYear.Every))
+        @if (childHolidays.ChristmasFather == ((int)HolidayYear.Every))
         {
-            @:The father will have visitation at Winter Break every year.  
-            }
-        else if (childHolidays.ChristmasMother==((int)HolidayYear.Every))
+            @:The Father will have visitation at Winter Break Every year.  
+	    }
+        else if (childHolidays.ChristmasMother == ((int)HolidayYear.Every))
         {
-            @:The mother will have visitation at Winter Break every year.  
-            }
+            @:The Mother will have visitation at Winter Break Every year.  
+        }
         else
         {
-            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Winter Break in
+            @:For Winter Break, the @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation in 
             @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasFather) : Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasMother))
+            @:years, the @Model.PpOutputFormHelper.CustodyInformation.Parent will have visitation in 
+            @(@Model.PpOutputFormHelper.CustodyInformation.Parent == "Mother" ? Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasMother) : Enum.GetName(typeof(HolidayYear), childHolidays.ChristmasFather))
             @:years.
-            }
+        }
         Visitation will begin at the time the school day ends on the last
-            school day prior to the holiday break, and end at @childHolidays.ChristmasTime
-        @if (childHolidays.Christmas==((int)Christmas.AfterBreak))
+            school day prior to the holiday break, and end at 
+        @if (childHolidays.Christmas == ((int)Christmas.AfterBreak))
         {
-            <span>until returning to school after Winter Break</span>
+            <span>the beginning of the school day after Winter Break.</span>
         }
-        else if (childHolidays.Christmas==((int)Christmas.Eve))
+        else if (childHolidays.Christmas == ((int)Christmas.Eve))
         {
-            <span>on Christmas Eve </span>
+            <span>@childHolidays.ChristmasTime on Christmas Eve.</span>
         }
-        else if (childHolidays.Christmas==((int)Christmas.Day))
+        else if (childHolidays.Christmas == ((int)Christmas.Day))
         {
-            <span>on Christmas Day</span>
+            <span>@childHolidays.ChristmasTime on Christmas Day.</span>
         }
-        else if (childHolidays.Christmas==((int)Christmas.AfterDay))
+        else if (childHolidays.Christmas == ((int)Christmas.AfterDay))
         {
-            <span>on the day after Christmas</span>
+            <span>@childHolidays.ChristmasTime on the day after Christmas.</span>
         }
         else
         {
@@ -82,25 +86,27 @@
     </p>
     <h3 class="indented">Spring Break</h3>
     <p class="indented">
-        @if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
+        @if (childHolidays.SpringBreakFather == ((int)HolidayYear.Every))
         {
-            @:The father will have visitation at Spring Break every year.  
+            @:The Father will have visitation at Spring Break Every year.  
             }
-        else if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
+        else if (childHolidays.SpringBreakFather == ((int)HolidayYear.Every))
         {
-            @:The mother will have visitation at Spring Break every year.  
+            @:The Mother will have visitation at Spring Break Every year.  
             }
         else
         {
-            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Spring Break in
+            @:For Spring Break, the @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation in 
             @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakFather) : Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakMother))
+            @:years, the @Model.PpOutputFormHelper.CustodyInformation.Parent will have visitation in 
+            @(@Model.PpOutputFormHelper.CustodyInformation.Parent == "Mother" ? Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakMother) : Enum.GetName(typeof(HolidayYear), childHolidays.SpringBreakFather))
             @:years.
-            }
+        }
         Visitation will begin at the time the school day ends on the last
             school day prior to the holiday break, and end at  
-            @if (childHolidays.SpringBreak==((int)YesNo.Yes))
+            @if (childHolidays.SpringBreak == ((int)YesNo.Yes))
             {
-                <span>the conclusion of spring break</span>
+                <span>the conclusion of spring break.</span>
             }
             else
             {
@@ -113,25 +119,27 @@
     <p class="indented">The parties will manage summer break visitation as follows: @childHolidays.SummerDetails</p>
     <h3 class="indented">Fall Break</h3>
     <p class="indented">
-        @if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
+        @if (childHolidays.SpringBreakFather == ((int)HolidayYear.Every))
         {
-            @:The father will have visitation at Fall Break every year.  
+            @:The Father will have visitation at Fall Break Every year.  
             }
-        else if (childHolidays.SpringBreakFather==((int)HolidayYear.Every))
+        else if (childHolidays.SpringBreakFather == ((int)HolidayYear.Every))
         {
-            @:The mother will have visitation at Fall Break every year.  
+            @:The Mother will have visitation at Fall Break Every year.  
             }
         else
         {
-            @:The @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation at Fall Break in
+            @:For Fall Break, the @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have visitation in 
             @(@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent == "Father" ? Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakFather) : Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakMother))
+            @:years, the @Model.PpOutputFormHelper.CustodyInformation.Parent will have visitation in 
+            @(@Model.PpOutputFormHelper.CustodyInformation.Parent == "Mother" ? Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakMother) : Enum.GetName(typeof(HolidayYear), childHolidays.FallBreakFather))
             @:years.
-            }
+        }
         Visitation will begin at the time the school day ends on the last
             school day prior to the holiday break, and end at 
-            @if (childHolidays.FallBreak==((int)YesNo.Yes))
+            @if (childHolidays.FallBreak == ((int)YesNo.Yes))
             {
-                <span>the conclusion of fall break</span>
+                <span>the conclusion of fall break.</span>
             }
             else
             {
@@ -141,9 +149,15 @@
     <h3 class="indented">Other Holidays</h3>
     <p class="indented">The parties agree that all other holidays will be managed in accordance with the following:</p>
     <div class="row-fluid">
-        <div class="span3 indented"><h3>Holiday</h3></div>
-        <div class="span1"><h3>Mother</h3></div>
-        <div class="span1"><h3>Father</h3></div>
+        <div class="span3 indented">
+            <h3>Holiday</h3>
+        </div>
+        <div class="span1">
+            <h3>Mother</h3>
+        </div>
+        <div class="span1">
+            <h3>Father</h3>
+        </div>
     </div>
     <div class="row-fluid">
         <div class="span3 indented">MLK Day</div>
@@ -211,7 +225,7 @@
         <div class="span3 indented">@extra.HolidayName</div>
         <div class="span1 indentedTiny">@Enum.GetName(typeof(HolidayYear), extra.HolidayMother)</div>
         <div class="span1 indentedTiny">@Enum.GetName(typeof(HolidayYear), extra.HolidayFather)</div>
-            </div>
+    </div>
             }
             if (childHolidays.FridayHoliday)
             {
