@@ -52,7 +52,7 @@
                             <label class="radio">
                                 Mother @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Mother, false)</label>
                             <label class="radio">
-                                Defendant  @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Plaintiff)</label>
+                                Defendant  @Html.RadioButtonFor(m => m.DefendantRelationship, (int)ParentRelationship.Defendant)</label>
                             @Html.ValidationMessageFor(m => m.DefendantRelationship)
                         </div>
                         <div class="control-group span4">

@@ -35,7 +35,7 @@
                 $('#DefendantRelationship[value="1"]').attr('checked', 'checked');
                 break;
             case "3":
-                $('#DefendantRelationship[value="3"]').attr('checked', 'checked');
+                $('#DefendantRelationship[value="4"]').attr('checked', 'checked');
                 break;
         }
         updatePlaintiffCustodial();
@@ -49,7 +49,7 @@
             case "2":
                 $('#PlaintiffRelationship[value="1"]').attr('checked', 'checked');
                 break;
-            case "3":
+            case "4":
                 $('#PlaintiffRelationship[value="3"]').attr('checked', 'checked');
                 break;
         }
@@ -187,6 +187,7 @@
                     //get values
                     var model = Friendly.GetFormInput(formName);
                     model.ChildFormId = data.ChildForm.Id;
+                    $('#childForm').hide();
                     //use this for later when editing child information
                     $('#childFormId').val(model.ChildFormId);
                     $.ajax({

@@ -63,17 +63,17 @@
     });
     
     //Vehicle Form    
-    $('input[name=Refinanced]').change(function () {
-        $('#RefinanceDate').val('');
-        if ($('#Refinanced:checked').val() === "1") {
+    $('input[id=VehicleViewModel_Refinanced]').change(function () {
+        $('#VehicleViewModel_RefinanceDate').val('');
+        if ($('#VehicleViewModel_Refinanced:checked').val() === "1") {
             $('.vehicle-refinance').show();
         } else {
             $('.vehicle-refinance').hide();
         }
     });
-    $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
+    $('input[id=VehicleViewModel_VehiclesInvolved]').change(function () {
         $('#vehicle')[0].reset();
-        if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
+        if ($('#VehicleViewModel_VehiclesInvolved:checked').val() === "1") {
             $('.vehicle-info').show();
         } else {
             $('.vehicle-info').hide();
