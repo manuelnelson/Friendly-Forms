@@ -46,14 +46,14 @@
             @if (Model.RealEstate==((int)YesNo.Yes))
             {
                 <div class="control-group property-details">
-                    @Html.TextAreaFor(m => m.DividingProperty, new { placeholder = "Details",@class="input-xxlarge" })
+                    @Html.TextAreaFor(m => m.DividingProperty, new { placeholder = "Describe how personal property such as jewelry, home furnishings etc will be divided.",@class="input-xxlarge" })
                     @Html.ValidationMessageFor(m => m.DividingProperty)
                 </div>   
             }
             else
             {
                 <div class="control-group property-details hide">
-                    @Html.TextAreaFor(m => m.DividingProperty, new { placeholder = "Details",@class="input-xxlarge"  })
+                    @Html.TextAreaFor(m => m.DividingProperty, new { placeholder = "Describe how personal property such as jewelry, home furnishings etc will be divided.",@class="input-xxlarge"  })
                     @Html.ValidationMessageFor(m => m.DividingProperty)
                 </div>                
             }
