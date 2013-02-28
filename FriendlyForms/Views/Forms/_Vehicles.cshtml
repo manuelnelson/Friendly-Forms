@@ -22,7 +22,7 @@
                     <br/>
                     @if (Model.VehicleViewModel.VehicleList != null && Model.VehicleViewModel.VehicleList.Any())
                     {                        
-                        <div class="row-fluid vehicle-table">
+                        <div class="row-fluid vehicle-table vehicle-info">
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -48,7 +48,7 @@
                     }
                     else
                     {
-                        <div class="row-fluid hide vehicle-table">
+                        <div class="row-fluid hide vehicle-table vehicle-info">
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -68,7 +68,7 @@
                     {
                         using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new {id = "vehicle"}))
                         {
-                            <div class="vehicle-info">
+                            <div class="vehicle-info">                                
                                 <label class="informative">                                     
                                     List each vehicle under consideration in this agreement.
                                 </label>
