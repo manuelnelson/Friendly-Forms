@@ -14,9 +14,9 @@
 }
 @section ButtonGroup{
     <div class="btn-group">
-        @using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "myform", target = "_blank" }))
+        @using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "topPrintButton", target = "_blank" }))
         {
-            <input type="hidden" id="html" name="html" />
+            <input type="hidden" class="html" name="html" />
             <button class="btn btn-large tip-bottom printForm" title="To PDF"><i class="icon-print"></i></button>
         }
     </div>
@@ -34,8 +34,9 @@
 @Html.Partial("_parentingSchedule", Model)
 @Html.Partial("_parentingHoliday", Model)
 @Html.Partial("_ParentingEnd", Model)
-@using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "myform", target = "_blank" }))
+
+@using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "bottomPrintButton", target = "_blank" }))
 {
-    <input type="hidden" id="html" name="html" />
+    <input type="hidden" class="html" name="html" />
     <input type="submit" class="btn-primary btn printForm" value="Print to PDF" />
 }

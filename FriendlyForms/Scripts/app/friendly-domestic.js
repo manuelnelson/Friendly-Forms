@@ -71,9 +71,9 @@
             $('.vehicle-refinance').hide();
         }
     });
-    $('input[id=VehicleViewModel_VehiclesInvolved]').change(function () {
+    $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
         $('#vehicle')[0].reset();
-        if ($('#VehicleViewModel_VehiclesInvolved:checked').val() === "1") {
+        if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
             $('.vehicle-info').show();
         } else {
             $('.vehicle-info').hide();
@@ -214,9 +214,9 @@
                 type: 'POST',
                 data: model,
                 success: function () {
-                    var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
-                    var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
-                    Friendly.ValidateForms(forms, properNames, '.domestic-part8');
+                    //var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
+                    //var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
+                    Friendly.ValidateForms('.domestic-part8');
                     Friendly.EndLoading();
                     return false;
                 },

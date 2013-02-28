@@ -60,9 +60,6 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
         //go ahead and save
         if (typeof model === 'undefined') {
             model = Friendly.GetFormInput(formName);
-            //grab form Id if it exists
-            if ($('#' + formName + 'Id').length > 0)
-                model.Id = $('#' + formName + 'Id').val();
         }
         if (Friendly.IsOtherForm(formName)) {
             formName = formName.substring(0, formName.lastIndexOf("Other"));
@@ -99,9 +96,14 @@ Friendly.AjaxSubmit = function(formName, nextForm, model) {
         if (typeof model === 'undefined') {
             model = Friendly.GetFormInput(formName);
         }
+        //If there's an Id, we are updating; use PUT instead of POST
+        var submitType = 'POST';
+
+        if (typeof model.Id != 'undefined' && model.Id != '0')
+            submitType = 'PUT';
         $.ajax({
             url: '/api/' + formName + '?format=json',
-            type: 'POST',
+            type: submitType,
             data: model,
             success: function() {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -162,6 +164,9 @@ Friendly.GetFormInput = function (formName) {
         model[field.name] = field.value;
     });
     model.UserId = $('#user-id').val();
+    //grab form Id if it exists
+    if ($('#' + formName + 'Id').length > 0)
+        model.Id = $('#' + formName + 'Id').val();
     return model;
 };
 Friendly.ClearForm = function (formName) {
@@ -452,9 +457,24 @@ $(document).ready(function () {
     $('#main-content').on('click', '.close', function () {
         $(this).parent().parent().parent().remove();
     });
-
+    //currency
     $('.currency').mask('000,000,000,000,000', { reverse: true });
-
+    $.each($('.currencyText'), function (ndx, item) {
+        var text = $(item).text();
+        $(item).text(addCommas(text));
+    });
+    
+    function addCommas(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form
