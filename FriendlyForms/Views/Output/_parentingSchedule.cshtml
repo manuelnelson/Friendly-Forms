@@ -8,15 +8,15 @@
     {
         if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.FirstThird))
         {
-            <span>mother will have the weekend of the first and third friday of each month for visiation.</span>
+            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first and third weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second, fourth and fifth weekend of each month.</span>
         }
         else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.FirstThirdFifth))
         {
-            <span>mother will have the weekend of the first, third and fifth friday of each month for visitation.</span>
+            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first, third and fifth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second and fourth weekend of each month.</span>
         }
         else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.SecondFourth))
         {
-            <span>mother will have the weekend of the second and fourth friday of each month for visitation.</span>
+            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the second and fourth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the first, third and fifth weekend of each month.</span>
         }
         else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.EveryOther))
         {
@@ -24,7 +24,7 @@
         }
         else
         {
-            <span>mother will have @Model.ScheduleViewModel.MotherWeekendOther for visitation.</span>
+            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have @Model.ScheduleViewModel.MotherWeekendOther for visitation.</span>
         }
     }
     else
