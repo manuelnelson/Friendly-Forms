@@ -20,24 +20,24 @@
     {
         <h3 class="indented">@child.Name</h3>
         <p class="indented">
-            Educational Decisions: 
-                @{
+               @{
                     var childDecision = Model.AllDecisionsViewModel.ChildDecisions.First(c => c.ChildId == (child.Id));
                     var extraChildDecisions = Model.AllDecisionsViewModel.ChildExtraDecisions.Where(c => c.ChildId==(child.Id));
                     //If there are multiple children, both resolve could possible vary.  Take the last 'BothResolve' for now....
                     disagreements = string.IsNullOrEmpty(childDecision.BothResolve) ? disagreements : childDecision.BothResolve;        
                 }
+            Educational Decisions: 
             @Enum.GetName(typeof(DecisionMaker), childDecision.Education) <br/>
             Non-emergency Healthcare:
-                @Enum.GetName(typeof(DecisionMaker), childDecision.HealthCare)<br/>
+            @Enum.GetName(typeof(DecisionMaker), childDecision.HealthCare)<br/>
             Religious Upbringing:
-                @Enum.GetName(typeof(DecisionMaker), childDecision.Religion)<br/>
+            @Enum.GetName(typeof(DecisionMaker), childDecision.Religion)<br/>
             Extracurricular Activities:
-                @Enum.GetName(typeof(DecisionMaker), childDecision.ExtraCurricular)<br/>
-        @foreach (var extra in extraChildDecisions)
-        {
-            @extra.Description@:  @Enum.GetName(typeof(DecisionMaker), extra.DecisionMaker) <br/>
-        }
+            @Enum.GetName(typeof(DecisionMaker), childDecision.ExtraCurricular)<br/>
+            @foreach (var extra in extraChildDecisions)
+            {
+                @extra.Description@:  @Enum.GetName(typeof(DecisionMaker), extra.DecisionMaker) <br/>
+            }
         </p>
         <hr />
     }

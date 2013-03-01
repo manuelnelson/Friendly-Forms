@@ -165,11 +165,11 @@ namespace FriendlyForms.Controllers
             var communicationTypes = new List<string>();
             if (communication.Telephone)
             {
-                communicationTypes.Add("Telephone");
+                communicationTypes.Add("telephone");
             }
             if (communication.Email)
             {
-                communicationTypes.Add("Email");
+                communicationTypes.Add("email");
             }
             if (communication.Other)
             {
