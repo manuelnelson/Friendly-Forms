@@ -14624,6 +14624,1629 @@ $.format = $.validator.format;
     })
 
 }(window.jQuery);
+;/*
+ * ----------------------------- JSTORAGE -------------------------------------
+ * Simple local storage wrapper to save data on the browser side, supporting
+ * all major browsers - IE6+, Firefox2+, Safari4+, Chrome4+ and Opera 10.5+
+ *
+ * Copyright (c) 2010 - 2012 Andris Reinman, andris.reinman@gmail.com
+ * Project homepage: www.jstorage.info
+ *
+ * Licensed under MIT-style license:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+(function () {
+    var
+        /* jStorage version */
+        JSTORAGE_VERSION = "0.3.2",
+
+        /* detect a dollar object or create one if not found */
+        $ = window.jQuery || window.$ || (window.$ = {}),
+
+        /* check for a JSON handling support */
+        JSON = {
+            parse:
+                window.JSON && (window.JSON.parse || window.JSON.decode) ||
+                String.prototype.evalJSON && function (str) { return String(str).evalJSON(); } ||
+                $.parseJSON ||
+                $.evalJSON,
+            stringify:
+                Object.toJSON ||
+                window.JSON && (window.JSON.stringify || window.JSON.encode) ||
+                $.toJSON
+        };
+
+    // Break if no JSON support was found
+    if (!JSON.parse || !JSON.stringify) {
+        throw new Error("No JSON support found, include //cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js to page");
+    }
+
+    var
+        /* This is the object, that holds the cached values */
+        _storage = { __jstorage_meta: { CRC32: {} } },
+
+        /* Actual browser storage (localStorage or globalStorage['domain']) */
+        _storage_service = { jStorage: "{}" },
+
+        /* DOM element for older IE versions, holds userData behavior */
+        _storage_elm = null,
+
+        /* How much space does the storage take */
+        _storage_size = 0,
+
+        /* which backend is currently used */
+        _backend = false,
+
+        /* onchange observers */
+        _observers = {},
+
+        /* timeout to wait after onchange event */
+        _observer_timeout = false,
+
+        /* last update time */
+        _observer_update = 0,
+
+        /* pubsub observers */
+        _pubsub_observers = {},
+
+        /* skip published items older than current timestamp */
+        _pubsub_last = +new Date(),
+
+        /* Next check for TTL */
+        _ttl_timeout,
+
+        /**
+         * XML encoding and decoding as XML nodes can't be JSON'ized
+         * XML nodes are encoded and decoded if the node is the value to be saved
+         * but not if it's as a property of another object
+         * Eg. -
+         *   $.jStorage.set("key", xmlNode);        // IS OK
+         *   $.jStorage.set("key", {xml: xmlNode}); // NOT OK
+         */
+        _XMLService = {
+
+            /**
+             * Validates a XML node to be XML
+             * based on jQuery.isXML function
+             */
+            isXML: function (elm) {
+                var documentElement = (elm ? elm.ownerDocument || elm : 0).documentElement;
+                return documentElement ? documentElement.nodeName !== "HTML" : false;
+            },
+
+            /**
+             * Encodes a XML node to string
+             * based on http://www.mercurytide.co.uk/news/article/issues-when-working-ajax/
+             */
+            encode: function (xmlNode) {
+                if (!this.isXML(xmlNode)) {
+                    return false;
+                }
+                try { // Mozilla, Webkit, Opera
+                    return new XMLSerializer().serializeToString(xmlNode);
+                } catch (E1) {
+                    try {  // IE
+                        return xmlNode.xml;
+                    } catch (E2) { }
+                }
+                return false;
+            },
+
+            /**
+             * Decodes a XML node from string
+             * loosely based on http://outwestmedia.com/jquery-plugins/xmldom/
+             */
+            decode: function (xmlString) {
+                var dom_parser = ("DOMParser" in window && (new DOMParser()).parseFromString) ||
+                        (window.ActiveXObject && function (_xmlString) {
+                            var xml_doc = new ActiveXObject('Microsoft.XMLDOM');
+                            xml_doc.async = 'false';
+                            xml_doc.loadXML(_xmlString);
+                            return xml_doc;
+                        }),
+                resultXML;
+                if (!dom_parser) {
+                    return false;
+                }
+                resultXML = dom_parser.call("DOMParser" in window && (new DOMParser()) || window, xmlString, 'text/xml');
+                return this.isXML(resultXML) ? resultXML : false;
+            }
+        },
+
+        _localStoragePolyfillSetKey = function () { };
+
+
+    ////////////////////////// PRIVATE METHODS ////////////////////////
+
+    /**
+     * Initialization function. Detects if the browser supports DOM Storage
+     * or userData behavior and behaves accordingly.
+     */
+    function _init() {
+        /* Check if browser supports localStorage */
+        var localStorageReallyWorks = false;
+        if ("localStorage" in window) {
+            try {
+                window.localStorage.setItem('_tmptest', 'tmpval');
+                localStorageReallyWorks = true;
+                window.localStorage.removeItem('_tmptest');
+            } catch (BogusQuotaExceededErrorOnIos5) {
+                // Thanks be to iOS5 Private Browsing mode which throws
+                // QUOTA_EXCEEDED_ERRROR DOM Exception 22.
+            }
+        }
+
+        if (localStorageReallyWorks) {
+            try {
+                if (window.localStorage) {
+                    _storage_service = window.localStorage;
+                    _backend = "localStorage";
+                    _observer_update = _storage_service.jStorage_update;
+                }
+            } catch (E3) {/* Firefox fails when touching localStorage and cookies are disabled */ }
+        }
+            /* Check if browser supports globalStorage */
+        else if ("globalStorage" in window) {
+            try {
+                if (window.globalStorage) {
+                    _storage_service = window.globalStorage[window.location.hostname];
+                    _backend = "globalStorage";
+                    _observer_update = _storage_service.jStorage_update;
+                }
+            } catch (E4) {/* Firefox fails when touching localStorage and cookies are disabled */ }
+        }
+            /* Check if browser supports userData behavior */
+        else {
+            _storage_elm = document.createElement('link');
+            if (_storage_elm.addBehavior) {
+
+                /* Use a DOM element to act as userData storage */
+                _storage_elm.style.behavior = 'url(#default#userData)';
+
+                /* userData element needs to be inserted into the DOM! */
+                document.getElementsByTagName('head')[0].appendChild(_storage_elm);
+
+                try {
+                    _storage_elm.load("jStorage");
+                } catch (E) {
+                    // try to reset cache
+                    _storage_elm.setAttribute("jStorage", "{}");
+                    _storage_elm.save("jStorage");
+                    _storage_elm.load("jStorage");
+                }
+
+                var data = "{}";
+                try {
+                    data = _storage_elm.getAttribute("jStorage");
+                } catch (E5) { }
+
+                try {
+                    _observer_update = _storage_elm.getAttribute("jStorage_update");
+                } catch (E6) { }
+
+                _storage_service.jStorage = data;
+                _backend = "userDataBehavior";
+            } else {
+                _storage_elm = null;
+                return;
+            }
+        }
+
+        // Load data from storage
+        _load_storage();
+
+        // remove dead keys
+        _handleTTL();
+
+        // create localStorage and sessionStorage polyfills if needed
+        _createPolyfillStorage("local");
+        _createPolyfillStorage("session");
+
+        // start listening for changes
+        _setupObserver();
+
+        // initialize publish-subscribe service
+        _handlePubSub();
+
+        // handle cached navigation
+        if ("addEventListener" in window) {
+            window.addEventListener("pageshow", function (event) {
+                if (event.persisted) {
+                    _storageObserver();
+                }
+            }, false);
+        }
+    }
+
+    /**
+     * Create a polyfill for localStorage (type="local") or sessionStorage (type="session")
+     *
+     * @param {String} type Either "local" or "session"
+     * @param {Boolean} forceCreate If set to true, recreate the polyfill (needed with flush)
+     */
+    function _createPolyfillStorage(type, forceCreate) {
+        var _skipSave = false,
+            _length = 0,
+            i,
+            storage,
+            storage_source = {};
+
+        var rand = Math.random();
+
+        if (!forceCreate && typeof window[type + "Storage"] != "undefined") {
+            return;
+        }
+
+        // Use globalStorage for localStorage if available
+        if (type == "local" && window.globalStorage) {
+            localStorage = window.globalStorage[window.location.hostname];
+            return;
+        }
+
+        // only IE6/7 from this point on
+        if (_backend != "userDataBehavior") {
+            return;
+        }
+
+        // Remove existing storage element if available
+        if (forceCreate && window[type + "Storage"] && window[type + "Storage"].parentNode) {
+            window[type + "Storage"].parentNode.removeChild(window[type + "Storage"]);
+        }
+
+        storage = document.createElement("button");
+        document.getElementsByTagName('head')[0].appendChild(storage);
+
+        if (type == "local") {
+            storage_source = _storage;
+        } else if (type == "session") {
+            _sessionStoragePolyfillUpdate();
+        }
+
+        for (i in storage_source) {
+
+            if (storage_source.hasOwnProperty(i) && i != "__jstorage_meta" && i != "length" && typeof storage_source[i] != "undefined") {
+                if (!(i in storage)) {
+                    _length++;
+                }
+                storage[i] = storage_source[i];
+            }
+        }
+
+        // Polyfill API
+
+        /**
+         * Indicates how many keys are stored in the storage
+         */
+        storage.length = _length;
+
+        /**
+         * Returns the key of the nth stored value
+         *
+         * @param {Number} n Index position
+         * @return {String} Key name of the nth stored value
+         */
+        storage.key = function (n) {
+            var count = 0, i;
+            _sessionStoragePolyfillUpdate();
+            for (i in storage_source) {
+                if (storage_source.hasOwnProperty(i) && i != "__jstorage_meta" && i != "length" && typeof storage_source[i] != "undefined") {
+                    if (count == n) {
+                        return i;
+                    }
+                    count++;
+                }
+            }
+        }
+
+        /**
+         * Returns the current value associated with the given key
+         *
+         * @param {String} key key name
+         * @return {Mixed} Stored value
+         */
+        storage.getItem = function (key) {
+            _sessionStoragePolyfillUpdate();
+            if (type == "session") {
+                return storage_source[key];
+            }
+            return $.jStorage.get(key);
+        }
+
+        /**
+         * Sets or updates value for a give key
+         *
+         * @param {String} key Key name to be updated
+         * @param {String} value String value to be stored
+         */
+        storage.setItem = function (key, value) {
+            if (typeof value == "undefined") {
+                return;
+            }
+            storage[key] = (value || "").toString();
+        }
+
+        /**
+         * Removes key from the storage
+         *
+         * @param {String} key Key name to be removed
+         */
+        storage.removeItem = function (key) {
+            if (type == "local") {
+                return $.jStorage.deleteKey(key);
+            }
+
+            storage[key] = undefined;
+
+            _skipSave = true;
+            if (key in storage) {
+                storage.removeAttribute(key);
+            }
+            _skipSave = false;
+        }
+
+        /**
+         * Clear storage
+         */
+        storage.clear = function () {
+            if (type == "session") {
+                window.name = "";
+                _createPolyfillStorage("session", true);
+                return;
+            }
+            $.jStorage.flush();
+        }
+
+        if (type == "local") {
+
+            _localStoragePolyfillSetKey = function (key, value) {
+                if (key == "length") {
+                    return;
+                }
+                _skipSave = true;
+                if (typeof value == "undefined") {
+                    if (key in storage) {
+                        _length--;
+                        storage.removeAttribute(key);
+                    }
+                } else {
+                    if (!(key in storage)) {
+                        _length++;
+                    }
+                    storage[key] = (value || "").toString();
+                }
+                storage.length = _length;
+                _skipSave = false;
+            }
+        }
+
+        function _sessionStoragePolyfillUpdate() {
+            if (type != "session") {
+                return;
+            }
+            try {
+                storage_source = JSON.parse(window.name || "{}");
+            } catch (E) {
+                storage_source = {};
+            }
+        }
+
+        function _sessionStoragePolyfillSave() {
+            if (type != "session") {
+                return;
+            }
+            window.name = JSON.stringify(storage_source);
+        };
+
+        storage.attachEvent("onpropertychange", function (e) {
+            if (e.propertyName == "length") {
+                return;
+            }
+
+            if (_skipSave || e.propertyName == "length") {
+                return;
+            }
+
+            if (type == "local") {
+                if (!(e.propertyName in storage_source) && typeof storage[e.propertyName] != "undefined") {
+                    _length++;
+                }
+            } else if (type == "session") {
+                _sessionStoragePolyfillUpdate();
+                if (typeof storage[e.propertyName] != "undefined" && !(e.propertyName in storage_source)) {
+                    storage_source[e.propertyName] = storage[e.propertyName];
+                    _length++;
+                } else if (typeof storage[e.propertyName] == "undefined" && e.propertyName in storage_source) {
+                    delete storage_source[e.propertyName];
+                    _length--;
+                } else {
+                    storage_source[e.propertyName] = storage[e.propertyName];
+                }
+
+                _sessionStoragePolyfillSave();
+                storage.length = _length;
+                return;
+            }
+
+            $.jStorage.set(e.propertyName, storage[e.propertyName]);
+            storage.length = _length;
+        });
+
+        window[type + "Storage"] = storage;
+    }
+
+    /**
+     * Reload data from storage when needed
+     */
+    function _reloadData() {
+        var data = "{}";
+
+        if (_backend == "userDataBehavior") {
+            _storage_elm.load("jStorage");
+
+            try {
+                data = _storage_elm.getAttribute("jStorage");
+            } catch (E5) { }
+
+            try {
+                _observer_update = _storage_elm.getAttribute("jStorage_update");
+            } catch (E6) { }
+
+            _storage_service.jStorage = data;
+        }
+
+        _load_storage();
+
+        // remove dead keys
+        _handleTTL();
+
+        _handlePubSub();
+    }
+
+    /**
+     * Sets up a storage change observer
+     */
+    function _setupObserver() {
+        if (_backend == "localStorage" || _backend == "globalStorage") {
+            if ("addEventListener" in window) {
+                window.addEventListener("storage", _storageObserver, false);
+            } else {
+                document.attachEvent("onstorage", _storageObserver);
+            }
+        } else if (_backend == "userDataBehavior") {
+            setInterval(_storageObserver, 1000);
+        }
+    }
+
+    /**
+     * Fired on any kind of data change, needs to check if anything has
+     * really been changed
+     */
+    function _storageObserver() {
+        var updateTime;
+        // cumulate change notifications with timeout
+        clearTimeout(_observer_timeout);
+        _observer_timeout = setTimeout(function () {
+
+            if (_backend == "localStorage" || _backend == "globalStorage") {
+                updateTime = _storage_service.jStorage_update;
+            } else if (_backend == "userDataBehavior") {
+                _storage_elm.load("jStorage");
+                try {
+                    updateTime = _storage_elm.getAttribute("jStorage_update");
+                } catch (E5) { }
+            }
+
+            if (updateTime && updateTime != _observer_update) {
+                _observer_update = updateTime;
+                _checkUpdatedKeys();
+            }
+
+        }, 25);
+    }
+
+    /**
+     * Reloads the data and checks if any keys are changed
+     */
+    function _checkUpdatedKeys() {
+        var oldCrc32List = JSON.parse(JSON.stringify(_storage.__jstorage_meta.CRC32)),
+            newCrc32List;
+
+        _reloadData();
+        newCrc32List = JSON.parse(JSON.stringify(_storage.__jstorage_meta.CRC32));
+
+        var key,
+            updated = [],
+            removed = [];
+
+        for (key in oldCrc32List) {
+            if (oldCrc32List.hasOwnProperty(key)) {
+                if (!newCrc32List[key]) {
+                    removed.push(key);
+                    continue;
+                }
+                if (oldCrc32List[key] != newCrc32List[key] && String(oldCrc32List[key]).substr(0, 2) == "2.") {
+                    updated.push(key);
+                }
+            }
+        }
+
+        for (key in newCrc32List) {
+            if (newCrc32List.hasOwnProperty(key)) {
+                if (!oldCrc32List[key]) {
+                    updated.push(key);
+                }
+            }
+        }
+
+        _fireObservers(updated, "updated");
+        _fireObservers(removed, "deleted");
+    }
+
+    /**
+     * Fires observers for updated keys
+     *
+     * @param {Array|String} keys Array of key names or a key
+     * @param {String} action What happened with the value (updated, deleted, flushed)
+     */
+    function _fireObservers(keys, action) {
+        keys = [].concat(keys || []);
+        if (action == "flushed") {
+            keys = [];
+            for (var key in _observers) {
+                if (_observers.hasOwnProperty(key)) {
+                    keys.push(key);
+                }
+            }
+            action = "deleted";
+        }
+        for (var i = 0, len = keys.length; i < len; i++) {
+            if (_observers[keys[i]]) {
+                for (var j = 0, jlen = _observers[keys[i]].length; j < jlen; j++) {
+                    _observers[keys[i]][j](keys[i], action);
+                }
+            }
+        }
+    }
+
+    /**
+     * Publishes key change to listeners
+     */
+    function _publishChange() {
+        var updateTime = (+new Date()).toString();
+
+        if (_backend == "localStorage" || _backend == "globalStorage") {
+            _storage_service.jStorage_update = updateTime;
+        } else if (_backend == "userDataBehavior") {
+            _storage_elm.setAttribute("jStorage_update", updateTime);
+            _storage_elm.save("jStorage");
+        }
+
+        _storageObserver();
+    }
+
+    /**
+     * Loads the data from the storage based on the supported mechanism
+     */
+    function _load_storage() {
+        /* if jStorage string is retrieved, then decode it */
+        if (_storage_service.jStorage) {
+            try {
+                _storage = JSON.parse(String(_storage_service.jStorage));
+            } catch (E6) { _storage_service.jStorage = "{}"; }
+        } else {
+            _storage_service.jStorage = "{}";
+        }
+        _storage_size = _storage_service.jStorage ? String(_storage_service.jStorage).length : 0;
+
+        if (!_storage.__jstorage_meta) {
+            _storage.__jstorage_meta = {};
+        }
+        if (!_storage.__jstorage_meta.CRC32) {
+            _storage.__jstorage_meta.CRC32 = {};
+        }
+    }
+
+    /**
+     * This functions provides the "save" mechanism to store the jStorage object
+     */
+    function _save() {
+        _dropOldEvents(); // remove expired events
+        try {
+            _storage_service.jStorage = JSON.stringify(_storage);
+            // If userData is used as the storage engine, additional
+            if (_storage_elm) {
+                _storage_elm.setAttribute("jStorage", _storage_service.jStorage);
+                _storage_elm.save("jStorage");
+            }
+            _storage_size = _storage_service.jStorage ? String(_storage_service.jStorage).length : 0;
+        } catch (E7) {/* probably cache is full, nothing is saved this way*/ }
+    }
+
+    /**
+     * Function checks if a key is set and is string or numberic
+     *
+     * @param {String} key Key name
+     */
+    function _checkKey(key) {
+        if (!key || (typeof key != "string" && typeof key != "number")) {
+            throw new TypeError('Key name must be string or numeric');
+        }
+        if (key == "__jstorage_meta") {
+            throw new TypeError('Reserved key name');
+        }
+        return true;
+    }
+
+    /**
+     * Removes expired keys
+     */
+    function _handleTTL() {
+        var curtime, i, TTL, CRC32, nextExpire = Infinity, changed = false, deleted = [];
+
+        clearTimeout(_ttl_timeout);
+
+        if (!_storage.__jstorage_meta || typeof _storage.__jstorage_meta.TTL != "object") {
+            // nothing to do here
+            return;
+        }
+
+        curtime = +new Date();
+        TTL = _storage.__jstorage_meta.TTL;
+
+        CRC32 = _storage.__jstorage_meta.CRC32;
+        for (i in TTL) {
+            if (TTL.hasOwnProperty(i)) {
+                if (TTL[i] <= curtime) {
+                    delete TTL[i];
+                    delete CRC32[i];
+                    delete _storage[i];
+                    changed = true;
+                    deleted.push(i);
+                } else if (TTL[i] < nextExpire) {
+                    nextExpire = TTL[i];
+                }
+            }
+        }
+
+        // set next check
+        if (nextExpire != Infinity) {
+            _ttl_timeout = setTimeout(_handleTTL, nextExpire - curtime);
+        }
+
+        // save changes
+        if (changed) {
+            _save();
+            _publishChange();
+            _fireObservers(deleted, "deleted");
+        }
+    }
+
+    /**
+     * Checks if there's any events on hold to be fired to listeners
+     */
+    function _handlePubSub() {
+        if (!_storage.__jstorage_meta.PubSub) {
+            return;
+        }
+        var pubelm,
+            _pubsubCurrent = _pubsub_last;
+
+        for (var i = len = _storage.__jstorage_meta.PubSub.length - 1; i >= 0; i--) {
+            pubelm = _storage.__jstorage_meta.PubSub[i];
+            if (pubelm[0] > _pubsub_last) {
+                _pubsubCurrent = pubelm[0];
+                _fireSubscribers(pubelm[1], pubelm[2]);
+            }
+        }
+
+        _pubsub_last = _pubsubCurrent;
+    }
+
+    /**
+     * Fires all subscriber listeners for a pubsub channel
+     *
+     * @param {String} channel Channel name
+     * @param {Mixed} payload Payload data to deliver
+     */
+    function _fireSubscribers(channel, payload) {
+        if (_pubsub_observers[channel]) {
+            for (var i = 0, len = _pubsub_observers[channel].length; i < len; i++) {
+                // send immutable data that can't be modified by listeners
+                _pubsub_observers[channel][i](channel, JSON.parse(JSON.stringify(payload)));
+            }
+        }
+    }
+
+    /**
+     * Remove old events from the publish stream (at least 2sec old)
+     */
+    function _dropOldEvents() {
+        if (!_storage.__jstorage_meta.PubSub) {
+            return;
+        }
+
+        var retire = +new Date() - 2000;
+
+        for (var i = 0, len = _storage.__jstorage_meta.PubSub.length; i < len; i++) {
+            if (_storage.__jstorage_meta.PubSub[i][0] <= retire) {
+                // deleteCount is needed for IE6
+                _storage.__jstorage_meta.PubSub.splice(i, _storage.__jstorage_meta.PubSub.length - i);
+                break;
+            }
+        }
+
+        if (!_storage.__jstorage_meta.PubSub.length) {
+            delete _storage.__jstorage_meta.PubSub;
+        }
+
+    }
+
+    /**
+     * Publish payload to a channel
+     *
+     * @param {String} channel Channel name
+     * @param {Mixed} payload Payload to send to the subscribers
+     */
+    function _publish(channel, payload) {
+        if (!_storage.__jstorage_meta) {
+            _storage.__jstorage_meta = {};
+        }
+        if (!_storage.__jstorage_meta.PubSub) {
+            _storage.__jstorage_meta.PubSub = [];
+        }
+
+        _storage.__jstorage_meta.PubSub.unshift([+new Date, channel, payload]);
+
+        _save();
+        _publishChange();
+    }
+
+
+    /**
+     * JS Implementation of MurmurHash2
+     *
+     *  SOURCE: https://github.com/garycourt/murmurhash-js (MIT licensed)
+     *
+     * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+     * @see http://github.com/garycourt/murmurhash-js
+     * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+     * @see http://sites.google.com/site/murmurhash/
+     *
+     * @param {string} str ASCII only
+     * @param {number} seed Positive integer only
+     * @return {number} 32-bit positive integer hash
+     */
+
+    function murmurhash2_32_gc(str, seed) {
+        var
+            l = str.length,
+            h = seed ^ l,
+            i = 0,
+            k;
+
+        while (l >= 4) {
+            k =
+                ((str.charCodeAt(i) & 0xff)) |
+                ((str.charCodeAt(++i) & 0xff) << 8) |
+                ((str.charCodeAt(++i) & 0xff) << 16) |
+                ((str.charCodeAt(++i) & 0xff) << 24);
+
+            k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+            k ^= k >>> 24;
+            k = (((k & 0xffff) * 0x5bd1e995) + ((((k >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+
+            h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16)) ^ k;
+
+            l -= 4;
+            ++i;
+        }
+
+        switch (l) {
+            case 3: h ^= (str.charCodeAt(i + 2) & 0xff) << 16;
+            case 2: h ^= (str.charCodeAt(i + 1) & 0xff) << 8;
+            case 1: h ^= (str.charCodeAt(i) & 0xff);
+                h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+        }
+
+        h ^= h >>> 13;
+        h = (((h & 0xffff) * 0x5bd1e995) + ((((h >>> 16) * 0x5bd1e995) & 0xffff) << 16));
+        h ^= h >>> 15;
+
+        return h >>> 0;
+    }
+
+    ////////////////////////// PUBLIC INTERFACE /////////////////////////
+
+    $.jStorage = {
+        /* Version number */
+        version: JSTORAGE_VERSION,
+
+        /**
+         * Sets a key's value.
+         *
+         * @param {String} key Key to set. If this value is not set or not
+         *              a string an exception is raised.
+         * @param {Mixed} value Value to set. This can be any value that is JSON
+         *              compatible (Numbers, Strings, Objects etc.).
+         * @param {Object} [options] - possible options to use
+         * @param {Number} [options.TTL] - optional TTL value
+         * @return {Mixed} the used value
+         */
+        set: function (key, value, options) {
+            _checkKey(key);
+
+            options = options || {};
+
+            // undefined values are deleted automatically
+            if (typeof value == "undefined") {
+                this.deleteKey(key);
+                return value;
+            }
+
+            if (_XMLService.isXML(value)) {
+                value = { _is_xml: true, xml: _XMLService.encode(value) };
+            } else if (typeof value == "function") {
+                return undefined; // functions can't be saved!
+            } else if (value && typeof value == "object") {
+                // clone the object before saving to _storage tree
+                value = JSON.parse(JSON.stringify(value));
+            }
+
+            _storage[key] = value;
+
+            _storage.__jstorage_meta.CRC32[key] = "2." + murmurhash2_32_gc(JSON.stringify(value));
+
+            this.setTTL(key, options.TTL || 0); // also handles saving and _publishChange
+
+            _localStoragePolyfillSetKey(key, value);
+
+            _fireObservers(key, "updated");
+            return value;
+        },
+
+        /**
+         * Looks up a key in cache
+         *
+         * @param {String} key - Key to look up.
+         * @param {mixed} def - Default value to return, if key didn't exist.
+         * @return {Mixed} the key value, default value or null
+         */
+        get: function (key, def) {
+            _checkKey(key);
+            if (key in _storage) {
+                if (_storage[key] && typeof _storage[key] == "object" && _storage[key]._is_xml) {
+                    return _XMLService.decode(_storage[key].xml);
+                } else {
+                    return _storage[key];
+                }
+            }
+            return typeof (def) == 'undefined' ? null : def;
+        },
+
+        /**
+         * Deletes a key from cache.
+         *
+         * @param {String} key - Key to delete.
+         * @return {Boolean} true if key existed or false if it didn't
+         */
+        deleteKey: function (key) {
+            _checkKey(key);
+            if (key in _storage) {
+                delete _storage[key];
+                // remove from TTL list
+                if (typeof _storage.__jstorage_meta.TTL == "object" &&
+                  key in _storage.__jstorage_meta.TTL) {
+                    delete _storage.__jstorage_meta.TTL[key];
+                }
+
+                delete _storage.__jstorage_meta.CRC32[key];
+                _localStoragePolyfillSetKey(key, undefined);
+
+                _save();
+                _publishChange();
+                _fireObservers(key, "deleted");
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Sets a TTL for a key, or remove it if ttl value is 0 or below
+         *
+         * @param {String} key - key to set the TTL for
+         * @param {Number} ttl - TTL timeout in milliseconds
+         * @return {Boolean} true if key existed or false if it didn't
+         */
+        setTTL: function (key, ttl) {
+            var curtime = +new Date();
+            _checkKey(key);
+            ttl = Number(ttl) || 0;
+            if (key in _storage) {
+
+                if (!_storage.__jstorage_meta.TTL) {
+                    _storage.__jstorage_meta.TTL = {};
+                }
+
+                // Set TTL value for the key
+                if (ttl > 0) {
+                    _storage.__jstorage_meta.TTL[key] = curtime + ttl;
+                } else {
+                    delete _storage.__jstorage_meta.TTL[key];
+                }
+
+                _save();
+
+                _handleTTL();
+
+                _publishChange();
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Gets remaining TTL (in milliseconds) for a key or 0 when no TTL has been set
+         *
+         * @param {String} key Key to check
+         * @return {Number} Remaining TTL in milliseconds
+         */
+        getTTL: function (key) {
+            var curtime = +new Date(), ttl;
+            _checkKey(key);
+            if (key in _storage && _storage.__jstorage_meta.TTL && _storage.__jstorage_meta.TTL[key]) {
+                ttl = _storage.__jstorage_meta.TTL[key] - curtime;
+                return ttl || 0;
+            }
+            return 0;
+        },
+
+        /**
+         * Deletes everything in cache.
+         *
+         * @return {Boolean} Always true
+         */
+        flush: function () {
+            _storage = { __jstorage_meta: { CRC32: {} } };
+            _createPolyfillStorage("local", true);
+            _save();
+            _publishChange();
+            _fireObservers(null, "flushed");
+            return true;
+        },
+
+        /**
+         * Returns a read-only copy of _storage
+         *
+         * @return {Object} Read-only copy of _storage
+        */
+        storageObj: function () {
+            function F() { }
+            F.prototype = _storage;
+            return new F();
+        },
+
+        /**
+         * Returns an index of all used keys as an array
+         * ['key1', 'key2',..'keyN']
+         *
+         * @return {Array} Used keys
+        */
+        index: function () {
+            var index = [], i;
+            for (i in _storage) {
+                if (_storage.hasOwnProperty(i) && i != "__jstorage_meta") {
+                    index.push(i);
+                }
+            }
+            return index;
+        },
+
+        /**
+         * How much space in bytes does the storage take?
+         *
+         * @return {Number} Storage size in chars (not the same as in bytes,
+         *                  since some chars may take several bytes)
+         */
+        storageSize: function () {
+            return _storage_size;
+        },
+
+        /**
+         * Which backend is currently in use?
+         *
+         * @return {String} Backend name
+         */
+        currentBackend: function () {
+            return _backend;
+        },
+
+        /**
+         * Test if storage is available
+         *
+         * @return {Boolean} True if storage can be used
+         */
+        storageAvailable: function () {
+            return !!_backend;
+        },
+
+        /**
+         * Register change listeners
+         *
+         * @param {String} key Key name
+         * @param {Function} callback Function to run when the key changes
+         */
+        listenKeyChange: function (key, callback) {
+            _checkKey(key);
+            if (!_observers[key]) {
+                _observers[key] = [];
+            }
+            _observers[key].push(callback);
+        },
+
+        /**
+         * Remove change listeners
+         *
+         * @param {String} key Key name to unregister listeners against
+         * @param {Function} [callback] If set, unregister the callback, if not - unregister all
+         */
+        stopListening: function (key, callback) {
+            _checkKey(key);
+
+            if (!_observers[key]) {
+                return;
+            }
+
+            if (!callback) {
+                delete _observers[key];
+                return;
+            }
+
+            for (var i = _observers[key].length - 1; i >= 0; i--) {
+                if (_observers[key][i] == callback) {
+                    _observers[key].splice(i, 1);
+                }
+            }
+        },
+
+        /**
+         * Subscribe to a Publish/Subscribe event stream
+         *
+         * @param {String} channel Channel name
+         * @param {Function} callback Function to run when the something is published to the channel
+         */
+        subscribe: function (channel, callback) {
+            channel = (channel || "").toString();
+            if (!channel) {
+                throw new TypeError('Channel not defined');
+            }
+            if (!_pubsub_observers[channel]) {
+                _pubsub_observers[channel] = [];
+            }
+            _pubsub_observers[channel].push(callback);
+        },
+
+        /**
+         * Publish data to an event stream
+         *
+         * @param {String} channel Channel name
+         * @param {Mixed} payload Payload to deliver
+         */
+        publish: function (channel, payload) {
+            channel = (channel || "").toString();
+            if (!channel) {
+                throw new TypeError('Channel not defined');
+            }
+
+            _publish(channel, payload);
+        },
+
+        /**
+         * Reloads the data from browser storage
+         */
+        reInit: function () {
+            _reloadData();
+        }
+    };
+
+    // Initialize jStorage
+    _init();
+
+})();
+;/*
+    http://www.JSON.org/json2.js
+    2011-02-23
+
+    Public Domain.
+
+    NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+
+    See http://www.JSON.org/js.html
+
+
+    This code should be minified before deployment.
+    See http://javascript.crockford.com/jsmin.html
+
+    USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
+    NOT CONTROL.
+
+
+    This file creates a global JSON object containing two methods: stringify
+    and parse.
+
+        JSON.stringify(value, replacer, space)
+            value       any JavaScript value, usually an object or array.
+
+            replacer    an optional parameter that determines how object
+                        values are stringified for objects. It can be a
+                        function or an array of strings.
+
+            space       an optional parameter that specifies the indentation
+                        of nested structures. If it is omitted, the text will
+                        be packed without extra whitespace. If it is a number,
+                        it will specify the number of spaces to indent at each
+                        level. If it is a string (such as '\t' or '&nbsp;'),
+                        it contains the characters used to indent at each level.
+
+            This method produces a JSON text from a JavaScript value.
+
+            When an object value is found, if the object contains a toJSON
+            method, its toJSON method will be called and the result will be
+            stringified. A toJSON method does not serialize: it returns the
+            value represented by the name/value pair that should be serialized,
+            or undefined if nothing should be serialized. The toJSON method
+            will be passed the key associated with the value, and this will be
+            bound to the value
+
+            For example, this would serialize Dates as ISO strings.
+
+                Date.prototype.toJSON = function (key) {
+                    function f(n) {
+                        // Format integers to have at least two digits.
+                        return n < 10 ? '0' + n : n;
+                    }
+
+                    return this.getUTCFullYear()   + '-' +
+                         f(this.getUTCMonth() + 1) + '-' +
+                         f(this.getUTCDate())      + 'T' +
+                         f(this.getUTCHours())     + ':' +
+                         f(this.getUTCMinutes())   + ':' +
+                         f(this.getUTCSeconds())   + 'Z';
+                };
+
+            You can provide an optional replacer method. It will be passed the
+            key and value of each member, with this bound to the containing
+            object. The value that is returned from your method will be
+            serialized. If your method returns undefined, then the member will
+            be excluded from the serialization.
+
+            If the replacer parameter is an array of strings, then it will be
+            used to select the members to be serialized. It filters the results
+            such that only members with keys listed in the replacer array are
+            stringified.
+
+            Values that do not have JSON representations, such as undefined or
+            functions, will not be serialized. Such values in objects will be
+            dropped; in arrays they will be replaced with null. You can use
+            a replacer function to replace those with JSON values.
+            JSON.stringify(undefined) returns undefined.
+
+            The optional space parameter produces a stringification of the
+            value that is filled with line breaks and indentation to make it
+            easier to read.
+
+            If the space parameter is a non-empty string, then that string will
+            be used for indentation. If the space parameter is a number, then
+            the indentation will be that many spaces.
+
+            Example:
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}]);
+            // text is '["e",{"pluribus":"unum"}]'
+
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}], null, '\t');
+            // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
+
+            text = JSON.stringify([new Date()], function (key, value) {
+                return this[key] instanceof Date ?
+                    'Date(' + this[key] + ')' : value;
+            });
+            // text is '["Date(---current time---)"]'
+
+
+        JSON.parse(text, reviver)
+            This method parses a JSON text to produce an object or array.
+            It can throw a SyntaxError exception.
+
+            The optional reviver parameter is a function that can filter and
+            transform the results. It receives each of the keys and values,
+            and its return value is used instead of the original value.
+            If it returns what it received, then the structure is not modified.
+            If it returns undefined then the member is deleted.
+
+            Example:
+
+            // Parse the text. Values that look like ISO date strings will
+            // be converted to Date objects.
+
+            myData = JSON.parse(text, function (key, value) {
+                var a;
+                if (typeof value === 'string') {
+                    a =
+/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                    if (a) {
+                        return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4],
+                            +a[5], +a[6]));
+                    }
+                }
+                return value;
+            });
+
+            myData = JSON.parse('["Date(09/09/2001)"]', function (key, value) {
+                var d;
+                if (typeof value === 'string' &&
+                        value.slice(0, 5) === 'Date(' &&
+                        value.slice(-1) === ')') {
+                    d = new Date(value.slice(5, -1));
+                    if (d) {
+                        return d;
+                    }
+                }
+                return value;
+            });
+
+
+    This is a reference implementation. You are free to copy, modify, or
+    redistribute.
+*/
+
+/*jslint evil: true, strict: false, regexp: false */
+
+/*members "", "\b", "\t", "\n", "\f", "\r", "\"", JSON, "\\", apply,
+    call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
+    getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
+    lastIndex, length, parse, prototype, push, replace, slice, stringify,
+    test, toJSON, toString, valueOf
+*/
+
+
+// Create a JSON object only if one does not already exist. We create the
+// methods in a closure to avoid creating global variables.
+
+var JSON;
+if (!JSON) {
+    JSON = {};
+}
+
+(function () {
+    "use strict";
+
+    function f(n) {
+        // Format integers to have at least two digits.
+        return n < 10 ? '0' + n : n;
+    }
+
+    if (typeof Date.prototype.toJSON !== 'function') {
+
+        Date.prototype.toJSON = function (key) {
+
+            return isFinite(this.valueOf()) ?
+                this.getUTCFullYear() + '-' +
+                f(this.getUTCMonth() + 1) + '-' +
+                f(this.getUTCDate()) + 'T' +
+                f(this.getUTCHours()) + ':' +
+                f(this.getUTCMinutes()) + ':' +
+                f(this.getUTCSeconds()) + 'Z' : null;
+        };
+
+        String.prototype.toJSON =
+            Number.prototype.toJSON =
+            Boolean.prototype.toJSON = function (key) {
+                return this.valueOf();
+            };
+    }
+
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        gap,
+        indent,
+        meta = {    // table of character substitutions
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"': '\\"',
+            '\\': '\\\\'
+        },
+        rep;
+
+
+    function quote(string) {
+
+        // If the string contains no control characters, no quote characters, and no
+        // backslash characters, then we can safely slap some quotes around it.
+        // Otherwise we must also replace the offending characters with safe escape
+        // sequences.
+
+        escapable.lastIndex = 0;
+        return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
+            var c = meta[a];
+            return typeof c === 'string' ? c :
+                '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+        }) + '"' : '"' + string + '"';
+    }
+
+
+    function str(key, holder) {
+
+        // Produce a string from holder[key].
+
+        var i,          // The loop counter.
+            k,          // The member key.
+            v,          // The member value.
+            length,
+            mind = gap,
+            partial,
+            value = holder[key];
+
+        // If the value has a toJSON method, call it to obtain a replacement value.
+
+        if (value && typeof value === 'object' &&
+                typeof value.toJSON === 'function') {
+            value = value.toJSON(key);
+        }
+
+        // If we were called with a replacer function, then call the replacer to
+        // obtain a replacement value.
+
+        if (typeof rep === 'function') {
+            value = rep.call(holder, key, value);
+        }
+
+        // What happens next depends on the value's type.
+
+        switch (typeof value) {
+            case 'string':
+                return quote(value);
+
+            case 'number':
+
+                // JSON numbers must be finite. Encode non-finite numbers as null.
+
+                return isFinite(value) ? String(value) : 'null';
+
+            case 'boolean':
+            case 'null':
+
+                // If the value is a boolean or null, convert it to a string. Note:
+                // typeof null does not produce 'null'. The case is included here in
+                // the remote chance that this gets fixed someday.
+
+                return String(value);
+
+                // If the type is 'object', we might be dealing with an object or an array or
+                // null.
+
+            case 'object':
+
+                // Due to a specification blunder in ECMAScript, typeof null is 'object',
+                // so watch out for that case.
+
+                if (!value) {
+                    return 'null';
+                }
+
+                // Make an array to hold the partial results of stringifying this object value.
+
+                gap += indent;
+                partial = [];
+
+                // Is the value an array?
+
+                if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+                    // The value is an array. Stringify every element. Use null as a placeholder
+                    // for non-JSON values.
+
+                    length = value.length;
+                    for (i = 0; i < length; i += 1) {
+                        partial[i] = str(i, value) || 'null';
+                    }
+
+                    // Join all of the elements together, separated with commas, and wrap them in
+                    // brackets.
+
+                    v = partial.length === 0 ? '[]' : gap ?
+                        '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' :
+                        '[' + partial.join(',') + ']';
+                    gap = mind;
+                    return v;
+                }
+
+                // If the replacer is an array, use it to select the members to be stringified.
+
+                if (rep && typeof rep === 'object') {
+                    length = rep.length;
+                    for (i = 0; i < length; i += 1) {
+                        if (typeof rep[i] === 'string') {
+                            k = rep[i];
+                            v = str(k, value);
+                            if (v) {
+                                partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                            }
+                        }
+                    }
+                } else {
+
+                    // Otherwise, iterate through all of the keys in the object.
+
+                    for (k in value) {
+                        if (Object.prototype.hasOwnProperty.call(value, k)) {
+                            v = str(k, value);
+                            if (v) {
+                                partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                            }
+                        }
+                    }
+                }
+
+                // Join all of the member texts together, separated with commas,
+                // and wrap them in braces.
+
+                v = partial.length === 0 ? '{}' : gap ?
+                    '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' :
+                    '{' + partial.join(',') + '}';
+                gap = mind;
+                return v;
+        }
+    }
+
+    // If the JSON object does not yet have a stringify method, give it one.
+
+    if (typeof JSON.stringify !== 'function') {
+        JSON.stringify = function (value, replacer, space) {
+
+            // The stringify method takes a value and an optional replacer, and an optional
+            // space parameter, and returns a JSON text. The replacer can be a function
+            // that can replace values, or an array of strings that will select the keys.
+            // A default replacer method can be provided. Use of the space parameter can
+            // produce text that is more easily readable.
+
+            var i;
+            gap = '';
+            indent = '';
+
+            // If the space parameter is a number, make an indent string containing that
+            // many spaces.
+
+            if (typeof space === 'number') {
+                for (i = 0; i < space; i += 1) {
+                    indent += ' ';
+                }
+
+                // If the space parameter is a string, it will be used as the indent string.
+
+            } else if (typeof space === 'string') {
+                indent = space;
+            }
+
+            // If there is a replacer, it must be a function or an array.
+            // Otherwise, throw an error.
+
+            rep = replacer;
+            if (replacer && typeof replacer !== 'function' &&
+                    (typeof replacer !== 'object' ||
+                    typeof replacer.length !== 'number')) {
+                throw new Error('JSON.stringify');
+            }
+
+            // Make a fake root object containing our value under the key of ''.
+            // Return the result of stringifying the value.
+
+            return str('', { '': value });
+        };
+    }
+
+
+    // If the JSON object does not yet have a parse method, give it one.
+
+    if (typeof JSON.parse !== 'function') {
+        JSON.parse = function (text, reviver) {
+
+            // The parse method takes a text and an optional reviver function, and returns
+            // a JavaScript value if the text is a valid JSON text.
+
+            var j;
+
+            function walk(holder, key) {
+
+                // The walk method is used to recursively walk the resulting structure so
+                // that modifications can be made.
+
+                var k, v, value = holder[key];
+                if (value && typeof value === 'object') {
+                    for (k in value) {
+                        if (Object.prototype.hasOwnProperty.call(value, k)) {
+                            v = walk(value, k);
+                            if (v !== undefined) {
+                                value[k] = v;
+                            } else {
+                                delete value[k];
+                            }
+                        }
+                    }
+                }
+                return reviver.call(holder, key, value);
+            }
+
+
+            // Parsing happens in four stages. In the first stage, we replace certain
+            // Unicode characters with escape sequences. JavaScript handles many characters
+            // incorrectly, either silently deleting them, or treating them as line endings.
+
+            text = String(text);
+            cx.lastIndex = 0;
+            if (cx.test(text)) {
+                text = text.replace(cx, function (a) {
+                    return '\\u' +
+                        ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                });
+            }
+
+            // In the second stage, we run the text against regular expressions that look
+            // for non-JSON patterns. We are especially concerned with '()' and 'new'
+            // because they can cause invocation, and '=' because it can cause mutation.
+            // But just to be safe, we want to reject all unexpected forms.
+
+            // We split the second stage into 4 regexp operations in order to work around
+            // crippling inefficiencies in IE's and Safari's regexp engines. First we
+            // replace the JSON backslash pairs with '@' (a non-JSON character). Second, we
+            // replace all simple value tokens with ']' characters. Third, we delete all
+            // open brackets that follow a colon or comma or that begin the text. Finally,
+            // we look to see that the remaining characters are only whitespace or ']' or
+            // ',' or ':' or '{' or '}'. If that is so, then the text is safe for eval.
+
+            if (/^[\],:{}\s]*$/
+                    .test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
+                        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+                        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+                // In the third stage we use the eval function to compile the text into a
+                // JavaScript structure. The '{' operator is subject to a syntactic ambiguity
+                // in JavaScript: it can begin a block or an object literal. We wrap the text
+                // in parens to eliminate the ambiguity.
+
+                j = eval('(' + text + ')');
+
+                // In the optional fourth stage, we recursively walk the new structure, passing
+                // each name/value pair to a reviver function for possible transformation.
+
+                return typeof reviver === 'function' ?
+                    walk({ '': j }, '') : j;
+            }
+
+            // If the text is not JSON parseable, then a SyntaxError is thrown.
+
+            throw new SyntaxError('JSON.parse');
+        };
+    }
+}());
 ;/* File Created: August 18, 2012 */
 window.Friendly = window.Friendly || {};
 
@@ -14691,19 +16314,26 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
             formName = formName.substring(0, formName.lastIndexOf("Other"));
             model.isOtherParent = "true";
         }
+        //If there's an Id, we are updating; use PUT instead of POST
+        var submitType = 'POST';
+        
+        if (typeof model.Id != 'undefined' && model.Id != '0')
+            submitType = 'PUT';
         $.ajax({
             url: '/api/' + formName + '?format=json',
-            type: 'POST',
+            type: submitType,
             data: model,
-            success: function () {
+            success: function (data) {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
+                //update Id on form
+                if ($('#' + formName + 'Id').length > 0)
+                    $('#' + formName + 'Id').val(data.Id);
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 Friendly.EndLoading();
             },
             error: Friendly.GenericErrorMessage
         });
     } else if (isGeneric) {
-        //Friendly.NextForm(nextForm, Friendly.properties.iconError);
         Friendly.EndLoading();
         return false;
     }
@@ -14715,9 +16345,14 @@ Friendly.AjaxSubmit = function(formName, nextForm, model) {
         if (typeof model === 'undefined') {
             model = Friendly.GetFormInput(formName);
         }
+        //If there's an Id, we are updating; use PUT instead of POST
+        var submitType = 'POST';
+
+        if (typeof model.Id != 'undefined' && model.Id != '0')
+            submitType = 'PUT';
         $.ajax({
             url: '/api/' + formName + '?format=json',
-            type: 'POST',
+            type: submitType,
             data: model,
             success: function() {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -14755,10 +16390,13 @@ Friendly.NextForm = function (nextForm, prevIcon) {
             }
             break;
         case 'decisions':
-            Parenting.LoadChildren('decision');
+            Friendly.LoadChildren('decision');
             break;
         case 'holiday':
-            Parenting.LoadChildren('holiday');
+            Friendly.LoadChildren('holiday');
+            break;
+        case 'childCare':
+            Friendly.LoadChildren('childCare');
             break;
     }
     $('#sidebar li').removeClass('active');
@@ -14775,6 +16413,9 @@ Friendly.GetFormInput = function (formName) {
         model[field.name] = field.value;
     });
     model.UserId = $('#user-id').val();
+    //grab form Id if it exists
+    if ($('#' + formName + 'Id').length > 0)
+        model.Id = $('#' + formName + 'Id').val();
     return model;
 };
 Friendly.ClearForm = function (formName) {
@@ -14788,7 +16429,7 @@ Friendly.ClearForm = function (formName) {
      .removeAttr('checked')
      .removeAttr('selected');
 };
-Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
+Friendly.ValidateForms = function (btnClassToHide) {
     var allValid = true, invalidForms = [];
     //Cycles through nav tags to see if everything is complete
     var navItems = $('.nav-item');
@@ -14800,16 +16441,33 @@ Friendly.ValidateForms = function (forms, readableFormNames, btnClassToHide) {
     }
     if (!allValid) {
         var message = "The following forms are still incomplete or have errors: ";
-        for (var j = 0; j < invalidForms.length - 1; j++) {
-            message += invalidForms[j] + ", ";
+        for (var j = 0; j < invalidForms.length; j++) {
+            message += Friendly.FormInvalidationMessage(invalidForms[j]);
         }
-        message += invalidForms[invalidForms.length - 1];
+        //remove last comma
+        message = message.substring(0, message.lastIndexOf(','));
         Friendly.ShowMessage('Almost there!', message, Friendly.properties.messageType.Error);
         $('html, body').animate({ scrollTop: 0 }, 'fast');
         return false;
     }
     $(btnClassToHide).hide();
     $('.viewOutput').show();
+};
+Friendly.FormInvalidationMessage = function(formName) {
+    switch (formName) {
+        case 'Decisions':
+            if(Friendly.ChildDecisionError.length > 1)
+                return "Decisions (" + Friendly.ChildDecisionError.join(',') + "), ";
+            else 
+                return "Decisions (" + Friendly.ChildDecisionError[0] + "), ";
+        case 'Holidays':
+            if (Friendly.ChildHolidayError.length > 1)
+                return "Holidays (" + Friendly.ChildHolidayError.join(',') + "), ";
+            else
+                return "Holidays (" + Friendly.ChildHolidayError[0] + "), ";
+        default:
+            return formName + ", ";
+    }
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
@@ -14832,26 +16490,36 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 break;
             case 'decisions':
                 //First, check if current form is valid
-                if (Parenting.AddDecision()) {
-                    //cycle through all children and make sure form is valid and saved
-                    Friendly.childNdx = 0;
-                    var child = Friendly.children[Friendly.childNdx];
-                    Parenting.CheckChildDecision(child, nextForm);
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                }
+                Parenting.AddDecision();
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                Friendly.ChildDecisionError = [];
+                Parenting.CheckChildDecision(child, nextForm);
                 break;
-            case 'holiday':
+            case 'childCare':
                 //First, check if current form is valid
-                if (Parenting.AddHoliday()) {
-                    //cycle through all children and make sure form is valid and saved
-                    Friendly.childNdx = 0;
-                    var child = Friendly.children[Friendly.childNdx];
-                    Parenting.CheckChildHoliday(child, nextForm);
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                }
-                Friendly.EndLoading();
+                Financial.AddChildCare();
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                //Friendly.ChildCareError = [];
+                //Parenting.CheckChildCare(child, nextForm);
+                break;
+        case 'holiday':
+                //First, check if current form is valid
+                Parenting.AddHoliday();
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                Friendly.ChildHolidayError = [];
+                Parenting.CheckChildHoliday(child, nextForm);
                 break;                
             case 'preexistingSupport':
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
@@ -14865,7 +16533,41 @@ Friendly.IsGenericForm = function (formName, nextForm) {
     }
     return true;
 };
+//Children Decisions
+Friendly.LoadChildren = function (form) {
+    Friendly.children = [];
+    $('.copy-button ul').empty();
+    $('.copy-button ul').append('<li><a title="all" data-id="0">All</a></li>');
+    $.each($('.child-table tbody tr'), function (ndx, item) {
+        var child = {
+            Name: $(item).find('.child-name').text(),
+            DateOfBirth: $(item).find('.child-dob').text(),
+            Id: $(item).find('.child-id').text().trim(),
+        };
+        Friendly.children.push(child);
+        //add to decision and holiday dropdown - we are removing this for now
+        //$('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
+    });
 
+    if (Friendly.children.length <= 1) {
+        $('.copy-wrapper').hide();
+    }
+
+    //get first child's information
+    Friendly.childNdx = 0;
+    var firstChild = Friendly.children[Friendly.childNdx];
+    switch (form) {
+        case "decision":
+            Parenting.GetChildDecisions(firstChild);
+            break;
+        case "holiday":
+            Parenting.GetChildHoliday(firstChild);
+            break;
+        case "childCare":
+            Financial.GetChildCare(firstChild);
+            break;
+    }
+};
 $(document).ready(function () {
     // === Sidebar navigation === //
 
@@ -15004,9 +16706,24 @@ $(document).ready(function () {
     $('#main-content').on('click', '.close', function () {
         $(this).parent().parent().parent().remove();
     });
-
+    //currency
     $('.currency').mask('000,000,000,000,000', { reverse: true });
-
+    $.each($('.currencyText'), function (ndx, item) {
+        var text = $(item).text();
+        $(item).text(addCommas(text));
+    });
+    
+    function addCommas(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form
@@ -15088,9 +16805,9 @@ $(document).ready(function () {
     });
     
     //Vehicle Form    
-    $('input[name=Refinanced]').change(function () {
-        $('#RefinanceDate').val('');
-        if ($('#Refinanced:checked').val() === "1") {
+    $('input[id=VehicleViewModel_Refinanced]').change(function () {
+        $('#VehicleViewModel_RefinanceDate').val('');
+        if ($('#VehicleViewModel_Refinanced:checked').val() === "1") {
             $('.vehicle-refinance').show();
         } else {
             $('.vehicle-refinance').hide();
@@ -15239,9 +16956,9 @@ $(document).ready(function () {
                 type: 'POST',
                 data: model,
                 success: function () {
-                    var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
-                    var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
-                    Friendly.ValidateForms(forms, properNames, '.domestic-part8');
+                    //var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
+                    //var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
+                    Friendly.ValidateForms('.domestic-part8');
                     Friendly.EndLoading();
                     return false;
                 },
@@ -15286,40 +17003,75 @@ $(document).ready(function () {
     //});
 });
 ;$(function ($) {
+    //----------------------Special Circumstances---------------    
+    $('.financial-part0').click(function () {
+        Friendly.SubmitForm('deviations', 'childcare');
+    });
+    $('input[name="Deviations"]').change(function () {
+        if ($('#Deviations:checked').val() === "1") {
+            $('.deviation-other').show();
+        } else {
+            $('.deviation-other').hide();
+        }
+    });
+    $('input[name="HighLow"]').change(function () {
+        if ($('#HighLow:checked').val() === "1") {
+            $('.deviation-high').show();
+            $('.deviation-low').hide();
+        } else {
+            $('.deviation-low').show();
+            $('.deviation-high').hide();
+        }
+    });
     $('.financial-part1').click(function () {
         Friendly.SubmitForm('income', 'socialSecurity');
     });
-    $('#income input[name="Employed"]').change(function () {
-        $('#income #Salary').val('');
-        if ($('#income #Employed:checked').val() === "1") {
-            $('#income .income-employed').show();
+    $('#income input[name="HaveSalary"]').change(function () {
+        if ($('#income #HaveSalary:checked').val() === "1") {
+            $('#income .income-salary').show();
+            $('#income .income-nosalary').hide();
         } else {
-            $('#income .income-employed').hide();
+            $('#income .income-salary').hide();
+            $('#income .income-nosalary').show();
         }
     });
 
-    $('#income input[name="SelfEmployed"]').change(function () {
-        $('#income #SelfIncome').val('');
-        if ($('#income #SelfEmployed:checked').val() === "1") {
-            $('#income .income-self').show();
+    $('#income input[name="NonW2Income"]').change(function () {
+        if ($('#income #NonW2Income:checked').val() === "1") {
+            $('#income .income-nonW2').show();
         } else {
-            $('#income .income-self').hide();
+            $('#income .income-nonW2').hide();
         }
     });
-    $('#income input[name="SelfTax"]').change(function () {
-        $('#income #SelfTaxAmount').val('');
-        if ($('#income #SelfTax:checked').val() === "1") {
-            $('#income .income-tax').show();
+    //-----------------Child care---------------------
+    $('#childCareForm #ChildrenInvolved').change(function() {
+        if ($('#childCareForm #ChildrenInvolved:checked').val() === "1") {
+            $('#childCare-show').show();
         } else {
-            $('#income .income-tax').hide();
+            $('#childCare-show').hide();
         }
     });
-    $('#income input[name="OtherSources"]').change(function () {
-        if ($('#income #OtherSources:checked').val() === "1") {
-            $('#income .income-other').show();
-        } else {
-            $('#income .income-other').hide();
+    
+    $('.financial-childcare').click(function () {
+        //if the form isn't validated, we still need to move on
+        if (!Financial.AddChildCare(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.ChildCareError.push(child.Name);
+            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+                Friendly.NextForm('income', Friendly.properties.iconError);
+                return;
+            }
+            //check if we need to move to previous form
+            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
+                Friendly.NextForm('deviations', Friendly.properties.iconError);
+                return;
+            }
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Parenting.GetChildCare(nextChild);
+            Friendly.EndLoading();
         }
+        
     });
     //-----------------Social Security---------------------
     $('.financial-part2').click(function () {
@@ -15430,7 +17182,7 @@ $(document).ready(function () {
                         $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -15461,19 +17213,32 @@ $(document).ready(function () {
         }
         Friendly.EndLoading();
     });
-    //----------------------Special Circumstances---------------    
+    //---------------------------------------Health--------------------------------
     $('.financial-part5').click(function () {
-        Friendly.SubmitForm('specialCircumstances', 'incomeOther');
+        Friendly.SubmitForm('healths', 'incomeOther');
     });
-    $('input[name="Circumstances"]').change(function () {
-        if ($('#Circumstances:checked').val() === "1") {
-            $('.circumstance-other').show();
+    $('#healths input[name="ProvideHealth"]').change(function () {
+        $('#healths #health-provide input').val('');
+        if ($('#healths #ProvideHealth:checked').val() === "1") {
+            $('#healths #health-provide').show();
         } else {
-            $('.circumstance-other').hide();
+            $('#healths #health-provide').hide();
         }
     });
-
-    //---------------------------------------Other Parent--------------------------------
+    $('#healths .percent').focusout(function () {
+        var percentItems = $.grep($('#healths .percent'), function(element, ndx) {
+            return $(element).val() != "";
+        });
+        //only alter if 
+        var remainingVal = 0;
+        if (percentItems.length == 2) {
+            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+            percentItems = $.grep($('#healths .percent'), function (element, ndx) {
+                return $(element).val() === "";
+            });
+            $(percentItems).val(remainingVal);
+        }
+    });
     //---------------------------------------Income--------------------------------
     $('#incomeOther input[name="Employed"]').change(function () {
         $('#incomeOther #Salary').val('');
@@ -15620,7 +17385,7 @@ $(document).ready(function () {
                         $('#otherChildOtherWrapper #childrenId').val(data.OtherChildren.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
-                        Friendly.NextForm('specialCircumstancesOther', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('healthsOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -15651,45 +17416,110 @@ $(document).ready(function () {
         }
         Friendly.EndLoading();
     });
+    //----------------------Health Other---------------    
 
-    //----------------------Special Circumstances---------------    
     $('.financial-part10').click(function () {
-        //check if we need to move to next form
-        Friendly.SubmitForm('specialCircumstancesOther', 'incomeOther');
+        Friendly.SubmitForm('healthsOther', 'incomeOther');
     });
-    $('#circumstanceOther input[name="Circumstances"]').change(function () {
-        if ($('#circumstanceOther #Circumstances:checked').val() === "1") {
-            $('#circumstanceOther .circumstance-other').show();
+    $('#healthsOther input[name="ProvideHealth"]').change(function () {
+        $('#healthsOther #health-provide input').val('');
+        if ($('#healthsOther #ProvideHealth:checked').val() === "1") {
+            $('#healthsOther #health-provide').show();
         } else {
-            $('#circumstanceOther .circumstance-other').hide();
+            $('#healthsOther #health-provide').hide();
         }
     });
-    
+    $('#healthsOther .percent').focusout(function () {
+        var percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
+            return $(element).val() != "";
+        });
+        //only alter if 
+        var remainingVal = 0;
+        if (percentItems.length == 2) {
+            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+            percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
+                return $(element).val() === "";
+            });
+            $(percentItems).val(remainingVal);
+        }
+    });
 });
+;window.Financial = window.Financial|| {};
+Financial.GetChildCare = function(child) {
+    var formName = 'childCare';
+    $.ajax({
+        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
+        type: 'GET',
+        success: function(data) {
+            var $form = $('#' + formName);
+            $form.empty();
+            if (data === "")
+                data = {};
+            data.Name = child.Name;
+            data.Id = child.Id;
+            var result = $("#friendly-childCare-template").tmpl(data);
+            $form.append(result);
+            //check if valid
+            $form.valid();
+        },
+        error: Friendly.GenericErrorMessage
+    });
+};
+Financial.AddChildCare = function (caller) {
+    var formName = 'childCare';
+    if (caller != null && $(caller).hasClass('next'))
+        Friendly.childNdx++;
+    else if (caller != null) {
+        Friendly.childNdx--;
+    }
+    var model = Friendly.GetFormInput(formName);
+    model.ChildId = $('#ChildId').val().trim();
+    //key is for local storage
+    var key = formName + model.ChildId;
+    if (!$('#' + formName).valid()) {
+        //if validation fails, save data to local storage for later retrieval
+        $.jStorage.set(key, model);
+        return false;
+    }
+    //delete key since form is valid (doesn't matter if it exists or not
+    $.jStorage.deleteKey(key);
+    //check if we need to move to next form
+    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+        Friendly.SubmitForm(formName, 'income', model);
+        return false;
+    }
+    //check if we need to move to previous form
+    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
+        Friendly.SubmitForm(formName, 'deviations', model);
+        return false;
+    }
+    if ($('#' + formName + 'Id').length > 0)
+        model.Id = $('#' + formName + 'Id').val();
+    var submitType = 'POST';
+    if (typeof model.Id != 'undefined' && model.Id != '0')
+        submitType = 'PUT';
+
+    //save current information
+    $.ajax({
+        url: '/api/' + formName + '/?format=json',
+        type: submitType,
+        data: model,
+        success: function () {
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Financial.GetChildCare(nextChild);
+        },
+        error: Friendly.GenericErrorMessage
+    });
+    return true;
+};
+
 ;$(function ($) {
     var html = $('#main-content').html();
     html = html.replace(/<form.*>/, "");
     html = html.replace(/<input.*>/, "");
     html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
-    //html = html.replace(/<hr.*>/, "");
-    $('#html').val(html);
-    //$('.printForm').click(function() {
-    //    var html = $('#main-content').html();
-    //    //remove button at end of form
-    //    html = html.replace(/<input.*>/, "");
-    //    Friendly.StartLoading();
-    //    $.ajax({
-    //        url: '/Output/PrintForm',
-    //        type: 'POST',
-    //        data: {
-    //            html: html
-    //        },
-    //        success: function(data) {
-    //            Friendly.EndLoading();
-    //        },
-    //        error: Friendly.GenericErrorMessage
-    //    });
-    //});
+    $('.html').val(html);
 });
 ;$(function ($) {
     //Court Form
@@ -15728,7 +17558,7 @@ $(document).ready(function () {
                 $('#DefendantRelationship[value="1"]').attr('checked', 'checked');
                 break;
             case "3":
-                $('#DefendantRelationship[value="3"]').attr('checked', 'checked');
+                $('#DefendantRelationship[value="4"]').attr('checked', 'checked');
                 break;
         }
         updatePlaintiffCustodial();
@@ -15742,7 +17572,7 @@ $(document).ready(function () {
             case "2":
                 $('#PlaintiffRelationship[value="1"]').attr('checked', 'checked');
                 break;
-            case "3":
+            case "4":
                 $('#PlaintiffRelationship[value="3"]').attr('checked', 'checked');
                 break;
         }
@@ -15880,6 +17710,7 @@ $(document).ready(function () {
                     //get values
                     var model = Friendly.GetFormInput(formName);
                     model.ChildFormId = data.ChildForm.Id;
+                    $('#childForm').hide();
                     //use this for later when editing child information
                     $('#childFormId').val(model.ChildFormId);
                     $.ajax({
@@ -15924,6 +17755,9 @@ $(document).ready(function () {
     });
 });
 ;$(function ($) {
+    //let's declare the globals for this form.
+    Friendly.ChildDecisionError = [];
+    Friendly.ChildHolidayError = [];
     //----------------------Privacy Form-----------------------
     //if on or the other of the supervision checkboxes are checked, then show the rest of the data
     $('input[name=NeedSupervision]').change(function () {
@@ -15945,7 +17779,7 @@ $(document).ready(function () {
         Friendly.StartLoading();
         //get values
         var model = Friendly.GetFormInput('information');
-        Parenting.LoadChildren('decision');
+        Friendly.LoadChildren('decision');
         var formName = 'information';
         var nextForm = 'decisions';
         var formSelector = '#' + formName;
@@ -16009,6 +17843,7 @@ $(document).ready(function () {
         if (childId === "0") {
             //all case.  Cycle through all kids
             for (var i = 0; i < Friendly.children.length; i++) {
+                
                 var currChild = Friendly.children[i];
                 //only show message if last child saved completes
                 if (i == Friendly.children.length - 1)
@@ -16027,8 +17862,15 @@ $(document).ready(function () {
     });
     function copyDecision(childId, showMessage) {
         Parenting.SaveExtraDecisions(childId);
-        var model = Friendly.GetFormInput('decisions');
-        model.ChildId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
+        var formName = 'decisions';
+        childId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
+
+        //delete from local storage
+        var key = formName + childId;
+        $.jStorage.deleteKey(key);
+
+        var model = Friendly.GetFormInput(formName);
+        model.ChildId = childId;
         $.ajax({
             url: '/api/Decisions?format=json',
             type: 'POST',
@@ -16040,8 +17882,25 @@ $(document).ready(function () {
             error: Friendly.GenericErrorMessage
         });
     }
-    $('.child-part6').click(function () {
-        Parenting.AddDecision(this);
+    $('.child-part6').click(function () {        
+        //if the form isn't validated, we still need to move on
+        if (!Parenting.AddDecision(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.ChildDecisionError.push(child.Name);
+            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+                Friendly.NextForm('responsibility', Friendly.properties.iconError);
+                return;
+            }
+            //check if we need to move to previous form
+            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
+                Friendly.NextForm('information', Friendly.properties.iconError);
+                return;
+            }
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Parenting.GetChildDecisions(nextChild);
+            Friendly.EndLoading();
+        }
     });
 
     //Responsibility Form
@@ -16072,23 +17931,7 @@ $(document).ready(function () {
     });
 
     $('.child-part7').click(function () {
-        var model = {
-            BeginningVisitation: $('#BeginningVisitation:checked').val(),
-            EndVisitation: $('#EndVisitation:checked').val(),
-            TransportationCosts: $('#TransportationCosts:checked').val(),
-            FatherPercentage: 0,
-            MotherPercentage: 0,
-            UserId: $('#user-id').val(),
-            OtherDetails: ''
-        };
-        if (model.TransportationCosts === "3") {
-            model.FatherPercentage = $('#FatherPercentage').val();
-            model.MotherPercentage = $('#MotherPercentage').val();
-        }
-        if (model.TransportationCosts === "4") {
-            model.OtherDetails = $('#OtherDetails').val();
-        }
-        Friendly.SubmitForm('responsibility', 'communication', model);
+        Friendly.SubmitForm('responsibility', 'communication');
     });
 
 
@@ -16140,75 +17983,53 @@ $(document).ready(function () {
             $('.schedule-weekday').hide();
         }
     });
-    $('input[name=FatherWeekend]').change(function () {
-        var checked = $('#FatherWeekend:checked').val();
+    $('input[name=CustodianWeekend]').change(function () {
+        var checked = $('#CustodianWeekend:checked').val();
         $('.schedule-weekend-other').hide();
         switch (checked) {
             case "1":
-                $('#MotherWeekend[value="1"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="1"]').attr('checked', 'checked');
                 break;
             case "2":
-                $('#MotherWeekend[value="4"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="4"]').attr('checked', 'checked');
                 break;
             case "3":
-                $('#MotherWeekend[value="4"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="4"]').attr('checked', 'checked'); 
                 break;
             case "4":
-                $('#MotherWeekend[value="3"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="3"]').attr('checked', 'checked');
                 break;
             case "5":
-                $('#MotherWeekend[value="5"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="5"]').attr('checked', 'checked');
                 $('.schedule-weekend-other').show();
                 break;
         }
     });
-    $('input[name=MotherWeekend]').change(function () {
-        var checked = $('#MotherWeekend:checked').val();
+    $('input[name=NonCustodianWeekend]').change(function () {
+        var checked = $('#NonCustodianWeekend:checked').val();
         $('.schedule-weekend-other').hide();
         switch (checked) {
             case "1":
-                $('#FatherWeekend[value="1"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="1"]').attr('checked', 'checked');
                 break;
             case "2":
-                $('#FatherWeekend[value="4"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="4"]').attr('checked', 'checked');
                 break;
             case "3":
-                $('#FatherWeekend[value="4"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="4"]').attr('checked', 'checked');
                 break;
             case "4":
-                $('#FatherWeekend[value="3"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="3"]').attr('checked', 'checked');
                 break;
             case "5":
-                $('#FatherWeekend[value="5"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="5"]').attr('checked', 'checked');
                 $('.schedule-weekend-other').show();
                 break;
         }
     });
 
     $('.child-part9').click(function () {
-        var model = Friendly.GetFormInput('schedule');
-        var formName = 'schedule';
-        var nextForm = 'holiday';
-        var formSelector = '#' + formName;
-        if ($(formSelector).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '?format=json',
-                type: 'POST',
-                data: model,
-                success: function () {
-                    Parenting.LoadChildren('holiday');
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    Friendly.EndLoading();
-                    return false;
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        else {
-            Friendly.EndLoading();
-            return false;
-        }
-        return false;
+        Friendly.SubmitForm('schedule', 'holiday');
     });
     $('#addHolidays').click(function () {
         Friendly.StartLoading();
@@ -16257,6 +18078,8 @@ $(document).ready(function () {
                 holidayCheckOther(holidayName, val);
             }
         });
+        //we need to do a validation check after this since red errors don't go away on radio buttons after this
+        $('#holiday').valid();
     });
     $('.mother-all input[type=radio]').change(function () {
         var name = $(this).attr('name');
@@ -16272,6 +18095,7 @@ $(document).ready(function () {
                 holidayCheckOther(holidayName, val);
             }
         });
+        $('#holiday').valid();
     });
     function holidayCheckOther(name, val) {
         switch (val) {
@@ -16310,20 +18134,22 @@ $(document).ready(function () {
     $('.child-part10').click(function () {
         //if the form isn't validated, we still need to move on
         if (!Parenting.AddHoliday(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.ChildHolidayError.push(child.Name);
             if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
                 Friendly.NextForm('addendum', Friendly.properties.iconError);
-                return false;
+                return;
             }
             //check if we need to move to previous form
             if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
                 Friendly.NextForm('schedule', Friendly.properties.iconError);                
-                return false;
+                return;
             }
             $('html, body').animate({ scrollTop: 0 }, 'fast');
             var nextChild = Friendly.children[Friendly.childNdx];
             Parenting.GetChildHoliday(nextChild);
             Friendly.EndLoading();
-        }        
+        }       
     });
     //Addendum
     $('input[name=HasAddendum]').change(function () {
@@ -16345,9 +18171,7 @@ $(document).ready(function () {
                 type: 'POST',
                 data: model,
                 success: function () {
-                    var forms = ["privacy", "information", "decisions", "responsibility", "communication", "schedule", "holiday", "addendum"];
-                    var readableForms = ["Supervision", "Information", "Decisions", "Responsibility", "Communication", "Schedule", "Holiday", "Addendum"];
-                    Friendly.ValidateForms(forms, readableForms, '.child-part11');
+                    Friendly.ValidateForms('.child-part11');
                     Friendly.EndLoading();
                 },
                 error: Friendly.GenericErrorMessage
@@ -16428,17 +18252,23 @@ $(document).ready(function () {
             //then save the copy to child
             copyHoliday(childId, true);
         }
-        Friendly.EndLoading();
+        Friendly.EndLoading();       
     });
 
     function copyHoliday(childId, showMessage) {
         Parenting.SaveExtraHolidays(childId);
         var formName = 'holiday';
         //do rest of the form
+        childId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
+
+        //delete from local storage
+        var key = formName + childId;
+        $.jStorage.deleteKey(key);
+
         var model = Friendly.GetFormInput(formName);
-        model.ChildId = typeof (childId) === "undefined" ? $('#holidayChildId').val() : childId;
-        model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
-        model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
+        model.ChildId = childId;
+        //model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
+        //model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
         $.ajax({
             url: '/api/' + formName + '?format=json',
             type: 'POST',
@@ -16448,7 +18278,7 @@ $(document).ready(function () {
                     Friendly.ShowMessage('Success!', 'The holiday section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#holidayWrapper .copy-wrapper');
             },
             error: Friendly.GenericErrorMessage
-        });
+        });       
     }
 });
 
@@ -16456,10 +18286,6 @@ $(document).ready(function () {
 ;window.Parenting = window.Parenting || {};
 Parenting.AddDecision = function (caller) {
     var formName = 'decisions';
-    if (!$('#' + formName).valid()) {
-        return false;
-    }
-    Parenting.SaveExtraDecisions();
     if (caller != null && $(caller).hasClass('next'))
         Friendly.childNdx++;
     else if (caller != null) {
@@ -16467,6 +18293,31 @@ Parenting.AddDecision = function (caller) {
     }
     var model = Friendly.GetFormInput(formName);
     model.ChildId = $('#childId').val().trim();
+    //key is for local storage
+    var key = formName + model.ChildId;
+    if (!$('#' + formName).valid()) {
+        //if validation fails, save data to local storage for later retrieval
+        var saveModel = {
+            Decisions: model,
+            ExtraDecisions: []
+        };
+        $.each($('.extra-decision-item'), function(ndx, item) {
+            var id = $(item).children('#extra-decision-Id').val();
+            var extraModel = {
+                Id: typeof(model.ChildId) === "undefined" ? id : 0,
+                ChildId: typeof (model.ChildId) === "undefined" ? $(item).children('#extra-decision-childId').val() : model.ChildId,
+                DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
+                Description: $(item).children('#extra-decision-description').text().trim(),
+                UserId: $('#user-id').val()
+            };
+            saveModel.ExtraDecisions.push(extraModel);
+        });
+        $.jStorage.set(key, saveModel);
+        return false;
+    }
+    //delete key since form is valid (doesn't matter if it exists or not
+    $.jStorage.deleteKey(key);
+    Parenting.SaveExtraDecisions();
     //check if we need to move to next form
     if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
         Friendly.SubmitForm(formName, 'responsibility', model);
@@ -16485,10 +18336,6 @@ Parenting.AddDecision = function (caller) {
         data: model,
         success: function () {
             $('html, body').animate({ scrollTop: 0 }, 'fast');
-            $('input[id=DecisionsViewModel_Education]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_HealthCare]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_Religion]').removeAttr('checked');
-            $('input[id=DecisionsViewModel_ExtraCurricular]').removeAttr('checked');
             var nextChild = Friendly.children[Friendly.childNdx];
             Parenting.GetChildDecisions(nextChild);
         },
@@ -16497,35 +18344,43 @@ Parenting.AddDecision = function (caller) {
     return true;
 };
 Parenting.CheckChildDecision = function (child, nextForm) {
+    var formName = 'decisions';
     $.ajax({
-        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
+        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
         type: 'GET',
         success: function (data) {
             $('#childName').text(child.Name);
             $('#childId').val(child.Id);
-            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+            Friendly.ClearForm(formName);
+            if (data.Decisions) {
+                $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+                $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+            }
             $('.extra-decision-item').remove();
             Friendly.childNdx++;
-            if (Friendly.childNdx === Friendly.children.length) {
-                if ($('#decisions').valid()) {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    return false;
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                    return false;
-                }
-            }
-            if ($('#decisions').valid()) {
-                //recursively go to next child
+            //Check if we've gone through all children. If not, continue on
+            if (Friendly.childNdx !== Friendly.children.length) {
+                if ($('#' + formName).valid()) {
+                    //recursively go to next child
+                    Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
+                    return;
+                } 
+                //Record Error and recursively go to next child
+                Friendly.ChildDecisionError.push(child.Name);
                 Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
-                return false;
-            } else {
+                return;                
+            }
+            //At last child.  Advance to next form - show error if there are errors
+            if (!$('#decisions').valid()) {
+                Friendly.ChildDecisionError.push(child.Name);
+            }
+            if (Friendly.ChildDecisionError.length > 0) {
                 Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                return false;
+            } else {
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
             }
         },
         error: Friendly.GenericErrorMessage
@@ -16580,29 +18435,44 @@ Parenting.SaveExtraDecisions = function (childId) {
         });
     });
 };
+Parenting.SetChildDecisions = function(child, data) {
+    $('#childName').text(child.Name);
+    $('#childId').val(child.Id);
+    if (typeof (data.Decisions) === 'undefined')
+        return false;
+
+    $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
+    $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
+    $('.extra-decision-item').remove();
+    $.each(data.ExtraDecisions, function(ndx, item) {
+        var result = $("#friendly-extraDecisions-template").tmpl(item);
+        $('#radio-decisions').append(result);
+    });
+    Parenting.CheckIfBothIsChecked();
+    //fixes possible error flag if one child isn't complete but another is
+    if (data.Decisions.ExtraCurricular !== 0) {
+        $('#decisions').valid();
+    }
+    $('#decisionsWrapper').show();
+};
+//get's a childs decision informaion.  Checks local storage first. If it doesn't exist, it looks for the data at the server
 Parenting.GetChildDecisions = function (child) {
+    var formName = 'decisions';
+    Friendly.ClearForm(formName);
+    var key = formName + child.Id;
+    var data = $.jStorage.get(key);
+    if (data) {
+        Parenting.SetChildDecisions(child, data);
+        return;
+    }            
     $.ajax({
-        url: '/api/Decisions?ChildId=' + child.Id + '&format=json',
+        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
         type: 'GET',
-        success: function (data) {
-            $('#childName').text(child.Name);
-            $('#childId').val(child.Id);
-            $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-            $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
-            $('.extra-decision-item').remove();
-            $.each(data.ExtraDecisions, function (ndx, item) {
-                var result = $("#friendly-extraDecisions-template").tmpl(item);
-                $('#radio-decisions').append(result);
-            });
-            Parenting.CheckIfBothIsChecked();
-            //fixes possible error flag if one child isn't complete but another is
-            if (data.Decisions.Education !== 0) {
-                $('#decisions').valid();
-            }
-            $('#decisionsWrapper').show();
+        success: function (data) {            
+            Parenting.SetChildDecisions(child, data);
         },
         error: Friendly.GenericErrorMessage
     });
@@ -16622,29 +18492,33 @@ Parenting.CheckIfBothIsChecked = function () {
     }
 }
 Parenting.CheckChildHoliday = function (child, nextForm) {
+    var formName = 'holiday';
     $.ajax({
-        url: '/api/Holiday/' + child.Id + '?format=json',
+        url: '/api/' + formName + '/' + child.Id + '?format=json',
         type: 'GET',
-        success: function (data) {
+        success: function (data) {            
             Parenting.SetChildHolidayForm(data, child);
             Friendly.childNdx++;
-            if (Friendly.childNdx === Friendly.children.length) {
-                if ($('#holiday').valid()) {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    return false;
-                } else {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                    return false;
+            if (Friendly.childNdx !== Friendly.children.length) {
+                if ($('#' + formName).valid()) {
+                    //recursively go to next child
+                    Parenting.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
+                    return;
                 }
-            }
-            if ($('#holiday').valid()) {
-                //recursively go to next child
+                //Record Error and recursively go to next child
+                Friendly.ChildDecisionError.push(child.Name);
                 Parenting.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
-                return false;
-            } else {
-                Friendly.NextForm(nextForm, Friendly.properties.iconError);
-                return false;
+                return;
             }
+            //At last child.  Advance to next form - show error if there are errors
+            if (!$('#' + formName).valid()) {
+                Friendly.ChildHolidayError.push(child.Name);
+            }
+            if (Friendly.ChildHolidayError.length > 0) {
+                Friendly.NextForm(nextForm, Friendly.properties.iconError);
+            } else {
+                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
+            }            
         },
         error: Friendly.GenericErrorMessage
     });
@@ -16657,75 +18531,75 @@ Parenting.AddHoliday = function(caller) {
     else if (caller != null) {
         Friendly.childNdx--;
     }
-    if ($('#' + formName).valid()) {
-        Parenting.SaveExtraHolidays();
-        var model = Friendly.GetFormInput(formName);
-        model.ChildId = $('#holidayChildId').val();
-        //check if we need to move to next form
-        if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-            Friendly.SubmitForm('holiday', 'addendum', model);
-            return true;
-        }
-        //check if we need to move to previous form
-        if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-            Friendly.SubmitForm('holiday', 'schedule', model);
-            return true;
-        }
-        Friendly.StartLoading();
-        //save current information
-        $.ajax({
-            url: '/api/' + formName + "?format=json",
-            type: 'POST',
-            data: model,
-            success: function() {
-                //$('#' + formName)[0].reset();
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                var nextChild = Friendly.children[Friendly.childNdx];
-                Parenting.GetChildHoliday(nextChild);
-                Friendly.EndLoading();
-            },
-            error: Friendly.GenericErrorMessage
+    var model = Friendly.GetFormInput(formName);
+    var childId = $('#holidayChildId').val();
+    model.ChildId = childId;
+
+    var key = formName + model.ChildId;
+    if (!$('#' + formName).valid()) {
+        //if validation fails, save data to local storage for later retrieval
+        var saveModel = {
+            Holidays: model,
+            ExtraHolidays: []
+        };
+        $.each($('.extra-holiday-item'), function(ndx, item) {
+            var id = $(item).children('#extra-holiday-Id').val();
+            var extraModel = {
+                Id: typeof(childId) === "undefined" ? id : 0,
+                ChildId: typeof(childId) === "undefined" ? $(item).children('#extra-holiday-childId').val() : childId,
+                HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
+                HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
+                HolidayName: $(item).children('.extra-holiday-name').text(),
+                UserId: $('#user-id').val()
+            };
+            saveModel.ExtraHolidays.push(extraModel);
         });
+        $.jStorage.set(key, saveModel);
+        return false;
+    }
+    //delete key since form is valid (doesn't matter if it exists or not)
+    $.jStorage.deleteKey(key);
+
+    Parenting.SaveExtraHolidays();
+    //check if we need to move to next form
+    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+        Friendly.SubmitForm('holiday', 'addendum', model);
         return true;
     }
-    return false;
-};
-
-//Children Decisions
-Parenting.LoadChildren = function(form) {
-    Friendly.children = [];
-    $('.copy-button ul').empty();
-    $('.copy-button ul').append('<li><a title="all" data-id="0">All</a></li>');
-    $.each($('.child-table tbody tr'), function(ndx, item) {
-        var child = {
-            Name: $(item).find('.child-name').text(),
-            DateOfBirth: $(item).find('.child-dob').text(),
-            Id: $(item).find('.child-id').text().trim(),
-        };
-        Friendly.children.push(child);
-        //add to decision and holiday dropdown - we are removing this for now
-        //$('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
-    });
-
-    if (Friendly.children.length <= 1) {
-        $('.copy-wrapper').hide();
+    //check if we need to move to previous form
+    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
+        Friendly.SubmitForm('holiday', 'schedule', model);
+        return true;
     }
-
-    //get first child's information
-    Friendly.childNdx = 0;
-    var firstChild = Friendly.children[Friendly.childNdx];
-    switch (form) {
-    case "decision":
-        Parenting.GetChildDecisions(firstChild);
-        break;
-    case "holiday":
-        Parenting.GetChildHoliday(firstChild);
-        break;
-    }
-};
-Parenting.GetChildHoliday = function(child) {
+    Friendly.StartLoading();
+    //save current information
     $.ajax({
-        url: '/api/Holiday/' + child.Id + '?format=json',
+        url: '/api/' + formName + "?format=json",
+        type: 'POST',
+        data: model,
+        success: function() {
+            //$('#' + formName)[0].reset();
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Parenting.GetChildHoliday(nextChild);
+            Friendly.EndLoading();
+        },
+        error: Friendly.GenericErrorMessage
+    });
+    return true;
+};
+
+Parenting.GetChildHoliday = function (child) {
+    var formName = 'holiday';
+    var key = formName + child.Id;
+    var data = $.jStorage.get(key);
+    if (data) {
+        Parenting.SetChildHolidayForm(data, child);
+        $('#' + formName).valid();
+        return;
+    }
+    $.ajax({
+        url: '/api/'+ formName + '/' + child.Id + '?format=json',
         type: 'GET',
         success: function (data) {
             Parenting.SetChildHolidayForm(data, child);
@@ -16811,6 +18685,11 @@ Parenting.SetChildHolidayForm = function(data, child) {
         var result = $("#friendly-extraHolidays-template").tmpl(item);
         $('#holiday').append(result);
     });
+    //fixes possible error flag if one child isn't complete but another is
+    if (data.Holidays.ReligiousMother !== 0) {
+        $('#holiday').valid();
+    }
+
 };
 Parenting.SaveExtraHolidays = function(childId) {
     var formName = 'extraHoliday';

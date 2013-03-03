@@ -22,9 +22,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string BeginDate { get; set; }
         [DataMember]
-        public string FatherWeekendOther { get; set; }
+        public string CustodianWeekendOther { get; set; }
         [DataMember]
-        public string MotherWeekendOther { get; set; }
+        public string NonCustodianWeekendOther { get; set; }
         [DataMember]
         public string WeekendDayStart { get; set; }
         [DataMember]
@@ -38,9 +38,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string DropOffLocation { get; set; }
         [DataMember]
-        public int FatherWeekend { get; set; }
+        public int CustodianWeekend { get; set; }
         [DataMember]
-        public int MotherWeekend { get; set; }
+        public int NonCustodianWeekend { get; set; }
         [DataMember]
         public int Weekdays { get; set; }
         [DataMember]
@@ -52,15 +52,19 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string WeekdayDropoffLocation { get; set; }
         [DataMember]
-        public int? MondayParent { get; set; }
+        public bool MondayParent { get; set; }
         [DataMember]
-        public int? TuesdayParent { get; set; }
+        public bool TuesdayParent { get; set; }
         [DataMember]
-        public int? WednesdayParent { get; set; }
+        public bool WednesdayParent { get; set; }
         [DataMember]
-        public int? ThursdayParent { get; set; }
+        public bool ThursdayParent { get; set; }
         [DataMember]
-        public int? FridayParent { get; set; }
+        public bool FridayParent { get; set; }
+        [DataMember]
+        public bool SaturdayParent { get; set; }
+        [DataMember]
+        public bool SundayParent { get; set; }
         [DataMember]
         public string AdditionalProvisions { get; set; }
     }

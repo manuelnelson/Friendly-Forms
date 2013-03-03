@@ -15,12 +15,12 @@ namespace Models.ViewModels
         [Display(Name = "Begin date")]
         [RegularExpression(pattern: @"^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$", ErrorMessage = @"Date must be in mm/dd/yyyy format")]
         public string BeginDate { get; set; }
-        [Display(Name = "Father Weekend")]
+        [Display(Name = "Custodian Weekend")]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
-        public string FatherWeekendOther { get; set; }
-        [Display(Name = "Mother Weekend")]
+        public string CustodianWeekendOther { get; set; }
+        [Display(Name = "Non-custodian Weekend")]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
-        public string MotherWeekendOther { get; set; }
+        public string NonCustodianWeekendOther { get; set; }
 
         [Required]
         [Display(Name = "Weekend Start")]
@@ -48,11 +48,11 @@ namespace Models.ViewModels
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string DropOffLocation { get; set; }
         [Required]
-        [Display(Name = "Father weekend")]
-        public int FatherWeekend { get; set; }
+        [Display(Name = "Custodian weekend")]
+        public int CustodianWeekend { get; set; }
         [Required]
-        [Display(Name = "Mother weekend")]
-        public int MotherWeekend { get; set; }
+        [Display(Name = "Non-custodian weekend")]
+        public int NonCustodianWeekend { get; set; }
         [Required]
         public int Weekdays { get; set; }
         [Display(Name = "Weekday pickup")]
@@ -68,21 +68,26 @@ namespace Models.ViewModels
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string WeekdayDropoffLocation { get; set; }
         [Display(Name = "Monday parent")]
-        public int? MondayParent { get; set; }
+        public bool MondayParent { get; set; }
         [Display(Name = "Tuesday parent")]
-        public int? TuesdayParent { get; set; }
+        public bool TuesdayParent { get; set; }
         [Display(Name = "Wednesday parent")]
-        public int? WednesdayParent { get; set; }
+        public bool WednesdayParent { get; set; }
         [Display(Name = "Thursday parent")]
-        public int? ThursdayParent { get; set; }
+        public bool ThursdayParent { get; set; }
         [Display(Name = "Friday parent")]
-        public int? FridayParent { get; set; }
+        public bool FridayParent { get; set; }
+        [Display(Name = "Saturday parent")]
+        public bool SaturdayParent { get; set; }
+        [Display(Name = "Sunday parent")]
+        public bool SundayParent { get; set; }
         [Display(Name = "Additional Provisions")]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string AdditionalProvisions { get; set; }
 
         //This isn't in the model, just useful for the view
         public string NonCustodialParent { get; set; }
+        public string CustodialParent { get; set; }
 
         public IFormEntity ConvertToEntity()
         {
@@ -92,26 +97,28 @@ namespace Models.ViewModels
                     DetermineBeginDate = DetermineBeginDate,
                     DropOffLocation = DropOffLocation,
                     DroppedOff = DroppedOff,
-                    FatherWeekend = FatherWeekend,
-                    MotherWeekend = MotherWeekend,
+                    CustodianWeekend = CustodianWeekend,
+                    NonCustodianWeekend = NonCustodianWeekend,
                     PickedUp = PickedUp,
                     PickupLocation = PickupLocation,
                     UserId = UserId,
                     Weekdays = Weekdays,
-                    FatherWeekendOther = FatherWeekendOther,
-                    MotherWeekendOther = MotherWeekendOther,
+                    CustodianWeekendOther = CustodianWeekendOther,
+                    NonCustodianWeekendOther = NonCustodianWeekendOther,
                     WeekendDayEnd = WeekendDayEnd,
                     WeekendDayStart = WeekendDayStart,
                     WeekdayDropoff = WeekdayDropoff,                    
                     WeekdayDropoffLocation = WeekdayDropoffLocation,
                     WeekdayPickup = WeekdayPickup,                    
                     WeekdayPickupLocation = WeekdayPickupLocation,
-                    MondayParent = MondayParent ?? 0,
-                    TuesdayParent = TuesdayParent ?? 0,
-                    WednesdayParent = WednesdayParent ?? 0,
-                    ThursdayParent = ThursdayParent ?? 0,
-                    AdditionalProvisions = AdditionalProvisions,
-                    FridayParent = FridayParent ?? 0                    
+                    MondayParent = MondayParent,
+                    TuesdayParent = TuesdayParent,
+                    WednesdayParent = WednesdayParent,
+                    ThursdayParent = ThursdayParent,
+                    FridayParent = FridayParent,
+                    SaturdayParent = SaturdayParent,
+                    SundayParent = SundayParent,                    
+                    AdditionalProvisions = AdditionalProvisions
                 };
         }
     }
