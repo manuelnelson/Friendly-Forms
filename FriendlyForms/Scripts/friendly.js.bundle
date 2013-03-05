@@ -15,6 +15,11 @@ bootstrap-timepicker.js
 bootstrap-typeahead.js
 jstorage.js
 json2.js
+angular.js 
+angular-resource.js
+angular-ui.js  
+
+
 app/friendly-global.js 
 app/friendly-domestic.js
 app/friendly-financial.js
