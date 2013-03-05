@@ -266,8 +266,12 @@
     <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\main.js" />
+    <Content Include="app\Starter\Children\children-controller.js" />
     <Content Include="app\Starter\Children\children-service.js" />
     <Content Include="app\Starter\Children\children.html" />
+    <Content Include="app\Starter\Court\court-controller.js" />
+    <Content Include="app\Starter\Court\court-service.js" />
     <Content Include="app\Starter\Court\court.html" />
     <Content Include="app\Starter\Participants\participants.html" />
     <Content Include="App_Readme\Elmah.txt" />
