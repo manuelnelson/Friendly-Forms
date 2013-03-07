@@ -227,46 +227,46 @@
             $('.schedule-weekday').hide();
         }
     });
-    $('input[name=FatherWeekend]').change(function () {
-        var checked = $('#FatherWeekend:checked').val();
+    $('input[name=CustodianWeekend]').change(function () {
+        var checked = $('#CustodianWeekend:checked').val();
         $('.schedule-weekend-other').hide();
         switch (checked) {
             case "1":
-                $('#MotherWeekend[value="1"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="1"]').attr('checked', 'checked');
                 break;
             case "2":
-                $('#MotherWeekend[value="4"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="4"]').attr('checked', 'checked');
                 break;
             case "3":
-                $('#MotherWeekend[value="4"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="4"]').attr('checked', 'checked'); 
                 break;
             case "4":
-                $('#MotherWeekend[value="3"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="3"]').attr('checked', 'checked');
                 break;
             case "5":
-                $('#MotherWeekend[value="5"]').attr('checked', 'checked');
+                $('#NonCustodianWeekend[value="5"]').attr('checked', 'checked');
                 $('.schedule-weekend-other').show();
                 break;
         }
     });
-    $('input[name=MotherWeekend]').change(function () {
-        var checked = $('#MotherWeekend:checked').val();
+    $('input[name=NonCustodianWeekend]').change(function () {
+        var checked = $('#NonCustodianWeekend:checked').val();
         $('.schedule-weekend-other').hide();
         switch (checked) {
             case "1":
-                $('#FatherWeekend[value="1"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="1"]').attr('checked', 'checked');
                 break;
             case "2":
-                $('#FatherWeekend[value="4"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="4"]').attr('checked', 'checked');
                 break;
             case "3":
-                $('#FatherWeekend[value="4"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="4"]').attr('checked', 'checked');
                 break;
             case "4":
-                $('#FatherWeekend[value="3"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="3"]').attr('checked', 'checked');
                 break;
             case "5":
-                $('#FatherWeekend[value="5"]').attr('checked', 'checked');
+                $('#CustodianWeekend[value="5"]').attr('checked', 'checked');
                 $('.schedule-weekend-other').show();
                 break;
         }

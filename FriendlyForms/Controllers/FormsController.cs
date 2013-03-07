@@ -141,7 +141,11 @@ namespace FriendlyForms.Controllers
             var communication = _communicationService.GetByUserId(Id);
             var schedule = _scheduleService.GetByUserId(Id) as ScheduleViewModel;
             var custodyInformation = _participantService.GetCustodyInformation(participants);
-            if (schedule != null) schedule.NonCustodialParent = custodyInformation.NonCustodyParent;
+            if (schedule != null)
+            {
+                schedule.NonCustodialParent = custodyInformation.NonCustodyParent;
+                schedule.CustodialParent = custodyInformation.Parent;
+            }
 
             var holiday = children.Children.Any() ? _holidayService.GetByChildId(children.Children.First().Id) : new Holiday();
             var addendum = _addendumService.GetByUserId(Id);

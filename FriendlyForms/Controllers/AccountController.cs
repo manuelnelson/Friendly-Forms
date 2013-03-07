@@ -90,7 +90,7 @@ namespace FriendlyForms.Controllers
         //
         // GET: /Account/Register
 
-        public ActionResult Boogy()
+        public ActionResult Register()
         {
             return View();
         }
@@ -98,7 +98,7 @@ namespace FriendlyForms.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        public ActionResult Boogy(RegisterModel model)
+        public ActionResult Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {

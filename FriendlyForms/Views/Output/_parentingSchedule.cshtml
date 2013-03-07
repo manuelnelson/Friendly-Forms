@@ -4,52 +4,27 @@
 <p class="indented">During the term of this parenting plan, @Model.PpOutputFormHelper.CustodyInformation.NonCustodyParentName, as the non-custodial parent shall have at a minimum the following rights of parenting time/visitation:</p>
 <p class="indented">
     For purposes of this parenting plan, the 
-    @if (!Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather)
+    @if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.FirstThird))
     {
-        if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.FirstThird))
-        {
-            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first and third weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second, fourth and fifth weekend of each month.</span>
-        }
-        else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.FirstThirdFifth))
-        {
-            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first, third and fifth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second and fourth weekend of each month.</span>
-        }
-        else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.SecondFourth))
-        {
-            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the second and fourth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the first, third and fifth weekend of each month.</span>
-        }
-        else if (Model.ScheduleViewModel.MotherWeekend==((int)ParentWeekends.EveryOther))
-        {
-            <span>parents will alternate weekends for visitation.</span>
-        }
-        else
-        {
-            <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have @Model.ScheduleViewModel.MotherWeekendOther for visitation.</span>
-        }
+        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first and third weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second, fourth and fifth weekend of each month.</span>
+    }
+    else if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.FirstThirdFifth))
+    {
+        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first, third and fifth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second and fourth weekend of each month.</span>
+    }
+    else if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.SecondFourth))
+    {
+        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the second and fourth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the first, third and fifth weekend of each month.</span>
+    }
+    else if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.EveryOther))
+    {
+        <span>parents will alternate weekends for visitation.</span>
     }
     else
     {
-        if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.FirstThird))
-        {
-            <span>father will have the weekend of the first and third friday of each month for visiation.</span>
-        }
-        else if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.FirstThirdFifth))
-        {
-            <span>father will have the weekend of the first, third and fifth friday of each month for visitation.</span>
-        }
-        else if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.SecondFourth))
-        {
-            <span>father will have the weekend of the second and fourth friday of each month for visitation.</span>
-        }
-        else if (Model.ScheduleViewModel.FatherWeekend==((int)ParentWeekends.EveryOther))
-        {
-            <span>parents will alternate weekends for visitation.</span>
-        }
-        else
-        {
-            <span>father will have @Model.ScheduleViewModel.FatherWeekendOther for visitation.</span>
-        }
+        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have @Model.ScheduleViewModel.NonCustodianWeekendOther for visitation.</span>
     }
+
     A weekend will begin on @Model.ScheduleViewModel.WeekendDayStart at @Model.ScheduleViewModel.PickedUp. The child(ren) will be picked up @Model.ScheduleViewModel.PickupLocation The weekend ends on 
     @Model.ScheduleViewModel.WeekendDayEnd at @Model.ScheduleViewModel.DroppedOff. The child(ren) will be dropped off @Model.ScheduleViewModel.DropOffLocation
 </p>
@@ -59,25 +34,33 @@
             begin at @Model.ScheduleViewModel.WeekdayPickup. The child(ren) will be picked up at @Model.ScheduleViewModel.WeekdayPickupLocation. Weekday visitation will end at @Model.ScheduleViewModel.WeekdayDropoff. The child(ren) will be dropped off at @Model.ScheduleViewModel.DropOffLocation. This shall apply for the following day(s):
         </p>
         <p>
-            @if ((Model.ScheduleViewModel.MondayParent == (int) DecisionMaker.Mother && !Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather) || (Model.ScheduleViewModel.MondayParent == (int) DecisionMaker.Father && Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather))
+            @if (Model.ScheduleViewModel.MondayParent)
             {
                 <p class="linehtless50">Monday</p>
             }
-            @if ((Model.ScheduleViewModel.TuesdayParent == (int) DecisionMaker.Mother && !Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather) || (Model.ScheduleViewModel.TuesdayParent == (int) DecisionMaker.Father && Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather))
+            @if (Model.ScheduleViewModel.TuesdayParent)
             {
                 <p class="linehtless50">Tuesday<br /></p>
             }
-            @if ((Model.ScheduleViewModel.WednesdayParent == (int) DecisionMaker.Mother && !Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather) || (Model.ScheduleViewModel.WednesdayParent == (int) DecisionMaker.Father && Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather))
+            @if (Model.ScheduleViewModel.WednesdayParent)
             {
                 <p class="linehtless50">Wednesday</p>
             }
-            @if ((Model.ScheduleViewModel.ThursdayParent == (int) DecisionMaker.Mother && !Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather) || (Model.ScheduleViewModel.ThursdayParent == (int) DecisionMaker.Father && Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather))
+            @if (Model.ScheduleViewModel.ThursdayParent)
             {
                 <p class="linehtless50">Thursday</p>
             }
-            @if ((Model.ScheduleViewModel.FridayParent == (int) DecisionMaker.Mother && !Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather) || (Model.ScheduleViewModel.FridayParent == (int) DecisionMaker.Father && Model.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather))
+            @if (Model.ScheduleViewModel.FridayParent)
             {
                 <p class="linehtless50">Friday</p>
+            }
+            @if (Model.ScheduleViewModel.SaturdayParent)
+            {
+                <p class="linehtless50">Saturday</p>
+            }
+            @if (Model.ScheduleViewModel.SundayParent)
+            {
+                <p class="linehtless50">Sunday</p>
             }
         </p>
     }

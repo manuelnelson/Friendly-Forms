@@ -13,24 +13,26 @@ namespace Models
         public DateTime? BeginDate { get; set; }
         public string WeekendDayStart { get; set; }
         public string WeekendDayEnd { get; set; }
-        public string FatherWeekendOther { get; set; }
-        public string MotherWeekendOther { get; set; }
+        public string CustodianWeekendOther { get; set; }
+        public string NonCustodianWeekendOther { get; set; }
         public string PickedUp { get; set; }
         public string PickupLocation { get; set; }
         public string DroppedOff { get; set; }
         public string DropOffLocation { get; set; }
-        public int FatherWeekend { get; set; }
-        public int MotherWeekend { get; set; }
+        public int CustodianWeekend { get; set; }
+        public int NonCustodianWeekend { get; set; }
         public int Weekdays { get; set; }
         public string WeekdayPickup { get; set; }
         public string WeekdayPickupLocation { get; set; }
         public string WeekdayDropoff { get; set; }
         public string WeekdayDropoffLocation { get; set; }
-        public int MondayParent { get; set; }
-        public int TuesdayParent { get; set; }
-        public int WednesdayParent { get; set; }
-        public int ThursdayParent { get; set; }
-        public int FridayParent { get; set; }
+        public bool MondayParent { get; set; }
+        public bool TuesdayParent { get; set; }
+        public bool WednesdayParent { get; set; }
+        public bool ThursdayParent { get; set; }
+        public bool FridayParent { get; set; }
+        public bool SaturdayParent { get; set; }
+        public bool SundayParent { get; set; }
         public string AdditionalProvisions { get; set; }
         public IViewModel ConvertToModel()
         {
@@ -40,14 +42,14 @@ namespace Models
                 DetermineBeginDate = DetermineBeginDate,
                 DropOffLocation = DropOffLocation,
                 DroppedOff = DroppedOff,
-                FatherWeekend = FatherWeekend,
-                MotherWeekend = MotherWeekend,
+                CustodianWeekend = CustodianWeekend,
+                NonCustodianWeekend = NonCustodianWeekend,
                 PickedUp = PickedUp,
                 PickupLocation = PickupLocation,
                 UserId = UserId,
                 Weekdays = Weekdays,
-                FatherWeekendOther = FatherWeekendOther,
-                MotherWeekendOther = MotherWeekendOther,
+                CustodianWeekendOther = CustodianWeekendOther,
+                NonCustodianWeekendOther = NonCustodianWeekendOther,
                 WeekendDayStart = WeekendDayStart,
                 WeekendDayEnd = WeekendDayEnd,
                 WeekdayDropoff = WeekdayDropoff,
@@ -69,14 +71,14 @@ namespace Models
             DetermineBeginDate = update.DetermineBeginDate;
             DropOffLocation = update.DropOffLocation;
             DroppedOff = update.DroppedOff;
-            FatherWeekend = update.FatherWeekend;
-            MotherWeekend = update.MotherWeekend;
+            CustodianWeekend = update.CustodianWeekend;
+            NonCustodianWeekend = update.NonCustodianWeekend;
             PickedUp = update.PickedUp;
             PickupLocation = update.PickupLocation;
             UserId = update.UserId;
             Weekdays = update.Weekdays;
-            FatherWeekendOther = update.FatherWeekendOther;
-            MotherWeekendOther= update.MotherWeekendOther;
+            CustodianWeekendOther = update.CustodianWeekendOther;
+            NonCustodianWeekendOther= update.NonCustodianWeekendOther;
             WeekendDayStart = update.WeekendDayStart;
             WeekendDayEnd = update.WeekendDayEnd;
             WeekdayDropoff = update.WeekdayDropoff;
