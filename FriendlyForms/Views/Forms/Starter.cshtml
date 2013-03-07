@@ -1,5 +1,4 @@
-﻿@using FriendlyForms.Authentication
-@model FriendlyForms.Models.StarterViewModel
+﻿@model FriendlyForms.Models.StarterViewModel
 @{
     ViewBag.Title = "Starter";
 }
@@ -36,7 +35,4 @@
     </div>
 }
 <input type="hidden" id="user-id" value="@Model.FormUserId" /> 
-
-@Html.Partial("_Court", Model.CourtViewModel)
-@Html.Partial("_Participants", Model.ParticipantViewModel)
-@Html.Partial("_Children", Model.ChildAllViewModel)
+<div ng-view></div>

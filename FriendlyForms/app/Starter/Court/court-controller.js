@@ -7,4 +7,4 @@
         });
     };
 };
-TodoEditCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService'];
+CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService'];
