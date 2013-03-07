@@ -14,20 +14,12 @@ else
     </p> 
         if (vehicle.Refinanced == ((int)YesNo.Yes))
         {
-<<<<<<< HEAD
-    <p class="indented">@vehicle.Name will refinance this vehicle by @if (vehicle.RefinanceDate != null)
-                                                    {
-        @vehicle.RefinanceDate.Value.ToString("MM/dd/yyyy")
-                                                    }
-    </p>  
-=======
             <p class="indented">@vehicle.Name will refinance this vehicle by 
                 @if (vehicle.RefinanceDate != null)
                 {
                     @vehicle.RefinanceDate.ToString("MM/dd/yyyy")
                 }
             </p>  
->>>>>>> be6578b689083b7d8dfa116c5c8810c4bc36840c
         }
     }
 }
