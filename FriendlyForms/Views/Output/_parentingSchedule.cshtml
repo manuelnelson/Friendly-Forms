@@ -31,7 +31,7 @@
     @if (Model.ScheduleViewModel.Weekdays == (int) YesNo.Yes)
     {
         <p class="indented">@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParentName, as the non-custodial parent shall have at a minimum the following rights of parenting time/visitation on weekdays which will 
-            begin at @Model.ScheduleViewModel.WeekdayPickup. The child(ren) will be picked up at @Model.ScheduleViewModel.WeekdayPickupLocation. Weekday visitation will end at @Model.ScheduleViewModel.WeekdayDropoff. The child(ren) will be dropped off at @Model.ScheduleViewModel.DropOffLocation. This shall apply for the following day(s):
+            begin at @Model.ScheduleViewModel.WeekdayPickup. The child(ren) will be picked up @Model.ScheduleViewModel.WeekdayPickupLocation Weekday visitation will end at @Model.ScheduleViewModel.WeekdayDropoff. The child(ren) will be dropped off @Model.ScheduleViewModel.DropOffLocation This shall apply for the following day(s):
         </p>
         <p>
             @if (Model.ScheduleViewModel.MondayParent)
