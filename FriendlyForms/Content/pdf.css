@@ -1,8 +1,11 @@
 ﻿body
 {
     font-family: Times, "Times New Roman", Times, serif;
-    font-size: 25px;
-    line-height: 33px;
+
+    font-size: 15px;
+    line-height: 20px;
+	/*font-size: 25px;
+    line-height: 33px;*/
     color: #000;
     margin: 0;
 }
