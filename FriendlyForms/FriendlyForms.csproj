@@ -266,6 +266,16 @@
     <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\main.js" />
+    <Content Include="app\Starter\Children\children-controller.js" />
+    <Content Include="app\Starter\Children\children-service.js" />
+    <Content Include="app\Starter\Children\children.html" />
+    <Content Include="app\Starter\Court\court-controller.js" />
+    <Content Include="app\Starter\Court\court-service.js" />
+    <Content Include="app\Starter\Court\court.html" />
+    <Content Include="app\Starter\Participants\participants-controller.js" />
+    <Content Include="app\Starter\Participants\participants-service.js" />
+    <Content Include="app\Starter\Participants\participants.html" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="bundler\bundler.js" />
     <Content Include="bundler\node.exe" />
@@ -413,6 +423,22 @@
     </Content>
     <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="README.txt" />
+    <Content Include="Scripts\angular-bootstrap-prettify.js" />
+    <Content Include="Scripts\angular-bootstrap-prettify.min.js" />
+    <Content Include="Scripts\angular-bootstrap.js" />
+    <Content Include="Scripts\angular-bootstrap.min.js" />
+    <Content Include="Scripts\angular-cookies.js" />
+    <Content Include="Scripts\angular-cookies.min.js" />
+    <Content Include="Scripts\angular-loader.js" />
+    <Content Include="Scripts\angular-loader.min.js" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular-resource.js" />
+    <Content Include="Scripts\angular-resource.min.js" />
+    <Content Include="Scripts\angular-sanitize.js" />
+    <Content Include="Scripts\angular-sanitize.min.js" />
+    <Content Include="Scripts\angular-scenario.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\app\friendly-admin.js" />
     <Content Include="Scripts\app\friendly-domestic.js" />
     <Content Include="Scripts\app\friendly-financial-global.js" />
@@ -449,6 +475,8 @@
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\jstd-scenario-adapter-config.js" />
+    <Content Include="Scripts\jstd-scenario-adapter.js" />
     <Content Include="Scripts\jstorage.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
@@ -496,6 +524,7 @@
     <Content Include="Views\Forms\_HealthOther.cshtml" />
     <Content Include="Views\Forms\_ChildCareForm.cshtml" />
     <Content Include="Views\Forms\_templateChildCare.cshtml" />
+    <Content Include="Views\Output\_domesticEnd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

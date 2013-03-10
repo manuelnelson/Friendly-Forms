@@ -1,5 +1,4 @@
-﻿@using Models.ViewModels
-@model FriendlyForms.Models.DomesticMediationViewModel
+﻿@model FriendlyForms.Models.DomesticMediationViewModel
 @{
     ViewBag.Title = "";
 }
@@ -38,6 +37,7 @@
 @Html.Partial("_domesticHealth", Model)
 @Html.Partial("_domesticSpousal", Model)
 @Html.Partial("_domesticTaxes", Model)
+@Html.Partial("_domesticEnd", Model)
 @using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "bottomPrintButton", target = "_blank" }))
 {
     <input type="hidden" class="html" name="html" />
