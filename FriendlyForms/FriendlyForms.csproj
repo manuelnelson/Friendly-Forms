@@ -266,14 +266,20 @@
     <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\Home\home-controller.js" />
+    <Content Include="app\Home\home.html" />
     <Content Include="app\main.js" />
+    <Content Include="app\menu-controller.js" />
+    <Content Include="app\menu-service.js" />
     <Content Include="app\Starter\Children\children-controller.js" />
     <Content Include="app\Starter\Children\children-service.js" />
     <Content Include="app\Starter\Children\children.html" />
     <Content Include="app\Starter\Court\court-controller.js" />
     <Content Include="app\Starter\Court\court-service.js" />
     <Content Include="app\Starter\Court\court.html" />
-    <Content Include="app\Starter\Participants\participants.html" />
+    <Content Include="app\Starter\Participant\participant-controller.js" />
+    <Content Include="app\Starter\Participant\participant-service.js" />
+    <Content Include="app\Starter\Participant\participant.html" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="bundler\bundler.js" />
     <Content Include="bundler\node.exe" />
@@ -478,6 +484,8 @@
     <Content Include="Scripts\jstorage.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="ssleay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -501,8 +509,6 @@
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="wkhtmltox0.dll">
@@ -522,6 +528,7 @@
     <Content Include="Views\Forms\_HealthOther.cshtml" />
     <Content Include="Views\Forms\_ChildCareForm.cshtml" />
     <Content Include="Views\Forms\_templateChildCare.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

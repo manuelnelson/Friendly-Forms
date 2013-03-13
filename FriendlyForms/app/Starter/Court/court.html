@@ -1,6 +1,7 @@
 ﻿<div class="form-vertical wrapper" id="courtWrapper">
-    <form action="/api/court" id="court" method="post">
-        <input type="hidden" id="Id" value="{{Id}}">
+    <form action="/api/court" ng-controller="CourtCtrl" id="court" method="post">
+        <input type="hidden" ng-model="court.Id">
+        <input type="hidden" ng-model="court.UserId">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -12,7 +13,7 @@
                         <label class="informative">Fill in the information regarding your circumstances below.</label>
                         <div class="control-group">
                             <label class="form-question">County</label>
-                            <select data-val="true" data-val-number="The field CountyId must be a number." data-val-required="The CountyId field is required." id="CountyId" name="CountyId">
+                            <select ng-model="court.CountyId">
                                 <option value="">-- Select County --</option>
                                 <option value="1">Cobb</option>
                                 <option value="2">Dekalb</option>
@@ -23,7 +24,7 @@
                         </div>
                         <div class="control-group">
                             <label class="form-question">Case Number</label>
-                            <input class="hoverHelp" data-content="Your case number can be found XXXX." data-val="true" data-val-regex="Case Number may only contain numbers, letters and dashes." data-val-regex-pattern="^[0-9a-zA-Z\s-]*$" id="CaseNumber" name="CaseNumber" placeholder="Case Number" type="text" value="" data-original-title="">
+                            <input class="hoverHelp" data-content="Your case number can be found XXXX." ng-model="court.CaseNumber" data-val="true" data-val-regex="Case Number may only contain numbers, letters and dashes." data-val-regex-pattern="^[0-9a-zA-Z\s-]*$" placeholder="Case Number" type="text" value="" data-original-title="">
                             <span class="field-validation-valid" data-valmsg-for="CaseNumber" data-valmsg-replace="true"></span>
                         </div>
                         <div class="control-group">
@@ -31,9 +32,9 @@
                                 Who is the author of this plan?
                             </label>
                             <label class="radio">Parties agree to this plan
-                                <input data-val="true" data-val-number="The field Author of Plan must be a number." data-val-required="The Author of Plan field is required." id="AuthorOfPlan" name="AuthorOfPlan" type="radio" value="1"></label>
+                                <input data-val="true" ng-model="court.AuthorOfPlan" type="radio" value="1"></label>
                             <label class="radio">Plan Prepared by a judge
-                                <input id="Radio1" name="AuthorOfPlan" type="radio" value="2"></label>
+                                <input id="Radio1" ng-model="court.AuthorOfPlan" type="radio" value="2"></label>
                             <span class="field-validation-valid" data-valmsg-for="AuthorOfPlan" data-valmsg-replace="true"></span>
                         </div>
                         <div class="control-group">
@@ -41,16 +42,16 @@
                                 Is this a new plan or an existing plan?
                             </label>
                             <label class="radio">A new plan
-                                <input data-val="true" data-val-number="The field Plan Type must be a number." data-val-required="The Plan Type field is required." id="PlanType" name="PlanType" type="radio" value="1"></label>
+                                <input ng-model="court.PlanType" type="radio" value="1"></label>
                             <label class="radio">A modification of an existing plan
-                                <input id="Radio2" name="PlanType" type="radio" value="2"></label>
+                                <input ng-model="court.PlanType" type="radio" value="2"></label>
                             <label class="radio">A modification of an existing order
-                                <input id="Radio3" name="PlanType" type="radio" value="3"></label>
+                                <input ng-model="court.PlanType" type="radio" value="3"></label>
                             <span class="field-validation-valid" data-valmsg-for="PlanType" data-valmsg-replace="true"></span>
                         </div>
                         <div class="control-group court-date hide">
                             <label class="form-question">Case Number</label>
-                            <input class="hoverHelp" data-content="Your case number can be found XXXX." data-val="true" data-val-regex="Case Number may only contain numbers, letters and dashes." data-val-regex-pattern="^[0-9a-zA-Z\s-]*$" id="ExistCaseNumber" name="ExistCaseNumber" placeholder="Case Number" type="text" value="" data-original-title="">
+                            <input ng-model="court.ExistCaseNumber" class="hoverHelp" data-content="Your case number can be found XXXX." placeholder="Case Number" type="text">
                             <span class="field-validation-valid" data-valmsg-for="ExistCaseNumber" data-valmsg-replace="true"></span>
                         </div>
                     </div>

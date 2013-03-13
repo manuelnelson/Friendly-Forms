@@ -45,7 +45,18 @@ namespace FriendlyForms.RestService
     public class CourtRestService : Service
     {
         public ICourtService CourtService { get; set; }
-
+        public object Get(ReqCourt request)
+        {
+            if (request.Id != 0)
+            {
+                return CourtService.Get(request.Id);    
+            }
+            if (request.UserId != 0)
+            {
+                return CourtService.Get(request.UserId);                    
+            }
+            return new Court();
+        }
         public object Post(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
