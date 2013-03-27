@@ -1,9 +1,101 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<div class="form-vertical wrapper" ng-model="participant.participantWrapper" style="display: block;">
+    <form action="/api/court" ng-controller="ParticipantCtrl" ng-model="participant.participant" method="post">
+        <input type="hidden" ng-model="participant.Id">
+        <input type="hidden" ng-model="participant.UserId">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Participants</h5>
+                    </div>
+                    <div class="widget-content">
+                        <label class="informative">
+                            Before proceeding, be sure you are able to correctly answer the following questions:
+                        </label>
+                        <ul>
+                            <li>Who is the primary custodian?</li>
+                            <li>Who is the Plaintiff?</li>
+                            <li>Who is the Defendant?</li>
+                            <li>What are the names of every child involved in this modification?</li>
+                        </ul>
+                        <div class="control-group span4">
+                            <h4>Plaintiff</h4>
+                            <input class="hoverHelp" ng-model="participant.PlaintiffsName" data-content="Enter the plaintiff's full name here." data-val="true" data-val-regex="Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" data-val-required="The Plaintiff's Name field is required."  placeholder="Plaintiff's Name" type="text" data-original-title="">
+                            <span class="field-validation-valid" data-valmsg-for="PlaintiffsName" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="control-group span4">
+                            <h4>Defendant</h4>
+                            <input class="hoverHelp" data-content="Enter the defendants's full name here." data-val="true" data-val-regex="Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" data-val-required="The Defendant's Name field is required." ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
+                            <span class="field-validation-valid" data-valmsg-for="DefendantsName" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="control-group span4">
+                            <label class="form-question">
+                                The Plaintiff is the: 
+                            </label>
+                            <label class="radio">
+                                Father
+                                <input data-val="true" data-val-number="The field Plaintiff Relationship must be a number." data-val-required="The Plaintiff Relationship field is required." ng-model="participant.PlaintiffRelationship" type="radio" value="2"></label>
+                            <label class="radio">
+                                Mother
+                                <input checked="checked" ng-model="participant.PlaintiffRelationship" type="radio" value="1"></label>
+                            <label class="radio">
+                                Plaintiff 
+                                <input ng-model="participant.PlaintiffRelationship" type="radio" value="3"></label>
+                            <span class="field-validation-valid" data-valmsg-for="PlaintiffRelationship" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="control-group span4">
+                            <label class="form-question">
+                                The Defendant is the: 
+                            </label>
+                            <label class="radio">
+                                Father
+                                <input checked="checked" data-val="true" data-val-number="The field Defendant's Relationship must be a number." data-val-required="The Defendant's Relationship field is required." ng-model="participant.DefendantRelationship" type="radio" value="2"></label>
+                            <label class="radio">
+                                Mother
+                                <input ng-model="participant.DefendantRelationship" type="radio" value="1"></label>
+                            <label class="radio">
+                                Defendant 
+                                <input ng-model="participant.DefendantRelationship" type="radio" value="4"></label>
+                            <span class="field-validation-valid" data-valmsg-for="DefendantRelationship" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="control-group span4">
+                            <label class="form-question">
+                                The Plaintiff is the:
+                            </label>
+                            <label class="radio">
+                                Primary Custodial Parent
+                                <input checked="checked" data-val="true" data-val-number="The field Plaintiff Custodial Parent must be a number." data-val-required="The Plaintiff Custodial Parent field is required." ng-model="participant.PlaintiffCustodialParent" type="radio" value="1"></label>
+                            <label class="radio">
+                                Non Custodial Parent
+                                <input ng-model="participant.PlaintiffCustodialParent" type="radio" value="2"></label>
+                            <label class="radio">
+                                Joint Custodial Parent
+                                <input ng-model="participant.PlaintiffCustodialParent" type="radio" value="3"></label>
+                            <span class="field-validation-valid" data-valmsg-for="PlaintiffCustodialParent" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="control-group span4">
+                            <label class="form-question">
+                                The Defendant is the:
+                            </label>
+                            <label class="radio">
+                                Primary Custodial Parent
+                                <input data-val="true" data-val-number="The field Defendant Custodial Parent must be a number." data-val-required="The Defendant Custodial Parent field is required." ng-model="participant.DefendantCustodialParent" type="radio" value="1"></label>
+                            <label class="radio">
+                                Non Custodial Parent
+                                <input checked="checked" ng-model="participant.DefendantCustodialParent" type="radio" value="2"></label>
+                            <label class="radio">
+                                Joint Custodial Parent
+                                <input ng-model="participant.DefendantCustodialParent" type="radio" value="3"></label>
+                            <span class="field-validation-valid" data-valmsg-for="DefendantCustodialParent" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="row-fluid">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary child-part2 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    </form>
+</div>

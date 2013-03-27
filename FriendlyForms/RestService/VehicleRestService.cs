@@ -48,14 +48,26 @@ namespace FriendlyForms.RestService
     public class VehicleRestService : Service
     {
         public IVehicleService VehicleService { get; set; }
+        public object Get(ReqVehicle request)
+        {
+            if (request.Id != 0)
+            {
+                return VehicleService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return VehicleService.GetByUserId(request.UserId);
+            }
+            return new Vehicle();
+        }
 
         public object Post(ReqVehicle request)
         {
-            var vehicleViewModel = request.TranslateTo<VehicleViewModel>();
-            var updatedVehicle = VehicleService.AddOrUpdate(vehicleViewModel);
+            var vehicle = request.TranslateTo<Vehicle>();
+            VehicleService.Add(vehicle);
             return new RespVehicle()
                 {
-                    Vehicle = updatedVehicle
+                    Vehicle = vehicle
                 };
         }
         public object Put(ReqVehicle request)

@@ -37,7 +37,18 @@ namespace FriendlyForms.RestService
     public class SocialSecurityRestService : Service
     {
         public ISocialSecurityService SocialSecurityService { get; set; }
-
+        public object Get(ReqSocialSecurity request)
+        {
+            if (request.Id != 0)
+            {
+                return SocialSecurityService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return SocialSecurityService.GetByUserId(request.UserId);
+            }
+            return new SocialSecurity();
+        }
         public object Post(ReqSocialSecurity request)
         {
             var socialSecurity = request.TranslateTo<SocialSecurity>();

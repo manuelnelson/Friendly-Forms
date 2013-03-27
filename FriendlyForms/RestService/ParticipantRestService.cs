@@ -42,12 +42,23 @@ namespace FriendlyForms.RestService
     public class ParticipantRestService : Service
     {
         public IParticipantService ParticipantService { get; set; }
-
+        public object Get(ReqParticipant request)
+        {
+            if (request.Id != 0)
+            {
+                return ParticipantService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return ParticipantService.GetByUserId(request.UserId);
+            }
+            return new Participant();
+        }
         public object Post(ReqParticipant request)
         {
             var participant = request.TranslateTo<Participant>();
             ParticipantService.Add(participant);
-            return new RespParticipant()
+            return new RespParticipant
                 {
                     Id = participant.Id
                 };

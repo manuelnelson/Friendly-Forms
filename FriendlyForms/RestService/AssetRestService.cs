@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -11,7 +10,7 @@ namespace FriendlyForms.RestService
 {
         //will name it to asset/ eventually, but doing this to appease my previous stupidity
         [DataContract]
-        [Route("/asset/")]
+        [Route("/assets/")]
         public class ReqAsset
         {
             [DataMember]
@@ -46,7 +45,18 @@ namespace FriendlyForms.RestService
         public class AssetRestService : Service
         {
             public IAssetService AssetService { get; set; }
-
+            public object Get(ReqAsset request)
+            {
+                if (request.Id != 0)
+                {
+                    return AssetService.Get(request.Id);
+                }
+                if (request.UserId != 0)
+                {
+                    return AssetService.GetByUserId(request.UserId);
+                }
+                return new Assets();
+            }
             public object Post(ReqAsset request)
             {
                 var assets = request.TranslateTo<Assets>();

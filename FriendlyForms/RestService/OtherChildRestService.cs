@@ -37,17 +37,26 @@ namespace FriendlyForms.RestService
     public class OtherChildRestService : Service
     {
         public IOtherChildService OtherChildService { get; set; }
-
+        public object Get(ReqOtherChild request)
+        {
+            if (request.Id != 0)
+            {
+                return OtherChildService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return OtherChildService.GetByUserId(request.UserId);
+            }
+            return new OtherChild();
+        }
         public object Post(ReqOtherChild request)
         {
-            var otherChildViewModel = request.TranslateTo<OtherChildViewModel>();
-            var otherChildEntity = OtherChildService.AddOrUpdate(otherChildViewModel);
-            var otherChild = otherChildEntity.TranslateTo<ReqOtherChild>();
-            if (otherChildEntity.DateOfBirth != null)
-                otherChild.DateOfBirth = otherChildEntity.DateOfBirth.Value.ToShortDateString();
+            var otherChild = request.TranslateTo<OtherChild>();
+            OtherChildService.Add(otherChild);
+            request.Id = otherChild.Id;
             return new RespOtherChild()
                 {
-                    OtherChild = otherChild
+                    OtherChild = request
                 };
         }
 

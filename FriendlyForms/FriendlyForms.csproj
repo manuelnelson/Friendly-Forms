@@ -266,11 +266,42 @@
     <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\Domestic\Assets\assets-controller.js" />
+    <Content Include="app\Domestic\Assets\assets-service.js" />
+    <Content Include="app\Domestic\Debts\debts-controller.js" />
+    <Content Include="app\Domestic\Debts\debts-service.js" />
+    <Content Include="app\Domestic\HealthInsurances\healthInsurances-controller.js" />
+    <Content Include="app\Domestic\HealthInsurances\healthInsurances-service.js" />
+    <Content Include="app\Domestic\Houses\houses-controller.js" />
+    <Content Include="app\Domestic\Houses\houses-service.js" />
+    <Content Include="app\Domestic\Properties\properties-controller.js" />
+    <Content Include="app\Domestic\Properties\properties-service.js" />
+    <Content Include="app\Domestic\Spousals\spousals-controller.js" />
+    <Content Include="app\Domestic\Spousals\spousals-service.js" />
+    <Content Include="app\Domestic\Taxes\taxes-controller.js" />
+    <Content Include="app\Domestic\Taxes\taxes-service.js" />
+    <Content Include="app\generic-service.js" />
     <Content Include="app\Home\home-controller.js" />
     <Content Include="app\Home\home.html" />
     <Content Include="app\main.js" />
     <Content Include="app\menu-controller.js" />
     <Content Include="app\menu-service.js" />
+    <Content Include="app\Parenting\Addendums\addendums-controller.js" />
+    <Content Include="app\Parenting\Addendums\addendums-service.js" />
+    <Content Include="app\Parenting\Communication\communication-controller.js" />
+    <Content Include="app\Parenting\Communication\communication-service.js" />
+    <Content Include="app\Parenting\Communication\communication.html" />
+    <Content Include="app\Parenting\Information\information-controller.js" />
+    <Content Include="app\Parenting\Information\information-service.js" />
+    <Content Include="app\Parenting\Information\information.html" />
+    <Content Include="app\Parenting\Privacy\privacy.html" />
+    <Content Include="app\Parenting\Privacy\privacy-controller.js" />
+    <Content Include="app\Parenting\Privacy\privacy-service.js" />
+    <Content Include="app\Parenting\Responsibility\responsibility-controller.js" />
+    <Content Include="app\Parenting\Responsibility\responsibility-service.js" />
+    <Content Include="app\Parenting\Responsibility\responsibility.html" />
+    <Content Include="app\Parenting\Schedules\schedules-controller.js" />
+    <Content Include="app\Parenting\Schedules\schedules-service.js" />
     <Content Include="app\Starter\Children\children-controller.js" />
     <Content Include="app\Starter\Children\children-service.js" />
     <Content Include="app\Starter\Children\children.html" />
@@ -441,6 +472,7 @@
     <Content Include="Scripts\angular-sanitize.js" />
     <Content Include="Scripts\angular-sanitize.min.js" />
     <Content Include="Scripts\angular-scenario.js" />
+    <Content Include="Scripts\angular-ui.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\app\friendly-admin.js" />
@@ -452,22 +484,17 @@
     <Content Include="Scripts\app\friendly-parenting-global.js" />
     <Content Include="Scripts\app\friendly-starter.js" />
     <Content Include="Scripts\app\friendly-parenting.js" />
-    <Content Include="Scripts\bootstrap-affix.js" />
     <Content Include="Scripts\bootstrap-alert.js" />
     <Content Include="Scripts\bootstrap-button.js" />
-    <Content Include="Scripts\bootstrap-carousel.js" />
-    <Content Include="Scripts\bootstrap-collapse.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-dropdown.js" />
     <Content Include="Scripts\bootstrap-modal.js" />
     <Content Include="Scripts\bootstrap-popover.js" />
-    <Content Include="Scripts\bootstrap-scrollspy.js" />
-    <Content Include="Scripts\bootstrap-tab.js" />
     <Content Include="Scripts\bootstrap-timepicker.js" />
     <Content Include="Scripts\bootstrap-tooltip.js" />
-    <Content Include="Scripts\bootstrap-transition.js" />
     <Content Include="Scripts\bootstrap-typeahead.js" />
     <Content Include="Scripts\friendly.min.js" />
+    <Content Include="Scripts\garlic.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
@@ -475,15 +502,13 @@
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
     <Content Include="Scripts\jquery.mask.js" />
     <Content Include="Scripts\jQuery.tmpl.js" />
-    <Content Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\jstd-scenario-adapter-config.js" />
     <Content Include="Scripts\jstd-scenario-adapter.js" />
     <Content Include="Scripts\jstorage.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Scripts\sisyphus.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -500,10 +525,6 @@
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />

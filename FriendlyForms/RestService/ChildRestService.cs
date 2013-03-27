@@ -39,6 +39,18 @@ namespace FriendlyForms.RestService
     public class ChildRestService : Service
     {
         public IChildService ChildService { get; set; }
+        public object Get(ReqChild request)
+        {
+            if (request.Id != 0)
+            {
+                return ChildService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return ChildService.GetByUserId(request.UserId);
+            }
+            return new ChildForm();
+        }
         public object Put(ReqChild request)
         {
             var child = request.TranslateTo<Child>();

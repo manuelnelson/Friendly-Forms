@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -49,11 +44,22 @@ namespace FriendlyForms.RestService
     public class ChildSupportRestService : Service
     {
         public IChildSupportService ChildSupportService { get; set; }
-
+        public object Get(ReqChildSupport request)
+        {
+            if (request.Id != 0)
+            {
+                return ChildSupportService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return ChildSupportService.GetByUserId(request.UserId);
+            }
+            return new ChildSupport();
+        }
         public object Post(ReqChildSupport request)
         {
-            var childSupportViewModel = request.TranslateTo<ChildSupportViewModel>();
-            ChildSupportService.AddOrUpdate(childSupportViewModel);
+            var childSupport = request.TranslateTo<ChildSupport>();
+            ChildSupportService.Add(childSupport);
             return new RespChildSupport();
         }
         public object Put(ReqChildSupport request)

@@ -1,8 +1,10 @@
-﻿//Todoservice
-FormsApp.factory('participantService', ['$resource', function ($resource) {
-    return $resource('/api/participant/:Id', { Id: '@Id' },
-    {
-        update: { method: 'PUT' },
-        deleteAll: { method: 'DELETE' }
-    });
-}]);
+﻿FormsApp.factory('participantService', function($resource) {
+    var service = {
+        participant: $resource('/api/participant/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});

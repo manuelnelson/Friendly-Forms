@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -33,7 +32,18 @@ namespace FriendlyForms.RestService
     public class InformationRestService : Service
     {
         public IInformationService InformationService { get; set; }
-
+        public object Get(ReqInformation request)
+        {
+            if (request.Id != 0)
+            {
+                return InformationService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return InformationService.GetByUserId(request.UserId);
+            }
+            return new Information();
+        }
         public object Post(ReqInformation request)
         {
             var information = request.TranslateTo<Information>();

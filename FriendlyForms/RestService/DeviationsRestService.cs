@@ -65,7 +65,18 @@ namespace FriendlyForms.RestService
     public class DeviationsRestService : Service
     {
         public IDeviationsService DeviationsService { get; set; }
-
+        public object Get(ReqDeviations request)
+        {
+            if (request.Id != 0)
+            {
+                return DeviationsService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return DeviationsService.GetByUserId(request.UserId);
+            }
+            return new Deviations();
+        }
         public object Post(ReqDeviations request)
         {
             var specialCircumstances = request.TranslateTo<Deviations>();

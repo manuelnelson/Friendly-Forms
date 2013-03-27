@@ -64,7 +64,15 @@ namespace FriendlyForms.RestService
 
             public object Get(HealthDto request)
             {
-                return HealthService.Get(request.Id);
+                if (request.Id != 0)
+                {
+                    return HealthService.Get(request.Id);
+                }
+                if (request.UserId != 0)
+                {
+                    return HealthService.GetByUserId(request.UserId);
+                }
+                return new Health();
             }
 
             public object Post(HealthDto request)

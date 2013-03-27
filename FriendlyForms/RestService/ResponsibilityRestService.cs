@@ -9,7 +9,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Responsibility/")]
+    [Route("/Responsibilities/")]
     public class ReqResponsibility
     {
         [DataMember]
@@ -42,7 +42,18 @@ namespace FriendlyForms.RestService
     public class ResponsibilityRestService : Service
     {
         public IResponsibilityService ResponsibilityService { get; set; }
-
+        public object Get(ReqResponsibility request)
+        {
+            if (request.Id != 0)
+            {
+                return ResponsibilityService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return ResponsibilityService.GetByUserId(request.UserId);
+            }
+            return new Responsibility();
+        }
         public object Post(ReqResponsibility request)
         {
             var responsibility = request.TranslateTo<Responsibility>();

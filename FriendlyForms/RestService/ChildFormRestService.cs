@@ -33,6 +33,18 @@ namespace FriendlyForms.RestService
     public class ChildFormRestService : Service
     {
         public IChildFormService ChildFormService { get; set; }
+        public object Get(ReqChildForm request)
+        {
+            if (request.Id != 0)
+            {
+                return ChildFormService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return ChildFormService.GetByUserId(request.UserId);
+            }
+            return new ChildForm();
+        }
 
         public object Post(ReqChildForm request)
         {

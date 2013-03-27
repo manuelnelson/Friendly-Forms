@@ -86,7 +86,18 @@ namespace FriendlyForms.RestService
     public class IncomeRestService : Service
     {
         public IIncomeService IncomeService { get; set; }
-
+        public object Get(ReqIncome request)
+        {
+            if (request.Id != 0)
+            {
+                return IncomeService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return IncomeService.GetByUserId(request.UserId);
+            }
+            return new Income();
+        }
         public object Post(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();

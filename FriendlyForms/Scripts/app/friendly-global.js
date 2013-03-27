@@ -411,40 +411,6 @@ $(document).ready(function () {
             $(this).val(false);
     });
 
-    $.validator.addMethod("textlineinput", function (val, el, params) {
-        if (this.optional(el)) return true;
-        return val.split('\\')[0] === params;
-    });
-
-    // register the validator
-    $.validator.unobtrusive.adapters.add("textlineinput", ["name"], function (options) {
-        options.rules["textlineinput"] = options.params.name;
-        if (options.message) options.messages["textlineinput"] = options.message;
-    });
-
-    //Modify Validation on forms to cross-over to twitter bootstrap
-    var $forms = $('form');
-    var oldErrorFunction = [], oldSucessFunction = [], oldInvalidHandler = [];
-    for (var f = 0; f < $forms.length; f++) {
-        var settings = $.data($forms[f], 'validator').settings;
-        oldErrorFunction[f] = settings.errorPlacement;
-        oldSucessFunction[f] = settings.success;
-        oldInvalidHandler[f] = settings.invalidHandler;
-        settings.formNdx = f;
-        settings.errorPlacement = function (error, inputElement) {
-            $(inputElement).closest('.control-group').addClass('error');
-            if (!$.data($forms[this.formNdx], 'validator').valid()) {
-            }
-            oldErrorFunction[this.formNdx](error, inputElement);
-        };
-        settings.success = function (error) {
-            $(error).closest('.control-group').removeClass('error');
-            oldSucessFunction[this.formNdx](error);
-        };
-        settings.invalidHandler = function (error) {
-            oldInvalidHandler[this.formNdx]();
-        };
-    }
     //Datepickers
     $(".datepicker").datepicker();
 

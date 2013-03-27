@@ -1,8 +1,11 @@
 ﻿//Todoservice
-FormsApp.factory('courtService', ['$resource', function ($resource) {
-    return $resource('/api/court/:Id', { Id: '@Id' },
-    {
-        update: { method: 'PUT' },
-        deleteAll: { method: 'DELETE' }
-    });
-}]);
+FormsApp.factory('courtService', function ($resource) {
+    var service = {
+        court: $resource('/api/court/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});

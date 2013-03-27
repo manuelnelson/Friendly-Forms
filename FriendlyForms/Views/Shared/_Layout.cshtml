@@ -21,16 +21,16 @@
     <div id="user-nav" class="navbar">
         @Html.Partial("_LogOnPartial")
     </div>
+    @RenderBody()
+    @if (User.Identity.IsAuthenticated)
+    {
+        <input type="hidden" id="user-id" value="@(((FriendlyIdentity)User.Identity).Id)"/>
+    }
     <div id="sidebar" ng-controller="MenuCtrl">
-        @if (User.Identity.IsAuthenticated)
-        {
-            <input type="hidden" id="user-id" value="@(((FriendlyIdentity)User.Identity).Id)"/>
-        }
-        @RenderBody()
         <ul class="ng-cloak">
             <li ng-repeat="menuItem in menuItems" ng-click="menuClick()"  class="{{menuItem.itemClass}}"><a  href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>
                 <ul ng-show="menuItem.showSubMenu">
-                    <li ng-repeat="subMenuItem in menuItem.subMenuItems" ng-click="subMenuClick()"><a href="{{subMenuItem.path}}"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
+                    <li ng-repeat="subMenuItem in menuItem.subMenuItems" class="{{subMenuItem.itemClass}}" ng-click="subMenuClick(menuItem.text, subMenuItem.text)" data-path="{{subMenuItem.path}}"><a href="javascript:"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
                 </ul>
             </li>
         </ul>    
@@ -38,9 +38,7 @@
     <div id="content">
         <div id="content-header">
             <h1>@ViewBag.Title</h1>
-            @RenderSection("ButtonGroup", required: false)
         </div>
-        @RenderSection("Breadcrumb", required: false)
         <div class="container-fluid" id="main-content">
             <div ng-view></div>
             <hr/>

@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -10,7 +9,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Schedule/")]
+    [Route("/Schedules/")]
     public class ReqSchedule
     {
         [DataMember]
@@ -79,11 +78,22 @@ namespace FriendlyForms.RestService
     public class ScheduleRestService : Service
     {
         public IScheduleService ScheduleService { get; set; }
-
+        public object Get(ReqSchedule request)
+        {
+            if (request.Id != 0)
+            {
+                return ScheduleService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return ScheduleService.GetByUserId(request.UserId);
+            }
+            return new Schedule();
+        }
         public object Post(ReqSchedule request)
         {
-            var scheduleViewModel = request.TranslateTo<ScheduleViewModel>();
-            ScheduleService.AddOrUpdate(scheduleViewModel);
+            var schedule = request.TranslateTo<Schedule>();
+            ScheduleService.Add(schedule);
             return new RespSchedule();
         }
         public object Put(ReqSchedule request)

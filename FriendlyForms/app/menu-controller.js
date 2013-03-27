@@ -2,27 +2,22 @@
     $scope.$watch(function () { return menuService.menuItems; }, function () {
         $scope.menuItems = menuService.menuItems;
     });
-    $scope.menuClick = function() {
-        angular.forEach($scope.menuItems, function (val, key) {
-            val.itemClass = '';
-        });
+    $scope.menuClick = function () {
+        if ($scope.isSubMenuClick) {
+            $scope.isSubMenuClick = false;
+            return;
+        }
         var $curItem = $scope.menuItems[this.$index];
         if ($curItem.subMenuItems.length > 0) {
+            //show/collapse menu
             $curItem.showSubMenu = !$curItem.showSubMenu;
+        } else {
+            menuService.setActive($curItem.text);
         }            
-        else
-            $curItem.itemClass = 'active';
     };
-    $scope.subMenuClick = function () {
-        angular.forEach($scope.menuItems, function (val, key) {
-            val.itemClass = '';
-        });
-        //var $curItem = $scope.menuItems[this.$index];
-        //if ($curItem.subMenuItems.length > 0) {
-        //    $curItem.itemClass = 'submenu';
-        //}
-        //else
-        //    $curItem.itemClass = 'active';
+    $scope.subMenuClick = function (menuText, subMenuText) {
+        $scope.isSubMenuClick = true;
+        menuService.setActive(menuText, subMenuText);
     };
 };
 MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];

@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -10,7 +9,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Addendum/")]
+    [Route("/Addendums/")]
     public class ReqAddendum
     {
         [DataMember]
@@ -35,7 +34,18 @@ namespace FriendlyForms.RestService
     public class AddendumRestService : Service
     {
         public IAddendumService AddendumService { get; set; }
-
+        public object Get(ReqAddendum request)
+        {
+            if (request.Id != 0)
+            {
+                return AddendumService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return AddendumService.GetByUserId(request.UserId);
+            }
+            return new Addendum();
+        }
         public object Post(ReqAddendum request)
         {
             var addendum = request.TranslateTo<Addendum>();

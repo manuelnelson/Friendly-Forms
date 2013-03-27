@@ -33,14 +33,25 @@ namespace FriendlyForms.RestService
     public class VehicleFormRestService : Service
     {
         public IVehicleFormService VehicleFormService { get; set; }
-
+        public object Get(ReqVehicleForm request)
+        {
+            if (request.Id != 0)
+            {
+                return VehicleFormService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return VehicleFormService.GetByUserId(request.UserId);
+            }
+            return new VehicleForm();
+        }
         public object Post(ReqVehicleForm request)
         {
-            var vehicleFormViewModel = request.TranslateTo<VehicleFormViewModel>();
-            var updatedModel = VehicleFormService.AddOrUpdate(vehicleFormViewModel);
+            var vehicleForm = request.TranslateTo<VehicleForm>();
+            VehicleFormService.Add(vehicleForm);
             return new RespVehicleForm()
                 {
-                    VehicleForm = updatedModel
+                    VehicleForm = vehicleForm
                 };
         }
         public object Put(ReqVehicleForm request)

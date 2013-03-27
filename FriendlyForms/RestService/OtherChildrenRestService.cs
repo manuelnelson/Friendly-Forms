@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -46,15 +45,23 @@ namespace FriendlyForms.RestService
     public class OtherChildrenRestService : Service
     {
         public IOtherChildrenService OtherChildrenService { get; set; }
-
+        public object Get(ReqOtherChildren request)
+        {
+            if (request.Id != 0)
+            {
+                return OtherChildrenService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return OtherChildrenService.GetByUserId(request.UserId);
+            }
+            return new OtherChildren();
+        }
         public object Post(ReqOtherChildren request)
         {
-            var otherChildrenViewModel = request.TranslateTo<OtherChildrenViewModel>();
-            var otherChildren = OtherChildrenService.AddOrUpdate(otherChildrenViewModel);
-            return new RespOtherChildren
-                {
-                    OtherChildren = otherChildren
-                };
+            var otherChildrenViewModel = request.TranslateTo<OtherChildren>();
+            OtherChildrenService.Add(otherChildrenViewModel);
+            return new RespOtherChildren();
         }
         public object Put(ReqOtherChildren request)
         {

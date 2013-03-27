@@ -9,7 +9,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/HealthInsurance/")]
+    [Route("/HealthInsurances/")]
     public class ReqHealthInsurance
     {
         [DataMember]
@@ -34,7 +34,18 @@ namespace FriendlyForms.RestService
     public class HealthInsuranceRestService : Service
     {
         public IHealthInsuranceService HealthInsuranceService { get; set; }
-
+        public object Get(ReqHealthInsurance request)
+        {
+            if (request.Id != 0)
+            {
+                return HealthInsuranceService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return HealthInsuranceService.GetByUserId(request.UserId);
+            }
+            return new HealthInsurance();
+        }
         public object Post(ReqHealthInsurance request)
         {
             var healthInsurance = request.TranslateTo<HealthInsurance>();

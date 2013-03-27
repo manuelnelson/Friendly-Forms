@@ -38,25 +38,33 @@ namespace FriendlyForms.RestService
 
         public class ChildCareFormsService : Service
         {
-            public IChildCareFormService ChildCareFormService { get; set; } //Injected by IOC
+            public IChildCareFormService ChildCareFormService { get; set; } 
 
             public object Get(ChildCareFormDto request)
             {
-                return ChildCareFormService.Get(request.Id);
+                if (request.Id != 0)
+                {
+                    return ChildCareFormService.Get(request.Id);
+                }
+                if (request.UserId != 0)
+                {
+                    return ChildCareFormService.GetByUserId(request.UserId);
+                }
+                return new ChildCareForm();
             }
 
             public object Post(ChildCareFormDto request)
             {
-                var ChildCareFormEntity = request.TranslateTo<ChildCareForm>();
-                ChildCareFormService.Add(ChildCareFormEntity);
-                return ChildCareFormEntity;
+                var childCareFormEntity = request.TranslateTo<ChildCareForm>();
+                ChildCareFormService.Add(childCareFormEntity);
+                return childCareFormEntity;
             }
 
             public object Put(ChildCareFormDto request)
             {
-                var ChildCareFormEntity = request.TranslateTo<ChildCareForm>();
-                ChildCareFormService.Update(ChildCareFormEntity);
-                return ChildCareFormEntity;
+                var childCareFormEntity = request.TranslateTo<ChildCareForm>();
+                ChildCareFormService.Update(childCareFormEntity);
+                return childCareFormEntity;
             }
 
             public void Delete(ChildCareFormListDto request)
@@ -66,8 +74,8 @@ namespace FriendlyForms.RestService
 
             public void Delete(ChildCareFormDto request)
             {
-                var ChildCareFormEntity = request.TranslateTo<ChildCareForm>();
-                ChildCareFormService.Delete(ChildCareFormEntity);
+                var childCareFormEntity = request.TranslateTo<ChildCareForm>();
+                ChildCareFormService.Delete(childCareFormEntity);
             }
         }
 

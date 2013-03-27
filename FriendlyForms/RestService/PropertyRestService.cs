@@ -1,6 +1,5 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -10,7 +9,7 @@ using Property = Models.Property;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Property/")]
+    [Route("/Properties/")]
     public class ReqProperty
     {
         [DataMember]
@@ -39,7 +38,18 @@ namespace FriendlyForms.RestService
     public class PropertyRestService : Service
     {
         public IPropertyService PropertyService { get; set; }
-
+        public object Get(ReqProperty request)
+        {
+            if (request.Id != 0)
+            {
+                return PropertyService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return PropertyService.GetByUserId(request.UserId);
+            }
+            return new Property();
+        }
         public object Post(ReqProperty request)
         {
             var property = request.TranslateTo<Property>();

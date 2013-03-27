@@ -9403,2144 +9403,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 })( window );
 
-;/// <reference path="jquery-1.5.1.js" />
-
-/*!
-** Unobtrusive Ajax support library for jQuery
-** Copyright (C) Microsoft Corporation. All rights reserved.
-*/
-
-/*jslint white: true, browser: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: false */
-/*global window: false, jQuery: false */
-
-(function ($) {
-    var data_click = "unobtrusiveAjaxClick",
-        data_validation = "unobtrusiveValidation";
-
-    function getFunction(code, argNames) {
-        var fn = window, parts = (code || "").split(".");
-        while (fn && parts.length) {
-            fn = fn[parts.shift()];
-        }
-        if (typeof (fn) === "function") {
-            return fn;
-        }
-        argNames.push(code);
-        return Function.constructor.apply(null, argNames);
-    }
-
-    function isMethodProxySafe(method) {
-        return method === "GET" || method === "POST";
-    }
-
-    function asyncOnBeforeSend(xhr, method) {
-        if (!isMethodProxySafe(method)) {
-            xhr.setRequestHeader("X-HTTP-Method-Override", method);
-        }
-    }
-
-    function asyncOnSuccess(element, data, contentType) {
-        var mode;
-
-        if (contentType.indexOf("application/x-javascript") !== -1) {  // jQuery already executes JavaScript for us
-            return;
-        }
-
-        mode = (element.getAttribute("data-ajax-mode") || "").toUpperCase();
-        $(element.getAttribute("data-ajax-update")).each(function (i, update) {
-            var top;
-
-            switch (mode) {
-            case "BEFORE":
-                top = update.firstChild;
-                $("<div />").html(data).contents().each(function () {
-                    update.insertBefore(this, top);
-                });
-                break;
-            case "AFTER":
-                $("<div />").html(data).contents().each(function () {
-                    update.appendChild(this);
-                });
-                break;
-            default:
-                $(update).html(data);
-                break;
-            }
-        });
-    }
-
-    function asyncRequest(element, options) {
-        var confirm, loading, method, duration;
-
-        confirm = element.getAttribute("data-ajax-confirm");
-        if (confirm && !window.confirm(confirm)) {
-            return;
-        }
-
-        loading = $(element.getAttribute("data-ajax-loading"));
-        duration = element.getAttribute("data-ajax-loading-duration") || 0;
-
-        $.extend(options, {
-            type: element.getAttribute("data-ajax-method") || undefined,
-            url: element.getAttribute("data-ajax-url") || undefined,
-            beforeSend: function (xhr) {
-                var result;
-                asyncOnBeforeSend(xhr, method);
-                result = getFunction(element.getAttribute("data-ajax-begin"), ["xhr"]).apply(this, arguments);
-                if (result !== false) {
-                    loading.show(duration);
-                }
-                return result;
-            },
-            complete: function () {
-                loading.hide(duration);
-                getFunction(element.getAttribute("data-ajax-complete"), ["xhr", "status"]).apply(this, arguments);
-            },
-            success: function (data, status, xhr) {
-                asyncOnSuccess(element, data, xhr.getResponseHeader("Content-Type") || "text/html");
-                getFunction(element.getAttribute("data-ajax-success"), ["data", "status", "xhr"]).apply(this, arguments);
-            },
-            error: getFunction(element.getAttribute("data-ajax-failure"), ["xhr", "status", "error"])
-        });
-
-        options.data.push({ name: "X-Requested-With", value: "XMLHttpRequest" });
-
-        method = options.type.toUpperCase();
-        if (!isMethodProxySafe(method)) {
-            options.type = "POST";
-            options.data.push({ name: "X-HTTP-Method-Override", value: method });
-        }
-
-        $.ajax(options);
-    }
-
-    function validate(form) {
-        var validationInfo = $(form).data(data_validation);
-        return !validationInfo || !validationInfo.validate || validationInfo.validate();
-    }
-
-    $("a[data-ajax=true]").live("click", function (evt) {
-        evt.preventDefault();
-        asyncRequest(this, {
-            url: this.href,
-            type: "GET",
-            data: []
-        });
-    });
-
-    $("form[data-ajax=true] input[type=image]").live("click", function (evt) {
-        var name = evt.target.name,
-            $target = $(evt.target),
-            form = $target.parents("form")[0],
-            offset = $target.offset();
-
-        $(form).data(data_click, [
-            { name: name + ".x", value: Math.round(evt.pageX - offset.left) },
-            { name: name + ".y", value: Math.round(evt.pageY - offset.top) }
-        ]);
-
-        setTimeout(function () {
-            $(form).removeData(data_click);
-        }, 0);
-    });
-
-    $("form[data-ajax=true] :submit").live("click", function (evt) {
-        var name = evt.target.name,
-            form = $(evt.target).parents("form")[0];
-
-        $(form).data(data_click, name ? [{ name: name, value: evt.target.value }] : []);
-
-        setTimeout(function () {
-            $(form).removeData(data_click);
-        }, 0);
-    });
-
-    $("form[data-ajax=true]").live("submit", function (evt) {
-        var clickInfo = $(this).data(data_click) || [];
-        evt.preventDefault();
-        if (!validate(this)) {
-            return;
-        }
-        asyncRequest(this, {
-            url: this.action,
-            type: this.method || "GET",
-            data: clickInfo.concat($(this).serializeArray())
-        });
-    });
-}(jQuery));
-;/**
- * jQuery Validation Plugin 1.8.1
- *
- * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
- * http://docs.jquery.com/Plugins/Validation
- *
- * Copyright (c) 2006 - 2011 Jörn Zaefferer
- *
- * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
- */
-
-(function($) {
-
-$.extend($.fn, {
-	// http://docs.jquery.com/Plugins/Validation/validate
-	validate: function( options ) {
-
-		// if nothing is selected, return nothing; can't chain anyway
-		if (!this.length) {
-			options && options.debug && window.console && console.warn( "nothing selected, can't validate, returning nothing" );
-			return;
-		}
-
-		// check if a validator for this form was already created
-		var validator = $.data(this[0], 'validator');
-		if ( validator ) {
-			return validator;
-		}
-
-		validator = new $.validator( options, this[0] );
-		$.data(this[0], 'validator', validator);
-
-		if ( validator.settings.onsubmit ) {
-
-			// allow suppresing validation by adding a cancel class to the submit button
-			this.find("input, button").filter(".cancel").click(function() {
-				validator.cancelSubmit = true;
-			});
-
-			// when a submitHandler is used, capture the submitting button
-			if (validator.settings.submitHandler) {
-				this.find("input, button").filter(":submit").click(function() {
-					validator.submitButton = this;
-				});
-			}
-
-			// validate the form on submit
-			this.submit( function( event ) {
-				if ( validator.settings.debug )
-					// prevent form submit to be able to see console output
-					event.preventDefault();
-
-				function handle() {
-					if ( validator.settings.submitHandler ) {
-						if (validator.submitButton) {
-							// insert a hidden input as a replacement for the missing submit button
-							var hidden = $("<input type='hidden'/>").attr("name", validator.submitButton.name).val(validator.submitButton.value).appendTo(validator.currentForm);
-						}
-						validator.settings.submitHandler.call( validator, validator.currentForm );
-						if (validator.submitButton) {
-							// and clean up afterwards; thanks to no-block-scope, hidden can be referenced
-							hidden.remove();
-						}
-						return false;
-					}
-					return true;
-				}
-
-				// prevent submit for invalid forms or custom submit handlers
-				if ( validator.cancelSubmit ) {
-					validator.cancelSubmit = false;
-					return handle();
-				}
-				if ( validator.form() ) {
-					if ( validator.pendingRequest ) {
-						validator.formSubmitted = true;
-						return false;
-					}
-					return handle();
-				} else {
-					validator.focusInvalid();
-					return false;
-				}
-			});
-		}
-
-		return validator;
-	},
-	// http://docs.jquery.com/Plugins/Validation/valid
-	valid: function() {
-        if ( $(this[0]).is('form')) {
-            return this.validate().form();
-        } else {
-            var valid = true;
-            var validator = $(this[0].form).validate();
-            this.each(function() {
-				valid &= validator.element(this);
-            });
-            return valid;
-        }
-    },
-	// attributes: space seperated list of attributes to retrieve and remove
-	removeAttrs: function(attributes) {
-		var result = {},
-			$element = this;
-		$.each(attributes.split(/\s/), function(index, value) {
-			result[value] = $element.attr(value);
-			$element.removeAttr(value);
-		});
-		return result;
-	},
-	// http://docs.jquery.com/Plugins/Validation/rules
-	rules: function(command, argument) {
-		var element = this[0];
-
-		if (command) {
-			var settings = $.data(element.form, 'validator').settings;
-			var staticRules = settings.rules;
-			var existingRules = $.validator.staticRules(element);
-			switch(command) {
-			case "add":
-				$.extend(existingRules, $.validator.normalizeRule(argument));
-				staticRules[element.name] = existingRules;
-				if (argument.messages)
-					settings.messages[element.name] = $.extend( settings.messages[element.name], argument.messages );
-				break;
-			case "remove":
-				if (!argument) {
-					delete staticRules[element.name];
-					return existingRules;
-				}
-				var filtered = {};
-				$.each(argument.split(/\s/), function(index, method) {
-					filtered[method] = existingRules[method];
-					delete existingRules[method];
-				});
-				return filtered;
-			}
-		}
-
-		var data = $.validator.normalizeRules(
-		$.extend(
-			{},
-			$.validator.metadataRules(element),
-			$.validator.classRules(element),
-			$.validator.attributeRules(element),
-			$.validator.staticRules(element)
-		), element);
-
-		// make sure required is at front
-		if (data.required) {
-			var param = data.required;
-			delete data.required;
-			data = $.extend({required: param}, data);
-		}
-
-		return data;
-	}
-});
-
-// Custom selectors
-$.extend($.expr[":"], {
-	// http://docs.jquery.com/Plugins/Validation/blank
-	blank: function(a) {return !$.trim("" + a.value);},
-	// http://docs.jquery.com/Plugins/Validation/filled
-	filled: function(a) {return !!$.trim("" + a.value);},
-	// http://docs.jquery.com/Plugins/Validation/unchecked
-	unchecked: function(a) {return !a.checked;}
-});
-
-// constructor for validator
-$.validator = function( options, form ) {
-	this.settings = $.extend( true, {}, $.validator.defaults, options );
-	this.currentForm = form;
-	this.init();
-};
-
-$.validator.format = function(source, params) {
-	if ( arguments.length == 1 )
-		return function() {
-			var args = $.makeArray(arguments);
-			args.unshift(source);
-			return $.validator.format.apply( this, args );
-		};
-	if ( arguments.length > 2 && params.constructor != Array  ) {
-		params = $.makeArray(arguments).slice(1);
-	}
-	if ( params.constructor != Array ) {
-		params = [ params ];
-	}
-	$.each(params, function(i, n) {
-		source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
-	});
-	return source;
-};
-
-$.extend($.validator, {
-
-	defaults: {
-		messages: {},
-		groups: {},
-		rules: {},
-		errorClass: "error",
-		validClass: "valid",
-		errorElement: "label",
-		focusInvalid: true,
-		errorContainer: $( [] ),
-		errorLabelContainer: $( [] ),
-		onsubmit: true,
-		ignore: [],
-		ignoreTitle: false,
-		onfocusin: function(element) {
-			this.lastActive = element;
-
-			// hide error label and remove error class on focus if enabled
-			if ( this.settings.focusCleanup && !this.blockFocusCleanup ) {
-				this.settings.unhighlight && this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
-				this.addWrapper(this.errorsFor(element)).hide();
-			}
-		},
-		onfocusout: function(element) {
-			if ( !this.checkable(element) && (element.name in this.submitted || !this.optional(element)) ) {
-				this.element(element);
-			}
-		},
-		onkeyup: function(element) {
-			if ( element.name in this.submitted || element == this.lastElement ) {
-				this.element(element);
-			}
-		},
-		onclick: function(element) {
-			// click on selects, radiobuttons and checkboxes
-			if ( element.name in this.submitted )
-				this.element(element);
-			// or option elements, check parent select in that case
-			else if (element.parentNode.name in this.submitted)
-				this.element(element.parentNode);
-		},
-		highlight: function(element, errorClass, validClass) {
-			if (element.type === 'radio') {
-				this.findByName(element.name).addClass(errorClass).removeClass(validClass);
-			} else {
-				$(element).addClass(errorClass).removeClass(validClass);
-			}
-		},
-		unhighlight: function(element, errorClass, validClass) {
-			if (element.type === 'radio') {
-				this.findByName(element.name).removeClass(errorClass).addClass(validClass);
-			} else {
-				$(element).removeClass(errorClass).addClass(validClass);
-			}
-		}
-	},
-
-	// http://docs.jquery.com/Plugins/Validation/Validator/setDefaults
-	setDefaults: function(settings) {
-		$.extend( $.validator.defaults, settings );
-	},
-
-	messages: {
-		required: "This field is required.",
-		remote: "Please fix this field.",
-		email: "Please enter a valid email address.",
-		url: "Please enter a valid URL.",
-		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
-		number: "Please enter a valid number.",
-		digits: "Please enter only digits.",
-		creditcard: "Please enter a valid credit card number.",
-		equalTo: "Please enter the same value again.",
-		accept: "Please enter a value with a valid extension.",
-		maxlength: $.validator.format("Please enter no more than {0} characters."),
-		minlength: $.validator.format("Please enter at least {0} characters."),
-		rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
-		range: $.validator.format("Please enter a value between {0} and {1}."),
-		max: $.validator.format("Please enter a value less than or equal to {0}."),
-		min: $.validator.format("Please enter a value greater than or equal to {0}.")
-	},
-
-	autoCreateRanges: false,
-
-	prototype: {
-
-		init: function() {
-			this.labelContainer = $(this.settings.errorLabelContainer);
-			this.errorContext = this.labelContainer.length && this.labelContainer || $(this.currentForm);
-			this.containers = $(this.settings.errorContainer).add( this.settings.errorLabelContainer );
-			this.submitted = {};
-			this.valueCache = {};
-			this.pendingRequest = 0;
-			this.pending = {};
-			this.invalid = {};
-			this.reset();
-
-			var groups = (this.groups = {});
-			$.each(this.settings.groups, function(key, value) {
-				$.each(value.split(/\s/), function(index, name) {
-					groups[name] = key;
-				});
-			});
-			var rules = this.settings.rules;
-			$.each(rules, function(key, value) {
-				rules[key] = $.validator.normalizeRule(value);
-			});
-
-			function delegate(event) {
-				var validator = $.data(this[0].form, "validator"),
-					eventType = "on" + event.type.replace(/^validate/, "");
-				validator.settings[eventType] && validator.settings[eventType].call(validator, this[0] );
-			}
-			$(this.currentForm)
-				.validateDelegate(":text, :password, :file, select, textarea", "focusin focusout keyup", delegate)
-				.validateDelegate(":radio, :checkbox, select, option", "click", delegate);
-
-			if (this.settings.invalidHandler)
-				$(this.currentForm).bind("invalid-form.validate", this.settings.invalidHandler);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/form
-		form: function() {
-			this.checkForm();
-			$.extend(this.submitted, this.errorMap);
-			this.invalid = $.extend({}, this.errorMap);
-			if (!this.valid())
-				$(this.currentForm).triggerHandler("invalid-form", [this]);
-			this.showErrors();
-			return this.valid();
-		},
-
-		checkForm: function() {
-			this.prepareForm();
-			for ( var i = 0, elements = (this.currentElements = this.elements()); elements[i]; i++ ) {
-				this.check( elements[i] );
-			}
-			return this.valid();
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/element
-		element: function( element ) {
-			element = this.clean( element );
-			this.lastElement = element;
-			this.prepareElement( element );
-			this.currentElements = $(element);
-			var result = this.check( element );
-			if ( result ) {
-				delete this.invalid[element.name];
-			} else {
-				this.invalid[element.name] = true;
-			}
-			if ( !this.numberOfInvalids() ) {
-				// Hide error containers on last error
-				this.toHide = this.toHide.add( this.containers );
-			}
-			this.showErrors();
-			return result;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/showErrors
-		showErrors: function(errors) {
-			if(errors) {
-				// add items to error list and map
-				$.extend( this.errorMap, errors );
-				this.errorList = [];
-				for ( var name in errors ) {
-					this.errorList.push({
-						message: errors[name],
-						element: this.findByName(name)[0]
-					});
-				}
-				// remove items from success list
-				this.successList = $.grep( this.successList, function(element) {
-					return !(element.name in errors);
-				});
-			}
-			this.settings.showErrors
-				? this.settings.showErrors.call( this, this.errorMap, this.errorList )
-				: this.defaultShowErrors();
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Validator/resetForm
-		resetForm: function() {
-			if ( $.fn.resetForm )
-				$( this.currentForm ).resetForm();
-			this.submitted = {};
-			this.prepareForm();
-			this.hideErrors();
-			this.elements().removeClass( this.settings.errorClass );
-		},
-
-		numberOfInvalids: function() {
-			return this.objectLength(this.invalid);
-		},
-
-		objectLength: function( obj ) {
-			var count = 0;
-			for ( var i in obj )
-				count++;
-			return count;
-		},
-
-		hideErrors: function() {
-			this.addWrapper( this.toHide ).hide();
-		},
-
-		valid: function() {
-			return this.size() == 0;
-		},
-
-		size: function() {
-			return this.errorList.length;
-		},
-
-		focusInvalid: function() {
-			if( this.settings.focusInvalid ) {
-				try {
-					$(this.findLastActive() || this.errorList.length && this.errorList[0].element || [])
-					.filter(":visible")
-					.focus()
-					// manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
-					.trigger("focusin");
-				} catch(e) {
-					// ignore IE throwing errors when focusing hidden elements
-				}
-			}
-		},
-
-		findLastActive: function() {
-			var lastActive = this.lastActive;
-			return lastActive && $.grep(this.errorList, function(n) {
-				return n.element.name == lastActive.name;
-			}).length == 1 && lastActive;
-		},
-
-		elements: function() {
-			var validator = this,
-				rulesCache = {};
-
-			// select all valid inputs inside the form (no submit or reset buttons)
-			return $(this.currentForm)
-			.find("input, select, textarea")
-			.not(":submit, :reset, :image, [disabled]")
-			.not( this.settings.ignore )
-			.filter(function() {
-				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
-
-				// select only the first element for each name, and only those with rules specified
-				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) )
-					return false;
-
-				rulesCache[this.name] = true;
-				return true;
-			});
-		},
-
-		clean: function( selector ) {
-			return $( selector )[0];
-		},
-
-		errors: function() {
-			return $( this.settings.errorElement + "." + this.settings.errorClass, this.errorContext );
-		},
-
-		reset: function() {
-			this.successList = [];
-			this.errorList = [];
-			this.errorMap = {};
-			this.toShow = $([]);
-			this.toHide = $([]);
-			this.currentElements = $([]);
-		},
-
-		prepareForm: function() {
-			this.reset();
-			this.toHide = this.errors().add( this.containers );
-		},
-
-		prepareElement: function( element ) {
-			this.reset();
-			this.toHide = this.errorsFor(element);
-		},
-
-		check: function( element ) {
-			element = this.clean( element );
-
-			// if radio/checkbox, validate first element in group instead
-			if (this.checkable(element)) {
-				element = this.findByName( element.name ).not(this.settings.ignore)[0];
-			}
-
-			var rules = $(element).rules();
-			var dependencyMismatch = false;
-			for (var method in rules ) {
-				var rule = { method: method, parameters: rules[method] };
-				try {
-					var result = $.validator.methods[method].call( this, element.value.replace(/\r/g, ""), element, rule.parameters );
-
-					// if a method indicates that the field is optional and therefore valid,
-					// don't mark it as valid when there are no other rules
-					if ( result == "dependency-mismatch" ) {
-						dependencyMismatch = true;
-						continue;
-					}
-					dependencyMismatch = false;
-
-					if ( result == "pending" ) {
-						this.toHide = this.toHide.not( this.errorsFor(element) );
-						return;
-					}
-
-					if( !result ) {
-						this.formatAndAdd( element, rule );
-						return false;
-					}
-				} catch(e) {
-					this.settings.debug && window.console && console.log("exception occured when checking element " + element.id
-						 + ", check the '" + rule.method + "' method", e);
-					throw e;
-				}
-			}
-			if (dependencyMismatch)
-				return;
-			if ( this.objectLength(rules) )
-				this.successList.push(element);
-			return true;
-		},
-
-		// return the custom message for the given element and validation method
-		// specified in the element's "messages" metadata
-		customMetaMessage: function(element, method) {
-			if (!$.metadata)
-				return;
-
-			var meta = this.settings.meta
-				? $(element).metadata()[this.settings.meta]
-				: $(element).metadata();
-
-			return meta && meta.messages && meta.messages[method];
-		},
-
-		// return the custom message for the given element name and validation method
-		customMessage: function( name, method ) {
-			var m = this.settings.messages[name];
-			return m && (m.constructor == String
-				? m
-				: m[method]);
-		},
-
-		// return the first defined argument, allowing empty strings
-		findDefined: function() {
-			for(var i = 0; i < arguments.length; i++) {
-				if (arguments[i] !== undefined)
-					return arguments[i];
-			}
-			return undefined;
-		},
-
-		defaultMessage: function( element, method) {
-			return this.findDefined(
-				this.customMessage( element.name, method ),
-				this.customMetaMessage( element, method ),
-				// title is never undefined, so handle empty string as undefined
-				!this.settings.ignoreTitle && element.title || undefined,
-				$.validator.messages[method],
-				"<strong>Warning: No message defined for " + element.name + "</strong>"
-			);
-		},
-
-		formatAndAdd: function( element, rule ) {
-			var message = this.defaultMessage( element, rule.method ),
-				theregex = /\$?\{(\d+)\}/g;
-			if ( typeof message == "function" ) {
-				message = message.call(this, rule.parameters, element);
-			} else if (theregex.test(message)) {
-				message = jQuery.format(message.replace(theregex, '{$1}'), rule.parameters);
-			}
-			this.errorList.push({
-				message: message,
-				element: element
-			});
-
-			this.errorMap[element.name] = message;
-			this.submitted[element.name] = message;
-		},
-
-		addWrapper: function(toToggle) {
-			if ( this.settings.wrapper )
-				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
-			return toToggle;
-		},
-
-		defaultShowErrors: function() {
-			for ( var i = 0; this.errorList[i]; i++ ) {
-				var error = this.errorList[i];
-				this.settings.highlight && this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
-				this.showLabel( error.element, error.message );
-			}
-			if( this.errorList.length ) {
-				this.toShow = this.toShow.add( this.containers );
-			}
-			if (this.settings.success) {
-				for ( var i = 0; this.successList[i]; i++ ) {
-					this.showLabel( this.successList[i] );
-				}
-			}
-			if (this.settings.unhighlight) {
-				for ( var i = 0, elements = this.validElements(); elements[i]; i++ ) {
-					this.settings.unhighlight.call( this, elements[i], this.settings.errorClass, this.settings.validClass );
-				}
-			}
-			this.toHide = this.toHide.not( this.toShow );
-			this.hideErrors();
-			this.addWrapper( this.toShow ).show();
-		},
-
-		validElements: function() {
-			return this.currentElements.not(this.invalidElements());
-		},
-
-		invalidElements: function() {
-			return $(this.errorList).map(function() {
-				return this.element;
-			});
-		},
-
-		showLabel: function(element, message) {
-			var label = this.errorsFor( element );
-			if ( label.length ) {
-				// refresh error/success class
-				label.removeClass().addClass( this.settings.errorClass );
-
-				// check if we have a generated label, replace the message then
-				label.attr("generated") && label.html(message);
-			} else {
-				// create label
-				label = $("<" + this.settings.errorElement + "/>")
-					.attr({"for":  this.idOrName(element), generated: true})
-					.addClass(this.settings.errorClass)
-					.html(message || "");
-				if ( this.settings.wrapper ) {
-					// make sure the element is visible, even in IE
-					// actually showing the wrapped element is handled elsewhere
-					label = label.hide().show().wrap("<" + this.settings.wrapper + "/>").parent();
-				}
-				if ( !this.labelContainer.append(label).length )
-					this.settings.errorPlacement
-						? this.settings.errorPlacement(label, $(element) )
-						: label.insertAfter(element);
-			}
-			if ( !message && this.settings.success ) {
-				label.text("");
-				typeof this.settings.success == "string"
-					? label.addClass( this.settings.success )
-					: this.settings.success( label );
-			}
-			this.toShow = this.toShow.add(label);
-		},
-
-		errorsFor: function(element) {
-			var name = this.idOrName(element);
-    		return this.errors().filter(function() {
-				return $(this).attr('for') == name;
-			});
-		},
-
-		idOrName: function(element) {
-			return this.groups[element.name] || (this.checkable(element) ? element.name : element.id || element.name);
-		},
-
-		checkable: function( element ) {
-			return /radio|checkbox/i.test(element.type);
-		},
-
-		findByName: function( name ) {
-			// select by name and filter by form for performance over form.find("[name=...]")
-			var form = this.currentForm;
-			return $(document.getElementsByName(name)).map(function(index, element) {
-				return element.form == form && element.name == name && element  || null;
-			});
-		},
-
-		getLength: function(value, element) {
-			switch( element.nodeName.toLowerCase() ) {
-			case 'select':
-				return $("option:selected", element).length;
-			case 'input':
-				if( this.checkable( element) )
-					return this.findByName(element.name).filter(':checked').length;
-			}
-			return value.length;
-		},
-
-		depend: function(param, element) {
-			return this.dependTypes[typeof param]
-				? this.dependTypes[typeof param](param, element)
-				: true;
-		},
-
-		dependTypes: {
-			"boolean": function(param, element) {
-				return param;
-			},
-			"string": function(param, element) {
-				return !!$(param, element.form).length;
-			},
-			"function": function(param, element) {
-				return param(element);
-			}
-		},
-
-		optional: function(element) {
-			return !$.validator.methods.required.call(this, $.trim(element.value), element) && "dependency-mismatch";
-		},
-
-		startRequest: function(element) {
-			if (!this.pending[element.name]) {
-				this.pendingRequest++;
-				this.pending[element.name] = true;
-			}
-		},
-
-		stopRequest: function(element, valid) {
-			this.pendingRequest--;
-			// sometimes synchronization fails, make sure pendingRequest is never < 0
-			if (this.pendingRequest < 0)
-				this.pendingRequest = 0;
-			delete this.pending[element.name];
-			if ( valid && this.pendingRequest == 0 && this.formSubmitted && this.form() ) {
-				$(this.currentForm).submit();
-				this.formSubmitted = false;
-			} else if (!valid && this.pendingRequest == 0 && this.formSubmitted) {
-				$(this.currentForm).triggerHandler("invalid-form", [this]);
-				this.formSubmitted = false;
-			}
-		},
-
-		previousValue: function(element) {
-			return $.data(element, "previousValue") || $.data(element, "previousValue", {
-				old: null,
-				valid: true,
-				message: this.defaultMessage( element, "remote" )
-			});
-		}
-
-	},
-
-	classRuleSettings: {
-		required: {required: true},
-		email: {email: true},
-		url: {url: true},
-		date: {date: true},
-		dateISO: {dateISO: true},
-		dateDE: {dateDE: true},
-		number: {number: true},
-		numberDE: {numberDE: true},
-		digits: {digits: true},
-		creditcard: {creditcard: true}
-	},
-
-	addClassRules: function(className, rules) {
-		className.constructor == String ?
-			this.classRuleSettings[className] = rules :
-			$.extend(this.classRuleSettings, className);
-	},
-
-	classRules: function(element) {
-		var rules = {};
-		var classes = $(element).attr('class');
-		classes && $.each(classes.split(' '), function() {
-			if (this in $.validator.classRuleSettings) {
-				$.extend(rules, $.validator.classRuleSettings[this]);
-			}
-		});
-		return rules;
-	},
-
-	attributeRules: function(element) {
-		var rules = {};
-		var $element = $(element);
-
-		for (var method in $.validator.methods) {
-			var value = $element.attr(method);
-			if (value) {
-				rules[method] = value;
-			}
-		}
-
-		// maxlength may be returned as -1, 2147483647 (IE) and 524288 (safari) for text inputs
-		if (rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength)) {
-			delete rules.maxlength;
-		}
-
-		return rules;
-	},
-
-	metadataRules: function(element) {
-		if (!$.metadata) return {};
-
-		var meta = $.data(element.form, 'validator').settings.meta;
-		return meta ?
-			$(element).metadata()[meta] :
-			$(element).metadata();
-	},
-
-	staticRules: function(element) {
-		var rules = {};
-		var validator = $.data(element.form, 'validator');
-		if (validator.settings.rules) {
-			rules = $.validator.normalizeRule(validator.settings.rules[element.name]) || {};
-		}
-		return rules;
-	},
-
-	normalizeRules: function(rules, element) {
-		// handle dependency check
-		$.each(rules, function(prop, val) {
-			// ignore rule when param is explicitly false, eg. required:false
-			if (val === false) {
-				delete rules[prop];
-				return;
-			}
-			if (val.param || val.depends) {
-				var keepRule = true;
-				switch (typeof val.depends) {
-					case "string":
-						keepRule = !!$(val.depends, element.form).length;
-						break;
-					case "function":
-						keepRule = val.depends.call(element, element);
-						break;
-				}
-				if (keepRule) {
-					rules[prop] = val.param !== undefined ? val.param : true;
-				} else {
-					delete rules[prop];
-				}
-			}
-		});
-
-		// evaluate parameters
-		$.each(rules, function(rule, parameter) {
-			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
-		});
-
-		// clean number parameters
-		$.each(['minlength', 'maxlength', 'min', 'max'], function() {
-			if (rules[this]) {
-				rules[this] = Number(rules[this]);
-			}
-		});
-		$.each(['rangelength', 'range'], function() {
-			if (rules[this]) {
-				rules[this] = [Number(rules[this][0]), Number(rules[this][1])];
-			}
-		});
-
-		if ($.validator.autoCreateRanges) {
-			// auto-create ranges
-			if (rules.min && rules.max) {
-				rules.range = [rules.min, rules.max];
-				delete rules.min;
-				delete rules.max;
-			}
-			if (rules.minlength && rules.maxlength) {
-				rules.rangelength = [rules.minlength, rules.maxlength];
-				delete rules.minlength;
-				delete rules.maxlength;
-			}
-		}
-
-		// To support custom messages in metadata ignore rule methods titled "messages"
-		if (rules.messages) {
-			delete rules.messages;
-		}
-
-		return rules;
-	},
-
-	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
-	normalizeRule: function(data) {
-		if( typeof data == "string" ) {
-			var transformed = {};
-			$.each(data.split(/\s/), function() {
-				transformed[this] = true;
-			});
-			data = transformed;
-		}
-		return data;
-	},
-
-	// http://docs.jquery.com/Plugins/Validation/Validator/addMethod
-	addMethod: function(name, method, message) {
-		$.validator.methods[name] = method;
-		$.validator.messages[name] = message != undefined ? message : $.validator.messages[name];
-		if (method.length < 3) {
-			$.validator.addClassRules(name, $.validator.normalizeRule(name));
-		}
-	},
-
-	methods: {
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/required
-		required: function(value, element, param) {
-			// check if dependency is met
-			if ( !this.depend(param, element) )
-				return "dependency-mismatch";
-			switch( element.nodeName.toLowerCase() ) {
-			case 'select':
-				// could be an array for select-multiple or a string, both are fine this way
-				var val = $(element).val();
-				return val && val.length > 0;
-			case 'input':
-				if ( this.checkable(element) )
-					return this.getLength(value, element) > 0;
-			default:
-				return $.trim(value).length > 0;
-			}
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/remote
-		remote: function(value, element, param) {
-			if ( this.optional(element) )
-				return "dependency-mismatch";
-
-			var previous = this.previousValue(element);
-			if (!this.settings.messages[element.name] )
-				this.settings.messages[element.name] = {};
-			previous.originalMessage = this.settings.messages[element.name].remote;
-			this.settings.messages[element.name].remote = previous.message;
-
-			param = typeof param == "string" && {url:param} || param;
-
-			if ( this.pending[element.name] ) {
-				return "pending";
-			}
-			if ( previous.old === value ) {
-				return previous.valid;
-			}
-
-			previous.old = value;
-			var validator = this;
-			this.startRequest(element);
-			var data = {};
-			data[element.name] = value;
-			$.ajax($.extend(true, {
-				url: param,
-				mode: "abort",
-				port: "validate" + element.name,
-				dataType: "json",
-				data: data,
-				success: function(response) {
-					validator.settings.messages[element.name].remote = previous.originalMessage;
-					var valid = response === true;
-					if ( valid ) {
-						var submitted = validator.formSubmitted;
-						validator.prepareElement(element);
-						validator.formSubmitted = submitted;
-						validator.successList.push(element);
-						validator.showErrors();
-					} else {
-						var errors = {};
-						var message = response || validator.defaultMessage( element, "remote" );
-						errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
-						validator.showErrors(errors);
-					}
-					previous.valid = valid;
-					validator.stopRequest(element, valid);
-				}
-			}, param));
-			return "pending";
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/minlength
-		minlength: function(value, element, param) {
-			return this.optional(element) || this.getLength($.trim(value), element) >= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
-		maxlength: function(value, element, param) {
-			return this.optional(element) || this.getLength($.trim(value), element) <= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
-		rangelength: function(value, element, param) {
-			var length = this.getLength($.trim(value), element);
-			return this.optional(element) || ( length >= param[0] && length <= param[1] );
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/min
-		min: function( value, element, param ) {
-			return this.optional(element) || value >= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/max
-		max: function( value, element, param ) {
-			return this.optional(element) || value <= param;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/range
-		range: function( value, element, param ) {
-			return this.optional(element) || ( value >= param[0] && value <= param[1] );
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/email
-		email: function(value, element) {
-			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
-			return this.optional(element) || /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/url
-		url: function(value, element) {
-			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
-			return this.optional(element) || /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/date
-		date: function(value, element) {
-			return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/dateISO
-		dateISO: function(value, element) {
-			return this.optional(element) || /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/number
-		number: function(value, element) {
-			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/digits
-		digits: function(value, element) {
-			return this.optional(element) || /^\d+$/.test(value);
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/creditcard
-		// based on http://en.wikipedia.org/wiki/Luhn
-		creditcard: function(value, element) {
-			if ( this.optional(element) )
-				return "dependency-mismatch";
-			// accept only digits and dashes
-			if (/[^0-9-]+/.test(value))
-				return false;
-			var nCheck = 0,
-				nDigit = 0,
-				bEven = false;
-
-			value = value.replace(/\D/g, "");
-
-			for (var n = value.length - 1; n >= 0; n--) {
-				var cDigit = value.charAt(n);
-				var nDigit = parseInt(cDigit, 10);
-				if (bEven) {
-					if ((nDigit *= 2) > 9)
-						nDigit -= 9;
-				}
-				nCheck += nDigit;
-				bEven = !bEven;
-			}
-
-			return (nCheck % 10) == 0;
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/accept
-		accept: function(value, element, param) {
-			param = typeof param == "string" ? param.replace(/,/g, '|') : "png|jpe?g|gif";
-			return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i"));
-		},
-
-		// http://docs.jquery.com/Plugins/Validation/Methods/equalTo
-		equalTo: function(value, element, param) {
-			// bind to the blur event of the target in order to revalidate whenever the target field is updated
-			// TODO find a way to bind the event just once, avoiding the unbind-rebind overhead
-			var target = $(param).unbind(".validate-equalTo").bind("blur.validate-equalTo", function() {
-				$(element).valid();
-			});
-			return value == target.val();
-		}
-
-	}
-
-});
-
-// deprecated, use $.validator.format instead
-$.format = $.validator.format;
-
-})(jQuery);
-
-// ajax mode: abort
-// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
-// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
-;(function($) {
-	var pendingRequests = {};
-	// Use a prefilter if available (1.5+)
-	if ( $.ajaxPrefilter ) {
-		$.ajaxPrefilter(function(settings, _, xhr) {
-			var port = settings.port;
-			if (settings.mode == "abort") {
-				if ( pendingRequests[port] ) {
-					pendingRequests[port].abort();
-				}
-				pendingRequests[port] = xhr;
-			}
-		});
-	} else {
-		// Proxy ajax
-		var ajax = $.ajax;
-		$.ajax = function(settings) {
-			var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
-				port = ( "port" in settings ? settings : $.ajaxSettings ).port;
-			if (mode == "abort") {
-				if ( pendingRequests[port] ) {
-					pendingRequests[port].abort();
-				}
-				return (pendingRequests[port] = ajax.apply(this, arguments));
-			}
-			return ajax.apply(this, arguments);
-		};
-	}
-})(jQuery);
-
-// provides cross-browser focusin and focusout events
-// IE has native support, in other browsers, use event caputuring (neither bubbles)
-
-// provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
-// handler is only called when $(event.target).is(delegate), in the scope of the jquery-object for event.target
-;(function($) {
-	// only implement if not provided by jQuery core (since 1.4)
-	// TODO verify if jQuery 1.4's implementation is compatible with older jQuery special-event APIs
-	if (!jQuery.event.special.focusin && !jQuery.event.special.focusout && document.addEventListener) {
-		$.each({
-			focus: 'focusin',
-			blur: 'focusout'
-		}, function( original, fix ){
-			$.event.special[fix] = {
-				setup:function() {
-					this.addEventListener( original, handler, true );
-				},
-				teardown:function() {
-					this.removeEventListener( original, handler, true );
-				},
-				handler: function(e) {
-					arguments[0] = $.event.fix(e);
-					arguments[0].type = fix;
-					return $.event.handle.apply(this, arguments);
-				}
-			};
-			function handler(e) {
-				e = $.event.fix(e);
-				e.type = fix;
-				return $.event.handle.call(this, e);
-			}
-		});
-	};
-	$.extend($.fn, {
-		validateDelegate: function(delegate, type, handler) {
-			return this.bind(type, function(event) {
-				var target = $(event.target);
-				if (target.is(delegate)) {
-					return handler.apply(target, arguments);
-				}
-			});
-		}
-	});
-})(jQuery);
-
-;/// <reference path="jquery-1.5.1.js" />
-/// <reference path="jquery.validate.js" />
-
-/*!
-** Unobtrusive validation support library for jQuery and jQuery Validate
-** Copyright (C) Microsoft Corporation. All rights reserved.
-*/
-
-/*jslint white: true, browser: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: false */
-/*global document: false, jQuery: false */
-
-(function ($) {
-    var $jQval = $.validator,
-        adapters,
-        data_validation = "unobtrusiveValidation";
-
-    function setValidationValues(options, ruleName, value) {
-        options.rules[ruleName] = value;
-        if (options.message) {
-            options.messages[ruleName] = options.message;
-        }
-    }
-
-    function splitAndTrim(value) {
-        return value.replace(/^\s+|\s+$/g, "").split(/\s*,\s*/g);
-    }
-
-    function getModelPrefix(fieldName) {
-        return fieldName.substr(0, fieldName.lastIndexOf(".") + 1);
-    }
-
-    function appendModelPrefix(value, prefix) {
-        if (value.indexOf("*.") === 0) {
-            value = value.replace("*.", prefix);
-        }
-        return value;
-    }
-
-    function onError(error, inputElement) {  // 'this' is the form element
-        var container = $(this).find("[data-valmsg-for='" + inputElement[0].name + "']"),
-            replace = $.parseJSON(container.attr("data-valmsg-replace")) !== false;
-
-        container.removeClass("field-validation-valid").addClass("field-validation-error");
-        error.data("unobtrusiveContainer", container);
-
-        if (replace) {
-            container.empty();
-            error.removeClass("input-validation-error").appendTo(container);
-        }
-        else {
-            error.hide();
-        }
-    }
-
-    function onErrors(form, validator) {  // 'this' is the form element
-        var container = $(this).find("[data-valmsg-summary=true]"),
-            list = container.find("ul");
-
-        if (list && list.length && validator.errorList.length) {
-            list.empty();
-            container.addClass("validation-summary-errors").removeClass("validation-summary-valid");
-
-            $.each(validator.errorList, function () {
-                $("<li />").html(this.message).appendTo(list);
-            });
-        }
-    }
-
-    function onSuccess(error) {  // 'this' is the form element
-        var container = error.data("unobtrusiveContainer"),
-            replace = $.parseJSON(container.attr("data-valmsg-replace"));
-
-        if (container) {
-            container.addClass("field-validation-valid").removeClass("field-validation-error");
-            error.removeData("unobtrusiveContainer");
-
-            if (replace) {
-                container.empty();
-            }
-        }
-    }
-
-    function validationInfo(form) {
-        var $form = $(form),
-            result = $form.data(data_validation);
-
-        if (!result) {
-            result = {
-                options: {  // options structure passed to jQuery Validate's validate() method
-                    errorClass: "input-validation-error",
-                    errorElement: "span",
-                    errorPlacement: $.proxy(onError, form),
-                    invalidHandler: $.proxy(onErrors, form),
-                    messages: {},
-                    rules: {},
-                    success: $.proxy(onSuccess, form)
-                },
-                attachValidation: function () {
-                    $form.validate(this.options);
-                },
-                validate: function () {  // a validation function that is called by unobtrusive Ajax
-                    $form.validate();
-                    return $form.valid();
-                }
-            };
-            $form.data(data_validation, result);
-        }
-
-        return result;
-    }
-
-    $jQval.unobtrusive = {
-        adapters: [],
-
-        parseElement: function (element, skipAttach) {
-            /// <summary>
-            /// Parses a single HTML element for unobtrusive validation attributes.
-            /// </summary>
-            /// <param name="element" domElement="true">The HTML element to be parsed.</param>
-            /// <param name="skipAttach" type="Boolean">[Optional] true to skip attaching the
-            /// validation to the form. If parsing just this single element, you should specify true.
-            /// If parsing several elements, you should specify false, and manually attach the validation
-            /// to the form when you are finished. The default is false.</param>
-            var $element = $(element),
-                form = $element.parents("form")[0],
-                valInfo, rules, messages;
-
-            if (!form) {  // Cannot do client-side validation without a form
-                return;
-            }
-
-            valInfo = validationInfo(form);
-            valInfo.options.rules[element.name] = rules = {};
-            valInfo.options.messages[element.name] = messages = {};
-
-            $.each(this.adapters, function () {
-                var prefix = "data-val-" + this.name,
-                    message = $element.attr(prefix),
-                    paramValues = {};
-
-                if (message !== undefined) {  // Compare against undefined, because an empty message is legal (and falsy)
-                    prefix += "-";
-
-                    $.each(this.params, function () {
-                        paramValues[this] = $element.attr(prefix + this);
-                    });
-
-                    this.adapt({
-                        element: element,
-                        form: form,
-                        message: message,
-                        params: paramValues,
-                        rules: rules,
-                        messages: messages
-                    });
-                }
-            });
-
-            jQuery.extend(rules, { "__dummy__": true });
-
-            if (!skipAttach) {
-                valInfo.attachValidation();
-            }
-        },
-
-        parse: function (selector) {
-            /// <summary>
-            /// Parses all the HTML elements in the specified selector. It looks for input elements decorated
-            /// with the [data-val=true] attribute value and enables validation according to the data-val-*
-            /// attribute values.
-            /// </summary>
-            /// <param name="selector" type="String">Any valid jQuery selector.</param>
-            $(selector).find(":input[data-val=true]").each(function () {
-                $jQval.unobtrusive.parseElement(this, true);
-            });
-
-            $("form").each(function () {
-                var info = validationInfo(this);
-                if (info) {
-                    info.attachValidation();
-                }
-            });
-        }
-    };
-
-    adapters = $jQval.unobtrusive.adapters;
-
-    adapters.add = function (adapterName, params, fn) {
-        /// <summary>Adds a new adapter to convert unobtrusive HTML into a jQuery Validate validation.</summary>
-        /// <param name="adapterName" type="String">The name of the adapter to be added. This matches the name used
-        /// in the data-val-nnnn HTML attribute (where nnnn is the adapter name).</param>
-        /// <param name="params" type="Array" optional="true">[Optional] An array of parameter names (strings) that will
-        /// be extracted from the data-val-nnnn-mmmm HTML attributes (where nnnn is the adapter name, and
-        /// mmmm is the parameter name).</param>
-        /// <param name="fn" type="Function">The function to call, which adapts the values from the HTML
-        /// attributes into jQuery Validate rules and/or messages.</param>
-        /// <returns type="jQuery.validator.unobtrusive.adapters" />
-        if (!fn) {  // Called with no params, just a function
-            fn = params;
-            params = [];
-        }
-        this.push({ name: adapterName, params: params, adapt: fn });
-        return this;
-    };
-
-    adapters.addBool = function (adapterName, ruleName) {
-        /// <summary>Adds a new adapter to convert unobtrusive HTML into a jQuery Validate validation, where
-        /// the jQuery Validate validation rule has no parameter values.</summary>
-        /// <param name="adapterName" type="String">The name of the adapter to be added. This matches the name used
-        /// in the data-val-nnnn HTML attribute (where nnnn is the adapter name).</param>
-        /// <param name="ruleName" type="String" optional="true">[Optional] The name of the jQuery Validate rule. If not provided, the value
-        /// of adapterName will be used instead.</param>
-        /// <returns type="jQuery.validator.unobtrusive.adapters" />
-        return this.add(adapterName, function (options) {
-            setValidationValues(options, ruleName || adapterName, true);
-        });
-    };
-
-    adapters.addMinMax = function (adapterName, minRuleName, maxRuleName, minMaxRuleName, minAttribute, maxAttribute) {
-        /// <summary>Adds a new adapter to convert unobtrusive HTML into a jQuery Validate validation, where
-        /// the jQuery Validate validation has three potential rules (one for min-only, one for max-only, and
-        /// one for min-and-max). The HTML parameters are expected to be named -min and -max.</summary>
-        /// <param name="adapterName" type="String">The name of the adapter to be added. This matches the name used
-        /// in the data-val-nnnn HTML attribute (where nnnn is the adapter name).</param>
-        /// <param name="minRuleName" type="String">The name of the jQuery Validate rule to be used when you only
-        /// have a minimum value.</param>
-        /// <param name="maxRuleName" type="String">The name of the jQuery Validate rule to be used when you only
-        /// have a maximum value.</param>
-        /// <param name="minMaxRuleName" type="String">The name of the jQuery Validate rule to be used when you
-        /// have both a minimum and maximum value.</param>
-        /// <param name="minAttribute" type="String" optional="true">[Optional] The name of the HTML attribute that
-        /// contains the minimum value. The default is "min".</param>
-        /// <param name="maxAttribute" type="String" optional="true">[Optional] The name of the HTML attribute that
-        /// contains the maximum value. The default is "max".</param>
-        /// <returns type="jQuery.validator.unobtrusive.adapters" />
-        return this.add(adapterName, [minAttribute || "min", maxAttribute || "max"], function (options) {
-            var min = options.params.min,
-                max = options.params.max;
-
-            if (min && max) {
-                setValidationValues(options, minMaxRuleName, [min, max]);
-            }
-            else if (min) {
-                setValidationValues(options, minRuleName, min);
-            }
-            else if (max) {
-                setValidationValues(options, maxRuleName, max);
-            }
-        });
-    };
-
-    adapters.addSingleVal = function (adapterName, attribute, ruleName) {
-        /// <summary>Adds a new adapter to convert unobtrusive HTML into a jQuery Validate validation, where
-        /// the jQuery Validate validation rule has a single value.</summary>
-        /// <param name="adapterName" type="String">The name of the adapter to be added. This matches the name used
-        /// in the data-val-nnnn HTML attribute(where nnnn is the adapter name).</param>
-        /// <param name="attribute" type="String">[Optional] The name of the HTML attribute that contains the value.
-        /// The default is "val".</param>
-        /// <param name="ruleName" type="String" optional="true">[Optional] The name of the jQuery Validate rule. If not provided, the value
-        /// of adapterName will be used instead.</param>
-        /// <returns type="jQuery.validator.unobtrusive.adapters" />
-        return this.add(adapterName, [attribute || "val"], function (options) {
-            setValidationValues(options, ruleName || adapterName, options.params[attribute]);
-        });
-    };
-
-    $jQval.addMethod("__dummy__", function (value, element, params) {
-        return true;
-    });
-
-    $jQval.addMethod("regex", function (value, element, params) {
-        var match;
-        if (this.optional(element)) {
-            return true;
-        }
-
-        match = new RegExp(params).exec(value);
-        return (match && (match.index === 0) && (match[0].length === value.length));
-    });
-
-    adapters.addSingleVal("accept", "exts").addSingleVal("regex", "pattern");
-    adapters.addBool("creditcard").addBool("date").addBool("digits").addBool("email").addBool("number").addBool("url");
-    adapters.addMinMax("length", "minlength", "maxlength", "rangelength").addMinMax("range", "min", "max", "range");
-    adapters.add("equalto", ["other"], function (options) {
-        var prefix = getModelPrefix(options.element.name),
-            other = options.params.other,
-            fullOtherName = appendModelPrefix(other, prefix),
-            element = $(options.form).find(":input[name=" + fullOtherName + "]")[0];
-
-        setValidationValues(options, "equalTo", element);
-    });
-    adapters.add("required", function (options) {
-        // jQuery Validate equates "required" with "mandatory" for checkbox elements
-        if (options.element.tagName.toUpperCase() !== "INPUT" || options.element.type.toUpperCase() !== "CHECKBOX") {
-            setValidationValues(options, "required", true);
-        }
-    });
-    adapters.add("remote", ["url", "type", "additionalfields"], function (options) {
-        var value = {
-            url: options.params.url,
-            type: options.params.type || "GET",
-            data: {}
-        },
-            prefix = getModelPrefix(options.element.name);
-
-        $.each(splitAndTrim(options.params.additionalfields || options.element.name), function (i, fieldName) {
-            var paramName = appendModelPrefix(fieldName, prefix);
-            value.data[paramName] = function () {
-                return $(options.form).find(":input[name='" + paramName + "']").val();
-            };
-        });
-
-        setValidationValues(options, "remote", value);
-    });
-
-    $(function () {
-        $jQval.unobtrusive.parse(document);
-    });
-}(jQuery));
-;/*
- * jQuery Templating Plugin
- * Copyright 2010, John Resig
- * Dual licensed under the MIT or GPL Version 2 licenses.
- */
-(function( jQuery, undefined ){
-	var oldManip = jQuery.fn.domManip, tmplItmAtt = "_tmplitem", htmlExpr = /^[^<]*(<[\w\W]+>)[^>]*$|\{\{\! /,
-		newTmplItems = {}, wrappedItems = {}, appendToTmplItems, topTmplItem = { key: 0, data: {} }, itemKey = 0, cloneIndex = 0, stack = [];
-
-	function newTmplItem( options, parentItem, fn, data ) {
-		// Returns a template item data structure for a new rendered instance of a template (a 'template item').
-		// The content field is a hierarchical array of strings and nested items (to be
-		// removed and replaced by nodes field of dom elements, once inserted in DOM).
-		var newItem = {
-			data: data || (parentItem ? parentItem.data : {}),
-			_wrap: parentItem ? parentItem._wrap : null,
-			tmpl: null,
-			parent: parentItem || null,
-			nodes: [],
-			calls: tiCalls,
-			nest: tiNest,
-			wrap: tiWrap,
-			html: tiHtml,
-			update: tiUpdate
-		};
-		if ( options ) {
-			jQuery.extend( newItem, options, { nodes: [], parent: parentItem } );
-		}
-		if ( fn ) {
-			// Build the hierarchical content to be used during insertion into DOM
-			newItem.tmpl = fn;
-			newItem._ctnt = newItem._ctnt || newItem.tmpl( jQuery, newItem );
-			newItem.key = ++itemKey;
-			// Keep track of new template item, until it is stored as jQuery Data on DOM element
-			(stack.length ? wrappedItems : newTmplItems)[itemKey] = newItem;
-		}
-		return newItem;
-	}
-
-	// Override appendTo etc., in order to provide support for targeting multiple elements. (This code would disappear if integrated in jquery core).
-	jQuery.each({
-		appendTo: "append",
-		prependTo: "prepend",
-		insertBefore: "before",
-		insertAfter: "after",
-		replaceAll: "replaceWith"
-	}, function( name, original ) {
-		jQuery.fn[ name ] = function( selector ) {
-			var ret = [], insert = jQuery( selector ), elems, i, l, tmplItems,
-				parent = this.length === 1 && this[0].parentNode;
-
-			appendToTmplItems = newTmplItems || {};
-			if ( parent && parent.nodeType === 11 && parent.childNodes.length === 1 && insert.length === 1 ) {
-				insert[ original ]( this[0] );
-				ret = this;
-			} else {
-				for ( i = 0, l = insert.length; i < l; i++ ) {
-					cloneIndex = i;
-					elems = (i > 0 ? this.clone(true) : this).get();
-					jQuery.fn[ original ].apply( jQuery(insert[i]), elems );
-					ret = ret.concat( elems );
-				}
-				cloneIndex = 0;
-				ret = this.pushStack( ret, name, insert.selector );
-			}
-			tmplItems = appendToTmplItems;
-			appendToTmplItems = null;
-			jQuery.tmpl.complete( tmplItems );
-			return ret;
-		};
-	});
-
-	jQuery.fn.extend({
-		// Use first wrapped element as template markup.
-		// Return wrapped set of template items, obtained by rendering template against data.
-		tmpl: function( data, options, parentItem ) {
-			return jQuery.tmpl( this[0], data, options, parentItem );
-		},
-
-		// Find which rendered template item the first wrapped DOM element belongs to
-		tmplItem: function() {
-			return jQuery.tmplItem( this[0] );
-		},
-
-		// Consider the first wrapped element as a template declaration, and get the compiled template or store it as a named template.
-		template: function( name ) {
-			return jQuery.template( name, this[0] );
-		},
-
-		domManip: function( args, table, callback, options ) {
-			// This appears to be a bug in the appendTo, etc. implementation
-			// it should be doing .call() instead of .apply(). See #6227
-			if ( args[0] && args[0].nodeType ) {
-				var dmArgs = jQuery.makeArray( arguments ), argsLength = args.length, i = 0, tmplItem;
-				while ( i < argsLength && !(tmplItem = jQuery.data( args[i++], "tmplItem" ))) {}
-				if ( argsLength > 1 ) {
-					dmArgs[0] = [jQuery.makeArray( args )];
-				}
-				if ( tmplItem && cloneIndex ) {
-					dmArgs[2] = function( fragClone ) {
-						// Handler called by oldManip when rendered template has been inserted into DOM.
-						jQuery.tmpl.afterManip( this, fragClone, callback );
-					};
-				}
-				oldManip.apply( this, dmArgs );
-			} else {
-				oldManip.apply( this, arguments );
-			}
-			cloneIndex = 0;
-			if ( !appendToTmplItems ) {
-				jQuery.tmpl.complete( newTmplItems );
-			}
-			return this;
-		}
-	});
-
-	jQuery.extend({
-		// Return wrapped set of template items, obtained by rendering template against data.
-		tmpl: function( tmpl, data, options, parentItem ) {
-			var ret, topLevel = !parentItem;
-			if ( topLevel ) {
-				// This is a top-level tmpl call (not from a nested template using {{tmpl}})
-				parentItem = topTmplItem;
-				tmpl = jQuery.template[tmpl] || jQuery.template( null, tmpl );
-				wrappedItems = {}; // Any wrapped items will be rebuilt, since this is top level
-			} else if ( !tmpl ) {
-				// The template item is already associated with DOM - this is a refresh.
-				// Re-evaluate rendered template for the parentItem
-				tmpl = parentItem.tmpl;
-				newTmplItems[parentItem.key] = parentItem;
-				parentItem.nodes = [];
-				if ( parentItem.wrapped ) {
-					updateWrapped( parentItem, parentItem.wrapped );
-				}
-				// Rebuild, without creating a new template item
-				return jQuery( build( parentItem, null, parentItem.tmpl( jQuery, parentItem ) ));
-			}
-			if ( !tmpl ) {
-				return []; // Could throw...
-			}
-			if ( typeof data === "function" ) {
-				data = data.call( parentItem || {} );
-			}
-			if ( options && options.wrapped ) {
-				updateWrapped( options, options.wrapped );
-			}
-			ret = jQuery.isArray( data ) ? 
-				jQuery.map( data, function( dataItem ) {
-					return dataItem ? newTmplItem( options, parentItem, tmpl, dataItem ) : null;
-				}) :
-				[ newTmplItem( options, parentItem, tmpl, data ) ];
-			return topLevel ? jQuery( build( parentItem, null, ret ) ) : ret;
-		},
-
-		// Return rendered template item for an element.
-		tmplItem: function( elem ) {
-			var tmplItem;
-			if ( elem instanceof jQuery ) {
-				elem = elem[0];
-			}
-			while ( elem && elem.nodeType === 1 && !(tmplItem = jQuery.data( elem, "tmplItem" )) && (elem = elem.parentNode) ) {}
-			return tmplItem || topTmplItem;
-		},
-
-		// Set:
-		// Use $.template( name, tmpl ) to cache a named template,
-		// where tmpl is a template string, a script element or a jQuery instance wrapping a script element, etc.
-		// Use $( "selector" ).template( name ) to provide access by name to a script block template declaration.
-
-		// Get:
-		// Use $.template( name ) to access a cached template.
-		// Also $( selectorToScriptBlock ).template(), or $.template( null, templateString )
-		// will return the compiled template, without adding a name reference.
-		// If templateString includes at least one HTML tag, $.template( templateString ) is equivalent
-		// to $.template( null, templateString )
-		template: function( name, tmpl ) {
-			if (tmpl) {
-				// Compile template and associate with name
-				if ( typeof tmpl === "string" ) {
-					// This is an HTML string being passed directly in.
-					tmpl = buildTmplFn( tmpl )
-				} else if ( tmpl instanceof jQuery ) {
-					tmpl = tmpl[0] || {};
-				}
-				if ( tmpl.nodeType ) {
-					// If this is a template block, use cached copy, or generate tmpl function and cache.
-					tmpl = jQuery.data( tmpl, "tmpl" ) || jQuery.data( tmpl, "tmpl", buildTmplFn( tmpl.innerHTML ));
-				}
-				return typeof name === "string" ? (jQuery.template[name] = tmpl) : tmpl;
-			}
-			// Return named compiled template
-			return name ? (typeof name !== "string" ? jQuery.template( null, name ): 
-				(jQuery.template[name] || 
-					// If not in map, treat as a selector. (If integrated with core, use quickExpr.exec) 
-					jQuery.template( null, htmlExpr.test( name ) ? name : jQuery( name )))) : null; 
-		},
-
-		encode: function( text ) {
-			// Do HTML encoding replacing < > & and ' and " by corresponding entities.
-			return ("" + text).split("<").join("&lt;").split(">").join("&gt;").split('"').join("&#34;").split("'").join("&#39;");
-		}
-	});
-
-	jQuery.extend( jQuery.tmpl, {
-		tag: {
-			"tmpl": {
-				_default: { $2: "null" },
-				open: "if($notnull_1){_=_.concat($item.nest($1,$2));}"
-				// tmpl target parameter can be of type function, so use $1, not $1a (so not auto detection of functions)
-				// This means that {{tmpl foo}} treats foo as a template (which IS a function). 
-				// Explicit parens can be used if foo is a function that returns a template: {{tmpl foo()}}.
-			},
-			"wrap": {
-				_default: { $2: "null" },
-				open: "$item.calls(_,$1,$2);_=[];",
-				close: "call=$item.calls();_=call._.concat($item.wrap(call,_));"
-			},
-			"each": {
-				_default: { $2: "$index, $value" },
-				open: "if($notnull_1){$.each($1a,function($2){with(this){",
-				close: "}});}"
-			},
-			"if": {
-				open: "if(($notnull_1) && $1a){",
-				close: "}"
-			},
-			"else": {
-				_default: { $1: "true" },
-				open: "}else if(($notnull_1) && $1a){"
-			},
-			"html": {
-				// Unecoded expression evaluation. 
-				open: "if($notnull_1){_.push($1a);}"
-			},
-			"=": {
-				// Encoded expression evaluation. Abbreviated form is ${}.
-				_default: { $1: "$data" },
-				open: "if($notnull_1){_.push($.encode($1a));}"
-			},
-			"!": {
-				// Comment tag. Skipped by parser
-				open: ""
-			}
-		},
-
-		// This stub can be overridden, e.g. in jquery.tmplPlus for providing rendered events
-		complete: function( items ) {
-			newTmplItems = {};
-		},
-
-		// Call this from code which overrides domManip, or equivalent
-		// Manage cloning/storing template items etc.
-		afterManip: function afterManip( elem, fragClone, callback ) {
-			// Provides cloned fragment ready for fixup prior to and after insertion into DOM
-			var content = fragClone.nodeType === 11 ?
-				jQuery.makeArray(fragClone.childNodes) :
-				fragClone.nodeType === 1 ? [fragClone] : [];
-
-			// Return fragment to original caller (e.g. append) for DOM insertion
-			callback.call( elem, fragClone );
-
-			// Fragment has been inserted:- Add inserted nodes to tmplItem data structure. Replace inserted element annotations by jQuery.data.
-			storeTmplItems( content );
-			cloneIndex++;
-		}
-	});
-
-	//========================== Private helper functions, used by code above ==========================
-
-	function build( tmplItem, nested, content ) {
-		// Convert hierarchical content into flat string array 
-		// and finally return array of fragments ready for DOM insertion
-		var frag, ret = content ? jQuery.map( content, function( item ) {
-			return (typeof item === "string") ? 
-				// Insert template item annotations, to be converted to jQuery.data( "tmplItem" ) when elems are inserted into DOM.
-				(tmplItem.key ? item.replace( /(<\w+)(?=[\s>])(?![^>]*_tmplitem)([^>]*)/g, "$1 " + tmplItmAtt + "=\"" + tmplItem.key + "\" $2" ) : item) :
-				// This is a child template item. Build nested template.
-				build( item, tmplItem, item._ctnt );
-		}) : 
-		// If content is not defined, insert tmplItem directly. Not a template item. May be a string, or a string array, e.g. from {{html $item.html()}}. 
-		tmplItem;
-		if ( nested ) {
-			return ret;
-		}
-
-		// top-level template
-		ret = ret.join("");
-
-		// Support templates which have initial or final text nodes, or consist only of text
-		// Also support HTML entities within the HTML markup.
-		ret.replace( /^\s*([^<\s][^<]*)?(<[\w\W]+>)([^>]*[^>\s])?\s*$/, function( all, before, middle, after) {
-			frag = jQuery( middle ).get();
-
-			storeTmplItems( frag );
-			if ( before ) {
-				frag = unencode( before ).concat(frag);
-			}
-			if ( after ) {
-				frag = frag.concat(unencode( after ));
-			}
-		});
-		return frag ? frag : unencode( ret );
-	}
-
-	function unencode( text ) {
-		// Use createElement, since createTextNode will not render HTML entities correctly
-		var el = document.createElement( "div" );
-		el.innerHTML = text;
-		return jQuery.makeArray(el.childNodes);
-	}
-
-	// Generate a reusable function that will serve to render a template against data
-	function buildTmplFn( markup ) {
-		return new Function("jQuery","$item",
-			"var $=jQuery,call,_=[],$data=$item.data;" +
-
-			// Introduce the data as local variables using with(){}
-			"with($data){_.push('" +
-
-			// Convert the template into pure JavaScript
-			jQuery.trim(markup)
-				.replace( /([\\'])/g, "\\$1" )
-				.replace( /[\r\t\n]/g, " " )
-				.replace( /\$\{([^\}]*)\}/g, "{{= $1}}" )
-				.replace( /\{\{(\/?)(\w+|.)(?:\(((?:[^\}]|\}(?!\}))*?)?\))?(?:\s+(.*?)?)?(\(((?:[^\}]|\}(?!\}))*?)\))?\s*\}\}/g,
-				function( all, slash, type, fnargs, target, parens, args ) {
-					var tag = jQuery.tmpl.tag[ type ], def, expr, exprAutoFnDetect;
-					if ( !tag ) {
-						throw "Template command not found: " + type;
-					}
-					def = tag._default || [];
-					if ( parens && !/\w$/.test(target)) {
-						target += parens;
-						parens = "";
-					}
-					if ( target ) {
-						target = unescape( target ); 
-						args = args ? ("," + unescape( args ) + ")") : (parens ? ")" : "");
-						// Support for target being things like a.toLowerCase();
-						// In that case don't call with template item as 'this' pointer. Just evaluate...
-						expr = parens ? (target.indexOf(".") > -1 ? target + parens : ("(" + target + ").call($item" + args)) : target;
-						exprAutoFnDetect = parens ? expr : "(typeof(" + target + ")==='function'?(" + target + ").call($item):(" + target + "))";
-					} else {
-						exprAutoFnDetect = expr = def.$1 || "null";
-					}
-					fnargs = unescape( fnargs );
-					return "');" + 
-						tag[ slash ? "close" : "open" ]
-							.split( "$notnull_1" ).join( target ? "typeof(" + target + ")!=='undefined' && (" + target + ")!=null" : "true" )
-							.split( "$1a" ).join( exprAutoFnDetect )
-							.split( "$1" ).join( expr )
-							.split( "$2" ).join( fnargs ?
-								fnargs.replace( /\s*([^\(]+)\s*(\((.*?)\))?/g, function( all, name, parens, params ) {
-									params = params ? ("," + params + ")") : (parens ? ")" : "");
-									return params ? ("(" + name + ").call($item" + params) : all;
-								})
-								: (def.$2||"")
-							) +
-						"_.push('";
-				}) +
-			"');}return _;"
-		);
-	}
-	function updateWrapped( options, wrapped ) {
-		// Build the wrapped content. 
-		options._wrap = build( options, true, 
-			// Suport imperative scenario in which options.wrapped can be set to a selector or an HTML string.
-			jQuery.isArray( wrapped ) ? wrapped : [htmlExpr.test( wrapped ) ? wrapped : jQuery( wrapped ).html()]
-		).join("");
-	}
-
-	function unescape( args ) {
-		return args ? args.replace( /\\'/g, "'").replace(/\\\\/g, "\\" ) : null;
-	}
-	function outerHtml( elem ) {
-		var div = document.createElement("div");
-		div.appendChild( elem.cloneNode(true) );
-		return div.innerHTML;
-	}
-
-	// Store template items in jQuery.data(), ensuring a unique tmplItem data data structure for each rendered template instance.
-	function storeTmplItems( content ) {
-		var keySuffix = "_" + cloneIndex, elem, elems, newClonedItems = {}, i, l, m;
-		for ( i = 0, l = content.length; i < l; i++ ) {
-			if ( (elem = content[i]).nodeType !== 1 ) {
-				continue;
-			}
-			elems = elem.getElementsByTagName("*");
-			for ( m = elems.length - 1; m >= 0; m-- ) {
-				processItemKey( elems[m] );
-			}
-			processItemKey( elem );
-		}
-		function processItemKey( el ) {
-			var pntKey, pntNode = el, pntItem, tmplItem, key;
-			// Ensure that each rendered template inserted into the DOM has its own template item,
-			if ( (key = el.getAttribute( tmplItmAtt ))) {
-				while ( pntNode.parentNode && (pntNode = pntNode.parentNode).nodeType === 1 && !(pntKey = pntNode.getAttribute( tmplItmAtt ))) { }
-				if ( pntKey !== key ) {
-					// The next ancestor with a _tmplitem expando is on a different key than this one.
-					// So this is a top-level element within this template item
-					// Set pntNode to the key of the parentNode, or to 0 if pntNode.parentNode is null, or pntNode is a fragment.
-					pntNode = pntNode.parentNode ? (pntNode.nodeType === 11 ? 0 : (pntNode.getAttribute( tmplItmAtt ) || 0)) : 0;
-					if ( !(tmplItem = newTmplItems[key]) ) {
-						// The item is for wrapped content, and was copied from the temporary parent wrappedItem.
-						tmplItem = wrappedItems[key];
-						tmplItem = newTmplItem( tmplItem, newTmplItems[pntNode]||wrappedItems[pntNode], null, true );
-						tmplItem.key = ++itemKey;
-						newTmplItems[itemKey] = tmplItem;
-					}
-					if ( cloneIndex ) {
-						cloneTmplItem( key );
-					}
-				}
-				el.removeAttribute( tmplItmAtt );
-			} else if ( cloneIndex && (tmplItem = jQuery.data( el, "tmplItem" )) ) {
-				// This was a rendered element, cloned during append or appendTo etc.
-				// TmplItem stored in jQuery data has already been cloned in cloneCopyEvent. We must replace it with a fresh cloned tmplItem.
-				cloneTmplItem( tmplItem.key );
-				newTmplItems[tmplItem.key] = tmplItem;
-				pntNode = jQuery.data( el.parentNode, "tmplItem" );
-				pntNode = pntNode ? pntNode.key : 0;
-			}
-			if ( tmplItem ) {
-				pntItem = tmplItem;
-				// Find the template item of the parent element. 
-				// (Using !=, not !==, since pntItem.key is number, and pntNode may be a string)
-				while ( pntItem && pntItem.key != pntNode ) { 
-					// Add this element as a top-level node for this rendered template item, as well as for any
-					// ancestor items between this item and the item of its parent element
-					pntItem.nodes.push( el );
-					pntItem = pntItem.parent;
-				}
-				// Delete content built during rendering - reduce API surface area and memory use, and avoid exposing of stale data after rendering...
-				delete tmplItem._ctnt;
-				delete tmplItem._wrap;
-				// Store template item as jQuery data on the element
-				jQuery.data( el, "tmplItem", tmplItem );
-			}
-			function cloneTmplItem( key ) {
-				key = key + keySuffix;
-				tmplItem = newClonedItems[key] = 
-					(newClonedItems[key] || newTmplItem( tmplItem, newTmplItems[tmplItem.parent.key + keySuffix] || tmplItem.parent, null, true ));
-			}
-		}
-	}
-
-	//---- Helper functions for template item ----
-
-	function tiCalls( content, tmpl, data, options ) {
-		if ( !content ) {
-			return stack.pop();
-		}
-		stack.push({ _: content, tmpl: tmpl, item:this, data: data, options: options });
-	}
-
-	function tiNest( tmpl, data, options ) {
-		// nested template, using {{tmpl}} tag
-		return jQuery.tmpl( jQuery.template( tmpl ), data, options, this );
-	}
-
-	function tiWrap( call, wrapped ) {
-		// nested template, using {{wrap}} tag
-		var options = call.options || {};
-		options.wrapped = wrapped;
-		// Apply the template, which may incorporate wrapped content, 
-		return jQuery.tmpl( jQuery.template( call.tmpl ), call.data, options, call.item );
-	}
-
-	function tiHtml( filter, textOnly ) {
-		var wrapped = this._wrap;
-		return jQuery.map(
-			jQuery( jQuery.isArray( wrapped ) ? wrapped.join("") : wrapped ).filter( filter || "*" ),
-			function(e) {
-				return textOnly ?
-					e.innerText || e.textContent :
-					e.outerHTML || outerHtml(e);
-			});
-	}
-
-	function tiUpdate() {
-		var coll = this.nodes;
-		jQuery.tmpl( null, null, null, this).insertBefore( coll[0] );
-		jQuery( coll ).remove();
-	}
-})( jQuery );
-
 ;/**
 * jquery.mask.js
 * @author: Igor Escobar
@@ -11767,6 +9629,282 @@ $.format = $.validator.format;
     };
 
 })(jQuery);
+;/* ===========================================================
+ * bootstrap-tooltip.js v2.1.1
+ * http://twitter.github.com/bootstrap/javascript.html#tooltips
+ * Inspired by the original jQuery.tipsy by Jason Frame
+ * ===========================================================
+ * Copyright 2012 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================== */
+
+
+!function ($) {
+
+  "use strict"; // jshint ;_;
+
+
+ /* TOOLTIP PUBLIC CLASS DEFINITION
+  * =============================== */
+
+  var Tooltip = function (element, options) {
+    this.init('tooltip', element, options)
+  }
+
+  Tooltip.prototype = {
+
+    constructor: Tooltip
+
+  , init: function (type, element, options) {
+      var eventIn
+        , eventOut
+
+      this.type = type
+      this.$element = $(element)
+      this.options = this.getOptions(options)
+      this.enabled = true
+
+      if (this.options.trigger == 'click') {
+        this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
+      } else if (this.options.trigger != 'manual') {
+        eventIn = this.options.trigger == 'hover' ? 'mouseenter' : 'focus'
+        eventOut = this.options.trigger == 'hover' ? 'mouseleave' : 'blur'
+        this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+        this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
+      }
+
+      this.options.selector ?
+        (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+        this.fixTitle()
+    }
+
+  , getOptions: function (options) {
+      options = $.extend({}, $.fn[this.type].defaults, options, this.$element.data())
+
+      if (options.delay && typeof options.delay == 'number') {
+        options.delay = {
+          show: options.delay
+        , hide: options.delay
+        }
+      }
+
+      return options
+    }
+
+  , enter: function (e) {
+      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
+
+      if (!self.options.delay || !self.options.delay.show) return self.show()
+
+      clearTimeout(this.timeout)
+      self.hoverState = 'in'
+      this.timeout = setTimeout(function() {
+        if (self.hoverState == 'in') self.show()
+      }, self.options.delay.show)
+    }
+
+  , leave: function (e) {
+      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
+
+      if (this.timeout) clearTimeout(this.timeout)
+      if (!self.options.delay || !self.options.delay.hide) return self.hide()
+
+      self.hoverState = 'out'
+      this.timeout = setTimeout(function() {
+        if (self.hoverState == 'out') self.hide()
+      }, self.options.delay.hide)
+    }
+
+  , show: function () {
+      var $tip
+        , inside
+        , pos
+        , actualWidth
+        , actualHeight
+        , placement
+        , tp
+
+      if (this.hasContent() && this.enabled) {
+        $tip = this.tip()
+        this.setContent()
+
+        if (this.options.animation) {
+          $tip.addClass('fade')
+        }
+
+        placement = typeof this.options.placement == 'function' ?
+          this.options.placement.call(this, $tip[0], this.$element[0]) :
+          this.options.placement
+
+        inside = /in/.test(placement)
+
+        $tip
+          .remove()
+          .css({ top: 0, left: 0, display: 'block' })
+          .appendTo(inside ? this.$element : document.body)
+
+        pos = this.getPosition(inside)
+
+        actualWidth = $tip[0].offsetWidth
+        actualHeight = $tip[0].offsetHeight
+
+        switch (inside ? placement.split(' ')[1] : placement) {
+          case 'bottom':
+            tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}
+            break
+          case 'top':
+            tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}
+            break
+          case 'left':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}
+            break
+          case 'right':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
+            break
+        }
+
+        $tip
+          .css(tp)
+          .addClass(placement)
+          .addClass('in')
+      }
+    }
+
+  , setContent: function () {
+      var $tip = this.tip()
+        , title = this.getTitle()
+
+      $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
+      $tip.removeClass('fade in top bottom left right')
+    }
+
+  , hide: function () {
+      var that = this
+        , $tip = this.tip()
+
+      $tip.removeClass('in')
+
+      function removeWithAnimation() {
+        var timeout = setTimeout(function () {
+          $tip.off($.support.transition.end).remove()
+        }, 500)
+
+        $tip.one($.support.transition.end, function () {
+          clearTimeout(timeout)
+          $tip.remove()
+        })
+      }
+
+      $.support.transition && this.$tip.hasClass('fade') ?
+        removeWithAnimation() :
+        $tip.remove()
+
+      return this
+    }
+
+  , fixTitle: function () {
+      var $e = this.$element
+      if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
+        $e.attr('data-original-title', $e.attr('title') || '').removeAttr('title')
+      }
+    }
+
+  , hasContent: function () {
+      return this.getTitle()
+    }
+
+  , getPosition: function (inside) {
+      return $.extend({}, (inside ? {top: 0, left: 0} : this.$element.offset()), {
+        width: this.$element[0].offsetWidth
+      , height: this.$element[0].offsetHeight
+      })
+    }
+
+  , getTitle: function () {
+      var title
+        , $e = this.$element
+        , o = this.options
+
+      title = $e.attr('data-original-title')
+        || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+
+      return title
+    }
+
+  , tip: function () {
+      return this.$tip = this.$tip || $(this.options.template)
+    }
+
+  , validate: function () {
+      if (!this.$element[0].parentNode) {
+        this.hide()
+        this.$element = null
+        this.options = null
+      }
+    }
+
+  , enable: function () {
+      this.enabled = true
+    }
+
+  , disable: function () {
+      this.enabled = false
+    }
+
+  , toggleEnabled: function () {
+      this.enabled = !this.enabled
+    }
+
+  , toggle: function () {
+      this[this.tip().hasClass('in') ? 'hide' : 'show']()
+    }
+
+  , destroy: function () {
+      this.hide().$element.off('.' + this.type).removeData(this.type)
+    }
+
+  }
+
+
+ /* TOOLTIP PLUGIN DEFINITION
+  * ========================= */
+
+  $.fn.tooltip = function ( option ) {
+    return this.each(function () {
+      var $this = $(this)
+        , data = $this.data('tooltip')
+        , options = typeof option == 'object' && option
+      if (!data) $this.data('tooltip', (data = new Tooltip(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.tooltip.Constructor = Tooltip
+
+  $.fn.tooltip.defaults = {
+    animation: true
+  , placement: 'top'
+  , selector: false
+  , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+  , trigger: 'hover'
+  , title: ''
+  , delay: 0
+  , html: true
+  }
+
+}(window.jQuery);
+
 ;/* ==========================================================
  * bootstrap-alert.js v2.1.1
  * http://twitter.github.com/bootstrap/javascript.html#alerts
@@ -12343,282 +10481,6 @@ $.format = $.validator.format;
 
 }(window.jQuery);
 ;/* ===========================================================
- * bootstrap-tooltip.js v2.1.1
- * http://twitter.github.com/bootstrap/javascript.html#tooltips
- * Inspired by the original jQuery.tipsy by Jason Frame
- * ===========================================================
- * Copyright 2012 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================== */
-
-
-!function ($) {
-
-  "use strict"; // jshint ;_;
-
-
- /* TOOLTIP PUBLIC CLASS DEFINITION
-  * =============================== */
-
-  var Tooltip = function (element, options) {
-    this.init('tooltip', element, options)
-  }
-
-  Tooltip.prototype = {
-
-    constructor: Tooltip
-
-  , init: function (type, element, options) {
-      var eventIn
-        , eventOut
-
-      this.type = type
-      this.$element = $(element)
-      this.options = this.getOptions(options)
-      this.enabled = true
-
-      if (this.options.trigger == 'click') {
-        this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
-      } else if (this.options.trigger != 'manual') {
-        eventIn = this.options.trigger == 'hover' ? 'mouseenter' : 'focus'
-        eventOut = this.options.trigger == 'hover' ? 'mouseleave' : 'blur'
-        this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
-        this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
-      }
-
-      this.options.selector ?
-        (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
-        this.fixTitle()
-    }
-
-  , getOptions: function (options) {
-      options = $.extend({}, $.fn[this.type].defaults, options, this.$element.data())
-
-      if (options.delay && typeof options.delay == 'number') {
-        options.delay = {
-          show: options.delay
-        , hide: options.delay
-        }
-      }
-
-      return options
-    }
-
-  , enter: function (e) {
-      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
-
-      if (!self.options.delay || !self.options.delay.show) return self.show()
-
-      clearTimeout(this.timeout)
-      self.hoverState = 'in'
-      this.timeout = setTimeout(function() {
-        if (self.hoverState == 'in') self.show()
-      }, self.options.delay.show)
-    }
-
-  , leave: function (e) {
-      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
-
-      if (this.timeout) clearTimeout(this.timeout)
-      if (!self.options.delay || !self.options.delay.hide) return self.hide()
-
-      self.hoverState = 'out'
-      this.timeout = setTimeout(function() {
-        if (self.hoverState == 'out') self.hide()
-      }, self.options.delay.hide)
-    }
-
-  , show: function () {
-      var $tip
-        , inside
-        , pos
-        , actualWidth
-        , actualHeight
-        , placement
-        , tp
-
-      if (this.hasContent() && this.enabled) {
-        $tip = this.tip()
-        this.setContent()
-
-        if (this.options.animation) {
-          $tip.addClass('fade')
-        }
-
-        placement = typeof this.options.placement == 'function' ?
-          this.options.placement.call(this, $tip[0], this.$element[0]) :
-          this.options.placement
-
-        inside = /in/.test(placement)
-
-        $tip
-          .remove()
-          .css({ top: 0, left: 0, display: 'block' })
-          .appendTo(inside ? this.$element : document.body)
-
-        pos = this.getPosition(inside)
-
-        actualWidth = $tip[0].offsetWidth
-        actualHeight = $tip[0].offsetHeight
-
-        switch (inside ? placement.split(' ')[1] : placement) {
-          case 'bottom':
-            tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}
-            break
-          case 'top':
-            tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}
-            break
-          case 'left':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}
-            break
-          case 'right':
-            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
-            break
-        }
-
-        $tip
-          .css(tp)
-          .addClass(placement)
-          .addClass('in')
-      }
-    }
-
-  , setContent: function () {
-      var $tip = this.tip()
-        , title = this.getTitle()
-
-      $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
-      $tip.removeClass('fade in top bottom left right')
-    }
-
-  , hide: function () {
-      var that = this
-        , $tip = this.tip()
-
-      $tip.removeClass('in')
-
-      function removeWithAnimation() {
-        var timeout = setTimeout(function () {
-          $tip.off($.support.transition.end).remove()
-        }, 500)
-
-        $tip.one($.support.transition.end, function () {
-          clearTimeout(timeout)
-          $tip.remove()
-        })
-      }
-
-      $.support.transition && this.$tip.hasClass('fade') ?
-        removeWithAnimation() :
-        $tip.remove()
-
-      return this
-    }
-
-  , fixTitle: function () {
-      var $e = this.$element
-      if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
-        $e.attr('data-original-title', $e.attr('title') || '').removeAttr('title')
-      }
-    }
-
-  , hasContent: function () {
-      return this.getTitle()
-    }
-
-  , getPosition: function (inside) {
-      return $.extend({}, (inside ? {top: 0, left: 0} : this.$element.offset()), {
-        width: this.$element[0].offsetWidth
-      , height: this.$element[0].offsetHeight
-      })
-    }
-
-  , getTitle: function () {
-      var title
-        , $e = this.$element
-        , o = this.options
-
-      title = $e.attr('data-original-title')
-        || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
-
-      return title
-    }
-
-  , tip: function () {
-      return this.$tip = this.$tip || $(this.options.template)
-    }
-
-  , validate: function () {
-      if (!this.$element[0].parentNode) {
-        this.hide()
-        this.$element = null
-        this.options = null
-      }
-    }
-
-  , enable: function () {
-      this.enabled = true
-    }
-
-  , disable: function () {
-      this.enabled = false
-    }
-
-  , toggleEnabled: function () {
-      this.enabled = !this.enabled
-    }
-
-  , toggle: function () {
-      this[this.tip().hasClass('in') ? 'hide' : 'show']()
-    }
-
-  , destroy: function () {
-      this.hide().$element.off('.' + this.type).removeData(this.type)
-    }
-
-  }
-
-
- /* TOOLTIP PLUGIN DEFINITION
-  * ========================= */
-
-  $.fn.tooltip = function ( option ) {
-    return this.each(function () {
-      var $this = $(this)
-        , data = $this.data('tooltip')
-        , options = typeof option == 'object' && option
-      if (!data) $this.data('tooltip', (data = new Tooltip(this, options)))
-      if (typeof option == 'string') data[option]()
-    })
-  }
-
-  $.fn.tooltip.Constructor = Tooltip
-
-  $.fn.tooltip.defaults = {
-    animation: true
-  , placement: 'top'
-  , selector: false
-  , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
-  , trigger: 'hover'
-  , title: ''
-  , delay: 0
-  , html: true
-  }
-
-}(window.jQuery);
-
-;/* ===========================================================
  * bootstrap-popover.js v2.1.1
  * http://twitter.github.com/bootstrap/javascript.html#popovers
  * ===========================================================
@@ -12721,12 +10583,11 @@ $.format = $.validator.format;
   })
 
 }(window.jQuery);
-;/* =========================================================
- * bootstrap-datepicker.js
- * http://www.eyecon.ro/bootstrap-datepicker
- * =========================================================
- * Copyright 2012 Stefan Petre
- * Improvements by Andrew Rowls
+;/* =============================================================
+ * bootstrap-typeahead.js v2.0.3
+ * http://twitter.github.com/bootstrap/javascript.html#typeahead
+ * =============================================================
+ * Copyright 2012 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12739,767 +10600,313 @@ $.format = $.validator.format;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ========================================================= */
+ * ============================================================ */
 
-!function( $ ) {
 
-	function UTCDate(){ 
-		return new Date(Date.UTC.apply(Date, arguments));
-	}
+!function ($) {
 
-	// Picker object
+    "use strict"; // jshint ;_;
 
-	var Datepicker = function(element, options) {
-		var that = this;
 
-		this.element = $(element);
-		this.language = options.language||this.element.data('date-language')||"en";
-		this.language = this.language in dates ? this.language : "en";
-		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
-		this.picker = $(DPGlobal.template)
-							.appendTo('body')
-							.on({
-								click: $.proxy(this.click, this)
-							});
-		this.isInput = this.element.is('input');
-		this.component = this.element.is('.date') ? this.element.find('.add-on') : false;
-		this.hasInput = this.component && this.element.find('input').length;
-		if(this.component && this.component.length === 0)
-			this.component = false;
+    /* TYPEAHEAD PUBLIC CLASS DEFINITION
+     * ================================= */
 
-		if (this.isInput) {
-			this.element.on({
-				focus: $.proxy(this.show, this),
-				keyup: $.proxy(this.update, this),
-				keydown: $.proxy(this.keydown, this)
-			});
-		} else {
-			if (this.component && this.hasInput){
-				// For components that are not readonly, allow keyboard nav
-				this.element.find('input').on({
-					focus: $.proxy(this.show, this),
-					keyup: $.proxy(this.update, this),
-					keydown: $.proxy(this.keydown, this)
-				});
+    var Typeahead = function (element, options) {
+        this.$element = $(element)
+        this.options = $.extend({}, $.fn.typeahead.defaults, options)
+        this.matcher = this.options.matcher || this.matcher
+        this.sorter = this.options.sorter || this.sorter
+        this.highlighter = this.options.highlighter || this.highlighter
+        this.updater = this.options.updater || this.updater
+        this.$menu = $(this.options.menu).appendTo('body')
+        this.source = this.options.source
+        this.onselect = this.options.onselect
+        this.strings = true
+        this.shown = false
+        this.listen()
+    }
 
-				this.component.on('click', $.proxy(this.show, this));
-			} else {
-				this.element.on('click', $.proxy(this.show, this));
-			}
-		}
+    Typeahead.prototype = {
 
-		$(document).on('mousedown', function (e) {
-			// Clicked outside the datepicker, hide it
-			if ($(e.target).closest('.datepicker').length == 0) {
-				that.hide();
-			}
-		});
+        constructor: Typeahead
 
-		this.autoclose = false;
-		if ('autoclose' in options) {
-			this.autoclose = options.autoclose;
-		} else if ('dateAutoclose' in this.element.data()) {
-			this.autoclose = this.element.data('date-autoclose');
-		}
+    , select: function () {
+        var val = JSON.parse(this.$menu.find('.active').attr('data-value'))
+              , text
 
-		this.keyboardNavigation = true;
-		if ('keyboardNavigation' in options) {
-			this.keyboardNavigation = options.keyboardNavigation;
-		} else if ('dateKeyboardNavigation' in this.element.data()) {
-			this.keyboardNavigation = this.element.data('date-keyboard-navigation');
-		}
+        if (!this.strings) text = val[this.options.property]
+        else text = val
 
-		switch(options.startView || this.element.data('date-start-view')){
-			case 2:
-			case 'decade':
-				this.viewMode = this.startViewMode = 2;
-				break;
-			case 1:
-			case 'year':
-				this.viewMode = this.startViewMode = 1;
-				break;
-			case 0:
-			case 'month':
-			default:
-				this.viewMode = this.startViewMode = 0;
-				break;
-		}
+        this.$element.val(this.updater(text)).change()
 
-		this.weekStart = ((options.weekStart||this.element.data('date-weekstart')||dates[this.language].weekStart||0) % 7);
-		this.weekEnd = ((this.weekStart + 6) % 7);
-		this.startDate = -Infinity;
-		this.endDate = Infinity;
-		this.setStartDate(options.startDate||this.element.data('date-startdate'));
-		this.setEndDate(options.endDate||this.element.data('date-enddate'));
-		this.fillDow();
-		this.fillMonths();
-		this.update();
-		this.showMode();
-	};
+        if (typeof this.onselect == "function")
+            this.onselect(val)
 
-	Datepicker.prototype = {
-		constructor: Datepicker,
+        return this.hide()
+    }
 
-		show: function(e) {
-			this.picker.show();
-			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
-			this.update();
-			this.place();
-			$(window).on('resize', $.proxy(this.place, this));
-			if (e ) {
-				e.stopPropagation();
-				e.preventDefault();
-			}
-			this.element.trigger({
-				type: 'show',
-				date: this.date
-			});
-		},
+    , updater: function (item) {
+        return item
+    }
 
-		hide: function(e){
-			this.picker.hide();
-			$(window).off('resize', this.place);
-			this.viewMode = this.startViewMode;
-			this.showMode();
-			if (!this.isInput) {
-				$(document).off('mousedown', this.hide);
-			}
-			if (e && e.currentTarget.value)
-				this.setValue();
-			this.element.trigger({
-				type: 'hide',
-				date: this.date
-			});
-		},
+    , show: function () {
+        var pos = $.extend({}, this.$element.offset(), {
+            height: this.$element[0].offsetHeight
+        })
 
-		setValue: function() {
-			var formatted = DPGlobal.formatDate(this.date, this.format, this.language);
-			if (!this.isInput) {
-				if (this.component){
-					this.element.find('input').prop('value', formatted);
-				}
-				this.element.data('date', formatted);
-			} else {
-				this.element.prop('value', formatted);
-			}
-		},
+        this.$menu.css({
+            top: pos.top + pos.height
+        , left: pos.left
+        })
 
-		setStartDate: function(startDate){
-			this.startDate = startDate||-Infinity;
-			if (this.startDate !== -Infinity) {
-				this.startDate = DPGlobal.parseDate(this.startDate, this.format, this.language);
-			}
-			this.update();
-			this.updateNavArrows();
-		},
+        this.$menu.show()
+        this.shown = true
+        return this
+    }
 
-		setEndDate: function(endDate){
-			this.endDate = endDate||Infinity;
-			if (this.endDate !== Infinity) {
-				this.endDate = DPGlobal.parseDate(this.endDate, this.format, this.language);
-			}
-			this.update();
-			this.updateNavArrows();
-		},
+    , hide: function () {
+        this.$menu.hide()
+        this.shown = false
+        return this
+    }
 
-		place: function(){
-			var zIndex = parseInt(this.element.parents().filter(function() {
-							return $(this).css('z-index') != 'auto';
-						}).first().css('z-index'))+10;
-			var offset = this.component ? this.component.offset() : this.element.offset();
-			this.picker.css({
-				top: offset.top + this.height,
-				left: offset.left,
-				zIndex: zIndex
-			});
-		},
+    , lookup: function (event) {
+        var that = this
+          , items
+          , q
+          , value
 
-		update: function(){
-			this.date = DPGlobal.parseDate(
-				this.isInput ? this.element.prop('value') : this.element.data('date') || this.element.find('input').prop('value'),
-				this.format, this.language
-			);
-			if (this.date < this.startDate) {
-				this.viewDate = new Date(this.startDate);
-			} else if (this.date > this.endDate) {
-				this.viewDate = new Date(this.endDate);
-			} else {
-				this.viewDate = new Date(this.date);
-			}
-			this.fill();
-		},
+        this.query = this.$element.val()
 
-		fillDow: function(){
-			var dowCnt = this.weekStart;
-			var html = '<tr>';
-			while (dowCnt < this.weekStart + 7) {
-				html += '<th class="dow">'+dates[this.language].daysMin[(dowCnt++)%7]+'</th>';
-			}
-			html += '</tr>';
-			this.picker.find('.datepicker-days thead').append(html);
-		},
+        if (typeof this.source == "function")
+            value = this.source(this, this.query)
+        if (value)
+            this.process(value)
+        else
+            this.process(this.source)
+    }
 
-		fillMonths: function(){
-			var html = '';
-			var i = 0
-			while (i < 12) {
-				html += '<span class="month">'+dates[this.language].monthsShort[i++]+'</span>';
-			}
-			this.picker.find('.datepicker-months td').html(html);
-		},
+    , process: function (results) {
+        var that = this
+          , items
+          , q
 
-		fill: function() {
-			var d = new Date(this.viewDate),
-				year = d.getUTCFullYear(),
-				month = d.getUTCMonth(),
-				startYear = this.startDate !== -Infinity ? this.startDate.getUTCFullYear() : -Infinity,
-				startMonth = this.startDate !== -Infinity ? this.startDate.getUTCMonth() : -Infinity,
-				endYear = this.endDate !== Infinity ? this.endDate.getUTCFullYear() : Infinity,
-				endMonth = this.endDate !== Infinity ? this.endDate.getUTCMonth() : Infinity,
-				currentDate = this.date.valueOf();
-			this.picker.find('.datepicker-days th:eq(1)')
-						.text(dates[this.language].months[month]+' '+year);
-			this.updateNavArrows();
-			this.fillMonths();
-			var prevMonth = UTCDate(year, month-1, 28,0,0,0,0),
-				day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
-			prevMonth.setUTCDate(day);
-			prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.weekStart + 7)%7);
-			var nextMonth = new Date(prevMonth);
-			nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
-			nextMonth = nextMonth.valueOf();
-			var html = [];
-			var clsName;
-			while(prevMonth.valueOf() < nextMonth) {
-				if (prevMonth.getUTCDay() == this.weekStart) {
-					html.push('<tr>');
-				}
-				clsName = '';
-				if (prevMonth.getUTCFullYear() < year || (prevMonth.getUTCFullYear() == year && prevMonth.getUTCMonth() < month)) {
-					clsName += ' old';
-				} else if (prevMonth.getUTCFullYear() > year || (prevMonth.getUTCFullYear() == year && prevMonth.getUTCMonth() > month)) {
-					clsName += ' new';
-				}
-				if (prevMonth.valueOf() == currentDate) {
-					clsName += ' active';
-				}
-				if (prevMonth.valueOf() < this.startDate || prevMonth.valueOf() > this.endDate) {
-					clsName += ' disabled';
-				}
-				html.push('<td class="day'+clsName+'">'+prevMonth.getUTCDate() + '</td>');
-				if (prevMonth.getUTCDay() == this.weekEnd) {
-					html.push('</tr>');
-				}
-				prevMonth.setUTCDate(prevMonth.getUTCDate()+1);
-			}
-			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
-			var currentYear = this.date.getUTCFullYear();
+        if (results.length && typeof results[0] != "string")
+            this.strings = false
 
-			var months = this.picker.find('.datepicker-months')
-						.find('th:eq(1)')
-							.text(year)
-							.end()
-						.find('span').removeClass('active');
-			if (currentYear == year) {
-				months.eq(this.date.getUTCMonth()).addClass('active');
-			}
-			if (year < startYear || year > endYear) {
-				months.addClass('disabled');
-			}
-			if (year == startYear) {
-				months.slice(0, startMonth).addClass('disabled');
-			}
-			if (year == endYear) {
-				months.slice(endMonth+1).addClass('disabled');
-			}
+        this.query = this.$element.val()
 
-			html = '';
-			year = parseInt(year/10, 10) * 10;
-			var yearCont = this.picker.find('.datepicker-years')
-								.find('th:eq(1)')
-									.text(year + '-' + (year + 9))
-									.end()
-								.find('td');
-			year -= 1;
-			for (var i = -1; i < 11; i++) {
-				html += '<span class="year'+(i == -1 || i == 10 ? ' old' : '')+(currentYear == year ? ' active' : '')+(year < startYear || year > endYear ? ' disabled' : '')+'">'+year+'</span>';
-				year += 1;
-			}
-			yearCont.html(html);
-		},
+        if (!this.query) {
+            return this.shown ? this.hide() : this
+        }
 
-		updateNavArrows: function() {
-			var d = new Date(this.viewDate),
-				year = d.getUTCFullYear(),
-				month = d.getUTCMonth();
-			switch (this.viewMode) {
-				case 0:
-					if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear() && month <= this.startDate.getUTCMonth()) {
-						this.picker.find('.prev').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.prev').css({visibility: 'visible'});
-					}
-					if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear() && month >= this.endDate.getUTCMonth()) {
-						this.picker.find('.next').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.next').css({visibility: 'visible'});
-					}
-					break;
-				case 1:
-				case 2:
-					if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear()) {
-						this.picker.find('.prev').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.prev').css({visibility: 'visible'});
-					}
-					if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear()) {
-						this.picker.find('.next').css({visibility: 'hidden'});
-					} else {
-						this.picker.find('.next').css({visibility: 'visible'});
-					}
-					break;
-			}
-		},
+        items = $.grep(results, function (item) {
+            if (!that.strings)
+                item = item[that.options.property]
 
-		click: function(e) {
-			e.stopPropagation();
-			e.preventDefault();
-			var target = $(e.target).closest('span, td, th');
-			if (target.length == 1) {
-				switch(target[0].nodeName.toLowerCase()) {
-					case 'th':
-						switch(target[0].className) {
-							case 'switch':
-								this.showMode(1);
-								break;
-							case 'prev':
-							case 'next':
-								var dir = DPGlobal.modes[this.viewMode].navStep * (target[0].className == 'prev' ? -1 : 1);
-								switch(this.viewMode){
-									case 0:
-										this.viewDate = this.moveMonth(this.viewDate, dir);
-										break;
-									case 1:
-									case 2:
-										this.viewDate = this.moveYear(this.viewDate, dir);
-										break;
-								}
-								this.fill();
-								break;
-						}
-						break;
-					case 'span':
-						if (!target.is('.disabled')) {
-							this.viewDate.setUTCDate(1);
-							if (target.is('.month')) {
-								var month = target.parent().find('span').index(target);
-								this.viewDate.setUTCMonth(month);
-								this.element.trigger({
-									type: 'changeMonth',
-									date: this.viewDate
-								});
-							} else {
-								var year = parseInt(target.text(), 10)||0;
-								this.viewDate.setUTCFullYear(year);
-								this.element.trigger({
-									type: 'changeYear',
-									date: this.viewDate
-								});
-							}
-							this.showMode(-1);
-							this.fill();
-						}
-						break;
-					case 'td':
-						if (target.is('.day') && !target.is('.disabled')){
-							var day = parseInt(target.text(), 10)||1;
-							var year = this.viewDate.getUTCFullYear(),
-								month = this.viewDate.getUTCMonth();
-							if (target.is('.old')) {
-								if (month == 0) {
-									month = 11;
-									year -= 1;
-								} else {
-									month -= 1;
-								}
-							} else if (target.is('.new')) {
-								if (month == 11) {
-									month = 0;
-									year += 1;
-								} else {
-									month += 1;
-								}
-							}
-							this.date = UTCDate(year, month, day,0,0,0,0);
-							this.viewDate = UTCDate(year, month, day,0,0,0,0);
-							this.fill();
-							this.setValue();
-							this.element.trigger({
-								type: 'changeDate',
-								date: this.date
-							});
-							var element;
-							if (this.isInput) {
-								element = this.element;
-							} else if (this.component){
-								element = this.element.find('input');
-							}
-							if (element) {
-								element.change();
-								if (this.autoclose) {
-									this.hide();
-								}
-							}
-						}
-						break;
-				}
-			}
-		},
+            return that.matcher(item)
+        })
 
-		moveMonth: function(date, dir){
-			if (!dir) return date;
-			var new_date = new Date(date.valueOf()),
-				day = new_date.getUTCDate(),
-				month = new_date.getUTCMonth(),
-				mag = Math.abs(dir),
-				new_month, test;
-			dir = dir > 0 ? 1 : -1;
-			if (mag == 1){
-				test = dir == -1
-					// If going back one month, make sure month is not current month
-					// (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
-					? function(){ return new_date.getUTCMonth() == month; }
-					// If going forward one month, make sure month is as expected
-					// (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
-					: function(){ return new_date.getUTCMonth() != new_month; };
-				new_month = month + dir;
-				new_date.setUTCMonth(new_month);
-				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
-				if (new_month < 0 || new_month > 11)
-					new_month = (new_month + 12) % 12;
-			} else {
-				// For magnitudes >1, move one month at a time...
-				for (var i=0; i<mag; i++)
-					// ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
-					new_date = this.moveMonth(new_date, dir);
-				// ...then reset the day, keeping it in the new month
-				new_month = new_date.getUTCMonth();
-				new_date.setUTCDate(day);
-				test = function(){ return new_month != new_date.getUTCMonth(); };
-			}
-			// Common date-resetting loop -- if date is beyond end of month, make it
-			// end of month
-			while (test()){
-				new_date.setUTCDate(--day);
-				new_date.setUTCMonth(new_month);
-			}
-			return new_date;
-		},
+        items = this.sorter(items)
 
-		moveYear: function(date, dir){
-			return this.moveMonth(date, dir*12);
-		},
+        if (!items.length) {
+            return this.shown ? this.hide() : this
+        }
 
-		dateWithinRange: function(date){
-			return date >= this.startDate && date <= this.endDate;
-		},
+        return this.render(items.slice(0, this.options.items)).show()
+    }
 
-		keydown: function(e){
-			if (this.picker.is(':not(:visible)')){
-				if (e.keyCode == 27) // allow escape to hide and re-show picker
-					this.show();
-				return;
-			}
-			var dateChanged = false,
-				dir, day, month,
-				newDate, newViewDate;
-			switch(e.keyCode){
-				case 27: // escape
-					this.hide();
-					e.preventDefault();
-					break;
-				case 37: // left
-				case 39: // right
-					if (!this.keyboardNavigation) break;
-					dir = e.keyCode == 37 ? -1 : 1;
-					if (e.ctrlKey){
-						newDate = this.moveYear(this.date, dir);
-						newViewDate = this.moveYear(this.viewDate, dir);
-					} else if (e.shiftKey){
-						newDate = this.moveMonth(this.date, dir);
-						newViewDate = this.moveMonth(this.viewDate, dir);
-					} else {
-						newDate = new Date(this.date);
-						newDate.setUTCDate(this.date.getUTCDate() + dir);
-						newViewDate = new Date(this.viewDate);
-						newViewDate.setUTCDate(this.viewDate.getUTCDate() + dir);
-					}
-					if (this.dateWithinRange(newDate)){
-						this.date = newDate;
-						this.viewDate = newViewDate;
-						this.setValue();
-						this.update();
-						e.preventDefault();
-						dateChanged = true;
-					}
-					break;
-				case 38: // up
-				case 40: // down
-					if (!this.keyboardNavigation) break;
-					dir = e.keyCode == 38 ? -1 : 1;
-					if (e.ctrlKey){
-						newDate = this.moveYear(this.date, dir);
-						newViewDate = this.moveYear(this.viewDate, dir);
-					} else if (e.shiftKey){
-						newDate = this.moveMonth(this.date, dir);
-						newViewDate = this.moveMonth(this.viewDate, dir);
-					} else {
-						newDate = new Date(this.date);
-						newDate.setUTCDate(this.date.getUTCDate() + dir * 7);
-						newViewDate = new Date(this.viewDate);
-						newViewDate.setUTCDate(this.viewDate.getUTCDate() + dir * 7);
-					}
-					if (this.dateWithinRange(newDate)){
-						this.date = newDate;
-						this.viewDate = newViewDate;
-						this.setValue();
-						this.update();
-						e.preventDefault();
-						dateChanged = true;
-					}
-					break;
-				case 13: // enter
-					this.hide();
-					e.preventDefault();
-					break;
-				case 9: // tab
-					this.hide();
-					break;
-			}
-			if (dateChanged){
-				this.element.trigger({
-					type: 'changeDate',
-					date: this.date
-				});
-				var element;
-				if (this.isInput) {
-					element = this.element;
-				} else if (this.component){
-					element = this.element.find('input');
-				}
-				if (element) {
-					element.change();
-				}
-			}
-		},
+    , matcher: function (item) {
+        return ~item.toLowerCase().indexOf(this.query.toLowerCase())
+    }
 
-		showMode: function(dir) {
-			if (dir) {
-				this.viewMode = Math.max(0, Math.min(2, this.viewMode + dir));
-			}
-			this.picker.find('>div').hide().filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName).show();
-			this.updateNavArrows();
-		}
-	};
+    , sorter: function (items) {
+        var beginswith = []
+          , caseSensitive = []
+          , caseInsensitive = []
+          , item
+          , sortby
 
-	$.fn.datepicker = function ( option ) {
-		var args = Array.apply(null, arguments);
-		args.shift();
-		return this.each(function () {
-			var $this = $(this),
-				data = $this.data('datepicker'),
-				options = typeof option == 'object' && option;
-			if (!data) {
-				$this.data('datepicker', (data = new Datepicker(this, $.extend({}, $.fn.datepicker.defaults,options))));
-			}
-			if (typeof option == 'string' && typeof data[option] == 'function') {
-				data[option].apply(data, args);
-			}
-		});
-	};
+        while (item = items.shift()) {
+            if (this.strings) sortby = item
+            else sortby = item[this.options.property]
 
-	$.fn.datepicker.defaults = {
-	};
-	$.fn.datepicker.Constructor = Datepicker;
-	var dates = $.fn.datepicker.dates = {
-		en: {
-			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-		}
-	}
+            if (!sortby.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item)
+            else if (~sortby.indexOf(this.query)) caseSensitive.push(item)
+            else caseInsensitive.push(item)
+        }
 
-	var DPGlobal = {
-		modes: [
-			{
-				clsName: 'days',
-				navFnc: 'Month',
-				navStep: 1
-			},
-			{
-				clsName: 'months',
-				navFnc: 'FullYear',
-				navStep: 1
-			},
-			{
-				clsName: 'years',
-				navFnc: 'FullYear',
-				navStep: 10
-		}],
-		isLeapYear: function (year) {
-			return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0))
-		},
-		getDaysInMonth: function (year, month) {
-			return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
-		},
-		validParts: /dd?|mm?|MM?|yy(?:yy)?/g,
-		nonpunctuation: /[^ -\/:-@\[-`{-~\t\n\r]+/g,
-		parseFormat: function(format){
-			// IE treats \0 as a string end in inputs (truncating the value),
-			// so it's a bad format delimiter, anyway
-			var separators = format.replace(this.validParts, '\0').split('\0'),
-				parts = format.match(this.validParts);
-			if (!separators || !separators.length || !parts || parts.length == 0){
-				throw new Error("Invalid date format.");
-			}
-			return {separators: separators, parts: parts};
-		},
-		parseDate: function(date, format, language) {
-			if (date instanceof Date) return date;
-			if (/^[-+]\d+[dmwy]([\s,]+[-+]\d+[dmwy])*$/.test(date)) {
-				var part_re = /([-+]\d+)([dmwy])/,
-					parts = date.match(/([-+]\d+)([dmwy])/g),
-					part, dir;
-				date = new Date();
-				for (var i=0; i<parts.length; i++) {
-					part = part_re.exec(parts[i]);
-					dir = parseInt(part[1]);
-					switch(part[2]){
-						case 'd':
-							date.setUTCDate(date.getUTCDate() + dir);
-							break;
-						case 'm':
-							date = Datepicker.prototype.moveMonth.call(Datepicker.prototype, date, dir);
-							break;
-						case 'w':
-							date.setUTCDate(date.getUTCDate() + dir * 7);
-							break;
-						case 'y':
-							date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
-							break;
-					}
-				}
-				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
-			}
-			var parts = date && date.match(this.nonpunctuation) || [],
-				date = new Date(),
-				parsed = {},
-				setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
-				setters_map = {
-					yyyy: function(d,v){ return d.setUTCFullYear(v); },
-					yy: function(d,v){ return d.setUTCFullYear(2000+v); },
-					m: function(d,v){
-						v -= 1;
-						while (v<0) v += 12;
-						v %= 12;
-						d.setUTCMonth(v);
-						while (d.getUTCMonth() != v)
-							d.setUTCDate(d.getUTCDate()-1);
-						return d;
-					},
-					d: function(d,v){ return d.setUTCDate(v); }
-				},
-				val, filtered, part;
-			setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
-			setters_map['dd'] = setters_map['d'];
-			date = UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
-			if (parts.length == format.parts.length) {
-				for (var i=0, cnt = format.parts.length; i < cnt; i++) {
-					val = parseInt(parts[i], 10);
-					part = format.parts[i];
-					if (isNaN(val)) {
-						switch(part) {
-							case 'MM':
-								filtered = $(dates[language].months).filter(function(){
-									var m = this.slice(0, parts[i].length),
-										p = parts[i].slice(0, m.length);
-									return m == p;
-								});
-								val = $.inArray(filtered[0], dates[language].months) + 1;
-								break;
-							case 'M':
-								filtered = $(dates[language].monthsShort).filter(function(){
-									var m = this.slice(0, parts[i].length),
-										p = parts[i].slice(0, m.length);
-									return m == p;
-								});
-								val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
-								break;
-						}
-					}
-					parsed[part] = val;
-				}
-				for (var i=0, s; i<setters_order.length; i++){
-					s = setters_order[i];
-					if (s in parsed)
-						setters_map[s](date, parsed[s])
-				}
-			}
-			return date;
-		},
-		formatDate: function(date, format, language){
-			var val = {
-				d: date.getUTCDate(),
-				m: date.getUTCMonth() + 1,
-				M: dates[language].monthsShort[date.getUTCMonth()],
-				MM: dates[language].months[date.getUTCMonth()],
-				yy: date.getUTCFullYear().toString().substring(2),
-				yyyy: date.getUTCFullYear()
-			};
-			val.dd = (val.d < 10 ? '0' : '') + val.d;
-			val.mm = (val.m < 10 ? '0' : '') + val.m;
-			var date = [],
-				seps = $.extend([], format.separators);
-			for (var i=0, cnt = format.parts.length; i < cnt; i++) {
-				if (seps.length)
-					date.push(seps.shift())
-				date.push(val[format.parts[i]]);
-			}
-			return date.join('');
-		},
-		headTemplate: '<thead>'+
-							'<tr>'+
-								'<th class="prev"><i class="icon-arrow-left"/></th>'+
-								'<th colspan="5" class="switch"></th>'+
-								'<th class="next"><i class="icon-arrow-right"/></th>'+
-							'</tr>'+
-						'</thead>',
-		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>'
-	};
-	DPGlobal.template = '<div class="datepicker dropdown-menu">'+
-							'<div class="datepicker-days">'+
-								'<table class=" table-condensed">'+
-									DPGlobal.headTemplate+
-									'<tbody></tbody>'+
-								'</table>'+
-							'</div>'+
-							'<div class="datepicker-months">'+
-								'<table class="table-condensed">'+
-									DPGlobal.headTemplate+
-									DPGlobal.contTemplate+
-								'</table>'+
-							'</div>'+
-							'<div class="datepicker-years">'+
-								'<table class="table-condensed">'+
-									DPGlobal.headTemplate+
-									DPGlobal.contTemplate+
-								'</table>'+
-							'</div>'+
-						'</div>';
+        return beginswith.concat(caseSensitive, caseInsensitive)
+    }
 
-}( window.jQuery );
+    , highlighter: function (item) {
+        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+        return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+            return '<strong>' + match + '</strong>'
+        })
+    }
+
+    , render: function (items) {
+        var that = this
+
+        items = $(items).map(function (i, item) {
+            i = $(that.options.item).attr('data-value', JSON.stringify(item))
+            if (!that.strings)
+                item = item[that.options.property]
+            i.find('a').html(that.highlighter(item))
+            return i[0]
+        })
+
+        items.first().addClass('active')
+        this.$menu.html(items)
+        return this
+    }
+
+    , next: function (event) {
+        var active = this.$menu.find('.active').removeClass('active')
+          , next = active.next()
+
+        if (!next.length) {
+            next = $(this.$menu.find('li')[0])
+        }
+
+        next.addClass('active')
+    }
+
+    , prev: function (event) {
+        var active = this.$menu.find('.active').removeClass('active')
+          , prev = active.prev()
+
+        if (!prev.length) {
+            prev = this.$menu.find('li').last()
+        }
+
+        prev.addClass('active')
+    }
+
+    , listen: function () {
+        this.$element
+          .on('blur', $.proxy(this.blur, this))
+          .on('keypress', $.proxy(this.keypress, this))
+          .on('keyup', $.proxy(this.keyup, this))
+
+        if ($.browser.webkit || $.browser.msie) {
+            this.$element.on('keydown', $.proxy(this.keypress, this))
+        }
+
+        this.$menu
+          .on('click', $.proxy(this.click, this))
+          .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+    }
+
+    , keyup: function (e) {
+        switch (e.keyCode) {
+            case 40: // down arrow
+            case 38: // up arrow
+                break
+
+            case 9: // tab
+            case 13: // enter
+                if (!this.shown) return
+                this.select()
+                break
+
+            case 27: // escape
+                if (!this.shown) return
+                this.hide()
+                break
+
+            default:
+                this.lookup();
+        }
+
+        e.stopPropagation()
+        e.preventDefault()
+    }
+
+    , keypress: function (e) {
+        if (!this.shown) return
+
+        switch (e.keyCode) {
+            case 9: // tab
+            case 13: // enter
+            case 27: // escape
+                e.preventDefault()
+                break
+
+            case 38: // up arrow
+                if (e.type != 'keydown') break
+                e.preventDefault()
+                this.prev()
+                break
+
+            case 40: // down arrow
+                if (e.type != 'keydown') break
+                e.preventDefault()
+                this.next()
+                break
+        }
+
+        e.stopPropagation()
+    }
+
+    , blur: function (e) {
+        var that = this
+        setTimeout(function () { that.hide() }, 150)
+    }
+
+    , click: function (e) {
+        e.stopPropagation()
+        e.preventDefault()
+        this.select()
+    }
+
+    , mouseenter: function (e) {
+        this.$menu.find('.active').removeClass('active')
+        $(e.currentTarget).addClass('active')
+    }
+
+    }
+
+
+    /* TYPEAHEAD PLUGIN DEFINITION
+     * =========================== */
+
+    $.fn.typeahead = function (option) {
+        return this.each(function () {
+            var $this = $(this)
+              , data = $this.data('typeahead')
+              , options = typeof option == 'object' && option
+            if (!data) $this.data('typeahead', (data = new Typeahead(this, options)))
+            if (typeof option == 'string') data[option]()
+        })
+    }
+
+    $.fn.typeahead.defaults = {
+        source: []
+    , items: 8
+    , menu: '<ul class="typeahead dropdown-menu"></ul>'
+    , item: '<li><a href="#"></a></li>'
+    , onselect: null
+    , property: 'value'
+    }
+
+    $.fn.typeahead.Constructor = Typeahead
+
+
+    /* TYPEAHEAD DATA-API
+     * ================== */
+
+    $(function () {
+        $('body').on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
+            var $this = $(this)
+            if ($this.data('typeahead')) return
+            e.preventDefault()
+            $this.typeahead($this.data())
+        })
+    })
+
+}(window.jQuery);
 ;/* =========================================================
  * bootstrap-timepicker.js
  * http://www.github.com/jdewit/bootstrap-timepicker
@@ -14300,11 +11707,12 @@ $.format = $.validator.format;
 
     $.fn.timepicker.Constructor = Timepicker
 }(window.jQuery);
-;/* =============================================================
- * bootstrap-typeahead.js v2.0.3
- * http://twitter.github.com/bootstrap/javascript.html#typeahead
- * =============================================================
- * Copyright 2012 Twitter, Inc.
+;/* =========================================================
+ * bootstrap-datepicker.js
+ * http://www.eyecon.ro/bootstrap-datepicker
+ * =========================================================
+ * Copyright 2012 Stefan Petre
+ * Improvements by Andrew Rowls
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14317,313 +11725,2455 @@ $.format = $.validator.format;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ============================================================ */
+ * ========================================================= */
 
+!function( $ ) {
 
-!function ($) {
+	function UTCDate(){ 
+		return new Date(Date.UTC.apply(Date, arguments));
+	}
 
-    "use strict"; // jshint ;_;
+	// Picker object
 
+	var Datepicker = function(element, options) {
+		var that = this;
 
-    /* TYPEAHEAD PUBLIC CLASS DEFINITION
-     * ================================= */
+		this.element = $(element);
+		this.language = options.language||this.element.data('date-language')||"en";
+		this.language = this.language in dates ? this.language : "en";
+		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
+		this.picker = $(DPGlobal.template)
+							.appendTo('body')
+							.on({
+								click: $.proxy(this.click, this)
+							});
+		this.isInput = this.element.is('input');
+		this.component = this.element.is('.date') ? this.element.find('.add-on') : false;
+		this.hasInput = this.component && this.element.find('input').length;
+		if(this.component && this.component.length === 0)
+			this.component = false;
 
-    var Typeahead = function (element, options) {
-        this.$element = $(element)
-        this.options = $.extend({}, $.fn.typeahead.defaults, options)
-        this.matcher = this.options.matcher || this.matcher
-        this.sorter = this.options.sorter || this.sorter
-        this.highlighter = this.options.highlighter || this.highlighter
-        this.updater = this.options.updater || this.updater
-        this.$menu = $(this.options.menu).appendTo('body')
-        this.source = this.options.source
-        this.onselect = this.options.onselect
-        this.strings = true
-        this.shown = false
-        this.listen()
+		if (this.isInput) {
+			this.element.on({
+				focus: $.proxy(this.show, this),
+				keyup: $.proxy(this.update, this),
+				keydown: $.proxy(this.keydown, this)
+			});
+		} else {
+			if (this.component && this.hasInput){
+				// For components that are not readonly, allow keyboard nav
+				this.element.find('input').on({
+					focus: $.proxy(this.show, this),
+					keyup: $.proxy(this.update, this),
+					keydown: $.proxy(this.keydown, this)
+				});
+
+				this.component.on('click', $.proxy(this.show, this));
+			} else {
+				this.element.on('click', $.proxy(this.show, this));
+			}
+		}
+
+		$(document).on('mousedown', function (e) {
+			// Clicked outside the datepicker, hide it
+			if ($(e.target).closest('.datepicker').length == 0) {
+				that.hide();
+			}
+		});
+
+		this.autoclose = false;
+		if ('autoclose' in options) {
+			this.autoclose = options.autoclose;
+		} else if ('dateAutoclose' in this.element.data()) {
+			this.autoclose = this.element.data('date-autoclose');
+		}
+
+		this.keyboardNavigation = true;
+		if ('keyboardNavigation' in options) {
+			this.keyboardNavigation = options.keyboardNavigation;
+		} else if ('dateKeyboardNavigation' in this.element.data()) {
+			this.keyboardNavigation = this.element.data('date-keyboard-navigation');
+		}
+
+		switch(options.startView || this.element.data('date-start-view')){
+			case 2:
+			case 'decade':
+				this.viewMode = this.startViewMode = 2;
+				break;
+			case 1:
+			case 'year':
+				this.viewMode = this.startViewMode = 1;
+				break;
+			case 0:
+			case 'month':
+			default:
+				this.viewMode = this.startViewMode = 0;
+				break;
+		}
+
+		this.weekStart = ((options.weekStart||this.element.data('date-weekstart')||dates[this.language].weekStart||0) % 7);
+		this.weekEnd = ((this.weekStart + 6) % 7);
+		this.startDate = -Infinity;
+		this.endDate = Infinity;
+		this.setStartDate(options.startDate||this.element.data('date-startdate'));
+		this.setEndDate(options.endDate||this.element.data('date-enddate'));
+		this.fillDow();
+		this.fillMonths();
+		this.update();
+		this.showMode();
+	};
+
+	Datepicker.prototype = {
+		constructor: Datepicker,
+
+		show: function(e) {
+			this.picker.show();
+			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
+			this.update();
+			this.place();
+			$(window).on('resize', $.proxy(this.place, this));
+			if (e ) {
+				e.stopPropagation();
+				e.preventDefault();
+			}
+			this.element.trigger({
+				type: 'show',
+				date: this.date
+			});
+		},
+
+		hide: function(e){
+			this.picker.hide();
+			$(window).off('resize', this.place);
+			this.viewMode = this.startViewMode;
+			this.showMode();
+			if (!this.isInput) {
+				$(document).off('mousedown', this.hide);
+			}
+			if (e && e.currentTarget.value)
+				this.setValue();
+			this.element.trigger({
+				type: 'hide',
+				date: this.date
+			});
+		},
+
+		setValue: function() {
+			var formatted = DPGlobal.formatDate(this.date, this.format, this.language);
+			if (!this.isInput) {
+				if (this.component){
+					this.element.find('input').prop('value', formatted);
+				}
+				this.element.data('date', formatted);
+			} else {
+				this.element.prop('value', formatted);
+			}
+		},
+
+		setStartDate: function(startDate){
+			this.startDate = startDate||-Infinity;
+			if (this.startDate !== -Infinity) {
+				this.startDate = DPGlobal.parseDate(this.startDate, this.format, this.language);
+			}
+			this.update();
+			this.updateNavArrows();
+		},
+
+		setEndDate: function(endDate){
+			this.endDate = endDate||Infinity;
+			if (this.endDate !== Infinity) {
+				this.endDate = DPGlobal.parseDate(this.endDate, this.format, this.language);
+			}
+			this.update();
+			this.updateNavArrows();
+		},
+
+		place: function(){
+			var zIndex = parseInt(this.element.parents().filter(function() {
+							return $(this).css('z-index') != 'auto';
+						}).first().css('z-index'))+10;
+			var offset = this.component ? this.component.offset() : this.element.offset();
+			this.picker.css({
+				top: offset.top + this.height,
+				left: offset.left,
+				zIndex: zIndex
+			});
+		},
+
+		update: function(){
+			this.date = DPGlobal.parseDate(
+				this.isInput ? this.element.prop('value') : this.element.data('date') || this.element.find('input').prop('value'),
+				this.format, this.language
+			);
+			if (this.date < this.startDate) {
+				this.viewDate = new Date(this.startDate);
+			} else if (this.date > this.endDate) {
+				this.viewDate = new Date(this.endDate);
+			} else {
+				this.viewDate = new Date(this.date);
+			}
+			this.fill();
+		},
+
+		fillDow: function(){
+			var dowCnt = this.weekStart;
+			var html = '<tr>';
+			while (dowCnt < this.weekStart + 7) {
+				html += '<th class="dow">'+dates[this.language].daysMin[(dowCnt++)%7]+'</th>';
+			}
+			html += '</tr>';
+			this.picker.find('.datepicker-days thead').append(html);
+		},
+
+		fillMonths: function(){
+			var html = '';
+			var i = 0
+			while (i < 12) {
+				html += '<span class="month">'+dates[this.language].monthsShort[i++]+'</span>';
+			}
+			this.picker.find('.datepicker-months td').html(html);
+		},
+
+		fill: function() {
+			var d = new Date(this.viewDate),
+				year = d.getUTCFullYear(),
+				month = d.getUTCMonth(),
+				startYear = this.startDate !== -Infinity ? this.startDate.getUTCFullYear() : -Infinity,
+				startMonth = this.startDate !== -Infinity ? this.startDate.getUTCMonth() : -Infinity,
+				endYear = this.endDate !== Infinity ? this.endDate.getUTCFullYear() : Infinity,
+				endMonth = this.endDate !== Infinity ? this.endDate.getUTCMonth() : Infinity,
+				currentDate = this.date.valueOf();
+			this.picker.find('.datepicker-days th:eq(1)')
+						.text(dates[this.language].months[month]+' '+year);
+			this.updateNavArrows();
+			this.fillMonths();
+			var prevMonth = UTCDate(year, month-1, 28,0,0,0,0),
+				day = DPGlobal.getDaysInMonth(prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
+			prevMonth.setUTCDate(day);
+			prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.weekStart + 7)%7);
+			var nextMonth = new Date(prevMonth);
+			nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
+			nextMonth = nextMonth.valueOf();
+			var html = [];
+			var clsName;
+			while(prevMonth.valueOf() < nextMonth) {
+				if (prevMonth.getUTCDay() == this.weekStart) {
+					html.push('<tr>');
+				}
+				clsName = '';
+				if (prevMonth.getUTCFullYear() < year || (prevMonth.getUTCFullYear() == year && prevMonth.getUTCMonth() < month)) {
+					clsName += ' old';
+				} else if (prevMonth.getUTCFullYear() > year || (prevMonth.getUTCFullYear() == year && prevMonth.getUTCMonth() > month)) {
+					clsName += ' new';
+				}
+				if (prevMonth.valueOf() == currentDate) {
+					clsName += ' active';
+				}
+				if (prevMonth.valueOf() < this.startDate || prevMonth.valueOf() > this.endDate) {
+					clsName += ' disabled';
+				}
+				html.push('<td class="day'+clsName+'">'+prevMonth.getUTCDate() + '</td>');
+				if (prevMonth.getUTCDay() == this.weekEnd) {
+					html.push('</tr>');
+				}
+				prevMonth.setUTCDate(prevMonth.getUTCDate()+1);
+			}
+			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
+			var currentYear = this.date.getUTCFullYear();
+
+			var months = this.picker.find('.datepicker-months')
+						.find('th:eq(1)')
+							.text(year)
+							.end()
+						.find('span').removeClass('active');
+			if (currentYear == year) {
+				months.eq(this.date.getUTCMonth()).addClass('active');
+			}
+			if (year < startYear || year > endYear) {
+				months.addClass('disabled');
+			}
+			if (year == startYear) {
+				months.slice(0, startMonth).addClass('disabled');
+			}
+			if (year == endYear) {
+				months.slice(endMonth+1).addClass('disabled');
+			}
+
+			html = '';
+			year = parseInt(year/10, 10) * 10;
+			var yearCont = this.picker.find('.datepicker-years')
+								.find('th:eq(1)')
+									.text(year + '-' + (year + 9))
+									.end()
+								.find('td');
+			year -= 1;
+			for (var i = -1; i < 11; i++) {
+				html += '<span class="year'+(i == -1 || i == 10 ? ' old' : '')+(currentYear == year ? ' active' : '')+(year < startYear || year > endYear ? ' disabled' : '')+'">'+year+'</span>';
+				year += 1;
+			}
+			yearCont.html(html);
+		},
+
+		updateNavArrows: function() {
+			var d = new Date(this.viewDate),
+				year = d.getUTCFullYear(),
+				month = d.getUTCMonth();
+			switch (this.viewMode) {
+				case 0:
+					if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear() && month <= this.startDate.getUTCMonth()) {
+						this.picker.find('.prev').css({visibility: 'hidden'});
+					} else {
+						this.picker.find('.prev').css({visibility: 'visible'});
+					}
+					if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear() && month >= this.endDate.getUTCMonth()) {
+						this.picker.find('.next').css({visibility: 'hidden'});
+					} else {
+						this.picker.find('.next').css({visibility: 'visible'});
+					}
+					break;
+				case 1:
+				case 2:
+					if (this.startDate !== -Infinity && year <= this.startDate.getUTCFullYear()) {
+						this.picker.find('.prev').css({visibility: 'hidden'});
+					} else {
+						this.picker.find('.prev').css({visibility: 'visible'});
+					}
+					if (this.endDate !== Infinity && year >= this.endDate.getUTCFullYear()) {
+						this.picker.find('.next').css({visibility: 'hidden'});
+					} else {
+						this.picker.find('.next').css({visibility: 'visible'});
+					}
+					break;
+			}
+		},
+
+		click: function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			var target = $(e.target).closest('span, td, th');
+			if (target.length == 1) {
+				switch(target[0].nodeName.toLowerCase()) {
+					case 'th':
+						switch(target[0].className) {
+							case 'switch':
+								this.showMode(1);
+								break;
+							case 'prev':
+							case 'next':
+								var dir = DPGlobal.modes[this.viewMode].navStep * (target[0].className == 'prev' ? -1 : 1);
+								switch(this.viewMode){
+									case 0:
+										this.viewDate = this.moveMonth(this.viewDate, dir);
+										break;
+									case 1:
+									case 2:
+										this.viewDate = this.moveYear(this.viewDate, dir);
+										break;
+								}
+								this.fill();
+								break;
+						}
+						break;
+					case 'span':
+						if (!target.is('.disabled')) {
+							this.viewDate.setUTCDate(1);
+							if (target.is('.month')) {
+								var month = target.parent().find('span').index(target);
+								this.viewDate.setUTCMonth(month);
+								this.element.trigger({
+									type: 'changeMonth',
+									date: this.viewDate
+								});
+							} else {
+								var year = parseInt(target.text(), 10)||0;
+								this.viewDate.setUTCFullYear(year);
+								this.element.trigger({
+									type: 'changeYear',
+									date: this.viewDate
+								});
+							}
+							this.showMode(-1);
+							this.fill();
+						}
+						break;
+					case 'td':
+						if (target.is('.day') && !target.is('.disabled')){
+							var day = parseInt(target.text(), 10)||1;
+							var year = this.viewDate.getUTCFullYear(),
+								month = this.viewDate.getUTCMonth();
+							if (target.is('.old')) {
+								if (month == 0) {
+									month = 11;
+									year -= 1;
+								} else {
+									month -= 1;
+								}
+							} else if (target.is('.new')) {
+								if (month == 11) {
+									month = 0;
+									year += 1;
+								} else {
+									month += 1;
+								}
+							}
+							this.date = UTCDate(year, month, day,0,0,0,0);
+							this.viewDate = UTCDate(year, month, day,0,0,0,0);
+							this.fill();
+							this.setValue();
+							this.element.trigger({
+								type: 'changeDate',
+								date: this.date
+							});
+							var element;
+							if (this.isInput) {
+								element = this.element;
+							} else if (this.component){
+								element = this.element.find('input');
+							}
+							if (element) {
+								element.change();
+								if (this.autoclose) {
+									this.hide();
+								}
+							}
+						}
+						break;
+				}
+			}
+		},
+
+		moveMonth: function(date, dir){
+			if (!dir) return date;
+			var new_date = new Date(date.valueOf()),
+				day = new_date.getUTCDate(),
+				month = new_date.getUTCMonth(),
+				mag = Math.abs(dir),
+				new_month, test;
+			dir = dir > 0 ? 1 : -1;
+			if (mag == 1){
+				test = dir == -1
+					// If going back one month, make sure month is not current month
+					// (eg, Mar 31 -> Feb 31 == Feb 28, not Mar 02)
+					? function(){ return new_date.getUTCMonth() == month; }
+					// If going forward one month, make sure month is as expected
+					// (eg, Jan 31 -> Feb 31 == Feb 28, not Mar 02)
+					: function(){ return new_date.getUTCMonth() != new_month; };
+				new_month = month + dir;
+				new_date.setUTCMonth(new_month);
+				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
+				if (new_month < 0 || new_month > 11)
+					new_month = (new_month + 12) % 12;
+			} else {
+				// For magnitudes >1, move one month at a time...
+				for (var i=0; i<mag; i++)
+					// ...which might decrease the day (eg, Jan 31 to Feb 28, etc)...
+					new_date = this.moveMonth(new_date, dir);
+				// ...then reset the day, keeping it in the new month
+				new_month = new_date.getUTCMonth();
+				new_date.setUTCDate(day);
+				test = function(){ return new_month != new_date.getUTCMonth(); };
+			}
+			// Common date-resetting loop -- if date is beyond end of month, make it
+			// end of month
+			while (test()){
+				new_date.setUTCDate(--day);
+				new_date.setUTCMonth(new_month);
+			}
+			return new_date;
+		},
+
+		moveYear: function(date, dir){
+			return this.moveMonth(date, dir*12);
+		},
+
+		dateWithinRange: function(date){
+			return date >= this.startDate && date <= this.endDate;
+		},
+
+		keydown: function(e){
+			if (this.picker.is(':not(:visible)')){
+				if (e.keyCode == 27) // allow escape to hide and re-show picker
+					this.show();
+				return;
+			}
+			var dateChanged = false,
+				dir, day, month,
+				newDate, newViewDate;
+			switch(e.keyCode){
+				case 27: // escape
+					this.hide();
+					e.preventDefault();
+					break;
+				case 37: // left
+				case 39: // right
+					if (!this.keyboardNavigation) break;
+					dir = e.keyCode == 37 ? -1 : 1;
+					if (e.ctrlKey){
+						newDate = this.moveYear(this.date, dir);
+						newViewDate = this.moveYear(this.viewDate, dir);
+					} else if (e.shiftKey){
+						newDate = this.moveMonth(this.date, dir);
+						newViewDate = this.moveMonth(this.viewDate, dir);
+					} else {
+						newDate = new Date(this.date);
+						newDate.setUTCDate(this.date.getUTCDate() + dir);
+						newViewDate = new Date(this.viewDate);
+						newViewDate.setUTCDate(this.viewDate.getUTCDate() + dir);
+					}
+					if (this.dateWithinRange(newDate)){
+						this.date = newDate;
+						this.viewDate = newViewDate;
+						this.setValue();
+						this.update();
+						e.preventDefault();
+						dateChanged = true;
+					}
+					break;
+				case 38: // up
+				case 40: // down
+					if (!this.keyboardNavigation) break;
+					dir = e.keyCode == 38 ? -1 : 1;
+					if (e.ctrlKey){
+						newDate = this.moveYear(this.date, dir);
+						newViewDate = this.moveYear(this.viewDate, dir);
+					} else if (e.shiftKey){
+						newDate = this.moveMonth(this.date, dir);
+						newViewDate = this.moveMonth(this.viewDate, dir);
+					} else {
+						newDate = new Date(this.date);
+						newDate.setUTCDate(this.date.getUTCDate() + dir * 7);
+						newViewDate = new Date(this.viewDate);
+						newViewDate.setUTCDate(this.viewDate.getUTCDate() + dir * 7);
+					}
+					if (this.dateWithinRange(newDate)){
+						this.date = newDate;
+						this.viewDate = newViewDate;
+						this.setValue();
+						this.update();
+						e.preventDefault();
+						dateChanged = true;
+					}
+					break;
+				case 13: // enter
+					this.hide();
+					e.preventDefault();
+					break;
+				case 9: // tab
+					this.hide();
+					break;
+			}
+			if (dateChanged){
+				this.element.trigger({
+					type: 'changeDate',
+					date: this.date
+				});
+				var element;
+				if (this.isInput) {
+					element = this.element;
+				} else if (this.component){
+					element = this.element.find('input');
+				}
+				if (element) {
+					element.change();
+				}
+			}
+		},
+
+		showMode: function(dir) {
+			if (dir) {
+				this.viewMode = Math.max(0, Math.min(2, this.viewMode + dir));
+			}
+			this.picker.find('>div').hide().filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName).show();
+			this.updateNavArrows();
+		}
+	};
+
+	$.fn.datepicker = function ( option ) {
+		var args = Array.apply(null, arguments);
+		args.shift();
+		return this.each(function () {
+			var $this = $(this),
+				data = $this.data('datepicker'),
+				options = typeof option == 'object' && option;
+			if (!data) {
+				$this.data('datepicker', (data = new Datepicker(this, $.extend({}, $.fn.datepicker.defaults,options))));
+			}
+			if (typeof option == 'string' && typeof data[option] == 'function') {
+				data[option].apply(data, args);
+			}
+		});
+	};
+
+	$.fn.datepicker.defaults = {
+	};
+	$.fn.datepicker.Constructor = Datepicker;
+	var dates = $.fn.datepicker.dates = {
+		en: {
+			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+		}
+	}
+
+	var DPGlobal = {
+		modes: [
+			{
+				clsName: 'days',
+				navFnc: 'Month',
+				navStep: 1
+			},
+			{
+				clsName: 'months',
+				navFnc: 'FullYear',
+				navStep: 1
+			},
+			{
+				clsName: 'years',
+				navFnc: 'FullYear',
+				navStep: 10
+		}],
+		isLeapYear: function (year) {
+			return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0))
+		},
+		getDaysInMonth: function (year, month) {
+			return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
+		},
+		validParts: /dd?|mm?|MM?|yy(?:yy)?/g,
+		nonpunctuation: /[^ -\/:-@\[-`{-~\t\n\r]+/g,
+		parseFormat: function(format){
+			// IE treats \0 as a string end in inputs (truncating the value),
+			// so it's a bad format delimiter, anyway
+			var separators = format.replace(this.validParts, '\0').split('\0'),
+				parts = format.match(this.validParts);
+			if (!separators || !separators.length || !parts || parts.length == 0){
+				throw new Error("Invalid date format.");
+			}
+			return {separators: separators, parts: parts};
+		},
+		parseDate: function(date, format, language) {
+			if (date instanceof Date) return date;
+			if (/^[-+]\d+[dmwy]([\s,]+[-+]\d+[dmwy])*$/.test(date)) {
+				var part_re = /([-+]\d+)([dmwy])/,
+					parts = date.match(/([-+]\d+)([dmwy])/g),
+					part, dir;
+				date = new Date();
+				for (var i=0; i<parts.length; i++) {
+					part = part_re.exec(parts[i]);
+					dir = parseInt(part[1]);
+					switch(part[2]){
+						case 'd':
+							date.setUTCDate(date.getUTCDate() + dir);
+							break;
+						case 'm':
+							date = Datepicker.prototype.moveMonth.call(Datepicker.prototype, date, dir);
+							break;
+						case 'w':
+							date.setUTCDate(date.getUTCDate() + dir * 7);
+							break;
+						case 'y':
+							date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
+							break;
+					}
+				}
+				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+			}
+			var parts = date && date.match(this.nonpunctuation) || [],
+				date = new Date(),
+				parsed = {},
+				setters_order = ['yyyy', 'yy', 'M', 'MM', 'm', 'mm', 'd', 'dd'],
+				setters_map = {
+					yyyy: function(d,v){ return d.setUTCFullYear(v); },
+					yy: function(d,v){ return d.setUTCFullYear(2000+v); },
+					m: function(d,v){
+						v -= 1;
+						while (v<0) v += 12;
+						v %= 12;
+						d.setUTCMonth(v);
+						while (d.getUTCMonth() != v)
+							d.setUTCDate(d.getUTCDate()-1);
+						return d;
+					},
+					d: function(d,v){ return d.setUTCDate(v); }
+				},
+				val, filtered, part;
+			setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
+			setters_map['dd'] = setters_map['d'];
+			date = UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+			if (parts.length == format.parts.length) {
+				for (var i=0, cnt = format.parts.length; i < cnt; i++) {
+					val = parseInt(parts[i], 10);
+					part = format.parts[i];
+					if (isNaN(val)) {
+						switch(part) {
+							case 'MM':
+								filtered = $(dates[language].months).filter(function(){
+									var m = this.slice(0, parts[i].length),
+										p = parts[i].slice(0, m.length);
+									return m == p;
+								});
+								val = $.inArray(filtered[0], dates[language].months) + 1;
+								break;
+							case 'M':
+								filtered = $(dates[language].monthsShort).filter(function(){
+									var m = this.slice(0, parts[i].length),
+										p = parts[i].slice(0, m.length);
+									return m == p;
+								});
+								val = $.inArray(filtered[0], dates[language].monthsShort) + 1;
+								break;
+						}
+					}
+					parsed[part] = val;
+				}
+				for (var i=0, s; i<setters_order.length; i++){
+					s = setters_order[i];
+					if (s in parsed)
+						setters_map[s](date, parsed[s])
+				}
+			}
+			return date;
+		},
+		formatDate: function(date, format, language){
+			var val = {
+				d: date.getUTCDate(),
+				m: date.getUTCMonth() + 1,
+				M: dates[language].monthsShort[date.getUTCMonth()],
+				MM: dates[language].months[date.getUTCMonth()],
+				yy: date.getUTCFullYear().toString().substring(2),
+				yyyy: date.getUTCFullYear()
+			};
+			val.dd = (val.d < 10 ? '0' : '') + val.d;
+			val.mm = (val.m < 10 ? '0' : '') + val.m;
+			var date = [],
+				seps = $.extend([], format.separators);
+			for (var i=0, cnt = format.parts.length; i < cnt; i++) {
+				if (seps.length)
+					date.push(seps.shift())
+				date.push(val[format.parts[i]]);
+			}
+			return date.join('');
+		},
+		headTemplate: '<thead>'+
+							'<tr>'+
+								'<th class="prev"><i class="icon-arrow-left"/></th>'+
+								'<th colspan="5" class="switch"></th>'+
+								'<th class="next"><i class="icon-arrow-right"/></th>'+
+							'</tr>'+
+						'</thead>',
+		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>'
+	};
+	DPGlobal.template = '<div class="datepicker dropdown-menu">'+
+							'<div class="datepicker-days">'+
+								'<table class=" table-condensed">'+
+									DPGlobal.headTemplate+
+									'<tbody></tbody>'+
+								'</table>'+
+							'</div>'+
+							'<div class="datepicker-months">'+
+								'<table class="table-condensed">'+
+									DPGlobal.headTemplate+
+									DPGlobal.contTemplate+
+								'</table>'+
+							'</div>'+
+							'<div class="datepicker-years">'+
+								'<table class="table-condensed">'+
+									DPGlobal.headTemplate+
+									DPGlobal.contTemplate+
+								'</table>'+
+							'</div>'+
+						'</div>';
+
+}( window.jQuery );
+;//     Underscore.js 1.4.4
+//     http://underscorejs.org
+//     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud Inc.
+//     Underscore may be freely distributed under the MIT license.
+
+(function() {
+
+  // Baseline setup
+  // --------------
+
+  // Establish the root object, `window` in the browser, or `global` on the server.
+  var root = this;
+
+  // Save the previous value of the `_` variable.
+  var previousUnderscore = root._;
+
+  // Establish the object that gets returned to break out of a loop iteration.
+  var breaker = {};
+
+  // Save bytes in the minified (but not gzipped) version:
+  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+  // Create quick reference variables for speed access to core prototypes.
+  var push             = ArrayProto.push,
+      slice            = ArrayProto.slice,
+      concat           = ArrayProto.concat,
+      toString         = ObjProto.toString,
+      hasOwnProperty   = ObjProto.hasOwnProperty;
+
+  // All **ECMAScript 5** native function implementations that we hope to use
+  // are declared here.
+  var
+    nativeForEach      = ArrayProto.forEach,
+    nativeMap          = ArrayProto.map,
+    nativeReduce       = ArrayProto.reduce,
+    nativeReduceRight  = ArrayProto.reduceRight,
+    nativeFilter       = ArrayProto.filter,
+    nativeEvery        = ArrayProto.every,
+    nativeSome         = ArrayProto.some,
+    nativeIndexOf      = ArrayProto.indexOf,
+    nativeLastIndexOf  = ArrayProto.lastIndexOf,
+    nativeIsArray      = Array.isArray,
+    nativeKeys         = Object.keys,
+    nativeBind         = FuncProto.bind;
+
+  // Create a safe reference to the Underscore object for use below.
+  var _ = function(obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
+    this._wrapped = obj;
+  };
+
+  // Export the Underscore object for **Node.js**, with
+  // backwards-compatibility for the old `require()` API. If we're in
+  // the browser, add `_` as a global object via a string identifier,
+  // for Closure Compiler "advanced" mode.
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports = _;
+    }
+    exports._ = _;
+  } else {
+    root._ = _;
+  }
+
+  // Current version.
+  _.VERSION = '1.4.4';
+
+  // Collection Functions
+  // --------------------
+
+  // The cornerstone, an `each` implementation, aka `forEach`.
+  // Handles objects with the built-in `forEach`, arrays, and raw objects.
+  // Delegates to **ECMAScript 5**'s native `forEach` if available.
+  var each = _.each = _.forEach = function(obj, iterator, context) {
+    if (obj == null) return;
+    if (nativeForEach && obj.forEach === nativeForEach) {
+      obj.forEach(iterator, context);
+    } else if (obj.length === +obj.length) {
+      for (var i = 0, l = obj.length; i < l; i++) {
+        if (iterator.call(context, obj[i], i, obj) === breaker) return;
+      }
+    } else {
+      for (var key in obj) {
+        if (_.has(obj, key)) {
+          if (iterator.call(context, obj[key], key, obj) === breaker) return;
+        }
+      }
+    }
+  };
+
+  // Return the results of applying the iterator to each element.
+  // Delegates to **ECMAScript 5**'s native `map` if available.
+  _.map = _.collect = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
+    each(obj, function(value, index, list) {
+      results[results.length] = iterator.call(context, value, index, list);
+    });
+    return results;
+  };
+
+  var reduceError = 'Reduce of empty array with no initial value';
+
+  // **Reduce** builds up a single result from a list of values, aka `inject`,
+  // or `foldl`. Delegates to **ECMAScript 5**'s native `reduce` if available.
+  _.reduce = _.foldl = _.inject = function(obj, iterator, memo, context) {
+    var initial = arguments.length > 2;
+    if (obj == null) obj = [];
+    if (nativeReduce && obj.reduce === nativeReduce) {
+      if (context) iterator = _.bind(iterator, context);
+      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
+    }
+    each(obj, function(value, index, list) {
+      if (!initial) {
+        memo = value;
+        initial = true;
+      } else {
+        memo = iterator.call(context, memo, value, index, list);
+      }
+    });
+    if (!initial) throw new TypeError(reduceError);
+    return memo;
+  };
+
+  // The right-associative version of reduce, also known as `foldr`.
+  // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
+  _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
+    var initial = arguments.length > 2;
+    if (obj == null) obj = [];
+    if (nativeReduceRight && obj.reduceRight === nativeReduceRight) {
+      if (context) iterator = _.bind(iterator, context);
+      return initial ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);
+    }
+    var length = obj.length;
+    if (length !== +length) {
+      var keys = _.keys(obj);
+      length = keys.length;
+    }
+    each(obj, function(value, index, list) {
+      index = keys ? keys[--length] : --length;
+      if (!initial) {
+        memo = obj[index];
+        initial = true;
+      } else {
+        memo = iterator.call(context, memo, obj[index], index, list);
+      }
+    });
+    if (!initial) throw new TypeError(reduceError);
+    return memo;
+  };
+
+  // Return the first value which passes a truth test. Aliased as `detect`.
+  _.find = _.detect = function(obj, iterator, context) {
+    var result;
+    any(obj, function(value, index, list) {
+      if (iterator.call(context, value, index, list)) {
+        result = value;
+        return true;
+      }
+    });
+    return result;
+  };
+
+  // Return all the elements that pass a truth test.
+  // Delegates to **ECMAScript 5**'s native `filter` if available.
+  // Aliased as `select`.
+  _.filter = _.select = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context);
+    each(obj, function(value, index, list) {
+      if (iterator.call(context, value, index, list)) results[results.length] = value;
+    });
+    return results;
+  };
+
+  // Return all the elements for which a truth test fails.
+  _.reject = function(obj, iterator, context) {
+    return _.filter(obj, function(value, index, list) {
+      return !iterator.call(context, value, index, list);
+    }, context);
+  };
+
+  // Determine whether all of the elements match a truth test.
+  // Delegates to **ECMAScript 5**'s native `every` if available.
+  // Aliased as `all`.
+  _.every = _.all = function(obj, iterator, context) {
+    iterator || (iterator = _.identity);
+    var result = true;
+    if (obj == null) return result;
+    if (nativeEvery && obj.every === nativeEvery) return obj.every(iterator, context);
+    each(obj, function(value, index, list) {
+      if (!(result = result && iterator.call(context, value, index, list))) return breaker;
+    });
+    return !!result;
+  };
+
+  // Determine if at least one element in the object matches a truth test.
+  // Delegates to **ECMAScript 5**'s native `some` if available.
+  // Aliased as `any`.
+  var any = _.some = _.any = function(obj, iterator, context) {
+    iterator || (iterator = _.identity);
+    var result = false;
+    if (obj == null) return result;
+    if (nativeSome && obj.some === nativeSome) return obj.some(iterator, context);
+    each(obj, function(value, index, list) {
+      if (result || (result = iterator.call(context, value, index, list))) return breaker;
+    });
+    return !!result;
+  };
+
+  // Determine if the array or object contains a given value (using `===`).
+  // Aliased as `include`.
+  _.contains = _.include = function(obj, target) {
+    if (obj == null) return false;
+    if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
+    return any(obj, function(value) {
+      return value === target;
+    });
+  };
+
+  // Invoke a method (with arguments) on every item in a collection.
+  _.invoke = function(obj, method) {
+    var args = slice.call(arguments, 2);
+    var isFunc = _.isFunction(method);
+    return _.map(obj, function(value) {
+      return (isFunc ? method : value[method]).apply(value, args);
+    });
+  };
+
+  // Convenience version of a common use case of `map`: fetching a property.
+  _.pluck = function(obj, key) {
+    return _.map(obj, function(value){ return value[key]; });
+  };
+
+  // Convenience version of a common use case of `filter`: selecting only objects
+  // containing specific `key:value` pairs.
+  _.where = function(obj, attrs, first) {
+    if (_.isEmpty(attrs)) return first ? void 0 : [];
+    return _[first ? 'find' : 'filter'](obj, function(value) {
+      for (var key in attrs) {
+        if (attrs[key] !== value[key]) return false;
+      }
+      return true;
+    });
+  };
+
+  // Convenience version of a common use case of `find`: getting the first object
+  // containing specific `key:value` pairs.
+  _.findWhere = function(obj, attrs) {
+    return _.where(obj, attrs, true);
+  };
+
+  // Return the maximum element or (element-based computation).
+  // Can't optimize arrays of integers longer than 65,535 elements.
+  // See: https://bugs.webkit.org/show_bug.cgi?id=80797
+  _.max = function(obj, iterator, context) {
+    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
+      return Math.max.apply(Math, obj);
+    }
+    if (!iterator && _.isEmpty(obj)) return -Infinity;
+    var result = {computed : -Infinity, value: -Infinity};
+    each(obj, function(value, index, list) {
+      var computed = iterator ? iterator.call(context, value, index, list) : value;
+      computed >= result.computed && (result = {value : value, computed : computed});
+    });
+    return result.value;
+  };
+
+  // Return the minimum element (or element-based computation).
+  _.min = function(obj, iterator, context) {
+    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
+      return Math.min.apply(Math, obj);
+    }
+    if (!iterator && _.isEmpty(obj)) return Infinity;
+    var result = {computed : Infinity, value: Infinity};
+    each(obj, function(value, index, list) {
+      var computed = iterator ? iterator.call(context, value, index, list) : value;
+      computed < result.computed && (result = {value : value, computed : computed});
+    });
+    return result.value;
+  };
+
+  // Shuffle an array.
+  _.shuffle = function(obj) {
+    var rand;
+    var index = 0;
+    var shuffled = [];
+    each(obj, function(value) {
+      rand = _.random(index++);
+      shuffled[index - 1] = shuffled[rand];
+      shuffled[rand] = value;
+    });
+    return shuffled;
+  };
+
+  // An internal function to generate lookup iterators.
+  var lookupIterator = function(value) {
+    return _.isFunction(value) ? value : function(obj){ return obj[value]; };
+  };
+
+  // Sort the object's values by a criterion produced by an iterator.
+  _.sortBy = function(obj, value, context) {
+    var iterator = lookupIterator(value);
+    return _.pluck(_.map(obj, function(value, index, list) {
+      return {
+        value : value,
+        index : index,
+        criteria : iterator.call(context, value, index, list)
+      };
+    }).sort(function(left, right) {
+      var a = left.criteria;
+      var b = right.criteria;
+      if (a !== b) {
+        if (a > b || a === void 0) return 1;
+        if (a < b || b === void 0) return -1;
+      }
+      return left.index < right.index ? -1 : 1;
+    }), 'value');
+  };
+
+  // An internal function used for aggregate "group by" operations.
+  var group = function(obj, value, context, behavior) {
+    var result = {};
+    var iterator = lookupIterator(value || _.identity);
+    each(obj, function(value, index) {
+      var key = iterator.call(context, value, index, obj);
+      behavior(result, key, value);
+    });
+    return result;
+  };
+
+  // Groups the object's values by a criterion. Pass either a string attribute
+  // to group by, or a function that returns the criterion.
+  _.groupBy = function(obj, value, context) {
+    return group(obj, value, context, function(result, key, value) {
+      (_.has(result, key) ? result[key] : (result[key] = [])).push(value);
+    });
+  };
+
+  // Counts instances of an object that group by a certain criterion. Pass
+  // either a string attribute to count by, or a function that returns the
+  // criterion.
+  _.countBy = function(obj, value, context) {
+    return group(obj, value, context, function(result, key) {
+      if (!_.has(result, key)) result[key] = 0;
+      result[key]++;
+    });
+  };
+
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iterator, context) {
+    iterator = iterator == null ? _.identity : lookupIterator(iterator);
+    var value = iterator.call(context, obj);
+    var low = 0, high = array.length;
+    while (low < high) {
+      var mid = (low + high) >>> 1;
+      iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
+    }
+    return low;
+  };
+
+  // Safely convert anything iterable into a real, live array.
+  _.toArray = function(obj) {
+    if (!obj) return [];
+    if (_.isArray(obj)) return slice.call(obj);
+    if (obj.length === +obj.length) return _.map(obj, _.identity);
+    return _.values(obj);
+  };
+
+  // Return the number of elements in an object.
+  _.size = function(obj) {
+    if (obj == null) return 0;
+    return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
+  };
+
+  // Array Functions
+  // ---------------
+
+  // Get the first element of an array. Passing **n** will return the first N
+  // values in the array. Aliased as `head` and `take`. The **guard** check
+  // allows it to work with `_.map`.
+  _.first = _.head = _.take = function(array, n, guard) {
+    if (array == null) return void 0;
+    return (n != null) && !guard ? slice.call(array, 0, n) : array[0];
+  };
+
+  // Returns everything but the last entry of the array. Especially useful on
+  // the arguments object. Passing **n** will return all the values in
+  // the array, excluding the last N. The **guard** check allows it to work with
+  // `_.map`.
+  _.initial = function(array, n, guard) {
+    return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
+  };
+
+  // Get the last element of an array. Passing **n** will return the last N
+  // values in the array. The **guard** check allows it to work with `_.map`.
+  _.last = function(array, n, guard) {
+    if (array == null) return void 0;
+    if ((n != null) && !guard) {
+      return slice.call(array, Math.max(array.length - n, 0));
+    } else {
+      return array[array.length - 1];
+    }
+  };
+
+  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
+  // Especially useful on the arguments object. Passing an **n** will return
+  // the rest N values in the array. The **guard**
+  // check allows it to work with `_.map`.
+  _.rest = _.tail = _.drop = function(array, n, guard) {
+    return slice.call(array, (n == null) || guard ? 1 : n);
+  };
+
+  // Trim out all falsy values from an array.
+  _.compact = function(array) {
+    return _.filter(array, _.identity);
+  };
+
+  // Internal implementation of a recursive `flatten` function.
+  var flatten = function(input, shallow, output) {
+    each(input, function(value) {
+      if (_.isArray(value)) {
+        shallow ? push.apply(output, value) : flatten(value, shallow, output);
+      } else {
+        output.push(value);
+      }
+    });
+    return output;
+  };
+
+  // Return a completely flattened version of an array.
+  _.flatten = function(array, shallow) {
+    return flatten(array, shallow, []);
+  };
+
+  // Return a version of the array that does not contain the specified value(s).
+  _.without = function(array) {
+    return _.difference(array, slice.call(arguments, 1));
+  };
+
+  // Produce a duplicate-free version of the array. If the array has already
+  // been sorted, you have the option of using a faster algorithm.
+  // Aliased as `unique`.
+  _.uniq = _.unique = function(array, isSorted, iterator, context) {
+    if (_.isFunction(isSorted)) {
+      context = iterator;
+      iterator = isSorted;
+      isSorted = false;
+    }
+    var initial = iterator ? _.map(array, iterator, context) : array;
+    var results = [];
+    var seen = [];
+    each(initial, function(value, index) {
+      if (isSorted ? (!index || seen[seen.length - 1] !== value) : !_.contains(seen, value)) {
+        seen.push(value);
+        results.push(array[index]);
+      }
+    });
+    return results;
+  };
+
+  // Produce an array that contains the union: each distinct element from all of
+  // the passed-in arrays.
+  _.union = function() {
+    return _.uniq(concat.apply(ArrayProto, arguments));
+  };
+
+  // Produce an array that contains every item shared between all the
+  // passed-in arrays.
+  _.intersection = function(array) {
+    var rest = slice.call(arguments, 1);
+    return _.filter(_.uniq(array), function(item) {
+      return _.every(rest, function(other) {
+        return _.indexOf(other, item) >= 0;
+      });
+    });
+  };
+
+  // Take the difference between one array and a number of other arrays.
+  // Only the elements present in just the first array will remain.
+  _.difference = function(array) {
+    var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
+    return _.filter(array, function(value){ return !_.contains(rest, value); });
+  };
+
+  // Zip together multiple lists into a single array -- elements that share
+  // an index go together.
+  _.zip = function() {
+    var args = slice.call(arguments);
+    var length = _.max(_.pluck(args, 'length'));
+    var results = new Array(length);
+    for (var i = 0; i < length; i++) {
+      results[i] = _.pluck(args, "" + i);
+    }
+    return results;
+  };
+
+  // Converts lists into objects. Pass either a single array of `[key, value]`
+  // pairs, or two parallel arrays of the same length -- one of keys, and one of
+  // the corresponding values.
+  _.object = function(list, values) {
+    if (list == null) return {};
+    var result = {};
+    for (var i = 0, l = list.length; i < l; i++) {
+      if (values) {
+        result[list[i]] = values[i];
+      } else {
+        result[list[i][0]] = list[i][1];
+      }
+    }
+    return result;
+  };
+
+  // If the browser doesn't supply us with indexOf (I'm looking at you, **MSIE**),
+  // we need this function. Return the position of the first occurrence of an
+  // item in an array, or -1 if the item is not included in the array.
+  // Delegates to **ECMAScript 5**'s native `indexOf` if available.
+  // If the array is large and already in sort order, pass `true`
+  // for **isSorted** to use binary search.
+  _.indexOf = function(array, item, isSorted) {
+    if (array == null) return -1;
+    var i = 0, l = array.length;
+    if (isSorted) {
+      if (typeof isSorted == 'number') {
+        i = (isSorted < 0 ? Math.max(0, l + isSorted) : isSorted);
+      } else {
+        i = _.sortedIndex(array, item);
+        return array[i] === item ? i : -1;
+      }
+    }
+    if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
+    for (; i < l; i++) if (array[i] === item) return i;
+    return -1;
+  };
+
+  // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
+  _.lastIndexOf = function(array, item, from) {
+    if (array == null) return -1;
+    var hasIndex = from != null;
+    if (nativeLastIndexOf && array.lastIndexOf === nativeLastIndexOf) {
+      return hasIndex ? array.lastIndexOf(item, from) : array.lastIndexOf(item);
+    }
+    var i = (hasIndex ? from : array.length);
+    while (i--) if (array[i] === item) return i;
+    return -1;
+  };
+
+  // Generate an integer Array containing an arithmetic progression. A port of
+  // the native Python `range()` function. See
+  // [the Python documentation](http://docs.python.org/library/functions.html#range).
+  _.range = function(start, stop, step) {
+    if (arguments.length <= 1) {
+      stop = start || 0;
+      start = 0;
+    }
+    step = arguments[2] || 1;
+
+    var len = Math.max(Math.ceil((stop - start) / step), 0);
+    var idx = 0;
+    var range = new Array(len);
+
+    while(idx < len) {
+      range[idx++] = start;
+      start += step;
     }
 
-    Typeahead.prototype = {
+    return range;
+  };
 
-        constructor: Typeahead
+  // Function (ahem) Functions
+  // ------------------
 
-    , select: function () {
-        var val = JSON.parse(this.$menu.find('.active').attr('data-value'))
-              , text
+  // Create a function bound to a given object (assigning `this`, and arguments,
+  // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
+  // available.
+  _.bind = function(func, context) {
+    if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    var args = slice.call(arguments, 2);
+    return function() {
+      return func.apply(context, args.concat(slice.call(arguments)));
+    };
+  };
 
-        if (!this.strings) text = val[this.options.property]
-        else text = val
+  // Partially apply a function by creating a version that has had some of its
+  // arguments pre-filled, without changing its dynamic `this` context.
+  _.partial = function(func) {
+    var args = slice.call(arguments, 1);
+    return function() {
+      return func.apply(this, args.concat(slice.call(arguments)));
+    };
+  };
 
-        this.$element.val(this.updater(text)).change()
+  // Bind all of an object's methods to that object. Useful for ensuring that
+  // all callbacks defined on an object belong to it.
+  _.bindAll = function(obj) {
+    var funcs = slice.call(arguments, 1);
+    if (funcs.length === 0) throw new Error("bindAll must be passed function names");
+    each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
+    return obj;
+  };
 
-        if (typeof this.onselect == "function")
-            this.onselect(val)
+  // Memoize an expensive function by storing its results.
+  _.memoize = function(func, hasher) {
+    var memo = {};
+    hasher || (hasher = _.identity);
+    return function() {
+      var key = hasher.apply(this, arguments);
+      return _.has(memo, key) ? memo[key] : (memo[key] = func.apply(this, arguments));
+    };
+  };
 
-        return this.hide()
+  // Delays a function for the given number of milliseconds, and then calls
+  // it with the arguments supplied.
+  _.delay = function(func, wait) {
+    var args = slice.call(arguments, 2);
+    return setTimeout(function(){ return func.apply(null, args); }, wait);
+  };
+
+  // Defers a function, scheduling it to run after the current call stack has
+  // cleared.
+  _.defer = function(func) {
+    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
+  };
+
+  // Returns a function, that, when invoked, will only be triggered at most once
+  // during a given window of time.
+  _.throttle = function(func, wait) {
+    var context, args, timeout, result;
+    var previous = 0;
+    var later = function() {
+      previous = new Date;
+      timeout = null;
+      result = func.apply(context, args);
+    };
+    return function() {
+      var now = new Date;
+      var remaining = wait - (now - previous);
+      context = this;
+      args = arguments;
+      if (remaining <= 0) {
+        clearTimeout(timeout);
+        timeout = null;
+        previous = now;
+        result = func.apply(context, args);
+      } else if (!timeout) {
+        timeout = setTimeout(later, remaining);
+      }
+      return result;
+    };
+  };
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  _.debounce = function(func, wait, immediate) {
+    var timeout, result;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) result = func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) result = func.apply(context, args);
+      return result;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = function(func) {
+    var ran = false, memo;
+    return function() {
+      if (ran) return memo;
+      ran = true;
+      memo = func.apply(this, arguments);
+      func = null;
+      return memo;
+    };
+  };
+
+  // Returns the first function passed as an argument to the second,
+  // allowing you to adjust arguments, run code before and after, and
+  // conditionally execute the original function.
+  _.wrap = function(func, wrapper) {
+    return function() {
+      var args = [func];
+      push.apply(args, arguments);
+      return wrapper.apply(this, args);
+    };
+  };
+
+  // Returns a function that is the composition of a list of functions, each
+  // consuming the return value of the function that follows.
+  _.compose = function() {
+    var funcs = arguments;
+    return function() {
+      var args = arguments;
+      for (var i = funcs.length - 1; i >= 0; i--) {
+        args = [funcs[i].apply(this, args)];
+      }
+      return args[0];
+    };
+  };
+
+  // Returns a function that will only be executed after being called N times.
+  _.after = function(times, func) {
+    if (times <= 0) return func();
+    return function() {
+      if (--times < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  };
+
+  // Object Functions
+  // ----------------
+
+  // Retrieve the names of an object's properties.
+  // Delegates to **ECMAScript 5**'s native `Object.keys`
+  _.keys = nativeKeys || function(obj) {
+    if (obj !== Object(obj)) throw new TypeError('Invalid object');
+    var keys = [];
+    for (var key in obj) if (_.has(obj, key)) keys[keys.length] = key;
+    return keys;
+  };
+
+  // Retrieve the values of an object's properties.
+  _.values = function(obj) {
+    var values = [];
+    for (var key in obj) if (_.has(obj, key)) values.push(obj[key]);
+    return values;
+  };
+
+  // Convert an object into a list of `[key, value]` pairs.
+  _.pairs = function(obj) {
+    var pairs = [];
+    for (var key in obj) if (_.has(obj, key)) pairs.push([key, obj[key]]);
+    return pairs;
+  };
+
+  // Invert the keys and values of an object. The values must be serializable.
+  _.invert = function(obj) {
+    var result = {};
+    for (var key in obj) if (_.has(obj, key)) result[obj[key]] = key;
+    return result;
+  };
+
+  // Return a sorted list of the function names available on the object.
+  // Aliased as `methods`
+  _.functions = _.methods = function(obj) {
+    var names = [];
+    for (var key in obj) {
+      if (_.isFunction(obj[key])) names.push(key);
+    }
+    return names.sort();
+  };
+
+  // Extend a given object with all the properties in passed-in object(s).
+  _.extend = function(obj) {
+    each(slice.call(arguments, 1), function(source) {
+      if (source) {
+        for (var prop in source) {
+          obj[prop] = source[prop];
+        }
+      }
+    });
+    return obj;
+  };
+
+  // Return a copy of the object only containing the whitelisted properties.
+  _.pick = function(obj) {
+    var copy = {};
+    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
+    each(keys, function(key) {
+      if (key in obj) copy[key] = obj[key];
+    });
+    return copy;
+  };
+
+   // Return a copy of the object without the blacklisted properties.
+  _.omit = function(obj) {
+    var copy = {};
+    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
+    for (var key in obj) {
+      if (!_.contains(keys, key)) copy[key] = obj[key];
+    }
+    return copy;
+  };
+
+  // Fill in a given object with default properties.
+  _.defaults = function(obj) {
+    each(slice.call(arguments, 1), function(source) {
+      if (source) {
+        for (var prop in source) {
+          if (obj[prop] == null) obj[prop] = source[prop];
+        }
+      }
+    });
+    return obj;
+  };
+
+  // Create a (shallow-cloned) duplicate of an object.
+  _.clone = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+  };
+
+  // Invokes interceptor with the obj, and then returns obj.
+  // The primary purpose of this method is to "tap into" a method chain, in
+  // order to perform operations on intermediate results within the chain.
+  _.tap = function(obj, interceptor) {
+    interceptor(obj);
+    return obj;
+  };
+
+  // Internal recursive comparison function for `isEqual`.
+  var eq = function(a, b, aStack, bStack) {
+    // Identical objects are equal. `0 === -0`, but they aren't identical.
+    // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
+    if (a === b) return a !== 0 || 1 / a == 1 / b;
+    // A strict comparison is necessary because `null == undefined`.
+    if (a == null || b == null) return a === b;
+    // Unwrap any wrapped objects.
+    if (a instanceof _) a = a._wrapped;
+    if (b instanceof _) b = b._wrapped;
+    // Compare `[[Class]]` names.
+    var className = toString.call(a);
+    if (className != toString.call(b)) return false;
+    switch (className) {
+      // Strings, numbers, dates, and booleans are compared by value.
+      case '[object String]':
+        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+        // equivalent to `new String("5")`.
+        return a == String(b);
+      case '[object Number]':
+        // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
+        // other numeric values.
+        return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+      case '[object Date]':
+      case '[object Boolean]':
+        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+        // millisecond representations. Note that invalid dates with millisecond representations
+        // of `NaN` are not equivalent.
+        return +a == +b;
+      // RegExps are compared by their source patterns and flags.
+      case '[object RegExp]':
+        return a.source == b.source &&
+               a.global == b.global &&
+               a.multiline == b.multiline &&
+               a.ignoreCase == b.ignoreCase;
+    }
+    if (typeof a != 'object' || typeof b != 'object') return false;
+    // Assume equality for cyclic structures. The algorithm for detecting cyclic
+    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+    var length = aStack.length;
+    while (length--) {
+      // Linear search. Performance is inversely proportional to the number of
+      // unique nested structures.
+      if (aStack[length] == a) return bStack[length] == b;
+    }
+    // Add the first object to the stack of traversed objects.
+    aStack.push(a);
+    bStack.push(b);
+    var size = 0, result = true;
+    // Recursively compare objects and arrays.
+    if (className == '[object Array]') {
+      // Compare array lengths to determine if a deep comparison is necessary.
+      size = a.length;
+      result = size == b.length;
+      if (result) {
+        // Deep compare the contents, ignoring non-numeric properties.
+        while (size--) {
+          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
+        }
+      }
+    } else {
+      // Objects with different constructors are not equivalent, but `Object`s
+      // from different frames are.
+      var aCtor = a.constructor, bCtor = b.constructor;
+      if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
+                               _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
+        return false;
+      }
+      // Deep compare objects.
+      for (var key in a) {
+        if (_.has(a, key)) {
+          // Count the expected number of properties.
+          size++;
+          // Deep compare each member.
+          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
+        }
+      }
+      // Ensure that both objects contain the same number of properties.
+      if (result) {
+        for (key in b) {
+          if (_.has(b, key) && !(size--)) break;
+        }
+        result = !size;
+      }
+    }
+    // Remove the first object from the stack of traversed objects.
+    aStack.pop();
+    bStack.pop();
+    return result;
+  };
+
+  // Perform a deep comparison to check if two objects are equal.
+  _.isEqual = function(a, b) {
+    return eq(a, b, [], []);
+  };
+
+  // Is a given array, string, or object empty?
+  // An "empty" object has no enumerable own-properties.
+  _.isEmpty = function(obj) {
+    if (obj == null) return true;
+    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
+    for (var key in obj) if (_.has(obj, key)) return false;
+    return true;
+  };
+
+  // Is a given value a DOM element?
+  _.isElement = function(obj) {
+    return !!(obj && obj.nodeType === 1);
+  };
+
+  // Is a given value an array?
+  // Delegates to ECMA5's native Array.isArray
+  _.isArray = nativeIsArray || function(obj) {
+    return toString.call(obj) == '[object Array]';
+  };
+
+  // Is a given variable an object?
+  _.isObject = function(obj) {
+    return obj === Object(obj);
+  };
+
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
+  each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+    _['is' + name] = function(obj) {
+      return toString.call(obj) == '[object ' + name + ']';
+    };
+  });
+
+  // Define a fallback version of the method in browsers (ahem, IE), where
+  // there isn't any inspectable "Arguments" type.
+  if (!_.isArguments(arguments)) {
+    _.isArguments = function(obj) {
+      return !!(obj && _.has(obj, 'callee'));
+    };
+  }
+
+  // Optimize `isFunction` if appropriate.
+  if (typeof (/./) !== 'function') {
+    _.isFunction = function(obj) {
+      return typeof obj === 'function';
+    };
+  }
+
+  // Is a given object a finite number?
+  _.isFinite = function(obj) {
+    return isFinite(obj) && !isNaN(parseFloat(obj));
+  };
+
+  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
+  _.isNaN = function(obj) {
+    return _.isNumber(obj) && obj != +obj;
+  };
+
+  // Is a given value a boolean?
+  _.isBoolean = function(obj) {
+    return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
+  };
+
+  // Is a given value equal to null?
+  _.isNull = function(obj) {
+    return obj === null;
+  };
+
+  // Is a given variable undefined?
+  _.isUndefined = function(obj) {
+    return obj === void 0;
+  };
+
+  // Shortcut function for checking if an object has a given property directly
+  // on itself (in other words, not on a prototype).
+  _.has = function(obj, key) {
+    return hasOwnProperty.call(obj, key);
+  };
+
+  // Utility Functions
+  // -----------------
+
+  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
+  // previous owner. Returns a reference to the Underscore object.
+  _.noConflict = function() {
+    root._ = previousUnderscore;
+    return this;
+  };
+
+  // Keep the identity function around for default iterators.
+  _.identity = function(value) {
+    return value;
+  };
+
+  // Run a function **n** times.
+  _.times = function(n, iterator, context) {
+    var accum = Array(n);
+    for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
+    return accum;
+  };
+
+  // Return a random integer between min and max (inclusive).
+  _.random = function(min, max) {
+    if (max == null) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.floor(Math.random() * (max - min + 1));
+  };
+
+  // List of HTML entities for escaping.
+  var entityMap = {
+    escape: {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      '/': '&#x2F;'
+    }
+  };
+  entityMap.unescape = _.invert(entityMap.escape);
+
+  // Regexes containing the keys and values listed immediately above.
+  var entityRegexes = {
+    escape:   new RegExp('[' + _.keys(entityMap.escape).join('') + ']', 'g'),
+    unescape: new RegExp('(' + _.keys(entityMap.unescape).join('|') + ')', 'g')
+  };
+
+  // Functions for escaping and unescaping strings to/from HTML interpolation.
+  _.each(['escape', 'unescape'], function(method) {
+    _[method] = function(string) {
+      if (string == null) return '';
+      return ('' + string).replace(entityRegexes[method], function(match) {
+        return entityMap[method][match];
+      });
+    };
+  });
+
+  // If the value of the named property is a function then invoke it;
+  // otherwise, return it.
+  _.result = function(object, property) {
+    if (object == null) return void 0;
+    var value = object[property];
+    return _.isFunction(value) ? value.call(object) : value;
+  };
+
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    each(_.functions(obj), function(name){
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result.call(this, func.apply(_, args));
+      };
+    });
+  };
+
+  // Generate a unique integer id (unique within the entire client session).
+  // Useful for temporary DOM ids.
+  var idCounter = 0;
+  _.uniqueId = function(prefix) {
+    var id = ++idCounter + '';
+    return prefix ? prefix + id : id;
+  };
+
+  // By default, Underscore uses ERB-style template delimiters, change the
+  // following template settings to use alternative delimiters.
+  _.templateSettings = {
+    evaluate    : /<%([\s\S]+?)%>/g,
+    interpolate : /<%=([\s\S]+?)%>/g,
+    escape      : /<%-([\s\S]+?)%>/g
+  };
+
+  // When customizing `templateSettings`, if you don't want to define an
+  // interpolation, evaluation or escaping regex, we need one that is
+  // guaranteed not to match.
+  var noMatch = /(.)^/;
+
+  // Certain characters need to be escaped so that they can be put into a
+  // string literal.
+  var escapes = {
+    "'":      "'",
+    '\\':     '\\',
+    '\r':     'r',
+    '\n':     'n',
+    '\t':     't',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+  };
+
+  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
+
+  // JavaScript micro-templating, similar to John Resig's implementation.
+  // Underscore templating handles arbitrary delimiters, preserves whitespace,
+  // and correctly escapes quotes within interpolated code.
+  _.template = function(text, data, settings) {
+    var render;
+    settings = _.defaults({}, settings, _.templateSettings);
+
+    // Combine delimiters into one regular expression via alternation.
+    var matcher = new RegExp([
+      (settings.escape || noMatch).source,
+      (settings.interpolate || noMatch).source,
+      (settings.evaluate || noMatch).source
+    ].join('|') + '|$', 'g');
+
+    // Compile the template source, escaping string literals appropriately.
+    var index = 0;
+    var source = "__p+='";
+    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+      source += text.slice(index, offset)
+        .replace(escaper, function(match) { return '\\' + escapes[match]; });
+
+      if (escape) {
+        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
+      }
+      if (interpolate) {
+        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+      }
+      if (evaluate) {
+        source += "';\n" + evaluate + "\n__p+='";
+      }
+      index = offset + match.length;
+      return match;
+    });
+    source += "';\n";
+
+    // If a variable is not specified, place data values in local scope.
+    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+    source = "var __t,__p='',__j=Array.prototype.join," +
+      "print=function(){__p+=__j.call(arguments,'');};\n" +
+      source + "return __p;\n";
+
+    try {
+      render = new Function(settings.variable || 'obj', '_', source);
+    } catch (e) {
+      e.source = source;
+      throw e;
     }
 
-    , updater: function (item) {
-        return item
+    if (data) return render(data, _);
+    var template = function(data) {
+      return render.call(this, data, _);
+    };
+
+    // Provide the compiled function source as a convenience for precompilation.
+    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+
+    return template;
+  };
+
+  // Add a "chain" function, which will delegate to the wrapper.
+  _.chain = function(obj) {
+    return _(obj).chain();
+  };
+
+  // OOP
+  // ---------------
+  // If Underscore is called as a function, it returns a wrapped object that
+  // can be used OO-style. This wrapper holds altered versions of all the
+  // underscore functions. Wrapped objects may be chained.
+
+  // Helper function to continue chaining intermediate results.
+  var result = function(obj) {
+    return this._chain ? _(obj).chain() : obj;
+  };
+
+  // Add all of the Underscore functions to the wrapper object.
+  _.mixin(_);
+
+  // Add all mutator Array functions to the wrapper.
+  each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      var obj = this._wrapped;
+      method.apply(obj, arguments);
+      if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
+      return result.call(this, obj);
+    };
+  });
+
+  // Add all accessor Array functions to the wrapper.
+  each(['concat', 'join', 'slice'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      return result.call(this, method.apply(this._wrapped, arguments));
+    };
+  });
+
+  _.extend(_.prototype, {
+
+    // Start chaining a wrapped Underscore object.
+    chain: function() {
+      this._chain = true;
+      return this;
+    },
+
+    // Extracts the result from a wrapped and chained object.
+    value: function() {
+      return this._wrapped;
     }
 
-    , show: function () {
-        var pos = $.extend({}, this.$element.offset(), {
-            height: this.$element[0].offsetHeight
-        })
+  });
 
-        this.$menu.css({
-            top: pos.top + pos.height
-        , left: pos.left
-        })
+}).call(this);
 
-        this.$menu.show()
-        this.shown = true
-        return this
-    }
+;/**
+ * Plugin developed to save html forms data to LocalStorage to restore them after browser crashes, tabs closings
+ * and other disasters.
+ *
+ * @author Alexander Kaupanin <kaupanin@gmail.com>
+ */
 
-    , hide: function () {
-        this.$menu.hide()
-        this.shown = false
-        return this
-    }
+//$.sisyphus().setOptions({timeout: 15})
+(function ($) {
+    $.sisyphus = function () {
+        return Sisyphus.getInstance();
+    };
 
-    , lookup: function (event) {
-        var that = this
-          , items
-          , q
-          , value
+    $.fn.sisyphus = function (options) {
+        var sisyphus = Sisyphus.getInstance();
+        sisyphus.setOptions(options);
+        sisyphus.protect(this);
+        return sisyphus;
+    };
 
-        this.query = this.$element.val()
+    var browserStorage = {};
 
-        if (typeof this.source == "function")
-            value = this.source(this, this.query)
-        if (value)
-            this.process(value)
-        else
-            this.process(this.source)
-    }
+    /**
+	 * Check if local storage or other browser storage is available
+	 *
+	 * @return Boolean
+	 */
+    browserStorage.isAvailable = function () {
+        if (typeof $.jStorage === "object") {
+            return true;
+        }
+        try {
+            return localStorage.getItem;
+        } catch (e) {
+            return false;
+        }
+    };
 
-    , process: function (results) {
-        var that = this
-          , items
-          , q
+    /**
+	 * Set data to browser storage
+	 *
+	 * @param [String] key
+	 * @param [String] value
+	 *
+	 * @return Boolean
+	 */
+    browserStorage.set = function (key, value) {
+        if (typeof $.jStorage === "object") {
+            $.jStorage.set(key, value + "");
+        } else {
+            try {
+                localStorage.setItem(key, value + "");
+            } catch (e) {
+                //QUOTA_EXCEEDED_ERR
+            }
+        }
+    };
 
-        if (results.length && typeof results[0] != "string")
-            this.strings = false
+    /**
+	 * Get data from browser storage by specified key
+	 *
+	 * @param [String] key
+	 *
+	 * @return string
+	 */
+    browserStorage.get = function (key) {
+        if (typeof $.jStorage === "object") {
+            var result = $.jStorage.get(key);
+            return result ? result.toString() : result;
+        } else {
+            return localStorage.getItem(key);
+        }
+    };
 
-        this.query = this.$element.val()
+    /**
+	 * Delete data from browser storage by specified key
+	 *
+	 * @param [String] key
+	 *
+	 * @return void
+	 */
+    browserStorage.remove = function (key) {
+        if (typeof $.jStorage === "object") {
+            $.jStorage.deleteKey(key);
+        } else {
+            localStorage.removeItem(key);
+        }
+    };
 
-        if (!this.query) {
-            return this.shown ? this.hide() : this
+    Sisyphus = (function () {
+        var params = {
+            instantiated: null,
+            started: null
+        };
+
+        function init() {
+
+            return {
+                /**
+				 * Set plugin initial options
+				 *
+				 * @param [Object] options
+				 *
+				 * @return void
+				 */
+                setInitialOptions: function (options) {
+                    var defaults = {
+                        excludeFields: [],
+                        customKeyPrefix: "",
+                        timeout: 0,
+                        autoRelease: true,
+                        name: null,
+                        onSave: function () { },
+                        onBeforeRestore: function () { },
+                        onRestore: function () { },
+                        onRelease: function () { }
+                    };
+                    this.options = this.options || $.extend(defaults, options);
+                    this.browserStorage = browserStorage;
+                },
+
+                /**
+				 * Set plugin options
+				 *
+				 * @param [Object] options
+				 *
+				 * @return void
+				 */
+                setOptions: function (options) {
+                    this.options = this.options || this.setInitialOptions(options);
+                    this.options = $.extend(this.options, options);
+                },
+
+                /**
+				 * Protect specified forms, store it's fields data to local storage and restore them on page load
+				 *
+				 * @param [Object] targets		forms object(s), result of jQuery selector
+				 * @param Object options			plugin options
+				 *
+				 * @return void
+				 */
+                protect: function (targets) {
+                    targets = targets || {};
+                    var self = this;
+                    this.targets = this.targets || [];
+                    this.href = this.options.name || location.hostname + location.pathname + location.search + location.hash;
+
+                    this.targets = $.merge(this.targets, targets);
+                    this.targets = $.unique(this.targets);
+                    this.targets = $(this.targets);
+                    if (!this.browserStorage.isAvailable()) {
+                        return false;
+                    }
+
+                    self.restoreAllData();
+                    if (this.options.autoRelease) {
+                        self.bindReleaseData();
+                    }
+                    if (!params.started) {
+                        self.bindSaveData();
+                        params.started = true;
+                    }
+                },
+
+                /**
+				 * Bind saving data
+				 *
+				 * @return void
+				 */
+                bindSaveData: function () {
+                    var self = this;
+
+                    if (self.options.timeout) {
+                        self.saveDataByTimeout();
+                    }
+
+                    self.targets.each(function () {
+                        var targetFormId = $(this).attr("id");
+                        var fieldsToProtect = $(this).find(":input").not(":submit").not(":reset").not(":button").not(":file");
+
+                        fieldsToProtect.each(function () {
+                            if ($.inArray(this, self.options.excludeFields) !== -1) {
+                                // Returning non-false is the same as a continue statement in a for loop; it will skip immediately to the next iteration.
+                                return true;
+                            }
+                            var field = $(this);
+                            var prefix = self.href + targetFormId + field.attr("name") + self.options.customKeyPrefix;
+                            if (field.is(":text") || field.is("textarea")) {
+                                if (!self.options.timeout) {
+                                    self.bindSaveDataImmediately(field, prefix);
+                                }
+                            } else {
+                                self.bindSaveDataOnChange(field, prefix);
+                            }
+                        });
+                    });
+                },
+
+                /**
+				 * Save all protected forms data to Local Storage.
+				 * Common method, necessary to not lead astray user firing 'data are saved' when select/checkbox/radio
+				 * is changed and saved, while textfield data are saved only by timeout
+				 *
+				 * @return void
+				 */
+                saveAllData: function () {
+                    var self = this;
+                    self.targets.each(function () {
+                        var targetFormId = $(this).attr("id");
+                        var fieldsToProtect = $(this).find(":input").not(":submit").not(":reset").not(":button").not(":file");
+
+                        fieldsToProtect.each(function () {
+                            var field = $(this);
+                            if ($.inArray(this, self.options.excludeFields) !== -1 || field.attr("name") === undefined) {
+                                // Returning non-false is the same as a continue statement in a for loop; it will skip immediately to the next iteration.
+                                return true;
+                            }
+                            var prefix = self.href + targetFormId + field.attr("name") + self.options.customKeyPrefix;
+                            var value = field.val();
+
+                            if (field.is(":checkbox")) {
+                                if (field.attr("name").indexOf("[") !== -1) {
+                                    value = [];
+                                    $("[name='" + field.attr("name") + "']:checked").each(function () {
+                                        value.push($(this).val());
+                                    });
+                                } else {
+                                    value = field.is(":checked");
+                                }
+                                self.saveToBrowserStorage(prefix, value, false);
+                            } else if (field.is(":radio")) {
+                                if (field.is(":checked")) {
+                                    value = field.val();
+                                    self.saveToBrowserStorage(prefix, value, false);
+                                }
+                            } else {
+                                self.saveToBrowserStorage(prefix, value, false);
+                            }
+                        });
+                    });
+                    if ($.isFunction(self.options.onSave)) {
+                        self.options.onSave.call();
+                    }
+                },
+
+                /**
+				 * Restore forms data from Local Storage
+				 *
+				 * @return void
+				 */
+                restoreAllData: function () {
+                    var self = this;
+                    var restored = false;
+
+                    if ($.isFunction(self.options.onBeforeRestore)) {
+                        self.options.onBeforeRestore.call(self);
+                    }
+
+                    self.targets.each(function () {
+                        var target = $(this);
+                        var targetFormId = target.attr("id");
+                        var fieldsToProtect = target.find(":input").not(":submit").not(":reset").not(":button").not(":file");
+
+                        fieldsToProtect.each(function () {
+
+                            if ($.inArray(this, self.options.excludeFields) !== -1) {
+                                // Returning non-false is the same as a continue statement in a for loop; it will skip immediately to the next iteration.
+                                return true;
+                            }
+                            var field = $(this);
+                            var prefix = self.href + targetFormId + field.attr("name") + self.options.customKeyPrefix;
+                            var resque = self.browserStorage.get(prefix);
+                            if (resque) {
+                                self.restoreFieldsData(field, resque);
+                                restored = true;
+                            }
+                        });
+                    });
+
+                    if (restored && $.isFunction(self.options.onRestore)) {
+                        self.options.onRestore.call();
+                    }
+                },
+
+                /**
+				 * Restore form field data from local storage
+				 *
+				 * @param Object field		jQuery form element object
+				 * @param String resque	 previously stored fields data
+				 *
+				 * @return void
+				 */
+                restoreFieldsData: function (field, resque) {
+                    if (field.attr("name") === undefined) {
+                        return false;
+                    }
+                    if (field.is(":checkbox") && resque !== "false" && field.attr("name").indexOf("[") === -1) {
+                        field.attr("checked", "checked");
+                    } else if (field.is(":checkbox") && resque === "false" && field.attr("name").indexOf("[") === -1) {
+                        field.removeAttr("checked");
+                    } else if (field.is(":radio")) {
+                        if (field.val() === resque) {
+                            field.attr("checked", "checked");
+                        }
+                    } else if (field.attr("name").indexOf("[") === -1) {
+                        field.val(resque);
+                    } else {
+                        resque = resque.split(",");
+                        field.val(resque);
+                    }
+                },
+
+                /**
+				 * Bind immediate saving (on typing/checking/changing) field data to local storage when user fills it
+				 *
+				 * @param Object field		jQuery form element object
+				 * @param String prefix	 prefix used as key to store data in local storage
+				 *
+				 * @return void
+				 */
+                bindSaveDataImmediately: function (field, prefix) {
+                    var self = this;
+                    if (typeof $.browser.msie === 'undefined') {
+                        field.get(0).oninput = function () {
+                            self.saveToBrowserStorage(prefix, field.val());
+                        };
+                    } else {
+                        field.get(0).onpropertychange = function () {
+                            self.saveToBrowserStorage(prefix, field.val());
+                        };
+                    }
+                },
+
+                /**
+				 * Save data to Local Storage and fire callback if defined
+				 *
+				 * @param String key
+				 * @param String value
+				 * @param Boolean [true] fireCallback
+				 *
+				 * @return void
+				 */
+                saveToBrowserStorage: function (key, value, fireCallback) {
+                    // if fireCallback is undefined it should be true
+                    fireCallback = fireCallback === undefined ? true : fireCallback;
+                    this.browserStorage.set(key, value);
+                    if (fireCallback && value !== "" && $.isFunction(this.options.onSave)) {
+                        this.options.onSave.call();
+                    }
+                },
+
+                /**
+				 * Bind saving field data on change
+				 *
+				 * @param Object field		jQuery form element object
+				 * @param String prefix	 prefix used as key to store data in local storage
+				 *
+				 * @return void
+				 */
+                bindSaveDataOnChange: function (field, prefix) {
+                    var self = this;
+                    field.change(function () {
+                        self.saveAllData();
+                    });
+                },
+
+                /**
+				 * Saving (by timeout) field data to local storage when user fills it
+				 *
+				 * @return void
+				 */
+                saveDataByTimeout: function () {
+                    var self = this;
+                    var targetForms = self.targets;
+                    setTimeout((function (targetForms) {
+                        function timeout() {
+                            self.saveAllData();
+                            setTimeout(timeout, self.options.timeout * 1000);
+                        }
+                        return timeout;
+                    })(targetForms), self.options.timeout * 1000);
+                },
+
+                /**
+				 * Bind release form fields data from local storage on submit/reset form
+				 *
+				 * @return void
+				 */
+                bindReleaseData: function () {
+                    var self = this;
+                    self.targets.each(function (i) {
+                        var target = $(this);
+                        var fieldsToProtect = target.find(":input").not(":submit").not(":reset").not(":button").not(":file");
+                        var formId = target.attr("id");
+                        $(this).bind("submit reset", function () {
+                            self.releaseData(formId, fieldsToProtect);
+                        });
+                    });
+                },
+
+                /**
+				 * Manually release form fields
+				 *
+				 * @return void
+				 */
+                manuallyReleaseData: function () {
+                    var self = this;
+                    self.targets.each(function (i) {
+                        var target = $(this);
+                        var fieldsToProtect = target.find(":input").not(":submit").not(":reset").not(":button").not(":file");
+                        var formId = target.attr("id");
+                        self.releaseData(formId, fieldsToProtect);
+                    });
+                },
+
+                /**
+				 * Bind release form fields data from local storage on submit/resett form
+				 *
+				 * @param String targetFormId
+				 * @param Object fieldsToProtect		jQuery object contains form fields to protect
+				 *
+				 * @return void
+				 */
+                releaseData: function (targetFormId, fieldsToProtect) {
+                    var released = false;
+                    var self = this;
+                    fieldsToProtect.each(function () {
+                        if ($.inArray(this, self.options.excludeFields) !== -1) {
+                            // Returning non-false is the same as a continue statement in a for loop; it will skip immediately to the next iteration.
+                            return true;
+                        }
+                        var field = $(this);
+                        var prefix = self.href + targetFormId + field.attr("name") + self.options.customKeyPrefix;
+                        self.browserStorage.remove(prefix);
+                        released = true;
+                    });
+
+                    if (released && $.isFunction(self.options.onRelease)) {
+                        self.options.onRelease.call();
+                    }
+                }
+
+            };
         }
 
-        items = $.grep(results, function (item) {
-            if (!that.strings)
-                item = item[that.options.property]
+        return {
+            getInstance: function () {
+                if (!params.instantiated) {
+                    params.instantiated = init();
+                    params.instantiated.setInitialOptions();
+                }
+                return params.instantiated;
+            },
 
-            return that.matcher(item)
-        })
-
-        items = this.sorter(items)
-
-        if (!items.length) {
-            return this.shown ? this.hide() : this
-        }
-
-        return this.render(items.slice(0, this.options.items)).show()
-    }
-
-    , matcher: function (item) {
-        return ~item.toLowerCase().indexOf(this.query.toLowerCase())
-    }
-
-    , sorter: function (items) {
-        var beginswith = []
-          , caseSensitive = []
-          , caseInsensitive = []
-          , item
-          , sortby
-
-        while (item = items.shift()) {
-            if (this.strings) sortby = item
-            else sortby = item[this.options.property]
-
-            if (!sortby.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item)
-            else if (~sortby.indexOf(this.query)) caseSensitive.push(item)
-            else caseInsensitive.push(item)
-        }
-
-        return beginswith.concat(caseSensitive, caseInsensitive)
-    }
-
-    , highlighter: function (item) {
-        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
-        return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-            return '<strong>' + match + '</strong>'
-        })
-    }
-
-    , render: function (items) {
-        var that = this
-
-        items = $(items).map(function (i, item) {
-            i = $(that.options.item).attr('data-value', JSON.stringify(item))
-            if (!that.strings)
-                item = item[that.options.property]
-            i.find('a').html(that.highlighter(item))
-            return i[0]
-        })
-
-        items.first().addClass('active')
-        this.$menu.html(items)
-        return this
-    }
-
-    , next: function (event) {
-        var active = this.$menu.find('.active').removeClass('active')
-          , next = active.next()
-
-        if (!next.length) {
-            next = $(this.$menu.find('li')[0])
-        }
-
-        next.addClass('active')
-    }
-
-    , prev: function (event) {
-        var active = this.$menu.find('.active').removeClass('active')
-          , prev = active.prev()
-
-        if (!prev.length) {
-            prev = this.$menu.find('li').last()
-        }
-
-        prev.addClass('active')
-    }
-
-    , listen: function () {
-        this.$element
-          .on('blur', $.proxy(this.blur, this))
-          .on('keypress', $.proxy(this.keypress, this))
-          .on('keyup', $.proxy(this.keyup, this))
-
-        if ($.browser.webkit || $.browser.msie) {
-            this.$element.on('keydown', $.proxy(this.keypress, this))
-        }
-
-        this.$menu
-          .on('click', $.proxy(this.click, this))
-          .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
-    }
-
-    , keyup: function (e) {
-        switch (e.keyCode) {
-            case 40: // down arrow
-            case 38: // up arrow
-                break
-
-            case 9: // tab
-            case 13: // enter
-                if (!this.shown) return
-                this.select()
-                break
-
-            case 27: // escape
-                if (!this.shown) return
-                this.hide()
-                break
-
-            default:
-                this.lookup();
-        }
-
-        e.stopPropagation()
-        e.preventDefault()
-    }
-
-    , keypress: function (e) {
-        if (!this.shown) return
-
-        switch (e.keyCode) {
-            case 9: // tab
-            case 13: // enter
-            case 27: // escape
-                e.preventDefault()
-                break
-
-            case 38: // up arrow
-                if (e.type != 'keydown') break
-                e.preventDefault()
-                this.prev()
-                break
-
-            case 40: // down arrow
-                if (e.type != 'keydown') break
-                e.preventDefault()
-                this.next()
-                break
-        }
-
-        e.stopPropagation()
-    }
-
-    , blur: function (e) {
-        var that = this
-        setTimeout(function () { that.hide() }, 150)
-    }
-
-    , click: function (e) {
-        e.stopPropagation()
-        e.preventDefault()
-        this.select()
-    }
-
-    , mouseenter: function (e) {
-        this.$menu.find('.active').removeClass('active')
-        $(e.currentTarget).addClass('active')
-    }
-
-    }
-
-
-    /* TYPEAHEAD PLUGIN DEFINITION
-     * =========================== */
-
-    $.fn.typeahead = function (option) {
-        return this.each(function () {
-            var $this = $(this)
-              , data = $this.data('typeahead')
-              , options = typeof option == 'object' && option
-            if (!data) $this.data('typeahead', (data = new Typeahead(this, options)))
-            if (typeof option == 'string') data[option]()
-        })
-    }
-
-    $.fn.typeahead.defaults = {
-        source: []
-    , items: 8
-    , menu: '<ul class="typeahead dropdown-menu"></ul>'
-    , item: '<li><a href="#"></a></li>'
-    , onselect: null
-    , property: 'value'
-    }
-
-    $.fn.typeahead.Constructor = Typeahead
-
-
-    /* TYPEAHEAD DATA-API
-     * ================== */
-
-    $(function () {
-        $('body').on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
-            var $this = $(this)
-            if ($this.data('typeahead')) return
-            e.preventDefault()
-            $this.typeahead($this.data())
-        })
-    })
-
-}(window.jQuery);
+            free: function () {
+                params = {};
+                return null;
+            }
+        };
+    })();
+})(jQuery);
 ;/*
  * ----------------------------- JSTORAGE -------------------------------------
  * Simple local storage wrapper to save data on the browser side, supporting
@@ -31426,6 +30976,1466 @@ angular.module('ngResource', ['ng']).
 
 })(window, window.angular);
 
+;/**
+ * AngularUI - The companion suite for AngularJS
+ * @version v0.4.0 - 2013-02-15
+ * @link http://angular-ui.github.com
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+
+
+angular.module('ui.config', []).value('ui.config', {});
+angular.module('ui.filters', ['ui.config']);
+angular.module('ui.directives', ['ui.config']);
+angular.module('ui', ['ui.filters', 'ui.directives', 'ui.config']);
+
+/**
+ * Animates the injection of new DOM elements by simply creating the DOM with a class and then immediately removing it
+ * Animations must be done using CSS3 transitions, but provide excellent flexibility
+ *
+ * @todo Add proper support for animating out
+ * @param [options] {mixed} Can be an object with multiple options, or a string with the animation class
+ *    class {string} the CSS class(es) to use. For example, 'ui-hide' might be an excellent alternative class.
+ * @example <li ng-repeat="item in items" ui-animate=" 'ui-hide' ">{{item}}</li>
+ */
+angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout', function (uiConfig, $timeout) {
+    var options = {};
+    if (angular.isString(uiConfig.animate)) {
+        options['class'] = uiConfig.animate;
+    } else if (uiConfig.animate) {
+        options = uiConfig.animate;
+    }
+    return {
+        restrict: 'A', // supports using directive as element, attribute and class
+        link: function ($scope, element, attrs) {
+            var opts = {};
+            if (attrs.uiAnimate) {
+                opts = $scope.$eval(attrs.uiAnimate);
+                if (angular.isString(opts)) {
+                    opts = { 'class': opts };
+                }
+            }
+            opts = angular.extend({ 'class': 'ui-animate' }, options, opts);
+
+            element.addClass(opts['class']);
+            $timeout(function () {
+                element.removeClass(opts['class']);
+            }, 20, false);
+        }
+    };
+}]);
+
+
+/*
+*  AngularJs Fullcalendar Wrapper for the JQuery FullCalendar
+*  API @ http://arshaw.com/fullcalendar/ 
+*  
+*  Angular Calendar Directive that takes in the [eventSources] nested array object as the ng-model and watches (eventSources.length + eventSources[i].length) for changes. 
+*       Can also take in multiple event urls as a source object(s) and feed the events per view.
+*       The calendar will watch any eventSource array and update itself when a delta is created  
+*       An equalsTracker attrs has been added for use cases that would render the overall length tracker the same even though the events have changed to force updates.
+*
+*/
+
+angular.module('ui.directives').directive('uiCalendar', ['ui.config', '$parse', function (uiConfig, $parse) {
+    uiConfig.uiCalendar = uiConfig.uiCalendar || {};
+    //returns calendar     
+    return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, elm, attrs, $timeout) {
+            var sources = scope.$eval(attrs.ngModel);
+            var tracker = 0;
+            /* returns the length of all source arrays plus the length of eventSource itself */
+            var getSources = function () {
+                var equalsTracker = scope.$eval(attrs.equalsTracker);
+                tracker = 0;
+                angular.forEach(sources, function (value, key) {
+                    if (angular.isArray(value)) {
+                        tracker += value.length;
+                    }
+                });
+                if (angular.isNumber(equalsTracker)) {
+                    return tracker + sources.length + equalsTracker;
+                } else {
+                    return tracker + sources.length;
+                }
+            };
+            /* update the calendar with the correct options */
+            function update() {
+                //calendar object exposed on scope
+                scope.calendar = elm.html('');
+                var view = scope.calendar.fullCalendar('getView');
+                if (view) {
+                    view = view.name; //setting the default view to be whatever the current view is. This can be overwritten. 
+                }
+                /* If the calendar has options added then render them */
+                var expression,
+                  options = {
+                      defaultView: view,
+                      eventSources: sources
+                  };
+                if (attrs.uiCalendar) {
+                    expression = scope.$eval(attrs.uiCalendar);
+                } else {
+                    expression = {};
+                }
+                angular.extend(options, uiConfig.uiCalendar, expression);
+                scope.calendar.fullCalendar(options);
+            }
+            update();
+            /* watches all eventSources */
+            scope.$watch(getSources, function (newVal, oldVal) {
+                update();
+            });
+        }
+    };
+}]);
+/*global angular, CodeMirror, Error*/
+/**
+ * Binds a CodeMirror widget to a <textarea> element.
+ */
+angular.module('ui.directives').directive('uiCodemirror', ['ui.config', '$timeout', function (uiConfig, $timeout) {
+    'use strict';
+
+    var events = ["cursorActivity", "viewportChange", "gutterClick", "focus", "blur", "scroll", "update"];
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ngModel) {
+            var options, opts, onChange, deferCodeMirror, codeMirror;
+
+            if (elm[0].type !== 'textarea') {
+                throw new Error('uiCodemirror3 can only be applied to a textarea element');
+            }
+
+            options = uiConfig.codemirror || {};
+            opts = angular.extend({}, options, scope.$eval(attrs.uiCodemirror));
+
+            onChange = function (aEvent) {
+                return function (instance, changeObj) {
+                    var newValue = instance.getValue();
+                    if (newValue !== ngModel.$viewValue) {
+                        ngModel.$setViewValue(newValue);
+                        scope.$apply();
+                    }
+                    if (typeof aEvent === "function")
+                        aEvent(instance, changeObj);
+                };
+            };
+
+            deferCodeMirror = function () {
+                codeMirror = CodeMirror.fromTextArea(elm[0], opts);
+                codeMirror.on("change", onChange(opts.onChange));
+
+                for (var i = 0, n = events.length, aEvent; i < n; ++i) {
+                    aEvent = opts["on" + events[i].charAt(0).toUpperCase() + events[i].slice(1)];
+                    if (aEvent === void 0) continue;
+                    if (typeof aEvent !== "function") continue;
+                    codeMirror.on(events[i], aEvent);
+                }
+
+                // CodeMirror expects a string, so make sure it gets one.
+                // This does not change the model.
+                ngModel.$formatters.push(function (value) {
+                    if (angular.isUndefined(value) || value === null) {
+                        return '';
+                    }
+                    else if (angular.isObject(value) || angular.isArray(value)) {
+                        throw new Error('ui-codemirror cannot use an object or an array as a model');
+                    }
+                    return value;
+                });
+
+                // Override the ngModelController $render method, which is what gets called when the model is updated.
+                // This takes care of the synchronizing the codeMirror element with the underlying model, in the case that it is changed by something else.
+                ngModel.$render = function () {
+                    codeMirror.setValue(ngModel.$viewValue);
+                };
+
+                // Watch ui-refresh and refresh the directive
+                if (attrs.uiRefresh) {
+                    scope.$watch(attrs.uiRefresh, function (newVal, oldVal) {
+                        // Skip the initial watch firing
+                        if (newVal !== oldVal)
+                            $timeout(codeMirror.refresh);
+                    });
+                }
+            };
+
+            $timeout(deferCodeMirror);
+
+        }
+    };
+}]);
+
+/*
+ Gives the ability to style currency based on its sign.
+ */
+angular.module('ui.directives').directive('uiCurrency', ['ui.config', 'currencyFilter', function (uiConfig, currencyFilter) {
+    var options = {
+        pos: 'ui-currency-pos',
+        neg: 'ui-currency-neg',
+        zero: 'ui-currency-zero'
+    };
+    if (uiConfig.currency) {
+        angular.extend(options, uiConfig.currency);
+    }
+    return {
+        restrict: 'EAC',
+        require: 'ngModel',
+        link: function (scope, element, attrs, controller) {
+            var opts, // instance-specific options
+              renderview,
+              value;
+
+            opts = angular.extend({}, options, scope.$eval(attrs.uiCurrency));
+
+            renderview = function (viewvalue) {
+                var num;
+                num = viewvalue * 1;
+                element.toggleClass(opts.pos, (num > 0));
+                element.toggleClass(opts.neg, (num < 0));
+                element.toggleClass(opts.zero, (num === 0));
+                if (viewvalue === '') {
+                    element.text('');
+                } else {
+                    element.text(currencyFilter(num, opts.symbol));
+                }
+                return true;
+            };
+
+            controller.$render = function () {
+                value = controller.$viewValue;
+                element.val(value);
+                renderview(value);
+            };
+
+        }
+    };
+}]);
+
+/*global angular */
+/*
+ jQuery UI Datepicker plugin wrapper
+
+ @note If ≤ IE8 make sure you have a polyfill for Date.toISOString()
+ @param [ui-date] {object} Options to pass to $.fn.datepicker() merged onto ui.config
+ */
+
+angular.module('ui.directives')
+
+.directive('uiDate', ['ui.config', function (uiConfig) {
+    'use strict';
+    var options;
+    options = {};
+    if (angular.isObject(uiConfig.date)) {
+        angular.extend(options, uiConfig.date);
+    }
+    return {
+        require: '?ngModel',
+        link: function (scope, element, attrs, controller) {
+            var getOptions = function () {
+                return angular.extend({}, uiConfig.date, scope.$eval(attrs.uiDate));
+            };
+            var initDateWidget = function () {
+                var opts = getOptions();
+
+                // If we have a controller (i.e. ngModelController) then wire it up
+                if (controller) {
+                    var updateModel = function () {
+                        scope.$apply(function () {
+                            var date = element.datepicker("getDate");
+                            element.datepicker("setDate", element.val());
+                            controller.$setViewValue(date);
+                            element.blur();
+                        });
+                    };
+                    if (opts.onSelect) {
+                        // Caller has specified onSelect, so call this as well as updating the model
+                        var userHandler = opts.onSelect;
+                        opts.onSelect = function (value, picker) {
+                            updateModel();
+                            scope.$apply(function () {
+                                userHandler(value, picker);
+                            });
+                        };
+                    } else {
+                        // No onSelect already specified so just update the model
+                        opts.onSelect = updateModel;
+                    }
+                    // In case the user changes the text directly in the input box
+                    element.bind('change', updateModel);
+
+                    // Update the date picker when the model changes
+                    controller.$render = function () {
+                        var date = controller.$viewValue;
+                        if (angular.isDefined(date) && date !== null && !angular.isDate(date)) {
+                            throw new Error('ng-Model value must be a Date object - currently it is a ' + typeof date + ' - use ui-date-format to convert it from a string');
+                        }
+                        element.datepicker("setDate", date);
+                    };
+                }
+                // If we don't destroy the old one it doesn't update properly when the config changes
+                element.datepicker('destroy');
+                // Create the new datepicker widget
+                element.datepicker(opts);
+                if (controller) {
+                    // Force a render to override whatever is in the input text box
+                    controller.$render();
+                }
+            };
+            // Watch for changes to the directives options
+            scope.$watch(getOptions, initDateWidget, true);
+        }
+    };
+}
+])
+
+.directive('uiDateFormat', ['ui.config', function (uiConfig) {
+    var directive = {
+        require: 'ngModel',
+        link: function (scope, element, attrs, modelCtrl) {
+            var dateFormat = attrs.uiDateFormat || uiConfig.dateFormat;
+            if (dateFormat) {
+                // Use the datepicker with the attribute value as the dateFormat string to convert to and from a string
+                modelCtrl.$formatters.push(function (value) {
+                    if (angular.isString(value)) {
+                        return $.datepicker.parseDate(dateFormat, value);
+                    }
+                });
+                modelCtrl.$parsers.push(function (value) {
+                    if (value) {
+                        return $.datepicker.formatDate(dateFormat, value);
+                    }
+                });
+            } else {
+                // Default to ISO formatting
+                modelCtrl.$formatters.push(function (value) {
+                    if (angular.isString(value)) {
+                        return new Date(value);
+                    }
+                });
+                modelCtrl.$parsers.push(function (value) {
+                    if (value) {
+                        return value.toISOString();
+                    }
+                });
+            }
+        }
+    };
+    return directive;
+}]);
+
+/**
+ * General-purpose Event binding. Bind any event not natively supported by Angular
+ * Pass an object with keynames for events to ui-event
+ * Allows $event object and $params object to be passed
+ *
+ * @example <input ui-event="{ focus : 'counter++', blur : 'someCallback()' }">
+ * @example <input ui-event="{ myCustomEvent : 'myEventHandler($event, $params)'}">
+ *
+ * @param ui-event {string|object literal} The event to bind to as a string or a hash of events with their callbacks
+ */
+angular.module('ui.directives').directive('uiEvent', ['$parse',
+  function ($parse) {
+      return function (scope, elm, attrs) {
+          var events = scope.$eval(attrs.uiEvent);
+          angular.forEach(events, function (uiEvent, eventName) {
+              var fn = $parse(uiEvent);
+              elm.bind(eventName, function (evt) {
+                  var params = Array.prototype.slice.call(arguments);
+                  //Take out first paramater (event object);
+                  params = params.splice(1);
+                  scope.$apply(function () {
+                      fn(scope, { $event: evt, $params: params });
+                  });
+              });
+          });
+      };
+  }]);
+
+/*
+ * Defines the ui-if tag. This removes/adds an element from the dom depending on a condition
+ * Originally created by @tigbro, for the @jquery-mobile-angular-adapter
+ * https://github.com/tigbro/jquery-mobile-angular-adapter
+ */
+angular.module('ui.directives').directive('uiIf', [function () {
+    return {
+        transclude: 'element',
+        priority: 1000,
+        terminal: true,
+        restrict: 'A',
+        compile: function (element, attr, transclude) {
+            return function (scope, element, attr) {
+
+                var childElement;
+                var childScope;
+
+                scope.$watch(attr['uiIf'], function (newValue) {
+                    if (childElement) {
+                        childElement.remove();
+                        childElement = undefined;
+                    }
+                    if (childScope) {
+                        childScope.$destroy();
+                        childScope = undefined;
+                    }
+
+                    if (newValue) {
+                        childScope = scope.$new();
+                        transclude(childScope, function (clone) {
+                            childElement = clone;
+                            element.after(clone);
+                        });
+                    }
+                });
+            };
+        }
+    };
+}]);
+/**
+ * General-purpose jQuery wrapper. Simply pass the plugin name as the expression.
+ *
+ * It is possible to specify a default set of parameters for each jQuery plugin.
+ * Under the jq key, namespace each plugin by that which will be passed to ui-jq.
+ * Unfortunately, at this time you can only pre-define the first parameter.
+ * @example { jq : { datepicker : { showOn:'click' } } }
+ *
+ * @param ui-jq {string} The $elm.[pluginName]() to call.
+ * @param [ui-options] {mixed} Expression to be evaluated and passed as options to the function
+ *     Multiple parameters can be separated by commas
+ * @param [ui-refresh] {expression} Watch expression and refire plugin on changes
+ *
+ * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
+ */
+angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function uiJqInjectingFunction(uiConfig, $timeout) {
+
+    return {
+        restrict: 'A',
+        compile: function uiJqCompilingFunction(tElm, tAttrs) {
+
+            if (!angular.isFunction(tElm[tAttrs.uiJq])) {
+                throw new Error('ui-jq: The "' + tAttrs.uiJq + '" function does not exist');
+            }
+            var options = uiConfig.jq && uiConfig.jq[tAttrs.uiJq];
+
+            return function uiJqLinkingFunction(scope, elm, attrs) {
+
+                var linkOptions = [];
+
+                // If ui-options are passed, merge (or override) them onto global defaults and pass to the jQuery method
+                if (attrs.uiOptions) {
+                    linkOptions = scope.$eval('[' + attrs.uiOptions + ']');
+                    if (angular.isObject(options) && angular.isObject(linkOptions[0])) {
+                        linkOptions[0] = angular.extend({}, options, linkOptions[0]);
+                    }
+                } else if (options) {
+                    linkOptions = [options];
+                }
+                // If change compatibility is enabled, the form input's "change" event will trigger an "input" event
+                if (attrs.ngModel && elm.is('select,input,textarea')) {
+                    elm.on('change', function () {
+                        elm.trigger('input');
+                    });
+                }
+
+                // Call jQuery method and pass relevant options
+                function callPlugin() {
+                    $timeout(function () {
+                        elm[attrs.uiJq].apply(elm, linkOptions);
+                    }, 0, false);
+                }
+
+                // If ui-refresh is used, re-fire the the method upon every change
+                if (attrs.uiRefresh) {
+                    scope.$watch(attrs.uiRefresh, function (newVal) {
+                        callPlugin();
+                    });
+                }
+                callPlugin();
+            };
+        }
+    };
+}]);
+
+angular.module('ui.directives').factory('keypressHelper', ['$parse', function keypress($parse) {
+    var keysByCode = {
+        8: 'backspace',
+        9: 'tab',
+        13: 'enter',
+        27: 'esc',
+        32: 'space',
+        33: 'pageup',
+        34: 'pagedown',
+        35: 'end',
+        36: 'home',
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down',
+        45: 'insert',
+        46: 'delete'
+    };
+
+    var capitaliseFirstLetter = function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
+    return function (mode, scope, elm, attrs) {
+        var params, combinations = [];
+        params = scope.$eval(attrs['ui' + capitaliseFirstLetter(mode)]);
+
+        // Prepare combinations for simple checking
+        angular.forEach(params, function (v, k) {
+            var combination, expression;
+            expression = $parse(v);
+
+            angular.forEach(k.split(' '), function (variation) {
+                combination = {
+                    expression: expression,
+                    keys: {}
+                };
+                angular.forEach(variation.split('-'), function (value) {
+                    combination.keys[value] = true;
+                });
+                combinations.push(combination);
+            });
+        });
+
+        // Check only matching of pressed keys one of the conditions
+        elm.bind(mode, function (event) {
+            // No need to do that inside the cycle
+            var altPressed = event.metaKey || event.altKey;
+            var ctrlPressed = event.ctrlKey;
+            var shiftPressed = event.shiftKey;
+            var keyCode = event.keyCode;
+
+            // normalize keycodes
+            if (mode === 'keypress' && !shiftPressed && keyCode >= 97 && keyCode <= 122) {
+                keyCode = keyCode - 32;
+            }
+
+            // Iterate over prepared combinations
+            angular.forEach(combinations, function (combination) {
+
+                var mainKeyPressed = (combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()]) || false;
+
+                var altRequired = combination.keys.alt || false;
+                var ctrlRequired = combination.keys.ctrl || false;
+                var shiftRequired = combination.keys.shift || false;
+
+                if (
+                  mainKeyPressed &&
+                  (altRequired == altPressed) &&
+                  (ctrlRequired == ctrlPressed) &&
+                  (shiftRequired == shiftPressed)
+                ) {
+                    // Run the function
+                    scope.$apply(function () {
+                        combination.expression(scope, { '$event': event });
+                    });
+                }
+            });
+        });
+    };
+}]);
+
+/**
+ * Bind one or more handlers to particular keys or their combination
+ * @param hash {mixed} keyBindings Can be an object or string where keybinding expression of keys or keys combinations and AngularJS Exspressions are set. Object syntax: "{ keys1: expression1 [, keys2: expression2 [ , ... ]]}". String syntax: ""expression1 on keys1 [ and expression2 on keys2 [ and ... ]]"". Expression is an AngularJS Expression, and key(s) are dash-separated combinations of keys and modifiers (one or many, if any. Order does not matter). Supported modifiers are 'ctrl', 'shift', 'alt' and key can be used either via its keyCode (13 for Return) or name. Named keys are 'backspace', 'tab', 'enter', 'esc', 'space', 'pageup', 'pagedown', 'end', 'home', 'left', 'up', 'right', 'down', 'insert', 'delete'.
+ * @example <input ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <input ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
+ **/
+angular.module('ui.directives').directive('uiKeydown', ['keypressHelper', function (keypressHelper) {
+    return {
+        link: function (scope, elm, attrs) {
+            keypressHelper('keydown', scope, elm, attrs);
+        }
+    };
+}]);
+
+angular.module('ui.directives').directive('uiKeypress', ['keypressHelper', function (keypressHelper) {
+    return {
+        link: function (scope, elm, attrs) {
+            keypressHelper('keypress', scope, elm, attrs);
+        }
+    };
+}]);
+
+angular.module('ui.directives').directive('uiKeyup', ['keypressHelper', function (keypressHelper) {
+    return {
+        link: function (scope, elm, attrs) {
+            keypressHelper('keyup', scope, elm, attrs);
+        }
+    };
+}]);
+(function () {
+    var app = angular.module('ui.directives');
+
+    //Setup map events from a google map object to trigger on a given element too,
+    //then we just use ui-event to catch events from an element
+    function bindMapEvents(scope, eventsStr, googleObject, element) {
+        angular.forEach(eventsStr.split(' '), function (eventName) {
+            //Prefix all googlemap events with 'map-', so eg 'click' 
+            //for the googlemap doesn't interfere with a normal 'click' event
+            var $event = { type: 'map-' + eventName };
+            google.maps.event.addListener(googleObject, eventName, function (evt) {
+                element.triggerHandler(angular.extend({}, $event, evt));
+                //We create an $apply if it isn't happening. we need better support for this
+                //We don't want to use timeout because tons of these events fire at once,
+                //and we only need one $apply
+                if (!scope.$$phase) scope.$apply();
+            });
+        });
+    }
+
+    app.directive('uiMap',
+      ['ui.config', '$parse', function (uiConfig, $parse) {
+
+          var mapEvents = 'bounds_changed center_changed click dblclick drag dragend ' +
+            'dragstart heading_changed idle maptypeid_changed mousemove mouseout ' +
+            'mouseover projection_changed resize rightclick tilesloaded tilt_changed ' +
+            'zoom_changed';
+          var options = uiConfig.map || {};
+
+          return {
+              restrict: 'A',
+              //doesn't work as E for unknown reason
+              link: function (scope, elm, attrs) {
+                  var opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
+                  var map = new google.maps.Map(elm[0], opts);
+                  var model = $parse(attrs.uiMap);
+
+                  //Set scope variable for the map
+                  model.assign(scope, map);
+
+                  bindMapEvents(scope, mapEvents, map, elm);
+              }
+          };
+      }]);
+
+    app.directive('uiMapInfoWindow',
+      ['ui.config', '$parse', '$compile', function (uiConfig, $parse, $compile) {
+
+          var infoWindowEvents = 'closeclick content_change domready ' +
+            'position_changed zindex_changed';
+          var options = uiConfig.mapInfoWindow || {};
+
+          return {
+              link: function (scope, elm, attrs) {
+                  var opts = angular.extend({}, options, scope.$eval(attrs.uiOptions));
+                  opts.content = elm[0];
+                  var model = $parse(attrs.uiMapInfoWindow);
+                  var infoWindow = model(scope);
+
+                  if (!infoWindow) {
+                      infoWindow = new google.maps.InfoWindow(opts);
+                      model.assign(scope, infoWindow);
+                  }
+
+                  bindMapEvents(scope, infoWindowEvents, infoWindow, elm);
+
+                  /* The info window's contents dont' need to be on the dom anymore,
+                   google maps has them stored.  So we just replace the infowindow element
+                   with an empty div. (we don't just straight remove it from the dom because
+                   straight removing things from the dom can mess up angular) */
+                  elm.replaceWith('<div></div>');
+
+                  //Decorate infoWindow.open to $compile contents before opening
+                  var _open = infoWindow.open;
+                  infoWindow.open = function open(a1, a2, a3, a4, a5, a6) {
+                      $compile(elm.contents())(scope);
+                      _open.call(infoWindow, a1, a2, a3, a4, a5, a6);
+                  };
+              }
+          };
+      }]);
+
+    /* 
+     * Map overlay directives all work the same. Take map marker for example
+     * <ui-map-marker="myMarker"> will $watch 'myMarker' and each time it changes,
+     * it will hook up myMarker's events to the directive dom element.  Then
+     * ui-event will be able to catch all of myMarker's events. Super simple.
+     */
+    function mapOverlayDirective(directiveName, events) {
+        app.directive(directiveName, [function () {
+            return {
+                restrict: 'A',
+                link: function (scope, elm, attrs) {
+                    scope.$watch(attrs[directiveName], function (newObject) {
+                        bindMapEvents(scope, events, newObject, elm);
+                    });
+                }
+            };
+        }]);
+    }
+
+    mapOverlayDirective('uiMapMarker',
+      'animation_changed click clickable_changed cursor_changed ' +
+        'dblclick drag dragend draggable_changed dragstart flat_changed icon_changed ' +
+        'mousedown mouseout mouseover mouseup position_changed rightclick ' +
+        'shadow_changed shape_changed title_changed visible_changed zindex_changed');
+
+    mapOverlayDirective('uiMapPolyline',
+      'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick');
+
+    mapOverlayDirective('uiMapPolygon',
+      'click dblclick mousedown mousemove mouseout mouseover mouseup rightclick');
+
+    mapOverlayDirective('uiMapRectangle',
+      'bounds_changed click dblclick mousedown mousemove mouseout mouseover ' +
+        'mouseup rightclick');
+
+    mapOverlayDirective('uiMapCircle',
+      'center_changed click dblclick mousedown mousemove ' +
+        'mouseout mouseover mouseup radius_changed rightclick');
+
+    mapOverlayDirective('uiMapGroundOverlay',
+      'click dblclick');
+
+})();
+/*
+ Attaches jquery-ui input mask onto input element
+ */
+angular.module('ui.directives').directive('uiMask', [
+  function () {
+      return {
+          require: 'ngModel',
+          link: function ($scope, element, attrs, controller) {
+
+              /* We override the render method to run the jQuery mask plugin
+               */
+              controller.$render = function () {
+                  var value = controller.$viewValue || '';
+                  element.val(value);
+                  element.mask($scope.$eval(attrs.uiMask));
+              };
+
+              /* Add a parser that extracts the masked value into the model but only if the mask is valid
+               */
+              controller.$parsers.push(function (value) {
+                  //the second check (or) is only needed due to the fact that element.isMaskValid() will keep returning undefined
+                  //until there was at least one key event
+                  var isValid = element.isMaskValid() || angular.isUndefined(element.isMaskValid()) && element.val().length > 0;
+                  controller.$setValidity('mask', isValid);
+                  return isValid ? value : undefined;
+              });
+
+              /* When keyup, update the view value
+               */
+              element.bind('keyup', function () {
+                  $scope.$apply(function () {
+                      controller.$setViewValue(element.mask());
+                  });
+              });
+          }
+      };
+  }
+]);
+
+/**
+ * Add a clear button to form inputs to reset their value
+ */
+angular.module('ui.directives').directive('uiReset', ['ui.config', function (uiConfig) {
+    var resetValue = null;
+    if (uiConfig.reset !== undefined)
+        resetValue = uiConfig.reset;
+    return {
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ctrl) {
+            var aElement;
+            aElement = angular.element('<a class="ui-reset" />');
+            elm.wrap('<span class="ui-resetwrap" />').after(aElement);
+            aElement.bind('click', function (e) {
+                e.preventDefault();
+                scope.$apply(function () {
+                    if (attrs.uiReset)
+                        ctrl.$setViewValue(scope.$eval(attrs.uiReset));
+                    else
+                        ctrl.$setViewValue(resetValue);
+                    ctrl.$render();
+                });
+            });
+        }
+    };
+}]);
+
+/**
+ * Set a $uiRoute boolean to see if the current route matches
+ */
+angular.module('ui.directives').directive('uiRoute', ['$location', '$parse', function ($location, $parse) {
+    return {
+        restrict: 'AC',
+        compile: function (tElement, tAttrs) {
+            var useProperty;
+            if (tAttrs.uiRoute) {
+                useProperty = 'uiRoute';
+            } else if (tAttrs.ngHref) {
+                useProperty = 'ngHref';
+            } else if (tAttrs.href) {
+                useProperty = 'href';
+            } else {
+                throw new Error('uiRoute missing a route or href property on ' + tElement[0]);
+            }
+            return function ($scope, elm, attrs) {
+                var modelSetter = $parse(attrs.ngModel || attrs.routeModel || '$uiRoute').assign;
+                var watcher = angular.noop;
+
+                // Used by href and ngHref
+                function staticWatcher(newVal) {
+                    if ((hash = newVal.indexOf('#')) > -1)
+                        newVal = newVal.substr(hash + 1);
+                    watcher = function watchHref() {
+                        modelSetter($scope, ($location.path().indexOf(newVal) > -1));
+                    };
+                    watcher();
+                }
+                // Used by uiRoute
+                function regexWatcher(newVal) {
+                    if ((hash = newVal.indexOf('#')) > -1)
+                        newVal = newVal.substr(hash + 1);
+                    watcher = function watchRegex() {
+                        var regexp = new RegExp('^' + newVal + '$', ['i']);
+                        modelSetter($scope, regexp.test($location.path()));
+                    };
+                    watcher();
+                }
+
+                switch (useProperty) {
+                    case 'uiRoute':
+                        // if uiRoute={{}} this will be undefined, otherwise it will have a value and $observe() never gets triggered
+                        if (attrs.uiRoute)
+                            regexWatcher(attrs.uiRoute);
+                        else
+                            attrs.$observe('uiRoute', regexWatcher);
+                        break;
+                    case 'ngHref':
+                        // Setup watcher() every time ngHref changes
+                        if (attrs.ngHref)
+                            staticWatcher(attrs.ngHref);
+                        else
+                            attrs.$observe('ngHref', staticWatcher);
+                        break;
+                    case 'href':
+                        // Setup watcher()
+                        staticWatcher(attrs.href);
+                }
+
+                $scope.$on('$routeChangeSuccess', function () {
+                    watcher();
+                });
+            }
+        }
+    };
+}]);
+
+/*global angular, $, document*/
+/**
+ * Adds a 'ui-scrollfix' class to the element when the page scrolls past it's position.
+ * @param [offset] {int} optional Y-offset to override the detected offset.
+ *   Takes 300 (absolute) or -300 or +300 (relative to detected)
+ */
+angular.module('ui.directives').directive('uiScrollfix', ['$window', function ($window) {
+    'use strict';
+    return {
+        link: function (scope, elm, attrs) {
+            var top = elm.offset().top;
+            if (!attrs.uiScrollfix) {
+                attrs.uiScrollfix = top;
+            } else {
+                // chartAt is generally faster than indexOf: http://jsperf.com/indexof-vs-chartat
+                if (attrs.uiScrollfix.charAt(0) === '-') {
+                    attrs.uiScrollfix = top - attrs.uiScrollfix.substr(1);
+                } else if (attrs.uiScrollfix.charAt(0) === '+') {
+                    attrs.uiScrollfix = top + parseFloat(attrs.uiScrollfix.substr(1));
+                }
+            }
+            angular.element($window).on('scroll.ui-scrollfix', function () {
+                // if pageYOffset is defined use it, otherwise use other crap for IE
+                var offset;
+                if (angular.isDefined($window.pageYOffset)) {
+                    offset = $window.pageYOffset;
+                } else {
+                    var iebody = (document.compatMode && document.compatMode !== "BackCompat") ? document.documentElement : document.body;
+                    offset = iebody.scrollTop;
+                }
+                if (!elm.hasClass('ui-scrollfix') && offset > attrs.uiScrollfix) {
+                    elm.addClass('ui-scrollfix');
+                } else if (elm.hasClass('ui-scrollfix') && offset < attrs.uiScrollfix) {
+                    elm.removeClass('ui-scrollfix');
+                }
+            });
+        }
+    };
+}]);
+
+/**
+ * Enhanced Select2 Dropmenus
+ *
+ * @AJAX Mode - When in this mode, your value will be an object (or array of objects) of the data used by Select2
+ *     This change is so that you do not have to do an additional query yourself on top of Select2's own query
+ * @params [options] {object} The configuration options passed to $.fn.select2(). Refer to the documentation
+ */
+angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$timeout', function (uiConfig, $timeout) {
+    var options = {};
+    if (uiConfig.select2) {
+        angular.extend(options, uiConfig.select2);
+    }
+    return {
+        require: '?ngModel',
+        compile: function (tElm, tAttrs) {
+            var watch,
+              repeatOption,
+              repeatAttr,
+              isSelect = tElm.is('select'),
+              isMultiple = (tAttrs.multiple !== undefined);
+
+            // Enable watching of the options dataset if in use
+            if (tElm.is('select')) {
+                repeatOption = tElm.find('option[ng-repeat], option[data-ng-repeat]');
+
+                if (repeatOption.length) {
+                    repeatAttr = repeatOption.attr('ng-repeat') || repeatOption.attr('data-ng-repeat');
+                    watch = jQuery.trim(repeatAttr.split('|')[0]).split(' ').pop();
+                }
+            }
+
+            return function (scope, elm, attrs, controller) {
+                // instance-specific options
+                var opts = angular.extend({}, options, scope.$eval(attrs.uiSelect2));
+
+                if (isSelect) {
+                    // Use <select multiple> instead
+                    delete opts.multiple;
+                    delete opts.initSelection;
+                } else if (isMultiple) {
+                    opts.multiple = true;
+                }
+
+                if (controller) {
+                    // Watch the model for programmatic changes
+                    controller.$render = function () {
+                        if (isSelect) {
+                            elm.select2('val', controller.$modelValue);
+                        } else {
+                            if (isMultiple) {
+                                if (!controller.$modelValue) {
+                                    elm.select2('data', []);
+                                } else if (angular.isArray(controller.$modelValue)) {
+                                    elm.select2('data', controller.$modelValue);
+                                } else {
+                                    elm.select2('val', controller.$modelValue);
+                                }
+                            } else {
+                                if (angular.isObject(controller.$modelValue)) {
+                                    elm.select2('data', controller.$modelValue);
+                                } else {
+                                    elm.select2('val', controller.$modelValue);
+                                }
+                            }
+                        }
+                    };
+
+                    // Watch the options dataset for changes
+                    if (watch) {
+                        scope.$watch(watch, function (newVal, oldVal, scope) {
+                            if (!newVal) return;
+                            // Delayed so that the options have time to be rendered
+                            $timeout(function () {
+                                elm.select2('val', controller.$viewValue);
+                                // Refresh angular to remove the superfluous option
+                                elm.trigger('change');
+                            });
+                        });
+                    }
+
+                    if (!isSelect) {
+                        // Set the view and model value and update the angular template manually for the ajax/multiple select2.
+                        elm.bind("change", function () {
+                            scope.$apply(function () {
+                                controller.$setViewValue(elm.select2('data'));
+                            });
+                        });
+
+                        if (opts.initSelection) {
+                            var initSelection = opts.initSelection;
+                            opts.initSelection = function (element, callback) {
+                                initSelection(element, function (value) {
+                                    controller.$setViewValue(value);
+                                    callback(value);
+                                });
+                            };
+                        }
+                    }
+                }
+
+                attrs.$observe('disabled', function (value) {
+                    elm.select2(value && 'disable' || 'enable');
+                });
+
+                if (attrs.ngMultiple) {
+                    scope.$watch(attrs.ngMultiple, function (newVal) {
+                        elm.select2(opts);
+                    });
+                }
+
+                // Set initial value since Angular doesn't
+                elm.val(scope.$eval(attrs.ngModel));
+
+                // Initialize the plugin late so that the injected DOM does not disrupt the template compiler
+                $timeout(function () {
+                    elm.select2(opts);
+                    // Not sure if I should just check for !isSelect OR if I should check for 'tags' key
+                    if (!opts.initSelection && !isSelect)
+                        controller.$setViewValue(elm.select2('data'));
+                });
+            };
+        }
+    };
+}]);
+
+/**
+ * uiShow Directive
+ *
+ * Adds a 'ui-show' class to the element instead of display:block
+ * Created to allow tighter control  of CSS without bulkier directives
+ *
+ * @param expression {boolean} evaluated expression to determine if the class should be added
+ */
+angular.module('ui.directives').directive('uiShow', [function () {
+    return function (scope, elm, attrs) {
+        scope.$watch(attrs.uiShow, function (newVal, oldVal) {
+            if (newVal) {
+                elm.addClass('ui-show');
+            } else {
+                elm.removeClass('ui-show');
+            }
+        });
+    };
+}])
+
+/**
+ * uiHide Directive
+ *
+ * Adds a 'ui-hide' class to the element instead of display:block
+ * Created to allow tighter control  of CSS without bulkier directives
+ *
+ * @param expression {boolean} evaluated expression to determine if the class should be added
+ */
+  .directive('uiHide', [function () {
+      return function (scope, elm, attrs) {
+          scope.$watch(attrs.uiHide, function (newVal, oldVal) {
+              if (newVal) {
+                  elm.addClass('ui-hide');
+              } else {
+                  elm.removeClass('ui-hide');
+              }
+          });
+      };
+  }])
+
+/**
+ * uiToggle Directive
+ *
+ * Adds a class 'ui-show' if true, and a 'ui-hide' if false to the element instead of display:block/display:none
+ * Created to allow tighter control  of CSS without bulkier directives. This also allows you to override the
+ * default visibility of the element using either class.
+ *
+ * @param expression {boolean} evaluated expression to determine if the class should be added
+ */
+  .directive('uiToggle', [function () {
+      return function (scope, elm, attrs) {
+          scope.$watch(attrs.uiToggle, function (newVal, oldVal) {
+              if (newVal) {
+                  elm.removeClass('ui-hide').addClass('ui-show');
+              } else {
+                  elm.removeClass('ui-show').addClass('ui-hide');
+              }
+          });
+      };
+  }]);
+
+/*
+ jQuery UI Sortable plugin wrapper
+
+ @param [ui-sortable] {object} Options to pass to $.fn.sortable() merged onto ui.config
+*/
+angular.module('ui.directives').directive('uiSortable', [
+  'ui.config', function (uiConfig) {
+      return {
+          require: '?ngModel',
+          link: function (scope, element, attrs, ngModel) {
+              var onReceive, onRemove, onStart, onUpdate, opts, _receive, _remove, _start, _update;
+
+              opts = angular.extend({}, uiConfig.sortable, scope.$eval(attrs.uiSortable));
+
+              if (ngModel) {
+
+                  ngModel.$render = function () {
+                      element.sortable("refresh");
+                  };
+
+                  onStart = function (e, ui) {
+                      // Save position of dragged item
+                      ui.item.sortable = { index: ui.item.index() };
+                  };
+
+                  onUpdate = function (e, ui) {
+                      // For some reason the reference to ngModel in stop() is wrong
+                      ui.item.sortable.resort = ngModel;
+                  };
+
+                  onReceive = function (e, ui) {
+                      ui.item.sortable.relocate = true;
+                      // added item to array into correct position and set up flag
+                      ngModel.$modelValue.splice(ui.item.index(), 0, ui.item.sortable.moved);
+                  };
+
+                  onRemove = function (e, ui) {
+                      // copy data into item
+                      if (ngModel.$modelValue.length === 1) {
+                          ui.item.sortable.moved = ngModel.$modelValue.splice(0, 1)[0];
+                      } else {
+                          ui.item.sortable.moved = ngModel.$modelValue.splice(ui.item.sortable.index, 1)[0];
+                      }
+                  };
+
+                  onStop = function (e, ui) {
+                      // digest all prepared changes
+                      if (ui.item.sortable.resort && !ui.item.sortable.relocate) {
+
+                          // Fetch saved and current position of dropped element
+                          var end, start;
+                          start = ui.item.sortable.index;
+                          end = ui.item.index();
+                          if (start < end)
+                              end--;
+
+                          // Reorder array and apply change to scope
+                          ui.item.sortable.resort.$modelValue.splice(end, 0, ui.item.sortable.resort.$modelValue.splice(start, 1)[0]);
+
+                      }
+                      if (ui.item.sortable.resort || ui.item.sortable.relocate) {
+                          scope.$apply();
+                      }
+                  };
+
+                  // If user provided 'start' callback compose it with onStart function
+                  _start = opts.start;
+                  opts.start = function (e, ui) {
+                      onStart(e, ui);
+                      if (typeof _start === "function")
+                          _start(e, ui);
+                  };
+
+                  // If user provided 'start' callback compose it with onStart function
+                  _stop = opts.stop;
+                  opts.stop = function (e, ui) {
+                      onStop(e, ui);
+                      if (typeof _stop === "function")
+                          _stop(e, ui);
+                  };
+
+                  // If user provided 'update' callback compose it with onUpdate function
+                  _update = opts.update;
+                  opts.update = function (e, ui) {
+                      onUpdate(e, ui);
+                      if (typeof _update === "function")
+                          _update(e, ui);
+                  };
+
+                  // If user provided 'receive' callback compose it with onReceive function
+                  _receive = opts.receive;
+                  opts.receive = function (e, ui) {
+                      onReceive(e, ui);
+                      if (typeof _receive === "function")
+                          _receive(e, ui);
+                  };
+
+                  // If user provided 'remove' callback compose it with onRemove function
+                  _remove = opts.remove;
+                  opts.remove = function (e, ui) {
+                      onRemove(e, ui);
+                      if (typeof _remove === "function")
+                          _remove(e, ui);
+                  };
+              }
+
+              // Create sortable
+              element.sortable(opts);
+          }
+      };
+  }
+]);
+
+/**
+ * Binds a TinyMCE widget to <textarea> elements.
+ */
+angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (uiConfig) {
+    uiConfig.tinymce = uiConfig.tinymce || {};
+    return {
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ngModel) {
+            var expression,
+              options = {
+                  // Update model on button click
+                  onchange_callback: function (inst) {
+                      if (inst.isDirty()) {
+                          inst.save();
+                          ngModel.$setViewValue(elm.val());
+                          if (!scope.$$phase)
+                              scope.$apply();
+                      }
+                  },
+                  // Update model on keypress
+                  handle_event_callback: function (e) {
+                      if (this.isDirty()) {
+                          this.save();
+                          ngModel.$setViewValue(elm.val());
+                          if (!scope.$$phase)
+                              scope.$apply();
+                      }
+                      return true; // Continue handling
+                  },
+                  // Update model when calling setContent (such as from the source editor popup)
+                  setup: function (ed) {
+                      ed.onSetContent.add(function (ed, o) {
+                          if (ed.isDirty()) {
+                              ed.save();
+                              ngModel.$setViewValue(elm.val());
+                              if (!scope.$$phase)
+                                  scope.$apply();
+                          }
+                      });
+                  }
+              };
+            if (attrs.uiTinymce) {
+                expression = scope.$eval(attrs.uiTinymce);
+            } else {
+                expression = {};
+            }
+            angular.extend(options, uiConfig.tinymce, expression);
+            setTimeout(function () {
+                elm.tinymce(options);
+            });
+        }
+    };
+}]);
+
+/**
+ * General-purpose validator for ngModel.
+ * angular.js comes with several built-in validation mechanism for input fields (ngRequired, ngPattern etc.) but using
+ * an arbitrary validation function requires creation of a custom formatters and / or parsers.
+ * The ui-validate directive makes it easy to use any function(s) defined in scope as a validator function(s).
+ * A validator function will trigger validation on both model and input changes.
+ *
+ * @example <input ui-validate=" 'myValidatorFunction($value)' ">
+ * @example <input ui-validate="{ foo : '$value > anotherModel', bar : 'validateFoo($value)' }">
+ * @example <input ui-validate="{ foo : '$value > anotherModel' }" ui-validate-watch=" 'anotherModel' ">
+ * @example <input ui-validate="{ foo : '$value > anotherModel', bar : 'validateFoo($value)' }" ui-validate-watch=" { foo : 'anotherModel' } ">
+ *
+ * @param ui-validate {string|object literal} If strings is passed it should be a scope's function to be used as a validator.
+ * If an object literal is passed a key denotes a validation error key while a value should be a validator function.
+ * In both cases validator function should take a value to validate as its argument and should return true/false indicating a validation result.
+ */
+angular.module('ui.directives').directive('uiValidate', function () {
+
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ctrl) {
+            var validateFn, watch, validators = {},
+              validateExpr = scope.$eval(attrs.uiValidate);
+
+            if (!validateExpr) return;
+
+            if (angular.isString(validateExpr)) {
+                validateExpr = { validator: validateExpr };
+            }
+
+            angular.forEach(validateExpr, function (expression, key) {
+                validateFn = function (valueToValidate) {
+                    if (scope.$eval(expression, { '$value': valueToValidate })) {
+                        ctrl.$setValidity(key, true);
+                        return valueToValidate;
+                    } else {
+                        ctrl.$setValidity(key, false);
+                        return undefined;
+                    }
+                };
+                validators[key] = validateFn;
+                ctrl.$formatters.push(validateFn);
+                ctrl.$parsers.push(validateFn);
+            });
+
+            // Support for ui-validate-watch
+            if (attrs.uiValidateWatch) {
+                watch = scope.$eval(attrs.uiValidateWatch);
+                if (angular.isString(watch)) {
+                    scope.$watch(watch, function () {
+                        angular.forEach(validators, function (validatorFn, key) {
+                            validatorFn(ctrl.$modelValue);
+                        });
+                    });
+                } else {
+                    angular.forEach(watch, function (expression, key) {
+                        scope.$watch(expression, function () {
+                            validators[key](ctrl.$modelValue);
+                        });
+                    });
+                }
+            }
+        }
+    };
+});
+
+
+/**
+ * A replacement utility for internationalization very similar to sprintf.
+ *
+ * @param replace {mixed} The tokens to replace depends on type
+ *  string: all instances of $0 will be replaced
+ *  array: each instance of $0, $1, $2 etc. will be placed with each array item in corresponding order
+ *  object: all attributes will be iterated through, with :key being replaced with its corresponding value
+ * @return string
+ *
+ * @example: 'Hello :name, how are you :day'.format({ name:'John', day:'Today' })
+ * @example: 'Records $0 to $1 out of $2 total'.format(['10', '20', '3000'])
+ * @example: '$0 agrees to all mentions $0 makes in the event that $0 hits a tree while $0 is driving drunk'.format('Bob')
+ */
+angular.module('ui.filters').filter('format', function () {
+    return function (value, replace) {
+        if (!value) {
+            return value;
+        }
+        var target = value.toString(), token;
+        if (replace === undefined) {
+            return target;
+        }
+        if (!angular.isArray(replace) && !angular.isObject(replace)) {
+            return target.split('$0').join(replace);
+        }
+        token = angular.isArray(replace) && '$' || ':';
+
+        angular.forEach(replace, function (value, key) {
+            target = target.split(token + key).join(value);
+        });
+        return target;
+    };
+});
+
+/**
+ * Wraps the
+ * @param text {string} haystack to search through
+ * @param search {string} needle to search for
+ * @param [caseSensitive] {boolean} optional boolean to use case-sensitive searching
+ */
+angular.module('ui.filters').filter('highlight', function () {
+    return function (text, search, caseSensitive) {
+        if (search || angular.isNumber(search)) {
+            text = text.toString();
+            search = search.toString();
+            if (caseSensitive) {
+                return text.split(search).join('<span class="ui-match">' + search + '</span>');
+            } else {
+                return text.replace(new RegExp(search, 'gi'), '<span class="ui-match">$&</span>');
+            }
+        } else {
+            return text;
+        }
+    };
+});
+
+/**
+ * Converts variable-esque naming conventions to something presentational, capitalized words separated by space.
+ * @param {String} value The value to be parsed and prettified.
+ * @param {String} [inflector] The inflector to use. Default: humanize.
+ * @return {String}
+ * @example {{ 'Here Is my_phoneNumber' | inflector:'humanize' }} => Here Is My Phone Number
+ *          {{ 'Here Is my_phoneNumber' | inflector:'underscore' }} => here_is_my_phone_number
+ *          {{ 'Here Is my_phoneNumber' | inflector:'variable' }} => hereIsMyPhoneNumber
+ */
+angular.module('ui.filters').filter('inflector', function () {
+    function ucwords(text) {
+        return text.replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+            return $1.toUpperCase();
+        });
+    }
+
+    function breakup(text, separator) {
+        return text.replace(/[A-Z]/g, function (match) {
+            return separator + match;
+        });
+    }
+
+    var inflectors = {
+        humanize: function (value) {
+            return ucwords(breakup(value, ' ').split('_').join(' '));
+        },
+        underscore: function (value) {
+            return value.substr(0, 1).toLowerCase() + breakup(value.substr(1), '_').toLowerCase().split(' ').join('_');
+        },
+        variable: function (value) {
+            value = value.substr(0, 1).toLowerCase() + ucwords(value.split('_').join(' ')).substr(1).split(' ').join('');
+            return value;
+        }
+    };
+
+    return function (text, inflector, separator) {
+        if (inflector !== false && angular.isString(text)) {
+            inflector = inflector || 'humanize';
+            return inflectors[inflector](text);
+        } else {
+            return text;
+        }
+    };
+});
+
+/**
+ * Filters out all duplicate items from an array by checking the specified key
+ * @param [key] {string} the name of the attribute of each object to compare for uniqueness
+ if the key is empty, the entire object will be compared
+ if the key === false then no filtering will be performed
+ * @return {array}
+ */
+angular.module('ui.filters').filter('unique', function () {
+
+    return function (items, filterOn) {
+
+        if (filterOn === false) {
+            return items;
+        }
+
+        if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
+            var hashCheck = {}, newItems = [];
+
+            var extractValueToCompare = function (item) {
+                if (angular.isObject(item) && angular.isString(filterOn)) {
+                    return item[filterOn];
+                } else {
+                    return item;
+                }
+            };
+
+            angular.forEach(items, function (item) {
+                var valueToCheck, isDuplicate = false;
+
+                for (var i = 0; i < newItems.length; i++) {
+                    if (angular.equals(extractValueToCompare(newItems[i]), extractValueToCompare(item))) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+                if (!isDuplicate) {
+                    newItems.push(item);
+                }
+
+            });
+            items = newItems;
+        }
+        return items;
+    };
+});
 ;window.Application = window.Application || {};
 //put specific application properties here
 Application.properties = {
@@ -31437,48 +32447,97 @@ Application.properties = {
     defaultMessage: 'Loading...'
 };
 
-var FormsApp = angular.module("FormsApp", ["ngResource"], ["$routeProvider", function ($routeProvider) {
+var FormsApp = angular.module("FormsApp", ["ngResource", "ui"], ["$routeProvider", function ($routeProvider) {
     $routeProvider.
-        when('/Forms/Starter/Court/:userId', { controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
-        when('/Forms/Starter/Participants/:userId', { controller: CourtCtrl, templateUrl: '/app/Starter/Participants/participants.html' }).
-        when('/Forms/Starter/Children/:userId', { controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
+        when('/Starter/Court/:userId', { controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
+        when('/Starter/Participant/:userId', { controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
+        when('/Starter/Children/:userId', { controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
         when('/', { controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
-;var CourtCtrl = function ($scope, $routeParams, $location, courtService) {
-    $scope.court = courtService.get({ UserId: $routeParams.userId });
-
-    $scope.update = function () {        
-        courtService.update({ Id: $scope.court.Id }, $scope.court, function () {
-            $location.path('/Forms/Starter/Participants/:userId');
-        });
+FormsApp.value('ui.config', {
+    jq: {
+        popover: {
+            placement: 'left',
+            title: 'Tip',
+            trigger: 'hover'
+        }
+    }
+})
+;FormsApp.factory('genericService', function () {
+    var service = {
+        iconSuccess: 'icon-green icon-ok',
+        iconEdit: 'icon-blue icon-pencil',
+        iconError: 'icon-red icon-pencil',
+        getFormInput: function(formName) {
+            var model = {};
+            $.each($(formName).serializeArray(), function(i, field) {
+                model[field.name] = field.value;
+            });
+            return model;
+        },
     };
+    return service;
+});
+;var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService) {
+    $scope.court = courtService.get({ UserId: $routeParams.userId }, function() {
+        if ($scope.Id == 0) {
+            //see if garlic has something stored
+            //$scope.court = $.jStorage.get()
+            var court = $.jStorage.get($location.path());
+            console.log(court.Id);
+        }
+    });
+
+    $scope.submit = function () {
+        if ($scope.courtForm.$invalid) {
+            menuService.setSubMenuIconClass('Starter', 'Court', 'icon-pencil icon-red');            
+            $location.path('/Starter/Participant/' + $scope.court.UserId);
+            var key = $location.path();
+            var value = genericService.getFormInput('#courtForm');
+            $.jStorage.set(key, value);
+            return;
+        }
+        if ($scope.court.Id == 0) {
+            courtService.save(null, $scope.court, function() {
+                $location.path('/Starter/Participant/' + $scope.court.UserId);
+            });
+        } else {
+            courtService.update({ Id: $scope.court.Id }, $scope.court, function () {                
+                $location.path('/Starter/Participant/' + $scope.court.UserId);
+            });
+        }
+    };
+    menuService.setActive('Starter', 'Court');    
 };
-CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService'];
+CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService'];
 ;//Todoservice
 FormsApp.factory('courtService', ['$resource', function ($resource) {
-    return $resource('/api/court/:Id', { Id: '@Id' },
+    return $resource('/api/court/:userId', {userId: '@userId' },
     {
-        update: { method: 'PUT' },
-        deleteAll: { method: 'DELETE' }
+        get : {method: 'GET', params: {format:'json'}},
+        update: { method: 'PUT', params: { format: 'json' } },
+        deleteAll: { method: 'DELETE', params: { format: 'json' } }
     });
 }]);
-;var ParticipantCtrl = function ($scope, $routeParams, $location, participantService) {
+;var ParticipantCtrl = function ($scope, $routeParams, $location, participantService, menuService) {
     $scope.participant = participantService.get({ UserId: $routeParams.userId });
 
     $scope.update = function () {
         participantService.update({ Id: $scope.participant.Id }, $scope.participant, function () {
-            $location.path('/Forms/Starter/Participants/:userId');
+            $location.path('/Starter/Participants/:userId');
         });
     };
+    menuService.setActive('Starter', 'Participants');
 };
-ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService'];
+ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService'];
 ;//Todoservice
 FormsApp.factory('participantService', ['$resource', function ($resource) {
-    return $resource('/api/participant/:Id', { Id: '@Id' },
+    return $resource('/api/participant/:userId', { userId: '@userId' },
     {
-        update: { method: 'PUT' },
-        deleteAll: { method: 'DELETE' }
+        get: { method: 'GET', params: { format: 'json' } },
+        update: { method: 'PUT', params: { format: 'json' } },
+        deleteAll: { method: 'DELETE', params: { format: 'json' } }
     });
 }]);
 ;var ChildrenCtrl = function ($scope, $location, childService, messageService) {
@@ -31537,33 +32596,29 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
     $scope.$watch(function () { return menuService.menuItems; }, function () {
         $scope.menuItems = menuService.menuItems;
     });
-    $scope.menuClick = function() {
-        angular.forEach($scope.menuItems, function (val, key) {
-            val.itemClass = '';
-        });
+    $scope.menuClick = function () {
+        if ($scope.isSubMenuClick) {
+            $scope.isSubMenuClick = false;
+            return;
+        }
         var $curItem = $scope.menuItems[this.$index];
         if ($curItem.subMenuItems.length > 0) {
-            $curItem.showSubMenu = true;
+            //show/collapse menu
+            $curItem.showSubMenu = !$curItem.showSubMenu;
+        } else {
+            menuService.setActive($curItem.text);
         }            
-        else
-            $curItem.itemClass = 'active';
     };
-    $scope.subMenuClick = function () {
-        angular.forEach($scope.menuItems, function (val, key) {
-            val.itemClass = '';
-        });
-        //var $curItem = $scope.menuItems[this.$index];
-        //if ($curItem.subMenuItems.length > 0) {
-        //    $curItem.itemClass = 'submenu';
-        //}
-        //else
-        //    $curItem.itemClass = 'active';
+    $scope.subMenuClick = function (menuText, subMenuText) {
+        $scope.isSubMenuClick = true;
+        menuService.setActive(menuText, subMenuText);
     };
 };
 MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
 ;FormsApp.factory('menuService', function () {
     var service = {
         menuItems: [],
+        isSetup: false,
         setItems: function (menuItems) {
             service.menuItems = menuItems;
         },
@@ -31580,19 +32635,20 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 path: '',
                 iconClass: 'icon icon-th-list',
                 text: 'Starter',
+                showSubMenu: false,
                 subMenuItems: [{
                     itemClass: '',
-                    path: '#/Forms/Starter/Court/' + userId,
-                    iconClass: 'icon-pencil icon-blue',
+                    path: '#/Starter/Court/' + userId,
+                    iconClass: '',
                     text: 'Court',                    
                 }, {
                     itemClass: '',
-                    path: '#/Forms/Starter/Participants/' + userId,
+                    path: '#/Starter/Participant/' + userId,
                     iconClass: '',
                     text: 'Participants',
                 }, {
                     itemClass: '',
-                    path: '#/Forms/Starter/Children/' + userId,
+                    path: '#/Starter/Children/' + userId,
                     iconClass: '',
                     text: 'Children',
                 }],
@@ -31604,6 +32660,45 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 subMenuItems: [],
             }];
             service.setItems(menuItems);
+            service.isSetup = true;
+        },
+        setSubMenuIconClass: function(menuItemText, subMenuItemText, iconClass) {
+            var menuItem = _.find(service.menuItems, function (item) {
+                return item.text === menuItemText;
+            });
+            var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
+                return subItem.text === subMenuItemText;
+            });
+            subMenuItem.iconClass = iconClass;
+        },
+        setActive: function (menuItemText, subMenuItemText) {
+            if (!service.isSetup) {
+                service.setupMenu();
+            }
+            service.clearActive();
+            var menuItem = _.find(service.menuItems, function(item) {
+                return item.text === menuItemText;
+            });
+            if (subMenuItemText === null) {
+                //no submenu to worry about
+                menuItem.itemClass = 'active';
+            } else {
+                menuItem.showSubMenu = true;
+                menuItem.itemClass = 'submenu active';
+                var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
+                    return subItem.text === subMenuItemText;
+                });
+                subMenuItem.itemClass = 'active';
+                subMenuItem.iconClass = 'icon-blue icon-pencil';
+            }
+        },
+        clearActive: function() {
+            angular.forEach(service.menuItems, function (item) {
+                for (var i = 0; i < item.subMenuItems.length; i++) {
+                    item.subMenuItems[i].itemClass = '';
+                }
+                item.itemClass = '';
+            });
         },
     };
     return service;
@@ -32022,40 +33117,6 @@ $(document).ready(function () {
             $(this).val(false);
     });
 
-    $.validator.addMethod("textlineinput", function (val, el, params) {
-        if (this.optional(el)) return true;
-        return val.split('\\')[0] === params;
-    });
-
-    // register the validator
-    $.validator.unobtrusive.adapters.add("textlineinput", ["name"], function (options) {
-        options.rules["textlineinput"] = options.params.name;
-        if (options.message) options.messages["textlineinput"] = options.message;
-    });
-
-    //Modify Validation on forms to cross-over to twitter bootstrap
-    var $forms = $('form');
-    var oldErrorFunction = [], oldSucessFunction = [], oldInvalidHandler = [];
-    for (var f = 0; f < $forms.length; f++) {
-        var settings = $.data($forms[f], 'validator').settings;
-        oldErrorFunction[f] = settings.errorPlacement;
-        oldSucessFunction[f] = settings.success;
-        oldInvalidHandler[f] = settings.invalidHandler;
-        settings.formNdx = f;
-        settings.errorPlacement = function (error, inputElement) {
-            $(inputElement).closest('.control-group').addClass('error');
-            if (!$.data($forms[this.formNdx], 'validator').valid()) {
-            }
-            oldErrorFunction[this.formNdx](error, inputElement);
-        };
-        settings.success = function (error) {
-            $(error).closest('.control-group').removeClass('error');
-            oldSucessFunction[this.formNdx](error);
-        };
-        settings.invalidHandler = function (error) {
-            oldInvalidHandler[this.formNdx]();
-        };
-    }
     //Datepickers
     $(".datepicker").datepicker();
 
@@ -32100,1801 +33161,5 @@ $(document).ready(function () {
     //will go to output forms
     $('#ViewOutput').live('click', function () {
         document.location.href = $(this).attr('data-url');
-    });
-});
-;$(function ($) {
-    //House Form
-    $('.domestic-part1').click(function () {
-        //get values
-        var model = Friendly.GetFormInput('house');
-        model.Equity = $('#Equity').val().replace(/,/g, "");
-        model.MoneyOwed = $('#MoneyOwed').val().replace(/,/g, "");
-        model.RetailValue = $('#RetailValue').val().replace(/,/g, ""); 
-        Friendly.SubmitForm('house', 'property', model);
-    });
-    $('#CityState').typeahead({
-        source: function (typeahead, query) {
-            if (query === "") {
-                return typeahead.process([]);
-            }
-            var url = 'http://ws.geonames.org/searchJSON?country=US&name_startsWith=' + query;
-            return $.ajax({
-                url: url,
-                success: function (data) {                    
-                    var cityStates = [];
-                    //limit results to 3
-                    var maxItems = data.geonames.length < 5 ? data.geonames.length : 5;
-                    for (var i = 0; i < maxItems; i++) {
-                        cityStates.push({
-                            Name: data.geonames[i].name + ', ' + data.geonames[i].adminCode1
-                        });
-                    }
-                    typeahead.process(cityStates);
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        },
-        property: "Name"
-    });
-    $('input[name=MaritalHouse]').change(function () {
-        $('.marital-info').val('');
-        if ($('#MaritalHouse:checked').val() === "1") {
-            $('.marital-house').show();
-        } else {
-            $('.marital-house').hide();
-        }
-    });
-
-    //Property Form
-    $('.domestic-part2').click(function () {
-        Friendly.SubmitForm('property', 'vehicle');
-    });
-    $('input[name=RealEstate]').change(function () {
-        $('#RealEstateDescription').val('');
-        if ($('#RealEstate:checked').val() === "1") {
-            $('.real-estate-details').show();
-        } else {
-            $('.real-estate-details').hide();
-        }
-    });
-    $('input[name=PersonalProperty]').change(function () {
-        $('#DividingProperty').val('');
-        if ($('#PersonalProperty:checked').val() === "3") {
-            $('.property-details').show();
-        } else {
-            $('.property-details').hide();
-        }
-    });
-    
-    //Vehicle Form    
-    $('input[id=VehicleViewModel_Refinanced]').change(function () {
-        $('#VehicleViewModel_RefinanceDate').val('');
-        if ($('#VehicleViewModel_Refinanced:checked').val() === "1") {
-            $('.vehicle-refinance').show();
-        } else {
-            $('.vehicle-refinance').hide();
-        }
-    });
-    $('input[id=VehicleFormViewModel_VehiclesInvolved]').change(function () {
-        $('#vehicle')[0].reset();
-        if ($('#VehicleFormViewModel_VehiclesInvolved:checked').val() === "1") {
-            $('.vehicle-info').show();
-        } else {
-            $('.vehicle-info').hide();
-        }
-    });
-    $('#addVehicle').click(function () {
-        Friendly.StartLoading();
-        var formName = 'vehicle';
-        if ($('#' + formName).valid()) {
-            var vehicleFormModel = Friendly.GetFormInput('vehicleForm');
-            $.ajax({
-                url: '/api/VehicleForm?format=json',
-                type: 'POST',
-                data: vehicleFormModel,
-                success: function (data) {
-                    //get values
-                    var model = Friendly.GetFormInput(formName);
-                    model.VehicleFormId = data.VehicleForm.Id;
-                    $.ajax({
-                        url: '/api/' + formName + '?format=json',
-                        type: 'POST',
-                        data: model,
-                        success: function (vehicle) {
-                            //Add vehicle to list
-                            $('.vehicle-table').show();
-                            var result = $("#friendly-vehicle-template").tmpl(vehicle.Vehicle);
-                            $('.vehicle-table tbody').append(result);
-                            Friendly.ClearForm('vehicle');
-                            Friendly.EndLoading();
-                            return false;
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                    //Add vehicle to list
-                },
-                error: Friendly.GenericErrorMessage                
-            });
-        }
-        else {
-            Friendly.EndLoading();
-            return false;
-        }
-        return false;
-    });
-
-    $('.domestic-part3').click(function () {
-        //get values
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
-        if ($('#vehicleForm').valid()) {
-            Friendly.NextForm('debt', Friendly.properties.iconSuccess);
-        } else {
-            Friendly.NextForm('debt', Friendly.properties.iconError);
-        }
-        Friendly.EndLoading();
-        return false;
-    });
-
-    //Debt Form
-    $('.domestic-part4').click(function () {
-        //get values
-        Friendly.SubmitForm('debt', 'asset');
-    });
-
-    $('input[name=MaritalDebt]').change(function () {
-        $('#DebtDivision').val('');
-        if ($('#MaritalDebt:checked').val() === "1") {
-            $('.debt-details').show();
-        } else {
-            $('.debt-details').hide();
-        }
-    });
-    //Asset Form
-    $('.domestic-part5').click(function () {
-        //check if we need to move to next form
-        Friendly.SubmitForm('asset', 'healthInsurance');
-    });
-
-    $('input[name=Retirement]').change(function () {
-        $('#RetirementDescription').val('');
-        if ($('#Retirement:checked').val() === "1") {
-            $('.retirement-detail').show();
-        } else {
-            $('.retirement-detail').hide();
-        }
-    });
-    $('input[name=NonRetirement]').change(function () {
-        $('#NonRetirementDescription').val('');
-        if ($('#NonRetirement:checked').val() === "1") {
-            $('.non-retirement-detail').show();
-        } else {
-            $('.non-retirement-detail').hide();
-        }
-    });
-    $('input[name=Business]').change(function () {
-        $('#BusinessDescription').val('');
-        if ($('#Business:checked').val() === "1") {
-            $('.business-detail').show();
-        } else {
-            $('.business-detail').hide();
-        }
-    });
-
-    //Health Insurance
-    $('.domestic-part6').click(function () {
-        Friendly.SubmitForm('healthInsurance', 'spousal');
-    });
-    $('input[name=Health]').change(function () {
-        $('#HealthDescription').val('');
-        if ($('#Health:checked').val() === "2") {
-            $('.health-detail').show();
-        } else {
-            $('.health-detail').hide();
-        }
-    });
-
-    //Spousal Support
-    $('.domestic-part7').click(function () {
-        Friendly.SubmitForm('spousal', 'tax');
-    });
-    $('input[name=Spousal]').change(function () {
-        $('#SpousalDescription').val('');
-        if ($('#Spousal:checked').val() === "1") {
-            $('.spousal-detail').show();
-        } else {
-            $('.spousal-detail').hide();
-        }
-    });
-    //Taxes 
-    $('.domestic-part8').click(function () {
-        //last form.  Let's try and validate this bi-atch
-        Friendly.StartLoading();
-        var formName = 'tax';
-        var model = Friendly.GetFormInput(formName);
-        var formSelector = '#' + formName;
-        if ($(formSelector).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '/?format=json',
-                type: 'POST',
-                data: model,
-                success: function () {
-                    //var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
-                    //var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
-                    Friendly.ValidateForms('.domestic-part8');
-                    Friendly.EndLoading();
-                    return false;
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        } else {
-            Friendly.EndLoading();
-            return false;
-        }
-        return false;
-    });
-    $('input[name=Taxes]').change(function () {
-        $('#TaxDescription').val('');
-        if ($('#Taxes:checked').val() === "2") {
-            $('.taxes-detail').show();
-        } else {
-            $('.taxes-detail').hide();
-        }
-    });
-
-    //Spousal Support
-    //$('.domestic-part9').click(function () {
-    //    //get values
-    //    var model = {
-    //        PaidBy: $('#PaidBy').val(),
-    //        PaidTo: $('#PaidTo').val(),
-    //        MonthlyAmount: $('#MonthlyAmount:checked').val(),
-    //        EffectiveDate: $('#EffectiveDate').val(),
-    //        TemporaryAgreement: $('#TemporaryAgreement:checked').val(),
-    //        Payment: $('#Payment:checked').val(),
-    //        PaymentDay: $('#PaymentDay').val()
-    //    };
-    //    Friendly.SubmitForm('support', 'support', model);
-    //});
-    //$('input[name=Payment]').change(function () {
-    //    $('#PaymentDay').val('');
-    //    if ($('#Payment:checked').val() === "2") {
-    //        $('.support-payday').show();
-    //    } else {
-    //        $('.support-payday').hide();
-    //    }
-    //});
-});
-;$(function ($) {
-    //----------------------Special Circumstances---------------    
-    $('.financial-part0').click(function () {
-        Friendly.SubmitForm('deviations', 'childcare');
-    });
-    $('input[name="Deviations"]').change(function () {
-        if ($('#Deviations:checked').val() === "1") {
-            $('.deviation-other').show();
-        } else {
-            $('.deviation-other').hide();
-        }
-    });
-    $('input[name="HighLow"]').change(function () {
-        if ($('#HighLow:checked').val() === "1") {
-            $('.deviation-high').show();
-            $('.deviation-low').hide();
-        } else {
-            $('.deviation-low').show();
-            $('.deviation-high').hide();
-        }
-    });
-    $('.financial-part1').click(function () {
-        Friendly.SubmitForm('income', 'socialSecurity');
-    });
-    $('#income input[name="HaveSalary"]').change(function () {
-        if ($('#income #HaveSalary:checked').val() === "1") {
-            $('#income .income-salary').show();
-            $('#income .income-nosalary').hide();
-        } else {
-            $('#income .income-salary').hide();
-            $('#income .income-nosalary').show();
-        }
-    });
-
-    $('#income input[name="NonW2Income"]').change(function () {
-        if ($('#income #NonW2Income:checked').val() === "1") {
-            $('#income .income-nonW2').show();
-        } else {
-            $('#income .income-nonW2').hide();
-        }
-    });
-    //-----------------Child care---------------------
-    $('#childCareForm #ChildrenInvolved').change(function() {
-        if ($('#childCareForm #ChildrenInvolved:checked').val() === "1") {
-            $('#childCare-show').show();
-        } else {
-            $('#childCare-show').hide();
-        }
-    });
-    
-    $('.financial-childcare').click(function () {
-        //if the form isn't validated, we still need to move on
-        if (!Financial.AddChildCare(this)) {
-            var child = Friendly.children[Friendly.childNdx - 1];
-            Friendly.ChildCareError.push(child.Name);
-            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('income', Friendly.properties.iconError);
-                return;
-            }
-            //check if we need to move to previous form
-            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('deviations', Friendly.properties.iconError);
-                return;
-            }
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Parenting.GetChildCare(nextChild);
-            Friendly.EndLoading();
-        }
-        
-    });
-    //-----------------Social Security---------------------
-    $('.financial-part2').click(function () {
-        Friendly.SubmitForm('socialSecurity', 'preexistingSupport');
-    });
-
-    $('#socialSecurity input[name="ReceiveSocial"]').change(function () {
-        $('#socialSecurity #Amount').val('');
-        if ($('#socialSecurity #ReceiveSocial:checked').val() === "1") {
-            $('#socialSecurity .social-social').show();
-        } else {
-            $('#socialSecurity .social-social').hide();
-        }
-    });
-    //-----------------Preexisting Support------------------
-    $('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]').change(function () {
-        if ($('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-            $('#supportWrapper').show();
-        } else {
-            $('#supportWrapper').hide();
-        }
-    });
-
-    $('#addSupport').click(function () {
-        Friendly.StartLoading();
-        var formName = 'support';
-        var model = Friendly.GetFormInput(formName);
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/PreexistingSupport/?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
-                    $('#supportWrapper .support-table tbody').append(result);
-                    $('#supportWrapper .support-table').show();
-                    $('#' + formName)[0].reset();
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-
-    $('#supportWrapper table').on('click', '.view-children', function () {
-        var id = $(this).attr('data-id');
-        $.ajax({
-            url: '/api/PreexistingSupportChild/' + id + '/?format=json',
-            type: 'GET',
-            success: function (data) {
-                if (data.Children.length !== 0) {
-                    $('#childWrapper .child-table tbody').empty();
-                    var result = $("#friendly-childsupport-template").tmpl(data.Children);
-                    $('#childWrapper .child-table tbody').append(result);
-                    $('#childWrapper .child-table').show();
-                } else {
-                    $('#childWrapper .child-table').hide();
-                }
-                $('#childWrapper #supportId').val(id);
-                $('#childWrapper').show();
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-    $('#addChildSupport').click(function () {
-        Friendly.StartLoading();
-        var formName = 'child';
-        var model = Friendly.GetFormInput(formName);
-        model.PreexistingSupportId = $('#childWrapper #supportId').val();
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/PreexistingSupportChild?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data.Child);
-                    $('#childWrapper .child-table tbody').append(result);
-                    $('#childWrapper .child-table').show();
-                    $('#' + formName)[0].reset();
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    $('.financial-part3').click(function () {
-        Friendly.NextForm('otherChildren', Friendly.properties.iconSuccess);
-    });
-
-    //----------------------Other Children---------------    
-    $('.financial-part4').click(function () {
-        if ($('#otherChildWrapper').is(':visible')) {
-            Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
-            return false;
-        }
-        Friendly.StartLoading();
-        var model = Friendly.GetFormInput('otherChildren');
-        if ($('#otherChildren').valid()) {
-            $.ajax({
-                url: '/api/OtherChildren/?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {
-                        //Eligible. Show add children.
-                        $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
-                        $('#otherChildWrapper').show();
-                    } else {
-                        Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
-                    }
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    $('#addOtherChild').click(function () {
-        Friendly.StartLoading();
-        var formName = 'otherchild';
-        var model = Friendly.GetFormInput(formName);
-        model.OtherChildrenId = $('#otherChildWrapper #childrenId').val();
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
-                    $('#otherChildWrapper .otherChild-table tbody').append(result);
-                    $('#otherChildWrapper .otherChild-table').show();
-                    $('#' + formName)[0].reset();
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    //---------------------------------------Health--------------------------------
-    $('.financial-part5').click(function () {
-        Friendly.SubmitForm('healths', 'incomeOther');
-    });
-    $('#healths input[name="ProvideHealth"]').change(function () {
-        $('#healths #health-provide input').val('');
-        if ($('#healths #ProvideHealth:checked').val() === "1") {
-            $('#healths #health-provide').show();
-        } else {
-            $('#healths #health-provide').hide();
-        }
-    });
-    $('#healths .percent').focusout(function () {
-        var percentItems = $.grep($('#healths .percent'), function(element, ndx) {
-            return $(element).val() != "";
-        });
-        //only alter if 
-        var remainingVal = 0;
-        if (percentItems.length == 2) {
-            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
-            percentItems = $.grep($('#healths .percent'), function (element, ndx) {
-                return $(element).val() === "";
-            });
-            $(percentItems).val(remainingVal);
-        }
-    });
-    //---------------------------------------Income--------------------------------
-    $('#incomeOther input[name="Employed"]').change(function () {
-        $('#incomeOther #Salary').val('');
-        if ($('#incomeOther #Employed:checked').val() === "1") {
-            $('#incomeOther .income-employed').show();
-        } else {
-            $('#incomeOther .income-employed').hide();
-        }
-    });
-
-    $('#incomeOther input[name="SelfEmployed"]').change(function () {
-        $('#incomeOther #SelfIncome').val('');
-        if ($('#incomeOther #SelfEmployed:checked').val() === "1") {
-            $('#incomeOther .income-self').show();
-        } else {
-            $('#incomeOther .income-self').hide();
-        }
-    });
-    $('#incomeOther input[name="SelfTax"]').change(function () {
-        $('#incomeOther #SelfTaxAmount').val('');
-        if ($('#incomeOther #SelfTax:checked').val() === "1") {
-            $('#incomeOther .income-tax').show();
-        } else {
-            $('#incomeOther .income-tax').hide();
-        }
-    });
-    $('#incomeOther input[name="OtherSources"]').change(function () {
-        if ($('#incomeOther #OtherSources:checked').val() === "1") {
-            $('#incomeOther .income-other').show();
-        } else {
-            $('#incomeOther .income-other').hide();
-        }
-    });
-    $('.financial-part6').click(function () {
-        Friendly.SubmitForm('incomeOther', 'socialSecurityOther');
-    });
-    //---------------------------------------Social Security--------------------------------
-    $('.financial-part7').click(function () {
-        Friendly.SubmitForm('socialSecurityOther', 'preexistingSupportOther');
-    });
-
-    $('#socialSecurityOther input[name="ReceiveSocial"]').change(function () {
-        $('#socialSecurityOther #Amount').val('');
-        if ($('#socialSecurityOther #ReceiveSocial:checked').val() === "1") {
-            $('#socialSecurityOther .social-social').show();
-        } else {
-            $('#socialSecurityOther .social-social').hide();
-        }
-    });
-    //---------------------------------------Preexisting Other--------------------------------
-    $('#preexistingSupportOther input[id="PreexistingSupportViewModel_Support"]').change(function () {
-        if ($('#preexistingSupportOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-            $('#supportOtherWrapper').show();
-        } else {
-            $('#supportOtherWrapper').hide();
-        }
-    });
-
-    $('#addSupportOther').click(function () {
-        Friendly.StartLoading();
-        var formName = "supportOther";
-        var model = Friendly.GetFormInput(formName);
-        model.IsOtherParent = "true";
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/PreexistingSupport/?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-support-template").tmpl(data.PreexistingSupport);
-                    $('#supportOtherWrapper .support-table tbody').append(result);
-                    $('#' + formName)[0].reset();                    
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-
-    $('#supportOtherWrapper table').on('click', '.view-children', function () {
-        var id = $(this).attr('data-id');
-        $.ajax({
-            url: '/api/PreexistingSupportChild/' + id + '/?format=json',
-            type: 'GET',
-            success: function (data) {
-                if (data.length !== 0) {                    
-                    $('#childOtherWrapper .child-table tbody').empty();
-                    var result = $("#friendly-childsupport-template").tmpl(data.Children);
-                    $('#childOtherWrapper .child-table tbody').append(result);
-                    $('#childOtherWrapper .child-table').show();
-                } else {
-                    $('#childOtherWrapper .child-table').hide();
-                }
-                $('#childOtherWrapper #supportId').val(id);
-                $('#childOtherWrapper').show();
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-    $('#addChildSupportOther').click(function () {
-        Friendly.StartLoading();
-        var formName = "childOther";
-        var model = Friendly.GetFormInput();
-        model.PreexistingSupportId = $('#childOtherWrapper #supportId').val();
-        model.IsOtherParent = "true";
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/PreexistingSupportChild?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data.Child);
-                    $('#childOtherWrapper .child-table tbody').append(result);
-                    $('#childOtherWrapper .child-table').show();
-                    $('#' + formName)[0].reset();
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    $('.financial-part8').click(function () {               
-        Friendly.NextForm('otherChildrenOther', Friendly.properties.iconSuccess);
-    });
-    //----------------------Other Children---------------    
-    $('.financial-part9').click(function () {
-        if ($('#otherChildOtherWrapper').is(':visible')) {
-            Friendly.NextForm('specialCircumstancesOther', Friendly.properties.iconSuccess);
-            return false;
-        }
-        Friendly.StartLoading();
-        var model = Friendly.GetFormInput('otherChildrenOther');
-        model.IsOtherParent = "true"; 
-        if ($('#otherChildrenOther').valid()) {
-            $.ajax({
-                url: '/api/OtherChildren/?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {                        
-                        //Eligible. Show add children.
-                        $('#otherChildOtherWrapper #childrenId').val(data.OtherChildren.Id);
-                        $('#otherChildOtherWrapper').show();
-                    } else {
-                        Friendly.NextForm('healthsOther', Friendly.properties.iconSuccess);
-                    }
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    $('#addOtherChildOther').click(function () {
-        Friendly.StartLoading();
-        var formName = "otherchildOther";
-        var model = Friendly.GetFormInput(formName);
-        model.OtherChildrenId = $('#otherChildOtherWrapper #childrenId').val();
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/OtherChild?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-childsupport-template").tmpl(data.OtherChild);
-                    $('#otherChildOtherWrapper .otherChild-table tbody').append(result);
-                    $('#otherChildOtherWrapper .otherChild-table').show();
-                    $('#' + formName)[0].reset();
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    //----------------------Health Other---------------    
-
-    $('.financial-part10').click(function () {
-        Friendly.SubmitForm('healthsOther', 'incomeOther');
-    });
-    $('#healthsOther input[name="ProvideHealth"]').change(function () {
-        $('#healthsOther #health-provide input').val('');
-        if ($('#healthsOther #ProvideHealth:checked').val() === "1") {
-            $('#healthsOther #health-provide').show();
-        } else {
-            $('#healthsOther #health-provide').hide();
-        }
-    });
-    $('#healthsOther .percent').focusout(function () {
-        var percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
-            return $(element).val() != "";
-        });
-        //only alter if 
-        var remainingVal = 0;
-        if (percentItems.length == 2) {
-            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
-            percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
-                return $(element).val() === "";
-            });
-            $(percentItems).val(remainingVal);
-        }
-    });
-});
-;window.Financial = window.Financial|| {};
-Financial.GetChildCare = function(child) {
-    var formName = 'childCare';
-    $.ajax({
-        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
-        type: 'GET',
-        success: function(data) {
-            var $form = $('#' + formName);
-            $form.empty();
-            if (data === "")
-                data = {};
-            data.Name = child.Name;
-            data.Id = child.Id;
-            var result = $("#friendly-childCare-template").tmpl(data);
-            $form.append(result);
-            //check if valid
-            $form.valid();
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
-Financial.AddChildCare = function (caller) {
-    var formName = 'childCare';
-    if (caller != null && $(caller).hasClass('next'))
-        Friendly.childNdx++;
-    else if (caller != null) {
-        Friendly.childNdx--;
-    }
-    var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#ChildId').val().trim();
-    //key is for local storage
-    var key = formName + model.ChildId;
-    if (!$('#' + formName).valid()) {
-        //if validation fails, save data to local storage for later retrieval
-        $.jStorage.set(key, model);
-        return false;
-    }
-    //delete key since form is valid (doesn't matter if it exists or not
-    $.jStorage.deleteKey(key);
-    //check if we need to move to next form
-    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm(formName, 'income', model);
-        return false;
-    }
-    //check if we need to move to previous form
-    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm(formName, 'deviations', model);
-        return false;
-    }
-    if ($('#' + formName + 'Id').length > 0)
-        model.Id = $('#' + formName + 'Id').val();
-    var submitType = 'POST';
-    if (typeof model.Id != 'undefined' && model.Id != '0')
-        submitType = 'PUT';
-
-    //save current information
-    $.ajax({
-        url: '/api/' + formName + '/?format=json',
-        type: submitType,
-        data: model,
-        success: function () {
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Financial.GetChildCare(nextChild);
-        },
-        error: Friendly.GenericErrorMessage
-    });
-    return true;
-};
-
-;$(function ($) {
-    var html = $('#main-content').html();
-    html = html.replace(/<form.*>/, "");
-    html = html.replace(/<input.*>/, "");
-    html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
-    $('.html').val(html);
-});
-;$(function ($) {
-    //let's declare the globals for this form.
-    Friendly.ChildDecisionError = [];
-    Friendly.ChildHolidayError = [];
-    //----------------------Privacy Form-----------------------
-    //if on or the other of the supervision checkboxes are checked, then show the rest of the data
-    $('input[name=NeedSupervision]').change(function () {
-        if ($('#NeedSupervision:checked').val() === "1") {
-            $('.supervision-details').show();
-        } else {
-            $('.supervision-details').hide();
-        }
-    });
-
-    $('.child-part4').click(function () {
-        //check if we need to move to next form
-        if ($(this).hasClass('next')) {
-            Friendly.SubmitForm('privacy', 'information');
-        }
-    });
-    //Information form
-    $('.child-part5').click(function () {
-        Friendly.StartLoading();
-        //get values
-        var model = Friendly.GetFormInput('information');
-        Friendly.LoadChildren('decision');
-        var formName = 'information';
-        var nextForm = 'decisions';
-        var formSelector = '#' + formName;
-        if ($(formSelector).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '?format=json',
-                type: 'POST',
-                data: model,
-                success: function () {
-                    Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-                    Friendly.EndLoading();
-                    return false;
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        else {
-            Friendly.EndLoading();
-            return false;
-        }
-        return false;
-    });
-
-    $('#addDecisions').click(function () {
-        Friendly.StartLoading();
-        var formName = 'extraDecisions';
-        var model = Friendly.GetFormInput(formName);
-        model.ChildId = $('#childId').val().trim();
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-extraDecisions-template").tmpl(data.ExtraDecision);
-                    $('#radio-decisions').append(result);
-                    $('input[id=ExtraDecisionsViewModel_DecisionMaker]').removeAttr('checked');
-                    $('#ExtraDecisionsViewModel_Description').val('');
-                    Friendly.EndLoading();
-                    return false;
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        else {
-            Friendly.EndLoading();
-            return false;
-        }
-        return false;
-    });
-    $('#decisions input[type=radio]').live('change', Parenting.CheckIfBothIsChecked);
-    //Decisions Form
-    $('.dropdown-toggle').dropdown();
-
-    $('#copy-decisions').on('click', "li a", function () {
-        if (!$('#decisions').valid()) {
-            return false;
-        }
-        Friendly.StartLoading();
-        var childId = $(this).attr('data-id');
-        if (childId === "0") {
-            //all case.  Cycle through all kids
-            for (var i = 0; i < Friendly.children.length; i++) {
-                
-                var currChild = Friendly.children[i];
-                //only show message if last child saved completes
-                if (i == Friendly.children.length - 1)
-                    copyDecision(currChild.Id, true);
-                else
-                    copyDecision(currChild.Id, false);
-            }
-        } else {
-            //first save current child
-            var currChildId = $('#childId').val().trim();
-            copyDecision(currChildId, false);
-            //then save the copy to child
-            copyDecision(childId, true);
-        }
-        Friendly.EndLoading();
-    });
-    function copyDecision(childId, showMessage) {
-        Parenting.SaveExtraDecisions(childId);
-        var formName = 'decisions';
-        childId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
-
-        //delete from local storage
-        var key = formName + childId;
-        $.jStorage.deleteKey(key);
-
-        var model = Friendly.GetFormInput(formName);
-        model.ChildId = childId;
-        $.ajax({
-            url: '/api/Decisions?format=json',
-            type: 'POST',
-            data: model,
-            success: function () {
-                if (showMessage)
-                    Friendly.ShowMessage('Success!', 'The decisions section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#decisionsWrapper .copy-wrapper');
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    }
-    $('.child-part6').click(function () {        
-        //if the form isn't validated, we still need to move on
-        if (!Parenting.AddDecision(this)) {
-            var child = Friendly.children[Friendly.childNdx - 1];
-            Friendly.ChildDecisionError.push(child.Name);
-            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('responsibility', Friendly.properties.iconError);
-                return;
-            }
-            //check if we need to move to previous form
-            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('information', Friendly.properties.iconError);
-                return;
-            }
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Parenting.GetChildDecisions(nextChild);
-            Friendly.EndLoading();
-        }
-    });
-
-    //Responsibility Form
-    $('input[name=TransportationCosts]').change(function () {
-        var checked = $('#TransportationCosts:checked').val();
-        $('.responsibility-percentage').hide();
-        $('.responsibility-cost').hide();
-        $('.responsibility-percentage input').val('0');
-        $('.responsibility-cost input').val('');
-        switch (checked) {
-            case "3":
-                $('.responsibility-percentage').show();
-                $('.responsibility-percentage input').val('');
-                break;
-            case "4":
-                $('.responsibility-cost').show();
-                break;
-        }
-    });
-
-    $('.responsibility-percentage input').focusout(function () {
-        var percent = $(this).val();
-        if ($(this).attr('id') === "FatherPercentage") {
-            $('#MotherPercentage').val(parseInt(100 - percent));
-        } else {
-            $('#FatherPercentage').val(parseInt(100 - percent));
-        }
-    });
-
-    $('.child-part7').click(function () {
-        Friendly.SubmitForm('responsibility', 'communication');
-    });
-
-
-    //Communicate Method
-    $('#Other').change(function () {
-        if ($(this).is(':checked')) {
-            $('.communicate-other').show();
-        }
-        else {
-            $('.communicate-other').hide();
-        }
-    });
-
-    $('input[name=Limitations]').change(function () {
-        var checked = $('#Limitations:checked').val();
-        if (checked == "1") {
-            $('.communicate-method').show();
-        } else {
-            $('.communicate-method').hide();
-        }
-    });
-    $('input[name=AccessOfRights]').change(function () {
-        var checked = $('#AccessOfRights:checked').val();
-        if (checked == "1") {
-            $('.communicate-rights').show();
-        } else {
-            $('.communicate-rights').hide();
-        }
-    });
-
-    $('.child-part8').click(function () {
-        Friendly.SubmitForm('communication', 'schedule');
-    });
-
-    //Schedule
-    $('input[name=DetermineBeginDate]').change(function () {
-        var checked = $('#DetermineBeginDate:checked').val();
-        if (checked === '1') {
-            $('.schedule-date').hide();
-        } else {
-            $('.schedule-date').show();
-        }
-    });
-    $('input[name=Weekdays]').change(function () {
-        var checked = $('#Weekdays:checked').val();
-        if (checked === '1') {
-            $('.schedule-weekday').show();
-        } else {
-            $('.schedule-weekday').hide();
-        }
-    });
-    $('input[name=CustodianWeekend]').change(function () {
-        var checked = $('#CustodianWeekend:checked').val();
-        $('.schedule-weekend-other').hide();
-        switch (checked) {
-            case "1":
-                $('#NonCustodianWeekend[value="1"]').attr('checked', 'checked');
-                break;
-            case "2":
-                $('#NonCustodianWeekend[value="4"]').attr('checked', 'checked');
-                break;
-            case "3":
-                $('#NonCustodianWeekend[value="4"]').attr('checked', 'checked'); 
-                break;
-            case "4":
-                $('#NonCustodianWeekend[value="3"]').attr('checked', 'checked');
-                break;
-            case "5":
-                $('#NonCustodianWeekend[value="5"]').attr('checked', 'checked');
-                $('.schedule-weekend-other').show();
-                break;
-        }
-    });
-    $('input[name=NonCustodianWeekend]').change(function () {
-        var checked = $('#NonCustodianWeekend:checked').val();
-        $('.schedule-weekend-other').hide();
-        switch (checked) {
-            case "1":
-                $('#CustodianWeekend[value="1"]').attr('checked', 'checked');
-                break;
-            case "2":
-                $('#CustodianWeekend[value="4"]').attr('checked', 'checked');
-                break;
-            case "3":
-                $('#CustodianWeekend[value="4"]').attr('checked', 'checked');
-                break;
-            case "4":
-                $('#CustodianWeekend[value="3"]').attr('checked', 'checked');
-                break;
-            case "5":
-                $('#CustodianWeekend[value="5"]').attr('checked', 'checked');
-                $('.schedule-weekend-other').show();
-                break;
-        }
-    });
-
-    $('.child-part9').click(function () {
-        Friendly.SubmitForm('schedule', 'holiday');
-    });
-    $('#addHolidays').click(function () {
-        Friendly.StartLoading();
-        var formName = 'extraHoliday';
-        var model = {
-            ChildId: $('#holidayChildId').val(),
-            HolidayFather: $('#ExtraHolidayViewModel_HolidayFather:checked').val(),
-            HolidayMother: $('#ExtraHolidayViewModel_HolidayMother:checked').val(),
-            HolidayName: $('#ExtraHolidayViewModel_HolidayName').val(),
-            UserId: $('#user-id').val(),
-        };
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '?format=json',
-                type: 'POST',
-                data: model,
-                success: function (data) {
-                    var result = $("#friendly-extraHolidays-template").tmpl(data.ExtraHoliday);
-                    $('#holiday').append(result);
-                    $('input[id=ExtraHolidayViewModel_HolidayFather]').removeAttr('checked');
-                    $('input[id=ExtraHolidayViewModel_HolidayMother]').removeAttr('checked');
-                    $('#ExtraHolidayViewModel_HolidayName').val('');
-                    Friendly.EndLoading();
-                    return false;
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        else {
-            Friendly.EndLoading();
-            return false;
-        }
-        return false;
-    });
-    $('.father-all input[type=radio]').change(function () {
-        var name = $(this).attr('name');
-        var val = $('input[name="' + name + '"]:checked').val();
-        $.each($('.holiday-parent input[value=' + val + ']'), function (ndx, item) {
-            var holidayName = $(item).attr('name');
-            if (typeof (holidayName) === 'undefined')
-                return;
-            if (holidayName.lastIndexOf("Father") >= 0 && holidayName.lastIndexOf("Father") > holidayName.lastIndexOf("Mother")) {
-                $(this).attr('checked', 'checked');
-            } else {
-                holidayName = holidayName.replace(".", "_");
-                holidayCheckOther(holidayName, val);
-            }
-        });
-        //we need to do a validation check after this since red errors don't go away on radio buttons after this
-        $('#holiday').valid();
-    });
-    $('.mother-all input[type=radio]').change(function () {
-        var name = $(this).attr('name');
-        var val = $('input[name="' + name + '"]:checked').val();
-        $.each($('.holiday-parent input[value=' + val + ']'), function (ndx, item) {
-            var holidayName = $(item).attr('name');
-            if (typeof (holidayName) === 'undefined')
-                return;
-            if (holidayName.lastIndexOf("Mother") >= 0 && holidayName.lastIndexOf("Mother") > holidayName.lastIndexOf("Father")) {
-                $(this).attr('checked', 'checked');
-            } else {
-                holidayName = holidayName.replace(".", "_");
-                holidayCheckOther(holidayName, val);
-            }
-        });
-        $('#holiday').valid();
-    });
-    function holidayCheckOther(name, val) {
-        switch (val) {
-            case "1":
-                $('#' + name + '[value="2"]').attr('checked', 'checked');
-                break;
-            case "2":
-                $('#' + name + '[value="1"]').attr('checked', 'checked');
-                break;
-            case "3":
-                $('#' + name + '[value="4"]').attr('checked', 'checked');
-                break;
-            case "4":
-                $('#' + name + '[value="3"]').attr('checked', 'checked');
-                break;
-        }
-    }
-    $('.holiday-parent input[type=radio]').live('change', function () {
-        var name = $(this).attr('name');
-        var val = $('input[name="' + name + '"]:checked').val();
-        var newName = "", suffix = "";
-        if (name.lastIndexOf("Father") >= 0 && name.lastIndexOf("Father") > name.lastIndexOf("Mother")) {
-            if (name.length > name.lastIndexOf("Father") + 6)
-                suffix = name.substring(name.lastIndexOf("Father") + 6, name.length);
-            newName = name.substring(0, name.lastIndexOf("Father")) + "Mother" + suffix;
-            newName = newName.replace(".", "_");
-        }
-        else if (name.lastIndexOf("Mother") >= 0 && name.lastIndexOf("Mother") > name.lastIndexOf("Father")) {
-            newName = name.substring(0, name.lastIndexOf("Mother")) + "Father";
-            newName = newName.replace(".", "_");
-        }
-        holidayCheckOther(newName, val);
-        return false;
-    });
-
-    $('.child-part10').click(function () {
-        //if the form isn't validated, we still need to move on
-        if (!Parenting.AddHoliday(this)) {
-            var child = Friendly.children[Friendly.childNdx - 1];
-            Friendly.ChildHolidayError.push(child.Name);
-            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('addendum', Friendly.properties.iconError);
-                return;
-            }
-            //check if we need to move to previous form
-            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('schedule', Friendly.properties.iconError);                
-                return;
-            }
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Parenting.GetChildHoliday(nextChild);
-            Friendly.EndLoading();
-        }       
-    });
-    //Addendum
-    $('input[name=HasAddendum]').change(function () {
-        var checked = $('#HasAddendum:checked').val();
-        if (checked == "1") {
-            $('.addendum-details').show();
-        } else {
-            $('.addendum-details').hide();
-        }
-    });
-
-    $('.child-part11').click(function () {
-        var formName = 'addendum';
-        if ($('#' + formName).valid()) {
-            Friendly.StartLoading();
-            var model = Friendly.GetFormInput(formName);
-            $.ajax({
-                url: '/api/' + formName + "?format=json",
-                type: 'POST',
-                data: model,
-                success: function () {
-                    Friendly.ValidateForms('.child-part11');
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        return false;
-    });
-    $('input[name="HolidayViewModel.Thanksgiving"]').change(function () {
-        var checked = $('#HolidayViewModel_Thanksgiving:checked').val();
-        $('.thanksgiving-other').hide();
-        $('.thanksgiving-time').hide();
-        switch (checked) {
-            case '3':
-                $('.thanksgiving-other').show();
-                break;
-            case '1':
-                $('.thanksgiving-time').show();
-                break;
-        
-        }
-    });
-    $('input[name="HolidayViewModel.SpringBreak"]').change(function () {
-        var checked = $('#HolidayViewModel_SpringBreak:checked').val();
-        if (checked === '2') {
-            $('.spring-other').show();
-        } else {
-            $('.spring-other').hide();
-        }
-    });
-    $('input[name="HolidayViewModel.FallBreak"]').change(function () {
-        var checked = $('#HolidayViewModel_FallBreak:checked').val();
-        if (checked === '2') {
-            $('.fall-other').show();
-        } else {
-            $('.fall-other').hide();
-        }
-    });
-    $('input[name="HolidayViewModel.Christmas"]').change(function () {
-        var checked = $('#HolidayViewModel_Christmas:checked').val();
-        $('.christmas-items').hide();
-        $('.christmas-other').hide();
-        switch (checked) {
-            case "2":
-                $('.christmas-items').show();
-                break;
-            case "3":
-                $('.christmas-items').show();
-                break;
-            case "4":
-                $('.christmas-items').show();
-                break;
-            case "5":
-                $('.christmas-other').show();
-                break;
-        }
-    });
-
-    $('#copy-holidays').on('click', "li a", function () {
-        if (!$('#holiday').valid()) {
-            return;
-        }
-        Friendly.StartLoading();
-        var childId = $(this).attr('data-id'); 
-        if (childId === "0") {
-            //all case.  Cycle through all kids (except current showing)
-            for (var i = 0; i < Friendly.children.length; i++) {
-                var currChild = Friendly.children[i];
-                //only show message if last child saved completes
-                if (i == Friendly.children.length - 1)
-                    copyHoliday(currChild.Id, true);
-                else
-                    copyHoliday(currChild.Id, false);
-            }
-        } else {
-            //first save current child
-            var currChildId = $('#holidayChildId').val().trim();
-            copyHoliday(currChildId, false);
-            //then save the copy to child
-            copyHoliday(childId, true);
-        }
-        Friendly.EndLoading();       
-    });
-
-    function copyHoliday(childId, showMessage) {
-        Parenting.SaveExtraHolidays(childId);
-        var formName = 'holiday';
-        //do rest of the form
-        childId = typeof (childId) === "undefined" ? $('#childId').val() : childId;
-
-        //delete from local storage
-        var key = formName + childId;
-        $.jStorage.deleteKey(key);
-
-        var model = Friendly.GetFormInput(formName);
-        model.ChildId = childId;
-        //model.FridayHoliday = $('#HolidayViewModel_FridayHoliday').is(':checked');
-        //model.MondayHoliday = $('#HolidayViewModel_MondayHoliday').is(':checked');
-        $.ajax({
-            url: '/api/' + formName + '?format=json',
-            type: 'POST',
-            data: model,
-            success: function () {
-                if (showMessage)
-                    Friendly.ShowMessage('Success!', 'The holiday section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.', Friendly.properties.messageType.Success, '#holidayWrapper .copy-wrapper');
-            },
-            error: Friendly.GenericErrorMessage
-        });       
-    }
-});
-
-
-;window.Parenting = window.Parenting || {};
-Parenting.AddDecision = function (caller) {
-    var formName = 'decisions';
-    if (caller != null && $(caller).hasClass('next'))
-        Friendly.childNdx++;
-    else if (caller != null) {
-        Friendly.childNdx--;
-    }
-    var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#childId').val().trim();
-    //key is for local storage
-    var key = formName + model.ChildId;
-    if (!$('#' + formName).valid()) {
-        //if validation fails, save data to local storage for later retrieval
-        var saveModel = {
-            Decisions: model,
-            ExtraDecisions: []
-        };
-        $.each($('.extra-decision-item'), function(ndx, item) {
-            var id = $(item).children('#extra-decision-Id').val();
-            var extraModel = {
-                Id: typeof(model.ChildId) === "undefined" ? id : 0,
-                ChildId: typeof (model.ChildId) === "undefined" ? $(item).children('#extra-decision-childId').val() : model.ChildId,
-                DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
-                Description: $(item).children('#extra-decision-description').text().trim(),
-                UserId: $('#user-id').val()
-            };
-            saveModel.ExtraDecisions.push(extraModel);
-        });
-        $.jStorage.set(key, saveModel);
-        return false;
-    }
-    //delete key since form is valid (doesn't matter if it exists or not
-    $.jStorage.deleteKey(key);
-    Parenting.SaveExtraDecisions();
-    //check if we need to move to next form
-    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm(formName, 'responsibility', model);
-        return false;
-    }
-    //check if we need to move to previous form
-    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm(formName, 'information', model);
-        return false;
-    }
-
-    //save current information
-    $.ajax({
-        url: '/api/' + formName + '/?format=json',
-        type: 'POST',
-        data: model,
-        success: function () {
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Parenting.GetChildDecisions(nextChild);
-        },
-        error: Friendly.GenericErrorMessage
-    });
-    return true;
-};
-Parenting.CheckChildDecision = function (child, nextForm) {
-    var formName = 'decisions';
-    $.ajax({
-        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
-        type: 'GET',
-        success: function (data) {
-            $('#childName').text(child.Name);
-            $('#childId').val(child.Id);
-            Friendly.ClearForm(formName);
-            if (data.Decisions) {
-                $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-                $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-                $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-                $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-                $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
-            }
-            $('.extra-decision-item').remove();
-            Friendly.childNdx++;
-            //Check if we've gone through all children. If not, continue on
-            if (Friendly.childNdx !== Friendly.children.length) {
-                if ($('#' + formName).valid()) {
-                    //recursively go to next child
-                    Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
-                    return;
-                } 
-                //Record Error and recursively go to next child
-                Friendly.ChildDecisionError.push(child.Name);
-                Parenting.CheckChildDecision(Friendly.children[Friendly.childNdx], nextForm);
-                return;                
-            }
-            //At last child.  Advance to next form - show error if there are errors
-            if (!$('#decisions').valid()) {
-                Friendly.ChildDecisionError.push(child.Name);
-            }
-            if (Friendly.ChildDecisionError.length > 0) {
-                Friendly.NextForm(nextForm, Friendly.properties.iconError);
-            } else {
-                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-            }
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
-Parenting.SaveExtraDecisions = function (childId) {
-    var formName = 'extraDecisions';
-    $.each($('.extra-decision-item'), function (ndx, item) {
-        var id = $(item).children('#extra-decision-Id').val();
-        var extraModel = {
-            Id: typeof (childId) === "undefined" ? id : 0,
-            ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
-            DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
-            Description: $(item).children('#extra-decision-description').text().trim(),
-            UserId: $('#user-id').val()
-        };
-        //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
-        //If it does, copy over the Id
-        if (typeof (childId) !== "undefined") {
-            $.ajax({
-                url: '/api/' + formName + '/' + childId + '?format=json',
-                type: 'GET',
-                success: function (data) {
-                    $.each(data, function (ndx, item) {
-                        if (item.Description === extraModel.Description) {
-                            //We have a match
-                            extraModel.Id = item.Id;
-                        }
-                    });
-                    //Now add/update extradecisions
-                    $.ajax({
-                        url: '/api/' + formName + '/?format=json',
-                        type: 'POST',
-                        data: extraModel,
-                        success: function () {
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                },
-                error: Friendly.GenericErrorMessage
-            });
-            return;
-        }
-        //else, just update the extradecisions
-        $.ajax({
-            url: '/api/' + formName + '/?format=json',
-            type: 'POST',
-            data: extraModel,
-            success: function () {
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-};
-Parenting.SetChildDecisions = function(child, data) {
-    $('#childName').text(child.Name);
-    $('#childId').val(child.Id);
-    if (typeof (data.Decisions) === 'undefined')
-        return false;
-
-    $('#DecisionsViewModel_Education[value="' + data.Decisions.Education + '"]').attr('checked', 'checked');
-    $('#DecisionsViewModel_HealthCare[value="' + data.Decisions.HealthCare + '"]').attr('checked', 'checked');
-    $('#DecisionsViewModel_Religion[value="' + data.Decisions.Religion + '"]').attr('checked', 'checked');
-    $('#DecisionsViewModel_ExtraCurricular[value="' + data.Decisions.ExtraCurricular + '"]').attr('checked', 'checked');
-    $('#DecisionsViewModel_BothResolve').val(data.Decisions.BothResolve);
-    $('.extra-decision-item').remove();
-    $.each(data.ExtraDecisions, function(ndx, item) {
-        var result = $("#friendly-extraDecisions-template").tmpl(item);
-        $('#radio-decisions').append(result);
-    });
-    Parenting.CheckIfBothIsChecked();
-    //fixes possible error flag if one child isn't complete but another is
-    if (data.Decisions.ExtraCurricular !== 0) {
-        $('#decisions').valid();
-    }
-    $('#decisionsWrapper').show();
-};
-//get's a childs decision informaion.  Checks local storage first. If it doesn't exist, it looks for the data at the server
-Parenting.GetChildDecisions = function (child) {
-    var formName = 'decisions';
-    Friendly.ClearForm(formName);
-    var key = formName + child.Id;
-    var data = $.jStorage.get(key);
-    if (data) {
-        Parenting.SetChildDecisions(child, data);
-        return;
-    }            
-    $.ajax({
-        url: '/api/' + formName + '?ChildId=' + child.Id + '&format=json',
-        type: 'GET',
-        success: function (data) {            
-            Parenting.SetChildDecisions(child, data);
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
-Parenting.CheckIfBothIsChecked = function () {
-    var bothChecked = false;
-    $.each($('#decisions input[type=radio]'), function (ndx, item) {
-        var id = $(item).attr('id');
-        if ($('#' + id + ':checked').val() === "3")
-            bothChecked = true;
-    });
-    if (bothChecked) {
-        $('.decision-details').show();
-    } else {
-        $('#DecisionsViewModel_BothResolve').val('');
-        $('.decision-details').hide();
-    }
-}
-Parenting.CheckChildHoliday = function (child, nextForm) {
-    var formName = 'holiday';
-    $.ajax({
-        url: '/api/' + formName + '/' + child.Id + '?format=json',
-        type: 'GET',
-        success: function (data) {            
-            Parenting.SetChildHolidayForm(data, child);
-            Friendly.childNdx++;
-            if (Friendly.childNdx !== Friendly.children.length) {
-                if ($('#' + formName).valid()) {
-                    //recursively go to next child
-                    Parenting.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
-                    return;
-                }
-                //Record Error and recursively go to next child
-                Friendly.ChildDecisionError.push(child.Name);
-                Parenting.CheckChildHoliday(Friendly.children[Friendly.childNdx], nextForm);
-                return;
-            }
-            //At last child.  Advance to next form - show error if there are errors
-            if (!$('#' + formName).valid()) {
-                Friendly.ChildHolidayError.push(child.Name);
-            }
-            if (Friendly.ChildHolidayError.length > 0) {
-                Friendly.NextForm(nextForm, Friendly.properties.iconError);
-            } else {
-                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-            }            
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
-
-Parenting.AddHoliday = function(caller) {
-    var formName = 'holiday';
-    if (caller != null && $(caller).hasClass('next'))
-        Friendly.childNdx++;
-    else if (caller != null) {
-        Friendly.childNdx--;
-    }
-    var model = Friendly.GetFormInput(formName);
-    var childId = $('#holidayChildId').val();
-    model.ChildId = childId;
-
-    var key = formName + model.ChildId;
-    if (!$('#' + formName).valid()) {
-        //if validation fails, save data to local storage for later retrieval
-        var saveModel = {
-            Holidays: model,
-            ExtraHolidays: []
-        };
-        $.each($('.extra-holiday-item'), function(ndx, item) {
-            var id = $(item).children('#extra-holiday-Id').val();
-            var extraModel = {
-                Id: typeof(childId) === "undefined" ? id : 0,
-                ChildId: typeof(childId) === "undefined" ? $(item).children('#extra-holiday-childId').val() : childId,
-                HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
-                HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
-                HolidayName: $(item).children('.extra-holiday-name').text(),
-                UserId: $('#user-id').val()
-            };
-            saveModel.ExtraHolidays.push(extraModel);
-        });
-        $.jStorage.set(key, saveModel);
-        return false;
-    }
-    //delete key since form is valid (doesn't matter if it exists or not)
-    $.jStorage.deleteKey(key);
-
-    Parenting.SaveExtraHolidays();
-    //check if we need to move to next form
-    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm('holiday', 'addendum', model);
-        return true;
-    }
-    //check if we need to move to previous form
-    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm('holiday', 'schedule', model);
-        return true;
-    }
-    Friendly.StartLoading();
-    //save current information
-    $.ajax({
-        url: '/api/' + formName + "?format=json",
-        type: 'POST',
-        data: model,
-        success: function() {
-            //$('#' + formName)[0].reset();
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Parenting.GetChildHoliday(nextChild);
-            Friendly.EndLoading();
-        },
-        error: Friendly.GenericErrorMessage
-    });
-    return true;
-};
-
-Parenting.GetChildHoliday = function (child) {
-    var formName = 'holiday';
-    var key = formName + child.Id;
-    var data = $.jStorage.get(key);
-    if (data) {
-        Parenting.SetChildHolidayForm(data, child);
-        $('#' + formName).valid();
-        return;
-    }
-    $.ajax({
-        url: '/api/'+ formName + '/' + child.Id + '?format=json',
-        type: 'GET',
-        success: function (data) {
-            Parenting.SetChildHolidayForm(data, child);
-            //fixes error flag if one child isn't complete but another is
-            if (typeof (data.Holidays) !== 'undefined' && data.Holidays.SpringBreakFather !== 0) {
-                $('#holiday').valid();
-            }
-            $('#holidayWrapper').show();
-        },
-        error: Friendly.GenericErrorMessage
-    });
-}
-
-Parenting.SetChildHolidayForm = function(data, child) {
-    Friendly.ClearForm('holiday');
-    $('#holidayChildName').text(child.Name);
-    $('#holidayChildId').val(child.Id);
-    //check if child has data already saved
-    if (typeof(data.Holidays) === 'undefined')
-        return false;
-    if (data.Holidays.FridayHoliday) {
-        $('#HolidayViewModel_FridayHoliday').attr('checked', 'checked');
-        $('#HolidayViewModel_FridayHoliday').val('true');
-    } else {
-        $('#HolidayViewModel_FridayHoliday').val('false');
-    }
-    if (data.Holidays.MondayHoliday) {
-        $('#HolidayViewModel_MondayHoliday').attr('checked', 'checked');
-        $('#HolidayViewModel_MondayHoliday').val('true');
-    } else {
-        $('#HolidayViewModel_MondayHoliday').val('false');
-    }
-
-    $('#HolidayViewModel_Thanksgiving[value="' + data.Holidays.Thanksgiving + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ThanksgivingOther').val(data.Holidays.ThanksgivingOther);
-    $('#HolidayViewModel_Christmas[value="' + data.Holidays.Christmas + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChristmasTime').val(data.Holidays.ChristmasTime);
-    $('#HolidayViewModel_ThanksgivingTime').val(data.Holidays.ThanksgivingTime);
-    $('#HolidayViewModel_ChristmasOther').val(data.Holidays.ChristmasOther);
-    $('#HolidayViewModel_SpringBreak[value="' + data.Holidays.SpringBreak + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_SpringOther').val(data.Holidays.SpringOther);
-    $('#HolidayViewModel_SummerBeginDays').val(data.Holidays.SummerBeginDays);
-    $('#HolidayViewModel_SummerBeginTime').val(data.Holidays.SummerBeginTime);
-    $('#HolidayViewModel_SummerEndDays').val(data.Holidays.SummerEndDays);
-    $('#HolidayViewModel_SummerEndTime').val(data.Holidays.SummerEndTime);
-    $('#HolidayViewModel_SummerDetails').val(data.Holidays.SummerDetails);
-    $('#HolidayViewModel_FallBreak[value="' + data.Holidays.FallBreak + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FallOther').val(data.Holidays.FallOther);
-    $('#HolidayViewModel_SpringBreakFather[value="' + data.Holidays.SpringBreakFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_SpringBreakMother[value="' + data.Holidays.SpringBreakMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FallBreakFather[value="' + data.Holidays.FallBreakFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FallBreakMother[value="' + data.Holidays.FallBreakMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ThanksgivingFather[value="' + data.Holidays.ThanksgivingFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ThanksgivingMother[value="' + data.Holidays.ThanksgivingMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChristmasFather[value="' + data.Holidays.ChristmasFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChristmasMother[value="' + data.Holidays.ChristmasMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MlkFather[value="' + data.Holidays.MlkFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MlkMother[value="' + data.Holidays.MlkMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_PresidentsFather[value="' + data.Holidays.PresidentsFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_PresidentsMother[value="' + data.Holidays.PresidentsMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersFather[value="' + data.Holidays.MothersFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersMother[value="' + data.Holidays.MothersMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MemorialFather[value="' + data.Holidays.MemorialFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MemorialMother[value="' + data.Holidays.MemorialMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersFather[value="' + data.Holidays.FathersFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersMother[value="' + data.Holidays.FathersMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_IndependenceFather[value="' + data.Holidays.IndependenceFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_IndependenceMother[value="' + data.Holidays.IndependenceMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_LaborFather[value="' + data.Holidays.LaborFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_LaborMother[value="' + data.Holidays.LaborMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_HalloweenFather[value="' + data.Holidays.HalloweenFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_HalloweenMother[value="' + data.Holidays.HalloweenMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChildrensFather[value="' + data.Holidays.ChildrensFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ChildrensMother[value="' + data.Holidays.ChildrensMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersBdayFather[value="' + data.Holidays.MothersBdayFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_MothersBdayMother[value="' + data.Holidays.MothersBdayMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersBdayFather[value="' + data.Holidays.FathersBdayFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_FathersBdayMother[value="' + data.Holidays.FathersBdayMother + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ReligiousFather[value="' + data.Holidays.ReligiousFather + '"]').attr('checked', 'checked');
-    $('#HolidayViewModel_ReligiousMother[value="' + data.Holidays.ReligiousMother + '"]').attr('checked', 'checked');
-    $('.extra-holiday-item').remove();
-    $.each(data.ExtraHolidays, function(ndx, item) {
-        var result = $("#friendly-extraHolidays-template").tmpl(item);
-        $('#holiday').append(result);
-    });
-    //fixes possible error flag if one child isn't complete but another is
-    if (data.Holidays.ReligiousMother !== 0) {
-        $('#holiday').valid();
-    }
-
-};
-Parenting.SaveExtraHolidays = function(childId) {
-    var formName = 'extraHoliday';
-    $.each($('.extra-holiday-item'), function(ndx, item) {
-        var id = $(item).children('#extra-holiday-Id').val();
-        var extraModel = {
-            Id: typeof(childId) === "undefined" ? id : 0,
-            ChildId: typeof(childId) === "undefined" ? $(item).children('#extra-holiday-childId').val() : childId,
-            HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
-            HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
-            HolidayName: $(item).children('.extra-holiday-name').text(),
-            UserId: $('#user-id').val()
-        };
-        //If we are copying, we need to make sure that the extra holiday doesn't already exist for the current child
-        //If it does, copy over the Id
-        if (typeof(childId) !== "undefined") {
-            $.ajax({
-                url: '/api/' + formName + '/' + childId + "?format=json",
-                type: 'GET',
-                success: function(data) {
-                    $.each(data, function(ndx, item) {
-                        if (item.HolidayName === extraModel.HolidayName) {
-                            //We have a match
-                            extraModel.Id = item.Id;
-                        }
-                    });
-                    //Now add/update extradecisions
-                    $.ajax({
-                        url: '/api/' + formName + "?format=json",
-                        type: 'POST',
-                        data: extraModel,
-                        success: function() {
-                        },
-                        error: Friendly.GenericErrorMessage
-                    });
-                },
-                error: Friendly.GenericErrorMessage
-            });
-            return;
-        }
-        $.ajax({
-            url: '/api/' + formName + "?format=json",
-            type: 'POST',
-            data: extraModel,
-            success: function() {
-            },
-            error: Friendly.GenericErrorMessage
-        });
-    });
-};
-
-
-
-;$(function ($) {
-    $('#adminEmail').submit(function (e) {
-        var formName = $(this).attr('id');
-        Friendly.StartLoading();
-        e.preventDefault();
-        var model = Friendly.GetFormInput(formName);
-        if ($("#" + formName).valid()) {
-            $.ajax({
-                url: '/api/emails?format=json',
-                type: 'POST',
-                data: model,
-                success: function () {
-                    $('#' + formName)[0].reset(); 
-                    Friendly.ShowMessage("Success!", "The e-mail was successfully sent to the client.", Friendly.properties.messageType.Success, '#' + formName);
-                    Friendly.EndLoading();
-                    return false;
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        } else {
-            Friendly.EndLoading();
-            return false;
-        }
-        return false;
     });
 });

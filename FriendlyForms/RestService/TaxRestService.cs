@@ -9,7 +9,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Tax/")]
+    [Route("/Taxes/")]
     public class ReqTax
     {
         [DataMember]
@@ -34,7 +34,18 @@ namespace FriendlyForms.RestService
     public class TaxRestService : Service
     {
         public ITaxService TaxService { get; set; }
-
+        public object Get(ReqTax request)
+        {
+            if (request.Id != 0)
+            {
+                return TaxService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return TaxService.GetByUserId(request.UserId);
+            }
+            return new Tax();
+        }
         public object Post(ReqTax request)
         {
             var tax = request.TranslateTo<Tax>();

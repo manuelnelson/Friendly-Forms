@@ -1,7 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -10,7 +9,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Spousal/")]
+    [Route("/Spousals/")]
     public class ReqSpousal
     {
         [DataMember]
@@ -35,7 +34,18 @@ namespace FriendlyForms.RestService
     public class SpousalRestService : Service
     {
         public ISpousalService SpousalService { get; set; }
-
+        public object Get(ReqSpousal request)
+        {
+            if (request.Id != 0)
+            {
+                return SpousalService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return SpousalService.GetByUserId(request.UserId);
+            }
+            return new SpousalSupport();
+        }
         public object Post(ReqSpousal request)
         {
             var spousalSupport = request.TranslateTo<SpousalSupport>();

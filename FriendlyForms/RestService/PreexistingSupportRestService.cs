@@ -43,7 +43,18 @@ namespace FriendlyForms.RestService
     public class PreexistingSupportRestService : Service
     {
         public IPreexistingSupportService PreexistingSupportService { get; set; }
-
+        public object Get(ReqPreexistingSupport request)
+        {
+            if (request.Id != 0)
+            {
+                return PreexistingSupportService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return PreexistingSupportService.GetByUserId(request.UserId);
+            }
+            return new PreexistingSupport();
+        }
         public object Post(ReqPreexistingSupport request)
         {
             var preexistingSupportViewModel = request.TranslateTo<PreexistingSupportViewModel>();
