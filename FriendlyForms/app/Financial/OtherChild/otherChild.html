@@ -1,0 +1,93 @@
+﻿<div class="form-vertical wrapper">
+    <form ng-submit="submit()" ng-controller="OtherChildCtrl" ng-model="otherChild.otherChildForm" name="otherChildForm" novalidate>
+        <input type="hidden" name="Id" ng-model="otherChild.Id">
+        <input type="hidden" name="UserId" ng-model="otherChild.UserId">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Other children living in the home</h5>
+                    </div>
+                    <div class="widget-content">
+                        <label class="informative">If you are seeking an adjustment for other qualified children in the home, please answer the questions below</label>
+                        <div class="control-group row-fluid">
+                            <label class="span4 form-question">
+                                Are you legally responsible for the qualified child? (Step children do not qualify)</label>
+                            <label class="radio inline">
+                                Yes
+                                <input class="inline" required ng-model="otherChild.LegallyResponsible" name="LegallyResponsible" type="radio" value="1"></label>
+                            <label class="radio inline">
+                                No
+                                <input class="inline" required ng-model="otherChild.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
+                            <div ng-show="otherChildForm.LegallyResponsible.$dirty && otherChildForm.LegallyResponsible.$invalid">
+                                <span class="form-error" ng-show="otherChildForm.LegallyResponsible.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4 form-question">
+                                Does the qualified child live in your home?</label>
+                            <label class="radio inline">
+                                Yes
+                                <input class="inline" required ng-model="otherChild.AtHome" name="AtHome" type="radio" value="1"></label>
+                            <label class="radio inline">
+                                No
+                                <input class="inline" required ng-model="otherChild.AtHome" name="AtHome" type="radio" value="2"></label>
+                            <div ng-show="otherChildForm.AtHome.$dirty && otherChildForm.AtHome.$invalid">
+                                <span class="form-error" ng-show="otherChildForm.AtHome.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4 form-question">
+                                Are you actually supporting the qualified child?</label>
+                            <label class="radio inline">
+                                Yes
+                                <input class="inline" required ng-model="otherChild.Support" name="Support" type="radio" value="1"></label>
+                            <label class="radio inline">
+                                No
+                                <input class="inline" required ng-model="otherChild.Support" name="Support" type="radio" value="2"></label>
+                            <div ng-show="otherChildForm.Support.$dirty && otherChildForm.Support.$invalid">
+                                <span class="form-error" ng-show="otherChildForm.Support.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4 form-question">
+                                Is the qualified child subject to a Preexisting Child Support Order?</label>
+                            <label class="radio inline">
+                                Yes
+                                <input class="inline" required ng-model="otherChild.Preexisting" name="Preexisting" type="radio" value="1"></label>
+                            <label class="radio inline">
+                                No
+                                <input class="inline" required ng-model="otherChild.Preexisting" name="Preexisting" type="radio" value="2"></label>
+                            <div ng-show="otherChildForm.Preexisting.$dirty && otherChildForm.Preexisting.$invalid">
+                                <span class="form-error" ng-show="otherChildForm.Preexisting.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4 form-question">
+                                Is the qualified child currently before the court to set, modify or enforce child support?</label>
+                            <label class="radio inline">
+                                Yes
+                                <input class="inline" required ng-model="otherChild.InCourt" name="InCourt" type="radio" value="1"></label>
+                            <label class="radio inline">
+                                No
+                                <input class="inline" required ng-model="otherChild.InCourt" name="InCourt" type="radio" value="2"></label>
+                            <div ng-show="otherChildForm.InCourt.$dirty && otherChildForm.InCourt.$invalid">
+                                <span class="form-error" ng-show="otherChildForm.InCourt.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group row-fluid">
+                            <label class="span4 form-question">
+                                Enter a comment here explaining why you have included an other qualified child in the current court case.</label>
+                            <textarea class="inline" cols="20" required ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="otherChild.Details" name="Details" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="otherChildForm.Details.$dirty && otherChildForm.Details.$invalid">
+                                <span class="form-error" ng-show="otherChildForm.Details.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    </form>
+</div>

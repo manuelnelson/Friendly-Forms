@@ -1,5 +1,5 @@
-﻿<div class="form-vertical wrapper" ng-model="participant.participantWrapper" style="display: block;">
-    <form action="/api/court" ng-controller="ParticipantCtrl" ng-model="participant.participant" method="post">
+﻿<div class="form-vertical wrapper">
+    <form action="/api/court" ng-controller="ParticipantCtrl" id="participantForm" name="participantForm" method="post">
         <input type="hidden" ng-model="participant.Id">
         <input type="hidden" ng-model="participant.UserId">
         <div class="row-fluid">

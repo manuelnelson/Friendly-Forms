@@ -23,17 +23,20 @@
                     itemClass: '',
                     path: '/Starter/Court/' + userId,
                     iconClass: '',
-                    text: 'Court',                    
+                    text: 'Court',
+                    formName: 'Court'
                 }, {
                     itemClass: '',
                     path: '/Starter/Participant/' + userId,
                     iconClass: '',
                     text: 'Participants',
+                    formName: 'Participant'
                 }, {
                     itemClass: '',
                     path: '/Starter/Children/' + userId,
                     iconClass: '',
                     text: 'Children',
+                    formName: 'Children'
                 }],
             }, {
                 itemClass: '',
@@ -60,7 +63,7 @@
                     return item.text === menuItemText;
                 });
                 var subMenuItem = _.find(menuItem.subMenuItems, function(subItem) {
-                    return subItem.text === subMenuItemText;
+                    return subItem.formName === subMenuItemText;
                 });
                 return subMenuItem.itemClass === 'active';
             }
@@ -82,7 +85,7 @@
                 menuItem.showSubMenu = true;
                 menuItem.itemClass = 'submenu active';
                 var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
-                    return subItem.text === subMenuItemText;
+                    return subItem.formName === subMenuItemText;
                 });
                 subMenuItem.itemClass = 'active';
                 subMenuItem.iconClass = 'icon-blue icon-pencil';
