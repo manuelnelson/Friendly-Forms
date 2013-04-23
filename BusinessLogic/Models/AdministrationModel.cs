@@ -13,7 +13,7 @@ namespace BusinessLogic.Models
     public class AdminEmail
     {
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Law Firm")]

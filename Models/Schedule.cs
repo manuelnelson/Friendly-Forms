@@ -4,10 +4,10 @@ using Models.ViewModels;
 
 namespace Models
 {
-    public class Schedule : IFormEntity
+    public class Schedule : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         public int DetermineBeginDate { get; set; }
         public DateTime? BeginDate { get; set; }

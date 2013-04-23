@@ -18,7 +18,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int? LegallyResponsible { get; set; }
         [DataMember]
@@ -38,7 +38,7 @@ namespace FriendlyForms.RestService
     public class RespOtherChildren : IHasResponseStatus
     {
         [DataMember]
-        public OtherChildren OtherChildren { get; set; }
+        public long Id { get; set; }
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
@@ -49,11 +49,11 @@ namespace FriendlyForms.RestService
 
         public object Post(ReqOtherChildren request)
         {
-            var otherChildrenViewModel = request.TranslateTo<OtherChildrenViewModel>();
-            var otherChildren = OtherChildrenService.AddOrUpdate(otherChildrenViewModel);
+            var otherChildren = request.TranslateTo<OtherChildren>();
+            OtherChildrenService.Add(otherChildren);
             return new RespOtherChildren
                 {
-                    OtherChildren = otherChildren
+                    Id = otherChildren.Id
                 };
         }
         public object Put(ReqOtherChildren request)

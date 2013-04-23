@@ -38,17 +38,18 @@ namespace FriendlyForms.Controllers
         private readonly ISocialSecurityService _socialSecurityService;
         private readonly IPreexistingSupportService _preexistingSupportService;
         private readonly IOtherChildrenService _otherChildrenService;
-        private readonly IDeviationsService _deviationsService;
+        private readonly IDeviationsFormService _deviationsFormService;
         private readonly IOtherChildService _otherChildService;
         private readonly IVehicleFormService _vehicleFormService;
         private readonly IAddendumService _addendumService;
         private readonly IHealthService _healthService;
         private readonly IChildCareFormService _childCareFormService;
+        private readonly IPreexistingSupportFormService _preexistingSupportFormService;
         //
         // GET: /Forms/
         public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IIncomeService incomeService, ISocialSecurityService socialSecurityService, 
-            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsService deviationsService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService)
+            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsFormService deviationsFormService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService, IPreexistingSupportFormService preexistingSupportFormService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -74,13 +75,14 @@ namespace FriendlyForms.Controllers
             _socialSecurityService = socialSecurityService;
             _preexistingSupportService = preexistingSupportService;
             _otherChildrenService = otherChildrenService;
-            _deviationsService = deviationsService;
+            _deviationsFormService = deviationsFormService;
             _otherChildService = otherChildService;
             _vehicleFormService = vehicleFormService;
             _childFormService = childFormService;
             _addendumService = addendumService;
             _healthService = healthService;
             _childCareFormService = childCareFormService;
+            _preexistingSupportFormService = preexistingSupportFormService;
         }
         
         [Authorize]
@@ -144,7 +146,7 @@ namespace FriendlyForms.Controllers
             if (schedule != null)
             {
                 schedule.NonCustodialParent = custodyInformation.NonCustodyParent;
-                schedule.CustodialParent = custodyInformation.Parent;
+                schedule.CustodialParent = custodyInformation.CustodyParent;
             }
 
             var holiday = children.Children.Any() ? _holidayService.GetByChildId(children.Children.First().Id) : new Holiday();
@@ -283,15 +285,19 @@ namespace FriendlyForms.Controllers
             var childForm = _childFormService.GetByUserId(Id);
             var social = _socialSecurityService.GetByUserId(Id);
             var socialOther = _socialSecurityService.GetByUserId(Id, isOtherParent:true);
+            var preexistForm = _preexistingSupportFormService.GetByUserId(Id);
+            var preexistFormOther = _preexistingSupportFormService.GetByUserId(Id, isOtherParent: true);
             var preexistList = _preexistingSupportService.GetByUserId(Id);
             var preexistListOther = _preexistingSupportService.GetByUserId(Id, isOtherParent:true);
             var other = _otherChildrenService.GetByUserId(Id);
             var otherChildren = _otherChildService.GetChildrenByOtherChildrenId(other.Id);
             var otherOther = _otherChildrenService.GetByUserId(Id, isOtherParent: true);
             var otherChildrenOther = _otherChildService.GetChildrenByOtherChildrenId(otherOther.Id);
-            var deviation = _deviationsService.GetByUserId(Id);
-            var health = _healthService.GetByUserId(Id) as HealthViewModel;
+            var health = _healthService.GetByUserId(Id);
+            var healthOther = _healthService.GetByUserId(Id, isOtherParent:true);
             var childCareForm = _childCareFormService.GetByUserId(Id) as ChildCareFormViewModel;
+            var deviation = _deviationsFormService.GetByUserId(Id);
+            var deviationOther = _deviationsFormService.GetByUserId(Id, isOtherParent:true);
             other.OtherChildViewModel = new OtherChildViewModel()
                 {
                     Children = otherChildren.ToList()
@@ -300,26 +306,14 @@ namespace FriendlyForms.Controllers
                 {
                     Children = otherChildrenOther.ToList()
                 };
-            var financial = new FinancialFormsCompleted()
-                {
-                    Income = income.UserId != 0,
-                    IncomeOther = incomeOther.UserId != 0,
-                    OtherChildren = other.UserId != 0,
-                    OtherChildrenOther = otherOther.UserId != 0,
-                    Preexisting = preexistList.Any(),
-                    PreexistingOther = preexistListOther.Any(),
-                    SocialSecurity = social.UserId != 0,
-                    SocialSecurityOther = socialOther.UserId != 0,
-                    Deviation = deviation.UserId != 0,
-                    Health = health.UserId != 0,
-                    ChildCareForm = childCareForm.UserId != 0
-                };
+
             var allPreexist = new AllPreexistingViewModel()
                 {
                     PreexistingSupportViewModel = new PreexistingSupportViewModel()
                         {
                             PreexistingSupportList = preexistList
                         },
+                        PreexistingSupportFormViewModel = preexistForm,
                         ChildViewModel = new ChildViewModel()                        
                 };
             var allPreexistOther = new AllPreexistingViewModel()
@@ -328,30 +322,49 @@ namespace FriendlyForms.Controllers
                         {
                             PreexistingSupportList = preexistListOther
                         },
+                        PreexistingSupportFormViewModel = preexistFormOther,
                     ChildViewModel = new ChildViewModel()
                 };
 
-            var model = new FinancialViewModel()
+            var financial = new FinancialFormsCompleted()
+                {
+                    Income = income.UserId != 0,
+                    IncomeOther = incomeOther.UserId != 0,
+                    OtherChildren = other.UserId != 0,
+                    OtherChildrenOther = otherOther.UserId != 0,
+                    Preexisting = allPreexist.PreexistingSupportFormViewModel.UserId != 0,
+                    PreexistingOther = allPreexistOther.PreexistingSupportFormViewModel.UserId != 0,
+                    SocialSecurity = social.UserId != 0,
+                    SocialSecurityOther = socialOther.UserId != 0,
+                    Deviation = deviation.UserId != 0,
+                    Health = health.UserId != 0,
+                    HealthOther = healthOther.UserId != 0,
+                    ChildCareForm = childCareForm.UserId != 0,
+                    DeviationOther = deviationOther.UserId != 0,
+                };
+            var model = new FinancialViewModel
                 {
                     FinancialFormsCompleted = financial,
                     IncomeViewModel = income,
                     IncomeOtherViewModel = incomeOther,
                     ChildAllViewModel = new ChildAllViewModel()
-                    {
-                        ChildViewModel = children,
-                        ChildFormViewModel = childForm as ChildFormViewModel
-                    },
+                        {
+                            ChildViewModel = children,
+                            ChildFormViewModel = childForm as ChildFormViewModel
+                        },
                     SocialSecurityViewModel = social,
                     SocialSecurityOtherViewModel = socialOther,
                     PreexistingSupportViewModel = allPreexist,
                     PreexistingSupportOtherViewModel = allPreexistOther,
                     OtherChildrenViewModel = other,
                     OtherChildrenOtherViewModel = otherOther,
-                    DeviationsViewModel = deviation,
+                    DeviationsFormViewModel = deviation,
                     HealthViewModel = health,
-                    ChildCareFormViewModel = childCareForm
+                    HealthOtherViewModel = healthOther,
+                    ChildCareFormViewModel = childCareForm,
+                    DeviationsOtherFormViewModel = deviationOther,
+                    FormUserId = Id
                 };
-            model.FormUserId = Id;
             return View(model);
         }
 

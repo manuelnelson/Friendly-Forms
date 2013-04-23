@@ -4,10 +4,10 @@ using Models.ViewModels;
 
 namespace Models
 {
-    public class PreexistingSupportChild : IFormEntity
+    public class PreexistingSupportChild : IEntity, IFormEntity
     {
         public virtual long Id { get; set; }
-        public virtual int UserId { get; set; }
+        public virtual long UserId { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
         public virtual int Gender { get; set; }

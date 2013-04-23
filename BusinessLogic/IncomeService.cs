@@ -14,7 +14,7 @@ namespace BusinessLogic
         {
         }
 
-        public IncomeViewModel GetByUserId(int userId, bool isOtherParent = false)
+        public IncomeViewModel GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {

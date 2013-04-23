@@ -46,6 +46,8 @@ namespace DataLayerContext
         public DbSet<OtherChild> OtherChild { get; set; }
         public DbSet<Health> Health{ get; set; }
         public DbSet<ChildCareForm> ChildCareForm { get; set; }
+        public DbSet<PreexistingSupportForm> PreexistingSupportForm { get; set; }
+        public DbSet<DeviationsForm> DeviationsForm { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -86,7 +88,24 @@ namespace DataLayerContext
             SetupHealthEntity(modelBuilder);
             SetupChildCareFormEntity(modelBuilder);
             SetupChildCareEntity(modelBuilder);
+            SetupPreexistingSupportFormEntity(modelBuilder);
+            SetupDeviationsFormEntity(modelBuilder);                    
+
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupDeviationsFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DeviationsForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<DeviationsForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
+
+        private void SetupPreexistingSupportFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PreexistingSupportForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<PreexistingSupportForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupChildCareEntity(DbModelBuilder modelBuilder)

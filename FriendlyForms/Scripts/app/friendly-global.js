@@ -63,13 +63,14 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
         }
         if (Friendly.IsOtherForm(formName)) {
             formName = formName.substring(0, formName.lastIndexOf("Other"));
-            model.isOtherParent = "true";
         }
         //If there's an Id, we are updating; use PUT instead of POST
         var submitType = 'POST';
         
-        if (typeof model.Id != 'undefined' && model.Id != '0')
+        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
             submitType = 'PUT';
+        else
+            model.Id = 0;
         $.ajax({
             url: '/api/' + formName + '?format=json',
             type: submitType,
@@ -130,16 +131,6 @@ Friendly.NextForm = function (nextForm, prevIcon) {
     $('.wrapper').hide();
 
     switch (nextForm) {
-        case 'preexistingSupport':
-            if ($('#preexistingSupport input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-                    $('#supportWrapper').show();
-                }
-            break;
-        case 'preexistingOther':
-            if ($('#preexistingOther input[id="PreexistingSupportViewModel_Support"]:checked').val() === "1") {
-                $('#supportOtherWrapper').show();
-            }
-            break;
         case 'decisions':
             Friendly.LoadChildren('decision');
             break;
@@ -148,6 +139,12 @@ Friendly.NextForm = function (nextForm, prevIcon) {
             break;
         case 'childCare':
             Friendly.LoadChildren('childCare');
+            break;
+        case 'deviations':
+            Friendly.LoadChildren('deviations');
+            break;
+        case 'deviationsOther':
+            Friendly.LoadChildren('deviationsOther');
             break;
     }
     $('#sidebar li').removeClass('active');
@@ -167,6 +164,9 @@ Friendly.GetFormInput = function (formName) {
     //grab form Id if it exists
     if ($('#' + formName + 'Id').length > 0)
         model.Id = $('#' + formName + 'Id').val();
+    if (Friendly.IsOtherForm(formName)) {
+        model.isOtherParent = "true";
+    }
     return model;
 };
 Friendly.ClearForm = function (formName) {
@@ -222,7 +222,7 @@ Friendly.FormInvalidationMessage = function(formName) {
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
-    var genericForms = ['house', 'vehicle', 'child', 'decisions', 'holiday', 'preexistingSupport', 'preexistingSupportOther'];
+    var genericForms = ['house', 'vehicle', 'child', 'decisions', 'holiday', 'preexistingSupportForm', 'preexistingSupportFormOther', 'childCare', 'deviations', 'deviationsOther'];
     if (genericForms.indexOf(formName) >= 0) {
         switch (formName) { 
             case 'house':
@@ -252,14 +252,36 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 break;
             case 'childCare':
                 //First, check if current form is valid
-                Financial.AddChildCare();
+                Financial.AddChildCare(null, true);
                 //let's hide the form while we go through them
                 $('#' + formName + 'Wrapper').hide();
                 //cycle through all children and make sure form is valid and saved
                 Friendly.childNdx = 0;
                 var child = Friendly.children[Friendly.childNdx];
-                //Friendly.ChildCareError = [];
-                //Parenting.CheckChildCare(child, nextForm);
+                Friendly.ChildCareError = [];
+                Financial.CheckChildCare(child, nextForm);
+                break;
+            case 'deviations':
+                //First, check if current form is valid
+                Financial.AddDeviations(null, true);
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                Friendly.DeviationsError = [];
+                Financial.CheckDeviations(child, nextForm);
+                break;
+            case 'deviationsOther':
+                //First, check if current form is valid
+                Financial.AddDeviationsOther(null, true);
+                //let's hide the form while we go through them
+                $('#' + formName + 'Wrapper').hide();
+                //cycle through all children and make sure form is valid and saved
+                Friendly.childNdx = 0;
+                var child = Friendly.children[Friendly.childNdx];
+                Friendly.DeviationsErrorOther = [];
+                Financial.CheckDeviationsOther(child, nextForm);
                 break;
         case 'holiday':
                 //First, check if current form is valid
@@ -272,13 +294,12 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 Friendly.ChildHolidayError = [];
                 Parenting.CheckChildHoliday(child, nextForm);
                 break;                
-            case 'preexistingSupport':
+            case 'preexistingSupportForm':
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 break;
-            case 'preexistingSupportOther':
+            case 'preexistingSupportFormOther':
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 break;
-
         }
         return false;
     }
@@ -316,6 +337,12 @@ Friendly.LoadChildren = function (form) {
             break;
         case "childCare":
             Financial.GetChildCare(firstChild);
+            break;
+        case "deviations":
+            Financial.GetDeviations(firstChild);
+            break;
+        case "deviationsOther":
+            Financial.GetDeviationsOther(firstChild);
             break;
     }
 };

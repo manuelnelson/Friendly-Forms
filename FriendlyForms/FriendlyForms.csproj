@@ -104,12 +104,6 @@
     <Reference Include="Microsoft.WindowsFabric.Data.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.Caching.1.8.1.0\lib\net35-full\Microsoft.WindowsFabric.Data.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Munq.IocContainer">
-      <HintPath>..\packages\Munq.IocContainer.3.1.6\Lib\Munq.IocContainer.dll</HintPath>
-    </Reference>
-    <Reference Include="Munq.MVC3">
-      <HintPath>..\packages\Munq.MVC3.3.1.5\Lib\Munq.MVC3.dll</HintPath>
-    </Reference>
     <Reference Include="Pechkin">
       <HintPath>..\packages\Pechkin.0.5.8.1\lib\net40\Pechkin.dll</HintPath>
     </Reference>
@@ -198,7 +192,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AppHost.cs" />
-    <Compile Include="App_Start\MunqMvc3Startup.cs" />
     <Compile Include="Authentication\DefaultFormsAuthentication.cs" />
     <Compile Include="Authentication\IdentityExtensions.cs" />
     <Compile Include="Authentication\IFormsAuthentication.cs" />
@@ -213,7 +206,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Authorization.cs" />
-    <Compile Include="Helpers\MunqIocAdapter.cs" />
     <Compile Include="Helpers\PdfResult.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -238,6 +230,7 @@
     <Compile Include="RestService\CourtRestService.cs" />
     <Compile Include="RestService\DebtRestService.cs" />
     <Compile Include="RestService\DecisionsRestService.cs" />
+    <Compile Include="RestService\DeviationsFormRestService.cs" />
     <Compile Include="RestService\EmailRestService.cs" />
     <Compile Include="RestService\ExtraDecisionRestService.cs" />
     <Compile Include="RestService\ExtraHolidayRestService.cs" />
@@ -250,8 +243,10 @@
     <Compile Include="RestService\OtherChildrenRestService.cs" />
     <Compile Include="RestService\OtherChildRestService.cs" />
     <Compile Include="RestService\AddendumRestService.cs" />
+    <Compile Include="RestService\OutputRestService.cs" />
     <Compile Include="RestService\ParticipantRestService.cs" />
     <Compile Include="RestService\PreexistingSupportChildRestService.cs" />
+    <Compile Include="RestService\PreexistingSupportFormRestService.cs" />
     <Compile Include="RestService\PreexistingSupportRestService.cs" />
     <Compile Include="RestService\PrivacyRestService.cs" />
     <Compile Include="RestService\PropertyRestService.cs" />
@@ -497,6 +492,10 @@
     <Content Include="Views\Forms\_ChildCareForm.cshtml" />
     <Content Include="Views\Forms\_templateChildCare.cshtml" />
     <Content Include="Views\Output\_domesticEnd.cshtml" />
+    <Content Include="Views\Output\_scheduleA.cshtml" />
+    <Content Include="Views\Output\_scheduleB.cshtml" />
+    <Content Include="Views\Forms\_templateDeviations.cshtml" />
+    <Content Include="Views\Forms\_DeviationsOther.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

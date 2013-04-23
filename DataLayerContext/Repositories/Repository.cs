@@ -5,10 +5,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using DataInterface;
+using Models.Contract;
 
 namespace DataLayerContext.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class,IEntity
     {
         public IUnitOfWork UnitOfWork { get; set; }
 
@@ -120,6 +121,12 @@ namespace DataLayerContext.Repositories
         public virtual TEntity Get(long id)
         {
             return GetDbSet().Find(id);
+        }
+
+
+        public IEnumerable<TEntity> Get(IEnumerable<long> ids)
+        {
+            return GetDbSet().Where(x=>ids.Contains(x.Id));
         }
 
 

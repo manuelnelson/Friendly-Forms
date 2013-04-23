@@ -30,29 +30,31 @@ namespace BusinessLogic
             {
                 var custodyInformation = new CustodyInformation()
                     {
-                        Parent = Enum.GetName(typeof (ParentRelationship), participant.PlaintiffRelationship),
+                        CustodyParent = Enum.GetName(typeof (ParentRelationship), participant.PlaintiffRelationship),
                         NonCustodyParent = Enum.GetName(typeof (ParentRelationship), participant.DefendantRelationship),                                                    
                         NonCustodyParentName = participant.DefendantsName,
+                        CustodyParentName = participant.PlaintiffsName
                     };
                 custodyInformation.NonCustodyIsFather = custodyInformation.NonCustodyParent == Enum.GetName(typeof(ParentRelationship), ParentRelationship.Father);
-                custodyInformation.LegalCustodyPhrase = "The " + custodyInformation.Parent + " will be the primary legal custodian of the children.";
+                custodyInformation.LegalCustodyPhrase = "The " + custodyInformation.CustodyParent + " will be the primary legal custodian of the children.";
                 return custodyInformation;
             }
             if (participant.DefendantCustodialParent ==(int)CustodialParent.Primary)
             {
                 var custodyInformation = new CustodyInformation()
                     {
-                        Parent = Enum.GetName(typeof (ParentRelationship), participant.DefendantRelationship),
+                        CustodyParent = Enum.GetName(typeof (ParentRelationship), participant.DefendantRelationship),
                         NonCustodyParent = Enum.GetName(typeof (ParentRelationship), participant.PlaintiffRelationship),
-                        NonCustodyParentName = participant.PlaintiffsName,                        
+                        NonCustodyParentName = participant.PlaintiffsName,
+                        CustodyParentName = participant.DefendantsName
                     };
-                custodyInformation.LegalCustodyPhrase = "The " + custodyInformation.Parent + " will be the primary legal custodian of the children.";
+                custodyInformation.LegalCustodyPhrase = "The " + custodyInformation.CustodyParent + " will be the primary legal custodian of the children.";
                 return custodyInformation;
             }
             //TODO: fix Joint Custody
             return new CustodyInformation()
                 {
-                    Parent = "Both parents",
+                    CustodyParent = "Both parents",
                     LegalCustodyPhrase = "The parties will share legal custody of the children."
                 };
         }

@@ -24,14 +24,14 @@ namespace FriendlyForms.RestService
         }
 
         [Route("/Healths", "POST")]
-        [Route("/Healths/{Id}", "PUT")]
+        [Route("/Healths", "PUT")]
         [Route("/Healths/{Id}", "GET")]
         public class HealthDto : IReturn<HealthDto>
         {
             [DataMember]
             public long Id { get; set; }
             [DataMember]
-            public int UserId { get; set; }
+            public long UserId { get; set; }
             [DataMember]
             public bool IsOtherParent { get; set; }
             [DataMember]

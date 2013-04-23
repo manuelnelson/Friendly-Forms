@@ -7,6 +7,6 @@ namespace BusinessLogic.Contracts
     public interface IChildService : IFormService<IChildRepository,Child>
     {
         Child AddOrUpdate(ChildViewModel model);
-        new ChildViewModel GetByUserId(int userId);
+        new ChildViewModel GetByUserId(long userId);
     }
 }

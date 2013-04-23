@@ -4,10 +4,10 @@ using Models.ViewModels;
 
 namespace Models
 {
-    public class ChildSupport : IFormEntity
+    public class ChildSupport : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public string PaidBy { get; set; }
         public string PaidTo { get; set; }
         public int MonthlyAmount { get; set; }

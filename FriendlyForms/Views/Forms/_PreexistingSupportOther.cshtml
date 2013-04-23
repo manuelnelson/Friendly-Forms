@@ -1,8 +1,9 @@
 ﻿@model BusinessLogic.Models.AllPreexistingViewModel 
 @using Models.ViewModels
-<div class="form-vertical wrapper hide" id="preexistingSupportOtherWrapper">
-    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "preexistingSupportOther" }))
+<div class="form-vertical wrapper hide" id="preexistingSupportFormOtherWrapper">
+    @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "preexistingSupportFormOther" }))
     {
+        <input type="hidden" id="preexistingSupportFormId" value="@Model.PreexistingSupportFormViewModel.Id"/>
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -12,18 +13,11 @@
                     </div>
                     <div class="widget-content">
                         <div class="control-group row-fluid">
-                            <label class="span4 form-question">
+                            <label class="form-question">
                                 Does the other parent make Current Court Ordered Child Support Payments for other children?</label>
-                            @if(Model.PreexistingSupportViewModel.PreexistingSupportList.Any())
-                            {
-                                <label class="radio inline">Yes @Html.RadioButtonFor(m => m.PreexistingSupportViewModel.Support, (int)YesNo.Yes, new{@class="inline", @checked = "checked"})</label>
-                                <label class="radio inline">No @Html.RadioButtonFor(m => m.PreexistingSupportViewModel.Support, (int)YesNo.No, new{@class="inline"})</label>                                
-                            } else
-                            {
-                                <label class="radio inline">Yes @Html.RadioButtonFor(m => m.PreexistingSupportViewModel.Support, (int)YesNo.Yes, new{@class="inline"})</label>
-                                <label class="radio inline">No @Html.RadioButtonFor(m => m.PreexistingSupportViewModel.Support, (int)YesNo.No, new{@class="inline", @checked = "checked"})</label>                                                                
-                            }
-                            @Html.ValidationMessageFor(m => m.PreexistingSupportViewModel.Support)
+                                <label class="radio inline">Yes @Html.RadioButtonFor(m => m.PreexistingSupportFormViewModel.Support, (int)YesNo.Yes, new{@class="inline"})</label>
+                                <label class="radio inline">No @Html.RadioButtonFor(m => m.PreexistingSupportFormViewModel.Support, (int)YesNo.No, new{@class="inline"})</label>                                
+                                @Html.ValidationMessageFor(m => m.PreexistingSupportFormViewModel.Support)                            
                         </div>
                     </div>
                 </div>

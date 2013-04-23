@@ -1,13 +1,14 @@
-﻿@using Models.ViewModels
-@model BusinessLogic.Models.AllFinancialViewModel 
-@{
-    ViewBag.Title = "Financial";
+﻿@{
+    ViewBag.Title = "";
 }
 @section Sidebar{
     <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
         <li><a href="@Url.Action("Index","Home")"><i class="icon icon-home"></i><span>Home</span></a></li>
-        <li class="nav-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Financial</a></li>
+        <li class="output-item active" id="courtNav"><a href="#" data-form="court"><i class="icon-check"></i>Schedule A</a></li>
+        <li class="output-item"><a href="#" data-form="scheduleB"><i class="icon-check"></i>Schedule B</a></li>
+        <li class="output-item"><a href="#" data-form="scheduleD"><i class="icon-check"></i>Schedule D</a></li>
+        <li class="output-item"><a href="#" data-form="scheduleE"><i class="icon-check"></i>Schedule E</a></li>
     </ul>
 }
 @section Styles{
@@ -15,12 +16,20 @@
 }
 @section ButtonGroup{
     <div class="btn-group">
-        @using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "myform", target = "_blank" }))
+        @using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "topPrintButton", target = "_blank" }))
         {
-            <input type="hidden" id="html" name="html" />
+            <input type="hidden" class="html" name="html" />
             <button class="btn btn-large tip-bottom printForm" title="To PDF"><i class="icon-print"></i></button>
         }
     </div>
-    }
-<h3>Financial Form</h3>
-<h4>Income</h4>
+}
+<input type="hidden" id="user-id" value="@ViewBag.UserId"/>
+<div id="finanicalFormOutput"></div>
+@Html.Partial("_scheduleA")
+@Html.Partial("_scheduleB")
+<br/>
+@using (Html.BeginForm("PrintForm", "Output", FormMethod.Post, new { id = "bottomPrintButton", target = "_blank" }))
+{
+    <input type="hidden" class="html" name="html" />
+    <input type="submit" class="btn-primary btn printForm" value="Print to PDF" />
+}<br/>

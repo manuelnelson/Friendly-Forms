@@ -12,7 +12,7 @@ namespace DataLayerContext.Repositories
 
         public ChildCare GetChildById(int childId)
         {
-            return GetDbSet().Where(c => c.ChildId == childId).FirstOrDefault();
+            return GetDbSet().FirstOrDefault(c => c.ChildId == childId);
         }
     }
 }

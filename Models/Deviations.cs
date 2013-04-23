@@ -5,10 +5,12 @@ using ServiceStack.Common.Extensions;
 
 namespace Models
 {
-    public class Deviations : IFormEntity
+    public class Deviations : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public bool IsOtherParent { get; set; }
+        public long ChildId { get; set; }
         public int Circumstances { get; set; }
         public string Unjust { get; set; }
         public string BestInterest { get; set; }
@@ -22,11 +24,11 @@ namespace Models
         public int? TaxCredit { get; set; }
         public int? TravelExpenses { get; set; }
         public int? Visitation { get; set; }
-        public int? Alimony { get; set; }
+        public int? AlimonyPaid { get; set; }
         public int? Mortgage { get; set; }
         public int? Permanency { get; set; }
         public int? NonSpecific { get; set; }
-
+        public Child Child { get; set; }
 
         public IViewModel ConvertToModel()
         {

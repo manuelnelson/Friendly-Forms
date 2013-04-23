@@ -15,7 +15,7 @@ namespace BusinessLogic
         {
         }
 
-        public List<PreexistingSupport> GetByUserId(int userId, bool isOtherParent = false)
+        public List<PreexistingSupport> GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {

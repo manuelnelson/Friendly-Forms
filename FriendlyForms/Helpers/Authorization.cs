@@ -1,6 +1,7 @@
 ﻿using System.Security.Principal;
 using BusinessLogic.Contracts;
 using FriendlyForms.Authentication;
+using ServiceStack.WebHost.Endpoints;
 
 namespace FriendlyForms.Helpers
 {
@@ -9,8 +10,7 @@ namespace FriendlyForms.Helpers
         private static readonly IClientService ClientService;
         static Authorization()
         {
-            var adapter = new MunqIocAdapter();
-            ClientService = adapter.TryResolve<IClientService>();
+            ClientService = AppHostBase.Resolve<IClientService>();
         }
         public static bool IsAuthorized(IPrincipal currentUser, int userId)
         {

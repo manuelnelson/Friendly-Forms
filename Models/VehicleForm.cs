@@ -4,10 +4,10 @@ using ServiceStack.Common.Extensions;
 
 namespace Models
 {
-    public class VehicleForm : IFormEntity
+    public class VehicleForm : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public IViewModel ConvertToModel()
         {
             return this.TranslateTo<VehicleFormViewModel>();

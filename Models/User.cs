@@ -1,8 +1,11 @@
 ﻿using System;
+using Models.Contract;
+using ServiceStack.DataAnnotations;
 
 namespace Models
 {
-    public class User
+    [Alias("Users")]
+    public class User : IEntity
     {
         public User()
         {
@@ -10,7 +13,8 @@ namespace Models
             FailedPasswordAttemptStart = DateTime.UtcNow.AddMonths(-1);
             RoleId = 4;
         }
-        public int Id { get; set; }
+        [AutoIncrement]
+        public long Id { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

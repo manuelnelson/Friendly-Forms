@@ -132,6 +132,7 @@
     <Compile Include="Contracts\ICourtService.cs" />
     <Compile Include="Contracts\IDebtService.cs" />
     <Compile Include="Contracts\IDecisionsService.cs" />
+    <Compile Include="Contracts\IDeviationsFormService.cs" />
     <Compile Include="Contracts\IExtraDecisionsService.cs" />
     <Compile Include="Contracts\IExtraHolidayService.cs" />
     <Compile Include="Contracts\IFormService.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Contracts\IAddendumService.cs" />
     <Compile Include="Contracts\IParticipantService.cs" />
     <Compile Include="Contracts\IPreexistingSupportChildService.cs" />
+    <Compile Include="Contracts\IPreexistingSupportFormService.cs" />
     <Compile Include="Contracts\IPreexistingSupportService.cs" />
     <Compile Include="Contracts\IPrivacyService.cs" />
     <Compile Include="Contracts\IPropertyService.cs" />
@@ -164,6 +166,7 @@
     <Compile Include="CourtService.cs" />
     <Compile Include="DebtService.cs" />
     <Compile Include="DecisionsService.cs" />
+    <Compile Include="DeviationsFormService.cs" />
     <Compile Include="ExtraDecisionsService.cs" />
     <Compile Include="ExtraHolidayService.cs" />
     <Compile Include="FormService.cs" />
@@ -187,6 +190,7 @@
     <Compile Include="AddendumService.cs" />
     <Compile Include="ParticipantService.cs" />
     <Compile Include="PreexistingSupportChildService.cs" />
+    <Compile Include="PreexistingSupportFormService.cs" />
     <Compile Include="PreexistingSupportService.cs" />
     <Compile Include="PrivacyService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

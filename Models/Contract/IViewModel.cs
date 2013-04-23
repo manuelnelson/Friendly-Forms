@@ -2,7 +2,7 @@
 {
     public interface IViewModel
     {        
-        int UserId { get; set; }
+        long UserId { get; set; }
         IFormEntity ConvertToEntity();
     }
 }

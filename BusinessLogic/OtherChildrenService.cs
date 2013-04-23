@@ -14,7 +14,7 @@ namespace BusinessLogic
         {
         }
 
-        public OtherChildrenViewModel GetByUserId(int userId, bool isOtherParent = false)
+        public OtherChildrenViewModel GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {

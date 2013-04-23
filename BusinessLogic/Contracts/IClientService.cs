@@ -6,8 +6,8 @@ namespace BusinessLogic.Contracts
 {
     public interface IClientService : IService<IClientRepository, Client>
     {
-        List<User> GetUsersClients(int userId);
-        bool LawyerHasClient(int lawyerId, int clientId);
+        List<User> GetUsersClients(long userId);
+        bool LawyerHasClient(long lawyerId, int clientId);
     }
 }
 

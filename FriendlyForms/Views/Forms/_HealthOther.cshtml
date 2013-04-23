@@ -1,6 +1,6 @@
 ﻿@using Models.ViewModels
 @model HealthViewModel
-<div class="form-vertical wrapper hide" id="healthsWrapper">
+<div class="form-vertical wrapper hide" id="healthsOtherWrapper">
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "healthsOther" }))
     {
         <input type="hidden" id="healthsOtherId" value="@Model.Id"/>
@@ -146,5 +146,7 @@
             </div>
         </div>
     }
-    <button class="btn btn-primary financial-part5  next">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <button class="btn btn-primary financial-part10 next">Check Completion<i class="icon-arrow-right icon-white"></i></button>
+    <p class="viewOutput hide"><span style="font-weight:bold;">Congratulations!</span> The financial form is completely done.  Click the button below to view the output.</p>
+    <button class="btn btn-primary next viewOutput hide" id="ViewOutput" data-url='/Output/Financial/#scheduleA' value="View">View Output<i class="icon-arrow-right icon-white"></i></button>
 </div>

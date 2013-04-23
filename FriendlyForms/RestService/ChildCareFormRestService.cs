@@ -24,14 +24,14 @@ namespace FriendlyForms.RestService
         }
 
         [Route("/ChildCareForm", "POST")]
-        [Route("/ChildCareForm/{Id}", "PUT")]
+        [Route("/ChildCareForm", "PUT")]
         [Route("/ChildCareForm/{Id}", "GET")]
         public class ChildCareFormDto : IReturn<ChildCareFormDto>
         {
             [DataMember]
             public long Id { get; set; }
             [DataMember]
-            public int UserId { get; set; }
+            public long UserId { get; set; }
             [DataMember]
             public int ChildrenInvolved { get; set; }
         }

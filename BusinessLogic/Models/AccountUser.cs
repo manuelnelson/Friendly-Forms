@@ -8,7 +8,7 @@ namespace BusinessLogic.Models
         /// <summary>
         /// Gets or sets the identifier for the user.
         /// </summary>
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the role ID for the user

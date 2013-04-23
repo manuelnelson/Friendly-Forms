@@ -14,14 +14,14 @@
         <li><a href="@Url.Action("Parenting","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Parenting Plan</a></li>
         <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Financial Form</a>
             <ul style="display: block">
-                <li class="nav-item active" id="deviationsNav"><a data-form="deviations" href="#"><i class="icon-pencil icon-blue"></i>Deviations</a></li>
-                @if (Model.FinancialFormsCompleted.ChildCareForm)
+                    <li class="nav-item active" id="childCareNav"><a data-form="childCare" href="#"><i class="icon-pencil icon-blue"></i>Child Care</a></li>
+                @if (Model.FinancialFormsCompleted.Deviation)
                 {
-                    <li class="nav-item" id="childCareNav"><a data-form="childCare" href="#"><i class="@itemDone"></i>Child Care</a></li>
+                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemDone"></i>Deviations (Father)</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="childCareNav"><a data-form="childCare" href="#"><i class="@itemlock"></i>Child Care</a></li>
+                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemlock"></i>Deviations (Father)</a></li>
                 }
                 @if (Model.FinancialFormsCompleted.Income)
                 {
@@ -41,11 +41,11 @@
                 }
                 @if (Model.FinancialFormsCompleted.Preexisting)
                 {
-                    <li class="nav-item" id="preexistingSupportNav"><a data-form="preexistingSupport" href="#"><i class="@itemDone"></i>Preexisting Support (Father)</a></li>
+                    <li class="nav-item" id="preexistingSupportFormNav"><a data-form="preexistingSupportForm" href="#"><i class="@itemDone"></i>Preexisting Support (Father)</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="preexistingSupportNav"><a data-form="preexistingSupport" href="#"><i class="@itemlock"></i>Preexisting Support (Father)</a></li>
+                    <li class="nav-item" id="preexistingSupportFormNav"><a data-form="preexistingSupportForm" href="#"><i class="@itemlock"></i>Preexisting Support (Father)</a></li>
                 }
                 @if (Model.FinancialFormsCompleted.OtherChildren)
                 {
@@ -62,7 +62,16 @@
                 else
                 {
                     <li class="nav-item" id="healthsNav"><a data-form="healths" href="#"><i class="@itemlock"></i>Health Insurance (Father)</a></li>
-                }                
+                }     
+                @if (Model.FinancialFormsCompleted.DeviationOther)
+                {
+                    <li class="nav-item" id="deviationsOtherNav"><a data-form="deviationsOther" href="#"><i class="@itemDone"></i>Deviations (Mother)</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="deviationsOtherNav"><a data-form="deviationsOther" href="#"><i class="@itemlock"></i>Deviations (Mother)</a></li>
+                }
+           
                 @if (Model.FinancialFormsCompleted.IncomeOther)
                 {
                     <li class="nav-item" id="incomeOtherNav"><a data-form="incomeOther" href="#"><i class="@itemDone"></i>Income (Mother)</a></li>
@@ -81,11 +90,11 @@
                 }
                 @if (Model.FinancialFormsCompleted.PreexistingOther)
                 {
-                    <li class="nav-item" id="preexistingSupportOtherNav"><a data-form="preexistingSupportOther" href="#"><i class="@itemDone"></i>Preexisting Support (Mother)</a></li>
+                    <li class="nav-item" id="preexistingSupportFormOtherNav"><a data-form="preexistingSupportFormOther" href="#"><i class="@itemDone"></i>Preexisting Support (Mother)</a></li>
                 }
                 else
                 {
-                    <li class="nav-item" id="preexistingSupportOtherNav"><a data-form="preexistingSupportOther" href="#"><i class="@itemlock"></i>Preexisting Support (Mother)</a></li>
+                    <li class="nav-item" id="preexistingSupportFormOtherNav"><a data-form="preexistingSupportFormOther" href="#"><i class="@itemlock"></i>Preexisting Support (Mother)</a></li>
                 }
                 @if (Model.FinancialFormsCompleted.OtherChildrenOther)
                 {
@@ -101,7 +110,7 @@
                 }
                 else
                 {
-                    <li class="nav-item" id="healthsOtherNav"><a data-form="healths" href="#"><i class="@itemlock"></i>Health Insurance (Mother)</a></li>
+                    <li class="nav-item" id="healthsOtherNav"><a data-form="healthsOther" href="#"><i class="@itemlock"></i>Health Insurance (Mother)</a></li>
                 }                
 
             </ul>
@@ -120,12 +129,14 @@
 @Html.Partial("_SocialSecurity", Model.SocialSecurityViewModel)
 @Html.Partial("_PreexistingSupport", Model.PreexistingSupportViewModel)
 @Html.Partial("_OtherChildren", Model.OtherChildrenViewModel)
-@Html.Partial("_Deviations", Model.DeviationsViewModel)
+@Html.Partial("_Deviations", Model.DeviationsFormViewModel)
 @Html.Partial("_Health", Model.HealthViewModel)
 @Html.Partial("_IncomeOther", Model.IncomeOtherViewModel)
 @Html.Partial("_SocialSecurityOther", Model.SocialSecurityOtherViewModel)
 @Html.Partial("_PreexistingSupportOther", Model.PreexistingSupportOtherViewModel)
 @Html.Partial("_OtherChildrenOther", Model.OtherChildrenOtherViewModel)
+@Html.Partial("_HealthOther", Model.HealthOtherViewModel)
 @Html.Partial("_ChildCareForm", Model.ChildCareFormViewModel)
+@Html.Partial("_DeviationsOther", Model.DeviationsOtherFormViewModel)
 @* The child form below is used for the decisions form and holiday form to grab children information *@
 @Html.Partial("_Children", Model.ChildAllViewModel)

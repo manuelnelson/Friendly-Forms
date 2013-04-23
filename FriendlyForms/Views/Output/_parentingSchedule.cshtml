@@ -6,15 +6,15 @@
     For purposes of this parenting plan, the 
     @if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.FirstThird))
     {
-        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first and third weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second, fourth and fifth weekend of each month.</span>
+        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first and third weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.CustodyParent will have the second, fourth and fifth weekend of each month.</span>
     }
     else if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.FirstThirdFifth))
     {
-        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first, third and fifth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the second and fourth weekend of each month.</span>
+        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the first, third and fifth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.CustodyParent will have the second and fourth weekend of each month.</span>
     }
     else if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.SecondFourth))
     {
-        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the second and fourth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.Parent will have the first, third and fifth weekend of each month.</span>
+        <span>@Model.PpOutputFormHelper.CustodyInformation.NonCustodyParent will have the second and fourth weekend of each month for visitation. The @Model.PpOutputFormHelper.CustodyInformation.CustodyParent will have the first, third and fifth weekend of each month.</span>
     }
     else if (Model.ScheduleViewModel.NonCustodianWeekend==((int)ParentWeekends.EveryOther))
     {

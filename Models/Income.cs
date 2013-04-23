@@ -5,13 +5,13 @@ using ServiceStack.Common.Extensions;
 
 namespace Models
 {
-    public class Income : IFormEntity
+    public class Income : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public bool IsOtherParent { get; set; }
         public int HaveSalary { get; set; }
-        public int? OtherIncome { get; set; }
+        public string OtherIncome { get; set; }
         public int? W2Income { get; set; }
         public int? NonW2Income { get; set; }
         public int? SelfIncome { get; set; }

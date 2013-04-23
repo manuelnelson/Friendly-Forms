@@ -7,7 +7,7 @@ namespace Models.ViewModels
     public class ParticipantViewModel : IViewModel
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
         [Display(Name = "Plaintiff's Name")]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]

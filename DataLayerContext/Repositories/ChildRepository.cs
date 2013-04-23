@@ -11,7 +11,7 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public new List<Child> GetByUserId(int userId)
+        public new List<Child> GetByUserId(long userId)
         {
             return GetDbSet().Where(c => c.UserId.Equals(userId)).ToList();
         }

@@ -7,6 +7,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using DataLayerContext.Migrations;
 using FriendlyForms.Authentication;
+using ServiceStack.WebHost.Endpoints;
 
 namespace FriendlyForms
 {
@@ -60,7 +61,8 @@ namespace FriendlyForms
         //Authentication logic
         public override void Init()
         {
-            _formsAuthentication = (IFormsAuthentication)DependencyResolver.Current.GetService(typeof(IFormsAuthentication));
+            _formsAuthentication = AppHostBase.Resolve<IFormsAuthentication>();
+                //(IFormsAuthentication)DependencyResolver.Current.GetService(typeof(IFormsAuthentication));
             this.AuthenticateRequest += AuthenticateRequestFriendlyForm;
             this.PostAuthenticateRequest += PostAuthenticateRequestFriendlyForm;
             base.Init();

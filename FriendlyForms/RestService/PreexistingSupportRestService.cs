@@ -18,7 +18,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int Support { get; set; }
         [DataMember]

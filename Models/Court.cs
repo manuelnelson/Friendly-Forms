@@ -5,10 +5,10 @@ using ServiceStack.Common.Extensions;
 
 namespace Models
 {
-    public class Court : IFormEntity
+    public class Court : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public int CountyId { get; set; }
         public string CaseNumber { get; set; }
         public int AuthorOfPlan { get; set; }

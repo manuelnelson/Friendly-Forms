@@ -19,7 +19,7 @@ namespace BusinessLogic
             ClientRepository = repository;
         }
 
-        public List<User> GetUsersClients(int userId)
+        public List<User> GetUsersClients(long userId)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace BusinessLogic
             }
         }
 
-        public bool LawyerHasClient(int lawyerId, int clientId)
+        public bool LawyerHasClient(long lawyerId, int clientId)
         {
             try
             {

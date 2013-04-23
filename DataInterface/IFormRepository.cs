@@ -1,11 +1,10 @@
-﻿using System;
-using Models.Contract;
+﻿using Models.Contract;
 
 namespace DataInterface
 {
-    public interface IFormRepository<TFormEntity> : IRepository<TFormEntity>, IDisposable 
-        where TFormEntity : class, IFormEntity
+    public interface IFormRepository<TFormEntity> : IRepository<TFormEntity> 
+        where TFormEntity : IEntity, IFormEntity
     {
-        TFormEntity GetByUserId(int userId);
+        TFormEntity GetByUserId(long userId);
     }
 }

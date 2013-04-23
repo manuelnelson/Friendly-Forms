@@ -4,10 +4,10 @@ using ServiceStack.Common.Extensions;
 
 namespace Models
 {
-    public class Communication : IFormEntity
+    public class Communication : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public int AllowCommunication { get; set; }
         public bool Telephone { get; set; }
         public bool Email { get; set; }

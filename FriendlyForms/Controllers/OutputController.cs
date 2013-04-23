@@ -39,13 +39,6 @@ namespace FriendlyForms.Controllers
         private readonly IChildSupportService _childSupportService;
         private readonly IHolidayService _holidayService;
         private readonly IExtraHolidayService _extraHolidayService;
-        private readonly IIncomeService _incomeService;
-        private readonly ISocialSecurityService _socialSecurityService;
-        private readonly IPreexistingSupportService _preexistingSupportService;
-        private readonly IPreexistingSupportChildService _preexistingSupportChildService;
-        private readonly IOtherChildrenService _otherChildrenService;
-        private readonly IDeviationsService _deviationsService;
-        private readonly IOtherChildService _otherChildService;
         private readonly IVehicleFormService _vehicleFormService;
         private readonly SynchronizedPechkin _synchronizedPechkin;
         //
@@ -76,13 +69,13 @@ namespace FriendlyForms.Controllers
             _childSupportService = childSupportService;
             _holidayService = holidayService;
             _extraHolidayService = extraHolidayService;
-            _incomeService = incomeService;
-            _socialSecurityService = socialSecurityService;
-            _preexistingSupportService = preexistingSupportService;
-            _preexistingSupportChildService = preexistingSupportChildService;
-            _otherChildrenService = otherChildrenService;
-            _deviationsService = deviationsService;
-            _otherChildService = otherChildService;
+            //_incomeService = incomeService;
+            //_socialSecurityService = socialSecurityService;
+            //_preexistingSupportService = preexistingSupportService;
+            //_preexistingSupportChildService = preexistingSupportChildService;
+            //_otherChildrenService = otherChildrenService;
+            //_deviationsService = deviationsService;
+            //_otherChildService = otherChildService;
             _vehicleFormService = vehicleFormService;
             // set it up using fluent notation
             var globalConfig = new GlobalConfig();
@@ -297,5 +290,11 @@ namespace FriendlyForms.Controllers
             return View(domesticModel);
         }
 
+        [Authorize]
+        public ActionResult Financial()
+        {
+            ViewBag.UserId =  User.FriendlyIdentity().Id;
+            return View();
+        }
     }
 }

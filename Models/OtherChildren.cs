@@ -4,11 +4,11 @@ using Models.ViewModels;
 
 namespace Models
 {
-    public class OtherChildren : IFormEntity
+    public class OtherChildren : IEntity, IFormEntity
     {
         public virtual long Id { get; set; }
         public virtual bool IsOtherParent { get; set; }
-        public virtual int UserId { get; set; }
+        public virtual long UserId { get; set; }
         public virtual int LegallyResponsible { get; set; }
         public virtual int AtHome { get; set; }
         public virtual int Support { get; set; }

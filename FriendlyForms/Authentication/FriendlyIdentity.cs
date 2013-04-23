@@ -13,10 +13,10 @@ namespace FriendlyForms.Authentication
         public string AuthenticationType{get { return "Friendly Forms"; }}
         public bool IsAuthenticated{get { return true; }}
         public string DisplayName { get; private set; }
-        public int Id { get; private set; }
+        public long Id { get; private set; }
         public int RoleId { get; private set; }
 
-        public FriendlyIdentity(string name, string displayName, int userId, int roleId = (int)Role.Default)
+        public FriendlyIdentity(string name, string displayName, long userId, int roleId = (int) Role.Default)
         {
             Name = name;
             DisplayName = displayName;

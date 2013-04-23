@@ -18,7 +18,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int VehiclesInvolved { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
     }
 
     [DataContract]

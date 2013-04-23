@@ -1,0 +1,54 @@
+﻿@using Models.ViewModels
+@model DeviationsFormViewModel
+<div class="form-vertical wrapper hide" id="deviationsOtherWrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Deviations</h5>
+                </div>
+                <div class="widget-content">
+                    <label class="informative">
+                        <p>
+                            The Court or Jury has discretion to allow or not allow the noncustodial parent to receive a Low Income 
+                                or High Income Deviation that will decrease or increase the Presumptive Amount of Child Support.  If Low Income Deviation does not apply in this case, skip this section and go on to the next.
+                        </p>
+                        <p>
+                            This section pertains to what is acceptable to the recipient and affordable to whomever is paying. This typically pertains to parties who have either high or low income, or extraordinary expenses. 
+                                You may also apply other circumstances as both parties agree by using other non-specific deviations.
+                        </p>
+                    </label>
+                    <form id="deviationsOtherForm" method="POST" action="/api/deviationsForm/">
+                        <div class="control-group">
+                            <label class="form-question">
+                                Are you applying for a Child Support Payment Deviation?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.Deviation, (int)YesNo.Yes, new { @class = "inline" })</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.Deviation, (int)YesNo.No, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.Deviation)
+                        </div>
+                        <input type="hidden" id="deviationsOtherFormId" value="@Model.Id"/>
+                    </form>
+                    @if (Model.Deviation == (int)YesNo.Yes)
+                    {
+                        <div id="deviationsOther-show">
+                            <form id="deviationsOther" method="POST" action="/api/deviations/">
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="deviations-show" style="display:none">
+                            <form id="deviationsOther" method="POST" action="/api/deviations/">
+                            </form>
+                        </div>                        
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary financial-deviationsOther previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary financial-deviationsOther next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>
+@Html.Partial("_templateDeviations")
+

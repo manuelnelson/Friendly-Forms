@@ -8,7 +8,7 @@ namespace BusinessLogic
 {
     public class FormService<TFormRepository, TEntity, TViewModel> : Service<TFormRepository, TEntity>, IFormService<TFormRepository, TEntity> 
         where TFormRepository : IFormRepository<TEntity>
-        where TEntity : class, IFormEntity  
+        where TEntity : class, IEntity, IFormEntity  
         where TViewModel : IViewModel, new()
     {
         public TFormRepository FormRepository { get; set; }
@@ -22,7 +22,7 @@ namespace BusinessLogic
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public IViewModel GetByUserId(int userId)
+        public IViewModel GetByUserId(long userId)
         {
             try
             {

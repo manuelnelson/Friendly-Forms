@@ -50,6 +50,8 @@
     <Compile Include="ICourtRepository.cs" />
     <Compile Include="IDebtRepository.cs" />
     <Compile Include="IDecisionRepository.cs" />
+    <Compile Include="IDeviationsFormRepository.cs" />
+    <Compile Include="IEfRepository.cs" />
     <Compile Include="IExtraDecisionRepository.cs" />
     <Compile Include="IExtraHolidayRepository.cs" />
     <Compile Include="IFormRepository.cs" />
@@ -59,10 +61,12 @@
     <Compile Include="IHouseRepository.cs" />
     <Compile Include="IIncomeRepository.cs" />
     <Compile Include="IInformationRepository.cs" />
+    <Compile Include="IOrmLiteRepository.cs" />
     <Compile Include="IOtherChildrenRepository.cs" />
     <Compile Include="IOtherChildRepository.cs" />
     <Compile Include="IAddendumRepository.cs" />
     <Compile Include="IParticipantRepository.cs" />
+    <Compile Include="IPreexistingSupportFormRepository.cs" />
     <Compile Include="IPreexistingSupportRepository.cs" />
     <Compile Include="IPrivacyRepository.cs" />
     <Compile Include="IRealEstateRepository.cs" />

@@ -4,10 +4,10 @@ using ServiceStack.Common.Extensions;
 
 namespace Models
 {
-    public class ExtraHoliday : IFormEntity
+    public class ExtraHoliday : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public int ChildId { get; set; }
         public string HolidayName { get; set; }
         public int HolidayFather { get; set; }

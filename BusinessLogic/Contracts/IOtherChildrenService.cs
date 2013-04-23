@@ -6,6 +6,6 @@ namespace BusinessLogic.Contracts
 {
     public interface IOtherChildrenService : IFormService<IOtherChildrenRepository,OtherChildren>
     {
-        OtherChildrenViewModel GetByUserId(int userId, bool isOtherParent = false);
+        OtherChildrenViewModel GetByUserId(long userId, bool isOtherParent = false);
     }
 }
