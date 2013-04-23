@@ -89,6 +89,10 @@ namespace FriendlyForms.RestService
         public ScheduleB ScheduleB { get; set; }
         [DataMember]
         public ScheduleB OtherScheduleB { get; set; }
+        [DataMember]
+        public string CustodialParentName { get; set; }
+        [DataMember]
+        public string NonCustodialParentName { get; set; }
     }
 
     [DataContract]
@@ -204,15 +208,17 @@ namespace FriendlyForms.RestService
             var otherChildFormOther = OtherChildrenService.GetByUserId(request.UserId, isOtherParent:true);
             var scheduleOther = GetScheduleB(incomeOther, preexistSupportOther, otherChildFormOther);
             //Setup output form            
-            //var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
-            //var outputViewModel = new PpOutputFormHelper
-            //{
-            //    CustodyInformation = ParticipantService.GetCustodyInformation(participants)
-            //};
+            var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
+            var outputViewModel = new PpOutputFormHelper
+            {
+                CustodyInformation = ParticipantService.GetCustodyInformation(participants)
+            };
             return new ScheduleBDtoResp
                 {
                     ScheduleB = schedule,
-                    OtherScheduleB = scheduleOther
+                    OtherScheduleB = scheduleOther,
+                    CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
+                    NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
                 };
         }
 
