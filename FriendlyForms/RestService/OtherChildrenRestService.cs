@@ -11,7 +11,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/OtherChildren/")]
-    public class ReqOtherChildren
+    public class ReqOtherChildren : IReturn<ReqOtherChildren>
     {
         [DataMember]
         public long Id { get; set; }
@@ -34,15 +34,6 @@ namespace FriendlyForms.RestService
 
     }
 
-    [DataContract]
-    public class RespOtherChildren : IHasResponseStatus
-    {
-        [DataMember]
-        public long Id { get; set; }
-        [DataMember]
-        public ResponseStatus ResponseStatus { get; set; }
-    }
-
     public class OtherChildrenRestService : Service
     {
         public IOtherChildrenService OtherChildrenService { get; set; }
@@ -51,16 +42,12 @@ namespace FriendlyForms.RestService
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
             OtherChildrenService.Add(otherChildren);
-            return new RespOtherChildren
-                {
-                    Id = otherChildren.Id
-                };
+            return otherChildren;
         }
-        public object Put(ReqOtherChildren request)
+        public void Put(ReqOtherChildren request)
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
-            OtherChildrenService.Update(otherChildren);
-            return new RespOtherChildren();
+            OtherChildrenService.Update(otherChildren);            
         }
     }
 }

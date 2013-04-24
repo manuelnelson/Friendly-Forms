@@ -249,7 +249,7 @@
     //#region Other Children---------------    
     $('.financial-part4').click(function () {
         if ($('#otherChildWrapper').is(':visible')) {
-            Friendly.NextForm('specialCircumstances', Friendly.properties.iconSuccess);
+            Friendly.NextForm('healths', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
@@ -262,7 +262,7 @@
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {
                         //Eligible. Show add children.
-                        $('#otherChildWrapper #childrenId').val(data.OtherChildren.Id);
+                        $('#otherChildWrapper #childrenId').val(data.Id);
                         $('#otherChildWrapper').show();
                     } else {
                         Friendly.NextForm('healths', Friendly.properties.iconSuccess);
@@ -537,7 +537,6 @@
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildrenOther');
-        model.IsOtherParent = "true"; 
         if ($('#otherChildrenOther').valid()) {
             $.ajax({
                 url: '/api/OtherChildren/?format=json',
@@ -546,7 +545,7 @@
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {                        
                         //Eligible. Show add children.
-                        $('#otherChildOtherWrapper #childrenId').val(data.OtherChildren.Id);
+                        $('#otherChildOtherWrapper #childrenId').val(data.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
                         Friendly.NextForm('healthsOther', Friendly.properties.iconSuccess);

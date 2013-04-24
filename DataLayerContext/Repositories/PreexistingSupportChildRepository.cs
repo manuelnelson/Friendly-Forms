@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using DataInterface;
 using Models;
@@ -13,7 +14,7 @@ namespace DataLayerContext.Repositories
 
         public IEnumerable<PreexistingSupportChild> GetChildrenById(long id)
         {
-            return GetDbSet().Where(p => p.PreexistingSupportId.Equals(id));
+            return GetDbSet().Where(p => p.PreexistingSupportId ==id).Include(x=>x.PreexistingSupport);
         }
     }
 }

@@ -111,7 +111,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double Total5Minus1 { get; set; }
         [DataMember]
-        public List<PreexistingSupportChild> PreexistingSupport { get; set; }
+        public List<PreexistingSupportChild> PreexistingSupportChild { get; set; }
+        [DataMember]
+        public List<PreexistingSupport> PreexistingSupport { get; set; }
         [DataMember]
         public int TotalSupport { get; set; }
         [DataMember]
@@ -236,10 +238,10 @@ namespace FriendlyForms.RestService
             schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
             if (preexistingSupport != null)
             {
-                var preexistSupportChildren = PreexistingSupportChildService.GetChildrenBySupportId(preexistingSupport.Id);
-                var preexistingSupportChildren = preexistSupportChildren as IList<PreexistingSupportChild> ?? preexistSupportChildren.ToList();
-                schedule.PreexistingSupport = preexistingSupportChildren.ToList();
-                schedule.TotalSupport = preexistingSupportChildren.Sum(preexistingSupportChild => preexistingSupportChild.PreexistingSupport.Monthly);
+                var preexistSupportChildren = PreexistingSupportChildService.GetChildrenBySupportId(preexistingSupport.Id).ToList();
+                schedule.PreexistingSupportChild = preexistSupportChildren.ToList();
+                schedule.PreexistingSupport = preexistSupportChildren.Select(x => x.PreexistingSupport).ToList();
+                schedule.TotalSupport = schedule.PreexistingSupport.Sum(c => c.Monthly);
             }
             schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
             if (otherChildren != null)
