@@ -496,6 +496,7 @@
     <Content Include="Views\Output\_scheduleB.cshtml" />
     <Content Include="Views\Forms\_templateDeviations.cshtml" />
     <Content Include="Views\Forms\_DeviationsOther.cshtml" />
+    <Content Include="Views\Output\_scheduleD.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

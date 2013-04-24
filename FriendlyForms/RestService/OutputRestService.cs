@@ -25,7 +25,16 @@ namespace FriendlyForms.RestService
     [DataContract]
     [Route("/Output/Financial/ScheduleB/{UserId}")]
     [Route("/Output/Financial/ScheduleB")]
-    public class ScheduleBDto : IReturn<ScheduleADtoResp>
+    public class ScheduleBDto : IReturn<ScheduleBDtoResp>
+    {
+        [DataMember]
+        public long UserId { get; set; }
+    }
+
+    [DataContract]
+    [Route("/Output/Financial/ScheduleD/{UserId}")]
+    [Route("/Output/Financial/ScheduleD")]
+    public class ScheduleDDto : IReturn<ScheduleDDtoResp>
     {
         [DataMember]
         public long UserId { get; set; }
@@ -94,7 +103,6 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string NonCustodialParentName { get; set; }
     }
-
     [DataContract]
     public class ScheduleB
     {
@@ -132,6 +140,40 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double PreexistingOrder { get; set; }
     }
+
+    [DataContract]
+    public class ScheduleDDtoResp
+    {
+        [DataMember]
+        public ScheduleD ScheduleD { get; set; }
+        [DataMember]
+        public ScheduleD NonCustodialScheduleD { get; set; }
+        [DataMember]
+        public ScheduleD NonParentScheduleD { get; set; }
+        [DataMember]
+        public ScheduleD TotalScheduleD { get; set; }
+        [DataMember]
+        public List<ChildCare> ChildCare { get; set; }
+        [DataMember]
+        public string CustodialParentName { get; set; }
+        [DataMember]
+        public string NonCustodialParentName { get; set; }
+    }
+
+    [DataContract]
+    public class ScheduleD
+    {
+        [DataMember]
+        public double WorkRelated { get; set; }
+        [DataMember]
+        public double HealthInsurance { get; set; }
+        [DataMember]
+        public double AdditionalExpenses { get; set; }
+        [DataMember]
+        public double ProRataParents { get; set; }
+        [DataMember]
+        public double ProRataExpenses { get; set; }
+    }
     
     public class OutputsService : Service
     {
@@ -144,6 +186,8 @@ namespace FriendlyForms.RestService
         public IDeviationsService DeviationsService { get; set; }
         public IOtherChildService OtherChildService { get; set; }
         public IParticipantService ParticipantService { get; set; }
+        public IHealthService HealthService { get; set; }
+        public IChildCareService ChildCareService { get; set; }
 
         public object Get(ScheduleADto request)
         {
@@ -224,8 +268,42 @@ namespace FriendlyForms.RestService
                 };
         }
 
-        private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport,
-                                 OtherChildrenViewModel otherChildren)
+        public object Get(ScheduleDDto request)
+        {
+            //Setup output form            
+            var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
+            var health = HealthService.GetByUserId(request.UserId) as HealthViewModel;
+            var childCares = ChildCareService.GetAllByUserId(request.UserId);
+            var schedule = new ScheduleD
+            {
+                HealthInsurance = health.FathersHealthAmount ?? 0
+            };
+            
+
+            var otherSchedule = new ScheduleD
+                {
+                    HealthInsurance = health.MothersHealthAmount ?? 0
+                };
+
+            
+            var nonParentSchedule = new ScheduleD
+                {
+                    HealthInsurance = health.NonCustodialHealthAmount ?? 0
+                };
+
+
+            var outputViewModel = new PpOutputFormHelper
+            {
+                CustodyInformation = ParticipantService.GetCustodyInformation(participants)
+            };
+            return new ScheduleDDtoResp
+            {
+                CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
+                NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
+            };
+        }
+
+        private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren)
         {
             var schedule = new ScheduleB
             {
@@ -258,7 +336,6 @@ namespace FriendlyForms.RestService
                                             : schedule.Subtotal - schedule.TheoreticalSupport;
             return schedule;
         }
-
     }
     public static class OutputHelper
     {

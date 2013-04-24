@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using DataInterface;
 using Models;
 
@@ -13,6 +14,11 @@ namespace DataLayerContext.Repositories
         public ChildCare GetChildById(int childId)
         {
             return GetDbSet().FirstOrDefault(c => c.ChildId == childId);
+        }
+
+        public IEnumerable<ChildCare> GetAllByUserId(long userId)
+        {
+            return GetDbSet().Where(c => c.UserId == userId);
         }
     }
 }

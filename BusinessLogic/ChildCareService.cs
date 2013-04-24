@@ -1,4 +1,6 @@
-﻿using BusinessLogic.Contracts;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BusinessLogic.Contracts;
 using DataInterface;
 using Models;
 using Models.ViewModels;
@@ -17,6 +19,11 @@ namespace BusinessLogic
         public ChildCare GetByChildId(int childId)
         {
             return ChildCareRepository.GetChildById(childId);
+        }
+
+        public List<ChildCare> GetAllByUserId(long userId)
+        {
+            return ChildCareRepository.GetAllByUserId(userId).ToList();
         }
     }
 }
