@@ -153,13 +153,49 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ScheduleD TotalScheduleD { get; set; }
         [DataMember]
-        public List<ChildCare> ChildCare { get; set; }
+        public List<ChildCareWithTotals> ChildCare { get; set; }
         [DataMember]
         public string CustodialParentName { get; set; }
         [DataMember]
         public string NonCustodialParentName { get; set; }
     }
 
+    [DataContract]
+    public class ChildCareWithTotals
+    {
+        [DataMember]
+        public int SchoolFather { get; set; }
+        [DataMember]
+        public int SchoolMother { get; set; }
+        [DataMember]
+        public int SchoolNonParent { get; set; }
+        [DataMember]
+        public int SummerFather { get; set; }
+        [DataMember]
+        public int SummerMother { get; set; }
+        [DataMember]
+        public int SummerNonParent { get; set; }
+        [DataMember]
+        public int BreaksFather { get; set; }
+        [DataMember]
+        public int BreaksMother { get; set; }
+        [DataMember]
+        public int BreaksNonParent { get; set; }
+        [DataMember]
+        public int OtherFather { get; set; }
+        [DataMember]
+        public int OtherMother { get; set; }
+        [DataMember]
+        public int OtherNonParent { get; set; }
+        [DataMember]
+        public int TotalFather { get; set; }
+        [DataMember]
+        public int TotalMother { get; set; }
+        [DataMember]
+        public int TotalNonParent { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+    }
     [DataContract]
     public class ScheduleD
     {
@@ -172,7 +208,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double ProRataParents { get; set; }
         [DataMember]
-        public double ProRataExpenses { get; set; }
+        public double TotalSchool { get; set; }
+        [DataMember]
+        public double TotalSummer { get; set; }
+        [DataMember]
+        public double TotalOther { get; set; }
+        [DataMember]
+        public double TotalBreaks { get; set; }
+        [DataMember]
+        public double TotalYearly { get; set; }        
     }
     
     public class OutputsService : Service
@@ -274,22 +318,48 @@ namespace FriendlyForms.RestService
             var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
             var health = HealthService.GetByUserId(request.UserId) as HealthViewModel;
             var childCares = ChildCareService.GetAllByUserId(request.UserId);
+            var childCaresWithTotals = childCares.Select(childCare => childCare.TranslateTo<ChildCareWithTotals>()).ToList();
+
             var schedule = new ScheduleD
             {
                 HealthInsurance = health.FathersHealthAmount ?? 0
             };
-            
-
             var otherSchedule = new ScheduleD
-                {
-                    HealthInsurance = health.MothersHealthAmount ?? 0
-                };
-
-            
+            {
+                HealthInsurance = health.MothersHealthAmount ?? 0
+            };
             var nonParentSchedule = new ScheduleD
-                {
-                    HealthInsurance = health.NonCustodialHealthAmount ?? 0
-                };
+            {
+                HealthInsurance = health.NonCustodialHealthAmount ?? 0
+            };
+
+            for (var i = 0; i < childCares.Count; i++)
+            {
+                var childCareWithTotal = childCaresWithTotals[i];
+                var childCare = childCares[i];
+                childCareWithTotal.TotalFather = childCareWithTotal.BreaksFather + childCareWithTotal.OtherFather +
+                                                   childCareWithTotal.SchoolFather + childCareWithTotal.SummerFather;
+                childCareWithTotal.TotalMother = childCareWithTotal.BreaksMother + childCareWithTotal.OtherMother +
+                                                   childCareWithTotal.SchoolMother + childCareWithTotal.SummerMother;
+                childCareWithTotal.TotalNonParent = childCareWithTotal.BreaksNonParent + childCareWithTotal.OtherNonParent +
+                                                      childCareWithTotal.SchoolNonParent + childCareWithTotal.SummerNonParent;
+                childCareWithTotal.Name = childCare.Child.Name;
+                schedule.TotalSummer += childCare.SummerFather;
+                otherSchedule.TotalSummer += childCare.SummerMother;
+                nonParentSchedule.TotalSummer += childCare.SummerNonParent;
+                schedule.TotalSchool += childCare.SchoolFather;
+                otherSchedule.TotalSchool += childCare.SchoolMother;
+                nonParentSchedule.TotalSchool += childCare.SchoolNonParent;
+                schedule.TotalBreaks += childCare.BreaksFather;
+                otherSchedule.TotalBreaks += childCare.BreaksMother;
+                nonParentSchedule.TotalBreaks += childCare.BreaksNonParent;
+                schedule.TotalOther += childCare.OtherFather;
+                otherSchedule.TotalOther += childCare.OtherMother;
+                nonParentSchedule.TotalOther += childCare.OtherNonParent;
+                schedule.TotalYearly += childCareWithTotal.TotalFather;
+                otherSchedule.TotalYearly += childCareWithTotal.TotalMother;
+                nonParentSchedule.TotalYearly += childCareWithTotal.TotalNonParent;
+            }
 
 
             var outputViewModel = new PpOutputFormHelper
@@ -298,6 +368,9 @@ namespace FriendlyForms.RestService
             };
             return new ScheduleDDtoResp
             {
+                ScheduleD = schedule,
+                NonCustodialScheduleD = otherSchedule,
+                NonParentScheduleD = nonParentSchedule,
                 CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
                 NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
             };
