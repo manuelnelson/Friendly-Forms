@@ -76,14 +76,14 @@
             <tr>
                 <th colspan="4">Adjustment for Other Qualified Children</th>
             </tr>
+        </thead>
+        <tbody id="other-qualified-children">
             <tr>
                 <th></th>
                 <th>Name of Child</th>
                 <th>DOB</th>
                 <th>Credit Claimed By</th>
             </tr>
-        </thead>
-        <tbody>
         </tbody>
     </table>
     <table>
@@ -177,10 +177,12 @@
     </tr>
 </script>
 <script id="friendly-otherChildren-template" type="text/x-jquery-tmpl">
+    {{each OtherChildren}}
     <tr>
         <td></td>
-        <td>${Name}</td>
-        <td>${DateOfBirth}</td>
-        <td>${ClaimedBy}</td>
+        <td>${$value.Name}</td>
+        <td>${$value.DateOfBirth}</td>
+        <td>${$value.ClaimedBy}</td>
     </tr>
+    {{/each}}
 </script>

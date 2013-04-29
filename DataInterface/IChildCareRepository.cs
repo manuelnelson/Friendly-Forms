@@ -5,7 +5,7 @@ namespace DataInterface
 {
     public interface IChildCareRepository : IFormRepository<ChildCare>
     {
-        ChildCare GetChildById(int childId);
+        ChildCare GetChildById(long childId);
         IEnumerable<ChildCare> GetAllByUserId(long userId);
     }
 }

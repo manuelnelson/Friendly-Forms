@@ -9,6 +9,7 @@ namespace Models
         public virtual long Id { get; set; }
         public virtual bool IsOtherParent { get; set; }
         public virtual long UserId { get; set; }
+        public virtual User User { get; set; }
         public virtual int Support { get; set; }
         public virtual string CourtName { get; set; }
         public virtual int CaseNumber { get; set; }

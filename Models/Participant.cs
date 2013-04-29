@@ -8,6 +8,7 @@ namespace Models
     {
         public long Id { get; set; }
         public long UserId { get; set; }
+        public virtual User User { get; set; }
         public string PlaintiffsName { get; set; }
         public int PlaintiffRelationship { get; set; }
         public int PlaintiffCustodialParent { get; set; }

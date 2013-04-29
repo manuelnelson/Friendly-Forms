@@ -96,7 +96,8 @@ namespace FriendlyForms.App_Start
 
             container.Register<IUnitOfWork>(c => new SplitContext());
             container.Register<ICourtRepository>(c => new CourtRepository(c.Resolve<IUnitOfWork>()));
-            container.Register<IUserRepository>(c => new UserOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            //container.Register<IUserRepository>(c => new UserOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IUserRepository>(c => new UserRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IParticipantRepository>(c => new ParticipantRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IChildRepository>(c => new ChildRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IPrivacyRepository>(c => new PrivacyRepository(c.Resolve<IUnitOfWork>()));

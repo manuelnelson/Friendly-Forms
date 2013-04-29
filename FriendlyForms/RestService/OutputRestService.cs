@@ -128,7 +128,7 @@ namespace FriendlyForms.RestService
         public double AdjustedSupport { get; set; }
 
         [DataMember]
-        public List<OtherChild> OtherChildren { get; set; }
+        public List<OtherChildDto> OtherChildren { get; set; }
         [DataMember]
         public string OtherChildrenDescription { get; set; }
         [DataMember]
@@ -139,6 +139,12 @@ namespace FriendlyForms.RestService
         public double TheoreticalSupport { get; set; }
         [DataMember]
         public double PreexistingOrder { get; set; }
+    }
+    public class OtherChildDto
+    {
+        public string Name { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string ClaimedBy { get; set; }
     }
 
     [DataContract]
@@ -193,6 +199,12 @@ namespace FriendlyForms.RestService
         public int TotalMother { get; set; }
         [DataMember]
         public int TotalNonParent { get; set; }
+        [DataMember]
+        public int TotalFatherMonthly { get; set; }
+        [DataMember]
+        public int TotalMotherMonthly { get; set; }
+        [DataMember]
+        public int TotalNonParentMonthly { get; set; }
         [DataMember]
         public string Name { get; set; }
     }
@@ -288,21 +300,22 @@ namespace FriendlyForms.RestService
 
         public object Get(ScheduleBDto request)
         {
-            var income = IncomeService.GetByUserId(request.UserId).TranslateTo<IncomeDto>();
-            var preexistSupport = PreexistingSupportFormService.GetByUserId(request.UserId);
-            var otherChildForm = OtherChildrenService.GetByUserId(request.UserId);
-            var schedule = GetScheduleB(income, preexistSupport, otherChildForm);
-
-            var incomeOther = IncomeService.GetByUserId(request.UserId, isOtherParent: true).TranslateTo<IncomeDto>();
-            var preexistSupportOther = PreexistingSupportFormService.GetByUserId(request.UserId, isOtherParent:true);
-            var otherChildFormOther = OtherChildrenService.GetByUserId(request.UserId, isOtherParent:true);
-            var scheduleOther = GetScheduleB(incomeOther, preexistSupportOther, otherChildFormOther);
             //Setup output form            
             var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
             var outputViewModel = new PpOutputFormHelper
             {
                 CustodyInformation = ParticipantService.GetCustodyInformation(participants)
-            };
+            }; 
+            var income = IncomeService.GetByUserId(request.UserId).TranslateTo<IncomeDto>();
+            var preexistSupport = PreexistingSupportFormService.GetByUserId(request.UserId);
+            var otherChildForm = OtherChildrenService.GetByUserId(request.UserId);
+            var schedule = GetScheduleB(income, preexistSupport, otherChildForm, outputViewModel.CustodyInformation.CustodyParentName);
+
+            var incomeOther = IncomeService.GetByUserId(request.UserId, isOtherParent: true).TranslateTo<IncomeDto>();
+            var preexistSupportOther = PreexistingSupportFormService.GetByUserId(request.UserId, isOtherParent:true);
+            var otherChildFormOther = OtherChildrenService.GetByUserId(request.UserId, isOtherParent:true);
+            var scheduleOther = GetScheduleB(incomeOther, preexistSupportOther, otherChildFormOther, outputViewModel.CustodyInformation.NonCustodyParentName);
+
             return new ScheduleBDtoResp
                 {
                     ScheduleB = schedule,
@@ -343,6 +356,9 @@ namespace FriendlyForms.RestService
                                                    childCareWithTotal.SchoolMother + childCareWithTotal.SummerMother;
                 childCareWithTotal.TotalNonParent = childCareWithTotal.BreaksNonParent + childCareWithTotal.OtherNonParent +
                                                       childCareWithTotal.SchoolNonParent + childCareWithTotal.SummerNonParent;
+                childCareWithTotal.TotalFatherMonthly = childCareWithTotal.TotalFather/12;
+                childCareWithTotal.TotalMotherMonthly = childCareWithTotal.TotalMother / 12;
+                childCareWithTotal.TotalNonParentMonthly = childCareWithTotal.TotalNonParent / 12;
                 childCareWithTotal.Name = childCare.Child.Name;
                 schedule.TotalSummer += childCare.SummerFather;
                 otherSchedule.TotalSummer += childCare.SummerMother;
@@ -376,7 +392,7 @@ namespace FriendlyForms.RestService
             };
         }
 
-        private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren)
+        private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren, string parentName)
         {
             var schedule = new ScheduleB
             {
@@ -397,7 +413,11 @@ namespace FriendlyForms.RestService
             schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
             if (otherChildren != null)
             {
-                schedule.OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(otherChildren.Id).ToList();
+                schedule.OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(otherChildren.Id).Select(x=>x.TranslateTo<OtherChildDto>()).ToList();
+                foreach (var otherChildDto in schedule.OtherChildren)
+                {
+                    otherChildDto.ClaimedBy = parentName;
+                }
                 schedule.OtherChildrenDescription = otherChildren.Details;
             }
             schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0.0) > 0.01 ? schedule.Total5Minus1 : schedule.GrossIncome;

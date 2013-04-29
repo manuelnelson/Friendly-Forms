@@ -8,6 +8,7 @@ namespace Models
     {
         public virtual long Id { get; set; }
         public virtual long UserId { get; set; }
+        public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime ? DateOfBirth { get; set; }
 

@@ -113,6 +113,7 @@ namespace DataLayerContext
             modelBuilder.Entity<ChildCare>().HasKey(t => new { t.Id });
             modelBuilder.Entity<ChildCare>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<ChildCare>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupChildCareFormEntity(DbModelBuilder modelBuilder)
@@ -164,6 +165,7 @@ namespace DataLayerContext
             modelBuilder.Entity<Deviations>().HasKey(t => new { t.Id });
             modelBuilder.Entity<Deviations>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Deviations>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupOtherChildrenEntity(DbModelBuilder modelBuilder)
@@ -208,6 +210,7 @@ namespace DataLayerContext
             modelBuilder.Entity<ExtraHoliday>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<ExtraHoliday>().Property(t => t.HolidayName).HasMaxLength(100);
+            modelBuilder.Entity<ExtraHoliday>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupChildSupportEntity(DbModelBuilder modelBuilder)
@@ -299,8 +302,8 @@ namespace DataLayerContext
         {
             modelBuilder.Entity<Holiday>().HasKey(t => new { t.Id });
             modelBuilder.Entity<Holiday>().Property(t => t.Id)
-                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);       
-                 
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Holiday>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupScheduleEntity(DbModelBuilder modelBuilder)
@@ -331,6 +334,7 @@ namespace DataLayerContext
             modelBuilder.Entity<ExtraDecisions>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<ExtraDecisions>().Property(t => t.Description).HasMaxLength(100);
+            modelBuilder.Entity<ExtraDecisions>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupDecisionEntity(DbModelBuilder modelBuilder)
@@ -338,6 +342,7 @@ namespace DataLayerContext
             modelBuilder.Entity<Decisions>().HasKey(t => new { t.Id });
             modelBuilder.Entity<Decisions>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);            
+            modelBuilder.Entity<Decisions>().HasRequired(t=>t.Child).WithMany().WillCascadeOnDelete(false);                
         }
 
         private void SetupInformationEntity(DbModelBuilder modelBuilder)

@@ -8,6 +8,7 @@ namespace Models
     {
         public long Id { get; set; }
         public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int AllowCommunication { get; set; }
         public bool Telephone { get; set; }
         public bool Email { get; set; }

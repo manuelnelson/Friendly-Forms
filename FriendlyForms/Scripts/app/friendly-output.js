@@ -22,14 +22,42 @@
             url: '/api/Output/Financial/' + form + '/?UserId=' + userId + '&format=json',
             type: 'GET',
             success: function (data) {
-                var result = $("#friendly-" + form + "-template").tmpl(data);
-                $('#finanicalFormOutput').empty();
-                $('#finanicalFormOutput').append(result);
+                switch (form) {
+                    case 'scheduleB':
+                        populateScheduleBForm(data);
+                        break;
+                    case 'scheduleD':
+                        populateScheduleDForm(data);
+                        break;
+                    case 'scheduleE':
+                        populateScheduleEForm(data);
+                        break;
+                    default:
+                        var result = $("#friendly-" + form + "-template").tmpl(data);
+                        $('#finanicalFormOutput').empty();
+                        $('#finanicalFormOutput').append(result);
+                }
                 getPdfHtml();
             },
             error: Friendly.GenericErrorMessage
         });
     });
+
+    function populateScheduleBForm(data) {
+        var result = $("#friendly-scheduleB-template").tmpl(data);        
+        $('#finanicalFormOutput').empty();
+        $('#finanicalFormOutput').append(result);
+        result = $("#friendly-otherChildren-template").tmpl(data.ScheduleB);
+        $('#other-qualified-children').append(result);
+        result = $("#friendly-otherChildren-template").tmpl(data.OtherScheduleB);
+        $('#other-qualified-children').append(result);
+    }
+    function populateScheduleDForm(data) {
+        var result = $("#friendly-scheduleD-template").tmpl(data);
+        $('#finanicalFormOutput').empty();
+        $('#finanicalFormOutput').append(result);
+    }
+
 
     function getPdfHtml() {
         var html = $('#main-content').html();

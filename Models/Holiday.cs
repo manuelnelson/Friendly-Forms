@@ -7,8 +7,6 @@ namespace Models
     public class Holiday : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public long UserId { get; set; }
-        public int ChildId { get; set; }
         public bool FridayHoliday { get; set; }
         public bool MondayHoliday { get; set; }
         public int Thanksgiving { get; set; }
@@ -58,6 +56,10 @@ namespace Models
         public int FathersBdayMother { get; set; }
         public int ReligiousFather { get; set; }
         public int ReligiousMother { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
+        public long ChildId { get; set; }
+        public virtual Child Child { get; set; }
 
 
         public IViewModel ConvertToModel()

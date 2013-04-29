@@ -9,6 +9,7 @@ namespace Models
         public long Id { get; set; }
         public virtual bool IsOtherParent { get; set; }
         public virtual long UserId { get; set; }
+        public virtual User User { get; set; }
         public virtual int Support { get; set; }
         public IViewModel ConvertToModel()
         {

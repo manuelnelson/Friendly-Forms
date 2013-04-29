@@ -7,7 +7,6 @@ namespace Models
     public class Decisions : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public long UserId { get; set; }
         
         public int Education { get; set; }
         public int HealthCare { get; set; }
@@ -15,8 +14,10 @@ namespace Models
         public int ExtraCurricular { get; set; }
         public string BothResolve { get; set; }
 
-        public int ChildId { get; set; }
-        public Child Child { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
+        public long ChildId { get; set; }
+        public virtual Child Child { get; set; }
         
         public IViewModel ConvertToModel()
         {

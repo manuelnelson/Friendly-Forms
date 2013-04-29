@@ -8,6 +8,7 @@ namespace Models
     {
         public long Id { get; set; }
         public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int MaritalHouse { get; set; }
         public string Address { get; set; }
         public string CityState { get; set; }
