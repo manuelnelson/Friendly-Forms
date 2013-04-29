@@ -220,6 +220,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double ProRataParents { get; set; }
         [DataMember]
+        public double ProRataAdditional { get; set; }
+        [DataMember]
         public double TotalSchool { get; set; }
         [DataMember]
         public double TotalSummer { get; set; }
@@ -375,6 +377,8 @@ namespace FriendlyForms.RestService
                 schedule.TotalYearly += childCareWithTotal.TotalFather;
                 otherSchedule.TotalYearly += childCareWithTotal.TotalMother;
                 nonParentSchedule.TotalYearly += childCareWithTotal.TotalNonParent;
+
+                schedule.WorkRelated = 
             }
 
 
