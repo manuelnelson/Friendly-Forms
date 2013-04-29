@@ -6,14 +6,18 @@
     <table>
         <thead>
             <tr>
-                <th></th>
+                <th>WORK RELATED CHILD CARE COSTS</th>
                 <th>${CustodialParentName}</th>
                 <th>${NonCustodialParentName}</th>
+                <th>Non Custody Parent</th>
+                <th>Combined</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>1. Total Gross Monthly Income</td>
+                <td>1. Work </td>
+                <td class="currency">$${ScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
                 <td class="currency">$${ScheduleB.GrossIncome}</td>
                 <td class="currency">$${OtherScheduleB.GrossIncome}</td>
             </tr>
