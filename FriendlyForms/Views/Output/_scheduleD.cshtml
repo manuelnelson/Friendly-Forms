@@ -6,181 +6,111 @@
     <table>
         <thead>
             <tr>
-                <th></th>
+                <th>WORK RELATED CHILD CARE COSTS</th>
                 <th>${CustodialParentName}</th>
                 <th>${NonCustodialParentName}</th>
+                <th>Nonparent Custodian</th>
+                <th>Combined</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>1. Total Gross Monthly Income</td>
+                <td>1. Work Related Child Care</td>
                 <td class="currency">$${ScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
                 <td class="currency">$${OtherScheduleB.GrossIncome}</td>
             </tr>
             <tr>
-                <td>2. Monthly Self-Employment Income on which a parent
-                    paid Self-Employment Taxes for FICA & Medicare.</td>
-                <td class="currency">$${ScheduleB.SelfEmploymentIncome}</td>
-                <td class="currency">$${OtherScheduleB.SelfEmploymentIncome}</td>
+                <td>2. Health Insurance Paid for Children</td>
+                <td class="currency">$${ScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
             </tr>
             <tr>
-                <td>3. Amount of FICA owed by parent for self-employment
-                    income.</td>
-                <td class="currency">$${ScheduleB.FicaIncome}</td>
-                <td class="currency">$${OtherScheduleB.FicaIncome}</td>
+                <td>3. Total Monthly Additional Expenses</td>
+                <td class="currency">$${ScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
             </tr>
             <tr>
-                <td>4. Amount of Medicare tax owed by a parent for
-                    self-employment income.</td>
-                <td class="currency">$${ScheduleB.MedicareTax}</td>
-                <td class="currency">$${OtherScheduleB.MedicareTax}</td>
+                <td>4. Pro Rata Share of Parents' Income</td>
+                <td class="currency">$${ScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
             </tr>
             <tr>
-                <td>5. Total for lines 3 and 4.</td>
-                <td class="currency">$${ScheduleB.Total34}</td>
-                <td class="currency">$${OtherScheduleB.Total34}</td>
-            </tr>
-            <tr>
-                <td>6. Line 5 minus line 1.</td>
-                <td class="currency">$${ScheduleB.Total5Minus1}</td>
-                <td class="currency">$${OtherScheduleB.Total5Minus1}</td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
-                <th colspan="3">Adjustment for Preexisting Child Support Orders Being Paid for Other Children</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>8. Total Adjustment for Preexisting Child Support Orders</td>
-                <td>$${ScheduleB.TotalSupport}</td>
-                <td>$${OtherScheduleB.TotalSupport}</td>
-            </tr>
-            <tr>
-                <td>9. Adjusted Total</td>
-                <td>$${ScheduleB.AdjustedSupport}</td>
-                <td>$${OtherScheduleB.AdjustedSupport}</td>
+                <td>5. Pro Rata Share of Additional Expenses</td>
+                <td class="currency">$${ScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
+                <td class="currency">$${OtherScheduleB.GrossIncome}</td>
             </tr>
         </tbody>
     </table>
     <table>
         <thead>
             <tr>
-                <th colspan="4">Adjustment for Other Qualified Children</th>
+                <th colspan="7">SUPPLEMENTAL TABLE 1-WORK RELATED CHILD CARE COSTS</th>
             </tr>
             <tr>
                 <th></th>
-                <th>Name of Child</th>
-                <th>DOB</th>
-                <th>Credit Claimed By</th>
+                <th>School</th>
+                <th>Summer Break</th>
+                <th>Other Break</th>
+                <th>Other Child Care</th>
+                <th>Total Yearly Amount</th>
+                <th>Total Monthly Amount</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="supplemental-table">
         </tbody>
     </table>
-    <table>
-        <thead>
-            <tr>
-                <th>Reason for Inclusion of Qualified Children in This Court Case</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><p>The addition of Qualified Children for ${NonCustodialParentName} is based upon: ${OtherScheduleB.OtherChildrenDescription}</p>
-                    <p>The addition of Qualified Children for ${CustodialParentName} is based upon: ${ScheduleB.OtherChildrenDescription}</p>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <tbody>
-            <tr>
-                <td></td>
-                <td>${CustodialParentName}</td>
-                <td>${NonCustodialParentName}</td>
-            </tr>
-            <tr>
-                <td>11. Subtotal</td>
-                <td class="currency">$${ScheduleB.Subtotal}</td>
-                <td class="currency">$${OtherScheduleB.Subtotal}</td>
-            </tr>
-            <tr>
-                <td>12. Amount based upon Georgia Schedule of Basic Child Support Obligations.</td>
-                <td class="currency">$${ScheduleB.GeorgiaObligations}</td>
-                <td class="currency">$${OtherScheduleB.GeorgiaObligations}</td>
-            </tr>
-            <tr>
-                <td>13. Theoretical Child Support Order</td>
-                <td class="currency">$${ScheduleB.TheoreticalSupport}</td>
-                <td class="currency">$${OtherScheduleB.TheoreticalSupport}</td>
-            </tr>
-            <tr>
-                <td>14. Allowed Preexisting Child Support Order.</td>
-                <td class="currency">$${ScheduleB.PreexistingOrder}</td>
-                <td class="currency">$${OtherScheduleB.PreexistingOrder}</td>
-            </tr>
-        </tbody>
-    </table>
-    <br />
-    <div class="borderBox centered" style="width: 90%;">
-        <p><span style="font-weight: bold">Other income for ${CustodialParentName} is based upon:</span> ${ScheduleB.OtherDetails}</p>
-        <p><span style="font-weight: bold">Other income for ${NonCustodialParentName} is based upon:</span> ${OtherScheduleB.OtherDetails}</p>
-    </div>
 </script>
-<script id="friendly-preexistingSupport-template" type="text/x-jquery-tmpl">
-    <tr id="preexistingChildSupport">
-        <td>7(1)</td>
-        <td>
-            <table>
-                <tr>
-                    <td>Court Name:</td>
-                    <td>${CourtName}</td>
-                </tr>
-                <tr>
-                    <td>Court Case #</td>
-                    <td>${CaseNumber}</td>
-                </tr>
-                <tr>
-                    <td>Date of Initial Order</td>
-                    <td>${OrderDate}</td>
-                </tr>
-                <tr>
-                    <td>Name of Child</td>
-                    <td>${Name}</td>
-                </tr>
-                <tr>
-                    <td>Date of Birth</td>
-                    <td>${DateOfBirth}</td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td>Preexisting child support paid by:</td>
-                    <td>${PaidBy}</td>
-                </tr>
-                <tr>
-                    <td>Amount</td>
-                    <td>$${Monthly}</td>
-                </tr>
-            </table>
-        </td>
+<script id="friendly-supplementalTableHeader-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${ParentName}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
 </script>
-<script id="friendly-otherChildren-template" type="text/x-jquery-tmpl">
+<script id="friendly-supplementalTableFather-template" type="text/x-jquery-tmpl">
     <tr>
-        <td></td>
         <td>${Name}</td>
-        <td>${DateOfBirth}</td>
-        <td>${ClaimedBy}</td>
+        <td>${SchoolFather}</td>
+        <td>${SummerFather}</td>
+        <td>${BreaksFather}</td>
+        <td>${OtherFather}</td>
+        <td>${TotalFather}</td>
+        <td>${TotalFatherMonthly}</td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableMother-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>${SchoolMother}</td>
+        <td>${SummerMother}</td>
+        <td>${BreaksMother}</td>
+        <td>${OtherMother}</td>
+        <td>${TotalMother}</td>
+        <td>${TotalMotherMonthly}</td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableNonParent-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>${SchoolNonParent}</td>
+        <td>${SummerNonParent}</td>
+        <td>${BreaksNonParent}</td>
+        <td>${OtherNonParent}</td>
+        <td>${TotalNonParent}</td>
+        <td>${TotalNonParentMonthly}</td>
     </tr>
 </script>

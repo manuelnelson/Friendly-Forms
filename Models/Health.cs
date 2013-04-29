@@ -21,7 +21,7 @@ namespace Models
         public int? MothersHealthPercentage { get; set; }
         public int? NonCustodialHealthPercentage { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public IViewModel ConvertToModel()
         {
             return this.TranslateTo<HealthViewModel>();

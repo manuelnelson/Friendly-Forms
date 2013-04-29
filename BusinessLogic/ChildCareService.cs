@@ -16,7 +16,7 @@ namespace BusinessLogic
             ChildCareRepository = repository;
         }
 
-        public ChildCare GetByChildId(int childId)
+        public ChildCare GetByChildId(long childId)
         {
             return ChildCareRepository.GetChildById(childId);
         }

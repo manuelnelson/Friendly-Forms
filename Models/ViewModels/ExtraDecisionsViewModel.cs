@@ -10,7 +10,7 @@ namespace Models.ViewModels
         [Required]
         public long UserId { get; set; }
         [Required]
-        public int ChildId { get; set; }
+        public long ChildId { get; set; }
         [Required]
         [Display(Name = "Decision Maker")]
         public int DecisionMaker { get; set; }

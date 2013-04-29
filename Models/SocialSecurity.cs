@@ -9,6 +9,7 @@ namespace Models
         public long Id { get; set; }
         public bool IsOtherParent { get; set; }
         public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int ReceiveSocial { get; set; }
         public int? Amount { get; set; } 
         public IViewModel ConvertToModel()

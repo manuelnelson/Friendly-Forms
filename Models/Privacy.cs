@@ -8,6 +8,7 @@ namespace Models
     {
         public long Id { get; set; }
         public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int NeedPrivacy { get; set; }
         public int NeedSupervision { get; set; }
         public string SupervisionHow { get; set; }

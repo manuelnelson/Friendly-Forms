@@ -8,6 +8,7 @@ namespace Models
     {
         public long Id { get; set; }
         public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int MaritalDebt { get; set; }
         public string DebtDivision { get; set; }
         public IViewModel ConvertToModel()

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -21,7 +20,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long UserId { get; set; }
         [DataMember]
-        public int ChildId { get; set; }
+        public long ChildId { get; set; }
         [DataMember]
         public int DecisionMaker { get; set; }
         [DataMember]

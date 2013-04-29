@@ -21,7 +21,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long UserId { get; set; }
         [DataMember]
-        public int ChildId { get; set; }
+        public long ChildId { get; set; }
         [DataMember]
         public bool FridayHoliday { get; set; }
         [DataMember]
