@@ -56,7 +56,23 @@
         var result = $("#friendly-scheduleD-template").tmpl(data);
         $('#finanicalFormOutput').empty();
         $('#finanicalFormOutput').append(result);
+        AddParentChildCareCosts(data.CustodialParentName, '#friendly-supplementalTableFather-template', data.ChildCare);
+        AddParentChildCareCosts(data.NonCustodialParentName, '#friendly-supplementalTableMother-template', data.ChildCare);
+        AddParentChildCareCosts(data.CustodialParentName, '#friendly-supplementalTableNonParent-template', data.ChildCare);
     }
+    
+    function AddParentChildCareCosts(parentName, templateName, childCareList) {
+        var parent = {
+            ParentName: parentName
+        };
+        var result = $("#friendly-supplementalTableHeader-template").tmpl(parent);
+        $('#supplemental-table').append(result);
+        $.each(childCareList, function (ndx, item) {
+            result = $(template).tmpl(item);
+            $('#supplemental-table').append(result);
+        });
+    }
+    
 
 
     function getPdfHtml() {

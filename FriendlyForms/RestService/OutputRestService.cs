@@ -347,6 +347,10 @@ namespace FriendlyForms.RestService
             {
                 HealthInsurance = health.NonCustodialHealthAmount ?? 0
             };
+            var totalScheduleD = new ScheduleD
+            {
+                HealthInsurance = health.NonCustodialHealthAmount ?? 0
+            };
 
             for (var i = 0; i < childCares.Count; i++)
             {
@@ -377,9 +381,19 @@ namespace FriendlyForms.RestService
                 schedule.TotalYearly += childCareWithTotal.TotalFather;
                 otherSchedule.TotalYearly += childCareWithTotal.TotalMother;
                 nonParentSchedule.TotalYearly += childCareWithTotal.TotalNonParent;
-
-                schedule.WorkRelated = 
             }
+            schedule.WorkRelated = schedule.TotalYearly;
+            otherSchedule.WorkRelated = otherSchedule.TotalYearly;
+            nonParentSchedule.WorkRelated = nonParentSchedule.TotalYearly;
+            schedule.AdditionalExpenses = schedule.WorkRelated + schedule.HealthInsurance;
+            otherSchedule.AdditionalExpenses = otherSchedule.WorkRelated + otherSchedule.HealthInsurance;
+            nonParentSchedule.AdditionalExpenses = nonParentSchedule.WorkRelated + nonParentSchedule.HealthInsurance;
+            schedule.ProRataParents = 0;
+            otherSchedule.ProRataParents = 0;
+            nonParentSchedule.ProRataParents = 0;
+            schedule.ProRataAdditional = 0;
+            otherSchedule.ProRataAdditional = 0;
+            nonParentSchedule.ProRataAdditional = 0;
 
 
             var outputViewModel = new PpOutputFormHelper
@@ -391,6 +405,7 @@ namespace FriendlyForms.RestService
                 ScheduleD = schedule,
                 NonCustodialScheduleD = otherSchedule,
                 NonParentScheduleD = nonParentSchedule,
+                TotalScheduleD = totalScheduleD,
                 CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
                 NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
             };

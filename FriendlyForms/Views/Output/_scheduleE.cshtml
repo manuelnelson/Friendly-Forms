@@ -1,0 +1,116 @@
+﻿<script id="friendly-scheduleD-template" type="text/x-jquery-tmpl">
+    <div class="row-fluid" style="text-align: center;">
+        <h2>CHILD SUPPORT SCHEDULE E</h2>
+        <h2>ADDITIONAL EXPENSES</h2>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>WORK RELATED CHILD CARE COSTS</th>
+                <th>${CustodialParentName}</th>
+                <th>${NonCustodialParentName}</th>
+                <th>Nonparent Custodian</th>
+                <th>Combined</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1. Work Related Child Care</td>
+                <td class="currency">$${ScheduleD.WorkRelated}</td>
+                <td class="currency">$${NonCustodialScheduleD.WorkRelated}</td>
+                <td class="currency">$${NonParentScheduleD.WorkRelated}</td>
+                <td class="currency">$${TotalScheduleD.WorkRelated}</td>
+            </tr>
+            <tr>
+                <td>2. Health Insurance Paid for Children</td>
+                <td class="currency">$${ScheduleD.HealthInsurance}</td>
+                <td class="currency">$${NonCustodialScheduleD.HealthInsurance}</td>
+                <td class="currency">$${NonParentScheduleD.HealthInsurance}</td>
+                <td class="currency">$${TotalScheduleD.HealthInsurance}</td>
+            </tr>
+            <tr>
+                <td>3. Total Monthly Additional Expenses</td>
+                <td class="currency">$${ScheduleD.AdditionalExpenses}</td>
+                <td class="currency">$${NonCustodialScheduleD.AdditionalExpenses}</td>
+                <td class="currency">$${NonParentScheduleD.AdditionalExpenses}</td>
+                <td class="currency">$${TotalScheduleD.AdditionalExpenses}</td>
+            </tr>
+            <tr>
+                <td>4. Pro Rata Share of Parents' Income</td>
+                <td class="currency">$${ScheduleD.ProRataParents}</td>
+                <td class="currency">$${NonCustodialScheduleD.ProRataParents}</td>
+                <td class="currency">$${NonParentScheduleD.ProRataParents}</td>
+                <td class="currency">$${TotalScheduleD.ProRataParents}</td>
+            </tr>
+            <tr>
+                <td>5. Pro Rata Share of Additional Expenses</td>
+                <td class="currency">$${ScheduleD.ProRataAdditional}</td>
+                <td class="currency">$${NonCustodialScheduleD.ProRataAdditional}</td>
+                <td class="currency">$${NonParentScheduleD.ProRataAdditional}</td>
+                <td class="currency">$${TotalScheduleD.ProRataAdditional}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="7">SUPPLEMENTAL TABLE 1-WORK RELATED CHILD CARE COSTS</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>School</th>
+                <th>Summer Break</th>
+                <th>Other Break</th>
+                <th>Other Child Care</th>
+                <th>Total Yearly Amount</th>
+                <th>Total Monthly Amount</th>
+            </tr>
+        </thead>
+        <tbody id="supplemental-table">
+        </tbody>
+    </table>
+</script>
+<script id="friendly-supplementalTableHeader-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${ParentName}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableFather-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>${SchoolFather}</td>
+        <td>${SummerFather}</td>
+        <td>${BreaksFather}</td>
+        <td>${OtherFather}</td>
+        <td>${TotalFather}</td>
+        <td>${TotalFatherMonthly}</td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableMother-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>${SchoolMother}</td>
+        <td>${SummerMother}</td>
+        <td>${BreaksMother}</td>
+        <td>${OtherMother}</td>
+        <td>${TotalMother}</td>
+        <td>${TotalMotherMonthly}</td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableNonParent-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>${SchoolNonParent}</td>
+        <td>${SummerNonParent}</td>
+        <td>${BreaksNonParent}</td>
+        <td>${OtherNonParent}</td>
+        <td>${TotalNonParent}</td>
+        <td>${TotalNonParentMonthly}</td>
+    </tr>
+</script>
