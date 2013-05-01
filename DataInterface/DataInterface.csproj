@@ -53,6 +53,8 @@
     <Compile Include="IDeviationsFormRepository.cs" />
     <Compile Include="IEfRepository.cs" />
     <Compile Include="IExtraDecisionRepository.cs" />
+    <Compile Include="IExtraExpenseFormRepository.cs" />
+    <Compile Include="IExtraExpenseRepository.cs" />
     <Compile Include="IExtraHolidayRepository.cs" />
     <Compile Include="IFormRepository.cs" />
     <Compile Include="IHealthInsuranceRepository.cs" />

@@ -71,6 +71,8 @@
     <Compile Include="Repositories\ChildFormRepository.cs" />
     <Compile Include="Repositories\AddendumRepository.cs" />
     <Compile Include="Repositories\DeviationsFormRepository.cs" />
+    <Compile Include="Repositories\ExtraExpenseFormRepository.cs" />
+    <Compile Include="Repositories\ExtraExpenseRepository.cs" />
     <Compile Include="Repositories\HeathRepository.cs" />
     <Compile Include="Repositories\PreexistingSupportFormRepository.cs" />
     <Compile Include="Repositories\VehicleFormRepository.cs" />

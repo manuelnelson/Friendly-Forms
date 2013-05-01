@@ -48,6 +48,8 @@ namespace DataLayerContext
         public DbSet<ChildCareForm> ChildCareForm { get; set; }
         public DbSet<PreexistingSupportForm> PreexistingSupportForm { get; set; }
         public DbSet<DeviationsForm> DeviationsForm { get; set; }
+        public DbSet<ExtraExpenseForm> ExtraExpenseForms { get; set; }
+        public DbSet<ExtraExpense> ExtraExpenses { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -89,9 +91,25 @@ namespace DataLayerContext
             SetupChildCareFormEntity(modelBuilder);
             SetupChildCareEntity(modelBuilder);
             SetupPreexistingSupportFormEntity(modelBuilder);
-            SetupDeviationsFormEntity(modelBuilder);                    
-
+            SetupDeviationsFormEntity(modelBuilder);
+            SetupExtraExpenseFormEntity(modelBuilder);
+            SetupExtraExpenseEntity(modelBuilder);
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupExtraExpenseEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ExtraExpense>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<ExtraExpense>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<ExtraExpense>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
+        }
+
+        private void SetupExtraExpenseFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ExtraExpenseForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<ExtraExpenseForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupDeviationsFormEntity(DbModelBuilder modelBuilder)

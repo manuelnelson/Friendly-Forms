@@ -293,8 +293,7 @@ namespace FriendlyForms.Controllers
             var otherChildren = _otherChildService.GetChildrenByOtherChildrenId(other.Id);
             var otherOther = _otherChildrenService.GetByUserId(Id, isOtherParent: true);
             var otherChildrenOther = _otherChildService.GetChildrenByOtherChildrenId(otherOther.Id);
-            var health = _healthService.GetByUserId(Id);
-            var healthOther = _healthService.GetByUserId(Id, isOtherParent:true);
+            var health = _healthService.GetByUserId(Id) as HealthViewModel;
             var childCareForm = _childCareFormService.GetByUserId(Id) as ChildCareFormViewModel;
             var deviation = _deviationsFormService.GetByUserId(Id);
             var deviationOther = _deviationsFormService.GetByUserId(Id, isOtherParent:true);
@@ -338,7 +337,6 @@ namespace FriendlyForms.Controllers
                     SocialSecurityOther = socialOther.UserId != 0,
                     Deviation = deviation.UserId != 0,
                     Health = health.UserId != 0,
-                    HealthOther = healthOther.UserId != 0,
                     ChildCareForm = childCareForm.UserId != 0,
                     DeviationOther = deviationOther.UserId != 0,
                 };
@@ -360,7 +358,6 @@ namespace FriendlyForms.Controllers
                     OtherChildrenOtherViewModel = otherOther,
                     DeviationsFormViewModel = deviation,
                     HealthViewModel = health,
-                    HealthOtherViewModel = healthOther,
                     ChildCareFormViewModel = childCareForm,
                     DeviationsOtherFormViewModel = deviationOther,
                     FormUserId = Id

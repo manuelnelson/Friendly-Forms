@@ -233,6 +233,8 @@
     <Compile Include="RestService\DeviationsFormRestService.cs" />
     <Compile Include="RestService\EmailRestService.cs" />
     <Compile Include="RestService\ExtraDecisionRestService.cs" />
+    <Compile Include="RestService\ExtraExpenseFormRestService.cs" />
+    <Compile Include="RestService\ExtraExpenseRestService.cs" />
     <Compile Include="RestService\ExtraHolidayRestService.cs" />
     <Compile Include="RestService\HealthInsuranceRestService.cs" />
     <Compile Include="RestService\HealthRestService.cs" />
@@ -498,6 +500,8 @@
     <Content Include="Views\Forms\_DeviationsOther.cshtml" />
     <Content Include="Views\Output\_scheduleD.cshtml" />
     <Content Include="Views\Output\_scheduleE.cshtml" />
+    <Content Include="Views\Forms\_ExtraExpenseForm.cshtml" />
+    <Content Include="Views\Forms\_templateExtraExpense.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

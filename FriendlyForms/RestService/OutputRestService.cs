@@ -234,7 +234,34 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double TotalMonthly { get; set; }
     }
-    
+
+    [DataContract]
+    public class ScheduleE
+    {
+        [DataMember]
+        public double WorkRelated { get; set; }
+        [DataMember]
+        public double HealthInsurance { get; set; }
+        [DataMember]
+        public double AdditionalExpenses { get; set; }
+        [DataMember]
+        public double ProRataParents { get; set; }
+        [DataMember]
+        public double ProRataAdditional { get; set; }
+        [DataMember]
+        public double TotalSchool { get; set; }
+        [DataMember]
+        public double TotalSummer { get; set; }
+        [DataMember]
+        public double TotalOther { get; set; }
+        [DataMember]
+        public double TotalBreaks { get; set; }
+        [DataMember]
+        public double TotalYearly { get; set; }
+        [DataMember]
+        public double TotalMonthly { get; set; }
+    }
+
     public class OutputsService : Service
     {
         public IIncomeService IncomeService { get; set; }

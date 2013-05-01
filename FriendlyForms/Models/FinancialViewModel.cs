@@ -36,7 +36,7 @@ namespace FriendlyForms.Models
         public bool SocialSecurityOther { get; set; }
         public bool PreexistingOther { get; set; }
         public bool OtherChildrenOther { get; set; }
-        public bool HealthOther { get; set; }
+        public bool ExtraExpenses { get; set; }
         public bool DeviationOther { get; set; }
     }
 }

@@ -1,0 +1,48 @@
+﻿@using Models.ViewModels
+@model ExtraExpenseFormViewModel
+<div class="form-vertical wrapper" id="extraExpenseWrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Child Care</h5>
+                </div>
+                <div class="widget-content">
+                    <form id="extraExpenseForm" method="POST" action="/api/extraExpenseform/">
+                        <label class="informative">In this section you will define extra ordinary expenses paid for the child(ren) in this action. These expenses include items such as:</label>
+                        <ul>
+                            <li>SCHOOL- Tuition, Room and Board, Fees and Books</li>
+                            <li>MEDICAL EXPENSES</li>
+                            <li>CHILD REARING- Summer Camp, Music or Art Lessons, Travel, Band, Clubs, Athletics, etc.</li>
+                        </ul>
+                        <div class="control-group">
+                            <label class="form-question">Do any individuals pay for child care for the child(ren)?</label>
+                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.HasExtraExpenses, (int)YesNo.Yes, new { @class = "inline" })</label>
+                            <label class="radio inline">No @Html.RadioButtonFor(m => m.HasExtraExpenses, (int)YesNo.No, new { @class = "inline" })</label>
+                            @Html.ValidationMessageFor(m => m.HasExtraExpenses)
+                        </div>
+                        <input type="hidden" id="childCareFormId" value="@Model.Id"/>
+                    </form>
+                    @if (Model.HasExtraExpenses == (int)YesNo.Yes)
+                    {
+                        <div id="extraExpense-show">
+                            <form id="extraExpense" method="POST" action="/api/extraExpense/">
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="extraExpense-show" class="hide">
+                            <form id="extraExpense" method="POST" action="/api/extraExpense/">
+                            </form>
+                        </div>                        
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary financial-extraExpense previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary financial-extraExpense next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>
+@Html.Partial("_templateExtraExpense")

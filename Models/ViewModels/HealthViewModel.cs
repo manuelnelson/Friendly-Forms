@@ -7,7 +7,6 @@ namespace Models.ViewModels
     {
         public long Id { get; set; }
         public long UserId { get; set; }
-        public bool IsOtherParent { get; set; }
         public int ProvideHealth { get; set; }
         public bool Prorate { get; set; }
         public bool FathersHealth { get; set; }

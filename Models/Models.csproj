@@ -65,6 +65,8 @@
     <Compile Include="Decisions.cs" />
     <Compile Include="DeviationsForm.cs" />
     <Compile Include="ExtraDecisions.cs" />
+    <Compile Include="ExtraExpense.cs" />
+    <Compile Include="ExtraExpenseForm.cs" />
     <Compile Include="ExtraHoliday.cs" />
     <Compile Include="Health.cs" />
     <Compile Include="HealthInsurance.cs" />
@@ -106,6 +108,8 @@
     <Compile Include="ViewModels\DeviationsFormViewModel.cs" />
     <Compile Include="ViewModels\Enums.cs" />
     <Compile Include="ViewModels\ExtraDecisionsViewModel.cs" />
+    <Compile Include="ViewModels\ExtraExpenseFormViewModel.cs" />
+    <Compile Include="ViewModels\ExtraExpenseViewModel.cs" />
     <Compile Include="ViewModels\ExtraHolidayViewModel.cs" />
     <Compile Include="ViewModels\HealthInsuranceViewModel.cs" />
     <Compile Include="ViewModels\HealthViewModel.cs" />
