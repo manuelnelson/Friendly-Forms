@@ -16,36 +16,36 @@
         <tbody>
             <tr>
                 <td>1. Work Related Child Care</td>
-                <td class="currency">$${ScheduleD.WorkRelated}</td>
-                <td class="currency">$${NonCustodialScheduleD.WorkRelated}</td>
+                <td class="currency">$${FatherScheduleD.WorkRelated}</td>
+                <td class="currency">$${MotherScheduleD.WorkRelated}</td>
                 <td class="currency">$${NonParentScheduleD.WorkRelated}</td>
                 <td class="currency">$${TotalScheduleD.WorkRelated}</td>
             </tr>
             <tr>
                 <td>2. Health Insurance Paid for Children</td>
-                <td class="currency">$${ScheduleD.HealthInsurance}</td>
-                <td class="currency">$${NonCustodialScheduleD.HealthInsurance}</td>
+                <td class="currency">$${FatherScheduleD.HealthInsurance}</td>
+                <td class="currency">$${MotherScheduleD.HealthInsurance}</td>
                 <td class="currency">$${NonParentScheduleD.HealthInsurance}</td>
                 <td class="currency">$${TotalScheduleD.HealthInsurance}</td>
             </tr>
             <tr>
                 <td>3. Total Monthly Additional Expenses</td>
-                <td class="currency">$${ScheduleD.AdditionalExpenses}</td>
-                <td class="currency">$${NonCustodialScheduleD.AdditionalExpenses}</td>
+                <td class="currency">$${FatherScheduleD.AdditionalExpenses}</td>
+                <td class="currency">$${MotherScheduleD.AdditionalExpenses}</td>
                 <td class="currency">$${NonParentScheduleD.AdditionalExpenses}</td>
                 <td class="currency">$${TotalScheduleD.AdditionalExpenses}</td>
             </tr>
             <tr>
                 <td>4. Pro Rata Share of Parents' Income</td>
-                <td class="currency">$${ScheduleD.ProRataParents}</td>
-                <td class="currency">$${NonCustodialScheduleD.ProRataParents}</td>
+                <td class="currency">$${FatherScheduleD.ProRataParents}</td>
+                <td class="currency">$${MotherScheduleD.ProRataParents}</td>
                 <td class="currency">$${NonParentScheduleD.ProRataParents}</td>
                 <td class="currency">$${TotalScheduleD.ProRataParents}</td>
             </tr>
             <tr>
                 <td>5. Pro Rata Share of Additional Expenses</td>
-                <td class="currency">$${ScheduleD.ProRataAdditional}</td>
-                <td class="currency">$${NonCustodialScheduleD.ProRataAdditional}</td>
+                <td class="currency">$${FatherScheduleD.ProRataAdditional}</td>
+                <td class="currency">$${MotherScheduleD.ProRataAdditional}</td>
                 <td class="currency">$${NonParentScheduleD.ProRataAdditional}</td>
                 <td class="currency">$${TotalScheduleD.ProRataAdditional}</td>
             </tr>
@@ -56,17 +56,17 @@
             <tr>
                 <th colspan="7">SUPPLEMENTAL TABLE 1-WORK RELATED CHILD CARE COSTS</th>
             </tr>
-            <tr>
-                <th></th>
-                <th>School</th>
-                <th>Summer Break</th>
-                <th>Other Break</th>
-                <th>Other Child Care</th>
-                <th>Total Yearly Amount</th>
-                <th>Total Monthly Amount</th>
-            </tr>
         </thead>
         <tbody id="supplemental-table">
+            <tr>
+                <td></td>
+                <td>School</td>
+                <td>Summer Break</td>
+                <td>Other Break</td>
+                <td>Other Child Care</td>
+                <td>Total Yearly Amount</td>
+                <td>Total Monthly Amount</td>
+            </tr>
         </tbody>
     </table>
 </script>
@@ -112,5 +112,16 @@
         <td>${OtherNonParent}</td>
         <td>${TotalNonParent}</td>
         <td>${TotalNonParentMonthly}</td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableTotal-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>${TotalSchool}</td>
+        <td>${TotalSummer}</td>
+        <td>${TotalBreaks}</td>
+        <td>${TotalOther}</td>
+        <td>${TotalYearly}</td>
+        <td>${TotalMonthly}</td>
     </tr>
 </script>

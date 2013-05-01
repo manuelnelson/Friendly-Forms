@@ -151,9 +151,9 @@ namespace FriendlyForms.RestService
     public class ScheduleDDtoResp
     {
         [DataMember]
-        public ScheduleD ScheduleD { get; set; }
+        public ScheduleD FatherScheduleD { get; set; }
         [DataMember]
-        public ScheduleD NonCustodialScheduleD { get; set; }
+        public ScheduleD MotherScheduleD { get; set; }
         [DataMember]
         public ScheduleD NonParentScheduleD { get; set; }
         [DataMember]
@@ -230,7 +230,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double TotalBreaks { get; set; }
         [DataMember]
-        public double TotalYearly { get; set; }        
+        public double TotalYearly { get; set; }
+        [DataMember]
+        public double TotalMonthly { get; set; }
     }
     
     public class OutputsService : Service
@@ -382,6 +384,10 @@ namespace FriendlyForms.RestService
                 otherSchedule.TotalYearly += childCareWithTotal.TotalMother;
                 nonParentSchedule.TotalYearly += childCareWithTotal.TotalNonParent;
             }
+            schedule.TotalMonthly = schedule.TotalYearly/12;
+            otherSchedule.TotalMonthly = otherSchedule.TotalYearly / 12;
+            nonParentSchedule.TotalMonthly = nonParentSchedule.TotalYearly / 12;
+
             schedule.WorkRelated = schedule.TotalYearly;
             otherSchedule.WorkRelated = otherSchedule.TotalYearly;
             nonParentSchedule.WorkRelated = nonParentSchedule.TotalYearly;
@@ -402,10 +408,11 @@ namespace FriendlyForms.RestService
             };
             return new ScheduleDDtoResp
             {
-                ScheduleD = schedule,
-                NonCustodialScheduleD = otherSchedule,
+                FatherScheduleD = schedule,
+                MotherScheduleD = otherSchedule,
                 NonParentScheduleD = nonParentSchedule,
                 TotalScheduleD = totalScheduleD,
+                ChildCare = childCaresWithTotals,
                 CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
                 NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
             };

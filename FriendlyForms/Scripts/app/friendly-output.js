@@ -56,21 +56,33 @@
         var result = $("#friendly-scheduleD-template").tmpl(data);
         $('#finanicalFormOutput').empty();
         $('#finanicalFormOutput').append(result);
-        AddParentChildCareCosts(data.CustodialParentName, '#friendly-supplementalTableFather-template', data.ChildCare);
-        AddParentChildCareCosts(data.NonCustodialParentName, '#friendly-supplementalTableMother-template', data.ChildCare);
-        AddParentChildCareCosts(data.CustodialParentName, '#friendly-supplementalTableNonParent-template', data.ChildCare);
+        addParentChildCareCosts(data.CustodialParentName, '#friendly-supplementalTableFather-template', data.ChildCare, data.FatherScheduleD);
+        addParentChildCareCosts(data.NonCustodialParentName, '#friendly-supplementalTableMother-template', data.ChildCare, data.MotherScheduleD);
+        addParentChildCareCosts('Nonparent Custodian', '#friendly-supplementalTableNonParent-template', data.ChildCare, data.NonParentScheduleD);
     }
     
-    function AddParentChildCareCosts(parentName, templateName, childCareList) {
+    function addParentChildCareCosts(parentName, templateName, childCareList, total) {
         var parent = {
             ParentName: parentName
         };
         var result = $("#friendly-supplementalTableHeader-template").tmpl(parent);
         $('#supplemental-table').append(result);
         $.each(childCareList, function (ndx, item) {
-            result = $(template).tmpl(item);
+            result = $(templateName).tmpl(item);
             $('#supplemental-table').append(result);
         });
+        //add total
+        var totalObj = {
+            Name: "Totals",
+            TotalSchool: total.TotalSchool,
+            TotalSummer: total.TotalSummer,
+            TotalBreaks: total.TotalBreaks,
+            TotalOther: total.TotalOther,
+            TotalYearly: total.TotalYearly,
+            TotalMonthly: total.TotalMonthly,
+        };
+        result = $('#friendly-supplementalTableTotal-template').tmpl(totalObj);
+        $('#supplemental-table').append(result);
     }
     
 
