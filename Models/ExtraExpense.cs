@@ -23,6 +23,10 @@ namespace Models
         public int SpecialFather { get; set; }
         public int SpecialMother { get; set; }
         public int SpecialNonParent { get; set; }
+        public string SpecialDescriptionFather { get; set; }
+        public string SpecialDescriptionMother { get; set; }
+        public string SpecialDescriptionNonParent { get; set; }
+        public int ExtraSpent { get; set; }
 
         public IViewModel ConvertToModel()
         {

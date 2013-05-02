@@ -15,6 +15,14 @@
         <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Financial Form</a>
             <ul style="display: block">
                     <li class="nav-item active" id="childCareNav"><a data-form="childCare" href="#"><i class="icon-pencil icon-blue"></i>Child Care</a></li>
+                @if (Model.FinancialFormsCompleted.ExtraExpenses)
+                {
+                    <li class="nav-item" id="extraExpenseNav"><a data-form="extraExpense" href="#"><i class="@itemDone"></i>Extra Expenses</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="extraExpenseNav"><a data-form="extraExpense" href="#"><i class="@itemlock"></i>Extra Expenses</a></li>
+                }
                 @if (Model.FinancialFormsCompleted.Deviation)
                 {
                     <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemDone"></i>Deviations (Father)</a></li>
@@ -104,15 +112,6 @@
                 {
                     <li class="nav-item" id="otherChildrenOtherNav"><a data-form="otherChildrenOther" href="#"><i class="@itemlock"></i>Other Children (Mother)</a></li>
                 }
-                @if (Model.FinancialFormsCompleted.HealthOther)
-                {
-                    <li class="nav-item" id="healthsOtherNav"><a data-form="healthsOther" href="#"><i class="@itemDone"></i>Health Insurance (Mother)</a></li>
-                }
-                else
-                {
-                    <li class="nav-item" id="healthsOtherNav"><a data-form="healthsOther" href="#"><i class="@itemlock"></i>Health Insurance (Mother)</a></li>
-                }                
-
             </ul>
         </li>
         <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
@@ -135,7 +134,7 @@
 @Html.Partial("_SocialSecurityOther", Model.SocialSecurityOtherViewModel)
 @Html.Partial("_PreexistingSupportOther", Model.PreexistingSupportOtherViewModel)
 @Html.Partial("_OtherChildrenOther", Model.OtherChildrenOtherViewModel)
-@Html.Partial("_HealthOther", Model.HealthOtherViewModel)
+@Html.Partial("_ExtraExpenseForm", Model.ExtraExpenseFormViewModel)
 @Html.Partial("_ChildCareForm", Model.ChildCareFormViewModel)
 @Html.Partial("_DeviationsOther", Model.DeviationsOtherFormViewModel)
 @* The child form below is used for the decisions form and holiday form to grab children information *@

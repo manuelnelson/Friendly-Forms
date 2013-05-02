@@ -34,7 +34,7 @@
             var child = Friendly.children[Friendly.childNdx - 1];
             Friendly.ChildCareError.push(child.Name);
             if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('deviations', Friendly.properties.iconError);
+                Friendly.NextForm('extraExpense', Friendly.properties.iconError);
                 return;
             }
             //check if we need to move to previous form
@@ -53,6 +53,57 @@
         Friendly.NextForm('childCare', 'icon-pencil icon-blue');
     }
     //#endregion 
+    //#region Extra Expense
+    $('#extraExpenseForm #HasExtraExpenses').change(function () {
+        if ($('#extraExpenseForm #HasExtraExpenses:checked').val() === "1") {
+            $('#extraExpense-show').show();
+        } else {
+            $('#extraExpense-show').hide();
+        }
+        Friendly.StartLoading();
+        var formName = 'extraExpenseForm';
+        var model = Friendly.GetFormInput(formName);
+        var submitType = 'POST';
+        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
+            submitType = 'PUT';
+        else
+            model.Id = 0;
+        if ($('#' + formName).valid()) {
+            $.ajax({
+                url: '/api/' + formName + '/?format=json',
+                type: submitType,
+                data: model,
+                success: function () {
+                    Friendly.EndLoading();
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        }
+        Friendly.EndLoading();
+    });
+
+    $('.financial-extraExpense').click(function () {
+        //if the form isn't validated, we still need to move on
+        if (!Financial.AddExtraExpense(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.ExtraExpenseError.push(child.Name);
+            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+                Friendly.NextForm('deviations', Friendly.properties.iconError);
+                return;
+            }
+            //check if we need to move to previous form
+            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
+                Friendly.NextForm('childCare', Friendly.properties.iconError);
+                return;
+            }
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Financial.GetExtraExpense(nextChild);
+            Friendly.EndLoading();
+        }
+    });
+    //#endregion 
+
     //#region Deviations
     $('.financial-deviations').click(function () {
         //if the form isn't validated, we still need to move on
@@ -65,7 +116,7 @@
             }
             //check if we need to move to previous form
             if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('childCare', Friendly.properties.iconError);
+                Friendly.NextForm('extraExpense', Friendly.properties.iconError);
                 return;
             }
             $('html, body').animate({ scrollTop: 0 }, 'fast');

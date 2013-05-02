@@ -45,11 +45,12 @@ namespace FriendlyForms.Controllers
         private readonly IHealthService _healthService;
         private readonly IChildCareFormService _childCareFormService;
         private readonly IPreexistingSupportFormService _preexistingSupportFormService;
+        private readonly IExtraExpenseFormService _extraExpenseFormService;
         //
         // GET: /Forms/
         public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IIncomeService incomeService, ISocialSecurityService socialSecurityService, 
-            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsFormService deviationsFormService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService, IPreexistingSupportFormService preexistingSupportFormService)
+            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsFormService deviationsFormService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService, IPreexistingSupportFormService preexistingSupportFormService, IExtraExpenseFormService extraExpenseFormService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -83,6 +84,7 @@ namespace FriendlyForms.Controllers
             _healthService = healthService;
             _childCareFormService = childCareFormService;
             _preexistingSupportFormService = preexistingSupportFormService;
+            _extraExpenseFormService = extraExpenseFormService;
         }
         
         [Authorize]
@@ -294,6 +296,7 @@ namespace FriendlyForms.Controllers
             var otherOther = _otherChildrenService.GetByUserId(Id, isOtherParent: true);
             var otherChildrenOther = _otherChildService.GetChildrenByOtherChildrenId(otherOther.Id);
             var health = _healthService.GetByUserId(Id) as HealthViewModel;
+            var extraExpense = _extraExpenseFormService.GetByUserId(Id) as ExtraExpenseFormViewModel;
             var childCareForm = _childCareFormService.GetByUserId(Id) as ChildCareFormViewModel;
             var deviation = _deviationsFormService.GetByUserId(Id);
             var deviationOther = _deviationsFormService.GetByUserId(Id, isOtherParent:true);
@@ -336,6 +339,7 @@ namespace FriendlyForms.Controllers
                     SocialSecurity = social.UserId != 0,
                     SocialSecurityOther = socialOther.UserId != 0,
                     Deviation = deviation.UserId != 0,
+                    ExtraExpenses = extraExpense.UserId != 0,
                     Health = health.UserId != 0,
                     ChildCareForm = childCareForm.UserId != 0,
                     DeviationOther = deviationOther.UserId != 0,
@@ -357,6 +361,7 @@ namespace FriendlyForms.Controllers
                     OtherChildrenViewModel = other,
                     OtherChildrenOtherViewModel = otherOther,
                     DeviationsFormViewModel = deviation,
+                    ExtraExpenseFormViewModel = extraExpense,
                     HealthViewModel = health,
                     ChildCareFormViewModel = childCareForm,
                     DeviationsOtherFormViewModel = deviationOther,

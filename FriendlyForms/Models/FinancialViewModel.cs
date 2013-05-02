@@ -15,7 +15,7 @@ namespace FriendlyForms.Models
         public AllPreexistingViewModel PreexistingSupportOtherViewModel { get; set; }
         public OtherChildrenViewModel OtherChildrenOtherViewModel { get; set; }
         public HealthViewModel HealthViewModel { get; set; }
-        public HealthViewModel HealthOtherViewModel { get; set; }
+        public ExtraExpenseFormViewModel ExtraExpenseFormViewModel { get; set; }
         public ChildCareFormViewModel ChildCareFormViewModel { get; set; }
         public FinancialFormsCompleted FinancialFormsCompleted { get; set; }
         public ChildAllViewModel ChildAllViewModel { get; set; }

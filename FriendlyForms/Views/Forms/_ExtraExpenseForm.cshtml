@@ -6,7 +6,7 @@
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon"><i class="icon-signal"></i></span>
-                    <h5>Child Care</h5>
+                    <h5>Extra Expenses</h5>
                 </div>
                 <div class="widget-content">
                     <form id="extraExpenseForm" method="POST" action="/api/extraExpenseform/">
@@ -17,12 +17,12 @@
                             <li>CHILD REARING- Summer Camp, Music or Art Lessons, Travel, Band, Clubs, Athletics, etc.</li>
                         </ul>
                         <div class="control-group">
-                            <label class="form-question">Do any individuals pay for child care for the child(ren)?</label>
+                            <label class="form-question">Do any individuals pay extraordinary expenses for the child(ren)?</label>
                             <label class="radio inline">Yes @Html.RadioButtonFor(m => m.HasExtraExpenses, (int)YesNo.Yes, new { @class = "inline" })</label>
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.HasExtraExpenses, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.HasExtraExpenses)
                         </div>
-                        <input type="hidden" id="childCareFormId" value="@Model.Id"/>
+                        <input type="hidden" id="extraExpenseFormId" value="@Model.Id"/>
                     </form>
                     @if (Model.HasExtraExpenses == (int)YesNo.Yes)
                     {

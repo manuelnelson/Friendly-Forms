@@ -1,69 +1,91 @@
-﻿<script id="friendly-childCare-template" type="text/x-jquery-tmpl">
+﻿<script id="friendly-extraExpense-template" type="text/x-jquery-tmpl">
     <h4>${Name}</h4>
     <input type="hidden" id="ChildId" value="${ChildId}" />
     <input type="hidden" id="extraExpenseId" value="${Id}" />
-    <label class="form-question">Total yearly amount during school year</label>
-    <div class="control-group row-fluid" style="display: block;">
+    <label class="form-question">Educational expenses for Tuition,Room & Board, Fees and Books</label>
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Father</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SchoolFather" name="SchoolFather" placeholder="Annual Amount" type="text" value="${SchoolFather}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="SchoolFather" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="TutitionFather" name="TutitionFather" placeholder="Annual Amount" type="text" value="${TutitionFather}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="TutitionFather" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Mother</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SchoolMother" name="SchoolMother" placeholder="Annual Amount" type="text" value="${SchoolMother}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="SchoolMother" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="TutitionMother" name="TutitionMother" placeholder="Annual Amount" type="text" value="${TutitionMother}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="TutitionMother" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Nonparent Custodian</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SchoolNonParent" name="SchoolNonParent" placeholder="Annual Amount" type="text" value="${SchoolNonParent}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="SchoolNonParent" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="TutitionNonParent" name="TutitionNonParent" placeholder="Annual Amount" type="text" value="${TutitionNonParent}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="TutitionNonParent" data-valmsg-replace="true"></span>
     </div>
-    <label class="form-question">Total yearly amount during Summer Break</label>
-    <div class="control-group row-fluid" style="display: block;">
+    <label class="form-question">Other Educational expenses</label>
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Father</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SummerFather" name="SummerFather" placeholder="Annual Amount" type="text" value="${SummerFather}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="SummerFather" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="EducationFather" name="EducationFather" placeholder="Annual Amount" type="text" value="${EducationFather}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="EducationFather" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Mother</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SummerMother" name="SummerMother" placeholder="Annual Amount" type="text" value="${SummerMother}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="SummerMother" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="EducationMother" name="EducationMother" placeholder="Annual Amount" type="text" value="${EducationMother}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="EducationMother" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Nonparent Custodian</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SummerNonParent" name="SummerNonParent" placeholder="Annual Amount" type="text" value="${SummerNonParent}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="SummerNonParent" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="EducationNonParent" name="EducationNonParent" placeholder="Annual Amount" type="text" value="${EducationNonParent}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="EducationNonParent" data-valmsg-replace="true"></span>
     </div>
-    <label class="form-question">Total yearly amount during other school breaks</label>
-    <div class="control-group row-fluid" style="display: block;">
+    <label class="form-question">Extraordinary Medical Expenses</label>
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Father</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="BreaksFather" name="BreaksFather" placeholder="Annual Amount" type="text" value="${BreaksFather}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="BreaksFather" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="MedicalFather" name="MedicalFather" placeholder="Annual Amount" type="text" value="${MedicalFather}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="MedicalFather" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Mother</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="BreaksMother" name="BreaksMother" placeholder="Annual Amount" type="text" value="${BreaksMother}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="BreaksMother" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="MedicalMother" name="MedicalMother" placeholder="Annual Amount" type="text" value="${MedicalMother}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="MedicalMother" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Nonparent Custodian</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="BreaksNonParent" name="BreaksNonParent" placeholder="Annual Amount" type="text" value="${BreaksNonParent}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="BreaksNonParent" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="MedicalNonParent" name="MedicalNonParent" placeholder="Annual Amount" type="text" value="${MedicalNonParent}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="MedicalNonParent" data-valmsg-replace="true"></span>
     </div>
-    <label class="form-question">Total yearly amount of other child care (e.g. pre-school or child with disability)</label>
-    <div class="control-group row-fluid" style="display: block;">
+    <label class="form-question">Special Expenses for Child Rearing (including, but not limited to summer camp, music orart lessons, travel, band, clubs, athletics, etc.)</label>
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Father</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="OtherFather" name="OtherFather" placeholder="Annual Amount" type="text" value="${OtherFather}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="OtherFather" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SpecialFather" name="SpecialFather" placeholder="Annual Amount" type="text" value="${SpecialFather}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="SpecialFather" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
+        <label class="span4 form-question">Provide a brief description of the expenses</label>
+        <textarea class="input-xxlarge" cols="20" data-val="true" data-val-regex="Only alpha-numeric characters and []@@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$" id="SpecialDescriptionFather" name="SpecialDescriptionFather" placeholder="Explain" rows="2" >${SpecialDescriptionFather}</textarea>
+        <span class="field-validation-valid" data-valmsg-for="SpecialDescriptionFather" data-valmsg-replace="true"></span>
+    </div>
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Mother</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="OtherMother" name="OtherMother" placeholder="Annual Amount" type="text" value="${OtherMother}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="OtherMother" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SpecialMother" name="SpecialMother" placeholder="Annual Amount" type="text" value="${SpecialMother}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="SpecialMother" data-valmsg-replace="true"></span>
     </div>
-    <div class="control-group row-fluid" style="display: block;">
+    <div class="control-group row-fluid">
+        <label class="span4 form-question">Provide a brief description of the expenses</label>
+        <textarea class="input-xxlarge" cols="20" data-val="true" data-val-regex="Only alpha-numeric characters and []@@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$" id="SpecialDescriptionMother" name="SpecialDescriptionMother" placeholder="Explain" rows="2" >${SpecialDescriptionMother}</textarea>
+        <span class="field-validation-valid" data-valmsg-for="SpecialDescriptionMother" data-valmsg-replace="true"></span>
+    </div>
+    <div class="control-group row-fluid">
         <label class="span4 form-question">Nonparent Custodian</label>
-        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="OtherNonParent" name="OtherNonParent" placeholder="Annual Amount" type="text" value="${OtherNonParent}" class="valid">
-        <span class="field-validation-valid" data-valmsg-for="OtherNonParent" data-valmsg-replace="true"></span>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="SpecialNonParent" name="SpecialNonParent" placeholder="Annual Amount" type="text" value="${SpecialNonParent}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="SpecialNonParent" data-valmsg-replace="true"></span>
+    </div>
+    <div class="control-group row-fluid">
+        <label class="span4 form-question">Provide a brief description of the expenses</label>
+        <textarea class="input-xxlarge" cols="20" data-val="true" data-val-regex="Only alpha-numeric characters and []@@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$" id="SpecialDescriptionNonParent" name="SpecialDescriptionNonParent" placeholder="Explain" rows="2" >${SpecialDescriptionNonParent}</textarea>
+        <span class="field-validation-valid" data-valmsg-for="SpecialDescriptionNonParent" data-valmsg-replace="true"></span>
+    </div>
+    <div class="control-group row-fluid">
+        <label class="form-question">
+            Do you have visitation with the child for more days each year than was ordered by the court? If so, what is the total annual amount 
+spent for excess visitation?</label>
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="ExtraSpent" name="ExtraSpent" placeholder="Annual Amount" type="text" value="${ExtraSpent}" class="valid">
+        <span class="field-validation-valid" data-valmsg-for="ExtraSpent" data-valmsg-replace="true"></span>
     </div>
 </script>
