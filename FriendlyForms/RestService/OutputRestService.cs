@@ -39,7 +39,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long UserId { get; set; }
     }
-
+    [DataContract]
+    [Route("/Output/Financial/ScheduleE/{UserId}")]
+    [Route("/Output/Financial/ScheduleE")]
+    public class ScheduleEDto : IReturn<ScheduleEDtoResp>
+    {
+        [DataMember]
+        public long UserId { get; set; }
+    }
+    #region ScheduleA
     //adding this dto to get rid of the nullable fields
     public class IncomeDto
     {
@@ -91,6 +99,10 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string NonCustodialParentName { get; set; }
     }
+
+    #endregion
+
+    #region ScheduleB
     [DataContract]
     public class ScheduleBDtoResp
     {
@@ -140,6 +152,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double PreexistingOrder { get; set; }
     }
+    #endregion
+
+    #region ScheduleD
     public class OtherChildDto
     {
         public string Name { get; set; }
@@ -235,32 +250,182 @@ namespace FriendlyForms.RestService
         public double TotalMonthly { get; set; }
     }
 
+    #endregion
+
+    #region ScheduleE
     [DataContract]
-    public class ScheduleE
+    public class ScheduleEDtoResp
     {
         [DataMember]
-        public double WorkRelated { get; set; }
+        public LowIncomeDeviation LowIncomeDeviation { get; set; }
         [DataMember]
-        public double HealthInsurance { get; set; }
+        public HighIncomeDeviation LowIncomeDeviationFather { get; set; }
         [DataMember]
-        public double AdditionalExpenses { get; set; }
+        public HighIncomeDeviation LowIncomeDeviationMother { get; set; }
         [DataMember]
-        public double ProRataParents { get; set; }
+        public ExtraExpenses TotalExpenses { get; set; }
+
         [DataMember]
-        public double ProRataAdditional { get; set; }
+        public double ParentingTime { get; set; }
         [DataMember]
-        public double TotalSchool { get; set; }
+        public AllowableDeviation AllowableDeviation { get; set; }
         [DataMember]
-        public double TotalSummer { get; set; }
+        public List<ExtraExpenses> ExtraExpenseses { get; set; }
+
         [DataMember]
-        public double TotalOther { get; set; }
+        public AllowableExpenses AllowableExpenses { get; set; }
+
         [DataMember]
-        public double TotalBreaks { get; set; }
+        public string CustodialParentName { get; set; }
         [DataMember]
-        public double TotalYearly { get; set; }
-        [DataMember]
-        public double TotalMonthly { get; set; }
+        public string NonCustodialParentName { get; set; }
     }
+
+    [DataContract]
+    public class AllowableExpenses
+    {
+        [DataMember]
+        public double YearlyAmountFather { get; set; }
+        [DataMember]
+        public double YearlyAmountMother { get; set; }
+        [DataMember]
+        public double YearlyAmountNonParent { get; set; }
+        [DataMember]
+        public double YearlyAmountTotal { get; set; }
+        [DataMember]
+        public double MonthlyAverage { get; set; }
+        [DataMember]
+        public double Obligation { get; set; }
+        [DataMember]
+        public double SpecialExpenses { get; set; }
+        [DataMember]
+        public double ExpensesFactor { get; set; }
+        [DataMember]
+        public double MonthlyExpensesFather { get; set; }
+        [DataMember]
+        public double MonthlyExpensesMother { get; set; }
+        [DataMember]
+        public double MonthlyExpensesNonParent { get; set; }
+    }
+
+    [DataContract]
+    public class AllowableDeviation
+    {
+        [DataMember]
+        public int AllowableFather { get; set; }
+        [DataMember]
+        public int AllowableMother { get; set; }
+        [DataMember]
+        public string PresumptiveAmount { get; set; }
+        [DataMember]
+        public string BestInterest { get; set; }
+        [DataMember]
+        public string ImpairAbility { get; set; }
+    }
+
+    [DataContract]
+    public class LowIncomeDeviation
+    {
+        [DataMember]
+        public double DeviationAmount { get; set; }
+        [DataMember]
+        public double CompareAmount { get; set; }
+        [DataMember]
+        public double CalculatedAmount { get; set; }
+        [DataMember]
+        public double ActualAmount { get; set; }
+        [DataMember]
+        public string Explaination { get; set; }
+    }
+    [DataContract]
+    public class HighIncomeDeviation
+    {
+        [DataMember]
+        public double Deviation { get; set; }
+        [DataMember]
+        public double OtherInsurance { get; set; }
+        [DataMember]
+        public double LifeInsurance { get; set; }
+        [DataMember]
+        public double ChildTaxCredit { get; set; }
+        [DataMember]
+        public double VisitationExpense { get; set; }
+        [DataMember]
+        public double Alimony { get; set; }
+        [DataMember]
+        public double Mortgage { get; set; }
+        [DataMember]
+        public double PermanancyPlan { get; set; }
+        [DataMember]
+        public double NonSpecific { get; set; }
+        [DataMember]
+        public double TotalDeviations { get; set; }
+    }
+    [DataContract]
+    public class ExtraExpenses
+    {
+        [DataMember]
+        public double TutitionFather { get; set; }
+        [DataMember]
+        public double TutitionMother { get; set; }
+        [DataMember]
+        public double TutitionNonParent { get; set; }
+        [DataMember]
+        public double TutitionNonTotal { get; set; }
+        [DataMember]
+        public double EducationFather { get; set; }
+        [DataMember]
+        public double EducationMother { get; set; }
+        [DataMember]
+        public double EducationNonParent { get; set; }
+        [DataMember]
+        public double EducationTotal { get; set; }
+        [DataMember]
+        public double MedicalFather { get; set; }
+        [DataMember]
+        public double MedicalMother { get; set; }
+        [DataMember]
+        public double MedicalNonParent { get; set; }
+        [DataMember]
+        public double MedicalTotal { get; set; }
+        [DataMember]
+        public double SpecialFather { get; set; }
+        [DataMember]
+        public double SpecialMother { get; set; }
+        [DataMember]
+        public double SpecialNonParent { get; set; }
+        [DataMember]
+        public double SpecialTotal { get; set; }
+        [DataMember]
+        public double TotalFather { get; set; }
+        [DataMember]
+        public double TotalMother { get; set; }
+        [DataMember]
+        public double TotalNonParent { get; set; }
+        [DataMember]
+        public double TotalTotal { get; set; }
+        [DataMember]
+        public double ProRataFather { get; set; }
+        [DataMember]
+        public double ProRataMother { get; set; }
+        [DataMember]
+        public double PercentageFather { get; set; }
+        [DataMember]
+        public double PercentageMother { get; set; }
+        [DataMember]
+        public double DeviationFather { get; set; }
+        [DataMember]
+        public double DeviationMother { get; set; }
+        [DataMember]
+        public string SpecialDescriptionFather { get; set; }
+        [DataMember]
+        public string SpecialDescriptionMother { get; set; }
+        [DataMember]
+        public string SpecialDescriptionNonParent { get; set; }
+        [DataMember]
+        public int ExtraSpent { get; set; }
+    }
+    #endregion
 
     public class OutputsService : Service
     {
@@ -275,6 +440,7 @@ namespace FriendlyForms.RestService
         public IParticipantService ParticipantService { get; set; }
         public IHealthService HealthService { get; set; }
         public IChildCareService ChildCareService { get; set; }
+        public IExtraExpenseService ExtraExpenseService { get; set; }
 
         public object Get(ScheduleADto request)
         {
@@ -445,6 +611,10 @@ namespace FriendlyForms.RestService
             };
         }
 
+        public object Get(ScheduleEDto request)
+        {
+            
+        }
         private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren, string parentName)
         {
             var schedule = new ScheduleB
