@@ -8,10 +8,10 @@
         var itemDone = "icon-ok icon-green";
         var itemlock = "";  
     }
-    <a href="@Url.Action("Index", "Home",new {Id=@Model.FormUserId})" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
     <ul>
-        <li><a href="@Url.Action("DomesticMediation","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>
-        <li><a href="@Url.Action("Parenting","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Parenting Plan</a></li>
+        <li><a href="@Url.Action("DomesticMediation","Forms")"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>
+        <li><a href="@Url.Action("Parenting","Forms")"><i class="icon icon-th-list"></i>Parenting Plan</a></li>
         <li class="submenu open"><a href="#"><i class="icon icon-th-list"></i>Financial Form</a>
             <ul style="display: block">
                     <li class="nav-item active" id="childCareNav"><a data-form="childCare" href="#"><i class="icon-pencil icon-blue"></i>Child Care</a></li>
@@ -23,6 +23,14 @@
                 {
                     <li class="nav-item" id="extraExpenseNav"><a data-form="extraExpense" href="#"><i class="@itemlock"></i>Extra Expenses</a></li>
                 }
+                @if (Model.FinancialFormsCompleted.Health)
+                {
+                    <li class="nav-item" id="healthsNav"><a data-form="healths" href="#"><i class="@itemDone"></i>Health Insurance</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="healthsNav"><a data-form="healths" href="#"><i class="@itemlock"></i>Health Insurance</a></li>
+                }  
                 @if (Model.FinancialFormsCompleted.Deviation)
                 {
                     <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemDone"></i>Deviations (Father)</a></li>
@@ -62,15 +70,7 @@
                 else
                 {
                     <li class="nav-item" id="otherChildrenNav"><a data-form="otherChildren" href="#"><i class="@itemlock"></i>Other Children (Father)</a></li>
-                }
-                @if (Model.FinancialFormsCompleted.Health)
-                {
-                    <li class="nav-item" id="healthsNav"><a data-form="healths" href="#"><i class="@itemDone"></i>Health Insurance (Father)</a></li>
-                }
-                else
-                {
-                    <li class="nav-item" id="healthsNav"><a data-form="healths" href="#"><i class="@itemlock"></i>Health Insurance (Father)</a></li>
-                }     
+                }   
                 @if (Model.FinancialFormsCompleted.DeviationOther)
                 {
                     <li class="nav-item" id="deviationsOtherNav"><a data-form="deviationsOther" href="#"><i class="@itemDone"></i>Deviations (Mother)</a></li>
@@ -119,11 +119,10 @@
 }
 @section Breadcrumb{
     <div id="breadcrumb">
-        <a data-form="asdfa" href="@Url.Action("Index", "Home",new {Id=@Model.FormUserId})" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
+        <a data-form="asdfa" href="@Url.Action("Index", "Home")" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
         <a data-form="asdfa" href="#" class="current">Financial</a>
     </div>
 }
-<input type="hidden" id="user-id" value="@Model.FormUserId" /> 
 @Html.Partial("_Income", Model.IncomeViewModel)
 @Html.Partial("_SocialSecurity", Model.SocialSecurityViewModel)
 @Html.Partial("_PreexistingSupport", Model.PreexistingSupportViewModel)

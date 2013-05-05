@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
-using FriendlyForms.Authentication;
 using FriendlyForms.Models;
 using Models;
 using Models.ViewModels;
@@ -96,7 +95,7 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult Parenting()
         {
-            var userId = User.FriendlyIdentity().Id;
+            var userId = 1;//User.FriendlyIdentity().Id;
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
@@ -204,7 +203,7 @@ namespace FriendlyForms.Controllers
             config.SetAllowLocalContent(true);                    
             config.SetPrintBackground(true);
 
-            var userId = User.FriendlyIdentity().Id;
+            var userId = 1;// User.FriendlyIdentity().Id;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             //var court = _courtService.GetByUserId(userId) as CourtViewModel;
 
@@ -240,7 +239,7 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult DomesticMediation()
         {
-            var userId = User.FriendlyIdentity().Id;
+            var userId = 1;// User.FriendlyIdentity().Id;
             var house = _houseService.GetByUserId(userId);
             var property = _propertyService.GetByUserId(userId);
             var debt = _debtService.GetByUserId(userId);
@@ -293,7 +292,7 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult Financial()
         {
-            ViewBag.UserId =  User.FriendlyIdentity().Id;
+            ViewBag.UserId = 1;// User.FriendlyIdentity().Id;
             return View();
         }
     }

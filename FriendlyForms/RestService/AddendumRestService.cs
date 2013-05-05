@@ -1,7 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -31,14 +31,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class AddendumRestService : Service
+    [Authenticate]
+    public class AddendumRestService : ServiceBase
     {
         public IAddendumService AddendumService { get; set; }
 
         public object Post(ReqAddendum request)
         {
             var addendum = request.TranslateTo<Addendum>();
+            addendum.UserId = Convert.ToInt64(UserSession.Id);
             AddendumService.Add(addendum);
             return new RespAddendum()
                 {
@@ -48,6 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqAddendum request)
         {
             var addendum = request.TranslateTo<Addendum>();
+            addendum.UserId = Convert.ToInt64(UserSession.Id);
             AddendumService.Update(addendum);
             return new RespAddendum();
         }

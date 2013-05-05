@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -40,14 +41,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class PrivacyRestService : Service
+    [Authenticate]
+    public class PrivacyRestService : ServiceBase
     {
         public IPrivacyService PrivacyService { get; set; }
 
         public object Post(ReqPrivacy request)
         {
             var privacy = request.TranslateTo<Privacy>();
+            privacy.UserId = Convert.ToInt64(UserSession.Id);
             PrivacyService.Add(privacy);
             return new RespPrivacy()
                 {
@@ -57,6 +59,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqPrivacy request)
         {
             var privacy = request.TranslateTo<Privacy>();
+            privacy.UserId = Convert.ToInt64(UserSession.Id);
             PrivacyService.Update(privacy);
             return new RespPrivacy();
         }

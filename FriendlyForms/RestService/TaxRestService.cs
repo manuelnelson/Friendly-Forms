@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common.Extensions;
@@ -30,14 +31,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class TaxRestService : Service
+    [Authenticate]
+    public class TaxRestService : ServiceBase
     {
         public ITaxService TaxService { get; set; }
 
         public object Post(ReqTax request)
         {
             var tax = request.TranslateTo<Tax>();
+            tax.UserId = Convert.ToInt64(UserSession.Id);
             TaxService.Add(tax);
             return new RespTax()
                 {
@@ -47,6 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqTax request)
         {
             var tax = request.TranslateTo<Tax>();
+            tax.UserId = Convert.ToInt64(UserSession.Id);
             TaxService.Update(tax);
             return new RespTax();
         }

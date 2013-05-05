@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
@@ -35,14 +36,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class PropertyRestService : Service
+    [Authenticate]
+    public class PropertyRestService : ServiceBase
     {
         public IPropertyService PropertyService { get; set; }
 
         public object Post(ReqProperty request)
         {
             var property = request.TranslateTo<Property>();
+            property.UserId = Convert.ToInt64(UserSession.Id);
             PropertyService.Add(property);
             return new RespProperty()
                 {
@@ -52,6 +54,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqProperty request)
         {
             var property = request.TranslateTo<Property>();
+            property.UserId = Convert.ToInt64(UserSession.Id);
             PropertyService.Update(property);
             return new RespProperty();
         }

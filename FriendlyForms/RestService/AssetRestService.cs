@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -42,14 +43,15 @@ namespace FriendlyForms.RestService
             [DataMember]
             public ResponseStatus ResponseStatus { get; set; }
         }
-
-        public class AssetRestService : Service
+        [Authenticate]
+        public class AssetRestService : ServiceBase
         {
             public IAssetService AssetService { get; set; }
 
             public object Post(ReqAsset request)
             {
                 var assets = request.TranslateTo<Assets>();
+                assets.UserId = Convert.ToInt64(UserSession.Id);
                 AssetService.Add(assets);
                 return new RespAsset()
                     {
@@ -59,6 +61,7 @@ namespace FriendlyForms.RestService
             public object Put(ReqAsset request)
             {
                 var assets = request.TranslateTo<Assets>();
+                assets.UserId = Convert.ToInt64(UserSession.Id);
                 AssetService.Update(assets);
                 return new RespAsset();
             }

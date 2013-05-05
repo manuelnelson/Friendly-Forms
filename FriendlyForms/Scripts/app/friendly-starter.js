@@ -136,7 +136,6 @@
 
         var model = {
             Id: $(this).attr('data-id'),
-            UserId: $('#user-id').val(),
             Name: name,
             DateOfBirth: dob,
             ChildFormId: $('#childFormId').val()
@@ -222,11 +221,10 @@
             $self.text('Next Form');
             Friendly.ShowMessage('Please note', 'Before proceeding, please review the data you entered as you will not be able to edit this data past this point.', Friendly.properties.messageType.Success, '#starterWarning');
         } else {
-            var formUserId = $('#user-id').val();
             if($('.child-table tr').length > 1) {
-                document.location.href = '/Forms/Parenting/'+formUserId;
+                document.location.href = '/Forms/Parenting/';
             } else {
-                document.location.href = '/Forms/DomesticMediation/'+formUserId;
+                document.location.href = '/Forms/DomesticMediation/';
             }
         }
     });

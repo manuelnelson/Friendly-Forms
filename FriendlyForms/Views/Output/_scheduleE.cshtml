@@ -1,12 +1,164 @@
 ﻿<script id="friendly-scheduleD-template" type="text/x-jquery-tmpl">
     <div class="row-fluid" style="text-align: center;">
         <h2>CHILD SUPPORT SCHEDULE E</h2>
-        <h2>ADDITIONAL EXPENSES</h2>
+        <h2>Deviation (Special Circumstances)</h2>
     </div>
     <table>
         <thead>
             <tr>
-                <th>WORK RELATED CHILD CARE COSTS</th>
+                <th colspan="3">DEVIATION FOR LOW INCOME</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>${CustodialParentName}</td>
+                <td>*Court or Jury Allowable Deviations</td>
+            </tr>
+            <tr>
+                <td>1(a). Proposed Low Income Deviation Amount</td>
+                <td class="currency">$${LowIncomeDeviation.DeviationAmount}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>1(b). Compare requested deviation amount with minimum order amount</td>
+                <td class="currency">$${LowIncomeDeviation.DeviationAmount}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>1(c). Calculated Deviation Amount</td>
+                <td class="currency">$${LowIncomeDeviation.DeviationAmount}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>1(d). Low Income Deviation Amount</td>
+                <td class="currency">$${LowIncomeDeviation.DeviationAmount}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p>
+                        DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY:Court or Jury - Place a check mark in the box at the left to show you are 
+                        excluding or changing the deviation amount(s) displaying in Line 1(d); otherwise, leave the check box blank and continue to thenext section 
+                        of this schedule. If this Discretionary Check Box is checked, enter a new “Discretionary amount allowed by Court/Jury” AS AN AMOUNT 
+                        TO BE SUBTRACTED or as a zero ($0.00) under the noncustodial parent’s column for (c) Mother and/or (d) Father. The amount(s) entered 
+                        under columns (c) and/or (d) will then be used to total with the other deviation(s) in Line 14 of this Schedule.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p>
+                        Explanation for Requesting a Low Income Deviation: ${LowIncomeDeviation.Explaination}
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="5">DEVIATION FOR HIGH INCOME & OTHER AMOUNTS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="3">2(a). High Income- Combined Adjusted Income greater than $30,000/month.</td>
+                <td>${HighIncomeAdjusted}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="2">*Court or Jury Allowable Deviations</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>${CustodialParentName}</td>
+                <td>${NonCustodialParentName}</td>
+                <td>${CustodialParentName}</td>
+                <td>${NonCustodialParentName}</td>
+            </tr>
+            <tr>
+                <td>2(b). Deviation Based on High Income.</td>
+                <td class="currency">$${HighIncomeDeviationFather.Deviation}</td>
+                <td class="currency">$${HighIncomeDeviationMother.Deviation}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>3. Other Health Related Insurance (dental, vision)</td>
+                <td class="currency">$${HighIncomeDeviationFather.OtherInsurance}</td>
+                <td class="currency">$${HighIncomeDeviationMother.OtherInsurance}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>4. Life Insurance</td>
+                <td class="currency">$${HighIncomeDeviationFather.LifeInsurance}</td>
+                <td class="currency">$${HighIncomeDeviationMother.LifeInsurance}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>5. Child and Dependent Care Tax Credit</td>
+                <td class="currency">$${HighIncomeDeviationFather.ChildTaxCredit}</td>
+                <td class="currency">$${HighIncomeDeviationMother.ChildTaxCredit}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>6. Visitation Related Travel Expenses</td>
+                <td class="currency">$${HighIncomeDeviationFather.VisitationExpense}</td>
+                <td class="currency">$${HighIncomeDeviationMother.VisitationExpense}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>7. Alimony PAID</td>
+                <td class="currency">$${HighIncomeDeviationFather.Alimony}</td>
+                <td class="currency">$${HighIncomeDeviationMother.Alimony}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>8. Mortgage (if non-custodial parent is providing cost of home where child resides)</td>
+                <td class="currency">$${HighIncomeDeviationFather.Mortgage}</td>
+                <td class="currency">$${HighIncomeDeviationMother.Mortgage}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>9. Permanency Plan or Foster Care Plan</td>
+                <td class="currency">$${HighIncomeDeviationFather.PermanancyPlan}</td>
+                <td class="currency">$${HighIncomeDeviationMother.PermanancyPlan}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>10. Other - Non-specific Deviations</td>
+                <td class="currency">$${HighIncomeDeviationFather.NonSpecific}</td>
+                <td class="currency">$${HighIncomeDeviationMother.NonSpecific}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>11. TOTAL DEVIATIONS</td>
+                <td class="currency">$${HighIncomeDeviationFather.TotalDeviations}</td>
+                <td class="currency">$${HighIncomeDeviationMother.TotalDeviations}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="5">INSTRUCTIONS FOR COURT/JURY: Place a check mark in the box at the left to show amounts entered in Line 11 columns (c) and (d), 
+                    rather than amounts entered in Line 11 columns (a) and (b), will be used in calculations. Only one set of answers for parents from Line 11 can 
+                    be included on Line 14 with all other deviations.</td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Extraordinary and Special Expenses</th>
                 <th>${CustodialParentName}</th>
                 <th>${NonCustodialParentName}</th>
                 <th>Nonparent Custodian</th>
@@ -15,60 +167,57 @@
         </thead>
         <tbody>
             <tr>
-                <td>1. Work Related Child Care</td>
-                <td class="currency">$${ScheduleD.WorkRelated}</td>
-                <td class="currency">$${NonCustodialScheduleD.WorkRelated}</td>
-                <td class="currency">$${NonParentScheduleD.WorkRelated}</td>
-                <td class="currency">$${TotalScheduleD.WorkRelated}</td>
+                <td>12(a). Extraordinary Educational Expenses</td>
+                <td class="currency">$${TotalExpenses.EducationFather}</td>
+                <td class="currency">$${TotalExpenses.EducationMother}</td>
+                <td class="currency">$${TotalExpenses.EducationNonParent}</td>
+                <td class="currency">$${TotalExpenses.EducationTotal}</td>
             </tr>
             <tr>
-                <td>2. Health Insurance Paid for Children</td>
-                <td class="currency">$${ScheduleD.HealthInsurance}</td>
-                <td class="currency">$${NonCustodialScheduleD.HealthInsurance}</td>
-                <td class="currency">$${NonParentScheduleD.HealthInsurance}</td>
-                <td class="currency">$${TotalScheduleD.HealthInsurance}</td>
+                <td>12(b). Extraordinary Medical Expenses</td>
+                <td class="currency">$${TotalExpenses.MedicalFather}</td>
+                <td class="currency">$${TotalExpenses.MedicalMother}</td>
+                <td class="currency">$${TotalExpenses.MedicalNonParent}</td>
+                <td class="currency">$${TotalExpenses.MedicalTotal}</td>
             </tr>
             <tr>
-                <td>3. Total Monthly Additional Expenses</td>
-                <td class="currency">$${ScheduleD.AdditionalExpenses}</td>
-                <td class="currency">$${NonCustodialScheduleD.AdditionalExpenses}</td>
-                <td class="currency">$${NonParentScheduleD.AdditionalExpenses}</td>
-                <td class="currency">$${TotalScheduleD.AdditionalExpenses}</td>
+                <td>12(c). Allowable Special Expenses</td>
+                <td class="currency">$${TotalExpenses.SpecialFather}</td>
+                <td class="currency">$${TotalExpenses.SpecialMother}</td>
+                <td class="currency">$${TotalExpenses.SpecialNonParent}</td>
+                <td class="currency">$${TotalExpenses.SpecialTotal}</td>
             </tr>
             <tr>
-                <td>4. Pro Rata Share of Parents' Income</td>
-                <td class="currency">$${ScheduleD.ProRataParents}</td>
-                <td class="currency">$${NonCustodialScheduleD.ProRataParents}</td>
-                <td class="currency">$${NonParentScheduleD.ProRataParents}</td>
-                <td class="currency">$${TotalScheduleD.ProRataParents}</td>
+                <td>12(d). Total Expenses</td>
+                <td class="currency">$${TotalExpenses.TotalFather}</td>
+                <td class="currency">$${TotalExpenses.TotalMother}</td>
+                <td class="currency">$${TotalExpenses.TotalNonParent}</td>
+                <td class="currency">$${TotalExpenses.TotalTotal}</td>
             </tr>
             <tr>
-                <td>5. Pro Rata Share of Additional Expenses</td>
-                <td class="currency">$${ScheduleD.ProRataAdditional}</td>
-                <td class="currency">$${NonCustodialScheduleD.ProRataAdditional}</td>
-                <td class="currency">$${NonParentScheduleD.ProRataAdditional}</td>
-                <td class="currency">$${TotalScheduleD.ProRataAdditional}</td>
+                <td>12(e). Percentage Pro Rata Share of Income</td>
+                <td>${TotalExpenses.ProRataFather}%</td>
+                <td>${TotalExpenses.ProRataMother}%</td>
+                <td></td>
+                <td>${TotalExpenses.ProRataTotal}%</td>
+            </tr>
+            <tr>
+                <td>12(f). Amount times Percentage</td>
+                <td class="currency">$${TotalExpenses.PercentageFather}</td>
+                <td class="currency">$${TotalExpenses.PercentageMother}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>12(g). Deviation amount for Extraordinary Educational, Medical and Special Expenses</td>
+                <td class="currency">$${TotalExpenses.DeviationFather}</td>
+                <td class="currency">$${TotalExpenses.DeviationMother}</td>
+                <td ></td>
+                <td ></td>
             </tr>
         </tbody>
     </table>
-    <table>
-        <thead>
-            <tr>
-                <th colspan="7">SUPPLEMENTAL TABLE 1-WORK RELATED CHILD CARE COSTS</th>
-            </tr>
-            <tr>
-                <th></th>
-                <th>School</th>
-                <th>Summer Break</th>
-                <th>Other Break</th>
-                <th>Other Child Care</th>
-                <th>Total Yearly Amount</th>
-                <th>Total Monthly Amount</th>
-            </tr>
-        </thead>
-        <tbody id="supplemental-table">
-        </tbody>
-    </table>
+
 </script>
 <script id="friendly-supplementalTableHeader-template" type="text/x-jquery-tmpl">
     <tr>

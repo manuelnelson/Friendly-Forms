@@ -3,8 +3,6 @@ using System.Web.Mvc;
 using System.Web.Security;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
-using FriendlyForms.Authentication;
-using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Models.ViewModels;
 
@@ -12,14 +10,10 @@ namespace FriendlyForms.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IFormsAuthentication _formsAuthentication;
-        private readonly IUserService _userService;
         private readonly IClientService _clientService;
 
-        public AccountController(IFormsAuthentication formsAuthentication, IUserService userService, IClientService clientService)
+        public AccountController(IClientService clientService)
         {
-            _formsAuthentication = formsAuthentication;
-            _userService = userService;
             _clientService = clientService;
         }
 
@@ -30,23 +24,28 @@ namespace FriendlyForms.Controllers
             return View();
         }
 
+        public ActionResult LogOff()
+        {
+            return RedirectToAction("Index","Home");
+        }
+
         // GET: /Account/LogOn
         [Authorize]
         public ActionResult Admin()
         {
-            var roleId = User.FriendlyIdentity().RoleId;
-            if(roleId == (int)Role.Default)                
-                    return RedirectToAction("NotAuthorized", "Account");
-            var model = new AdministrationModel();
-            if(roleId == (int)Role.Lawyer)
-            {
-                model.Clients = _clientService.GetUsersClients(User.FriendlyIdentity().Id);
-                model.Email = new AdminEmail
-                    {
-                        UserId = User.FriendlyIdentity().Id
-                    };
-                return View(model);                                                
-            }            
+            //var roleId = User.FriendlyIdentity().RoleId;
+            //if(roleId == (int)Role.Default)                
+            //        return RedirectToAction("NotAuthorized", "Account");
+            //var model = new AdministrationModel();
+            //if(roleId == (int)Role.Lawyer)
+            //{
+            //    model.Clients = _clientService.GetUsersClients(User.FriendlyIdentity().Id);
+            //    model.Email = new AdminEmail
+            //        {
+            //            UserId = User.FriendlyIdentity().Id
+            //        };
+            //    return View(model);                                                
+            //}            
             return RedirectToAction("NotAuthorized", "Account");
         }
 
@@ -56,73 +55,14 @@ namespace FriendlyForms.Controllers
         }
 
         //
-        // POST: /Account/LogOn
-        [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = _userService.Authenticate(model.Email, model.Password);
-                if (user != null)
-                {
-                    _formsAuthentication.SetAuthCookie(HttpContext, UserAuthenticationTicketBuilder.CreateAuthenticationTicket(user, model.RememberMe));
-                    if (Url.IsValidReturnUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    return RedirectToAction("Index", "Home");
-                }
-                ModelState.AddModelError("", "The email or password is incorrect.");
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        //
-        // GET: /Account/LogOff
-        public ActionResult LogOff()
-        {
-            _formsAuthentication.Signout();
-            return RedirectToAction("Index", "Home");
-        }
-
-        //
         // GET: /Account/Register
-
         public ActionResult Register()
         {
             return View();
         }
 
         //
-        // POST: /Account/Register
-        [HttpPost]
-        public ActionResult Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Attempt to register the user
-                if (_userService.DoesNativeUserExist(model.Email))
-                {
-                    ModelState.AddModelError("", @"User with this e-mail address already exists.");
-                }
-                else
-                {
-                    //if/when we fix roles, we'll update it here
-                    var user = _userService.CreateNativeUser(model.Email, model.FirstName, model.LastName, model.Password);
-                    _formsAuthentication.SetAuthCookie(HttpContext, UserAuthenticationTicketBuilder.CreateAuthenticationTicket(user));
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        //
         // GET: /Account/ChangePassword
-
         [Authorize]
         public ActionResult ChangePassword()
         {

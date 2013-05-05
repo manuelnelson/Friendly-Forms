@@ -32,7 +32,9 @@ Financial.AddChildCare = function (caller, stop) {
         }
     });
     var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#ChildId').val().trim();
+    if ($('#ChildId').val()) {
+        model.ChildId = $('#ChildId').val().trim();
+    }
     //key is for local storage
     var key = formName + model.ChildId;
     if (!$('#' + formName).valid()) {
@@ -157,7 +159,7 @@ Financial.AddExtraExpense = function (caller, stop) {
     $.jStorage.deleteKey(key);
     //check if we need to move to next form
     if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm(formName, 'deviations', model);
+        Friendly.SubmitForm(formName, 'healths', model);
         return true;
     }
     //check if we need to move to previous form
@@ -275,7 +277,7 @@ Financial.AddDeviations = function (caller, stop) {
     }
     //check if we need to move to previous form
     if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm(formName, 'extraExpense', model);
+        Friendly.SubmitForm(formName, 'healths', model);
         return true;
     }
     var submitType = 'POST';
@@ -388,7 +390,7 @@ Financial.AddDeviationsOther = function (caller, stop) {
     }
     //check if we need to move to previous form
     if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm(formName, 'healths', model);
+        Friendly.SubmitForm(formName, 'otherChildren', model);
         return true;
     }
     var submitType = 'POST';

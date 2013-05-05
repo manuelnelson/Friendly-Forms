@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -32,8 +33,8 @@ namespace FriendlyForms.RestService
             public long UserId { get; set; }
             public int Support { get; set; }
         }
-
-        public class PreexistingSupportFormsService : Service
+        [Authenticate]
+        public class PreexistingSupportFormsService : ServiceBase
         {
             public IPreexistingSupportFormService PreexistingSupportFormService { get; set; } //Injected by IOC
 
@@ -50,6 +51,7 @@ namespace FriendlyForms.RestService
             public object Post(PreexistingSupportFormDto request)
             {
                 var PreexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
+                PreexistingSupportFormEntity.UserId = Convert.ToInt64(UserSession.Id);
                 PreexistingSupportFormService.Add(PreexistingSupportFormEntity);
                 return PreexistingSupportFormEntity;
             }
@@ -57,6 +59,7 @@ namespace FriendlyForms.RestService
             public object Put(PreexistingSupportFormDto request)
             {
                 var PreexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
+                PreexistingSupportFormEntity.UserId = Convert.ToInt64(UserSession.Id);
                 PreexistingSupportFormService.Update(PreexistingSupportFormEntity);
                 return PreexistingSupportFormEntity;
             }

@@ -1,7 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -31,14 +31,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class SpousalRestService : Service
+    [Authenticate]
+    public class SpousalRestService : ServiceBase
     {
         public ISpousalService SpousalService { get; set; }
 
         public object Post(ReqSpousal request)
         {
             var spousalSupport = request.TranslateTo<SpousalSupport>();
+            spousalSupport.UserId = Convert.ToInt64(UserSession.Id);
             SpousalService.Add(spousalSupport);
             return new RespSpousal()
                 {
@@ -48,6 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqSpousal request)
         {
             var spousalSupport = request.TranslateTo<SpousalSupport>();
+            spousalSupport.UserId = Convert.ToInt64(UserSession.Id);
             SpousalService.Update(spousalSupport);
             return new RespSpousal();
         }

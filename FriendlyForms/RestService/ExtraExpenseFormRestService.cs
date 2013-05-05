@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -31,8 +32,8 @@ namespace FriendlyForms.RestService
             public long UserId { get; set; }
             public int HasExtraExpenses { get; set; }
         }
-
-        public class ExtraExpenseFormsService : Service
+        [Authenticate]
+        public class ExtraExpenseFormsService : ServiceBase
         {
             public IExtraExpenseFormService ExtraExpenseFormService { get; set; } //Injected by IOC
 
@@ -43,16 +44,18 @@ namespace FriendlyForms.RestService
 
             public object Post(ExtraExpenseFormDto request)
             {
-                var ExtraExpenseFormEntity = request.TranslateTo<ExtraExpenseForm>();
-                ExtraExpenseFormService.Add(ExtraExpenseFormEntity);
-                return ExtraExpenseFormEntity;
+                var extraExpenseFormEntity = request.TranslateTo<ExtraExpenseForm>();
+                extraExpenseFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                ExtraExpenseFormService.Add(extraExpenseFormEntity);
+                return extraExpenseFormEntity;
             }
 
             public object Put(ExtraExpenseFormDto request)
             {
-                var ExtraExpenseFormEntity = request.TranslateTo<ExtraExpenseForm>();
-                ExtraExpenseFormService.Update(ExtraExpenseFormEntity);
-                return ExtraExpenseFormEntity;
+                var extraExpenseFormEntity = request.TranslateTo<ExtraExpenseForm>();
+                extraExpenseFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                ExtraExpenseFormService.Update(extraExpenseFormEntity);
+                return extraExpenseFormEntity;
             }
 
             public void Delete(ExtraExpenseFormListDto request)

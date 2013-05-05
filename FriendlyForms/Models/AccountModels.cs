@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DataAnnotationsExtensions;
 
 namespace FriendlyForms.Models
 {
@@ -27,16 +28,13 @@ namespace FriendlyForms.Models
         [Required]
         [Display(Name = "E-mail")]
         [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        [Email]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string ReturnUrl { get; set; }
-
-        [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
     }
 
 }

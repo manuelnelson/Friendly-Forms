@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
-using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Models;
 using Models.ViewModels;
+using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.Controllers
 {
     [Authorize]
-    public class FormsController : Controller
+    public class FormsController : ControllerBase
     {
         private readonly ICourtService _courtService;
         private readonly IParticipantService _participantService;
@@ -87,15 +88,10 @@ namespace FriendlyForms.Controllers
             _extraExpenseFormService = extraExpenseFormService;
         }
         
-        [Authorize]
-        public ActionResult Starter(int Id)
-        {            
-            //only show form if userId is current user, or if curerent user is lawyer of userId
-            if(Authorization.IsAuthorized(User, Id))
-            {
-                //no authority to view the page. show error message
-                return RedirectToAction("NotAuthorized", "Account");
-            }
+        [Authenticate]
+        public ActionResult Starter()
+        {
+            var Id = Convert.ToInt64(UserSession.Id);
             var court = _courtService.GetByUserId(Id) as CourtViewModel;
             var participants = _participantService.GetByUserId(Id);
             var children = _childService.GetByUserId(Id);
@@ -110,30 +106,24 @@ namespace FriendlyForms.Controllers
             };
 
             var starterViewModel = new StarterViewModel
-            {
-                CourtViewModel = court,
-                ParticipantViewModel = participants as ParticipantViewModel,
-                ChildAllViewModel = new ChildAllViewModel()
-                    {
-                        ChildViewModel = children,
-                        ChildFormViewModel = childForm as ChildFormViewModel
-                    },
-                StarterFormsCompleted = formsViewModel
-            };
-            starterViewModel.FormUserId = Id;
+                {
+                    CourtViewModel = court,
+                    ParticipantViewModel = participants as ParticipantViewModel,
+                    ChildAllViewModel = new ChildAllViewModel()
+                        {
+                            ChildViewModel = children,
+                            ChildFormViewModel = childForm as ChildFormViewModel
+                        },
+                    StarterFormsCompleted = formsViewModel,
+                };
             return View(starterViewModel);
         }
 
-        
-        [Authorize]
-        public ActionResult Parenting(int Id)
+
+        [Authenticate]
+        public ActionResult Parenting()
         {
-            //only show form if userId is current user, or if curerent user is lawyer of userId
-            if (Authorization.IsAuthorized(User, Id))
-            {
-                //no authority to view the page. show error message
-                return RedirectToAction("NotAuthorized", "Account");
-            }
+            var Id = Convert.ToInt64(UserSession.Id);
             var court = _courtService.GetByUserId(Id) as CourtViewModel;
             var participants = _participantService.GetByUserId(Id) as ParticipantViewModel;
             var children = _childService.GetByUserId(Id);
@@ -197,19 +187,14 @@ namespace FriendlyForms.Controllers
                     AddendumViewModel = addendum as AddendumViewModel,
                     FormsCompleted = formsViewModel
                 };
-            childViewModel.FormUserId = Id;
             return View(childViewModel);
         }
 
-        [Authorize]
-        public ActionResult DomesticMediation(int Id)
+        [Authenticate]
+        public ActionResult DomesticMediation()
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            if (Authorization.IsAuthorized(User, Id))
-            {
-                //no authority to view the page. show error message
-                return RedirectToAction("NotAuthorized", "Account");
-            }
+            var Id = Convert.ToInt64(UserSession.Id);
             var house = _houseService.GetByUserId(Id);
             var property = _propertyService.GetByUserId(Id);            
             var debt = _debtService.GetByUserId(Id);
@@ -268,19 +253,14 @@ namespace FriendlyForms.Controllers
                 //TODO: we'll need to do a check to see if there are children involved.  This will be changed later but for NOW
                 HasChildren = true
             };
-            domesticModel.FormUserId = Id;
             return View(domesticModel);
         }
 
         [Authorize]
-        public ActionResult Financial(int Id)
+        public ActionResult Financial()
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            if (Authorization.IsAuthorized(User, Id))
-            {
-                //no authority to view the page. show error message
-                return RedirectToAction("NotAuthorized", "Account");
-            }
+            var Id = Convert.ToInt64(UserSession.Id);
             var income = _incomeService.GetByUserId(Id);
             var incomeOther = _incomeService.GetByUserId(Id, isOtherParent:true);
             var children = _childService.GetByUserId(Id);
@@ -364,8 +344,7 @@ namespace FriendlyForms.Controllers
                     ExtraExpenseFormViewModel = extraExpense,
                     HealthViewModel = health,
                     ChildCareFormViewModel = childCareForm,
-                    DeviationsOtherFormViewModel = deviationOther,
-                    FormUserId = Id
+                    DeviationsOtherFormViewModel = deviationOther
                 };
             return View(model);
         }

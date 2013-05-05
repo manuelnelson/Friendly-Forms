@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -32,13 +33,14 @@ namespace FriendlyForms.RestService
             public bool IsOtherParent { get; set; }
             public int Deviation { get; set; }
         }
-
-        public class DeviationsFormsService : Service
+        [Authenticate]
+        public class DeviationsFormsService : ServiceBase
         {
             public IDeviationsFormService DeviationsFormService { get; set; } //Injected by IOC
 
             public object Get(DeviationsFormDto request)
             {
+                request.UserId = Convert.ToInt64(UserSession.Id);
                 return DeviationsFormService.GetByUserId(request.UserId, request.IsOtherParent);
             }
 
@@ -50,16 +52,19 @@ namespace FriendlyForms.RestService
 
             public object Post(DeviationsFormDto request)
             {
-                var DeviationsFormEntity = request.TranslateTo<DeviationsForm>();
-                DeviationsFormService.Add(DeviationsFormEntity);
-                return DeviationsFormEntity;
+                var deviationsFormEntity = request.TranslateTo<DeviationsForm>();
+                deviationsFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+
+                DeviationsFormService.Add(deviationsFormEntity);
+                return deviationsFormEntity;
             }
 
             public object Put(DeviationsFormDto request)
             {
-                var DeviationsFormEntity = request.TranslateTo<DeviationsForm>();
-                DeviationsFormService.Update(DeviationsFormEntity);
-                return DeviationsFormEntity;
+                var deviationsFormEntity = request.TranslateTo<DeviationsForm>();
+                deviationsFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                DeviationsFormService.Update(deviationsFormEntity);
+                return deviationsFormEntity;
             }
 
             public void Delete(DeviationsFormListDto request)

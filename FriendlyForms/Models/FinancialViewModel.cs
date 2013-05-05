@@ -19,7 +19,6 @@ namespace FriendlyForms.Models
         public ChildCareFormViewModel ChildCareFormViewModel { get; set; }
         public FinancialFormsCompleted FinancialFormsCompleted { get; set; }
         public ChildAllViewModel ChildAllViewModel { get; set; }
-        public int FormUserId { get; set; }
         public DeviationsFormViewModel DeviationsOtherFormViewModel { get; set; }
     }
 

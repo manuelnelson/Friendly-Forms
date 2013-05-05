@@ -3,38 +3,32 @@
     ViewBag.Title = "Log On";
 }
 @section Sidebar{
-        <a href="@Url.Action("Index","Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
-        <ul>
-            <li><a href="@Url.Action("Index","Home")"><i class="icon icon-home"></i><span>Home</span></a></li>
-            <li><a href="@Url.Action("About","Home")"><i class="icon icon-briefcase"></i><span>About</span></a></li>
-            <li><a href="@Url.Action("About","Home")"><i class="icon icon-question-sign"></i><span>Help</span></a></li>
-        </ul>
+    <a href="@Url.Action("Index", "Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+    <ul>
+        <li><a href="@Url.Action("Index", "Home")"><i class="icon icon-home"></i><span>Home</span></a></li>
+        <li><a href="@Url.Action("About", "Home")"><i class="icon icon-briefcase"></i><span>About</span></a></li>
+        <li><a href="@Url.Action("About", "Home")"><i class="icon icon-question-sign"></i><span>Help</span></a></li>
+    </ul>
 }
 <p>
     Please enter your user name and password. @*@Html.ActionLink("Register", "Register") if you don't have an account.*@
 </p>
 
-@Html.ValidationSummary(true, "Login was unsuccessful. Please correct the errors and try again.")
 <div class="row-fluid">
-@using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "well form-vertical span4" }))
-{
-    <fieldset>
-        <legend>Account Information</legend>
-        @Html.ValidationSummary()
-        <div class="control-group">
-            @Html.TextBoxFor(m => m.Email, new { placeholder = "Email", style="width:90%" })
-            @Html.ValidationMessageFor(m => m.Email, null, new { @class = "help-inline" })
-        </div>
-        <div class="control-group">
-            @Html.PasswordFor(m => m.Password, new { placeholder = "Password", style="width:90%" })
-            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "help-inline" })
-        </div>
-        <div class="control-group">
-            @Html.CheckBoxFor(m => m.RememberMe)<span style="margin-left: 10px;">Remember Me?</span>
-        </div>
-        @Html.HiddenFor(m => m.ReturnUrl)
-        <input type="submit" id="submit" class="btn btn-primary" value="Log In" />
-    </fieldset>
-}
+    <form class="well form-vertical" id="login-form" action="/api/auth/credentials" data-continue="/">
+        <fieldset>
+            <legend>Account Information</legend>
+            <div class="control-group">
+                @Html.TextBoxFor(m => m.UserName, new { placeholder = "Email" })
+                @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "help-inline" })
+            </div>
+            <div class="control-group">
+                @Html.PasswordFor(m => m.Password, new { placeholder = "Password" })
+                @Html.ValidationMessageFor(m => m.Password, null, new { @class = "help-inline" })
+            </div>
+            <input type="submit" id="submit" class="btn btn-primary" value="Log In" />
+            <p style="margin-top: 10px;">@Html.ActionLink("Register", "Register") if you don't have an account.</p>
+        </fieldset>
+    </form>
 </div>
 

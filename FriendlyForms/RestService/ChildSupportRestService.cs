@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -45,20 +42,22 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ChildSupportRestService : Service
+    [Authenticate]
+    public class ChildSupportRestService : ServiceBase
     {
         public IChildSupportService ChildSupportService { get; set; }
 
         public object Post(ReqChildSupport request)
         {
             var childSupportViewModel = request.TranslateTo<ChildSupportViewModel>();
+            childSupportViewModel.UserId = Convert.ToInt64(UserSession.Id);
             ChildSupportService.AddOrUpdate(childSupportViewModel);
             return new RespChildSupport();
         }
         public object Put(ReqChildSupport request)
         {
             var childSupport = request.TranslateTo<ChildSupport>();
+            childSupport.UserId = Convert.ToInt64(UserSession.Id);
             ChildSupportService.Update(childSupport);
             return new RespChildSupport();
         }

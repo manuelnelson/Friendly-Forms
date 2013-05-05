@@ -1,5 +1,7 @@
 ﻿/* File Created: August 18, 2012 */
 window.Friendly = window.Friendly || {};
+//allows underscore to use mustache {{name}} brackets instead of underscores horrendous conventions
+_.templateSettings.interpolate = /\{\{(.+?)\}\}/g;
 
 Friendly.properties = {
     messageType: {
@@ -16,7 +18,7 @@ Friendly.children = [];
 Friendly.childNdx = 0;
 Friendly.StartLoading = function () {
     $('#loading').show();
-    $('body').css('cursor', 'wait'); 
+    $('body').css('cursor', 'wait');
 };
 Friendly.EndLoading = function () {
     $('#loading').hide();
@@ -66,7 +68,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
         }
         //If there's an Id, we are updating; use PUT instead of POST
         var submitType = 'POST';
-        
+
         if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
             submitType = 'PUT';
         else
@@ -92,7 +94,7 @@ Friendly.SubmitForm = function (formName, nextForm, model) {
     return true;
 };
 //This is a minor alteration from Submit form. Used for the IsGenericForm function
-Friendly.AjaxSubmit = function(formName, nextForm, model) {
+Friendly.AjaxSubmit = function (formName, nextForm, model) {
     if ($('#' + formName).valid()) {
         if (typeof model === 'undefined') {
             model = Friendly.GetFormInput(formName);
@@ -106,18 +108,18 @@ Friendly.AjaxSubmit = function(formName, nextForm, model) {
             url: '/api/' + formName + '?format=json',
             type: submitType,
             data: model,
-            success: function() {
+            success: function () {
                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
             },
             error: Friendly.GenericErrorMessage
         });
     } else {
-        Friendly.NextForm(nextForm, Friendly.properties.iconError);        
+        Friendly.NextForm(nextForm, Friendly.properties.iconError);
         return false;
     }
 };
-Friendly.IsOtherForm = function(formName) {
+Friendly.IsOtherForm = function (formName) {
     //If name of form contains other, with the exception of the OtherChildren form, then it is an 'Other' form
     var regex = /Other/g;
     if (formName.search(regex) != -1) {
@@ -163,7 +165,6 @@ Friendly.GetFormInput = function (formName) {
         }
         model[field.name] = field.value;
     });
-    model.UserId = $('#user-id').val();
     //grab form Id if it exists
     if ($('#' + formName + 'Id').length > 0)
         model.Id = $('#' + formName + 'Id').val();
@@ -177,7 +178,7 @@ Friendly.ClearForm = function (formName) {
         .not(':button, :submit, :reset, :hidden, :radio, .timepicker')
         .val('')
         .removeAttr('selected');
-        
+
     $(':input', '#' + formName)
      .not(':button, :submit, :reset, :hidden,')
      .removeAttr('checked')
@@ -207,12 +208,12 @@ Friendly.ValidateForms = function (btnClassToHide) {
     $(btnClassToHide).hide();
     $('.viewOutput').show();
 };
-Friendly.FormInvalidationMessage = function(formName) {
+Friendly.FormInvalidationMessage = function (formName) {
     switch (formName) {
         case 'Decisions':
-            if(Friendly.ChildDecisionError.length > 1)
+            if (Friendly.ChildDecisionError.length > 1)
                 return "Decisions (" + Friendly.ChildDecisionError.join(',') + "), ";
-            else 
+            else
                 return "Decisions (" + Friendly.ChildDecisionError[0] + "), ";
         case 'Holidays':
             if (Friendly.ChildHolidayError.length > 1)
@@ -227,7 +228,7 @@ Friendly.FormInvalidationMessage = function(formName) {
 Friendly.IsGenericForm = function (formName, nextForm) {
     var genericForms = ['house', 'vehicle', 'child', 'decisions', 'holiday', 'preexistingSupportForm', 'preexistingSupportFormOther', 'childCare', 'extraExpense', 'deviations', 'deviationsOther'];
     if (genericForms.indexOf(formName) >= 0) {
-        switch (formName) { 
+        switch (formName) {
             case 'house':
                 //get values
                 var model = Friendly.GetFormInput('house');
@@ -275,7 +276,7 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 Friendly.ExtraExpenseError = [];
                 Financial.CheckExtraExpense(child, nextForm);
                 break;
-        case 'deviations':
+            case 'deviations':
                 //First, check if current form is valid
                 Financial.AddDeviations(null, true);
                 //let's hide the form while we go through them
@@ -297,7 +298,7 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 Friendly.DeviationsErrorOther = [];
                 Financial.CheckDeviationsOther(child, nextForm);
                 break;
-        case 'holiday':
+            case 'holiday':
                 //First, check if current form is valid
                 Parenting.AddHoliday();
                 //let's hide the form while we go through them
@@ -307,7 +308,7 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 var child = Friendly.children[Friendly.childNdx];
                 Friendly.ChildHolidayError = [];
                 Parenting.CheckChildHoliday(child, nextForm);
-                break;                
+                break;
             case 'preexistingSupportForm':
                 Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
                 break;
@@ -507,7 +508,7 @@ $(document).ready(function () {
         var text = $(item).text();
         $(item).text(addCommas(text));
     });
-    
+
     function addCommas(nStr) {
         nStr += '';
         x = nStr.split('.');
@@ -533,5 +534,25 @@ $(document).ready(function () {
     //will go to output forms
     $('#ViewOutput').live('click', function () {
         document.location.href = $(this).attr('data-url');
+    });
+    ///api/auth/logout
+    $('#logOff').live('click', function () {
+        $.ajax({
+            url: '/api/auth/logout',
+            success: function () {
+                document.location.href = '/';
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    });
+    
+    //Fetch login status and update login template
+    $.ajax({
+        url: '/api/userauths?format=json',
+        success: function (data) {
+            var loginTempalte = $("#friendly-login-template").html();
+            $('#user-nav').append(_.template(loginTempalte, data.UserSession));
+        },
+        error: Friendly.GenericErrorMessage
     });
 });

@@ -6,7 +6,7 @@ namespace BusinessLogic.Contracts
 {
     public interface ISocialSecurityService : IFormService<ISocialSecurityRepository,SocialSecurity>
     {
-        SocialSecurityViewModel GetByUserId(int userId, bool isOtherParent = false);
+        SocialSecurityViewModel GetByUserId(long userId, bool isOtherParent = false);
         SocialSecurity AddOrUpdate(SocialSecurityViewModel model);
     }
 }

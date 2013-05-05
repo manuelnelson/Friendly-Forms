@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -44,14 +45,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class VehicleRestService : Service
+    [Authenticate]
+    public class VehicleRestService : ServiceBase
     {
         public IVehicleService VehicleService { get; set; }
 
         public object Post(ReqVehicle request)
         {
             var vehicleViewModel = request.TranslateTo<VehicleViewModel>();
+            vehicleViewModel.UserId = Convert.ToInt64(UserSession.Id);
             var updatedVehicle = VehicleService.AddOrUpdate(vehicleViewModel);
             return new RespVehicle()
                 {
@@ -61,6 +63,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqVehicle request)
         {
             var vehicle = request.TranslateTo<Vehicle>();
+            vehicle.UserId = Convert.ToInt64(UserSession.Id);
             VehicleService.Update(vehicle);
             return new RespVehicle();
         }

@@ -4,6 +4,7 @@ jquery.validate.js
 jquery.validate.unobtrusive.js
 jQuery.tmpl.js
 jquery.mask.js
+underscore.js
 bootstrap-alert.js  
 bootstrap-button.js
 bootstrap-dropdown.js

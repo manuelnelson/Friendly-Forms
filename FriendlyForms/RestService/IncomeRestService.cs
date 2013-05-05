@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common.Extensions;
@@ -82,14 +83,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class IncomeRestService : Service
+    [Authenticate]
+    public class IncomeRestService : ServiceBase
     {
         public IIncomeService IncomeService { get; set; }
 
         public object Post(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
+            income.UserId = Convert.ToInt64(UserSession.Id);
             IncomeService.Add(income);
             return new RespIncome()
                 {
@@ -99,6 +101,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
+            income.UserId = Convert.ToInt64(UserSession.Id);
             IncomeService.Update(income);
             return new RespIncome();
         }

@@ -2,9 +2,8 @@
     getPdfHtml();
 
     if (window.location.hash.indexOf('#scheduleA') !== -1) {
-        var userId = $('#user-id').val();
         $.ajax({
-            url: '/api/Output/Financial/ScheduleA/?UserId=' + userId + '&format=json',
+            url: '/api/Output/Financial/ScheduleA?format=json',
             type: 'GET',
             success: function (data) {
                 var result = $("#friendly-scheduleA-template").tmpl(data);
@@ -17,9 +16,8 @@
 
     $('.output-item').click(function() {
         var form = $(this).find('a').attr('data-form');
-        var userId = $('#user-id').val();
         $.ajax({
-            url: '/api/Output/Financial/' + form + '/?UserId=' + userId + '&format=json',
+            url: '/api/Output/Financial/' + form + '/?format=json',
             type: 'GET',
             success: function (data) {
                 switch (form) {

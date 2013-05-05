@@ -49,7 +49,7 @@
         }
     });
 
-    if (window.location.href.indexOf('/Forms/Financial/') !== -1) {
+    if (window.location.href.indexOf('/Forms/Financial') !== -1) {
         Friendly.NextForm('childCare', 'icon-pencil icon-blue');
     }
     //#endregion 
@@ -81,14 +81,13 @@
         }
         Friendly.EndLoading();
     });
-
     $('.financial-extraExpense').click(function () {
         //if the form isn't validated, we still need to move on
         if (!Financial.AddExtraExpense(this)) {
             var child = Friendly.children[Friendly.childNdx - 1];
             Friendly.ExtraExpenseError.push(child.Name);
             if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('deviations', Friendly.properties.iconError);
+                Friendly.NextForm('healths', Friendly.properties.iconError);
                 return;
             }
             //check if we need to move to previous form
@@ -103,6 +102,33 @@
         }
     });
     //#endregion 
+    //#region Health--------------------------------
+    $('.financial-part5').click(function () {
+        Friendly.SubmitForm('healths', 'deviations');
+    });
+    $('#healths input[name="ProvideHealth"]').change(function () {
+        $('#healths #health-provide input').val('');
+        if ($('#healths #ProvideHealth:checked').val() === "1") {
+            $('#healths #health-provide').show();
+        } else {
+            $('#healths #health-provide').hide();
+        }
+    });
+    $('#healths .percent').focusout(function () {
+        var percentItems = $.grep($('#healths .percent'), function (element, ndx) {
+            return $(element).val() != "";
+        });
+        //only alter if 
+        var remainingVal = 0;
+        if (percentItems.length == 2) {
+            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+            percentItems = $.grep($('#healths .percent'), function (element, ndx) {
+                return $(element).val() === "";
+            });
+            $(percentItems).val(remainingVal);
+        }
+    });
+    //#endregion
 
     //#region Deviations
     $('.financial-deviations').click(function () {
@@ -300,7 +326,7 @@
     //#region Other Children---------------    
     $('.financial-part4').click(function () {
         if ($('#otherChildWrapper').is(':visible')) {
-            Friendly.NextForm('healths', Friendly.properties.iconSuccess);
+            Friendly.NextForm('deviationsOther', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
@@ -316,7 +342,7 @@
                         $('#otherChildWrapper #childrenId').val(data.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('healths', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('deviationsOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -348,33 +374,6 @@
         Friendly.EndLoading();
     });
     //#endregion
-    //#region Health--------------------------------
-    $('.financial-part5').click(function () {
-        Friendly.SubmitForm('healths', 'deviationsOther');
-    });
-    $('#healths input[name="ProvideHealth"]').change(function () {
-        $('#healths #health-provide input').val('');
-        if ($('#healths #ProvideHealth:checked').val() === "1") {
-            $('#healths #health-provide').show();
-        } else {
-            $('#healths #health-provide').hide();
-        }
-    });
-    $('#healths .percent').focusout(function () {
-        var percentItems = $.grep($('#healths .percent'), function(element, ndx) {
-            return $(element).val() != "";
-        });
-        //only alter if 
-        var remainingVal = 0;
-        if (percentItems.length == 2) {
-            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
-            percentItems = $.grep($('#healths .percent'), function (element, ndx) {
-                return $(element).val() === "";
-            });
-            $(percentItems).val(remainingVal);
-        }
-    });
-    //#endregion
     //#region Deviations Other
     $('.financial-deviationsOther').click(function () {
         //if the form isn't validated, we still need to move on
@@ -387,7 +386,7 @@
             }
             //check if we need to move to previous form
             if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('healths', Friendly.properties.iconError);
+                Friendly.NextForm('otherChildren', Friendly.properties.iconError);
                 return;
             }
             $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -583,7 +582,7 @@
     //#region Other Children---------------    
     $('.financial-part9').click(function () {
         if ($('#otherChildOtherWrapper').is(':visible')) {
-            Friendly.NextForm('healthsOther', Friendly.properties.iconSuccess);
+            Friendly.ValidateForms('.financial-part9');
             return false;
         }
         Friendly.StartLoading();
@@ -599,7 +598,7 @@
                         $('#otherChildOtherWrapper #childrenId').val(data.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
-                        Friendly.NextForm('healthsOther', Friendly.properties.iconSuccess);
+                        Friendly.ValidateForms('.financial-part9');
                     }
                     Friendly.EndLoading();
                 },
@@ -631,46 +630,47 @@
         Friendly.EndLoading();
     });
     //#endregion
+    
     //#region Health Other---------------    
-    $('.financial-part10').click(function () {
-        var formName = 'healthsOther';
-        if ($('#' + formName).valid()) {
-            Friendly.StartLoading();
-            var model = Friendly.GetFormInput(formName);
-            $.ajax({
-                url: "/api/healths?format=json",
-                type: 'POST',
-                data: model,
-                success: function () {
-                    Friendly.ValidateForms('.financial-part10');
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        return false;
-    });
-    $('#healthsOther input[name="ProvideHealth"]').change(function () {
-        $('#healthsOther #health-provide input').val('');
-        if ($('#healthsOther #ProvideHealth:checked').val() === "1") {
-            $('#healthsOther #health-provide').show();
-        } else {
-            $('#healthsOther #health-provide').hide();
-        }
-    });
-    $('#healthsOther .percent').focusout(function () {
-        var percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
-            return $(element).val() != "";
-        });
-        //only alter if 
-        var remainingVal = 0;
-        if (percentItems.length == 2) {
-            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
-            percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
-                return $(element).val() === "";
-            });
-            $(percentItems).val(remainingVal);
-        }
-    });
+    //$('.financial-part10').click(function () {
+    //    var formName = 'healthsOther';
+    //    if ($('#' + formName).valid()) {
+    //        Friendly.StartLoading();
+    //        var model = Friendly.GetFormInput(formName);
+    //        $.ajax({
+    //            url: "/api/healths?format=json",
+    //            type: 'POST',
+    //            data: model,
+    //            success: function () {
+    //                Friendly.ValidateForms('.financial-part10');
+    //                Friendly.EndLoading();
+    //            },
+    //            error: Friendly.GenericErrorMessage
+    //        });
+    //    }
+    //    return false;
+    //});
+    //$('#healthsOther input[name="ProvideHealth"]').change(function () {
+    //    $('#healthsOther #health-provide input').val('');
+    //    if ($('#healthsOther #ProvideHealth:checked').val() === "1") {
+    //        $('#healthsOther #health-provide').show();
+    //    } else {
+    //        $('#healthsOther #health-provide').hide();
+    //    }
+    //});
+    //$('#healthsOther .percent').focusout(function () {
+    //    var percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
+    //        return $(element).val() != "";
+    //    });
+    //    //only alter if 
+    //    var remainingVal = 0;
+    //    if (percentItems.length == 2) {
+    //        remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+    //        percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
+    //            return $(element).val() === "";
+    //        });
+    //        $(percentItems).val(remainingVal);
+    //    }
+    //});
     //#endregion
 });

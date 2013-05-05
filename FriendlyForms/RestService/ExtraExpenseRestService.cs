@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -47,8 +48,8 @@ namespace FriendlyForms.RestService
             public string SpecialDescriptionNonParent { get; set; }
             public int ExtraSpent { get; set; }
         }
-
-        public class ExtraExpensesService : Service
+        [Authenticate]
+        public class ExtraExpensesService : ServiceBase
         {
             public IExtraExpenseService ExtraExpenseService { get; set; } //Injected by IOC
 
@@ -62,6 +63,7 @@ namespace FriendlyForms.RestService
             public object Post(ExtraExpenseDto request)
             {
                 var ExtraExpenseEntity = request.TranslateTo<ExtraExpense>();
+                ExtraExpenseEntity.UserId = Convert.ToInt64(UserSession.Id);
                 ExtraExpenseService.Add(ExtraExpenseEntity);
                 return ExtraExpenseEntity;
             }
@@ -69,6 +71,7 @@ namespace FriendlyForms.RestService
             public object Put(ExtraExpenseDto request)
             {
                 var ExtraExpenseEntity = request.TranslateTo<ExtraExpense>();
+                ExtraExpenseEntity.UserId = Convert.ToInt64(UserSession.Id);
                 ExtraExpenseService.Update(ExtraExpenseEntity);
                 return ExtraExpenseEntity;
             }

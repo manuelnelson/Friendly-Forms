@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -44,8 +45,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class DecisionsRestService : Service
+    [Authenticate]
+    public class DecisionsRestService : ServiceBase
     {
         public IDecisionsService DecisionsService { get; set; }
         public IExtraDecisionsService ExtraDecisionsService { get; set; }
@@ -64,12 +65,15 @@ namespace FriendlyForms.RestService
         public object Post(ReqDecisions request)
         {
             var decisions = request.TranslateTo<DecisionsViewModel>();
+            decisions.UserId = Convert.ToInt64(UserSession.Id);
+
             DecisionsService.AddOrUpdate(decisions);
             return new RespDecisions();
         }
         public object Put(ReqDecisions request)
         {
             var decisions = request.TranslateTo<Decisions>();
+            decisions.UserId = Convert.ToInt64(UserSession.Id);
             DecisionsService.Update(decisions);
             return new RespDecisions();
         }

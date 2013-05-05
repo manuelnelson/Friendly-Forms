@@ -6,10 +6,11 @@ using DataInterface;
 using DataLayerContext;
 using DataLayerContext.OrmLiteRepositories;
 using DataLayerContext.Repositories;
-using FriendlyForms.Authentication;
+using FriendlyForms.Models;
 using Funq;
 using ServiceStack.CacheAccess;
 using ServiceStack.CacheAccess.Providers;
+using ServiceStack.Configuration;
 using ServiceStack.Logging;
 using ServiceStack.Logging.Elmah;
 using ServiceStack.Logging.Support.Logging;
@@ -19,6 +20,7 @@ using ServiceStack.Mvc;
 using ServiceStack.OrmLite;
 using ServiceStack.OrmLite.SqlServer;
 using ServiceStack.ServiceInterface;
+using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.WebHost.Endpoints;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(FriendlyForms.App_Start.AppHost), "Start")]
@@ -58,26 +60,22 @@ namespace FriendlyForms.App_Start
 			//});
 
 			//Enable Authentication
-			//ConfigureAuth(container);
+			ConfigureAuth(container);
 
-			//Register all your dependencies
-			//container.Register(new TodoRepository());
+			//Register all your dependencies			
             LogManager.LogFactory = new ElmahLogFactory(new NullLogFactory());
 
             //Make the default lifetime of objects limited to request
             container.DefaultReuse = ReuseScope.Request;
 
             SetupRepositories(container);
-		    SetupServices(container);
-            //Authentication
-            container.Register<IFormsAuthentication>(c => new DefaultFormsAuthentication());
 
+		    SetupServices(container);
 
 			//Register In-Memory Cache provider. 
 			//For Distributed Cache Providers Use: PooledRedisClientManager, BasicRedisClientManager or see: https://github.com/ServiceStack/ServiceStack/wiki/Caching
 			container.Register<ICacheClient>(new MemoryCacheClient());
-			container.Register<ISessionFactory>(c => 
-				new SessionFactory(c.Resolve<ICacheClient>()));
+			container.Register<ISessionFactory>(c => new SessionFactory(c.Resolve<ICacheClient>()));
 
 			//Set MVC to use the same Funq IOC as ServiceStack
 			ControllerBuilder.Current.SetControllerFactory(new FunqControllerFactory(container));
@@ -136,6 +134,7 @@ namespace FriendlyForms.App_Start
             container.Register<IExtraExpenseFormRepository>(c => new ExtraExpenseFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IExtraExpenseRepository>(c => new ExtraExpenseRepository(c.Resolve<IUnitOfWork>()));
         }
+
         private void SetupServices(Container container)
         {
             container.Register<ICourtService>(c => new CourtService(c.Resolve<ICourtRepository>() as CourtRepository));
@@ -182,35 +181,30 @@ namespace FriendlyForms.App_Start
             container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>() as ExtraExpenseRepository));
         }
 
-	    /* Uncomment to enable ServiceStack Authentication and CustomUserSession
+	    // Uncomment to enable ServiceStack Authentication and CustomUserSession
 		private void ConfigureAuth(Funq.Container container)
 		{
 			var appSettings = new AppSettings();
 
 			//Default route: /auth/{provider}
-			Plugins.Add(new AuthFeature(this, () => new CustomUserSession(),
+			Plugins.Add(new AuthFeature(() => new CustomUserSession(container.Resolve<IUserService>()), 
 				new IAuthProvider[] {
 					new CredentialsAuthProvider(appSettings), 
-					new FacebookAuthProvider(appSettings), 
-					new TwitterAuthProvider(appSettings), 
-					new BasicAuthProvider(appSettings), 
-				})); 
+				}) {HtmlRedirect = "/"}); 
 
 			//Default route: /register
 			Plugins.Add(new RegistrationFeature()); 
 
 			//Requires ConnectionString configured in Web.Config
-			var connectionString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
-			container.Register<IDbConnectionFactory>(c =>
-				new OrmLiteConnectionFactory(connectionString, SqlServerOrmLiteDialectProvider.Instance));
+            var connectionString = ConfigurationManager.ConnectionStrings["SplitContext"].ConnectionString;
+			container.Register<IDbConnectionFactory>(c => new OrmLiteConnectionFactory(connectionString, SqlServerOrmLiteDialectProvider.Instance));
 
-			container.Register<IUserAuthRepository>(c =>
-				new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
+			container.Register<IUserAuthRepository>(c => new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
 
 			var authRepo = (OrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();
 			authRepo.CreateMissingTables();
 		}
-		*/
+		
 
 		public static void Start()
 		{

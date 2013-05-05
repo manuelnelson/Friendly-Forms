@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common.Extensions;
@@ -30,14 +31,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class HealthInsuranceRestService : Service
+    [Authenticate]
+    public class HealthInsuranceRestService : ServiceBase
     {
         public IHealthInsuranceService HealthInsuranceService { get; set; }
 
         public object Post(ReqHealthInsurance request)
         {
             var healthInsurance = request.TranslateTo<HealthInsurance>();
+            healthInsurance.UserId = Convert.ToInt64(UserSession.Id);
             HealthInsuranceService.Add(healthInsurance);
             return new RespHealthInsurance()
                 {
@@ -47,6 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqHealthInsurance request)
         {
             var healthInsurance = request.TranslateTo<HealthInsurance>();
+            healthInsurance.UserId = Convert.ToInt64(UserSession.Id);
             HealthInsuranceService.Update(healthInsurance);
             return new RespHealthInsurance();
         }

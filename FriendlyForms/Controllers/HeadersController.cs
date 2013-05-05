@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using BusinessLogic.Contracts;
-using FriendlyForms.Authentication;
 using FriendlyForms.Models;
 using Models.ViewModels;
 

@@ -17,7 +17,6 @@ namespace FriendlyForms.Models
         public ParticipantViewModel ParticipantsViewModel { get; set; }
         public CourtViewModel CourtViewModel { get; set; }
         public bool HasChildren { get; set; }
-        public int FormUserId { get; set; }
     }
 
     public class FormsCompletedDomestic

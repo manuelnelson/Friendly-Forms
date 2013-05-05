@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -39,8 +40,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class PreexistingSupportChildRestService : Service
+    [Authenticate]
+    public class PreexistingSupportChildRestService : ServiceBase
     {
         public IPreexistingSupportChildService PreexistingSupportChildService { get; set; }
         public object Get(ReqPreexistingSupportChild request)
@@ -62,6 +63,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqPreexistingSupportChild request)
         {
             var preexistingSupportChildViewModel = request.TranslateTo<PreexistingSupportChildViewModel>();
+            preexistingSupportChildViewModel.UserId = Convert.ToInt64(UserSession.Id);
             var preexistingSupportEntity = PreexistingSupportChildService.AddOrUpdate(preexistingSupportChildViewModel);
             var preexistingSupport = preexistingSupportEntity.TranslateTo<ReqPreexistingSupportChild>();
             if (preexistingSupportEntity.DateOfBirth != null)
@@ -74,6 +76,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqPreexistingSupportChild request)
         {
             var preexistingSupportChild = request.TranslateTo<PreexistingSupportChild>();
+            preexistingSupportChild.UserId = Convert.ToInt64(UserSession.Id);
             PreexistingSupportChildService.Update(preexistingSupportChild);
             return new RespPreexistingSupportChild();
         }

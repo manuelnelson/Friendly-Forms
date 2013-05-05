@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common.Extensions;
@@ -56,8 +57,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int? NonSpecific { get; set; }
     }
-
-    public class DeviationsRestService : Service
+    [Authenticate]
+    public class DeviationsRestService : ServiceBase
     {
         public IDeviationsService DeviationsService { get; set; }
 
@@ -78,6 +79,7 @@ namespace FriendlyForms.RestService
         public object Post(DeviationsDto request)
         {
             var deviationsEntity = request.TranslateTo<Deviations>();
+            deviationsEntity.UserId = Convert.ToInt64(UserSession.Id);
             DeviationsService.Add(deviationsEntity);
             return deviationsEntity;
         }
@@ -85,6 +87,7 @@ namespace FriendlyForms.RestService
         public object Put(DeviationsDto request)
         {
             var deviationsEntity = request.TranslateTo<Deviations>();
+            deviationsEntity.UserId = Convert.ToInt64(UserSession.Id);
             DeviationsService.Update(deviationsEntity);
             return deviationsEntity;
         }

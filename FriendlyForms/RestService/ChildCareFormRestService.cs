@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -35,8 +36,8 @@ namespace FriendlyForms.RestService
             [DataMember]
             public int ChildrenInvolved { get; set; }
         }
-
-        public class ChildCareFormsService : Service
+        [Authenticate]
+        public class ChildCareFormsService : ServiceBase
         {
             public IChildCareFormService ChildCareFormService { get; set; } //Injected by IOC
 
@@ -47,16 +48,18 @@ namespace FriendlyForms.RestService
 
             public object Post(ChildCareFormDto request)
             {
-                var ChildCareFormEntity = request.TranslateTo<ChildCareForm>();
-                ChildCareFormService.Add(ChildCareFormEntity);
-                return ChildCareFormEntity;
+                var childCareFormEntity = request.TranslateTo<ChildCareForm>();
+                childCareFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                ChildCareFormService.Add(childCareFormEntity);
+                return childCareFormEntity;
             }
 
             public object Put(ChildCareFormDto request)
             {
-                var ChildCareFormEntity = request.TranslateTo<ChildCareForm>();
-                ChildCareFormService.Update(ChildCareFormEntity);
-                return ChildCareFormEntity;
+                var childCareFormEntity = request.TranslateTo<ChildCareForm>();
+                childCareFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                ChildCareFormService.Update(childCareFormEntity);
+                return childCareFormEntity;
             }
 
             public void Delete(ChildCareFormListDto request)

@@ -14,7 +14,6 @@ using ServiceStack.ServiceInterface;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Output/Financial/ScheduleA/{UserId}")]
     [Route("/Output/Financial/ScheduleA")]
     public class ScheduleADto : IReturn<ScheduleADtoResp>
     {
@@ -259,9 +258,11 @@ namespace FriendlyForms.RestService
         [DataMember]
         public LowIncomeDeviation LowIncomeDeviation { get; set; }
         [DataMember]
-        public HighIncomeDeviation LowIncomeDeviationFather { get; set; }
+        public double HighIncomeAdjusted { get; set; }
         [DataMember]
-        public HighIncomeDeviation LowIncomeDeviationMother { get; set; }
+        public HighIncomeDeviation HighIncomeDeviationFather { get; set; }
+        [DataMember]
+        public HighIncomeDeviation HighIncomeDeviationMother { get; set; }
         [DataMember]
         public ExtraExpenses TotalExpenses { get; set; }
 
@@ -409,6 +410,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public double ProRataMother { get; set; }
         [DataMember]
+        public double ProRataTotal { get; set; }
+        [DataMember]
         public double PercentageFather { get; set; }
         [DataMember]
         public double PercentageMother { get; set; }
@@ -426,8 +429,8 @@ namespace FriendlyForms.RestService
         public int ExtraSpent { get; set; }
     }
     #endregion
-
-    public class OutputsService : Service
+    [Authenticate]
+    public class OutputsService : ServiceBase
     {
         public IIncomeService IncomeService { get; set; }
         public ISocialSecurityService SocialSecurityService { get; set; }
@@ -444,6 +447,7 @@ namespace FriendlyForms.RestService
 
         public object Get(ScheduleADto request)
         {
+            request.UserId = Convert.ToInt64(UserSession.Id);
             var income = IncomeService.GetByUserId(request.UserId).TranslateTo<IncomeDto>();
             var incomeOther = IncomeService.GetByUserId(request.UserId, isOtherParent: true).TranslateTo<IncomeDto>();
             var incomeCombined = new IncomeDto
@@ -498,6 +502,7 @@ namespace FriendlyForms.RestService
         public object Get(ScheduleBDto request)
         {
             //Setup output form            
+            request.UserId = Convert.ToInt64(UserSession.Id);
             var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
             var outputViewModel = new PpOutputFormHelper
             {
@@ -525,6 +530,7 @@ namespace FriendlyForms.RestService
         public object Get(ScheduleDDto request)
         {
             //Setup output form            
+            request.UserId = Convert.ToInt64(UserSession.Id);
             var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
             var health = HealthService.GetByUserId(request.UserId) as HealthViewModel;
             var childCares = ChildCareService.GetAllByUserId(request.UserId);
@@ -613,7 +619,8 @@ namespace FriendlyForms.RestService
 
         public object Get(ScheduleEDto request)
         {
-            
+            request.UserId = Convert.ToInt64(UserSession.Id);
+            return null;
         }
         private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren, string parentName)
         {

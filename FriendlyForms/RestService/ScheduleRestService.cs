@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -75,20 +76,22 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ScheduleRestService : Service
+    [Authenticate]
+    public class ScheduleRestService : ServiceBase
     {
         public IScheduleService ScheduleService { get; set; }
 
         public object Post(ReqSchedule request)
         {
             var scheduleViewModel = request.TranslateTo<ScheduleViewModel>();
+            scheduleViewModel.UserId = Convert.ToInt64(UserSession.Id);
             ScheduleService.AddOrUpdate(scheduleViewModel);
             return new RespSchedule();
         }
         public object Put(ReqSchedule request)
         {
             var schedule = request.TranslateTo<Schedule>();
+            schedule.UserId = Convert.ToInt64(UserSession.Id);
             ScheduleService.Update(schedule);
             return new RespSchedule();
         }

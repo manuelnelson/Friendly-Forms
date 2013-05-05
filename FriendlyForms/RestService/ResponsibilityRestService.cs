@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common.Extensions;
@@ -38,14 +39,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ResponsibilityRestService : Service
+    [Authenticate]
+    public class ResponsibilityRestService : ServiceBase
     {
         public IResponsibilityService ResponsibilityService { get; set; }
 
         public object Post(ReqResponsibility request)
         {
             var responsibility = request.TranslateTo<Responsibility>();
+            responsibility.UserId = Convert.ToInt64(UserSession.Id);
             ResponsibilityService.Add(responsibility);
             return new RespResponsibility
                 {
@@ -55,6 +57,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqResponsibility request)
         {
             var responsibility = request.TranslateTo<Responsibility>();
+            responsibility.UserId = Convert.ToInt64(UserSession.Id);
             ResponsibilityService.Update(responsibility);
             return new RespResponsibility();
         }

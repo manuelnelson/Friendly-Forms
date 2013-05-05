@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -48,7 +49,8 @@ namespace FriendlyForms.RestService
         public ResponseStatus ResponseStatus { get; set; }
     }
 
-    public class ExtraHolidayRestService : Service
+    [Authenticate]
+    public class ExtraHolidayRestService : ServiceBase
     {
         public IExtraHolidayService ExtraHolidayService { get; set; }
         public object Get(ReqExtraHoliday request)
@@ -60,6 +62,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqExtraHoliday request)
         {
             var extraHolidayViewModel = request.TranslateTo<ExtraHolidayViewModel>();
+            extraHolidayViewModel.UserId = Convert.ToInt64(UserSession.Id);
             var extraHoliday = ExtraHolidayService.AddOrUpdate(extraHolidayViewModel);
             return new RespExtraHolidayPost()
                 {
@@ -69,6 +72,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqExtraHoliday request)
         {
             var extraHoliday = request.TranslateTo<ExtraHoliday>();
+            extraHoliday.UserId = Convert.ToInt64(UserSession.Id);
             ExtraHolidayService.Update(extraHoliday);
             return new RespExtraHolidayPost();
         }

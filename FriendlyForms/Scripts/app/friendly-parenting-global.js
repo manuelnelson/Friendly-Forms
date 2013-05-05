@@ -23,7 +23,6 @@ Parenting.AddDecision = function (caller) {
                 ChildId: typeof (model.ChildId) === "undefined" ? $(item).children('#extra-decision-childId').val() : model.ChildId,
                 DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
                 Description: $(item).children('#extra-decision-description').text().trim(),
-                UserId: $('#user-id').val()
             };
             saveModel.ExtraDecisions.push(extraModel);
         });
@@ -110,7 +109,6 @@ Parenting.SaveExtraDecisions = function (childId) {
             ChildId: typeof (childId) === "undefined" ? $(item).children('#extra-decision-childId').val() : childId,
             DecisionMaker: $(item).find('input[name=ExtraDecisions' + id + ']:checked').val(),
             Description: $(item).children('#extra-decision-description').text().trim(),
-            UserId: $('#user-id').val()
         };
         //If we are copying, we need to make sure that the extra decision doesn't already exist for the current child
         //If it does, copy over the Id
@@ -265,7 +263,6 @@ Parenting.AddHoliday = function(caller) {
                 HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
                 HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
                 HolidayName: $(item).children('.extra-holiday-name').text(),
-                UserId: $('#user-id').val()
             };
             saveModel.ExtraHolidays.push(extraModel);
         });
@@ -416,7 +413,6 @@ Parenting.SaveExtraHolidays = function(childId) {
             HolidayFather: $(item).find('input[name=HolidayFather' + id + ']:checked').val(),
             HolidayMother: $(item).find('input[name=HolidayMother' + id + ']:checked').val(),
             HolidayName: $(item).children('.extra-holiday-name').text(),
-            UserId: $('#user-id').val()
         };
         //If we are copying, we need to make sure that the extra holiday doesn't already exist for the current child
         //If it does, copy over the Id

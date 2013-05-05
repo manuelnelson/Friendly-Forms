@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -41,14 +37,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class CourtRestService : Service
+    [Authenticate]
+    public class CourtRestService : ServiceBase
     {
         public ICourtService CourtService { get; set; }
 
         public object Post(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
+            court.UserId = Convert.ToInt64(UserSession.Id);
             CourtService.Add(court);
             return new RespCourt()
                 {
@@ -58,6 +55,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
+            court.UserId = Convert.ToInt64(UserSession.Id);
             CourtService.Update(court);
             return new RespCourt();
         }

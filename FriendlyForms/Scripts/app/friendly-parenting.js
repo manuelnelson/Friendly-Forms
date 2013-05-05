@@ -283,7 +283,6 @@
             HolidayFather: $('#ExtraHolidayViewModel_HolidayFather:checked').val(),
             HolidayMother: $('#ExtraHolidayViewModel_HolidayMother:checked').val(),
             HolidayName: $('#ExtraHolidayViewModel_HolidayName').val(),
-            UserId: $('#user-id').val(),
         };
         if ($('#' + formName).valid()) {
             $.ajax({

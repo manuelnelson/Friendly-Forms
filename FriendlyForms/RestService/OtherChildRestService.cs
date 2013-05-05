@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -33,14 +34,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class OtherChildRestService : Service
+    [Authenticate]
+    public class OtherChildRestService : ServiceBase
     {
         public IOtherChildService OtherChildService { get; set; }
 
         public object Post(ReqOtherChild request)
         {
             var otherChildViewModel = request.TranslateTo<OtherChildViewModel>();
+            otherChildViewModel.UserId = Convert.ToInt64(UserSession.Id);
             var otherChildEntity = OtherChildService.AddOrUpdate(otherChildViewModel);
             var otherChild = otherChildEntity.TranslateTo<ReqOtherChild>();
             if (otherChildEntity.DateOfBirth != null)
@@ -54,6 +56,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqOtherChild request)
         {
             var otherChild = request.TranslateTo<OtherChild>();
+            otherChild.UserId = Convert.ToInt64(UserSession.Id);
             OtherChildService.Update(otherChild);
             return new RespOtherChild();
         }

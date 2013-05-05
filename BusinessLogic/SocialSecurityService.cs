@@ -14,7 +14,7 @@ namespace BusinessLogic
         {
         }
 
-        public SocialSecurityViewModel GetByUserId(int userId, bool isOtherParent = false)
+        public SocialSecurityViewModel GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {

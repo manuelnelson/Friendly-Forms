@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -39,14 +40,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class PreexistingSupportRestService : Service
+    [Authenticate]
+    public class PreexistingSupportRestService : ServiceBase
     {
         public IPreexistingSupportService PreexistingSupportService { get; set; }
 
         public object Post(ReqPreexistingSupport request)
         {
             var preexistingSupportViewModel = request.TranslateTo<PreexistingSupportViewModel>();
+            preexistingSupportViewModel.UserId = Convert.ToInt64(UserSession.Id);
             var entity = PreexistingSupportService.AddOrUpdate(preexistingSupportViewModel);
             var preexistSupport = entity.TranslateTo<ReqPreexistingSupport>();
             preexistSupport.OrderDate = entity.OrderDate.ToShortDateString();
@@ -58,6 +60,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqPreexistingSupport request)
         {
             var preexistingSupport = request.TranslateTo<PreexistingSupport>();
+            preexistingSupport.UserId = Convert.ToInt64(UserSession.Id);
             PreexistingSupportService.Update(preexistingSupport);
             return new RespPreexistingSupport();
         }

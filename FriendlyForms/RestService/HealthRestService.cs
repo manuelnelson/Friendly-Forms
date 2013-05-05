@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -57,8 +58,8 @@ namespace FriendlyForms.RestService
             [DataMember]
             public int? NonCustodialHealthPercentage { get; set; }
         }
-
-        public class HealthsService : Service
+        [Authenticate]
+        public class HealthsService : ServiceBase
         {
             public IHealthService HealthService { get; set; } //Injected by IOC
 
@@ -70,6 +71,7 @@ namespace FriendlyForms.RestService
             public object Post(HealthDto request)
             {
                 var healthEntity = request.TranslateTo<Health>();
+                healthEntity.UserId = Convert.ToInt64(UserSession.Id);
                 HealthService.Add(healthEntity);
                 return new HealthDto
                     {
@@ -80,6 +82,7 @@ namespace FriendlyForms.RestService
             public void Put(HealthDto request)
             {
                 var healthEntity = request.TranslateTo<Health>();
+                healthEntity.UserId = Convert.ToInt64(UserSession.Id);
                 HealthService.Update(healthEntity);                
             }
 

@@ -2,26 +2,23 @@
 @{
         ViewBag.Title = "Welcome";
 }
-@section Sidebar{
-    @{
-        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {Id= @Model.FormUserId}) : "/";
-    }            
-        <a href="@homeUrl" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+@section Sidebar{           
+        <a href="/" class="visible-phone"><i class="icon icon-home"></i>Home</a>
         <ul>
-            <li class="active"><a href="@homeUrl"><i class="icon icon-home"></i><span>Home</span></a></li>
-            @if(User.Identity.IsAuthenticated)
+            <li class="active"><a href="/"><i class="icon icon-home"></i><span>Home</span></a></li>
+            @if(ViewBag.IsAuthenticated)
             {
                     if(!Model.IsStarterDone)
                     {
-                        <li><a href="@Url.Action("Starter","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Start Here</a></li>
+                        <li><a href="@Url.Action("Starter","Forms")"><i class="icon icon-th-list"></i>Start Here</a></li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("DomesticMediation","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>    
+                        <li><a href="@Url.Action("DomesticMediation","Forms")"><i class="icon icon-th-list"></i>Mediation Agreement</a></li>    
                         if(Model.HasChildren)
                         {
-                            <li><a href="@Url.Action("Parenting","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Parenting Plan</a></li>        
-                            <li><a href="@Url.Action("Financial","Forms",new {Id=@Model.FormUserId})"><i class="icon icon-th-list"></i>Financial Form</a></li>
+                            <li><a href="@Url.Action("Parenting","Forms")"><i class="icon icon-th-list"></i>Parenting Plan</a></li>        
+                            <li><a href="@Url.Action("Financial","Forms")"><i class="icon icon-th-list"></i>Financial Form</a></li>
                         }
                     }
                     <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
@@ -29,12 +26,8 @@
         </ul>
 }
 @section Breadcrumb{
-        @{
-        var homeUrl = User.Identity.IsAuthenticated ? Url.Action("Index", "Home", new {Id= @Model.FormUserId}) : "/";
-    }            
-
     <div id="breadcrumb">
-        <a href="@homeUrl" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
+        <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
     </div>
 }
 <div class="row-fluid">

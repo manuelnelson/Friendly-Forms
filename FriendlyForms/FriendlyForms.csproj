@@ -51,6 +51,10 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.1\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="DataAnnotationsExtensions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=358a5681c50fd84c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BusinessLogic\bin\Debug\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -192,11 +196,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AppHost.cs" />
-    <Compile Include="Authentication\DefaultFormsAuthentication.cs" />
-    <Compile Include="Authentication\IdentityExtensions.cs" />
-    <Compile Include="Authentication\IFormsAuthentication.cs" />
-    <Compile Include="Authentication\UserAuthenticationTicketBuilder.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\FormsController.cs" />
     <Compile Include="Controllers\HeadersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -205,11 +206,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Authorization.cs" />
     <Compile Include="Helpers\PdfResult.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Authentication\FriendlyIdentity.cs" />
+    <Compile Include="Models\CustomUserSession.cs" />
     <Compile Include="Models\FinancialViewModel.cs" />
     <Compile Include="Models\AllFormsViewModel.cs" />
     <Compile Include="Models\ChildAllViewModel.cs" />
@@ -254,10 +254,12 @@
     <Compile Include="RestService\PropertyRestService.cs" />
     <Compile Include="RestService\ResponsibilityRestService.cs" />
     <Compile Include="RestService\ScheduleRestService.cs" />
+    <Compile Include="RestService\ServiceBase.cs" />
     <Compile Include="RestService\SocialSecurityRestService.cs" />
     <Compile Include="RestService\DeviationsRestService.cs" />
     <Compile Include="RestService\SpousalRestService.cs" />
     <Compile Include="RestService\TaxRestService.cs" />
+    <Compile Include="RestService\UserAuthRestService.cs" />
     <Compile Include="RestService\VehicleFormRestService.cs" />
     <Compile Include="RestService\VehicleRestService.cs" />
     <Compile Include="WebRole.cs" />
@@ -449,6 +451,8 @@
     <Content Include="Scripts\jstorage.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="ssleay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -505,6 +509,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
