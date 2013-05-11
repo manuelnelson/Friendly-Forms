@@ -63,7 +63,7 @@ namespace FriendlyForms.RestService
             public object Post(ExtraExpenseDto request)
             {
                 var ExtraExpenseEntity = request.TranslateTo<ExtraExpense>();
-                ExtraExpenseEntity.UserId = Convert.ToInt64(UserSession.Id);
+                ExtraExpenseEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 ExtraExpenseService.Add(ExtraExpenseEntity);
                 return ExtraExpenseEntity;
             }
@@ -71,7 +71,7 @@ namespace FriendlyForms.RestService
             public object Put(ExtraExpenseDto request)
             {
                 var ExtraExpenseEntity = request.TranslateTo<ExtraExpense>();
-                ExtraExpenseEntity.UserId = Convert.ToInt64(UserSession.Id);
+                ExtraExpenseEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 ExtraExpenseService.Update(ExtraExpenseEntity);
                 return ExtraExpenseEntity;
             }

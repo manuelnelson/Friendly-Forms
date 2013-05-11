@@ -40,7 +40,7 @@ namespace FriendlyForms.RestService
 
             public object Get(DeviationsFormDto request)
             {
-                request.UserId = Convert.ToInt64(UserSession.Id);
+                request.UserId = Convert.ToInt32(UserSession.CustomId);
                 return DeviationsFormService.GetByUserId(request.UserId, request.IsOtherParent);
             }
 
@@ -53,7 +53,7 @@ namespace FriendlyForms.RestService
             public object Post(DeviationsFormDto request)
             {
                 var deviationsFormEntity = request.TranslateTo<DeviationsForm>();
-                deviationsFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                deviationsFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
 
                 DeviationsFormService.Add(deviationsFormEntity);
                 return deviationsFormEntity;
@@ -62,7 +62,7 @@ namespace FriendlyForms.RestService
             public object Put(DeviationsFormDto request)
             {
                 var deviationsFormEntity = request.TranslateTo<DeviationsForm>();
-                deviationsFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                deviationsFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 DeviationsFormService.Update(deviationsFormEntity);
                 return deviationsFormEntity;
             }

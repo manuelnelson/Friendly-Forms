@@ -2,6 +2,7 @@
 using Models.Contract;
 using Models.ViewModels;
 
+
 namespace Models
 {
     public class Child : IEntity, IFormEntity
@@ -18,8 +19,8 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new ChildViewModel()
-            {
+            return new ChildViewModel
+                {
                 DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided",
                 Name = Name,
                 UserId = UserId,

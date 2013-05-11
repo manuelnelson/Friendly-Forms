@@ -59,7 +59,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqExtraDecisions request)
         {
             var extraDecisionsViewModel = request.TranslateTo<ExtraDecisionsViewModel>();
-            extraDecisionsViewModel.UserId = Convert.ToInt64(UserSession.Id);
+            extraDecisionsViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var updatedDecision = ExtraDecisionsService.AddOrUpdate(extraDecisionsViewModel);
             return new RespExtraDecisionsPost()
                 {
@@ -69,7 +69,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqExtraDecisions request)
         {
             var extraDecisions = request.TranslateTo<ExtraDecisions>();
-            extraDecisions.UserId = Convert.ToInt64(UserSession.Id);
+            extraDecisions.UserId = Convert.ToInt32(UserSession.CustomId);
             //ExtraDecisionsService.Update(extraDecisions);
             return new RespExtraDecisionsPost();
         }

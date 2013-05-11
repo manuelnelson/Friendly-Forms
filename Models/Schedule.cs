@@ -2,6 +2,7 @@
 using Models.Contract;
 using Models.ViewModels;
 
+
 namespace Models
 {
     public class Schedule : IEntity, IFormEntity
@@ -37,8 +38,8 @@ namespace Models
         public string AdditionalProvisions { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new ScheduleViewModel()
-            {
+            return new ScheduleViewModel
+                {
                 BeginDate = BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "",                
                 DetermineBeginDate = DetermineBeginDate,
                 DropOffLocation = DropOffLocation,

@@ -27,7 +27,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new PreexistingSupportChild()
+            return new PreexistingSupportChild
                 {
                     Id = Id,
                     DateOfBirth = string.IsNullOrEmpty(DateOfBirth) ? (DateTime?)null : Convert.ToDateTime(DateOfBirth),

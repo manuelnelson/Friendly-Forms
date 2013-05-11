@@ -32,7 +32,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new PreexistingSupport()
+            return new PreexistingSupport
                 {
                     IsOtherParent = IsOtherParent,
                     CaseNumber = Convert.ToInt32(CaseNumber),

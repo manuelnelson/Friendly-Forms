@@ -49,7 +49,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqPrivacy request)
         {
             var privacy = request.TranslateTo<Privacy>();
-            privacy.UserId = Convert.ToInt64(UserSession.Id);
+            privacy.UserId = Convert.ToInt32(UserSession.CustomId);
             PrivacyService.Add(privacy);
             return new RespPrivacy()
                 {
@@ -59,7 +59,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqPrivacy request)
         {
             var privacy = request.TranslateTo<Privacy>();
-            privacy.UserId = Convert.ToInt64(UserSession.Id);
+            privacy.UserId = Convert.ToInt32(UserSession.CustomId);
             PrivacyService.Update(privacy);
             return new RespPrivacy();
         }

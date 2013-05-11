@@ -65,7 +65,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqDecisions request)
         {
             var decisions = request.TranslateTo<DecisionsViewModel>();
-            decisions.UserId = Convert.ToInt64(UserSession.Id);
+            decisions.UserId = Convert.ToInt32(UserSession.CustomId);
 
             DecisionsService.AddOrUpdate(decisions);
             return new RespDecisions();
@@ -73,7 +73,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqDecisions request)
         {
             var decisions = request.TranslateTo<Decisions>();
-            decisions.UserId = Convert.ToInt64(UserSession.Id);
+            decisions.UserId = Convert.ToInt32(UserSession.CustomId);
             DecisionsService.Update(decisions);
             return new RespDecisions();
         }

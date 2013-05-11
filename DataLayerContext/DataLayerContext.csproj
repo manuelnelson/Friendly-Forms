@@ -51,6 +51,10 @@
     <Reference Include="ServiceStack.OrmLite.SqlServer">
       <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.43\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.ServiceInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\FriendlyForms\bin\ServiceStack.ServiceInterface.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=3.9.43.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Text.3.9.43\lib\net35\ServiceStack.Text.dll</HintPath>
@@ -63,6 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\ChildCareFormOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\ChildCareOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\CourtOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\FormOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\OrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\UserOrmLiteRepository.cs" />
     <Compile Include="Repositories\ChildCareFormRepository.cs" />

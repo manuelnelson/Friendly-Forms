@@ -62,7 +62,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqExtraHoliday request)
         {
             var extraHolidayViewModel = request.TranslateTo<ExtraHolidayViewModel>();
-            extraHolidayViewModel.UserId = Convert.ToInt64(UserSession.Id);
+            extraHolidayViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var extraHoliday = ExtraHolidayService.AddOrUpdate(extraHolidayViewModel);
             return new RespExtraHolidayPost()
                 {
@@ -72,7 +72,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqExtraHoliday request)
         {
             var extraHoliday = request.TranslateTo<ExtraHoliday>();
-            extraHoliday.UserId = Convert.ToInt64(UserSession.Id);
+            extraHoliday.UserId = Convert.ToInt32(UserSession.CustomId);
             ExtraHolidayService.Update(extraHoliday);
             return new RespExtraHolidayPost();
         }

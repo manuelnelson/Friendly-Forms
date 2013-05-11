@@ -55,7 +55,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqCommunication request)
         {
             var communication = request.TranslateTo<Communication>();
-            communication.UserId = Convert.ToInt64(UserSession.Id);
+            communication.UserId = Convert.ToInt32(UserSession.CustomId);
             CommunicationService.Add(communication);
             return new RespCommunication()
                 {
@@ -65,7 +65,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqCommunication request)
         {
             var communication = request.TranslateTo<Communication>();
-            communication.UserId = Convert.ToInt64(UserSession.Id);
+            communication.UserId = Convert.ToInt32(UserSession.CustomId);
             CommunicationService.Update(communication);
             return new RespCommunication();
         }

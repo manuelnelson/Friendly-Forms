@@ -25,7 +25,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Child()
+            return new Child
                 {
                     DateOfBirth = string.IsNullOrEmpty(DateOfBirth) ? (DateTime?) null : Convert.ToDateTime(DateOfBirth),
                     Name = Name,

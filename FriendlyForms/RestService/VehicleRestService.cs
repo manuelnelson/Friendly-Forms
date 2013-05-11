@@ -53,7 +53,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqVehicle request)
         {
             var vehicleViewModel = request.TranslateTo<VehicleViewModel>();
-            vehicleViewModel.UserId = Convert.ToInt64(UserSession.Id);
+            vehicleViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var updatedVehicle = VehicleService.AddOrUpdate(vehicleViewModel);
             return new RespVehicle()
                 {
@@ -63,7 +63,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqVehicle request)
         {
             var vehicle = request.TranslateTo<Vehicle>();
-            vehicle.UserId = Convert.ToInt64(UserSession.Id);
+            vehicle.UserId = Convert.ToInt32(UserSession.CustomId);
             VehicleService.Update(vehicle);
             return new RespVehicle();
         }

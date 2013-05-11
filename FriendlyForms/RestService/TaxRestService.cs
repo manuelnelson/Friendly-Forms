@@ -39,7 +39,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqTax request)
         {
             var tax = request.TranslateTo<Tax>();
-            tax.UserId = Convert.ToInt64(UserSession.Id);
+            tax.UserId = Convert.ToInt32(UserSession.CustomId);
             TaxService.Add(tax);
             return new RespTax()
                 {
@@ -49,7 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqTax request)
         {
             var tax = request.TranslateTo<Tax>();
-            tax.UserId = Convert.ToInt64(UserSession.Id);
+            tax.UserId = Convert.ToInt32(UserSession.CustomId);
             TaxService.Update(tax);
             return new RespTax();
         }

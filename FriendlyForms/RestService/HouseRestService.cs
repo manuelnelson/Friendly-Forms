@@ -54,7 +54,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqHouse request)
         {
             var house = request.TranslateTo<House>();
-            house.UserId = Convert.ToInt64(UserSession.Id);
+            house.UserId = Convert.ToInt32(UserSession.CustomId);
             HouseService.Add(house);
             return new RespHouse()
                 {
@@ -64,7 +64,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqHouse request)
         {
             var house = request.TranslateTo<House>();
-            house.UserId = Convert.ToInt64(UserSession.Id);
+            house.UserId = Convert.ToInt32(UserSession.CustomId);
             HouseService.Update(house);
             return new RespHouse();
         }

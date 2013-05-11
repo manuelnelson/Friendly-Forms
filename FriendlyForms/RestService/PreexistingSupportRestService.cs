@@ -48,7 +48,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqPreexistingSupport request)
         {
             var preexistingSupportViewModel = request.TranslateTo<PreexistingSupportViewModel>();
-            preexistingSupportViewModel.UserId = Convert.ToInt64(UserSession.Id);
+            preexistingSupportViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var entity = PreexistingSupportService.AddOrUpdate(preexistingSupportViewModel);
             var preexistSupport = entity.TranslateTo<ReqPreexistingSupport>();
             preexistSupport.OrderDate = entity.OrderDate.ToShortDateString();
@@ -60,7 +60,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqPreexistingSupport request)
         {
             var preexistingSupport = request.TranslateTo<PreexistingSupport>();
-            preexistingSupport.UserId = Convert.ToInt64(UserSession.Id);
+            preexistingSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             PreexistingSupportService.Update(preexistingSupport);
             return new RespPreexistingSupport();
         }

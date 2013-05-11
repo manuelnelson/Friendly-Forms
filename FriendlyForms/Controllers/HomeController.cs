@@ -28,11 +28,12 @@ namespace FriendlyForms.Controllers
         }
         public ActionResult Index()
         {
+//            var child = _childFormService.Get(1);
             var user = UserSession;
             ViewBag.IsAuthenticated = user.IsAuthenticated;
             if (UserSession.IsAuthenticated)
             {
-                var userId = Convert.ToInt64(UserSession.Id);
+                var userId = Convert.ToInt32(UserSession.CustomId);
                 var childForm = _childFormService.GetByUserId(userId);
                 var children = _childService.GetByUserId(userId);
                 var childSupport = _childSupportService.GetByUserId(userId);

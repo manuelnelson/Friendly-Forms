@@ -407,13 +407,6 @@ namespace DataLayerContext
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<User>().Property(u => u.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<User>().Property(u => u.FirstName).IsRequired();
-            modelBuilder.Entity<User>().Property(u => u.FirstName).HasMaxLength(50);
-            modelBuilder.Entity<User>().Property(u => u.LastName).IsRequired();
-            modelBuilder.Entity<User>().Property(u => u.LastName).HasMaxLength(50);
-            modelBuilder.Entity<User>().Property(u => u.Email).IsRequired();
-            modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(100);
-            modelBuilder.Entity<User>().Property(u => u.Password).HasMaxLength(100);
         }
 
 

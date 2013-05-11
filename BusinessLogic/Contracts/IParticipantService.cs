@@ -7,7 +7,7 @@ namespace BusinessLogic.Contracts
 {
     public interface IParticipantService : IFormService<IParticipantRepository,Participant>
     {
-        CustodyInformation GetCustodyInformation(int userId);
+        CustodyInformation GetCustodyInformation(long userId);
         CustodyInformation GetCustodyInformation(ParticipantViewModel participant);
     }
 }

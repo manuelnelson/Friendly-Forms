@@ -51,7 +51,7 @@ namespace FriendlyForms.RestService
             public object Post(PreexistingSupportFormDto request)
             {
                 var PreexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
-                PreexistingSupportFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                PreexistingSupportFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 PreexistingSupportFormService.Add(PreexistingSupportFormEntity);
                 return PreexistingSupportFormEntity;
             }
@@ -59,7 +59,7 @@ namespace FriendlyForms.RestService
             public object Put(PreexistingSupportFormDto request)
             {
                 var PreexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
-                PreexistingSupportFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                PreexistingSupportFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 PreexistingSupportFormService.Update(PreexistingSupportFormEntity);
                 return PreexistingSupportFormEntity;
             }

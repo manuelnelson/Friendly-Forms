@@ -39,7 +39,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqSpousal request)
         {
             var spousalSupport = request.TranslateTo<SpousalSupport>();
-            spousalSupport.UserId = Convert.ToInt64(UserSession.Id);
+            spousalSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             SpousalService.Add(spousalSupport);
             return new RespSpousal()
                 {
@@ -49,7 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqSpousal request)
         {
             var spousalSupport = request.TranslateTo<SpousalSupport>();
-            spousalSupport.UserId = Convert.ToInt64(UserSession.Id);
+            spousalSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             SpousalService.Update(spousalSupport);
             return new RespSpousal();
         }

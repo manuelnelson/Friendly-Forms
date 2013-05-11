@@ -2,6 +2,7 @@
 using Models.Contract;
 using Models.ViewModels;
 
+
 namespace Models
 {
     public class PreexistingSupportChild : IEntity, IFormEntity
@@ -18,7 +19,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new PreexistingSupportChildViewModel()
+            return new PreexistingSupportChildViewModel
                 {
                     Id = Id,
                     DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided",

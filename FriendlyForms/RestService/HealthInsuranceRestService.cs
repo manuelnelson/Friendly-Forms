@@ -39,7 +39,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqHealthInsurance request)
         {
             var healthInsurance = request.TranslateTo<HealthInsurance>();
-            healthInsurance.UserId = Convert.ToInt64(UserSession.Id);
+            healthInsurance.UserId = Convert.ToInt32(UserSession.CustomId);
             HealthInsuranceService.Add(healthInsurance);
             return new RespHealthInsurance()
                 {
@@ -49,7 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqHealthInsurance request)
         {
             var healthInsurance = request.TranslateTo<HealthInsurance>();
-            healthInsurance.UserId = Convert.ToInt64(UserSession.Id);
+            healthInsurance.UserId = Convert.ToInt32(UserSession.CustomId);
             HealthInsuranceService.Update(healthInsurance);
             return new RespHealthInsurance();
         }

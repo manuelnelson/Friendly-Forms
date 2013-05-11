@@ -50,14 +50,14 @@ namespace FriendlyForms.RestService
         public object Post(ReqChildSupport request)
         {
             var childSupportViewModel = request.TranslateTo<ChildSupportViewModel>();
-            childSupportViewModel.UserId = Convert.ToInt64(UserSession.Id);
+            childSupportViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             ChildSupportService.AddOrUpdate(childSupportViewModel);
             return new RespChildSupport();
         }
         public object Put(ReqChildSupport request)
         {
             var childSupport = request.TranslateTo<ChildSupport>();
-            childSupport.UserId = Convert.ToInt64(UserSession.Id);
+            childSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             ChildSupportService.Update(childSupport);
             return new RespChildSupport();
         }

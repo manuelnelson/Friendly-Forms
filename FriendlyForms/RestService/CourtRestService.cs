@@ -45,7 +45,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
-            court.UserId = Convert.ToInt64(UserSession.Id);
+            court.UserId = Convert.ToInt32(UserSession.CustomId);
             CourtService.Add(court);
             return new RespCourt()
                 {
@@ -55,7 +55,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
-            court.UserId = Convert.ToInt64(UserSession.Id);
+            court.UserId = Convert.ToInt32(UserSession.CustomId);
             CourtService.Update(court);
             return new RespCourt();
         }

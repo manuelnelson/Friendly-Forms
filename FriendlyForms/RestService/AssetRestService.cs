@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -51,7 +50,7 @@ namespace FriendlyForms.RestService
             public object Post(ReqAsset request)
             {
                 var assets = request.TranslateTo<Assets>();
-                assets.UserId = Convert.ToInt64(UserSession.Id);
+                assets.UserId = Convert.ToInt32(UserSession.CustomId);
                 AssetService.Add(assets);
                 return new RespAsset()
                     {
@@ -61,7 +60,7 @@ namespace FriendlyForms.RestService
             public object Put(ReqAsset request)
             {
                 var assets = request.TranslateTo<Assets>();
-                assets.UserId = Convert.ToInt64(UserSession.Id);
+                assets.UserId = Convert.ToInt32(UserSession.CustomId);
                 AssetService.Update(assets);
                 return new RespAsset();
             }

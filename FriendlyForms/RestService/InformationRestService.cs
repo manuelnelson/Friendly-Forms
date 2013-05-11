@@ -37,7 +37,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqInformation request)
         {
             var information = request.TranslateTo<Information>();
-            information.UserId = Convert.ToInt64(UserSession.Id);
+            information.UserId = Convert.ToInt32(UserSession.CustomId);
             InformationService.Add(information);
             return new RespInformation()
                 {
@@ -47,7 +47,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqInformation request)
         {
             var information = request.TranslateTo<Information>();
-            information.UserId = Convert.ToInt64(UserSession.Id);
+            information.UserId = Convert.ToInt32(UserSession.CustomId);
             InformationService.Update(information);
             return new RespInformation();
         }

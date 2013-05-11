@@ -2,6 +2,7 @@
 using Models.ViewModels;
 using ServiceStack.Common.Extensions;
 
+
 namespace Models
 {
     public class House : IEntity, IFormEntity
