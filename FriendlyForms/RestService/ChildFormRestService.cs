@@ -2,6 +2,7 @@
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
+using ServiceStack.Common;
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Models.Contract;
+using ServiceStack.Common;
 using ServiceStack.Common.Extensions;
 
 namespace Models.ViewModels

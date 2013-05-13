@@ -6,6 +6,7 @@ using DevOne.Security.Cryptography.BCrypt;
 using Elmah;
 using Models;
 using Models.ViewModels;
+using ServiceStack.Common;
 using ServiceStack.Common.Extensions;
 
 namespace BusinessLogic
