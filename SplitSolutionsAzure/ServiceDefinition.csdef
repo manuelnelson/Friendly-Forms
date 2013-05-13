@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SplitSolutionsAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-10.1.8">
   <WebRole name="FriendlyForms" vmsize="ExtraSmall">
-    <Startup priority="-2">
-      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple">
-      </Task>
-      <Task commandLine="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe install" executionContext="elevated" taskType="simple" />
-    <Task commandLine="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe install" executionContext="elevated" taskType="simple" /></Startup>
+    <Startup>
+      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple"></Task>
+    </Startup>
     <!--<Contents>
       <Content destination="bin">
         <SourceDirectory path="CopyToBin"/>
@@ -25,15 +23,8 @@
       <Import moduleName="Diagnostics" />
       <Import moduleName="RemoteAccess" />
       <Import moduleName="RemoteForwarder" />
-      <Import moduleName="Caching" />
     </Imports>
     <Certificates>
     </Certificates>
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Caching.ClientDiagnosticLevel" />
-    </ConfigurationSettings>
-    <LocalResources>
-      <LocalStorage name="DiagnosticStore" sizeInMB="20000" cleanOnRoleRecycle="false" />
-    </LocalResources>
   </WebRole>
 </ServiceDefinition>

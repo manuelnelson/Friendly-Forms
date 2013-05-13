@@ -555,24 +555,4 @@ $(document).ready(function () {
         },
         error: Friendly.GenericErrorMessage
     });
-    
-    /*-----------------------Login----------------------------*/
-    $('#login-form input[type=submit]').click(function(e) {
-        if (e) e.preventDefault();
-        var form = $('#login-form');
-        var redirect = form.attr('data-continue');
-        if (form.valid()) {
-            Friendly.StartLoading("Logging in...Please wait");
-            $.ajax({
-                type: 'POST',
-                url: form.attr('action') + '?format=json',
-                data: Friendly.GetFormInput('login-form'),
-                success: function() {
-                    document.location.href = redirect;
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-    });
 });

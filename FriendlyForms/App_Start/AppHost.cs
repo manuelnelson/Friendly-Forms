@@ -9,7 +9,6 @@ using DataLayerContext.Repositories;
 using FriendlyForms.Models;
 using Funq;
 using ServiceStack.CacheAccess;
-using ServiceStack.CacheAccess.Azure;
 using ServiceStack.CacheAccess.Providers;
 using ServiceStack.Configuration;
 using ServiceStack.Logging;
@@ -75,8 +74,7 @@ namespace FriendlyForms.App_Start
 
 			//Register In-Memory Cache provider. 
 			//For Distributed Cache Providers Use: PooledRedisClientManager, BasicRedisClientManager or see: https://github.com/ServiceStack/ServiceStack/wiki/Caching
-			//container.Register<ICacheClient>(new MemoryCacheClient());
-            container.Register<ICacheClient>(c=>new AzureCacheClient()).ReusedWithin(ReuseScope.Container);
+			container.Register<ICacheClient>(new MemoryCacheClient());
 			container.Register<ISessionFactory>(c => new SessionFactory(c.Resolve<ICacheClient>()));
 
 			//Set MVC to use the same Funq IOC as ServiceStack

@@ -1,7 +1,6 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.Common.Extensions;
 
 namespace Models
