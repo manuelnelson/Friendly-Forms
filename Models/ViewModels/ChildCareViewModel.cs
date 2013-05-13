@@ -1,5 +1,5 @@
 ﻿using Models.Contract;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 
 namespace Models.ViewModels
 {

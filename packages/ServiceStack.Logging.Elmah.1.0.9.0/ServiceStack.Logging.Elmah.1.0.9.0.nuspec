@@ -16,6 +16,7 @@
         Dependencies:
             - ServiceStack.Interfaces.dll</description>
     <summary>Elmah logging integration for ServiceStack, the Opensource .NET and Mono REST Web Services Framework</summary>
+    <releaseNotes />
     <copyright>servicestack.net 2012 and contributors</copyright>
     <language>en-US</language>
     <tags>servicestack log logging elmah</tags>
