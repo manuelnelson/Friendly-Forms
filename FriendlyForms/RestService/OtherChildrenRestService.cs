@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
@@ -40,14 +40,14 @@ namespace FriendlyForms.RestService
         public object Post(ReqOtherChildren request)
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
-            otherChildren.UserId = Convert.ToInt64(UserSession.Id);
+            otherChildren.UserId = Convert.ToInt32(UserSession.CustomId);
             OtherChildrenService.Add(otherChildren);
             return otherChildren;
         }
         public void Put(ReqOtherChildren request)
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
-            otherChildren.UserId = Convert.ToInt64(UserSession.Id);
+            otherChildren.UserId = Convert.ToInt32(UserSession.CustomId);
             OtherChildrenService.Update(otherChildren);            
         }
     }

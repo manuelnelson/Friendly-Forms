@@ -49,7 +49,7 @@ namespace FriendlyForms.RestService
             public object Post(ChildCareFormDto request)
             {
                 var childCareFormEntity = request.TranslateTo<ChildCareForm>();
-                childCareFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                childCareFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 ChildCareFormService.Add(childCareFormEntity);
                 return childCareFormEntity;
             }
@@ -57,7 +57,7 @@ namespace FriendlyForms.RestService
             public object Put(ChildCareFormDto request)
             {
                 var childCareFormEntity = request.TranslateTo<ChildCareForm>();
-                childCareFormEntity.UserId = Convert.ToInt64(UserSession.Id);
+                childCareFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 ChildCareFormService.Update(childCareFormEntity);
                 return childCareFormEntity;
             }

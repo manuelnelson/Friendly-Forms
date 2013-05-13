@@ -447,7 +447,7 @@ namespace FriendlyForms.RestService
 
         public object Get(ScheduleADto request)
         {
-            request.UserId = Convert.ToInt64(UserSession.Id);
+            request.UserId = Convert.ToInt32(UserSession.CustomId);
             var income = IncomeService.GetByUserId(request.UserId).TranslateTo<IncomeDto>();
             var incomeOther = IncomeService.GetByUserId(request.UserId, isOtherParent: true).TranslateTo<IncomeDto>();
             var incomeCombined = new IncomeDto
@@ -502,7 +502,7 @@ namespace FriendlyForms.RestService
         public object Get(ScheduleBDto request)
         {
             //Setup output form            
-            request.UserId = Convert.ToInt64(UserSession.Id);
+            request.UserId = Convert.ToInt32(UserSession.CustomId);
             var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
             var outputViewModel = new PpOutputFormHelper
             {
@@ -530,7 +530,7 @@ namespace FriendlyForms.RestService
         public object Get(ScheduleDDto request)
         {
             //Setup output form            
-            request.UserId = Convert.ToInt64(UserSession.Id);
+            request.UserId = Convert.ToInt32(UserSession.CustomId);
             var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
             var health = HealthService.GetByUserId(request.UserId) as HealthViewModel;
             var childCares = ChildCareService.GetAllByUserId(request.UserId);
@@ -619,7 +619,7 @@ namespace FriendlyForms.RestService
 
         public object Get(ScheduleEDto request)
         {
-            request.UserId = Convert.ToInt64(UserSession.Id);
+            request.UserId = Convert.ToInt32(UserSession.CustomId);
             return null;
         }
         private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren, string parentName)

@@ -1,5 +1,4 @@
-﻿using System;
-using Models.Contract;
+﻿using Models.Contract;
 using Models.ViewModels;
 
 namespace Models
@@ -19,7 +18,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new OtherChildrenViewModel()
+            return new OtherChildrenViewModel
                 {
                     IsOtherParent = IsOtherParent,
                     AtHome = AtHome,

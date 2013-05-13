@@ -2,6 +2,7 @@
 using Models.Contract;
 using Models.ViewModels;
 
+
 namespace Models
 {
     public class ChildSupport : IEntity, IFormEntity
@@ -18,7 +19,7 @@ namespace Models
         public int PaymentDay { get; set; }
         public IViewModel ConvertToModel()
         {
-            return new ChildSupportViewModel()
+            return new ChildSupportViewModel
                 {
                     EffectiveDate = EffectiveDate.ToString("MM/dd/yyyy"),
                     MonthlyAmount = MonthlyAmount.ToString(),

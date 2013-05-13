@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Models.Contract;
@@ -27,8 +26,8 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new OtherChild()
-            {
+            return new OtherChild
+                {
                 Id = Id,
                 DateOfBirth = string.IsNullOrEmpty(DateOfBirth) ? (DateTime?)null : Convert.ToDateTime(this.DateOfBirth),
                 Name = this.Name,

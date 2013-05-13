@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -155,7 +155,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqHoliday request)
         {
             var holiday = request.TranslateTo<HolidayViewModel>();
-            holiday.UserId = Convert.ToInt64(UserSession.Id);
+            holiday.UserId = Convert.ToInt32(UserSession.CustomId);
             HolidayService.AddOrUpdate(holiday);
             return new RespHoliday();
 
@@ -169,7 +169,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqHoliday request)
         {
             var holiday = request.TranslateTo<Holiday>();
-            holiday.UserId = Convert.ToInt64(UserSession.Id);
+            holiday.UserId = Convert.ToInt32(UserSession.CustomId);
             HolidayService.Update(holiday);
             return new RespHoliday();
         }

@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -41,7 +41,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqSocialSecurity request)
         {
             var socialSecurity = request.TranslateTo<SocialSecurity>();
-            socialSecurity.UserId = Convert.ToInt64(UserSession.Id);
+            socialSecurity.UserId = Convert.ToInt32(UserSession.CustomId);
             SocialSecurityService.Add(socialSecurity);
             return new RespSocialSecurity
                 {
@@ -51,7 +51,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqSocialSecurity request)
         {
             var socialSecurity = request.TranslateTo<SocialSecurity>();
-            socialSecurity.UserId = Convert.ToInt64(UserSession.Id);
+            socialSecurity.UserId = Convert.ToInt32(UserSession.CustomId);
             SocialSecurityService.Update(socialSecurity);
             return new RespSocialSecurity();
         }

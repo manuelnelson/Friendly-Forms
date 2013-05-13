@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -42,7 +42,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqOtherChild request)
         {
             var otherChildViewModel = request.TranslateTo<OtherChildViewModel>();
-            otherChildViewModel.UserId = Convert.ToInt64(UserSession.Id);
+            otherChildViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var otherChildEntity = OtherChildService.AddOrUpdate(otherChildViewModel);
             var otherChild = otherChildEntity.TranslateTo<ReqOtherChild>();
             if (otherChildEntity.DateOfBirth != null)
@@ -56,7 +56,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqOtherChild request)
         {
             var otherChild = request.TranslateTo<OtherChild>();
-            otherChild.UserId = Convert.ToInt64(UserSession.Id);
+            otherChild.UserId = Convert.ToInt32(UserSession.CustomId);
             OtherChildService.Update(otherChild);
             return new RespOtherChild();
         }

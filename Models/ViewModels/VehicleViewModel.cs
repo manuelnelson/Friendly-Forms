@@ -43,7 +43,7 @@ namespace Models.ViewModels
  
         public IFormEntity ConvertToEntity()
         {
-            return new Vehicle()
+            return new Vehicle
                 {
                     Id = Id,
                     Make = Make,

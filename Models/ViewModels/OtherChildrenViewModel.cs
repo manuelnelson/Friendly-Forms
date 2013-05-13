@@ -24,7 +24,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new OtherChildren()
+            return new OtherChildren
                 {
                     IsOtherParent = IsOtherParent,
                     AtHome = AtHome ?? 0,

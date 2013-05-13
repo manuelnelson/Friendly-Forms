@@ -1,6 +1,5 @@
 ﻿using DataInterface;
 using Models;
-using ServiceStack.OrmLite;
 using IDbConnectionFactory = ServiceStack.OrmLite.IDbConnectionFactory;
 
 namespace DataLayerContext.OrmLiteRepositories
@@ -11,21 +10,9 @@ namespace DataLayerContext.OrmLiteRepositories
         {
         }
 
-        public bool NativeExists(string email)
+        public User GetByUserAuthId(int userAuthId)
         {
-            //return GetDbSet().Any(u => u.Email.ToUpper().Equals(email.ToUpper()) && u.Password != null);
-            using (var db = DbFactory.OpenDbConnection())
-            {
-                return db.First<User>(x => x.Email == email && x.Password != null) != null;
-            }
-        }
-
-        public User GetByEmail(string email)
-        {
-            using (var db = DbFactory.OpenDbConnection())
-            {
-                return db.First<User>(x => x.Email == email);
-            }
+            throw new System.NotImplementedException();
         }
     }
 }

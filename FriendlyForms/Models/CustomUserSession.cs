@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using BusinessLogic.Contracts;
 using Models;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.WebHost.Endpoints;
@@ -31,7 +31,7 @@ namespace FriendlyForms.Models
             base.OnAuthenticated(authService, session, tokens, authInfo);
 
             //Populate all matching fields from this session to your own custom User table            
-            //var user = session.TranslateTo<User>();
+            var user = session.TranslateTo<User>();
             //if (AppHost.Config.AdminUserNames.Contains(session.UserAuthName)
             //    && !session.HasRole(RoleNames.Admin))
             //{
@@ -44,6 +44,10 @@ namespace FriendlyForms.Models
             //        });
             //    }
             //}
+            //Resolve the DbFactory from the IOC and persist the user info
+            var newUser = UserService.CreateOrUpdate(user);
+            ((CustomUserSession)session).CustomId = newUser.Id.ToString();
+
             authService.SaveSession(session, TimeSpan.FromDays(7 * 2));
         }
 

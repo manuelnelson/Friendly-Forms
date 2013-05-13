@@ -35,7 +35,7 @@ namespace Models.ViewModels
         public int? PaymentDay { get; set; }
         public IFormEntity ConvertToEntity()
         {
-            return new ChildSupport()
+            return new ChildSupport
                 {
                     EffectiveDate = Convert.ToDateTime(EffectiveDate),
                     MonthlyAmount = Convert.ToInt32(MonthlyAmount),

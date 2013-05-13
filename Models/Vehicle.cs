@@ -2,6 +2,7 @@
 using Models.Contract;
 using Models.ViewModels;
 
+
 namespace Models
 {
     public class Vehicle : IEntity, IFormEntity
@@ -22,7 +23,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new VehicleViewModel()
+            return new VehicleViewModel
                 {
                     Make = Make,
                     VehicleModel = Model,

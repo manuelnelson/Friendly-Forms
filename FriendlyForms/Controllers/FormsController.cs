@@ -91,7 +91,7 @@ namespace FriendlyForms.Controllers
         [Authenticate]
         public ActionResult Starter()
         {
-            var Id = Convert.ToInt64(UserSession.Id);
+            var Id = Convert.ToInt32(UserSession.CustomId);
             var court = _courtService.GetByUserId(Id) as CourtViewModel;
             var participants = _participantService.GetByUserId(Id);
             var children = _childService.GetByUserId(Id);
@@ -123,7 +123,7 @@ namespace FriendlyForms.Controllers
         [Authenticate]
         public ActionResult Parenting()
         {
-            var Id = Convert.ToInt64(UserSession.Id);
+            var Id = Convert.ToInt32(UserSession.CustomId);
             var court = _courtService.GetByUserId(Id) as CourtViewModel;
             var participants = _participantService.GetByUserId(Id) as ParticipantViewModel;
             var children = _childService.GetByUserId(Id);
@@ -194,7 +194,7 @@ namespace FriendlyForms.Controllers
         public ActionResult DomesticMediation()
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            var Id = Convert.ToInt64(UserSession.Id);
+            var Id = Convert.ToInt32(UserSession.CustomId);
             var house = _houseService.GetByUserId(Id);
             var property = _propertyService.GetByUserId(Id);            
             var debt = _debtService.GetByUserId(Id);
@@ -260,7 +260,7 @@ namespace FriendlyForms.Controllers
         public ActionResult Financial()
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
-            var Id = Convert.ToInt64(UserSession.Id);
+            var Id = Convert.ToInt32(UserSession.CustomId);
             var income = _incomeService.GetByUserId(Id);
             var incomeOther = _incomeService.GetByUserId(Id, isOtherParent:true);
             var children = _childService.GetByUserId(Id);

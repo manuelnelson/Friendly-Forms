@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -91,7 +91,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
-            income.UserId = Convert.ToInt64(UserSession.Id);
+            income.UserId = Convert.ToInt32(UserSession.CustomId);
             IncomeService.Add(income);
             return new RespIncome()
                 {
@@ -101,7 +101,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
-            income.UserId = Convert.ToInt64(UserSession.Id);
+            income.UserId = Convert.ToInt32(UserSession.CustomId);
             IncomeService.Update(income);
             return new RespIncome();
         }

@@ -1,8 +1,9 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -30,13 +31,14 @@ namespace FriendlyForms.RestService
         public ResponseStatus ResponseStatus { get; set; }
     }
 
-    public class ChildFormRestService : Service
+    public class ChildFormRestService : ServiceBase
     {
         public IChildFormService ChildFormService { get; set; }
 
         public object Post(ReqChildForm request)
         {
             var childFormViewModel = request.TranslateTo<ChildFormViewModel>();
+            childFormViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var updatedChildForm = ChildFormService.AddOrUpdate(childFormViewModel);
             return new RespChildForm()
                 {
@@ -46,6 +48,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqChildForm request)
         {
             var childForm = request.TranslateTo<ChildForm>();
+            childForm.UserId = Convert.ToInt32(UserSession.CustomId);
             ChildFormService.Update(childForm);
             return new RespChildForm();
         }

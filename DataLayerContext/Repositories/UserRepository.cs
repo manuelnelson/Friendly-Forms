@@ -10,14 +10,9 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public bool NativeExists(string email)
+        public User GetByUserAuthId(int userAuthId)
         {
-            return GetDbSet().Any(u => u.Email.ToUpper().Equals(email.ToUpper()) && u.Password != null);
-        }
-
-        public User GetByEmail(string email)
-        {
-            return GetDbSet().FirstOrDefault(u => u.Email.ToUpper().Equals(email.ToUpper()));
+            return GetDbSet().FirstOrDefault(u => u.UserAuthId == userAuthId);
         }
     }
 }

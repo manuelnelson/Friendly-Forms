@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -84,14 +84,14 @@ namespace FriendlyForms.RestService
         public object Post(ReqSchedule request)
         {
             var scheduleViewModel = request.TranslateTo<ScheduleViewModel>();
-            scheduleViewModel.UserId = Convert.ToInt64(UserSession.Id);
+            scheduleViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             ScheduleService.AddOrUpdate(scheduleViewModel);
             return new RespSchedule();
         }
         public object Put(ReqSchedule request)
         {
             var schedule = request.TranslateTo<Schedule>();
-            schedule.UserId = Convert.ToInt64(UserSession.Id);
+            schedule.UserId = Convert.ToInt32(UserSession.CustomId);
             ScheduleService.Update(schedule);
             return new RespSchedule();
         }

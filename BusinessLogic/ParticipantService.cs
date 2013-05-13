@@ -15,7 +15,7 @@ namespace BusinessLogic
             ParticipantRepository = formRepository;
         }
 
-        public CustodyInformation GetCustodyInformation(int userId)
+        public CustodyInformation GetCustodyInformation(long userId)
         {
             var participant = ParticipantRepository.GetByUserId(userId);            
             return GetCustodyInformation(participant.ConvertToModel() as ParticipantViewModel);

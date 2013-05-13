@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -39,7 +39,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqDebt request)
         {
             var debt = request.TranslateTo<Debt>();
-            debt.UserId = Convert.ToInt64(UserSession.Id);
+            debt.UserId = Convert.ToInt32(UserSession.CustomId);
             DebtService.Add(debt);
             return new RespDebt()
                 {
@@ -49,7 +49,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqDebt request)
         {
             var debt = request.TranslateTo<Debt>();
-            debt.UserId = Convert.ToInt64(UserSession.Id);
+            debt.UserId = Convert.ToInt32(UserSession.CustomId);
 
             DebtService.Update(debt);
             return new RespDebt();

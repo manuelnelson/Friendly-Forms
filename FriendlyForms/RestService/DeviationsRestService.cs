@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -79,7 +79,7 @@ namespace FriendlyForms.RestService
         public object Post(DeviationsDto request)
         {
             var deviationsEntity = request.TranslateTo<Deviations>();
-            deviationsEntity.UserId = Convert.ToInt64(UserSession.Id);
+            deviationsEntity.UserId = Convert.ToInt32(UserSession.CustomId);
             DeviationsService.Add(deviationsEntity);
             return deviationsEntity;
         }
@@ -87,7 +87,7 @@ namespace FriendlyForms.RestService
         public object Put(DeviationsDto request)
         {
             var deviationsEntity = request.TranslateTo<Deviations>();
-            deviationsEntity.UserId = Convert.ToInt64(UserSession.Id);
+            deviationsEntity.UserId = Convert.ToInt32(UserSession.CustomId);
             DeviationsService.Update(deviationsEntity);
             return deviationsEntity;
         }

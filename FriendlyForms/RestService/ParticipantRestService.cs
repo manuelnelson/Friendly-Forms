@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -47,7 +47,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqParticipant request)
         {
             var participant = request.TranslateTo<Participant>();
-            participant.UserId = Convert.ToInt64(UserSession.Id);
+            participant.UserId = Convert.ToInt32(UserSession.CustomId);
             ParticipantService.Add(participant);
             return new RespParticipant()
                 {
@@ -57,7 +57,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqParticipant request)
         {
             var participant = request.TranslateTo<Participant>();
-            participant.UserId = Convert.ToInt64(UserSession.Id);
+            participant.UserId = Convert.ToInt32(UserSession.CustomId);
             ParticipantService.Update(participant);
             return new RespParticipant();
         }

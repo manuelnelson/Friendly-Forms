@@ -91,7 +91,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Schedule()
+            return new Schedule
                 {
                     BeginDate = string.IsNullOrEmpty(BeginDate) ? (DateTime?)null : Convert.ToDateTime(BeginDate),                    
                     DetermineBeginDate = DetermineBeginDate,
