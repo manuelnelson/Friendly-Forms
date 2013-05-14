@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
@@ -14,7 +15,7 @@ using System.IO;
 
 namespace FriendlyForms.Controllers
 {
-    public class OutputController : Controller
+    public class OutputController : ControllerBase
     {
         private readonly ICourtService _courtService;
         private readonly IParticipantService _participantService;
@@ -68,13 +69,6 @@ namespace FriendlyForms.Controllers
             _childSupportService = childSupportService;
             _holidayService = holidayService;
             _extraHolidayService = extraHolidayService;
-            //_incomeService = incomeService;
-            //_socialSecurityService = socialSecurityService;
-            //_preexistingSupportService = preexistingSupportService;
-            //_preexistingSupportChildService = preexistingSupportChildService;
-            //_otherChildrenService = otherChildrenService;
-            //_deviationsService = deviationsService;
-            //_otherChildService = otherChildService;
             _vehicleFormService = vehicleFormService;
             // set it up using fluent notation
             var globalConfig = new GlobalConfig();
@@ -95,7 +89,7 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult Parenting()
         {
-            var userId = 1;//User.FriendlyIdentity().Id;
+            var userId = Convert.ToInt32(UserSession.CustomId);
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
@@ -239,7 +233,7 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult DomesticMediation()
         {
-            var userId = 1;// User.FriendlyIdentity().Id;
+            var userId = Convert.ToInt32(UserSession.CustomId);
             var house = _houseService.GetByUserId(userId);
             var property = _propertyService.GetByUserId(userId);
             var debt = _debtService.GetByUserId(userId);
@@ -292,7 +286,6 @@ namespace FriendlyForms.Controllers
         [Authorize]
         public ActionResult Financial()
         {
-            ViewBag.UserId = 1;// User.FriendlyIdentity().Id;
             return View();
         }
     }
