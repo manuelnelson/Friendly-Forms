@@ -12,7 +12,6 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-
     [Route("/Holiday/")]
     [Route("/Holiday/{ChildId}", Verbs = "GET")]
     public class ReqHoliday

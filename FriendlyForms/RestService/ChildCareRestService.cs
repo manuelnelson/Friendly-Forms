@@ -6,6 +6,7 @@ using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
@@ -68,7 +69,7 @@ namespace FriendlyForms.RestService
             public object Get(ChildCareDto request)
             {
                 if(request.ChildId !=0)
-                    return ChildCareService.GetByChildId(request.ChildId);
+                    return ChildCareService.GetByChildId(request.ChildId).TranslateTo<ChildCareDto>();
                 return ChildCareService.Get(request.Id);
             }
 
