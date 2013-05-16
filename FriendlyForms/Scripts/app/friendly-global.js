@@ -537,9 +537,9 @@ $(document).ready(function () {
     });
     /*-----------------------Login----------------------------*/
     $('#login-form input[type=submit]').click(function (e) {
-        if (e) e.preventDefault();
+        if (e) e.preventDefault(); 
         var form = $('#login-form');
-        var redirect = form.attr('data-continue');
+        var redirect = form.attr('data-continue'); 
         if (form.valid()) {
             Friendly.StartLoading("Logging in...Please wait");
             $.ajax({

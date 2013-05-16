@@ -16,7 +16,7 @@
         //check if we need to move to next form
         if ($(this).hasClass('next')) {
             Friendly.SubmitForm('privacy', 'information');
-        }
+        } 
     });
     //Information form
     $('.child-part5').click(function () {
