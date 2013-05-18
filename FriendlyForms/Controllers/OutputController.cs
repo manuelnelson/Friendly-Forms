@@ -12,6 +12,7 @@ using Models.ViewModels;
 using Pechkin;
 using Pechkin.Synchronized;
 using System.IO;
+using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.Controllers
 {
@@ -86,7 +87,7 @@ namespace FriendlyForms.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authenticate]
         public ActionResult Parenting()
         {
             var userId = Convert.ToInt32(UserSession.CustomId);
@@ -230,7 +231,7 @@ namespace FriendlyForms.Controllers
             //System.IO.File.WriteAllBytes(contentPath, pdfBuf);
         }
 
-        [Authorize]
+        [Authenticate]
         public ActionResult DomesticMediation()
         {
             var userId = Convert.ToInt32(UserSession.CustomId);
@@ -283,7 +284,7 @@ namespace FriendlyForms.Controllers
             return View(domesticModel);
         }
 
-        [Authorize]
+        [Authenticate]
         public ActionResult Financial()
         {
             return View();

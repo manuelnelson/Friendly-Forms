@@ -5,10 +5,11 @@ using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using FriendlyForms.Models;
 using Models.ViewModels;
+using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
         private readonly IClientService _clientService;
 
@@ -30,7 +31,7 @@ namespace FriendlyForms.Controllers
         }
 
         // GET: /Account/LogOn
-        [Authorize]
+        [Authenticate]
         public ActionResult Admin()
         {
             //var roleId = User.FriendlyIdentity().RoleId;
@@ -63,7 +64,7 @@ namespace FriendlyForms.Controllers
 
         //
         // GET: /Account/ChangePassword
-        [Authorize]
+        [Authenticate]
         public ActionResult ChangePassword()
         {
             return View();
@@ -72,7 +73,7 @@ namespace FriendlyForms.Controllers
         //
         // POST: /Account/ChangePassword
 
-        [Authorize]
+        [Authenticate]
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {

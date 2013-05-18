@@ -11,7 +11,6 @@ using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.Controllers
 {
-    [Authorize]
     public class FormsController : ControllerBase
     {
         private readonly ICourtService _courtService;
@@ -118,8 +117,6 @@ namespace FriendlyForms.Controllers
                 };
             return View(starterViewModel);
         }
-
-
         [Authenticate]
         public ActionResult Parenting()
         {
@@ -256,7 +253,7 @@ namespace FriendlyForms.Controllers
             return View(domesticModel);
         }
 
-        [Authorize]
+        [Authenticate]
         public ActionResult Financial()
         {
             //only show form if userId is current user, or if curerent user is lawyer of userId
