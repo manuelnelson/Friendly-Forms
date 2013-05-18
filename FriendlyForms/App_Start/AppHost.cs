@@ -5,6 +5,7 @@ using BusinessLogic.Contracts;
 using DataInterface;
 using DataLayerContext;
 using DataLayerContext.Repositories;
+using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Funq;
 using ServiceStack.CacheAccess;
@@ -76,8 +77,7 @@ namespace FriendlyForms.App_Start
             #if DEBUG
             container.Register<ICacheClient>(new MemoryCacheClient());
 #else
-            container.Register<ICacheClient>(new MemoryCacheClient());
-            //container.Register<ICacheClient>(new AzureCacheClient());
+            container.Register<ICacheClient>(new AzureCacheClient());
             //use azure cache client
 #endif
             container.Register<ISessionFactory>(c => new SessionFactory(c.Resolve<ICacheClient>()));

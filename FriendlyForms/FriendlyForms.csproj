@@ -447,6 +447,9 @@
     <Content Include="mingwm10.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="msshrtmi.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\app\friendly-admin.js" />
     <Content Include="Scripts\app\friendly-domestic.js" />
     <Content Include="Scripts\app\friendly-financial-global.js" />
