@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
-using FriendlyForms.Authentication;
 using FriendlyForms.Models;
 using Models;
 using Models.ViewModels;
 using Pechkin;
 using Pechkin.Synchronized;
 using System.IO;
+using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.Controllers
 {
-    public class OutputController : Controller
+    public class OutputController : ControllerBase
     {
         private readonly ICourtService _courtService;
         private readonly IParticipantService _participantService;
@@ -39,13 +40,6 @@ namespace FriendlyForms.Controllers
         private readonly IChildSupportService _childSupportService;
         private readonly IHolidayService _holidayService;
         private readonly IExtraHolidayService _extraHolidayService;
-        private readonly IIncomeService _incomeService;
-        private readonly ISocialSecurityService _socialSecurityService;
-        private readonly IPreexistingSupportService _preexistingSupportService;
-        private readonly IPreexistingSupportChildService _preexistingSupportChildService;
-        private readonly IOtherChildrenService _otherChildrenService;
-        private readonly IDeviationsService _deviationsService;
-        private readonly IOtherChildService _otherChildService;
         private readonly IVehicleFormService _vehicleFormService;
         private readonly SynchronizedPechkin _synchronizedPechkin;
         //
@@ -76,13 +70,6 @@ namespace FriendlyForms.Controllers
             _childSupportService = childSupportService;
             _holidayService = holidayService;
             _extraHolidayService = extraHolidayService;
-            _incomeService = incomeService;
-            _socialSecurityService = socialSecurityService;
-            _preexistingSupportService = preexistingSupportService;
-            _preexistingSupportChildService = preexistingSupportChildService;
-            _otherChildrenService = otherChildrenService;
-            _deviationsService = deviationsService;
-            _otherChildService = otherChildService;
             _vehicleFormService = vehicleFormService;
             // set it up using fluent notation
             var globalConfig = new GlobalConfig();
@@ -100,10 +87,10 @@ namespace FriendlyForms.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authenticate]
         public ActionResult Parenting()
         {
-            var userId = User.FriendlyIdentity().Id;
+            var userId = Convert.ToInt32(UserSession.CustomId);
             var court = _courtService.GetByUserId(userId) as CourtViewModel;
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
             var children = _childService.GetByUserId(userId);
@@ -202,6 +189,7 @@ namespace FriendlyForms.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [Authenticate]
         public ActionResult PrintForm(string html)
         {
             var contentPath = Server.MapPath("~/Content/");
@@ -211,9 +199,8 @@ namespace FriendlyForms.Controllers
             config.SetAllowLocalContent(true);                    
             config.SetPrintBackground(true);
 
-            var userId = User.FriendlyIdentity().Id;
+            var userId = Convert.ToInt32(UserSession.CustomId);
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
-            //var court = _courtService.GetByUserId(userId) as CourtViewModel;
 
             if (Request.Url != null)
             {
@@ -244,10 +231,10 @@ namespace FriendlyForms.Controllers
             //System.IO.File.WriteAllBytes(contentPath, pdfBuf);
         }
 
-        [Authorize]
+        [Authenticate]
         public ActionResult DomesticMediation()
         {
-            var userId = User.FriendlyIdentity().Id;
+            var userId = Convert.ToInt32(UserSession.CustomId);
             var house = _houseService.GetByUserId(userId);
             var property = _propertyService.GetByUserId(userId);
             var debt = _debtService.GetByUserId(userId);
@@ -297,5 +284,10 @@ namespace FriendlyForms.Controllers
             return View(domesticModel);
         }
 
+        [Authenticate]
+        public ActionResult Financial()
+        {
+            return View();
+        }
     }
 }

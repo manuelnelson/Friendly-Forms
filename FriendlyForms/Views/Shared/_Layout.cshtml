@@ -1,5 +1,4 @@
-﻿@using FriendlyForms.Authentication
-@using ServiceStack.MiniProfiler
+﻿@using ServiceStack.MiniProfiler
 @using ServiceStack.Mvc
 <!DOCTYPE html>
 <html ng-app="FormsApp">
@@ -22,10 +21,6 @@
         @Html.Partial("_LogOnPartial")
     </div>
     @RenderBody()
-    @if (User.Identity.IsAuthenticated)
-    {
-        <input type="hidden" id="user-id" value="@(((FriendlyIdentity)User.Identity).Id)"/>
-    }
     <div id="sidebar" ng-controller="MenuCtrl">
         <ul class="ng-cloak">
             <li ng-repeat="menuItem in menuItems" ng-click="menuClick()"  class="{{menuItem.itemClass}}"><a  href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>

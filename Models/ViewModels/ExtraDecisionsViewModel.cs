@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ServiceStack.Common.Extensions;
+using ServiceStack.Common;
 
 namespace Models.ViewModels
 {

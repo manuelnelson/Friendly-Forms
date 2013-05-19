@@ -1,13 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using BusinessLogic.Contracts;
-using FriendlyForms.Authentication;
 using FriendlyForms.Models;
 using Models;
 
 namespace FriendlyForms.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
         private readonly IParticipantService _participantService;
         private readonly IChildService _childService;
@@ -28,9 +28,12 @@ namespace FriendlyForms.Controllers
         }
         public ActionResult Index()
         {
-            if(User.Identity.IsAuthenticated)
+//            var child = _childFormService.Get(1);
+            var user = UserSession;
+            ViewBag.IsAuthenticated = user.IsAuthenticated;
+            if (UserSession.IsAuthenticated)
             {
-                var userId = User.FriendlyIdentity().Id;
+                var userId = Convert.ToInt32(UserSession.CustomId);
                 var childForm = _childFormService.GetByUserId(userId);
                 var children = _childService.GetByUserId(userId);
                 var childSupport = _childSupportService.GetByUserId(userId);

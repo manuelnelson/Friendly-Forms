@@ -68,7 +68,6 @@ else
             @Html.TextAreaFor(m => m.Email.Message, new { placeholder = "Message", @class="input-xxlarge" })
             @Html.ValidationMessageFor(m => m.Email.Message)
         </div>
-        <input type="hidden" id="user-id" name="user-id" value="@Model.Email.UserId"/>
         <button class="btn btn-primary" id="sendEmail" value="Send Email">Send</button>
     </form>
 </div>

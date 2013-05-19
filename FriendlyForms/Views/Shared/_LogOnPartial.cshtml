@@ -1,16 +1,10 @@
-﻿@using FriendlyForms.Authentication
-@using Models.ViewModels
-<ul class="nav btn-group">
-    @if (User.Identity.IsAuthenticated)
-    {
-        <li class="btn btn-mini btn-inverse"><a title="" href="@Url.Action("Index", "Home")"><i class="icon icon-home"></i><span class="text">Home</span></a></li>
-         if (User.FriendlyIdentity().RoleId <= (int) Role.Lawyer)
-         {
-             <li class="btn btn-mini btn-inverse"><a title="" href="@Url.Action("Admin", "Account")"><i class="icon icon-user"></i><span class="text">Account</span></a></li>
-         }
-        <li class="btn btn-mini btn-inverse"><a title="" href="@Url.Action("LogOff", "Account")"><i class="icon icon-share-alt"></i><span class="text">Logout</span></a></li>        
-    }else
-    {
-        <li class="btn btn-mini btn-inverse"><a title="" href="@Url.Action("LogOn", "Account")"><i class="icon icon-off"></i><span class="text">Log in</span></a></li>                
-    }
-</ul>
+﻿<script id="friendly-login-template" type="text/x-jquery-tmpl">
+    <ul class="nav btn-group">
+        <% if(IsAuthenticated) {%>
+        <li class="btn btn-mini btn-inverse"><a title="" href="/"><i class="icon icon-home"></i><span class="text">Home</span></a></li>                
+        <li class="btn btn-mini btn-inverse"><a title="Log off" id="logOff" href="#logOff"><i class="icon icon-share-alt"></i><span class="text">Logout</span></a></li>        
+        <% } else {%>
+        <li class="btn btn-mini btn-inverse"><a title="" href="/Account/LogOn/"><i class="icon icon-off"></i><span class="text">Log in</span></a></li>                
+        <% } %>
+    </ul> 
+</script>
