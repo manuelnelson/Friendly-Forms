@@ -76,6 +76,7 @@ namespace FriendlyForms.App_Start
 			//For Distributed Cache Providers Use: PooledRedisClientManager, BasicRedisClientManager or see: https://github.com/ServiceStack/ServiceStack/wiki/Caching
             #if DEBUG
             container.Register<ICacheClient>(new MemoryCacheClient());
+//            container.Register<ICacheClient>(new AzureCacheClient());
 #else
             container.Register<ICacheClient>(new AzureCacheClient());
             //use azure cache client

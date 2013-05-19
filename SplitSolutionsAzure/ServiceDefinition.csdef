@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceDefinition name="SplitSolutionsAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-10.1.8">
+<ServiceDefinition name="SplitSolutionsAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2013-03.2.0">
   <WebRole name="FriendlyForms" vmsize="Small" enableNativeCodeExecution="true">
     <Startup priority="-2">
-      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple">
-      </Task>
+      <Task commandLine="Startup.cmd" executionContext="elevated" taskType="simple"></Task>
+      <Task commandLine="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe install" executionContext="elevated" taskType="simple" />
+      <Task commandLine="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe install" executionContext="elevated" taskType="simple" />
       <Task commandLine="Microsoft.WindowsAzure.Caching\ClientPerfCountersInstaller.exe install" executionContext="elevated" taskType="simple" />
     </Startup>
     <!--<Contents>
@@ -27,8 +28,7 @@
       <Import moduleName="RemoteForwarder" />
       <Import moduleName="Caching" />
     </Imports>
-    <Certificates>
-    </Certificates>
+    <Certificates></Certificates>
     <LocalResources>
       <LocalStorage name="DiagnosticStore" sizeInMB="20000" cleanOnRoleRecycle="false" />
     </LocalResources>
