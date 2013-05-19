@@ -169,7 +169,7 @@ Friendly.GetFormInput = function (formName) {
     if ($('#' + formName + 'Id').length > 0)
         model.Id = $('#' + formName + 'Id').val();
     if (Friendly.IsOtherForm(formName)) {
-        model.isOtherParent = "true";
+        model.IsOtherParent = "true";
     }
     return model;
 };

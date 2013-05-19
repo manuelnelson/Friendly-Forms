@@ -94,9 +94,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int CombinedIncomeTotal { get; set; }
         [DataMember]
-        public string CustodialParentName { get; set; }
+        public string Father { get; set; }
         [DataMember]
-        public string NonCustodialParentName { get; set; }
+        public string Mother { get; set; }
     }
 
     #endregion
@@ -110,9 +110,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ScheduleB OtherScheduleB { get; set; }
         [DataMember]
-        public string CustodialParentName { get; set; }
+        public string Father { get; set; }
         [DataMember]
-        public string NonCustodialParentName { get; set; }
+        public string Mother { get; set; }
     }
     [DataContract]
     public class ScheduleB
@@ -175,9 +175,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public List<ChildCareWithTotals> ChildCare { get; set; }
         [DataMember]
-        public string CustodialParentName { get; set; }
+        public string Father { get; set; }
         [DataMember]
-        public string NonCustodialParentName { get; set; }
+        public string Mother { get; set; }
     }
 
     [DataContract]
@@ -277,9 +277,9 @@ namespace FriendlyForms.RestService
         public AllowableExpenses AllowableExpenses { get; set; }
 
         [DataMember]
-        public string CustodialParentName { get; set; }
+        public string Father { get; set; }
         [DataMember]
-        public string NonCustodialParentName { get; set; }
+        public string Mother { get; set; }
     }
 
     [DataContract]
@@ -485,6 +485,12 @@ namespace FriendlyForms.RestService
             {
                 CustodyInformation = ParticipantService.GetCustodyInformation(participants)
             };
+            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.NonCustodyParentName
+                             : outputViewModel.CustodyInformation.CustodyParentName;
+            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.CustodyParentName
+                             : outputViewModel.CustodyInformation.NonCustodyParentName;
             var schedule = new ScheduleADtoResp
                 {
                     Income = income,
@@ -493,8 +499,8 @@ namespace FriendlyForms.RestService
                     IncomeTotal = income.CalculateTotalIncome(),
                     OtherIncomeTotal = incomeOther.CalculateTotalIncome(),
                     CombinedIncomeTotal = incomeCombined.CalculateTotalIncome(),
-                    CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
-                    NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
+                    Father = father,
+                    Mother = mother
                 };
             return schedule;
         }
@@ -507,23 +513,29 @@ namespace FriendlyForms.RestService
             var outputViewModel = new PpOutputFormHelper
             {
                 CustodyInformation = ParticipantService.GetCustodyInformation(participants)
-            }; 
+            };
             var income = IncomeService.GetByUserId(request.UserId).TranslateTo<IncomeDto>();
             var preexistSupport = PreexistingSupportFormService.GetByUserId(request.UserId);
             var otherChildForm = OtherChildrenService.GetByUserId(request.UserId);
             var schedule = GetScheduleB(income, preexistSupport, otherChildForm, outputViewModel.CustodyInformation.CustodyParentName);
 
             var incomeOther = IncomeService.GetByUserId(request.UserId, isOtherParent: true).TranslateTo<IncomeDto>();
-            var preexistSupportOther = PreexistingSupportFormService.GetByUserId(request.UserId, isOtherParent:true);
-            var otherChildFormOther = OtherChildrenService.GetByUserId(request.UserId, isOtherParent:true);
+            var preexistSupportOther = PreexistingSupportFormService.GetByUserId(request.UserId, isOtherParent: true);
+            var otherChildFormOther = OtherChildrenService.GetByUserId(request.UserId, isOtherParent: true);
             var scheduleOther = GetScheduleB(incomeOther, preexistSupportOther, otherChildFormOther, outputViewModel.CustodyInformation.NonCustodyParentName);
+            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
+                 ? outputViewModel.CustodyInformation.NonCustodyParentName
+                 : outputViewModel.CustodyInformation.CustodyParentName;
+            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.CustodyParentName
+                             : outputViewModel.CustodyInformation.NonCustodyParentName;
 
             return new ScheduleBDtoResp
                 {
                     ScheduleB = schedule,
                     OtherScheduleB = scheduleOther,
-                    CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
-                    NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
+                    Father = father,
+                    Mother = mother
                 };
         }
 
@@ -563,7 +575,7 @@ namespace FriendlyForms.RestService
                                                    childCareWithTotal.SchoolMother + childCareWithTotal.SummerMother;
                 childCareWithTotal.TotalNonParent = childCareWithTotal.BreaksNonParent + childCareWithTotal.OtherNonParent +
                                                       childCareWithTotal.SchoolNonParent + childCareWithTotal.SummerNonParent;
-                childCareWithTotal.TotalFatherMonthly = childCareWithTotal.TotalFather/12;
+                childCareWithTotal.TotalFatherMonthly = childCareWithTotal.TotalFather / 12;
                 childCareWithTotal.TotalMotherMonthly = childCareWithTotal.TotalMother / 12;
                 childCareWithTotal.TotalNonParentMonthly = childCareWithTotal.TotalNonParent / 12;
                 childCareWithTotal.Name = childCare.Child.Name;
@@ -583,7 +595,7 @@ namespace FriendlyForms.RestService
                 otherSchedule.TotalYearly += childCareWithTotal.TotalMother;
                 nonParentSchedule.TotalYearly += childCareWithTotal.TotalNonParent;
             }
-            schedule.TotalMonthly = schedule.TotalYearly/12;
+            schedule.TotalMonthly = schedule.TotalYearly / 12;
             otherSchedule.TotalMonthly = otherSchedule.TotalYearly / 12;
             nonParentSchedule.TotalMonthly = nonParentSchedule.TotalYearly / 12;
 
@@ -600,11 +612,17 @@ namespace FriendlyForms.RestService
             otherSchedule.ProRataAdditional = 0;
             nonParentSchedule.ProRataAdditional = 0;
 
-
             var outputViewModel = new PpOutputFormHelper
             {
                 CustodyInformation = ParticipantService.GetCustodyInformation(participants)
             };
+            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.NonCustodyParentName
+                             : outputViewModel.CustodyInformation.CustodyParentName;
+            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.CustodyParentName
+                             : outputViewModel.CustodyInformation.NonCustodyParentName;
+
             return new ScheduleDDtoResp
             {
                 FatherScheduleD = schedule,
@@ -612,15 +630,42 @@ namespace FriendlyForms.RestService
                 NonParentScheduleD = nonParentSchedule,
                 TotalScheduleD = totalScheduleD,
                 ChildCare = childCaresWithTotals,
-                CustodialParentName = outputViewModel.CustodyInformation.CustodyParentName,
-                NonCustodialParentName = outputViewModel.CustodyInformation.NonCustodyParentName
+                Father = father,
+                Mother = mother
             };
         }
 
         public object Get(ScheduleEDto request)
         {
-            request.UserId = Convert.ToInt32(UserSession.CustomId);
-            return null;
+            request.UserId = Convert.ToInt32(UserSession.CustomId);            
+            var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
+            var lowIncome = new LowIncomeDeviation()
+                {
+                    DeviationAmount = 0,
+                    ActualAmount = 0,
+                    CalculatedAmount = 0,
+                    CompareAmount = 0,
+                    Explaination = "Nothing yet"
+                };
+            var highIncome = new HighIncomeDeviation();
+            var outputViewModel = new PpOutputFormHelper
+            {
+                CustodyInformation = ParticipantService.GetCustodyInformation(participants)
+            };
+            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.NonCustodyParentName
+                             : outputViewModel.CustodyInformation.CustodyParentName;
+            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.CustodyParentName
+                             : outputViewModel.CustodyInformation.NonCustodyParentName; return new ScheduleEDtoResp
+            {
+                LowIncomeDeviation = lowIncome,
+                HighIncomeAdjusted = 0,
+                HighIncomeDeviationFather = highIncome,
+                HighIncomeDeviationMother = highIncome,
+                Father = father,
+                Mother = mother
+            };
         }
         private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren, string parentName)
         {
@@ -643,7 +688,7 @@ namespace FriendlyForms.RestService
             schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
             if (otherChildren != null)
             {
-                schedule.OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(otherChildren.Id).Select(x=>x.TranslateTo<OtherChildDto>()).ToList();
+                schedule.OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(otherChildren.Id).Select(x => x.TranslateTo<OtherChildDto>()).ToList();
                 foreach (var otherChildDto in schedule.OtherChildren)
                 {
                     otherChildDto.ClaimedBy = parentName;

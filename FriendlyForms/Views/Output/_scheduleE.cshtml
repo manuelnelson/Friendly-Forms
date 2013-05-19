@@ -12,7 +12,7 @@
         <tbody>
             <tr>
                 <td></td>
-                <td>${CustodialParentName}</td>
+                <td>${Father}</td>
                 <td>*Court or Jury Allowable Deviations</td>
             </tr>
             <tr>
@@ -22,23 +22,23 @@
             </tr>
             <tr>
                 <td>1(b). Compare requested deviation amount with minimum order amount</td>
-                <td class="currency">$${LowIncomeDeviation.DeviationAmount}</td>
+                <td class="currency">$${LowIncomeDeviation.CompareAmount}</td>
                 <td></td>
             </tr>
             <tr>
                 <td>1(c). Calculated Deviation Amount</td>
-                <td class="currency">$${LowIncomeDeviation.DeviationAmount}</td>
+                <td class="currency">$${LowIncomeDeviation.CalculatedAmount}</td>
                 <td></td>
             </tr>
             <tr>
                 <td>1(d). Low Income Deviation Amount</td>
-                <td class="currency">$${LowIncomeDeviation.DeviationAmount}</td>
+                <td class="currency">$${LowIncomeDeviation.ActualAmount}</td>
                 <td></td>
             </tr>
             <tr>
                 <td colspan="3">
                     <p>
-                        DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY:Court or Jury - Place a check mark in the box at the left to show you are 
+                        DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY:Court or Jury - Place a check mark in the boxNonFather at the left to show you are 
                         excluding or changing the deviation amount(s) displaying in Line 1(d); otherwise, leave the check box blank and continue to thenext section 
                         of this schedule. If this Discretionary Check Box is checked, enter a new “Discretionary amount allowed by Court/Jury” AS AN AMOUNT 
                         TO BE SUBTRACTED or as a zero ($0.00) under the noncustodial parent’s column for (c) Mother and/or (d) Father. The amount(s) entered 
@@ -73,10 +73,10 @@
             </tr>
             <tr>
                 <td></td>
-                <td>${CustodialParentName}</td>
-                <td>${NonCustodialParentName}</td>
-                <td>${CustodialParentName}</td>
-                <td>${NonCustodialParentName}</td>
+                <td>${Father}</td>
+                <td>${Mother}</td>
+                <td>${Father}</td>
+                <td>${Mother}</td>
             </tr>
             <tr>
                 <td>2(b). Deviation Based on High Income.</td>
@@ -159,8 +159,8 @@
         <thead>
             <tr>
                 <th>Extraordinary and Special Expenses</th>
-                <th>${CustodialParentName}</th>
-                <th>${NonCustodialParentName}</th>
+                <th>${Father}</th>
+                <th>${Mother}</th>
                 <th>Nonparent Custodian</th>
                 <th>Combined</th>
             </tr>

@@ -189,6 +189,7 @@ namespace FriendlyForms.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [Authenticate]
         public ActionResult PrintForm(string html)
         {
             var contentPath = Server.MapPath("~/Content/");
@@ -198,9 +199,8 @@ namespace FriendlyForms.Controllers
             config.SetAllowLocalContent(true);                    
             config.SetPrintBackground(true);
 
-            var userId = 1;// User.FriendlyIdentity().Id;
+            var userId = Convert.ToInt32(UserSession.CustomId);
             var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
-            //var court = _courtService.GetByUserId(userId) as CourtViewModel;
 
             if (Request.Url != null)
             {
