@@ -8,7 +8,7 @@ namespace Models.ViewModels
         public long Id { get; set; }
         public bool IsOtherParent { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Display(Name = "Legally Responsible")]
         public int? LegallyResponsible { get; set; }
         [Display(Name = "At home")]
@@ -24,7 +24,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new OtherChildren()
+            return new OtherChildren
                 {
                     IsOtherParent = IsOtherParent,
                     AtHome = AtHome ?? 0,

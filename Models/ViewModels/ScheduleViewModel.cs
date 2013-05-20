@@ -8,7 +8,7 @@ namespace Models.ViewModels
     {
         public long Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
         [Display(Name = "Determine begin date")]
         public int DetermineBeginDate { get; set; }
@@ -91,7 +91,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new Schedule()
+            return new Schedule
                 {
                     BeginDate = string.IsNullOrEmpty(BeginDate) ? (DateTime?)null : Convert.ToDateTime(BeginDate),                    
                     DetermineBeginDate = DetermineBeginDate,

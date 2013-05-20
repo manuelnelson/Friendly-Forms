@@ -8,9 +8,9 @@ namespace Models.ViewModels
     {
         public long Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
-        public int ChildId { get; set; }
+        public long ChildId { get; set; }
         [Required]
         public bool FridayHoliday { get; set; }
         [Required]

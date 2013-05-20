@@ -1,8 +1,10 @@
-﻿namespace Models
+﻿using Models.Contract;
+
+namespace Models
 {
-    public class County
+    public class County : IEntity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string CountyName { get; set; }
     }
 }

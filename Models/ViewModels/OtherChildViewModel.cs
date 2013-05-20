@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Models.Contract;
@@ -11,7 +10,7 @@ namespace Models.ViewModels
         public long Id { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         [Required]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
@@ -27,8 +26,8 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new OtherChild()
-            {
+            return new OtherChild
+                {
                 Id = Id,
                 DateOfBirth = string.IsNullOrEmpty(DateOfBirth) ? (DateTime?)null : Convert.ToDateTime(this.DateOfBirth),
                 Name = this.Name,

@@ -46,6 +46,10 @@ namespace DataLayerContext
         public DbSet<OtherChild> OtherChild { get; set; }
         public DbSet<Health> Health{ get; set; }
         public DbSet<ChildCareForm> ChildCareForm { get; set; }
+        public DbSet<PreexistingSupportForm> PreexistingSupportForm { get; set; }
+        public DbSet<DeviationsForm> DeviationsForm { get; set; }
+        public DbSet<ExtraExpenseForm> ExtraExpenseForms { get; set; }
+        public DbSet<ExtraExpense> ExtraExpenses { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -86,7 +90,40 @@ namespace DataLayerContext
             SetupHealthEntity(modelBuilder);
             SetupChildCareFormEntity(modelBuilder);
             SetupChildCareEntity(modelBuilder);
+            SetupPreexistingSupportFormEntity(modelBuilder);
+            SetupDeviationsFormEntity(modelBuilder);
+            SetupExtraExpenseFormEntity(modelBuilder);
+            SetupExtraExpenseEntity(modelBuilder);
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupExtraExpenseEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ExtraExpense>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<ExtraExpense>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<ExtraExpense>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
+        }
+
+        private void SetupExtraExpenseFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ExtraExpenseForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<ExtraExpenseForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
+
+        private void SetupDeviationsFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DeviationsForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<DeviationsForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
+
+        private void SetupPreexistingSupportFormEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PreexistingSupportForm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<PreexistingSupportForm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupChildCareEntity(DbModelBuilder modelBuilder)
@@ -94,6 +131,7 @@ namespace DataLayerContext
             modelBuilder.Entity<ChildCare>().HasKey(t => new { t.Id });
             modelBuilder.Entity<ChildCare>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<ChildCare>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupChildCareFormEntity(DbModelBuilder modelBuilder)
@@ -145,6 +183,7 @@ namespace DataLayerContext
             modelBuilder.Entity<Deviations>().HasKey(t => new { t.Id });
             modelBuilder.Entity<Deviations>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Deviations>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupOtherChildrenEntity(DbModelBuilder modelBuilder)
@@ -189,6 +228,7 @@ namespace DataLayerContext
             modelBuilder.Entity<ExtraHoliday>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<ExtraHoliday>().Property(t => t.HolidayName).HasMaxLength(100);
+            modelBuilder.Entity<ExtraHoliday>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupChildSupportEntity(DbModelBuilder modelBuilder)
@@ -280,8 +320,8 @@ namespace DataLayerContext
         {
             modelBuilder.Entity<Holiday>().HasKey(t => new { t.Id });
             modelBuilder.Entity<Holiday>().Property(t => t.Id)
-                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);       
-                 
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Holiday>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupScheduleEntity(DbModelBuilder modelBuilder)
@@ -312,6 +352,7 @@ namespace DataLayerContext
             modelBuilder.Entity<ExtraDecisions>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<ExtraDecisions>().Property(t => t.Description).HasMaxLength(100);
+            modelBuilder.Entity<ExtraDecisions>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupDecisionEntity(DbModelBuilder modelBuilder)
@@ -319,6 +360,7 @@ namespace DataLayerContext
             modelBuilder.Entity<Decisions>().HasKey(t => new { t.Id });
             modelBuilder.Entity<Decisions>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);            
+            modelBuilder.Entity<Decisions>().HasRequired(t=>t.Child).WithMany().WillCascadeOnDelete(false);                
         }
 
         private void SetupInformationEntity(DbModelBuilder modelBuilder)
@@ -365,13 +407,6 @@ namespace DataLayerContext
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<User>().Property(u => u.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<User>().Property(u => u.FirstName).IsRequired();
-            modelBuilder.Entity<User>().Property(u => u.FirstName).HasMaxLength(50);
-            modelBuilder.Entity<User>().Property(u => u.LastName).IsRequired();
-            modelBuilder.Entity<User>().Property(u => u.LastName).HasMaxLength(50);
-            modelBuilder.Entity<User>().Property(u => u.Email).IsRequired();
-            modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(100);
-            modelBuilder.Entity<User>().Property(u => u.Password).HasMaxLength(100);
         }
 
 

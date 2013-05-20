@@ -6,8 +6,8 @@ namespace Models.ViewModels
     public class ChildCareViewModel : IViewModel
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
-        public int ChildId { get; set; }
+        public long UserId { get; set; }
+        public long ChildId { get; set; }
         public int SchoolFather { get; set; }
         public int SchoolMother { get; set; }
         public int SchoolNonParent { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace Models.Contract
+﻿
+
+namespace Models.Contract
 {
     public interface IFormEntity        
     {

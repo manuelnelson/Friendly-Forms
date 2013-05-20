@@ -2,12 +2,14 @@
 using Models.Contract;
 using Models.ViewModels;
 
+
 namespace Models
 {
-    public class Vehicle : IFormEntity
+    public class Vehicle : IEntity, IFormEntity
     {
         public long Id { get; set; }        
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
         public int Year { get; set; }
@@ -21,7 +23,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return new VehicleViewModel()
+            return new VehicleViewModel
                 {
                     Make = Make,
                     VehicleModel = Model,

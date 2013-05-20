@@ -8,7 +8,7 @@ namespace Models.ViewModels
     {
         public long Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [StringLength(100)]
@@ -35,7 +35,7 @@ namespace Models.ViewModels
         public int? PaymentDay { get; set; }
         public IFormEntity ConvertToEntity()
         {
-            return new ChildSupport()
+            return new ChildSupport
                 {
                     EffectiveDate = Convert.ToDateTime(EffectiveDate),
                     MonthlyAmount = Convert.ToInt32(MonthlyAmount),

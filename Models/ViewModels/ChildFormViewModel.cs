@@ -8,7 +8,7 @@ namespace Models.ViewModels
         public long Id { get; set; }
         public int ChildrenInvolved { get; set; }
 
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         public IFormEntity ConvertToEntity()
         {

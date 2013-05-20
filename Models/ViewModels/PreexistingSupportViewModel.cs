@@ -10,7 +10,7 @@ namespace Models.ViewModels
         public long Id { get; set; }
         public bool IsOtherParent { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
         public int Support { get; set; }
         [Required]
@@ -32,7 +32,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return new PreexistingSupport()
+            return new PreexistingSupport
                 {
                     IsOtherParent = IsOtherParent,
                     CaseNumber = Convert.ToInt32(CaseNumber),

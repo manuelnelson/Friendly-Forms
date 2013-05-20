@@ -1,14 +1,15 @@
-﻿using System;
-using Models.Contract;
+﻿using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
 
+
 namespace Models
 {
-    public class Responsibility : IFormEntity
+    public class Responsibility : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int BeginningVisitation { get; set; }
         public int EndVisitation { get; set; }
         public int TransportationCosts { get; set; }

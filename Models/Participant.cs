@@ -2,12 +2,14 @@
 using Models.ViewModels;
 using ServiceStack.Common;
 
+
 namespace Models
 {
-    public class Participant : IFormEntity
+    public class Participant : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
         public string PlaintiffsName { get; set; }
         public int PlaintiffRelationship { get; set; }
         public int PlaintiffCustodialParent { get; set; }

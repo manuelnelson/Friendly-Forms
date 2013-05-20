@@ -1,15 +1,19 @@
-﻿using Models.ViewModels;
+﻿using Models.Contract;
+using Models.ViewModels;
 using ServiceStack.Common;
+
 
 namespace Models
 {
-    public class ExtraDecisions
+    public class ExtraDecisions : IEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
-        public int ChildId { get; set; }
         public int DecisionMaker { get; set; }
         public string Description { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
+        public long ChildId { get; set; }
+        public virtual Child Child { get; set; }
 
         public ExtraDecisionsViewModel ConvertToModel()
         {

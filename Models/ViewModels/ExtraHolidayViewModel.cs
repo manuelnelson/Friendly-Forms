@@ -7,11 +7,12 @@ namespace Models.ViewModels
 {
     public class ExtraHolidayViewModel : IViewModel
     {
+        [Required]
         public long Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
-        public int ChildId { get; set; }
+        public long ChildId { get; set; }
         [Required]
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [StringLength(100)]
@@ -23,6 +24,7 @@ namespace Models.ViewModels
         [Required]
         [Display(Name = "Mother")]
         public int HolidayMother { get; set; }
+
 
         public List<ExtraHoliday> ExtraHolidays { get; set; }
 

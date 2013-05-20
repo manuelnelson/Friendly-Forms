@@ -2,12 +2,14 @@
 using Models.Contract;
 using Models.ViewModels;
 
+
 namespace Models
 {
-    public class OtherChild : IFormEntity
+    public class OtherChild : IEntity, IFormEntity
     {
         public virtual long Id { get; set; }
-        public virtual int UserId { get; set; }
+        public virtual long UserId { get; set; }
+        public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
 
@@ -16,7 +18,7 @@ namespace Models
         
         public IViewModel ConvertToModel()
         {
-            return new OtherChildViewModel()
+            return new OtherChildViewModel
                 {
                     DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not provided",
                     Name = Name,

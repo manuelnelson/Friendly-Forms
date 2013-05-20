@@ -2,13 +2,15 @@
 using Models.ViewModels;
 using ServiceStack.Common;
 
+
 namespace Models
 {
-    public class SocialSecurity : IFormEntity
+    public class SocialSecurity : IEntity, IFormEntity
     {
         public long Id { get; set; }
         public bool IsOtherParent { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int ReceiveSocial { get; set; }
         public int? Amount { get; set; } 
         public IViewModel ConvertToModel()

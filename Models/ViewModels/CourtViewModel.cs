@@ -8,7 +8,7 @@ namespace Models.ViewModels
     public class CourtViewModel : IViewModel
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public int CountyId { get; set; }
         [Display(Name = "Case Number")]
         [RegularExpression(@"^[0-9a-zA-Z\s-]*$", ErrorMessage = "Case Number may only contain numbers, letters and dashes.")]

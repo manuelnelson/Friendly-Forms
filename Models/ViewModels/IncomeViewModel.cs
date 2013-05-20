@@ -8,13 +8,13 @@ namespace Models.ViewModels
     {
         public long Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public bool IsOtherParent { get; set; }
         [Required]
         public int HaveSalary { get; set; }
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Other Income")]
-        public int? OtherIncome { get; set; }
+        public string OtherIncome { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         [Display(Name = "W2 Income")]
         public int? W2Income { get; set; }

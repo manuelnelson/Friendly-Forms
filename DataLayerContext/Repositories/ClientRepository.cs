@@ -12,7 +12,7 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public IEnumerable<User> GetUsersClients(int userId)
+        public IEnumerable<User> GetUsersClients(long userId)
         {
             //unable to parameterize - me no likey
             //http://forums.asp.net/p/1778908/4873380.aspx/1?Re+No+mapping+exists+from+object+type+f__AnonymousType3+1+System+Decimal+mscorlib+Version+4+0+0+0+Culture+neutral+PublicKeyToken+b77a5c561934e089+to+a+known+managed+provider+native+type+
@@ -26,7 +26,7 @@ namespace DataLayerContext.Repositories
             //    });
         }
 
-        public bool LawyerHasClient(int lawyerId, int clientId)
+        public bool LawyerHasClient(long lawyerId, int clientId)
         {
             return GetDbSet().Any(c => c.UserId == lawyerId && c.ClientUserId == clientId);
         }

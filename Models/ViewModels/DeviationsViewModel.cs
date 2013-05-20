@@ -7,8 +7,9 @@ namespace Models.ViewModels
     public class DeviationsViewModel : IViewModel
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
-        public int Deviations { get; set; }
+        public long UserId { get; set; }
+        public bool IsOtherParent { get; set; }
+        public int Deviation { get; set; }
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string Unjust { get; set; }
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
@@ -33,7 +34,7 @@ namespace Models.ViewModels
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? Visitation { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? Alimony { get; set; }
+        public int? AlimonyPaid { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? Mortgage { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]

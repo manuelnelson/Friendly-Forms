@@ -2,12 +2,14 @@
 using Models.ViewModels;
 using ServiceStack.Common;
 
+
 namespace Models
 {
-    public class HealthInsurance : IFormEntity
+    public class HealthInsurance : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int Health { get; set; }
         public string HealthDescription { get; set; }
 

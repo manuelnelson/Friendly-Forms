@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Models.Contract;
 
 namespace DataInterface
 {
     public interface IRepository<TEntity> : IDisposable
-        where TEntity : class
+        where TEntity : IEntity
     {
         /// <summary>
         /// Get the unit of work in this repository
         /// </summary>
-        IUnitOfWork UnitOfWork { get; }
+        //IUnitOfWork UnitOfWork { get; }
 
-        string ConnectionString { get; set; }
+        //string ConnectionString { get; set; }
 
         /// <summary>
         /// Add item into repository
@@ -57,6 +58,13 @@ namespace DataInterface
         /// <returns></returns>
         TEntity Get(long id);
 
+        /// <summary>
+        /// Get element by entity key
+        /// </summary>
+        /// <param name="ids">Entity key value</param>
+        /// <returns></returns>
+        IEnumerable<TEntity> Get(IEnumerable<long> ids);
+        
         /// <summary>
         /// Updates the entity in the context
         /// </summary>

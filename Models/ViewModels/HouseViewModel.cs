@@ -8,7 +8,7 @@ namespace Models.ViewModels
     {
         public long Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [Required]
         [Display(Name = "House")]
         public int MaritalHouse { get; set; }

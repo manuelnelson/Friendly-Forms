@@ -5,6 +5,6 @@ namespace DataInterface
 {
     public interface IChildRepository : IFormRepository<Child>
     {
-        new List<Child> GetByUserId(int userId);
+        new List<Child> GetByUserId(long userId);
     }
 }

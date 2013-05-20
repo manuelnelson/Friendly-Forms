@@ -2,12 +2,14 @@
 using Models.ViewModels;
 using ServiceStack.Common;
 
+
 namespace Models
 {
-    public class Debt : IFormEntity
+    public class Debt : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        public virtual User User { get; set; }
         public int MaritalDebt { get; set; }
         public string DebtDivision { get; set; }
         public IViewModel ConvertToModel()

@@ -3,14 +3,15 @@ using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
 
+
 namespace Models
 {
-    public class ChildCareForm : IFormEntity
+    public class ChildCareForm : IEntity, IFormEntity
     {
         public long Id { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public int ChildrenInvolved { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public IViewModel ConvertToModel()
         {
