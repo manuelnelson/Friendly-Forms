@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -10,13 +11,13 @@ namespace FriendlyForms.RestService
 {
         //will name it to asset/ eventually, but doing this to appease my previous stupidity
         [DataContract]
-        [Route("/assets/")]
+        [Route("/asset/")]
         public class ReqAsset
         {
             [DataMember]
             public long Id { get; set; }
             [DataMember]
-            public int UserId { get; set; }
+            public long UserId { get; set; }
             [DataMember]
             public int Retirement { get; set; }
             [DataMember]
@@ -41,8 +42,8 @@ namespace FriendlyForms.RestService
             [DataMember]
             public ResponseStatus ResponseStatus { get; set; }
         }
-
-        public class AssetRestService : Service
+        [Authenticate]
+        public class AssetRestService : ServiceBase
         {
             public IAssetService AssetService { get; set; }
             public object Get(ReqAsset request)
@@ -51,15 +52,12 @@ namespace FriendlyForms.RestService
                 {
                     return AssetService.Get(request.Id);
                 }
-                if (request.UserId != 0)
-                {
-                    return AssetService.GetByUserId(request.UserId);
-                }
-                return new Assets();
+                return AssetService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
             }
             public object Post(ReqAsset request)
             {
                 var assets = request.TranslateTo<Assets>();
+                assets.UserId = Convert.ToInt32(UserSession.CustomId);
                 AssetService.Add(assets);
                 return new RespAsset()
                     {
@@ -69,6 +67,7 @@ namespace FriendlyForms.RestService
             public object Put(ReqAsset request)
             {
                 var assets = request.TranslateTo<Assets>();
+                assets.UserId = Convert.ToInt32(UserSession.CustomId);
                 AssetService.Update(assets);
                 return new RespAsset();
             }

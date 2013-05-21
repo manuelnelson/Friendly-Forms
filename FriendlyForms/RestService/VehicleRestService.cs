@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -16,7 +17,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public string Make { get; set; }
         [DataMember]
@@ -44,8 +45,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class VehicleRestService : Service
+    [Authenticate]
+    public class VehicleRestService : ServiceBase
     {
         public IVehicleService VehicleService { get; set; }
         public object Get(ReqVehicle request)
@@ -54,25 +55,22 @@ namespace FriendlyForms.RestService
             {
                 return VehicleService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return VehicleService.GetByUserId(request.UserId);
-            }
-            return new Vehicle();
+            return VehicleService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
-
         public object Post(ReqVehicle request)
         {
-            var vehicle = request.TranslateTo<Vehicle>();
-            VehicleService.Add(vehicle);
+            var vehicleViewModel = request.TranslateTo<VehicleViewModel>();
+            vehicleViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
+            var updatedVehicle = VehicleService.AddOrUpdate(vehicleViewModel);
             return new RespVehicle()
                 {
-                    Vehicle = vehicle
+                    Vehicle = updatedVehicle
                 };
         }
         public object Put(ReqVehicle request)
         {
             var vehicle = request.TranslateTo<Vehicle>();
+            vehicle.UserId = Convert.ToInt32(UserSession.CustomId);
             VehicleService.Update(vehicle);
             return new RespVehicle();
         }

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -8,14 +9,19 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
+
     [DataContract]
     [Route("/Deviations/")]
-    public class ReqDeviations
+    public class DeviationsDto : IReturn<DeviationsDto>
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
+        [DataMember]
+        public bool IsOtherParent { get; set; }
+        [DataMember]
+        public long ChildId { get; set; }
         [DataMember]
         public int Circumstances { get; set; }
         [DataMember]
@@ -43,54 +49,53 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int? Visitation { get; set; }
         [DataMember]
-        public int? Alimony { get; set; }
+        public int? AlimonyPaid { get; set; }
         [DataMember]
         public int? Mortgage { get; set; }
         [DataMember]
         public int? Permanency { get; set; }
         [DataMember]
         public int? NonSpecific { get; set; }
-
     }
-
-    [DataContract]
-    public class RespDeviations : IHasResponseStatus
-    {
-        [DataMember]
-        public long Id { get; set; }
-        [DataMember]
-        public ResponseStatus ResponseStatus { get; set; }
-    }
-
-    public class DeviationsRestService : Service
+    [Authenticate]
+    public class DeviationsRestService : ServiceBase
     {
         public IDeviationsService DeviationsService { get; set; }
-        public object Get(ReqDeviations request)
+
+        public object Get(DeviationsDto request)
         {
-            if (request.Id != 0)
+            if (request.ChildId != 0)
             {
-                return DeviationsService.Get(request.Id);
-            }
-            if (request.UserId != 0)
-            {
-                return DeviationsService.GetByUserId(request.UserId);
-            }
-            return new Deviations();
+                var deviations = DeviationsService.GetByChildId(request.ChildId, request.IsOtherParent) ?? new Deviations()
+                    {
+                        ChildId = request.ChildId,    
+                    };
+                deviations.HighLow = deviations.HighLow ?? 0;
+                return deviations.TranslateTo<DeviationsDto>();
+            }                
+            return DeviationsService.Get(request.Id);
         }
-        public object Post(ReqDeviations request)
+
+        public object Post(DeviationsDto request)
         {
-            var specialCircumstances = request.TranslateTo<Deviations>();
-            DeviationsService.Add(specialCircumstances);
-            return new RespDeviations
-                {
-                    Id = specialCircumstances.Id
-                };
+            var deviationsEntity = request.TranslateTo<Deviations>();
+            deviationsEntity.UserId = Convert.ToInt32(UserSession.CustomId);
+            DeviationsService.Add(deviationsEntity);
+            return deviationsEntity;
         }
-        public object Put(ReqDeviations request)
+
+        public object Put(DeviationsDto request)
         {
-            var specialCircumstances = request.TranslateTo<Deviations>();
-            DeviationsService.Update(specialCircumstances);
-            return new RespDeviations();
+            var deviationsEntity = request.TranslateTo<Deviations>();
+            deviationsEntity.UserId = Convert.ToInt32(UserSession.CustomId);
+            DeviationsService.Update(deviationsEntity);
+            return deviationsEntity;
+        }
+
+        public void Delete(DeviationsDto request)
+        {
+            var deviationsEntity = request.TranslateTo<Deviations>();
+            DeviationsService.Delete(deviationsEntity);
         }
     }
 }

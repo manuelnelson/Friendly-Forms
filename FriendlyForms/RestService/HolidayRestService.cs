@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -11,7 +12,6 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-
     [Route("/Holiday/")]
     [Route("/Holiday/{ChildId}", Verbs = "GET")]
     public class ReqHoliday
@@ -19,9 +19,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
-        public int ChildId { get; set; }
+        public long ChildId { get; set; }
         [DataMember]
         public bool FridayHoliday { get; set; }
         [DataMember]
@@ -134,8 +134,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class HolidayRestService : Service
+    [Authenticate]
+    public class HolidayRestService : ServiceBase
     {
         public IHolidayService HolidayService { get; set; }
         public IExtraHolidayService ExtraHolidayService{ get; set; }
@@ -154,6 +154,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqHoliday request)
         {
             var holiday = request.TranslateTo<HolidayViewModel>();
+            holiday.UserId = Convert.ToInt32(UserSession.CustomId);
             HolidayService.AddOrUpdate(holiday);
             return new RespHoliday();
 
@@ -167,6 +168,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqHoliday request)
         {
             var holiday = request.TranslateTo<Holiday>();
+            holiday.UserId = Convert.ToInt32(UserSession.CustomId);
             HolidayService.Update(holiday);
             return new RespHoliday();
         }

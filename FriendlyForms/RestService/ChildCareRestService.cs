@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
@@ -31,9 +33,9 @@ namespace FriendlyForms.RestService
             [DataMember]
             public long Id { get; set; }
             [DataMember]
-            public int UserId { get; set; }
+            public long UserId { get; set; }
             [DataMember]
-            public int ChildId { get; set; }
+            public long ChildId { get; set; }
             [DataMember]
             public int SchoolFather { get; set; }
             [DataMember]
@@ -59,30 +61,32 @@ namespace FriendlyForms.RestService
             [DataMember]
             public int OtherNonParent { get; set; }
         }
-
-        public class ChildCaresService : Service
+        [Authenticate]
+        public class ChildCaresService : ServiceBase
         {
             public IChildCareService ChildCareService { get; set; } //Injected by IOC
 
             public object Get(ChildCareDto request)
             {
                 if(request.ChildId !=0)
-                    return ChildCareService.GetByChildId(request.ChildId);
+                    return ChildCareService.GetByChildId(request.ChildId).TranslateTo<ChildCareDto>();
                 return ChildCareService.Get(request.Id);
             }
 
             public object Post(ChildCareDto request)
             {
-                var ChildCareEntity = request.TranslateTo<ChildCare>();
-                ChildCareService.Add(ChildCareEntity);
-                return ChildCareEntity;
+                var childCareEntity = request.TranslateTo<ChildCare>();
+                childCareEntity.UserId = Convert.ToInt32(UserSession.CustomId);    
+                ChildCareService.Add(childCareEntity);
+                return childCareEntity;
             }
 
             public object Put(ChildCareDto request)
             {
-                var ChildCareEntity = request.TranslateTo<ChildCare>();
-                ChildCareService.Update(ChildCareEntity);
-                return ChildCareEntity;
+                var childCareEntity = request.TranslateTo<ChildCare>();
+                childCareEntity.UserId = Convert.ToInt32(UserSession.CustomId); 
+                ChildCareService.Update(childCareEntity); 
+                return childCareEntity; 
             }
 
             public void Delete(ChildCareListDto request)

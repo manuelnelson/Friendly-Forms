@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -9,13 +10,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Houses/")]
+    [Route("/House/")]
     public class ReqHouse
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int MaritalHouse { get; set; }
         [DataMember]
@@ -45,8 +46,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class HouseRestService : Service
+    [Authenticate]
+    public class HouseRestService : ServiceBase
     {
         public IHouseService HouseService { get; set; }
         public object Get(ReqHouse request)
@@ -55,15 +56,12 @@ namespace FriendlyForms.RestService
             {
                 return HouseService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return HouseService.GetByUserId(request.UserId);
-            }
-            return new House();
+            return HouseService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqHouse request)
         {
             var house = request.TranslateTo<House>();
+            house.UserId = Convert.ToInt32(UserSession.CustomId);
             HouseService.Add(house);
             return new RespHouse()
                 {
@@ -73,6 +71,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqHouse request)
         {
             var house = request.TranslateTo<House>();
+            house.UserId = Convert.ToInt32(UserSession.CustomId);
             HouseService.Update(house);
             return new RespHouse();
         }

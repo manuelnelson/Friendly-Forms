@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web.Mvc;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -19,9 +19,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
-        public int ChildId { get; set; }
+        public long ChildId { get; set; }
         [DataMember]
         public int DecisionMaker { get; set; }
         [DataMember]
@@ -45,8 +45,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ExtraDecisionsRestService : Service
+    [Authenticate]
+    public class ExtraDecisionsRestService : ServiceBase
     {
         public IExtraDecisionsService ExtraDecisionsService { get; set; }
 
@@ -59,6 +59,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqExtraDecisions request)
         {
             var extraDecisionsViewModel = request.TranslateTo<ExtraDecisionsViewModel>();
+            extraDecisionsViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var updatedDecision = ExtraDecisionsService.AddOrUpdate(extraDecisionsViewModel);
             return new RespExtraDecisionsPost()
                 {
@@ -68,6 +69,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqExtraDecisions request)
         {
             var extraDecisions = request.TranslateTo<ExtraDecisions>();
+            extraDecisions.UserId = Convert.ToInt32(UserSession.CustomId);
             //ExtraDecisionsService.Update(extraDecisions);
             return new RespExtraDecisionsPost();
         }

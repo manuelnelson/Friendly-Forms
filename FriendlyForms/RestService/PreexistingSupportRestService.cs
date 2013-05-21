@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -18,7 +19,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int Support { get; set; }
         [DataMember]
@@ -39,8 +40,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class PreexistingSupportRestService : Service
+    [Authenticate]
+    public class PreexistingSupportRestService : ServiceBase
     {
         public IPreexistingSupportService PreexistingSupportService { get; set; }
         public object Get(ReqPreexistingSupport request)
@@ -49,15 +50,12 @@ namespace FriendlyForms.RestService
             {
                 return PreexistingSupportService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return PreexistingSupportService.GetByUserId(request.UserId);
-            }
-            return new PreexistingSupport();
+            return PreexistingSupportService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqPreexistingSupport request)
         {
             var preexistingSupportViewModel = request.TranslateTo<PreexistingSupportViewModel>();
+            preexistingSupportViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var entity = PreexistingSupportService.AddOrUpdate(preexistingSupportViewModel);
             var preexistSupport = entity.TranslateTo<ReqPreexistingSupport>();
             preexistSupport.OrderDate = entity.OrderDate.ToShortDateString();
@@ -69,6 +67,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqPreexistingSupport request)
         {
             var preexistingSupport = request.TranslateTo<PreexistingSupport>();
+            preexistingSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             PreexistingSupportService.Update(preexistingSupport);
             return new RespPreexistingSupport();
         }

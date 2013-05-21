@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -18,7 +19,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]
@@ -35,8 +36,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ChildRestService : Service
+    [Authenticate]
+    public class ChildRestService : ServiceBase
     {
         public IChildService ChildService { get; set; }
         public object Get(ReqChild request)
@@ -45,15 +46,12 @@ namespace FriendlyForms.RestService
             {
                 return ChildService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return ChildService.GetByUserId(request.UserId);
-            }
-            return new ChildForm();
+            return ChildService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Put(ReqChild request)
         {
             var child = request.TranslateTo<Child>();
+            child.UserId = Convert.ToInt32(UserSession.CustomId);
             ChildService.Update(child);
             return null;
         }
@@ -67,6 +65,7 @@ namespace FriendlyForms.RestService
         public object Post(ReqChild request)
         {
             var childViewModel = request.TranslateTo<ChildViewModel>();
+            childViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
             var updatedChild = ChildService.AddOrUpdate(childViewModel);
             return new RespChild()
             {

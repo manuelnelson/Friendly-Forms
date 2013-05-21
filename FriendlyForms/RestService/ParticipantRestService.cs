@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -15,7 +16,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public string PlaintiffsName { get; set; }
         [DataMember]
@@ -38,8 +39,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ParticipantRestService : Service
+    [Authenticate]
+    public class ParticipantRestService : ServiceBase
     {
         public IParticipantService ParticipantService { get; set; }
         public object Get(ReqParticipant request)
@@ -48,17 +49,14 @@ namespace FriendlyForms.RestService
             {
                 return ParticipantService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return ParticipantService.GetByUserId(request.UserId);
-            }
-            return new Participant();
+            return ParticipantService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqParticipant request)
         {
             var participant = request.TranslateTo<Participant>();
+            participant.UserId = Convert.ToInt32(UserSession.CustomId);
             ParticipantService.Add(participant);
-            return new RespParticipant
+            return new RespParticipant()
                 {
                     Id = participant.Id
                 };
@@ -66,6 +64,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqParticipant request)
         {
             var participant = request.TranslateTo<Participant>();
+            participant.UserId = Convert.ToInt32(UserSession.CustomId);
             ParticipantService.Update(participant);
             return new RespParticipant();
         }

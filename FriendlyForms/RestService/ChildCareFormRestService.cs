@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -24,21 +25,22 @@ namespace FriendlyForms.RestService
         }
 
         [Route("/ChildCareForm", "POST")]
-        [Route("/ChildCareForm/{Id}", "PUT")]
+        [Route("/ChildCareForm", "PUT")]
         [Route("/ChildCareForm/{Id}", "GET")]
         public class ChildCareFormDto : IReturn<ChildCareFormDto>
         {
             [DataMember]
             public long Id { get; set; }
             [DataMember]
-            public int UserId { get; set; }
+            public long UserId { get; set; }
             [DataMember]
             public int ChildrenInvolved { get; set; }
         }
-
-        public class ChildCareFormsService : Service
+        [Authenticate]
+        public class ChildCareFormsService : ServiceBase
         {
-            public IChildCareFormService ChildCareFormService { get; set; } 
+            public IChildCareFormService ChildCareFormService { get; set; } //Injected by IOC
+
 
             public object Get(ChildCareFormDto request)
             {
@@ -46,16 +48,13 @@ namespace FriendlyForms.RestService
                 {
                     return ChildCareFormService.Get(request.Id);
                 }
-                if (request.UserId != 0)
-                {
-                    return ChildCareFormService.GetByUserId(request.UserId);
-                }
-                return new ChildCareForm();
+                return ChildCareFormService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
             }
 
             public object Post(ChildCareFormDto request)
             {
                 var childCareFormEntity = request.TranslateTo<ChildCareForm>();
+                childCareFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 ChildCareFormService.Add(childCareFormEntity);
                 return childCareFormEntity;
             }
@@ -63,6 +62,7 @@ namespace FriendlyForms.RestService
             public object Put(ChildCareFormDto request)
             {
                 var childCareFormEntity = request.TranslateTo<ChildCareForm>();
+                childCareFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 ChildCareFormService.Update(childCareFormEntity);
                 return childCareFormEntity;
             }
@@ -74,8 +74,8 @@ namespace FriendlyForms.RestService
 
             public void Delete(ChildCareFormDto request)
             {
-                var childCareFormEntity = request.TranslateTo<ChildCareForm>();
-                ChildCareFormService.Delete(childCareFormEntity);
+                var ChildCareFormEntity = request.TranslateTo<ChildCareForm>();
+                ChildCareFormService.Delete(ChildCareFormEntity);
             }
         }
 

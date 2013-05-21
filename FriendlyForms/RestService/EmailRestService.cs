@@ -9,7 +9,7 @@ namespace FriendlyForms.RestService
         [Route("/Emails", "POST")]
         public class EmailDto : IReturn<EmailDto>
         {
-            public int UserId { get; set; }
+            public long UserId { get; set; }
             public string Email { get; set; }
             public string Message { get; set; }
             public string LawFirm { get; set; }

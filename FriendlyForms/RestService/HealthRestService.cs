@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
@@ -24,14 +25,14 @@ namespace FriendlyForms.RestService
         }
 
         [Route("/Healths", "POST")]
-        [Route("/Healths/{Id}", "PUT")]
+        [Route("/Healths", "PUT")]
         [Route("/Healths/{Id}", "GET")]
         public class HealthDto : IReturn<HealthDto>
         {
             [DataMember]
             public long Id { get; set; }
             [DataMember]
-            public int UserId { get; set; }
+            public long UserId { get; set; }
             [DataMember]
             public bool IsOtherParent { get; set; }
             [DataMember]
@@ -57,8 +58,8 @@ namespace FriendlyForms.RestService
             [DataMember]
             public int? NonCustodialHealthPercentage { get; set; }
         }
-
-        public class HealthsService : Service
+        [Authenticate]
+        public class HealthsService : ServiceBase
         {
             public IHealthService HealthService { get; set; } //Injected by IOC
 
@@ -68,16 +69,13 @@ namespace FriendlyForms.RestService
                 {
                     return HealthService.Get(request.Id);
                 }
-                if (request.UserId != 0)
-                {
-                    return HealthService.GetByUserId(request.UserId);
-                }
-                return new Health();
+                return HealthService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
             }
 
             public object Post(HealthDto request)
             {
                 var healthEntity = request.TranslateTo<Health>();
+                healthEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 HealthService.Add(healthEntity);
                 return new HealthDto
                     {
@@ -88,6 +86,7 @@ namespace FriendlyForms.RestService
             public void Put(HealthDto request)
             {
                 var healthEntity = request.TranslateTo<Health>();
+                healthEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 HealthService.Update(healthEntity);                
             }
 

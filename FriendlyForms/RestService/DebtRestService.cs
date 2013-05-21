@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -9,13 +10,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Debts/")]
+    [Route("/Debt/")]
     public class ReqDebt
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int MaritalDebt { get; set; }
         [DataMember]
@@ -30,8 +31,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class DebtRestService : Service
+    [Authenticate]
+    public class DebtRestService : ServiceBase
     {
         public IDebtService DebtService { get; set; }
         public object Get(ReqDebt request)
@@ -44,11 +45,12 @@ namespace FriendlyForms.RestService
             {
                 return DebtService.GetByUserId(request.UserId);
             }
-            return new Debt();
+            return DebtService.GetByUserId(Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqDebt request)
         {
             var debt = request.TranslateTo<Debt>();
+            debt.UserId = Convert.ToInt32(UserSession.CustomId);
             DebtService.Add(debt);
             return new RespDebt()
                 {
@@ -58,6 +60,8 @@ namespace FriendlyForms.RestService
         public object Put(ReqDebt request)
         {
             var debt = request.TranslateTo<Debt>();
+            debt.UserId = Convert.ToInt32(UserSession.CustomId);
+
             DebtService.Update(debt);
             return new RespDebt();
         }

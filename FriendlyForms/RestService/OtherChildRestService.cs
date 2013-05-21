@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -16,7 +17,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]
@@ -33,8 +34,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class OtherChildRestService : Service
+    [Authenticate]
+    public class OtherChildRestService : ServiceBase
     {
         public IOtherChildService OtherChildService { get; set; }
         public object Get(ReqOtherChild request)
@@ -43,26 +44,26 @@ namespace FriendlyForms.RestService
             {
                 return OtherChildService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return OtherChildService.GetByUserId(request.UserId);
-            }
-            return new OtherChild();
+            return OtherChildService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqOtherChild request)
         {
-            var otherChild = request.TranslateTo<OtherChild>();
-            OtherChildService.Add(otherChild);
-            request.Id = otherChild.Id;
+            var otherChildViewModel = request.TranslateTo<OtherChildViewModel>();
+            otherChildViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
+            var otherChildEntity = OtherChildService.AddOrUpdate(otherChildViewModel);
+            var otherChild = otherChildEntity.TranslateTo<ReqOtherChild>();
+            if (otherChildEntity.DateOfBirth != null)
+                otherChild.DateOfBirth = otherChildEntity.DateOfBirth.Value.ToShortDateString();
             return new RespOtherChild()
                 {
-                    OtherChild = request
+                    OtherChild = otherChild
                 };
         }
 
         public object Put(ReqOtherChild request)
         {
             var otherChild = request.TranslateTo<OtherChild>();
+            otherChild.UserId = Convert.ToInt32(UserSession.CustomId);
             OtherChildService.Update(otherChild);
             return new RespOtherChild();
         }

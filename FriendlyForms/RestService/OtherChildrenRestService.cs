@@ -1,23 +1,23 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
-using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/OtherChildren/")]
-    public class ReqOtherChildren
+    public class ReqOtherChildren : IReturn<ReqOtherChildren>
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int? LegallyResponsible { get; set; }
         [DataMember]
@@ -32,17 +32,8 @@ namespace FriendlyForms.RestService
         public string Details { get; set; }
 
     }
-
-    [DataContract]
-    public class RespOtherChildren : IHasResponseStatus
-    {
-        [DataMember]
-        public OtherChildren OtherChildren { get; set; }
-        [DataMember]
-        public ResponseStatus ResponseStatus { get; set; }
-    }
-
-    public class OtherChildrenRestService : Service
+    [Authenticate]
+    public class OtherChildrenRestService : ServiceBase
     {
         public IOtherChildrenService OtherChildrenService { get; set; }
         public object Get(ReqOtherChildren request)
@@ -51,23 +42,20 @@ namespace FriendlyForms.RestService
             {
                 return OtherChildrenService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return OtherChildrenService.GetByUserId(request.UserId);
-            }
-            return new OtherChildren();
+            return OtherChildrenService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqOtherChildren request)
         {
-            var otherChildrenViewModel = request.TranslateTo<OtherChildren>();
-            OtherChildrenService.Add(otherChildrenViewModel);
-            return new RespOtherChildren();
+            var otherChildren = request.TranslateTo<OtherChildren>();
+            otherChildren.UserId = Convert.ToInt32(UserSession.CustomId);
+            OtherChildrenService.Add(otherChildren);
+            return otherChildren;
         }
-        public object Put(ReqOtherChildren request)
+        public void Put(ReqOtherChildren request)
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
-            OtherChildrenService.Update(otherChildren);
-            return new RespOtherChildren();
+            otherChildren.UserId = Convert.ToInt32(UserSession.CustomId);
+            OtherChildrenService.Update(otherChildren);            
         }
     }
 }

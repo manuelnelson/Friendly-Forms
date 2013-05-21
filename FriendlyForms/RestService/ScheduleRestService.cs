@@ -1,6 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
+using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -9,13 +11,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Schedules/")]
+    [Route("/Schedule/")]
     public class ReqSchedule
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int DetermineBeginDate { get; set; }
         [DataMember]
@@ -74,8 +76,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ScheduleRestService : Service
+    [Authenticate]
+    public class ScheduleRestService : ServiceBase
     {
         public IScheduleService ScheduleService { get; set; }
         public object Get(ReqSchedule request)
@@ -84,21 +86,19 @@ namespace FriendlyForms.RestService
             {
                 return ScheduleService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return ScheduleService.GetByUserId(request.UserId);
-            }
-            return new Schedule();
+            return ScheduleService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqSchedule request)
         {
-            var schedule = request.TranslateTo<Schedule>();
-            ScheduleService.Add(schedule);
+            var scheduleViewModel = request.TranslateTo<ScheduleViewModel>();
+            scheduleViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
+            ScheduleService.AddOrUpdate(scheduleViewModel);
             return new RespSchedule();
         }
         public object Put(ReqSchedule request)
         {
             var schedule = request.TranslateTo<Schedule>();
+            schedule.UserId = Convert.ToInt32(UserSession.CustomId);
             ScheduleService.Update(schedule);
             return new RespSchedule();
         }

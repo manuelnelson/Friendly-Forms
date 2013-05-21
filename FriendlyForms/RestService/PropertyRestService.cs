@@ -1,5 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -9,13 +11,13 @@ using Property = Models.Property;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Properties/")]
+    [Route("/Property/")]
     public class ReqProperty
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int RealEstate { get; set; }
         [DataMember]
@@ -34,8 +36,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class PropertyRestService : Service
+    [Authenticate]
+    public class PropertyRestService : ServiceBase
     {
         public IPropertyService PropertyService { get; set; }
         public object Get(ReqProperty request)
@@ -44,15 +46,12 @@ namespace FriendlyForms.RestService
             {
                 return PropertyService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return PropertyService.GetByUserId(request.UserId);
-            }
-            return new Property();
+            return PropertyService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqProperty request)
         {
             var property = request.TranslateTo<Property>();
+            property.UserId = Convert.ToInt32(UserSession.CustomId);
             PropertyService.Add(property);
             return new RespProperty()
                 {
@@ -62,6 +61,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqProperty request)
         {
             var property = request.TranslateTo<Property>();
+            property.UserId = Convert.ToInt32(UserSession.CustomId);
             PropertyService.Update(property);
             return new RespProperty();
         }

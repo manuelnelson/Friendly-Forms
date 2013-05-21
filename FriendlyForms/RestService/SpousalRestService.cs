@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -9,13 +10,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Spousals/")]
+    [Route("/Spousal/")]
     public class ReqSpousal
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int Spousal { get; set; }
         [DataMember]
@@ -30,8 +31,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class SpousalRestService : Service
+    [Authenticate]
+    public class SpousalRestService : ServiceBase
     {
         public ISpousalService SpousalService { get; set; }
         public object Get(ReqSpousal request)
@@ -40,15 +41,12 @@ namespace FriendlyForms.RestService
             {
                 return SpousalService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return SpousalService.GetByUserId(request.UserId);
-            }
-            return new SpousalSupport();
+            return SpousalService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqSpousal request)
         {
             var spousalSupport = request.TranslateTo<SpousalSupport>();
+            spousalSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             SpousalService.Add(spousalSupport);
             return new RespSpousal()
                 {
@@ -58,6 +56,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqSpousal request)
         {
             var spousalSupport = request.TranslateTo<SpousalSupport>();
+            spousalSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             SpousalService.Update(spousalSupport);
             return new RespSpousal();
         }

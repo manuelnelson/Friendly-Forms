@@ -1,6 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
+using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -9,13 +11,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Privacies/")]
+    [Route("/Privacy/")]
     public class ReqPrivacy
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int NeedPrivacy { get; set; }
         [DataMember]
@@ -28,6 +30,7 @@ namespace FriendlyForms.RestService
         public string SupervisionWho { get; set; }
         [DataMember]
         public int? SupervisionCost { get; set; }
+
     }
 
     [DataContract]
@@ -38,8 +41,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class PrivacyRestService : Service
+    [Authenticate]
+    public class PrivacyRestService : ServiceBase
     {
         public IPrivacyService PrivacyService { get; set; }
         public object Get(ReqPrivacy request)
@@ -48,15 +51,12 @@ namespace FriendlyForms.RestService
             {
                 return PrivacyService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return PrivacyService.GetByUserId(request.UserId);
-            }
-            return new Privacy();
+            return PrivacyService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqPrivacy request)
         {
             var privacy = request.TranslateTo<Privacy>();
+            privacy.UserId = Convert.ToInt32(UserSession.CustomId);
             PrivacyService.Add(privacy);
             return new RespPrivacy()
                 {
@@ -66,6 +66,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqPrivacy request)
         {
             var privacy = request.TranslateTo<Privacy>();
+            privacy.UserId = Convert.ToInt32(UserSession.CustomId);
             PrivacyService.Update(privacy);
             return new RespPrivacy();
         }

@@ -1,7 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -16,7 +16,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]
@@ -33,8 +33,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class SocialSecurityRestService : Service
+    [Authenticate]
+    public class SocialSecurityRestService : ServiceBase
     {
         public ISocialSecurityService SocialSecurityService { get; set; }
         public object Get(ReqSocialSecurity request)
@@ -43,15 +43,12 @@ namespace FriendlyForms.RestService
             {
                 return SocialSecurityService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return SocialSecurityService.GetByUserId(request.UserId);
-            }
-            return new SocialSecurity();
+            return SocialSecurityService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqSocialSecurity request)
         {
             var socialSecurity = request.TranslateTo<SocialSecurity>();
+            socialSecurity.UserId = Convert.ToInt32(UserSession.CustomId);
             SocialSecurityService.Add(socialSecurity);
             return new RespSocialSecurity
                 {
@@ -61,6 +58,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqSocialSecurity request)
         {
             var socialSecurity = request.TranslateTo<SocialSecurity>();
+            socialSecurity.UserId = Convert.ToInt32(UserSession.CustomId);
             SocialSecurityService.Update(socialSecurity);
             return new RespSocialSecurity();
         }

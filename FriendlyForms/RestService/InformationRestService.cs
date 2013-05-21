@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -15,7 +16,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int InformationAccess { get; set; }
     }
@@ -28,8 +29,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class InformationRestService : Service
+    [Authenticate]
+    public class InformationRestService : ServiceBase
     {
         public IInformationService InformationService { get; set; }
         public object Get(ReqInformation request)
@@ -38,15 +39,12 @@ namespace FriendlyForms.RestService
             {
                 return InformationService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return InformationService.GetByUserId(request.UserId);
-            }
-            return new Information();
+            return InformationService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqInformation request)
         {
             var information = request.TranslateTo<Information>();
+            information.UserId = Convert.ToInt32(UserSession.CustomId);
             InformationService.Add(information);
             return new RespInformation()
                 {
@@ -56,6 +54,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqInformation request)
         {
             var information = request.TranslateTo<Information>();
+            information.UserId = Convert.ToInt32(UserSession.CustomId);
             InformationService.Update(information);
             return new RespInformation();
         }

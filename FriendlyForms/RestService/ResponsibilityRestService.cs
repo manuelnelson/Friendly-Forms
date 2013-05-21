@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -9,13 +10,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Responsibilities/")]
+    [Route("/Responsibility/")]
     public class ReqResponsibility
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int BeginningVisitation { get; set; }
         [DataMember]
@@ -38,8 +39,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ResponsibilityRestService : Service
+    [Authenticate]
+    public class ResponsibilityRestService : ServiceBase
     {
         public IResponsibilityService ResponsibilityService { get; set; }
         public object Get(ReqResponsibility request)
@@ -48,15 +49,12 @@ namespace FriendlyForms.RestService
             {
                 return ResponsibilityService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return ResponsibilityService.GetByUserId(request.UserId);
-            }
-            return new Responsibility();
+            return ResponsibilityService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqResponsibility request)
         {
             var responsibility = request.TranslateTo<Responsibility>();
+            responsibility.UserId = Convert.ToInt32(UserSession.CustomId);
             ResponsibilityService.Add(responsibility);
             return new RespResponsibility
                 {
@@ -66,6 +64,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqResponsibility request)
         {
             var responsibility = request.TranslateTo<Responsibility>();
+            responsibility.UserId = Convert.ToInt32(UserSession.CustomId);
             ResponsibilityService.Update(responsibility);
             return new RespResponsibility();
         }

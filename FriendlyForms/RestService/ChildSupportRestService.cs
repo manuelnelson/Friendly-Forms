@@ -1,6 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
+using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -15,7 +17,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public string PaidBy { get; set; }
         [DataMember]
@@ -40,8 +42,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class ChildSupportRestService : Service
+    [Authenticate]
+    public class ChildSupportRestService : ServiceBase
     {
         public IChildSupportService ChildSupportService { get; set; }
         public object Get(ReqChildSupport request)
@@ -50,21 +52,19 @@ namespace FriendlyForms.RestService
             {
                 return ChildSupportService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return ChildSupportService.GetByUserId(request.UserId);
-            }
-            return new ChildSupport();
+            return ChildSupportService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqChildSupport request)
         {
-            var childSupport = request.TranslateTo<ChildSupport>();
-            ChildSupportService.Add(childSupport);
+            var childSupportViewModel = request.TranslateTo<ChildSupportViewModel>();
+            childSupportViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
+            ChildSupportService.AddOrUpdate(childSupportViewModel);
             return new RespChildSupport();
         }
         public object Put(ReqChildSupport request)
         {
             var childSupport = request.TranslateTo<ChildSupport>();
+            childSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             ChildSupportService.Update(childSupport);
             return new RespChildSupport();
         }

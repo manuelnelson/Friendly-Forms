@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -15,7 +16,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int CountyId { get; set; }
         [DataMember]
@@ -36,25 +37,26 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class CourtRestService : Service
+    [Authenticate]
+    public class CourtRestService : ServiceBase
     {
         public ICourtService CourtService { get; set; }
         public object Get(ReqCourt request)
         {
             if (request.Id != 0)
             {
-                return CourtService.Get(request.Id);    
+                return CourtService.Get(request.Id);
             }
             if (request.UserId != 0)
             {
-                return CourtService.GetByUserId(request.UserId);                    
+                return CourtService.GetByUserId(request.UserId);
             }
-            return new Court();
+            return CourtService.GetByUserId(Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
+            court.UserId = Convert.ToInt32(UserSession.CustomId);
             CourtService.Add(court);
             return new RespCourt()
                 {
@@ -64,6 +66,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
+            court.UserId = Convert.ToInt32(UserSession.CustomId);
             CourtService.Update(court);
             return new RespCourt();
         }

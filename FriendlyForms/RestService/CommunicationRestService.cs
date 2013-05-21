@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -9,13 +10,13 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Communications/")]
+    [Route("/Communication/")]
     public class ReqCommunication
     {
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public int AllowCommunication { get; set; }
         [DataMember]
@@ -46,8 +47,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class CommunicationRestService : Service
+    [Authenticate]
+    public class CommunicationRestService : ServiceBase
     {
         public ICommunicationService CommunicationService{ get; set; }
         public object Get(ReqCommunication request)
@@ -56,15 +57,12 @@ namespace FriendlyForms.RestService
             {
                 return CommunicationService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return CommunicationService.GetByUserId(request.UserId);
-            }
-            return new Communication();
+            return CommunicationService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqCommunication request)
         {
             var communication = request.TranslateTo<Communication>();
+            communication.UserId = Convert.ToInt32(UserSession.CustomId);
             CommunicationService.Add(communication);
             return new RespCommunication()
                 {
@@ -74,6 +72,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqCommunication request)
         {
             var communication = request.TranslateTo<Communication>();
+            communication.UserId = Convert.ToInt32(UserSession.CustomId);
             CommunicationService.Update(communication);
             return new RespCommunication();
         }

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using Models.ViewModels;
@@ -18,7 +19,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int VehiclesInvolved { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
     }
 
     [DataContract]
@@ -29,8 +30,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class VehicleFormRestService : Service
+    [Authenticate]
+    public class VehicleFormRestService : ServiceBase
     {
         public IVehicleFormService VehicleFormService { get; set; }
         public object Get(ReqVehicleForm request)
@@ -39,24 +40,22 @@ namespace FriendlyForms.RestService
             {
                 return VehicleFormService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return VehicleFormService.GetByUserId(request.UserId);
-            }
-            return new VehicleForm();
+            return VehicleFormService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqVehicleForm request)
         {
-            var vehicleForm = request.TranslateTo<VehicleForm>();
-            VehicleFormService.Add(vehicleForm);
+            var vehicleFormViewModel = request.TranslateTo<VehicleFormViewModel>();
+            vehicleFormViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
+            var updatedModel = VehicleFormService.AddOrUpdate(vehicleFormViewModel);
             return new RespVehicleForm()
                 {
-                    VehicleForm = vehicleForm
+                    VehicleForm = updatedModel
                 };
         }
         public object Put(ReqVehicleForm request)
         {
             var vehicleForm = request.TranslateTo<VehicleForm>();
+            vehicleForm.UserId = Convert.ToInt32(UserSession.CustomId);
             VehicleFormService.Update(vehicleForm);
             return new RespVehicleForm();
         }    

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -15,13 +16,13 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long Id { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         [DataMember]
         public bool IsOtherParent { get; set; }
         [DataMember]
         public int HaveSalary { get; set; }
         [DataMember]
-        public int? OtherIncome { get; set; }
+        public string OtherIncome { get; set; }
         [DataMember]
         public int? W2Income { get; set; }
         [DataMember]
@@ -82,8 +83,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
-    public class IncomeRestService : Service
+    [Authenticate]
+    public class IncomeRestService : ServiceBase
     {
         public IIncomeService IncomeService { get; set; }
         public object Get(ReqIncome request)
@@ -92,15 +93,12 @@ namespace FriendlyForms.RestService
             {
                 return IncomeService.Get(request.Id);
             }
-            if (request.UserId != 0)
-            {
-                return IncomeService.GetByUserId(request.UserId);
-            }
-            return new Income();
+            return IncomeService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
         }
         public object Post(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
+            income.UserId = Convert.ToInt32(UserSession.CustomId);
             IncomeService.Add(income);
             return new RespIncome()
                 {
@@ -110,6 +108,7 @@ namespace FriendlyForms.RestService
         public object Put(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
+            income.UserId = Convert.ToInt32(UserSession.CustomId);
             IncomeService.Update(income);
             return new RespIncome();
         }
