@@ -5,13 +5,14 @@ using System.Net;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
+using Models.Contract;
 using ServiceStack.Common.Web;
 
 namespace BusinessLogic
 {
     public class Service<TRepository, TEntity> : IService<TRepository, TEntity>
         where TRepository : IRepository<TEntity>
-        where TEntity : class
+        where TEntity : IEntity
     {
         public TRepository Repository { get; set; }
 
@@ -57,6 +58,19 @@ namespace BusinessLogic
                 ErrorSignal.FromCurrentContext().Raise(ex);
                 throw new HttpError(HttpStatusCode.InternalServerError, "Unable to retrieve item");
             }
+        }
+
+        public IEnumerable<TEntity> Get(IEnumerable<long> ids)
+        {
+            try
+            {
+                return Repository.Get(ids);
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new HttpError(HttpStatusCode.InternalServerError, "Unable to retrieve items");
+            }            
         }
 
         public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> whereExpression)

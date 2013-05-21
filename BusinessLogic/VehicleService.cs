@@ -38,7 +38,7 @@ namespace BusinessLogic
             }
         }
 
-        public new IEnumerable<Vehicle> GetByUserId(int userId)
+        public new IEnumerable<Vehicle> GetByUserId(long userId)
         {
             try
             {

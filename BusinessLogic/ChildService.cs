@@ -37,7 +37,7 @@ namespace BusinessLogic
             }
         }
 
-        public new ChildViewModel GetByUserId(int userId)
+        public new ChildViewModel GetByUserId(long userId)
         {
             try
             {

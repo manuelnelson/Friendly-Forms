@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using DataInterface;
+using Models.Contract;
 
 namespace BusinessLogic.Contracts
 {
     public interface IService<TRepository, TEntity> : IDisposable
         where TRepository : IRepository<TEntity>
-        where TEntity : class
+        where TEntity : IEntity
     {
         /// <summary>
         /// Add the entity to the database.
@@ -28,6 +29,13 @@ namespace BusinessLogic.Contracts
         /// <returns></returns>
         TEntity Get(long id);
 
+        /// <summary>
+        /// Gets the entity from the database
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> Get(IEnumerable<long> ids);
+        
         /// <summary>
         /// Gets the entity from the database
         /// </summary>        

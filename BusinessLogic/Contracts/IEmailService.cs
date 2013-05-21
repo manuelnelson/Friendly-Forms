@@ -2,7 +2,7 @@
 {
     public interface IEmailService
     {
-        void SendVerificationEmail(string email, string hashedEmail);
+        void SendVerificationEmail(string email);
         void SendEmail(string email, string subject, string body);
     }
 }
