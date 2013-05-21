@@ -132,10 +132,10 @@ namespace FriendlyForms.App_Start
             container.Register<IHealthRepository>(c => new HealthRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IChildCareRepository>(c => new ChildCareRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IChildCareFormRepository>(c => new ChildCareFormRepository(c.Resolve<IUnitOfWork>()));
-            //container.Register<IPreexistingSupportFormRepository>(c => new PreexistingSupportFormRepository(c.Resolve<IUnitOfWork>()));
-            //container.Register<IDeviationsFormRepository>(c => new DeviationsFormRepository(c.Resolve<IUnitOfWork>()));
-            //container.Register<IExtraExpenseFormRepository>(c => new ExtraExpenseFormRepository(c.Resolve<IUnitOfWork>()));
-            //container.Register<IExtraExpenseRepository>(c => new ExtraExpenseRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IPreexistingSupportFormRepository>(c => new PreexistingSupportFormRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IDeviationsFormRepository>(c => new DeviationsFormRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IExtraExpenseFormRepository>(c => new ExtraExpenseFormRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IExtraExpenseRepository>(c => new ExtraExpenseRepository(c.Resolve<IUnitOfWork>()));
         }
 
         private void SetupServices(Container container)
@@ -178,10 +178,10 @@ namespace FriendlyForms.App_Start
             container.Register<IHealthService>(c => new HealthService(c.Resolve<IHealthRepository>() as HealthRepository));
             container.Register<IChildCareService>(c => new ChildCareService(c.Resolve<IChildCareRepository>() as ChildCareRepository));
             container.Register<IChildCareFormService>(c => new ChildCareFormService(c.Resolve<IChildCareFormRepository>() as ChildCareFormRepository));
-            //container.Register<IPreexistingSupportFormService>(c => new PreexistingSupportFormService(c.Resolve<IPreexistingSupportFormRepository>() as PreexistingSupportFormRepository));
-            //container.Register<IDeviationsFormService>(c => new DeviationsFormService(c.Resolve<IDeviationsFormRepository>() as DeviationsFormRepository));
-            //container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>() as ExtraExpenseFormRepository));
-            //container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>() as ExtraExpenseRepository));
+            container.Register<IPreexistingSupportFormService>(c => new PreexistingSupportFormService(c.Resolve<IPreexistingSupportFormRepository>() as PreexistingSupportFormRepository));
+            container.Register<IDeviationsFormService>(c => new DeviationsFormService(c.Resolve<IDeviationsFormRepository>() as DeviationsFormRepository));
+            container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>() as ExtraExpenseFormRepository));
+            container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>() as ExtraExpenseRepository));
         }
 
         /* Uncomment to enable ServiceStack Authentication and CustomUserSession*/

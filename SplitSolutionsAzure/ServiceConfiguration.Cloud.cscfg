@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="SplitSolutionsAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
-  <Role name="FriendlyForms">   
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="SplitSolutionsAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2013-03.2.0">
+  <Role name="FriendlyForms">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=splitsolutions;AccountKey=deMxVNH2hjwIJsEgZs2R2fbv3uvbbKFy0R/pxDcrmgh58yUutrGAE5HTCgs/mcC1fWnUjIg3Zp9rinyNLczyBQ==" />
@@ -9,6 +9,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEFlADwB8+LWVRgaP9+cbi0MwDQYJKoZIhvcNAQEBBQAEggEAs9wAgbVr/ew/eD489RtigDGGCxKkvyzLWKNKOqBvpdmUaZwim4jvD8Kg3/zo77Vjna3eUDoJRqqyOh8MuFQGCyPWMGURI6Mn5jWc9S0TOjcY5Xvk8h0dUFMTS+9rluMS5mK3jXXYGLYMZwNSH3S7t/BAJdVvceP38s7HAX55XXXWXJ7HLaSvrXtT/Ax5TGYR9qzpmj/a/ebXuhDXb3WZveYH3av690LaJfM3FavbLIdp/zqoI6HWUgAYwklwIw9fFLpWnbx/2PaqChSIht95cQJZ/SwFHcbTE6h8sARwN2SGFO0Gv94lAeGaUqu4SihY0uFrePmKv0cQIzyQA2BBjTAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECE+yz8JT5rX2gBDC8UgrfeD6MBI6hIUu35Q6" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2014-03-20T23:59:59.0000000-05:00" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Caching.ClientDiagnosticLevel" value="1" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="6372A60FC1ABCF6E0E48A28DDA49C65C312E0D3B" thumbprintAlgorithm="sha1" />
