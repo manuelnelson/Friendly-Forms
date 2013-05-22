@@ -213,8 +213,11 @@
     <Compile Include="RestService\CourtRestService.cs" />
     <Compile Include="RestService\DebtRestService.cs" />
     <Compile Include="RestService\DecisionsRestService.cs" />
+    <Compile Include="RestService\DeviationsFormRestService.cs" />
     <Compile Include="RestService\EmailRestService.cs" />
     <Compile Include="RestService\ExtraDecisionRestService.cs" />
+    <Compile Include="RestService\ExtraExpenseFormRestService.cs" />
+    <Compile Include="RestService\ExtraExpenseRestService.cs" />
     <Compile Include="RestService\ExtraHolidayRestService.cs" />
     <Compile Include="RestService\HealthInsuranceRestService.cs" />
     <Compile Include="RestService\HealthRestService.cs" />
@@ -225,8 +228,10 @@
     <Compile Include="RestService\OtherChildrenRestService.cs" />
     <Compile Include="RestService\OtherChildRestService.cs" />
     <Compile Include="RestService\AddendumRestService.cs" />
+    <Compile Include="RestService\OutputRestService.cs" />
     <Compile Include="RestService\ParticipantRestService.cs" />
     <Compile Include="RestService\PreexistingSupportChildRestService.cs" />
+    <Compile Include="RestService\PreexistingSupportFormRestService.cs" />
     <Compile Include="RestService\PreexistingSupportRestService.cs" />
     <Compile Include="RestService\PrivacyRestService.cs" />
     <Compile Include="RestService\PropertyRestService.cs" />
