@@ -248,6 +248,9 @@
     <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\Account\login-controller.js" />
+    <Content Include="app\Account\login-service.js" />
+    <Content Include="app\Account\Login.html" />
     <Content Include="app\Domestic\Asset\asset-controller.js" />
     <Content Include="app\Domestic\Asset\asset-service.js" />
     <Content Include="app\Domestic\Asset\asset.html" />
@@ -290,6 +293,8 @@
     <Content Include="app\generic-service.js" />
     <Content Include="app\Home\home-controller.js" />
     <Content Include="app\Home\home.html" />
+    <Content Include="app\loginMenu-controller.js" />
+    <Content Include="app\loginMenu-service.js" />
     <Content Include="app\main.js" />
     <Content Include="app\menu-controller.js" />
     <Content Include="app\menu-service.js" />

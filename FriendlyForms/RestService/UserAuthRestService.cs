@@ -11,7 +11,10 @@ namespace FriendlyForms.RestService
     {
         public int[] Ids { get; set; }
     }
-
+    public class UserAuthRequest
+    {
+        public int Id { get; set; }
+    }
     public class UserAuthsResponse
     {
         public UserAuthsResponse()
@@ -29,6 +32,14 @@ namespace FriendlyForms.RestService
     //Implementation. Can be called via any endpoint or format, see: http://servicestack.net/ServiceStack.Hello/
     public class UserAuthsService : ServiceBase
     {
+        public object Get(UserAuths request)
+        {
+            return new UserAuthsResponse
+                {
+                    UserSession = UserSession
+                };
+        }
+        
         public object Any(UserAuths request)
         {
             var response = new UserAuthsResponse

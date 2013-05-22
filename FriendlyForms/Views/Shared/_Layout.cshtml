@@ -17,18 +17,22 @@
     <div id="header">
         <h1><a href="/">Split Solutions</a></h1>
     </div>
-    <div id="user-nav" class="navbar">
-        @Html.Partial("_LogOnPartial")
+    <div id="user-nav" class="navbar" ng-controller="LoginMenuCtrl">
+        <ul class="nav btn-group">
+                <li class="btn btn-mini btn-inverse" ng-show="user.UserSession.IsAuthenticated" style="display:none"><a title="" href="/"><i class="icon icon-home"></i><span class="text">Home</span></a></li>
+                <li class="btn btn-mini btn-inverse" ng-show="user.UserSession.IsAuthenticated" style="display:none"><a title="Log off" id="logOff" href="#logOff"><i class="icon icon-share-alt"></i><span class="text">Logout</span></a></li>
+                <li class="btn btn-mini btn-inverse" ng-show="!user.UserSession.IsAuthenticated" style="display:none"><a title="" href="#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a></li>
+        </ul>
     </div>
     @RenderBody()
     <div id="sidebar" ng-controller="MenuCtrl">
         <ul class="ng-cloak">
-            <li ng-repeat="menuItem in menuItems" ng-click="menuClick()"  class="{{menuItem.itemClass}}"><a  href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>
+            <li ng-repeat="menuItem in menuItems" ng-click="menuClick()" class="{{menuItem.itemClass}}"><a href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>
                 <ul ng-show="menuItem.showSubMenu">
                     <li ng-repeat="subMenuItem in menuItem.subMenuItems" class="{{subMenuItem.itemClass}}" ng-click="subMenuClick(menuItem.text, subMenuItem.text)" data-path="{{subMenuItem.path}}"><a href="javascript:"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
                 </ul>
             </li>
-        </ul>    
+        </ul>
     </div>
     <div id="content">
         <div id="content-header">
@@ -36,7 +40,7 @@
         </div>
         <div class="container-fluid" id="main-content">
             <div ng-view></div>
-            <hr/>
+            <hr />
             <footer>
                 <p>
                     ©Split Solutions 2013
