@@ -1,7 +1,7 @@
 ﻿var MenuCtrl = function ($scope, $routeParams, $location, menuService) {
     $scope.$watch(function () { return menuService.menuItems; }, function () {
         $scope.menuItems = menuService.menuItems;
-    });
+    }, true);
     $scope.menuClick = function () {
         if ($scope.isSubMenuClick) {
             $scope.isSubMenuClick = false;

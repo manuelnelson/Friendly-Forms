@@ -3,10 +3,10 @@
         menuItems: [],
         isSetup: false,
         setItems: function (menuItems) {
-            service.menuItems = menuItems;
+            service.menuItems = menuItems;            
         },
         setupMenu: function() {
-            var userId = $('#user-id').val();
+            var userId = service.userId;
             var menuItems = [{
                 itemClass: 'active',
                 path: '#/',
@@ -114,7 +114,8 @@
                     break;
                 }
             }
-        }
+        },
+        userId: 0
     };
     return service;
 

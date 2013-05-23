@@ -32686,7 +32686,7 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
             service.menuItems = menuItems;
         },
         setupMenu: function() {
-            var userId = $('#user-id').val();
+            var userId = 0;//$('#user-id').val();
             var menuItems = [{
                 itemClass: 'active',
                 path: '#/',

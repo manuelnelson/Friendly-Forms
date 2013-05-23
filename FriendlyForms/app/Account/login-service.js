@@ -4,6 +4,7 @@
             {
                 post: { method: 'GET', params: { format: 'json' } },
             }),
+        authUser: null,
     };
     return service;
 });
