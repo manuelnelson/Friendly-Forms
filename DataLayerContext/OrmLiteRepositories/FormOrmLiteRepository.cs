@@ -15,8 +15,8 @@ namespace DataLayerContext.OrmLiteRepositories
         public TFormEntity GetByUserId(long userId)
         {
             using (var db = DbFactory.OpenDbConnection())
-            {                
-                return db.Single<TFormEntity>("UserId = {0}", userId);
+            {
+                return db.FirstOrDefault<TFormEntity>(x => x.UserId == userId); //< TFormEntity > (x => x.u);
             }              
         }        
     }

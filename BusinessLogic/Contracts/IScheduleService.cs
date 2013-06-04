@@ -1,11 +1,9 @@
-﻿using BusinessLogic.Models;
-using DataLayerContext.Repositories;
+﻿using DataInterface;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IScheduleService : IFormService<ScheduleRepository, Schedule>
+    public interface IScheduleService : IFormService<IScheduleRepository, Schedule>
     {
     }
 }

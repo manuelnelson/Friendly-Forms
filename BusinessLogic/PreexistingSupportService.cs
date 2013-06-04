@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BusinessLogic.Contracts;
+using DataInterface;
 using DataLayerContext.Repositories;
 using Elmah;
 using Models;
@@ -9,9 +10,10 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class PreexistingSupportService : FormService<PreexistingSupportRepository, PreexistingSupport, PreexistingSupportViewModel>, IPreexistingSupportService
+    public class PreexistingSupportService : FormService<IPreexistingSupportRepository, PreexistingSupport, PreexistingSupportViewModel>, IPreexistingSupportService
     {
-        public PreexistingSupportService(PreexistingSupportRepository formRepository) : base(formRepository)
+        public PreexistingSupportService(IPreexistingSupportRepository formRepository)
+            : base(formRepository)
         {
         }
 

@@ -29,7 +29,9 @@ angular-ui.js
 ../app/menu-service.js
 ../app/loginMenu-controller.js
 ../app/loginMenu-service.js
-../app/Account/login-controller.js
-../app/Account/login-service.js
+../app/Account/Login/login-controller.js
+../app/Account/Login/login-service.js
+../app/Account/Register/register-controller.js
+../app/Account/Register/register-service.js
 app/friendly-global.js 
 

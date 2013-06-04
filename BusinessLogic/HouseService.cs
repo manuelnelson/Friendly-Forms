@@ -1,13 +1,13 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class HouseService : FormService<HouseRepository, House, HouseViewModel>, IHouseService
+    public class HouseService : FormService<IHouseRepository, House, HouseViewModel>, IHouseService
     {
-        public HouseService(HouseRepository formRepository) : base(formRepository)
+        public HouseService(IHouseRepository formRepository) : base(formRepository)
         {
         }
     }

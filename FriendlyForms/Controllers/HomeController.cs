@@ -15,9 +15,10 @@ namespace FriendlyForms.Controllers
         private readonly IHolidayService _holidayService;
         private readonly IDeviationsService _deviationsService;
         private readonly IChildFormService _childFormService;
+        private readonly IClientService _clientService;
         //
         // GET: /Forms/
-        public HomeController(IParticipantService participantService, IChildService childService, IChildSupportService childSupportService, IHolidayService holidayService, IDeviationsService deviationsService, IChildFormService childFormService )
+        public HomeController(IParticipantService participantService, IChildService childService, IChildSupportService childSupportService, IHolidayService holidayService, IDeviationsService deviationsService, IChildFormService childFormService,IClientService clientService)
         {
             _participantService = participantService;
             _childService = childService;
@@ -25,17 +26,17 @@ namespace FriendlyForms.Controllers
             _holidayService = holidayService;
             _deviationsService = deviationsService;
             _childFormService = childFormService;
+            _clientService = clientService;
         }
         public ActionResult Index()
         {
-//            var child = _childFormService.Get(1);
             var user = UserSession;
             ViewBag.IsAuthenticated = user.IsAuthenticated;
             if (UserSession.IsAuthenticated)
             {
                 var userId = Convert.ToInt32(UserSession.CustomId);
-                var childForm = _childFormService.GetByUserId(userId);
                 var children = _childService.GetByUserId(userId);
+                var childForm = _childFormService.GetByUserId(userId);
                 var childSupport = _childSupportService.GetByUserId(userId);
                 var participants = _participantService.GetByUserId(userId);
                 var specialCircumstance = _deviationsService.GetByUserId(userId);

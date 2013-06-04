@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Linq;
 using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class IncomeService : FormService<IncomeRepository, Income, IncomeViewModel>, IIncomeService
+    public class IncomeService : FormService<IIncomeRepository, Income, IncomeViewModel>, IIncomeService
     {
-        public IncomeService(IncomeRepository formRepository) : base(formRepository)
+        public IncomeService(IIncomeRepository formRepository)
+            : base(formRepository)
         {
         }
 

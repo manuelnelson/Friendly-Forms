@@ -1,14 +1,18 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("Schedules")]
     public class Schedule : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
 
         public int DetermineBeginDate { get; set; }

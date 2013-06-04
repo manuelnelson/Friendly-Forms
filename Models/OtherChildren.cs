@@ -1,13 +1,17 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.DataAnnotations;
 
 namespace Models
 {
+    [Alias("OtherChildrens")]
     public class OtherChildren : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public virtual long Id { get; set; }
         public virtual bool IsOtherParent { get; set; }
         public virtual long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public virtual int LegallyResponsible { get; set; }
         public virtual int AtHome { get; set; }

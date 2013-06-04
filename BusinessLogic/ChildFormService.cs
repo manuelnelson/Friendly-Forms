@@ -1,13 +1,13 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ChildFormService : FormService<ChildFormRepository, ChildForm, ChildFormViewModel>, IChildFormService
+    public class ChildFormService : FormService<IChildFormRepository, ChildForm, ChildFormViewModel>, IChildFormService
     {
-        public ChildFormService(ChildFormRepository formRepository) : base(formRepository)
+        public ChildFormService(IChildFormRepository formRepository) : base(formRepository)
         {
         }
     }

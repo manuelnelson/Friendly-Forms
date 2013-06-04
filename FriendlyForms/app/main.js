@@ -14,7 +14,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui"], ["$routeProvider
         when('/Starter/Court/:userId', { controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
         when('/Starter/Participant/:userId', { controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
         when('/Starter/Children/:userId', { controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
-        when('/Account/Login/', { controller: LoginCtrl, templateUrl: '/app/Account/Login.html' }).
+        when('/Account/Login/', { controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
+        when('/Account/Register/', { controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
         when('/', { controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);

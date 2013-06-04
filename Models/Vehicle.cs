@@ -1,14 +1,18 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("Vehicles")]
     public class Vehicle : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }        
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class VehicleService : FormService<VehicleRepository, Vehicle, VehicleViewModel>, IVehicleService
+    public class VehicleService : FormService<IVehicleRepository, Vehicle, VehicleViewModel>, IVehicleService
     {
-        public VehicleService(VehicleRepository formRepository) : base(formRepository)
+        public VehicleService(IVehicleRepository formRepository)
+            : base(formRepository)
         {
         }
 

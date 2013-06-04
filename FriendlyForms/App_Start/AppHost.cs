@@ -4,6 +4,7 @@ using BusinessLogic;
 using BusinessLogic.Contracts;
 using DataInterface;
 using DataLayerContext;
+using DataLayerContext.OrmLiteRepositories;
 using DataLayerContext.Repositories;
 using FriendlyForms.Models;
 using Funq;
@@ -65,9 +66,9 @@ namespace FriendlyForms.App_Start
 			//container.Register(new TodoRepository());
             LogManager.LogFactory = new ElmahLogFactory(new NullLogFactory());
 
-            SetupRepositories(container);
-
-            SetupServices(container);
+            //SetupEFRepositories(container);
+            SetupOrmLiteServices(container);
+            SetupOrmLiteRepositories(container);
 
             //Register In-Memory Cache provider. 
             //For Distributed Cache Providers Use: PooledRedisClientManager, BasicRedisClientManager or see: https://github.com/ServiceStack/ServiceStack/wiki/Caching
@@ -84,7 +85,7 @@ namespace FriendlyForms.App_Start
 			//Set MVC to use the same Funq IOC as ServiceStack
 			ControllerBuilder.Current.SetControllerFactory(new FunqControllerFactory(container));
 		}
-        private void SetupRepositories(Container container)
+        private void SetupEFRepositories(Container container)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["SplitContext"].ConnectionString;
             container.Register<IDbConnectionFactory>(c =>
@@ -138,7 +139,59 @@ namespace FriendlyForms.App_Start
             container.Register<IExtraExpenseRepository>(c => new ExtraExpenseRepository(c.Resolve<IUnitOfWork>()));
         }
 
-        private void SetupServices(Container container)
+        private void SetupOrmLiteRepositories(Container container)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["SplitContext"].ConnectionString;
+            container.Register<IDbConnectionFactory>(c =>
+                new OrmLiteConnectionFactory(connectionString, SqlServerOrmLiteDialectProvider.Instance)
+                {
+                    ConnectionFilter = x => new ProfiledDbConnection(x, Profiler.Current)
+                });
+
+            container.Register<ICourtRepository>(c => new CourtOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IUserRepository>(c => new UserOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IParticipantRepository>(c => new ParticipantOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IChildRepository>(c => new ChildOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IPrivacyRepository>(c => new PrivacyOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IInformationRepository>(c => new InformationOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IDecisionRepository>(c => new DecisionOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IExtraDecisionRepository>(c => new ExtraDecisionOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IResponsibilityRepository>(c => new ResponsibilityOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<ICommunicationRepository>(c => new CommunicationOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IScheduleRepository>(c => new ScheduleOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<ICountyRepository>(c => new CountyOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IHouseRepository>(c => new HouseOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IRealEstateRepository>(c => new RealEstateOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IVehicleRepository>(c => new VehicleOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IDebtRepository>(c => new DebtOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IAssetRepository>(c => new AssetOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IHealthInsuranceRepository>(c => new HealthInsuranceOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<ISpousalRepository>(c => new SpousalOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<ITaxRepository>(c => new TaxOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IChildSupportRepository>(c => new ChildSupportOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IHolidayRepository>(c => new HolidayOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IExtraHolidayRepository>(c => new ExtraHolidayOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IIncomeRepository>(c => new IncomeOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<ISocialSecurityRepository>(c => new SocialSecurityOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IPreexistingSupportChildRepository>(c => new PreexistingSupportChildOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IPreexistingSupportRepository>(c => new PreexistingSupportOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IOtherChildrenRepository>(c => new OtherChildrenOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IDeviationsRepository>(c => new DeviationsOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IOtherChildRepository>(c => new OtherChildOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IVehicleFormRepository>(c => new VehicleFormOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IChildFormRepository>(c => new ChildFormOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IAddendumRepository>(c => new AddendumOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IClientRepository>(c => new ClientOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IHealthRepository>(c => new HealthOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IChildCareRepository>(c => new ChildCareOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IChildCareFormRepository>(c => new ChildCareFormOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IPreexistingSupportFormRepository>(c => new PreexistingSupportFormOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IDeviationsFormRepository>(c => new DeviationsFormOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IExtraExpenseFormRepository>(c => new ExtraExpenseFormOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IExtraExpenseRepository>(c => new ExtraExpenseOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+        }
+
+        private void SetupEFServices(Container container)
         {
             container.Register<ICourtService>(c => new CourtService(c.Resolve<ICourtRepository>() as CourtRepository));
             container.Register<IParticipantService>(c => new ParticipantService(c.Resolve<IParticipantRepository>() as ParticipantRepository));
@@ -183,9 +236,53 @@ namespace FriendlyForms.App_Start
             container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>() as ExtraExpenseFormRepository));
             container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>() as ExtraExpenseRepository));
         }
-
+        private void SetupOrmLiteServices(Container container)
+        {
+            container.Register<ICourtService>(c => new CourtService(c.Resolve<ICourtRepository>()));
+            container.Register<IParticipantService>(c => new ParticipantService(c.Resolve<IParticipantRepository>()));
+            container.Register<IChildService>(c => new ChildService(c.Resolve<IChildRepository>()));
+            container.Register<IPrivacyService>(c => new PrivacyService(c.Resolve<IPrivacyRepository>()));
+            container.Register<IInformationService>(c => new InformationService(c.Resolve<IInformationRepository>()));
+            container.Register<IDecisionsService>(c => new DecisionsService(c.Resolve<IDecisionRepository>()));
+            container.Register<IExtraDecisionsService>(c => new ExtraDecisionsService(c.Resolve<IExtraDecisionRepository>()));
+            container.Register<IEmailService>(c => new EmailService());
+            container.Register<IUserService>(c => new UserService(c.Resolve<IUserRepository>(), c.Resolve<IEmailService>()));
+            container.Register<IResponsibilityService>(c => new ResponsibilityService(c.Resolve<IResponsibilityRepository>()));
+            container.Register<ICommunicationService>(c => new CommunicationService(c.Resolve<ICommunicationRepository>()));
+            container.Register<IScheduleService>(c => new ScheduleService(c.Resolve<IScheduleRepository>()));
+            container.Register<ICountyService>(c => new CountyService(c.Resolve<ICountyRepository>()));
+            container.Register<IHouseService>(c => new HouseService(c.Resolve<IHouseRepository>()));
+            container.Register<IPropertyService>(c => new PropertyService(c.Resolve<IRealEstateRepository>()));
+            container.Register<IVehicleService>(c => new VehicleService(c.Resolve<IVehicleRepository>()));
+            container.Register<IDebtService>(c => new DebtService(c.Resolve<IDebtRepository>()));
+            container.Register<IAssetService>(c => new AssetService(c.Resolve<IAssetRepository>()));
+            container.Register<IHealthInsuranceService>(c => new HealthInsuranceService(c.Resolve<IHealthInsuranceRepository>()));
+            container.Register<ISpousalService>(c => new SpousalService(c.Resolve<ISpousalRepository>()));
+            container.Register<ITaxService>(c => new TaxService(c.Resolve<ITaxRepository>()));
+            container.Register<IChildSupportService>(c => new ChildSupportService(c.Resolve<IChildSupportRepository>()));
+            container.Register<IHolidayService>(c => new HolidayService(c.Resolve<IHolidayRepository>()));
+            container.Register<IExtraHolidayService>(c => new ExtraHolidayService(c.Resolve<IExtraHolidayRepository>()));
+            container.Register<IIncomeService>(c => new IncomeService(c.Resolve<IIncomeRepository>()));
+            container.Register<ISocialSecurityService>(c => new SocialSecurityService(c.Resolve<ISocialSecurityRepository>()));
+            container.Register<IPreexistingSupportChildService>(c => new PreexistingSupportChildService(c.Resolve<IPreexistingSupportChildRepository>()));
+            container.Register<IPreexistingSupportService>(c => new PreexistingSupportService(c.Resolve<IPreexistingSupportRepository>()));
+            container.Register<IOtherChildrenService>(c => new OtherChildrenService(c.Resolve<IOtherChildrenRepository>()));
+            container.Register<IDeviationsService>(c => new DeviationsService(c.Resolve<IDeviationsRepository>()));
+            container.Register<IOtherChildService>(c => new OtherChildService(c.Resolve<IOtherChildRepository>()));
+            container.Register<IVehicleFormService>(c => new VehicleFormService(c.Resolve<IVehicleFormRepository>()));
+            container.Register<IChildFormService>(c => new ChildFormService(c.Resolve<IChildFormRepository>()));
+            container.Register<IAddendumService>(c => new AddendumService(c.Resolve<IAddendumRepository>()));
+            container.Register<IClientService>(c => new ClientService(c.Resolve<IClientRepository>()));
+            container.Register<IHealthService>(c => new HealthService(c.Resolve<IHealthRepository>()));
+            container.Register<IChildCareService>(c => new ChildCareService(c.Resolve<IChildCareRepository>()));
+            container.Register<IChildCareFormService>(c => new ChildCareFormService(c.Resolve<IChildCareFormRepository>()));
+            container.Register<IPreexistingSupportFormService>(c => new PreexistingSupportFormService(c.Resolve<IPreexistingSupportFormRepository>()));
+            container.Register<IDeviationsFormService>(c => new DeviationsFormService(c.Resolve<IDeviationsFormRepository>()));
+            container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>()));
+            container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>()));
+        }
         /* Uncomment to enable ServiceStack Authentication and CustomUserSession*/
-		private void ConfigureAuth(Funq.Container container)
+		private void ConfigureAuth(Container container)
 		{
 			var appSettings = new AppSettings();
 
@@ -201,7 +298,6 @@ namespace FriendlyForms.App_Start
             //Requires ConnectionString configured in Web.Config
             var connectionString = ConfigurationManager.ConnectionStrings["SplitContext"].ConnectionString;
             container.Register<IDbConnectionFactory>(c => new OrmLiteConnectionFactory(connectionString, SqlServerOrmLiteDialectProvider.Instance));
-
             container.Register<IUserAuthRepository>(c => new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
 
             var authRepo = (OrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();

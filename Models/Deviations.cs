@@ -2,14 +2,17 @@
 using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
     public class Deviations : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public bool IsOtherParent { get; set; }
         public long ChildId { get; set; }
@@ -30,6 +33,7 @@ namespace Models
         public int? Mortgage { get; set; }
         public int? Permanency { get; set; }
         public int? NonSpecific { get; set; }
+        [Ignore]
         public Child Child { get; set; }
 
         public IViewModel ConvertToModel()

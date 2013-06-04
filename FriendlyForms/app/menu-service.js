@@ -53,7 +53,7 @@
                 return item.text === menuItemText;
             });
             var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
-                return subItem.text === subMenuItemText;
+                return subItem.formName === subMenuItemText;
             });
             subMenuItem.iconClass = iconClass;
         },

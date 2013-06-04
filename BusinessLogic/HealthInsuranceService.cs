@@ -1,13 +1,14 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class HealthInsuranceService : FormService<HealthInsuranceRepository, HealthInsurance, HealthInsuranceViewModel>, IHealthInsuranceService
+    public class HealthInsuranceService : FormService<IHealthInsuranceRepository, HealthInsurance, HealthInsuranceViewModel>, IHealthInsuranceService
     {
-        public HealthInsuranceService(HealthInsuranceRepository formRepository) : base(formRepository)
+        public HealthInsuranceService(IHealthInsuranceRepository formRepository)
+            : base(formRepository)
         {
         }
     }

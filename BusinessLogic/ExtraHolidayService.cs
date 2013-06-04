@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using BusinessLogic.Contracts;
-using DataLayerContext;
+using DataInterface;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ExtraHolidayService : FormService<ExtraHolidayRepository,ExtraHoliday,ExtraHolidayViewModel>, IExtraHolidayService
+    public class ExtraHolidayService : FormService<IExtraHolidayRepository,ExtraHoliday,ExtraHolidayViewModel>, IExtraHolidayService
     {
-        public ExtraHolidayService(ExtraHolidayRepository formRepository) : base(formRepository)
+        public ExtraHolidayService(IExtraHolidayRepository formRepository)
+            : base(formRepository)
         {
         }
 

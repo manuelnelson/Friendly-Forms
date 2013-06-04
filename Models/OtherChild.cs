@@ -1,19 +1,24 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("OtherChilds")]
     public class OtherChild : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public virtual long Id { get; set; }
         public virtual long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
 
         public virtual int OtherChildrenId { get; set; }
+        [Ignore]
         public virtual OtherChildren OtherChildren { get; set; }
         
         public IViewModel ConvertToModel()

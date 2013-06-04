@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BusinessLogic.Contracts;
+using DataInterface;
 using DataLayerContext.Repositories;
 using Elmah;
 using Models;
@@ -8,9 +9,10 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class PreexistingSupportChildService : FormService<PreexistingSupportChildRepository, PreexistingSupportChild, PreexistingSupportChildViewModel>, IPreexistingSupportChildService
+    public class PreexistingSupportChildService : FormService<IPreexistingSupportChildRepository, PreexistingSupportChild, PreexistingSupportChildViewModel>, IPreexistingSupportChildService
     {
-        public PreexistingSupportChildService(PreexistingSupportChildRepository formRepository) : base(formRepository)
+        public PreexistingSupportChildService(IPreexistingSupportChildRepository formRepository)
+            : base(formRepository)
         {
         }
 
@@ -18,7 +20,7 @@ namespace BusinessLogic
         {
             try
             {
-                return FormRepository.GetChildrenById(id);
+                return ((PreexistingSupportChildRepository)FormRepository).GetChildrenById(id);
             }
             catch(Exception ex)
             {

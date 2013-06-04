@@ -1,16 +1,18 @@
 ﻿using System;
 using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ChildService : FormService<ChildRepository, Child, ChildViewModel>, IChildService
+    public class ChildService : FormService<IChildRepository, Child, ChildViewModel>, IChildService
     {
-        public ChildService(ChildRepository formRepository) : base(formRepository)
+        private IChildRepository ChildRepository { get; set; }
+        public ChildService(IChildRepository formRepository) : base(formRepository)
         {
+            ChildRepository = formRepository;
         }
 
         public Child AddOrUpdate(ChildViewModel model)
@@ -19,7 +21,7 @@ namespace BusinessLogic
             {
                 //Check if entity already exists and we need to update record
                 var entity = model.ConvertToEntity() as Child;
-                var existEntity = FormRepository.Get(model.Id);
+                var existEntity = ChildRepository.Get(model.Id);
                 if (existEntity != null)
                 {
                     existEntity.Update(entity);
@@ -41,7 +43,7 @@ namespace BusinessLogic
         {
             try
             {
-                var childList = FormRepository.GetByUserId(userId);
+                var childList = ChildRepository.GetByUserId(userId);
                 return new ChildViewModel()
                     {
                         Children = childList

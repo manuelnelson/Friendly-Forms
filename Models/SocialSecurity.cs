@@ -1,15 +1,19 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("SocialSecurities")]
     public class SocialSecurity : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public bool IsOtherParent { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public int ReceiveSocial { get; set; }
         public int? Amount { get; set; } 

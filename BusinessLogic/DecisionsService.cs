@@ -1,15 +1,16 @@
 ﻿using System;
 using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class DecisionsService : FormService<DecisionRepository, Decisions, DecisionsViewModel>, IDecisionsService
+    public class DecisionsService : FormService<IDecisionRepository, Decisions, DecisionsViewModel>, IDecisionsService
     {
-        public DecisionsService(DecisionRepository formRepository) : base(formRepository)
+        public DecisionsService(IDecisionRepository formRepository)
+            : base(formRepository)
         {
         }
 

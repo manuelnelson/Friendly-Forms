@@ -1,20 +1,25 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("PreexistingSupportChilds")]
     public class PreexistingSupportChild : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public virtual long Id { get; set; }
         public virtual long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
         public virtual int Gender { get; set; }
 
         public virtual int PreexistingSupportId { get; set; }
+        [Ignore]
         public virtual PreexistingSupport PreexistingSupport { get; set; }
 
         public IViewModel ConvertToModel()

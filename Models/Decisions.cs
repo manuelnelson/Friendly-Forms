@@ -1,12 +1,14 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
     public class Decisions : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         
         public int Education { get; set; }
@@ -16,8 +18,10 @@ namespace Models
         public string BothResolve { get; set; }
 
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public long ChildId { get; set; }
+        [Ignore]
         public virtual Child Child { get; set; }
         
         public IViewModel ConvertToModel()

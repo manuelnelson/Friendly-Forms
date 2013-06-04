@@ -1,13 +1,14 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class DebtService : FormService<DebtRepository, Debt, DebtViewModel>, IDebtService
+    public class DebtService : FormService<IDebtRepository, Debt, DebtViewModel>, IDebtService
     {
-        public DebtService(DebtRepository formRepository) : base(formRepository)
+        public DebtService(IDebtRepository formRepository)
+            : base(formRepository)
         {
         }
     }

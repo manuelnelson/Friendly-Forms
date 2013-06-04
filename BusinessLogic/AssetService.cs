@@ -1,13 +1,13 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class AssetService : FormService<AssetRepository, Assets, AssetViewModel>, IAssetService
+    public class AssetService : FormService<IAssetRepository, Assets, AssetViewModel>, IAssetService
     {
-        public AssetService(AssetRepository formRepository) : base(formRepository)
+        public AssetService(IAssetRepository formRepository) : base(formRepository)
         {
         }
     }

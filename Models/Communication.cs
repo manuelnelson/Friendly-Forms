@@ -1,14 +1,18 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("Communications")]
     public class Communication : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public int AllowCommunication { get; set; }
         public bool Telephone { get; set; }

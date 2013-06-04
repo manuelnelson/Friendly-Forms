@@ -2,16 +2,21 @@
 using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("ExtraExpenses")]
     public class ExtraExpense : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public User User { get; set; }
         public long ChildId { get; set; }
+        [Ignore]
         public Child Child { get; set; }
         public int TutitionFather { get; set;}
         public int TutitionMother { get; set; }

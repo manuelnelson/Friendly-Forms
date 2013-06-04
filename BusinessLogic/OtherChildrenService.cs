@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Linq;
 using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class OtherChildrenService : FormService<OtherChildrenRepository, OtherChildren, OtherChildrenViewModel>, IOtherChildrenService
+    public class OtherChildrenService : FormService<IOtherChildrenRepository, OtherChildren, OtherChildrenViewModel>, IOtherChildrenService
     {
-        public OtherChildrenService(OtherChildrenRepository formRepository) : base(formRepository)
+        public OtherChildrenService(IOtherChildrenRepository formRepository)
+            : base(formRepository)
         {
         }
 

@@ -1,16 +1,16 @@
 ﻿using System;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ParticipantService : FormService<ParticipantRepository, Participant, ParticipantViewModel>, IParticipantService
+    public class ParticipantService : FormService<IParticipantRepository, Participant, ParticipantViewModel>, IParticipantService
     {
-        private ParticipantRepository ParticipantRepository { get; set; }
-        public ParticipantService(ParticipantRepository formRepository) : base(formRepository)
+        private IParticipantRepository ParticipantRepository { get; set; }
+        public ParticipantService(IParticipantRepository formRepository) : base(formRepository)
         {
             ParticipantRepository = formRepository;
         }

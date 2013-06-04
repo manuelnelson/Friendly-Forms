@@ -44,9 +44,11 @@ namespace DataLayerContext.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="entityState"></param>
-        protected virtual void SetEntityState(object entity, EntityState entityState)
+        protected virtual void SetEntityState(TEntity entity, EntityState entityState)
         {
-            SplitContext.Entry(entity).State = entityState;
+            //SplitContext.Entry(entity).State = entityState;
+            var v = GetDbSet().Find(entity.Id);// model.ReportDate
+            SplitContext.Entry(v).CurrentValues.SetValues(entity);
         }
 
         /// <summary>

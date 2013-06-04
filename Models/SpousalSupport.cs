@@ -1,14 +1,18 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("SpousalSupports")]
     public class SpousalSupport : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public int Spousal { get; set; }
         public string SpousalDescription { get; set; }

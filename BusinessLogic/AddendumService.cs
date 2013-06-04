@@ -1,13 +1,13 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class AddendumService : FormService<AddendumRepository, Addendum, AddendumViewModel>, IAddendumService
+    public class AddendumService : FormService<IAddendumRepository, Addendum, AddendumViewModel>, IAddendumService
     {
-        public AddendumService(AddendumRepository formRepository) : base(formRepository)
+        public AddendumService(IAddendumRepository formRepository) : base(formRepository)
         {
         }
     }

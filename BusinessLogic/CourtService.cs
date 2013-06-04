@@ -1,13 +1,14 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class CourtService : FormService<CourtRepository, Court, CourtViewModel>, ICourtService
+    public class CourtService : FormService<ICourtRepository, Court, CourtViewModel>, ICourtService
     {
-        public CourtService(CourtRepository formRepository) : base(formRepository)
+        public CourtService(ICourtRepository formRepository)
+            : base(formRepository)
         {
         }
     }

@@ -1,12 +1,15 @@
 ﻿using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("Holidays")]
     public class Holiday : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public bool FridayHoliday { get; set; }
         public bool MondayHoliday { get; set; }
@@ -58,8 +61,10 @@ namespace Models
         public int ReligiousFather { get; set; }
         public int ReligiousMother { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public long ChildId { get; set; }
+        [Ignore]
         public virtual Child Child { get; set; }
 
 

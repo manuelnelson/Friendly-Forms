@@ -1,13 +1,15 @@
 ﻿using BusinessLogic.Contracts;
+using DataInterface;
 using DataLayerContext.Repositories;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ScheduleService : FormService<ScheduleRepository,Schedule,ScheduleViewModel>, IScheduleService
+    public class ScheduleService : FormService<IScheduleRepository,Schedule,ScheduleViewModel>, IScheduleService
     {
-        public ScheduleService(ScheduleRepository formRepository) : base(formRepository)
+        public ScheduleService(IScheduleRepository formRepository)
+            : base(formRepository)
         {
         }
     }

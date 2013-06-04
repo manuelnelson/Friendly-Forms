@@ -1,11 +1,9 @@
-﻿using BusinessLogic.Models;
-using DataLayerContext.Repositories;
+﻿using DataInterface;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IResponsibilityService : IFormService<ResponsibilityRepository,Responsibility>
+    public interface IResponsibilityService : IFormService<IResponsibilityRepository,Responsibility>
     {
     }
 }

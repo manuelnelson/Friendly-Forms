@@ -1,13 +1,14 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class DeviationsService : FormService<DeviationsRepository, Deviations, DeviationsViewModel>, IDeviationsService
+    public class DeviationsService : FormService<IDeviationsRepository, Deviations, DeviationsViewModel>, IDeviationsService
     {
-        public DeviationsService(DeviationsRepository formRepository) : base(formRepository)
+        public DeviationsService(IDeviationsRepository formRepository)
+            : base(formRepository)
         {
         }
 

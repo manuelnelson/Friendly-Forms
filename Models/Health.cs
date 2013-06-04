@@ -2,12 +2,15 @@
 using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("Healths")]
     public class Health : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public long UserId { get; set; }
         public int ProvideHealth { get; set; }
@@ -22,6 +25,7 @@ namespace Models
         public int? MothersHealthPercentage { get; set; }
         public int? NonCustodialHealthPercentage { get; set; }
 
+        [Ignore]
         public virtual User User { get; set; }
         public IViewModel ConvertToModel()
         {

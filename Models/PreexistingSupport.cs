@@ -1,15 +1,19 @@
 ﻿using System;
 using Models.Contract;
 using Models.ViewModels;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("PreexistingSupports")]
     public class PreexistingSupport : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public virtual long Id { get; set; }
         public virtual bool IsOtherParent { get; set; }
         public virtual long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public virtual int Support { get; set; }
         public virtual string CourtName { get; set; }

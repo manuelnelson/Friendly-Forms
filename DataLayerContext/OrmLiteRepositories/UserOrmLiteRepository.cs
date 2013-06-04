@@ -1,5 +1,6 @@
 ﻿using DataInterface;
 using Models;
+using ServiceStack.OrmLite;
 using IDbConnectionFactory = ServiceStack.OrmLite.IDbConnectionFactory;
 
 namespace DataLayerContext.OrmLiteRepositories
@@ -12,7 +13,10 @@ namespace DataLayerContext.OrmLiteRepositories
 
         public User GetByUserAuthId(int userAuthId)
         {
-            throw new System.NotImplementedException();
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.First<User>(u=>u.UserAuthId == userAuthId);
+            }  
         }
     }
 }

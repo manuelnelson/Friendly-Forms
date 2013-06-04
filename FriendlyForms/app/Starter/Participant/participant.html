@@ -1,5 +1,5 @@
 ﻿<div class="form-vertical wrapper">
-    <form action="/api/court" ng-controller="ParticipantCtrl" id="participantForm" name="participantForm" method="post">
+    <form ng-submit="submit()" ng-controller="ParticipantCtrl" id="participantForm" name="participantForm" method="post" novalidate>
         <input type="hidden" ng-model="participant.Id">
         <input type="hidden" ng-model="participant.UserId">
         <div class="row-fluid">
@@ -96,6 +96,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary child-part2 next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+        <button class="btn btn-primary next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

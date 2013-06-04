@@ -2,12 +2,15 @@
 using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
+    [Alias("ChildCares")]
     public class ChildCare : IEntity, IFormEntity
     {
+        [AutoIncrement]
         public long Id { get; set; }
         public int SchoolFather { get; set; }
         public int SchoolMother { get; set; }
@@ -22,8 +25,10 @@ namespace Models
         public int OtherMother { get; set; }
         public int OtherNonParent { get; set; }
         public long UserId { get; set; }
+        [Ignore]
         public virtual User User { get; set; }
         public long ChildId { get; set; }
+        [Ignore]
         public Child Child { get; set; }
 
         public IViewModel ConvertToModel()

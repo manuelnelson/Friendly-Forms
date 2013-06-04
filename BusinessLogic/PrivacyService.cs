@@ -1,13 +1,14 @@
 ﻿using BusinessLogic.Contracts;
-using DataLayerContext.Repositories;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class PrivacyService : FormService<PrivacyRepository, Privacy, PrivacyViewModel>, IPrivacyService
+    public class PrivacyService : FormService<IPrivacyRepository, Privacy, PrivacyViewModel>, IPrivacyService
     {
-        public PrivacyService(PrivacyRepository formRepository) : base(formRepository)
+        public PrivacyService(IPrivacyRepository formRepository)
+            : base(formRepository)
         {
         }
     }

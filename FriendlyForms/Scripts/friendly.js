@@ -15798,7 +15798,7 @@ if (!JSON) {
     }
 }());
 ;/**
- * @license AngularJS v1.0.5
+ * @license AngularJS v1.0.6
  * (c) 2010-2012 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -15833,12 +15833,12 @@ var uppercase = function(string){return isString(string) ? string.toUpperCase() 
 
 var manualLowercase = function(s) {
   return isString(s)
-      ? s.replace(/[A-Z]/g, function(ch) {return fromCharCode(ch.charCodeAt(0) | 32);})
+      ? s.replace(/[A-Z]/g, function(ch) {return String.fromCharCode(ch.charCodeAt(0) | 32);})
       : s;
 };
 var manualUppercase = function(s) {
   return isString(s)
-      ? s.replace(/[a-z]/g, function(ch) {return fromCharCode(ch.charCodeAt(0) & ~32);})
+      ? s.replace(/[a-z]/g, function(ch) {return String.fromCharCode(ch.charCodeAt(0) & ~32);})
       : s;
 };
 
@@ -15850,8 +15850,6 @@ if ('i' !== 'I'.toLowerCase()) {
   lowercase = manualLowercase;
   uppercase = manualUppercase;
 }
-
-function fromCharCode(code) {return String.fromCharCode(code);}
 
 
 var /** holds major version number for IE or NaN for real browsers */
@@ -16660,7 +16658,7 @@ function encodeUriQuery(val, pctEncodeSpaces) {
              replace(/%3A/gi, ':').
              replace(/%24/g, '$').
              replace(/%2C/gi, ',').
-             replace((pctEncodeSpaces ? null : /%20/g), '+');
+             replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'));
 }
 
 
@@ -16749,22 +16747,38 @@ function angularInit(element, bootstrap) {
  * @returns {AUTO.$injector} Returns the newly created injector for this app.
  */
 function bootstrap(element, modules) {
-  element = jqLite(element);
-  modules = modules || [];
-  modules.unshift(['$provide', function($provide) {
-    $provide.value('$rootElement', element);
-  }]);
-  modules.unshift('ng');
-  var injector = createInjector(modules);
-  injector.invoke(
-    ['$rootScope', '$rootElement', '$compile', '$injector', function(scope, element, compile, injector){
-      scope.$apply(function() {
-        element.data('$injector', injector);
-        compile(element)(scope);
-      });
-    }]
-  );
-  return injector;
+  var resumeBootstrapInternal = function() {
+    element = jqLite(element);
+    modules = modules || [];
+    modules.unshift(['$provide', function($provide) {
+      $provide.value('$rootElement', element);
+    }]);
+    modules.unshift('ng');
+    var injector = createInjector(modules);
+    injector.invoke(['$rootScope', '$rootElement', '$compile', '$injector',
+       function(scope, element, compile, injector) {
+        scope.$apply(function() {
+          element.data('$injector', injector);
+          compile(element)(scope);
+        });
+      }]
+    );
+    return injector;
+  };
+
+  var NG_DEFER_BOOTSTRAP = /^NG_DEFER_BOOTSTRAP!/;
+
+  if (window && !NG_DEFER_BOOTSTRAP.test(window.name)) {
+    return resumeBootstrapInternal();
+  }
+
+  window.name = window.name.replace(NG_DEFER_BOOTSTRAP, '');
+  angular.resumeBootstrap = function(extraModules) {
+    forEach(extraModules, function(module) {
+      modules.push(module);
+    });
+    resumeBootstrapInternal();
+  };
 }
 
 var SNAKE_CASE_REGEXP = /[A-Z]/g;
@@ -17078,11 +17092,11 @@ function setupModuleLoader(window) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.0.5',    // all of these placeholder strings will be replaced by rake's
-  major: 1,    // compile task
+  full: '1.0.6',    // all of these placeholder strings will be replaced by grunt's
+  major: 1,    // package task
   minor: 0,
-  dot: 5,
-  codeName: 'flatulent-propulsion'
+  dot: 6,
+  codeName: 'universal-irreversibility'
 };
 
 
@@ -18167,15 +18181,15 @@ function annotate(fn) {
  *
  * <pre>
  *   // inferred (only works if code not minified/obfuscated)
- *   $inject.invoke(function(serviceA){});
+ *   $injector.invoke(function(serviceA){});
  *
  *   // annotated
  *   function explicit(serviceA) {};
  *   explicit.$inject = ['serviceA'];
- *   $inject.invoke(explicit);
+ *   $injector.invoke(explicit);
  *
  *   // inline
- *   $inject.invoke(['serviceA', function(serviceA){}]);
+ *   $injector.invoke(['serviceA', function(serviceA){}]);
  * </pre>
  *
  * ## Inference
@@ -18321,7 +18335,7 @@ function annotate(fn) {
  * @description
  *
  * Use `$provide` to register new providers with the `$injector`. The providers are the factories for the instance.
- * The providers share the same name as the instance they create with the `Provider` suffixed to them.
+ * The providers share the same name as the instance they create with `Provider` suffixed to them.
  *
  * A provider is an object with a `$get()` method. The injector calls the `$get` method to create a new instance of
  * a service. The Provider can have additional methods which would allow for configuration of the provider.
@@ -18669,6 +18683,7 @@ function createInjector(modulesToLoad) {
     };
   }
 }
+
 /**
  * @ngdoc function
  * @name ng.$anchorScroll
@@ -19097,6 +19112,7 @@ function $BrowserProvider(){
         return new Browser($window, $document, $log, $sniffer);
       }];
 }
+
 /**
  * @ngdoc object
  * @name ng.$cacheFactory
@@ -19424,7 +19440,7 @@ function $CompileProvider($provide) {
       COMMENT_DIRECTIVE_REGEXP = /^\s*directive\:\s*([\d\w\-_]+)\s+(.*)$/,
       CLASS_DIRECTIVE_REGEXP = /(([\d\w\-_]+)(?:\:([^;]+))?;?)/,
       MULTI_ROOT_TEMPLATE_ERROR = 'Template must have exactly one root element. was: ',
-      urlSanitizationWhitelist = /^\s*(https?|ftp|mailto):/;
+      urlSanitizationWhitelist = /^\s*(https?|ftp|mailto|file):/;
 
 
   /**
@@ -19626,7 +19642,7 @@ function $CompileProvider($provide) {
 
     function compile($compileNodes, transcludeFn, maxPriority) {
       if (!($compileNodes instanceof jqLite)) {
-        // jquery always rewraps, where as we need to preserve the original selector so that we can modify it.
+        // jquery always rewraps, whereas we need to preserve the original selector so that we can modify it.
         $compileNodes = jqLite($compileNodes);
       }
       // We can not compile top level text elements since text nodes can be merged and we will
@@ -19678,7 +19694,7 @@ function $CompileProvider($provide) {
      * functions return values - the linking functions - are combined into a composite linking
      * function, which is the a linking function for the node.
      *
-     * @param {NodeList} nodeList an array of nodes to compile
+     * @param {NodeList} nodeList an array of nodes or NodeList to compile
      * @param {function(angular.Scope[, cloneAttachFn]} transcludeFn A linking function, where the
      *        scope argument is auto-generated to the new child of the transcluded parent scope.
      * @param {DOMElement=} $rootElement If the nodeList is the root of the compilation tree then the
@@ -19701,7 +19717,7 @@ function $CompileProvider($provide) {
             ? applyDirectivesToNode(directives, nodeList[i], attrs, transcludeFn, $rootElement)
             : null;
 
-        childLinkFn = (nodeLinkFn && nodeLinkFn.terminal || !nodeList[i].childNodes.length)
+        childLinkFn = (nodeLinkFn && nodeLinkFn.terminal || !nodeList[i].childNodes || !nodeList[i].childNodes.length)
             ? null
             : compileNodes(nodeList[i].childNodes,
                  nodeLinkFn ? nodeLinkFn.transclude : transcludeFn);
@@ -20260,7 +20276,7 @@ function $CompileProvider($provide) {
 
           directives.unshift(derivedSyncDirective);
           afterTemplateNodeLinkFn = applyDirectivesToNode(directives, compileNode, tAttrs, childTranscludeFn);
-          afterTemplateChildLinkFn = compileNodes($compileNode.contents(), childTranscludeFn);
+          afterTemplateChildLinkFn = compileNodes($compileNode[0].childNodes, childTranscludeFn);
 
 
           while(linkQueue.length) {
@@ -20525,7 +20541,7 @@ function $ControllerProvider() {
      * @description
      * `$controller` service is responsible for instantiating controllers.
      *
-     * It's just simple call to {@link AUTO.$injector $injector}, but extracted into
+     * It's just a simple call to {@link AUTO.$injector $injector}, but extracted into
      * a service, so that one can override this service with {@link https://gist.github.com/1649788
      * BC version}.
      */
@@ -20766,7 +20782,7 @@ function $InterpolateProvider() {
   }];
 }
 
-var URL_MATCH = /^([^:]+):\/\/(\w+:{0,1}\w*@)?([\w\.-]*)(:([0-9]+))?(\/[^\?#]*)?(\?([^#]*))?(#(.*))?$/,
+var URL_MATCH = /^([^:]+):\/\/(\w+:{0,1}\w*@)?(\{?[\w\.-]*\}?)(:([0-9]+))?(\/[^\?#]*)?(\?([^#]*))?(#(.*))?$/,
     PATH_MATCH = /^([^\?#]*)?(\?([^#]*))?(#(.*))?$/,
     HASH_MATCH = PATH_MATCH,
     DEFAULT_PORTS = {'http': 80, 'https': 443, 'ftp': 21};
@@ -20845,7 +20861,8 @@ function convertToHashbangUrl(url, basePath, hashPrefix) {
   var match = matchUrl(url);
 
   // already hashbang url
-  if (decodeURIComponent(match.path) == basePath) {
+  if (decodeURIComponent(match.path) == basePath && !isUndefined(match.hash) &&
+      match.hash.indexOf(hashPrefix) === 0) {
     return url;
   // convert html5 url -> hashbang url
   } else {
@@ -23039,8 +23056,9 @@ function $RouteProvider(){
      * {@link ng.directive:ngView ngView} listens for the directive
      * to instantiate the controller and render the view.
      *
+     * @param {Object} angularEvent Synthetic event object.
      * @param {Route} current Current route information.
-     * @param {Route} previous Previous route information.
+     * @param {Route|Undefined} previous Previous route information, or undefined if current is first route entered.
      */
 
     /**
@@ -23138,7 +23156,7 @@ function $RouteProvider(){
       var next = parseRoute(),
           last = $route.current;
 
-      if (next && last && next.$route === last.$route
+      if (next && last && next.$$route === last.$$route
           && equals(next.pathParams, last.pathParams) && !next.reloadOnSearch && !forceReload) {
         last.params = next.params;
         copy(last.params, $routeParams);
@@ -23217,7 +23235,7 @@ function $RouteProvider(){
           match = inherit(route, {
             params: extend({}, $location.search(), params),
             pathParams: params});
-          match.$route = route;
+          match.$$route = route;
         }
       });
       // No route matched; fallback to "otherwise" route
@@ -24407,10 +24425,14 @@ function $HttpProvider() {
      *  - if XSRF prefix is detected, strip it (see Security Considerations section below)
      *  - if json response is detected, deserialize it using a JSON parser
      *
-     * To override these transformation locally, specify transform functions as `transformRequest`
-     * and/or `transformResponse` properties of the config object. To globally override the default
-     * transforms, override the `$httpProvider.defaults.transformRequest` and
-     * `$httpProvider.defaults.transformResponse` properties of the `$httpProvider`.
+     * To globally augment or override the default transforms, modify the `$httpProvider.defaults.transformRequest` and
+     * `$httpProvider.defaults.transformResponse` properties of the `$httpProvider`. These properties are by default an
+     * array of transform functions, which allows you to `push` or `unshift` a new transformation function into the
+     * transformation chain. You can also decide to completely override any default transformations by assigning your
+     * transformation functions to these properties directly without the array wrapper.
+     *
+     * Similarly, to locally override the request/response transforms, augment the `transformRequest` and/or
+     * `transformResponse` properties of the config object passed into `$http`.
      *
      *
      * # Caching
@@ -24928,6 +24950,7 @@ function $HttpProvider() {
 
   }];
 }
+
 var XHR = window.XMLHttpRequest || function() {
   try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e1) {}
   try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e2) {}
@@ -25240,7 +25263,7 @@ function $TimeoutProvider() {
  *
  * Filters are just functions which transform input to an output. However filters need to be Dependency Injected. To
  * achieve this a filter definition consists of a factory function which is annotated with dependencies and is
- * responsible for creating a the filter function.
+ * responsible for creating a filter function.
  *
  * <pre>
  *   // Filter registration
@@ -25378,22 +25401,22 @@ function $FilterProvider($provide) {
 
        Search: <input ng-model="searchText">
        <table id="searchTextResults">
-         <tr><th>Name</th><th>Phone</th><tr>
+         <tr><th>Name</th><th>Phone</th></tr>
          <tr ng-repeat="friend in friends | filter:searchText">
            <td>{{friend.name}}</td>
            <td>{{friend.phone}}</td>
-         <tr>
+         </tr>
        </table>
        <hr>
        Any: <input ng-model="search.$"> <br>
        Name only <input ng-model="search.name"><br>
        Phone only <input ng-model="search.phone"å><br>
        <table id="searchObjResults">
-         <tr><th>Name</th><th>Phone</th><tr>
+         <tr><th>Name</th><th>Phone</th></tr>
          <tr ng-repeat="friend in friends | filter:search">
            <td>{{friend.name}}</td>
            <td>{{friend.phone}}</td>
-         <tr>
+         </tr>
        </table>
      </doc:source>
      <doc:scenario>
@@ -25712,7 +25735,8 @@ function timeZoneGetter(date) {
   var zone = -1 * date.getTimezoneOffset();
   var paddedZone = (zone >= 0) ? "+" : "";
 
-  paddedZone += padNumber(zone / 60, 2) + padNumber(Math.abs(zone % 60), 2);
+  paddedZone += padNumber(Math[zone > 0 ? 'floor' : 'ceil'](zone / 60), 2) +
+                padNumber(Math.abs(zone % 60), 2);
 
   return paddedZone;
 }
@@ -25778,7 +25802,7 @@ var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZE']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+
  *   * `'ss'`: Second in minute, padded (00-59)
  *   * `'s'`: Second in minute (0-59)
  *   * `'a'`: am/pm marker
- *   * `'Z'`: 4 digit (+sign) representation of the timezone offset (-1200-1200)
+ *   * `'Z'`: 4 digit (+sign) representation of the timezone offset (-1200-+1200)
  *
  *   `format` string can also be one of the following predefined
  *   {@link guide/i18n localizable formats}:
@@ -26090,12 +26114,12 @@ function limitToFilter(){
                  (<a href ng-click="predicate = '-name'; reverse=false">^</a>)</th>
              <th><a href="" ng-click="predicate = 'phone'; reverse=!reverse">Phone Number</a></th>
              <th><a href="" ng-click="predicate = 'age'; reverse=!reverse">Age</a></th>
-           <tr>
+           </tr>
            <tr ng-repeat="friend in friends | orderBy:predicate:reverse">
              <td>{{friend.name}}</td>
              <td>{{friend.phone}}</td>
              <td>{{friend.age}}</td>
-           <tr>
+           </tr>
          </table>
        </div>
      </doc:source>
@@ -28458,7 +28482,7 @@ var ngClassEvenDirective = classDirective('Even', 1);
  *  `angular.min.js` files. Following is the css rule:
  *
  * <pre>
- * [ng\:cloak], [ng-cloak], .ng-cloak {
+ * [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
  *   display: none;
  * }
  * </pre>
@@ -29351,7 +29375,7 @@ var ngRepeatDirective = ngDirective({
             // Same as lastOrder but it has the current state. It will become the
             // lastOrder on the next iteration.
             nextOrder = new HashQueueMap(),
-            arrayLength,
+            arrayBound,
             childScope,
             key, value, // key/value of iteration
             array,
@@ -29372,7 +29396,7 @@ var ngRepeatDirective = ngDirective({
           array = collection || [];
         }
 
-        arrayLength = array.length;
+        arrayBound = array.length-1;
 
         // we are not using forEach for perf reasons (trying to avoid #call)
         for (index = 0, length = array.length; index < length; index++) {
@@ -29409,7 +29433,7 @@ var ngRepeatDirective = ngDirective({
           childScope.$index = index;
 
           childScope.$first = (index === 0);
-          childScope.$last = (index === (arrayLength - 1));
+          childScope.$last = (index === arrayBound);
           childScope.$middle = !(childScope.$first || childScope.$last);
 
           if (!last) {
@@ -29576,11 +29600,13 @@ var ngStyleDirective = ngDirective(function(scope, element, attr) {
  * @description
  * Conditionally change the DOM structure.
  *
- * @usageContent
- * <ANY ng-switch-when="matchValue1">...</ANY>
+ * @usage
+ * <ANY ng-switch="expression">
+ *   <ANY ng-switch-when="matchValue1">...</ANY>
  *   <ANY ng-switch-when="matchValue2">...</ANY>
  *   ...
  *   <ANY ng-switch-default>...</ANY>
+ * </ANY>
  *
  * @scope
  * @param {*} ngSwitch|on expression to match against <tt>ng-switch-when</tt>.
@@ -30069,7 +30095,7 @@ var scriptDirective = ['$templateCache', function($templateCache) {
 
 var ngOptionsDirective = valueFn({ terminal: true });
 var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
-                         //00001111100000000000222200000000000000000000003333000000000000044444444444444444000000000555555555555555550000000666666666666666660000000000000007777
+                         //0000111110000000000022220000000000000000000000333300000000000000444444444444444440000000005555555555555555500000006666666666666666600000000000000077770
   var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/,
       nullModelCtrl = {$setViewValue: noop};
 
@@ -30518,6 +30544,7 @@ var styleDirective = valueFn({
   restrict: 'E',
   terminal: true
 });
+
   //try to bind to jquery now so that one can write angular.element().read()
   //but we will rebind on bootstrap again.
   bindJQuery();
@@ -30531,7 +30558,7 @@ var styleDirective = valueFn({
 })(window, document);
 angular.element(document).find('head').append('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\\:form{display:block;}</style>');
 ;/**
- * @license AngularJS v1.0.5
+ * @license AngularJS v1.0.6
  * (c) 2010-2012 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -30555,6 +30582,17 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
  *
  * The returned resource object has action methods which provide high-level behaviors without
  * the need to interact with the low level {@link ng.$http $http} service.
+ *
+ * # Installation
+ * To use $resource make sure you have included the `angular-resource.js` that comes in Angular 
+ * package. You can also find this file on Google CDN, bower as well as at
+ * {@link http://code.angularjs.org/ code.angularjs.org}.
+ *
+ * Finally load the module in your application:
+ *
+ *        angular.module('app', ['ngResource']);
+ *
+ * and you are ready to get started!
  *
  * @param {string} url A parameterized URL template with parameters prefixed by `:` as in
  *   `/user/:username`. If you are using a URL with a port number (e.g. 
@@ -30800,7 +30838,7 @@ angular.module('ngResource', ['ng']).
         replace(/%3A/gi, ':').
         replace(/%24/g, '$').
         replace(/%2C/gi, ',').
-        replace((pctEncodeSpaces ? null : /%20/g), '+');
+        replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'));
     }
 
     function Route(template, defaults) {
@@ -30973,6 +31011,7 @@ angular.module('ngResource', ['ng']).
 
     return ResourceFactory;
   }]);
+
 
 })(window, window.angular);
 
@@ -32452,7 +32491,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui"], ["$routeProvider
         when('/Starter/Court/:userId', { controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
         when('/Starter/Participant/:userId', { controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
         when('/Starter/Children/:userId', { controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
-        when('/Account/Login/', { controller: LoginCtrl, templateUrl: '/app/Account/Login.html' }).
+        when('/Account/Login/', { controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
+        when('/Account/Register/', { controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
         when('/', { controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
@@ -32652,13 +32692,12 @@ FormsApp.factory('childService', ['$resource', function ($resource) {
     });
 }]);
 ;var HomeCtrl = function ($scope, $routeParams, $location,  menuService) {
-    menuService.setupMenu();
 };
 HomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
 ;var MenuCtrl = function ($scope, $routeParams, $location, menuService) {
     $scope.$watch(function () { return menuService.menuItems; }, function () {
         $scope.menuItems = menuService.menuItems;
-    });
+    }, true);
     $scope.menuClick = function () {
         if ($scope.isSubMenuClick) {
             $scope.isSubMenuClick = false;
@@ -32683,10 +32722,10 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
         menuItems: [],
         isSetup: false,
         setItems: function (menuItems) {
-            service.menuItems = menuItems;
+            service.menuItems = menuItems;            
         },
         setupMenu: function() {
-            var userId = 0;//$('#user-id').val();
+            var userId = service.userId;
             var menuItems = [{
                 itemClass: 'active',
                 path: '#/',
@@ -32794,16 +32833,23 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                     break;
                 }
             }
-        }
+        },
+        userId: 0
     };
     return service;
 
 });
 
-;var LoginMenuCtrl = function ($scope, $routeParams, $location, loginMenuService) {
-    $scope.user = loginMenuService.userAuth.get();
+;var LoginMenuCtrl = function ($scope, $routeParams, $location, loginMenuService, menuService) {
+    $scope.user = loginMenuService.userAuth.get({}, function (data) {
+        if (data.UserSession != null) {
+            loginMenuService.authUser = data.UserSession;
+            menuService.userId = loginMenuService.authUser.CustomId;
+            menuService.setupMenu();
+        }
+    });
 };
-MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuService'];
+LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuService', 'menuService'];
 ;FormsApp.factory('loginMenuService', function ($resource) {
     var service = {
         userAuth: $resource('/api/userauths/', {},
@@ -32816,13 +32862,28 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuService'];
 ;var LoginCtrl = function ($scope, $routeParams, $location, loginService) {
     $scope.login = loginService.login.post();
 };
-MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService'];
+LoginCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService'];
 ;FormsApp.factory('loginService', function ($resource) {
     var service = {
         login: $resource('/api/auth/credentials/', {},
             {
                 post: { method: 'GET', params: { format: 'json' } },
             }),
+        authUser: null,
+    };
+    return service;
+});
+;var RegisterCtrl = function ($scope, $routeParams, $location, registerService) {
+    $scope.user = registerService.register.post();
+};
+RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'];
+;FormsApp.factory('registerService', function ($resource) {
+    var service = {
+        register: $resource('/api/register/', {},
+            {
+                post: { method: 'POST', params: { format: 'json' } },
+            }),
+        authUser: null,
     };
     return service;
 });

@@ -1,13 +1,15 @@
 ﻿using BusinessLogic.Contracts;
+using DataInterface;
 using DataLayerContext.Repositories;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class SpousalService : FormService<SpousalRepository, SpousalSupport, SpousalViewModel>, ISpousalService
+    public class SpousalService : FormService<ISpousalRepository, SpousalSupport, SpousalViewModel>, ISpousalService
     {
-        public SpousalService(SpousalRepository formRepository) : base(formRepository)
+        public SpousalService(ISpousalRepository formRepository)
+            : base(formRepository)
         {
         }
     }

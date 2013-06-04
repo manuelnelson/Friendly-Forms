@@ -1,5 +1,6 @@
 ﻿using System;
 using BusinessLogic.Contracts;
+using DataInterface;
 using DataLayerContext.Repositories;
 using Elmah;
 using Models;
@@ -7,9 +8,9 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class HolidayService : FormService<HolidayRepository, Holiday, HolidayViewModel>,IHolidayService
+    public class HolidayService : FormService<IHolidayRepository, Holiday, HolidayViewModel>,IHolidayService
     {
-        public HolidayService(HolidayRepository formRepository) : base(formRepository)
+        public HolidayService(IHolidayRepository formRepository): base(formRepository)
         {
         }
 
@@ -22,7 +23,7 @@ namespace BusinessLogic
         {
             try
             {
-                return FormRepository.GetByChildId(childId);
+                return ((HolidayRepository)FormRepository).GetByChildId(childId);
             }
             catch (Exception ex)
             {
@@ -41,7 +42,7 @@ namespace BusinessLogic
             {
                 var entity = holiday.ConvertToEntity();
                 //Check if court already exists and we need to update record
-                var existDecisions = FormRepository.GetByChildId(holiday.ChildId);
+                var existDecisions = ((HolidayRepository)FormRepository).GetByChildId(holiday.ChildId);
                 if (existDecisions != null)
                 {
                     existDecisions.Update(entity);

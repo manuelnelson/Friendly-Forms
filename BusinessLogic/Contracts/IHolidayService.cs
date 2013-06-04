@@ -1,10 +1,10 @@
-﻿using DataLayerContext.Repositories;
+﻿using DataInterface;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic.Contracts
 {
-    public interface IHolidayService : IFormService<HolidayRepository,Holiday>
+    public interface IHolidayService : IFormService<IHolidayRepository,Holiday>
     {
         /// <summary>
         /// Retreives holiday infromation by childId
