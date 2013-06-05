@@ -1,40 +1,35 @@
-﻿var ChildrenCtrl = function ($scope, $location, childService, messageService) {
-    $scope.getChildren = function () {
-        childService.query({ format: 'json' }, function (children) {
-            $scope.children = [];
-            $scope.children = $scope.children.concat(children);
-        });
-    };
-
-    $scope.addChild = function () {
-        childService.save($scope.todo, function (task) {
-            $scope.children.push(task);
-            $scope.todo.Task = '';
-        });
-    };
-
-    $scope.delete = function () {
-        var deleteTodos = $.grep($scope.children, function (todo) {
-            return todo.Completed;
-        });
-        var deleteIds = [];
-        angular.forEach(deleteTodos, function (value, key) {
-            deleteIds.push(value.Id);
-        });
-        childService.deleteAll({
-            format: 'json',
-            Ids: deleteIds
-        }, function () {
-            var keepTodos = $.grep($scope.children, function (todo) {
-                return !todo.Completed;
+﻿var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    childService.childForm.get({ UserId: $routeParams.userId }, function (data) {
+        if (typeof data.Id == 'undefined' || data.Id == 0) {
+            //see if garlic has something stored            
+            $scope.childForm = $.jStorage.get($scope.storageKey);
+        } else {
+            $scope.childForm = data;
+        }
+    });
+    $scope.submitChildForm = function() {
+        if ($scope.childForm.$invalid) {
+            menuService.setSubMenuIconClass('Starter', 'Children', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#childForm');
+            $.jStorage.set($scope.storageKey, value);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.childForm.UserId = $routeParams.userId;
+        if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
+            childService.childForm.save(null, $scope.childForm, function () {
+                menuService.setSubMenuIconClass('Starter', 'Children', 'icon-ok icon-green');
             });
-            $scope.children = [];
-            $scope.children = keepTodos;
-        });
+        } else {
+            childService.childForm.update(null, $scope.childForm, function () {
+                menuService.setSubMenuIconClass('Starter', 'Children', 'icon-ok icon-green');
+            });
+        }
     };
-    $scope.getChildren();
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Starter', 'Children')) {
+        menuService.setActive('Starter', 'Children');
+    }
 };
-//Default service injection doesn't work with minification, so a manual injection is necessary. The one liner injection
-//TodoApp.controller('TodoListCtrl', ['$scope', '$location', 'todoService', 'loadingService', 'messageService', function ($scope, $location, todoService, loadingService, messageService) { ... }]);
-//doesn't seem to work for me as I'd prefer this 
-ChildrenCtrl.$inject = ['$scope', '$location', 'childService', 'messageService'];
+ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', 'menuService', 'genericService', '$rootScope'];
