@@ -9,7 +9,7 @@ using Models.Contract;
 
 namespace DataLayerContext.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class,IEntity
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
     {
         public IUnitOfWork UnitOfWork { get; set; }
 

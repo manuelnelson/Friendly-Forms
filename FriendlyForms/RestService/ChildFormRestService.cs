@@ -5,7 +5,6 @@ using Models;
 using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService

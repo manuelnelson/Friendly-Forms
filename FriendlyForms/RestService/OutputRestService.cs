@@ -38,6 +38,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long UserId { get; set; }
     }
+
     [DataContract]
     [Route("/Output/Financial/ScheduleE/{UserId}")]
     [Route("/Output/Financial/ScheduleE")]
@@ -46,6 +47,17 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long UserId { get; set; }
     }
+
+    [DataContract]
+    [Route("/Output/Financial/ChildSupportWorksheet/{UserId}")]
+    [Route("/Output/Financial/ChildSupportWorksheet")]
+    public class CSWDto : IReturn<CswDtoResp>
+    {
+        [DataMember]
+        public long UserId { get; set; }
+    }
+
+
     #region ScheduleA
     //adding this dto to get rid of the nullable fields
     public class IncomeDto
@@ -429,6 +441,37 @@ namespace FriendlyForms.RestService
         public int ExtraSpent { get; set; }
     }
     #endregion
+
+    #region CSW
+    public class CswDtoResp
+    {
+        public List<Child> Children { get; set; }
+        public Csw FatherCsw { get; set; }
+        public Csw MotherCsw { get; set; }
+        public Csw TotalCsw { get; set; }
+        public string Father { get; set; }
+        public string Mother { get; set; }
+    }
+
+    public class Csw
+    {
+        public double GrossIncome { get; set; }
+        public double AdjustedIncome { get; set; }
+        public double CombinedIncome { get; set; }
+        public double SupportObligation { get; set; }
+        public double ProRataObligation { get; set; }
+        public double WorkRelatedExpenses { get; set; }
+        public double AdjustedObligation { get; set; }
+        public double AdjustedExpensesPaid { get; set; }
+        public double PresumptiveAmount { get; set; }
+        public double DeviationsAmount { get; set; }
+        public double Subtotal { get; set; }
+        public double SocialSecurity { get; set; }
+        public double FinalAmount { get; set; }
+        public double UninsuredExpenses { get; set; }
+    }
+
+    #endregion
     [Authenticate]
     public class OutputsService : ServiceBase
     {
@@ -444,64 +487,16 @@ namespace FriendlyForms.RestService
         public IHealthService HealthService { get; set; }
         public IChildCareService ChildCareService { get; set; }
         public IExtraExpenseService ExtraExpenseService { get; set; }
+        public IChildService ChildService { get; set; }
 
         public object Get(ScheduleADto request)
         {
             request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var income = IncomeService.GetByUserId(request.UserId).TranslateTo<IncomeDto>();
-            var incomeOther = IncomeService.GetByUserId(request.UserId, isOtherParent: true).TranslateTo<IncomeDto>();
-            var incomeCombined = new IncomeDto
-                {
-                    Alimony = income.Alimony + incomeOther.Alimony,
-                    Annuities = income.Annuities + incomeOther.Annuities,
-                    Assets = income.Assets + incomeOther.Assets,
-                    Bonuses = income.Bonuses + incomeOther.Bonuses,
-                    Capital = income.Capital + incomeOther.Capital,
-                    CivilCase = income.CivilCase + incomeOther.CivilCase,
-                    Commisions = income.Commisions + incomeOther.Commisions,
-                    Compensation = income.Compensation + incomeOther.Compensation,
-                    Dividends = income.Dividends + incomeOther.Dividends,
-                    Fringe = income.Fringe + incomeOther.Fringe,
-                    Gifts = income.Gifts + incomeOther.Gifts,
-                    HaveSalary = income.HaveSalary + incomeOther.HaveSalary,
-                    Interest = income.Interest + incomeOther.Interest,
-                    NonW2Income = income.NonW2Income + incomeOther.NonW2Income,
-                    Other = income.Other + incomeOther.Other,
-                    OtherIncome = income.OtherIncome + incomeOther.OtherIncome,
-                    Overtime = income.Overtime + incomeOther.Overtime,
-                    Prizes = income.Prizes + incomeOther.Prizes,
-                    Retirement = income.Retirement + incomeOther.Retirement,
-                    SelfIncome = income.SelfIncome + incomeOther.SelfIncome,
-                    SelfIncomeNoDeductions = income.SelfIncomeNoDeductions + incomeOther.SelfIncomeNoDeductions,
-                    Severance = income.Severance + incomeOther.Severance,
-                    SocialSecurity = income.SocialSecurity + incomeOther.SocialSecurity,
-                    Trust = income.Trust + incomeOther.Trust,
-                    Unemployment = income.Unemployment + incomeOther.Unemployment,
-                    W2Income = income.W2Income + incomeOther.W2Income,
-                };
             //Setup output form            
-            var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
-            var outputViewModel = new PpOutputFormHelper
-            {
-                CustodyInformation = ParticipantService.GetCustodyInformation(participants)
-            };
-            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
-                             ? outputViewModel.CustodyInformation.NonCustodyParentName
-                             : outputViewModel.CustodyInformation.CustodyParentName;
-            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
-                             ? outputViewModel.CustodyInformation.CustodyParentName
-                             : outputViewModel.CustodyInformation.NonCustodyParentName;
-            var schedule = new ScheduleADtoResp
-                {
-                    Income = income,
-                    OtherIncome = incomeOther,
-                    CombinedIncome = incomeCombined,
-                    IncomeTotal = income.CalculateTotalIncome(),
-                    OtherIncomeTotal = incomeOther.CalculateTotalIncome(),
-                    CombinedIncomeTotal = incomeCombined.CalculateTotalIncome(),
-                    Father = father,
-                    Mother = mother
-                };
+            var parentNames = GetParentNames(request.UserId);
+            var schedule = GetScheduleA(request.UserId);
+            schedule.Father = parentNames.Father;
+            schedule.Mother = parentNames.Mother;
             return schedule;
         }
 
@@ -509,33 +504,15 @@ namespace FriendlyForms.RestService
         {
             //Setup output form            
             request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
-            var outputViewModel = new PpOutputFormHelper
-            {
-                CustodyInformation = ParticipantService.GetCustodyInformation(participants)
-            };
-            var income = IncomeService.GetByUserId(request.UserId).TranslateTo<IncomeDto>();
-            var preexistSupport = PreexistingSupportFormService.GetByUserId(request.UserId);
-            var otherChildForm = OtherChildrenService.GetByUserId(request.UserId);
-            var schedule = GetScheduleB(income, preexistSupport, otherChildForm, outputViewModel.CustodyInformation.CustodyParentName);
-
-            var incomeOther = IncomeService.GetByUserId(request.UserId, isOtherParent: true).TranslateTo<IncomeDto>();
-            var preexistSupportOther = PreexistingSupportFormService.GetByUserId(request.UserId, isOtherParent: true);
-            var otherChildFormOther = OtherChildrenService.GetByUserId(request.UserId, isOtherParent: true);
-            var scheduleOther = GetScheduleB(incomeOther, preexistSupportOther, otherChildFormOther, outputViewModel.CustodyInformation.NonCustodyParentName);
-            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
-                 ? outputViewModel.CustodyInformation.NonCustodyParentName
-                 : outputViewModel.CustodyInformation.CustodyParentName;
-            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
-                             ? outputViewModel.CustodyInformation.CustodyParentName
-                             : outputViewModel.CustodyInformation.NonCustodyParentName;
-
+            var parentNames = GetParentNames(request.UserId);
+            var schedule = GetScheduleB(request.UserId, parentNames.Father);
+            var scheduleOther = GetScheduleB(request.UserId, parentNames.Mother, true);
             return new ScheduleBDtoResp
                 {
                     ScheduleB = schedule,
                     OtherScheduleB = scheduleOther,
-                    Father = father,
-                    Mother = mother
+                    Father = parentNames.Father,
+                    Mother = parentNames.Mother
                 };
         }
 
@@ -543,9 +520,145 @@ namespace FriendlyForms.RestService
         {
             //Setup output form            
             request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
-            var health = HealthService.GetByUserId(request.UserId) as HealthViewModel;
-            var childCares = ChildCareService.GetAllByUserId(request.UserId);
+            var parentNames = GetParentNames(request.UserId);
+            var scheduleD = GetScheduleD(request.UserId);
+            scheduleD.Father = parentNames.Father;
+            scheduleD.Mother = parentNames.Mother;
+            return scheduleD;
+        }
+
+        public object Get(ScheduleEDto request)
+        {
+            request.UserId = Convert.ToInt32(UserSession.CustomId);
+            var lowIncome = new LowIncomeDeviation()
+                {
+                    DeviationAmount = 0,
+                    ActualAmount = 0,
+                    CalculatedAmount = 0,
+                    CompareAmount = 0,
+                    Explaination = "Nothing yet"
+                };
+            var highIncome = new HighIncomeDeviation();
+            var parentNames = GetParentNames(request.UserId);
+            return new ScheduleEDtoResp
+            {
+                LowIncomeDeviation = lowIncome,
+                HighIncomeAdjusted = 0,
+                HighIncomeDeviationFather = highIncome,
+                HighIncomeDeviationMother = highIncome,
+                Father = parentNames.Father,
+                Mother = parentNames.Mother
+            };
+        }
+
+        public object Get(CSWDto request)
+        {
+            //Setup output form            
+            request.UserId = Convert.ToInt32(UserSession.CustomId);
+            var children = ChildService.GetByUserId(request.UserId).Children;
+            var fatherCsw = new Csw
+                {
+
+                };
+            var parentNames = GetParentNames(request.UserId);
+            return new CswDtoResp
+                {
+                    Children = children,
+                    FatherCsw = fatherCsw,
+                    Father = parentNames.Father,
+                    Mother = parentNames.Mother
+                };
+
+        }
+
+        private ScheduleADtoResp GetScheduleA(long userId)
+        {
+            var income = IncomeService.GetByUserId(userId).TranslateTo<IncomeDto>();
+            var incomeOther = IncomeService.GetByUserId(userId, isOtherParent: true).TranslateTo<IncomeDto>();
+            var incomeCombined = new IncomeDto
+            {
+                Alimony = income.Alimony + incomeOther.Alimony,
+                Annuities = income.Annuities + incomeOther.Annuities,
+                Assets = income.Assets + incomeOther.Assets,
+                Bonuses = income.Bonuses + incomeOther.Bonuses,
+                Capital = income.Capital + incomeOther.Capital,
+                CivilCase = income.CivilCase + incomeOther.CivilCase,
+                Commisions = income.Commisions + incomeOther.Commisions,
+                Compensation = income.Compensation + incomeOther.Compensation,
+                Dividends = income.Dividends + incomeOther.Dividends,
+                Fringe = income.Fringe + incomeOther.Fringe,
+                Gifts = income.Gifts + incomeOther.Gifts,
+                HaveSalary = income.HaveSalary + incomeOther.HaveSalary,
+                Interest = income.Interest + incomeOther.Interest,
+                NonW2Income = income.NonW2Income + incomeOther.NonW2Income,
+                Other = income.Other + incomeOther.Other,
+                OtherIncome = income.OtherIncome + incomeOther.OtherIncome,
+                Overtime = income.Overtime + incomeOther.Overtime,
+                Prizes = income.Prizes + incomeOther.Prizes,
+                Retirement = income.Retirement + incomeOther.Retirement,
+                SelfIncome = income.SelfIncome + incomeOther.SelfIncome,
+                SelfIncomeNoDeductions = income.SelfIncomeNoDeductions + incomeOther.SelfIncomeNoDeductions,
+                Severance = income.Severance + incomeOther.Severance,
+                SocialSecurity = income.SocialSecurity + incomeOther.SocialSecurity,
+                Trust = income.Trust + incomeOther.Trust,
+                Unemployment = income.Unemployment + incomeOther.Unemployment,
+                W2Income = income.W2Income + incomeOther.W2Income,
+            };
+            return new ScheduleADtoResp()
+            {
+                Income = income,
+                OtherIncome = incomeOther,
+                CombinedIncome = incomeCombined,
+                IncomeTotal = income.CalculateTotalIncome(),
+                OtherIncomeTotal = incomeOther.CalculateTotalIncome(),
+                CombinedIncomeTotal = incomeCombined.CalculateTotalIncome()
+            };
+        }
+        private ScheduleB GetScheduleB(long userId, string parentName, bool isOtherParent = false)
+        {
+            var income = IncomeService.GetByUserId(userId, isOtherParent).TranslateTo<IncomeDto>();
+            var preexistingSupport = PreexistingSupportFormService.GetByUserId(userId, isOtherParent);
+            var otherChildren = OtherChildrenService.GetByUserId(userId, isOtherParent);
+
+            var schedule = new ScheduleB
+            {
+                GrossIncome = income.CalculateTotalIncome(),
+                SelfEmploymentIncome = income.SelfIncome
+            };
+            schedule.FicaIncome = schedule.SelfEmploymentIncome * .62;
+            schedule.MedicareTax = schedule.SelfEmploymentIncome * .0145;
+            schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
+            schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
+            if (preexistingSupport != null)
+            {
+                var preexistingSupportChildren = PreexistingSupportChildService.GetChildrenBySupportId(preexistingSupport.Id).ToList();
+                schedule.PreexistingSupportChild = preexistingSupportChildren.ToList();
+                schedule.PreexistingSupport = preexistingSupportChildren.Select(x => x.PreexistingSupport).ToList();
+                schedule.TotalSupport = schedule.PreexistingSupport.Sum(c => c.Monthly);
+            }
+            schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
+            if (otherChildren != null)
+            {
+                schedule.OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(otherChildren.Id).Select(x => x.TranslateTo<OtherChildDto>()).ToList();
+                foreach (var otherChildDto in schedule.OtherChildren)
+                {
+                    otherChildDto.ClaimedBy = parentName;
+                }
+                schedule.OtherChildrenDescription = otherChildren.Details;
+            }
+            schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0.0) > 0.01 ? schedule.Total5Minus1 : schedule.GrossIncome;
+            //Todo: get this number
+            schedule.GeorgiaObligations = 0;
+            schedule.TheoreticalSupport = schedule.GeorgiaObligations * .75;
+            schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
+                                            ? schedule.AdjustedSupport - schedule.TheoreticalSupport
+                                            : schedule.Subtotal - schedule.TheoreticalSupport;
+            return schedule;
+        }
+        private ScheduleDDtoResp GetScheduleD(long userId)
+        {
+            var health = HealthService.GetByUserId(userId) as HealthViewModel;
+            var childCares = ChildCareService.GetAllByUserId(userId);
             var childCaresWithTotals = childCares.Select(childCare => childCare.TranslateTo<ChildCareWithTotals>()).ToList();
 
             var schedule = new ScheduleD
@@ -611,100 +724,62 @@ namespace FriendlyForms.RestService
             schedule.ProRataAdditional = 0;
             otherSchedule.ProRataAdditional = 0;
             nonParentSchedule.ProRataAdditional = 0;
-
-            var outputViewModel = new PpOutputFormHelper
-            {
-                CustodyInformation = ParticipantService.GetCustodyInformation(participants)
-            };
-            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
-                             ? outputViewModel.CustodyInformation.NonCustodyParentName
-                             : outputViewModel.CustodyInformation.CustodyParentName;
-            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
-                             ? outputViewModel.CustodyInformation.CustodyParentName
-                             : outputViewModel.CustodyInformation.NonCustodyParentName;
-
-            return new ScheduleDDtoResp
-            {
-                FatherScheduleD = schedule,
-                MotherScheduleD = otherSchedule,
-                NonParentScheduleD = nonParentSchedule,
-                TotalScheduleD = totalScheduleD,
-                ChildCare = childCaresWithTotals,
-                Father = father,
-                Mother = mother
-            };
-        }
-
-        public object Get(ScheduleEDto request)
-        {
-            request.UserId = Convert.ToInt32(UserSession.CustomId);            
-            var participants = ParticipantService.GetByUserId(request.UserId) as ParticipantViewModel;
-            var lowIncome = new LowIncomeDeviation()
+            return new ScheduleDDtoResp()
                 {
-                    DeviationAmount = 0,
-                    ActualAmount = 0,
-                    CalculatedAmount = 0,
-                    CompareAmount = 0,
-                    Explaination = "Nothing yet"
+                    FatherScheduleD = schedule,
+                    MotherScheduleD = otherSchedule,
+                    NonParentScheduleD = nonParentSchedule,
+                    TotalScheduleD = totalScheduleD,
+                    ChildCare = childCaresWithTotals,
                 };
-            var highIncome = new HighIncomeDeviation();
+        }
+        private Csw GetCsw(long userId)
+        {
+            var scheduleA = GetScheduleA(userId);
+            var scheduleBFather = GetScheduleB(userId, "namehere");
+            var scheduleBMother = GetScheduleB(userId, "name", true);
+            var scheduleD = GetScheduleD(userId);
+            var totalIncome = scheduleBFather.AdjustedSupport + scheduleBMother.AdjustedSupport;
+            var cswTotal = new Csw();
+            var cswFather = new Csw
+                {
+                    GrossIncome = scheduleA.IncomeTotal,
+                    AdjustedIncome = scheduleBFather.AdjustedSupport,
+                    //Apparently this could be 14 as well? whats the logic here?
+                    CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
+                    SupportObligation = 0, //this is really confusing      
+              
+                };
+            cswFather.ProRataObligation = cswFather.CombinedIncome * cswTotal.SupportObligation;
+            cswFather.WorkRelatedExpenses = cswFather.CombinedIncome*scheduleD.TotalScheduleD.ProRataAdditional;
+            cswFather.AdjustedObligation = cswFather.ProRataObligation + cswFather.WorkRelatedExpenses;
+            return cswFather;
+        }
+        private ParentNames GetParentNames(long userId)
+        {
+            var participants = ParticipantService.GetByUserId(userId) as ParticipantViewModel;
             var outputViewModel = new PpOutputFormHelper
             {
                 CustodyInformation = ParticipantService.GetCustodyInformation(participants)
             };
-            var father = outputViewModel.CustodyInformation.NonCustodyIsFather
-                             ? outputViewModel.CustodyInformation.NonCustodyParentName
-                             : outputViewModel.CustodyInformation.CustodyParentName;
-            var mother = outputViewModel.CustodyInformation.NonCustodyIsFather
-                             ? outputViewModel.CustodyInformation.CustodyParentName
-                             : outputViewModel.CustodyInformation.NonCustodyParentName; return new ScheduleEDtoResp
-            {
-                LowIncomeDeviation = lowIncome,
-                HighIncomeAdjusted = 0,
-                HighIncomeDeviationFather = highIncome,
-                HighIncomeDeviationMother = highIncome,
-                Father = father,
-                Mother = mother
-            };
-        }
-        private ScheduleB GetScheduleB(IncomeDto income, PreexistingSupportFormViewModel preexistingSupport, OtherChildrenViewModel otherChildren, string parentName)
-        {
-            var schedule = new ScheduleB
-            {
-                GrossIncome = income.CalculateTotalIncome(),
-                SelfEmploymentIncome = income.SelfIncome
-            };
-            schedule.FicaIncome = schedule.SelfEmploymentIncome * .62;
-            schedule.MedicareTax = schedule.SelfEmploymentIncome * .0145;
-            schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
-            schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
-            if (preexistingSupport != null)
-            {
-                var preexistSupportChildren = PreexistingSupportChildService.GetChildrenBySupportId(preexistingSupport.Id).ToList();
-                schedule.PreexistingSupportChild = preexistSupportChildren.ToList();
-                schedule.PreexistingSupport = preexistSupportChildren.Select(x => x.PreexistingSupport).ToList();
-                schedule.TotalSupport = schedule.PreexistingSupport.Sum(c => c.Monthly);
-            }
-            schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
-            if (otherChildren != null)
-            {
-                schedule.OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(otherChildren.Id).Select(x => x.TranslateTo<OtherChildDto>()).ToList();
-                foreach (var otherChildDto in schedule.OtherChildren)
+            return new ParentNames
                 {
-                    otherChildDto.ClaimedBy = parentName;
-                }
-                schedule.OtherChildrenDescription = otherChildren.Details;
-            }
-            schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0.0) > 0.01 ? schedule.Total5Minus1 : schedule.GrossIncome;
-            //Todo: get this number
-            schedule.GeorgiaObligations = 0;
-            schedule.TheoreticalSupport = schedule.GeorgiaObligations * .75;
-            schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
-                                            ? schedule.AdjustedSupport - schedule.TheoreticalSupport
-                                            : schedule.Subtotal - schedule.TheoreticalSupport;
-            return schedule;
+                    Father = outputViewModel.CustodyInformation.NonCustodyIsFather
+                                 ? outputViewModel.CustodyInformation.NonCustodyParentName
+                                 : outputViewModel.CustodyInformation.CustodyParentName,
+                    Mother = outputViewModel.CustodyInformation.NonCustodyIsFather
+                             ? outputViewModel.CustodyInformation.CustodyParentName
+                             : outputViewModel.CustodyInformation.NonCustodyParentName; 
+                };        
         }
     }
+
+    internal class ParentNames
+    {
+        public string Father { get; set; }
+        public string Mother { get; set; }
+    }
+
     public static class OutputHelper
     {
         public static int CalculateTotalIncome(this IncomeDto income)
