@@ -50,24 +50,24 @@ namespace DataLayerContext.Migrations
             //            UserId = 1
             //        });
             //
-            context.Counties.AddOrUpdate(u => u.CountyName,
-                new County()
-                    {
-                        CountyName = "Cobb",
-                    },
-                new County()
-                    {
-                        CountyName = "Dekalb",
-                    },
-                new County()
-                    {
-                        CountyName = "Fulton",
-                    },
-                new County()
-                    {
-                        CountyName = "Gwinnett",
-                    }
-                    );
+            //context.Counties.AddOrUpdate(u => u.CountyName,
+            //    new County()
+            //        {
+            //            CountyName = "Cobb",
+            //        },
+            //    new County()
+            //        {
+            //            CountyName = "Dekalb",
+            //        },
+            //    new County()
+            //        {
+            //            CountyName = "Fulton",
+            //        },
+            //    new County()
+            //        {
+            //            CountyName = "Gwinnett",
+            //        }
+            //        );
         }
     }
 }

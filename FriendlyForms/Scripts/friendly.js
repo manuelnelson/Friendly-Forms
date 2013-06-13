@@ -17645,7 +17645,7 @@ Friendly.GetFormInput = function (formName) {
     if ($('#' + formName + 'Id').length > 0)
         model.Id = $('#' + formName + 'Id').val();
     if (Friendly.IsOtherForm(formName)) {
-        model.isOtherParent = "true";
+        model.IsOtherParent = "true";
     }
     return model;
 };
@@ -18504,8 +18504,7 @@ $(document).ready(function () {
         }
     });
     //#endregion
-
-    //#region Special Circomstasnces
+    //#region Income
     $('.financial-part1').click(function () {
         Friendly.SubmitForm('income', 'socialSecurity');
     });
@@ -18689,6 +18688,7 @@ $(document).ready(function () {
         Friendly.EndLoading();
     });
     //#endregion
+
     //#region Deviations Other
     $('.financial-deviationsOther').click(function () {
         //if the form isn't validated, we still need to move on
@@ -18747,44 +18747,29 @@ $(document).ready(function () {
         }
     });
     //#endregion
+    //#region Income Other--------------------------------
+    $('#incomeOther input[name="HaveSalary"]').change(function () {
+        if ($('#incomeOther #HaveSalary:checked').val() === "1") {
+            $('#incomeOther .income-salary').show();
+            $('#incomeOther .income-nosalary').hide();
+        } else {
+            $('#incomeOther .income-salary').hide();
+            $('#incomeOther .income-nosalary').show();
+        }
+    });
 
-    //#region Income--------------------------------
-    $('#incomeOther input[name="Employed"]').change(function () {
-        $('#incomeOther #Salary').val('');
-        if ($('#incomeOther #Employed:checked').val() === "1") {
-            $('#incomeOther .income-employed').show();
+    $('#incomeOther input[name="NonW2Income"]').change(function () {
+        if ($('#incomeOther #NonW2Income:checked').val() === "1") {
+            $('#incomeOther .income-nonW2').show();
         } else {
-            $('#incomeOther .income-employed').hide();
-        }
-    });
-    $('#incomeOther input[name="SelfEmployed"]').change(function () {
-        $('#incomeOther #SelfIncome').val('');
-        if ($('#incomeOther #SelfEmployed:checked').val() === "1") {
-            $('#incomeOther .income-self').show();
-        } else {
-            $('#incomeOther .income-self').hide();
-        }
-    });
-    $('#incomeOther input[name="SelfTax"]').change(function () {
-        $('#incomeOther #SelfTaxAmount').val('');
-        if ($('#incomeOther #SelfTax:checked').val() === "1") {
-            $('#incomeOther .income-tax').show();
-        } else {
-            $('#incomeOther .income-tax').hide();
-        }
-    });
-    $('#incomeOther input[name="OtherSources"]').change(function () {
-        if ($('#incomeOther #OtherSources:checked').val() === "1") {
-            $('#incomeOther .income-other').show();
-        } else {
-            $('#incomeOther .income-other').hide();
+            $('#incomeOther .income-nonW2').hide();
         }
     });
     $('.financial-part6').click(function () {
         Friendly.SubmitForm('incomeOther', 'socialSecurityOther');
     });
     //#endregion
-    //#region Social Security--------------------------------
+    //#region Social Security Other--------------------------------
     $('.financial-part7').click(function () {
         Friendly.SubmitForm('socialSecurityOther', 'preexistingSupportFormOther');
     });
@@ -18812,7 +18797,6 @@ $(document).ready(function () {
             submitType = 'PUT';
         else
             model.Id = 0;
-        model.isOtherParent = true;
         if ($('#' + formName).valid()) {
             $.ajax({
                 url: '/api/preexistingSupportForm/?format=json',
@@ -18872,7 +18856,6 @@ $(document).ready(function () {
         var formName = "childOther";
         var model = Friendly.GetFormInput();
         model.PreexistingSupportId = $('#childOtherWrapper #supportId').val();
-        model.IsOtherParent = "true";
         if ($('#' + formName).valid()) {
             $.ajax({
                 url: '/api/PreexistingSupportChild?format=json',
@@ -18945,50 +18928,7 @@ $(document).ready(function () {
         Friendly.EndLoading();
     });
     //#endregion
-    
-    //#region Health Other---------------    
-    //$('.financial-part10').click(function () {
-    //    var formName = 'healthsOther';
-    //    if ($('#' + formName).valid()) {
-    //        Friendly.StartLoading();
-    //        var model = Friendly.GetFormInput(formName);
-    //        $.ajax({
-    //            url: "/api/healths?format=json",
-    //            type: 'POST',
-    //            data: model,
-    //            success: function () {
-    //                Friendly.ValidateForms('.financial-part10');
-    //                Friendly.EndLoading();
-    //            },
-    //            error: Friendly.GenericErrorMessage
-    //        });
-    //    }
-    //    return false;
-    //});
-    //$('#healthsOther input[name="ProvideHealth"]').change(function () {
-    //    $('#healthsOther #health-provide input').val('');
-    //    if ($('#healthsOther #ProvideHealth:checked').val() === "1") {
-    //        $('#healthsOther #health-provide').show();
-    //    } else {
-    //        $('#healthsOther #health-provide').hide();
-    //    }
-    //});
-    //$('#healthsOther .percent').focusout(function () {
-    //    var percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
-    //        return $(element).val() != "";
-    //    });
-    //    //only alter if 
-    //    var remainingVal = 0;
-    //    if (percentItems.length == 2) {
-    //        remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
-    //        percentItems = $.grep($('#healthsOther .percent'), function (element, ndx) {
-    //            return $(element).val() === "";
-    //        });
-    //        $(percentItems).val(remainingVal);
-    //    }
-    //});
-    //#endregion
-});
+ });
 ;window.Financial = window.Financial|| {};
 Financial.GetChildCare = function(child) {
     var formName = 'childCare';

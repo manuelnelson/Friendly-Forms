@@ -49,7 +49,7 @@ namespace FriendlyForms.App_Start
 		public AppHost() //Tell ServiceStack the name and where to find your web services
 			: base("Split Solution Api", typeof(RestService.CourtRestService).Assembly) { }
 
-		public override void Configure(Funq.Container container)
+		public override void Configure(Container container)
 		{
 			//Set JSON web services to return idiomatic JSON camelCase properties
 			ServiceStack.Text.JsConfig.EmitCamelCaseNames = false;
@@ -139,6 +139,7 @@ namespace FriendlyForms.App_Start
             container.Register<IDeviationsFormRepository>(c => new DeviationsFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IExtraExpenseFormRepository>(c => new ExtraExpenseFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IExtraExpenseRepository>(c => new ExtraExpenseRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IBcsoRepository>(c => new BcsoRepository(c.Resolve<IUnitOfWork>()));
         }
 
         private void SetupServices(Container container)
@@ -185,6 +186,7 @@ namespace FriendlyForms.App_Start
             container.Register<IDeviationsFormService>(c => new DeviationsFormService(c.Resolve<IDeviationsFormRepository>() as DeviationsFormRepository));
             container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>() as ExtraExpenseFormRepository));
             container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>() as ExtraExpenseRepository));
+            container.Register<IBcsoService>(c => new BcsoService(c.Resolve<IBcsoRepository>() as BcsoRepository));
         }
 
 	    // Uncomment to enable ServiceStack Authentication and CustomUserSession

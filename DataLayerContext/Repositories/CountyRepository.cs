@@ -13,7 +13,7 @@ namespace DataLayerContext.Repositories
 
         public IEnumerable<County> GetAll()
         {
-            return GetDbSet().ToList();
+            return GetDbSet().ToList().OrderBy(y=>y.CountyName);
         }
     }
 }

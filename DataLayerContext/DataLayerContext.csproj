@@ -77,6 +77,7 @@
     <Compile Include="OrmLiteRepositories\FormOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\OrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\UserOrmLiteRepository.cs" />
+    <Compile Include="Repositories\BcsoRepository.cs" />
     <Compile Include="Repositories\ChildCareFormRepository.cs" />
     <Compile Include="Repositories\ChildCareRepository.cs" />
     <Compile Include="Repositories\ClientRepository.cs" />

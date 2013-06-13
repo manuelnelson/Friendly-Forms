@@ -529,10 +529,12 @@
     <Content Include="Views\Output\_scheduleE.cshtml" />
     <Content Include="Views\Forms\_ExtraExpenseForm.cshtml" />
     <Content Include="Views\Forms\_templateExtraExpense.cshtml" />
+    <Content Include="subscription.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Authentication\" />
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

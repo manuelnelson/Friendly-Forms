@@ -488,6 +488,7 @@ namespace FriendlyForms.RestService
         public IChildCareService ChildCareService { get; set; }
         public IExtraExpenseService ExtraExpenseService { get; set; }
         public IChildService ChildService { get; set; }
+        //public IHealthInsuranceService HealthInsuranceService { get; set; }
 
         public object Get(ScheduleADto request)
         {
@@ -556,19 +557,12 @@ namespace FriendlyForms.RestService
             //Setup output form            
             request.UserId = Convert.ToInt32(UserSession.CustomId);
             var children = ChildService.GetByUserId(request.UserId).Children;
-            var fatherCsw = new Csw
-                {
-
-                };
             var parentNames = GetParentNames(request.UserId);
-            return new CswDtoResp
-                {
-                    Children = children,
-                    FatherCsw = fatherCsw,
-                    Father = parentNames.Father,
-                    Mother = parentNames.Mother
-                };
-
+            var cswDto = GetAllCsw(request.UserId);
+            cswDto.Children = children;
+            cswDto.Father = parentNames.Father;
+            cswDto.Mother = parentNames.Mother;
+            return cswDto;
         }
 
         private ScheduleADtoResp GetScheduleA(long userId)
@@ -733,28 +727,68 @@ namespace FriendlyForms.RestService
                     ChildCare = childCaresWithTotals,
                 };
         }
-        private Csw GetCsw(long userId)
+        private CswDtoResp GetAllCsw(long userId)
         {
             var scheduleA = GetScheduleA(userId);
             var scheduleBFather = GetScheduleB(userId, "namehere");
             var scheduleBMother = GetScheduleB(userId, "name", true);
             var scheduleD = GetScheduleD(userId);
+            var socialSecurityFather = SocialSecurityService.GetByUserId(userId);
+            var socialSecurityMother = SocialSecurityService.GetByUserId(userId, true);
+            var healthInsurance = HealthService.GetByUserId(userId) as HealthViewModel;
             var totalIncome = scheduleBFather.AdjustedSupport + scheduleBMother.AdjustedSupport;
-            var cswTotal = new Csw();
             var cswFather = new Csw
                 {
                     GrossIncome = scheduleA.IncomeTotal,
                     AdjustedIncome = scheduleBFather.AdjustedSupport,
                     //Apparently this could be 14 as well? whats the logic here?
                     CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
-                    SupportObligation = 0, //this is really confusing      
-              
+                    SupportObligation = 0, //this is really confusing                    
                 };
-            cswFather.ProRataObligation = cswFather.CombinedIncome * cswTotal.SupportObligation;
-            cswFather.WorkRelatedExpenses = cswFather.CombinedIncome*scheduleD.TotalScheduleD.ProRataAdditional;
-            cswFather.AdjustedObligation = cswFather.ProRataObligation + cswFather.WorkRelatedExpenses;
-            return cswFather;
+            var cswMother = new Csw
+            {
+                GrossIncome = scheduleA.IncomeTotal,
+                AdjustedIncome = scheduleBFather.AdjustedSupport,
+                //Apparently this could be 14 as well? whats the logic here?
+                CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
+                SupportObligation = 0, //this is really confusing                    
+            };
+            var cswTotal = new Csw()
+                {
+                    GrossIncome = cswFather.GrossIncome + cswMother.GrossIncome,
+                    AdjustedIncome = cswFather.AdjustedIncome + cswMother.AdjustedIncome,
+                    CombinedIncome = 100
+                };
+
+            cswFather = FinishCsw(cswFather, cswTotal, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
+            cswMother = FinishCsw(cswMother, cswTotal, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
+
+            return new CswDtoResp()
+                {
+                    FatherCsw = cswFather,
+                    MotherCsw = cswMother,
+                    TotalCsw = cswTotal
+                };
         }
+        private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurityViewModel socialSecurity, HealthViewModel healthInsurance, bool isFather=true)
+        {
+
+            csw.ProRataObligation = csw.CombinedIncome*cswTotal.SupportObligation;
+            csw.WorkRelatedExpenses = csw.CombinedIncome*scheduleD.ProRataAdditional;
+            csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;
+            csw.AdjustedExpensesPaid = scheduleD.TotalMonthly;
+            csw.PresumptiveAmount = csw.AdjustedObligation - csw.AdjustedExpensesPaid;
+            csw.DeviationsAmount = 0; //TODO: comes from scheduleE
+            csw.Subtotal = csw.PresumptiveAmount + csw.DeviationsAmount;
+            csw.SocialSecurity = socialSecurity.Amount ?? 0.0;
+            csw.FinalAmount = csw.SocialSecurity > csw.Subtotal
+                                        ? csw.SocialSecurity
+                                        : csw.Subtotal - csw.SocialSecurity;
+            csw.UninsuredExpenses = isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0;
+            return csw;
+        }
+
+
         private ParentNames GetParentNames(long userId)
         {
             var participants = ParticipantService.GetByUserId(userId) as ParticipantViewModel;
@@ -769,7 +803,7 @@ namespace FriendlyForms.RestService
                                  : outputViewModel.CustodyInformation.CustodyParentName,
                     Mother = outputViewModel.CustodyInformation.NonCustodyIsFather
                              ? outputViewModel.CustodyInformation.CustodyParentName
-                             : outputViewModel.CustodyInformation.NonCustodyParentName; 
+                             : outputViewModel.CustodyInformation.NonCustodyParentName
                 };        
         }
     }

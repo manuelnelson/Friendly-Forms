@@ -50,6 +50,7 @@ namespace DataLayerContext
         public DbSet<DeviationsForm> DeviationsForm { get; set; }
         public DbSet<ExtraExpenseForm> ExtraExpenseForms { get; set; }
         public DbSet<ExtraExpense> ExtraExpenses { get; set; }
+        public DbSet<Bcso> Bcsos { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -94,7 +95,15 @@ namespace DataLayerContext
             SetupDeviationsFormEntity(modelBuilder);
             SetupExtraExpenseFormEntity(modelBuilder);
             SetupExtraExpenseEntity(modelBuilder);
+            SetupBcsoEntity(modelBuilder);
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupBcsoEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Bcso>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Bcso>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupExtraExpenseEntity(DbModelBuilder modelBuilder)
