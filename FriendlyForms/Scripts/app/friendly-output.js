@@ -30,6 +30,9 @@
                     case 'scheduleE':
                         populateScheduleEForm(data);
                         break;
+                    case 'ChildSupport':
+                        populateCswForm(data);
+                        break;
                     default:
                         var result = $("#friendly-" + form + "-template").tmpl(data);
                         $('#finanicalFormOutput').empty();
@@ -58,7 +61,9 @@
         addParentChildCareCosts(data.NonCustodialParentName, '#friendly-supplementalTableMother-template', data.ChildCare, data.MotherScheduleD);
         addParentChildCareCosts('Nonparent Custodian', '#friendly-supplementalTableNonParent-template', data.ChildCare, data.NonParentScheduleD);
     }
-    
+    function populateCswForm(data) {
+        
+    }
     function addParentChildCareCosts(parentName, templateName, childCareList, total) {
         var parent = {
             ParentName: parentName

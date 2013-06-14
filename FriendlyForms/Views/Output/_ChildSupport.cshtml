@@ -1,1 +1,95 @@
-﻿
+﻿<script id="friendly-scheduleA-template" type="text/x-jquery-tmpl">
+    <div class="row-fluid" style="text-align: center;">
+        <h2>CHILD SUPPORT WORKSHEET</h2>
+        <h2>Dekalb County Superior Court</h2>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Child Name</th>
+                <th>Date of Birth</th>
+            </tr>
+        </thead>
+        <tbody id="children">
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>${Father}</th>
+                <th>${Mother}</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1. Parent's Monthly Gross Income</td>
+                <td class="currency">$${Income.W2Income}</td>
+                <td class="currency">$${OtherIncome.W2Income}</td>
+                <td class="currency">$${CombinedIncome.W2Income}</td>
+            </tr>
+            <tr>
+                <td>2. Monthly Adjusted Income</td>
+                <td class="currency">$${Income.Commisions}</td>
+                <td class="currency">$${OtherIncome.Commisions}</td>
+                <td class="currency">$${CombinedIncome.Commisions}</td>
+            </tr>
+            <tr>
+                <td>3. Pro Rata Shares of Combined Income</td>
+                <td class="currency">$${Income.SelfIncomeNoDeductions}</td>
+                <td class="currency">$${OtherIncome.SelfIncomeNoDeductions}</td>
+                <td class="currency">$${CombinedIncome.SelfIncomeNoDeductions}</td>
+            </tr>
+            <tr>
+                <td>4. Basic Child Support Obligation</td>
+                <td class="currency">$${Income.Bonuses}</td>
+                <td class="currency">$${OtherIncome.Bonuses}</td>
+                <td class="currency">$${CombinedIncome.Bonuses}</td>
+            </tr>
+            <tr>
+                <td>5. Pro rata shares of Basic Child Support Obligation</td>
+                <td class="currency">$${Income.Overtime}</td>
+                <td class="currency">$${OtherIncome.Overtime}</td>
+                <td class="currency">$${CombinedIncome.Overtime}</td>
+            </tr>
+            <tr>
+                <td>6. Adjustment for Work Related Child Care and Health Insurance Expenses</td>
+                <td class="currency">$${Income.Severance}</td>
+                <td class="currency">$${OtherIncome.Severance}</td>
+                <td class="currency">$${CombinedIncome.Severance}</td>
+            </tr>
+            <tr>
+                <td>7. Adjusted Child Support Obligation</td>
+                <td class="currency">$${Income.Retirement}</td>
+                <td class="currency">$${OtherIncome.Retirement}</td>
+                <td class="currency">$${CombinedIncome.Retirement}</td>
+            </tr>
+            <tr>
+                <td>8. Adjustment for Additional Expenses Paid</td>
+                <td class="currency">$${Income.Interest}</td>
+                <td class="currency">$${OtherIncome.Interest}</td>
+                <td class="currency">$${CombinedIncome.Interest}</td>
+            </tr>
+            <tr>
+                <td>9. Presumptive Amount of Child Support</td>
+                <td class="currency">$${Income.Dividends}</td>
+                <td class="currency">$${OtherIncome.Dividends}</td>
+                <td class="currency">$${CombinedIncome.Dividends}</td>
+            </tr>
+        </tbody>
+    </table> <br/>   
+    <div class="borderBox centered" style="width:90%;">
+        <p><span style="font-weight: bold">Other income for ${Father} is based upon:</span> ${Income.OtherDetails}</p>
+        <p><span style="font-weight: bold">Other income for ${Mother} is based upon:</span> ${OtherIncome.OtherDetails}</p>
+    </div>
+</script>
+<script id="friendly-CSWChildren-template" type="text/x-jquery-tmpl">
+    {{each Children}}
+    <tr>
+        <td>${$value.Name}</td>
+        <td>${$value.DateOfBirth}</td>
+    </tr>
+    {{/each}}
+</script>

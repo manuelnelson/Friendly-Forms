@@ -530,6 +530,7 @@
     <Content Include="Views\Forms\_ExtraExpenseForm.cshtml" />
     <Content Include="Views\Forms\_templateExtraExpense.cshtml" />
     <Content Include="subscription.pdf" />
+    <Content Include="Views\Output\_ChildSupport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
