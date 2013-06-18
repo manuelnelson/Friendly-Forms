@@ -5,7 +5,6 @@ using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
-using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
@@ -18,8 +17,6 @@ namespace FriendlyForms.RestService
         public long Id { get; set; }
         [DataMember]
         public long UserId { get; set; }
-        [DataMember]
-        public bool IsOtherParent { get; set; }
         [DataMember]
         public long ChildId { get; set; }
         [DataMember]
@@ -66,11 +63,10 @@ namespace FriendlyForms.RestService
         {
             if (request.ChildId != 0)
             {
-                var deviations = DeviationsService.GetByChildId(request.ChildId, request.IsOtherParent) ?? new Deviations()
+                var deviations = DeviationsService.GetByChildId(request.ChildId) ?? new Deviations()
                     {
                         ChildId = request.ChildId,    
                     };
-                deviations.HighLow = deviations.HighLow ?? 0;
                 return deviations.TranslateTo<DeviationsDto>();
             }                
             return DeviationsService.Get(request.Id);

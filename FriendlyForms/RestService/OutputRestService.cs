@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using BusinessLogic;
 using BusinessLogic.Contracts;
 using FriendlyForms.Models;
 using Models;
@@ -49,9 +48,9 @@ namespace FriendlyForms.RestService
     }
 
     [DataContract]
-    [Route("/Output/Financial/ChildSupportWorksheet/{UserId}")]
-    [Route("/Output/Financial/ChildSupportWorksheet")]
-    public class CSWDto : IReturn<CswDtoResp>
+    [Route("/Output/Financial/ChildSupportWorkSheet/{UserId}")]
+    [Route("/Output/Financial/ChildSupportWorkSheet")]
+    public class CswDto : IReturn<CswDtoResp>
     {
         [DataMember]
         public long UserId { get; set; }
@@ -451,6 +450,8 @@ namespace FriendlyForms.RestService
         public Csw TotalCsw { get; set; }
         public string Father { get; set; }
         public string Mother { get; set; }
+        public string ValidSchedules { get; set; }
+        public string InvalidSchedules { get; set; }
     }
 
     public class Csw
@@ -488,7 +489,7 @@ namespace FriendlyForms.RestService
         public IChildCareService ChildCareService { get; set; }
         public IExtraExpenseService ExtraExpenseService { get; set; }
         public IChildService ChildService { get; set; }
-        //public IHealthInsuranceService HealthInsuranceService { get; set; }
+        public IBcsoService BcsoService { get; set; }
 
         public object Get(ScheduleADto request)
         {
@@ -552,14 +553,12 @@ namespace FriendlyForms.RestService
             };
         }
 
-        public object Get(CSWDto request)
+        public object Get(CswDto request)
         {
             //Setup output form            
             request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var children = ChildService.GetByUserId(request.UserId).Children;
             var parentNames = GetParentNames(request.UserId);
             var cswDto = GetAllCsw(request.UserId);
-            cswDto.Children = children;
             cswDto.Father = parentNames.Father;
             cswDto.Mother = parentNames.Mother;
             return cswDto;
@@ -743,15 +742,13 @@ namespace FriendlyForms.RestService
                     AdjustedIncome = scheduleBFather.AdjustedSupport,
                     //Apparently this could be 14 as well? whats the logic here?
                     CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
-                    SupportObligation = 0, //this is really confusing                    
                 };
             var cswMother = new Csw
             {
                 GrossIncome = scheduleA.IncomeTotal,
-                AdjustedIncome = scheduleBFather.AdjustedSupport,
+                AdjustedIncome = scheduleBMother.AdjustedSupport,
                 //Apparently this could be 14 as well? whats the logic here?
-                CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
-                SupportObligation = 0, //this is really confusing                    
+                CombinedIncome = scheduleBMother.AdjustedSupport / totalIncome,
             };
             var cswTotal = new Csw()
                 {
@@ -759,20 +756,21 @@ namespace FriendlyForms.RestService
                     AdjustedIncome = cswFather.AdjustedIncome + cswMother.AdjustedIncome,
                     CombinedIncome = 100
                 };
-
+            var children = ChildService.GetByUserId(userId).Children;
+            cswTotal.SupportObligation = BcsoService.GetAmount(cswTotal.AdjustedIncome, children.Count); 
             cswFather = FinishCsw(cswFather, cswTotal, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
-            cswMother = FinishCsw(cswMother, cswTotal, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
+            cswMother = FinishCsw(cswMother, cswTotal, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
 
             return new CswDtoResp()
                 {
                     FatherCsw = cswFather,
                     MotherCsw = cswMother,
-                    TotalCsw = cswTotal
+                    TotalCsw = cswTotal,
+                    Children = children
                 };
         }
         private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurityViewModel socialSecurity, HealthViewModel healthInsurance, bool isFather=true)
         {
-
             csw.ProRataObligation = csw.CombinedIncome*cswTotal.SupportObligation;
             csw.WorkRelatedExpenses = csw.CombinedIncome*scheduleD.ProRataAdditional;
             csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;

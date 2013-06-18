@@ -524,7 +524,6 @@
     <Content Include="Views\Output\_scheduleA.cshtml" />
     <Content Include="Views\Output\_scheduleB.cshtml" />
     <Content Include="Views\Forms\_templateDeviations.cshtml" />
-    <Content Include="Views\Forms\_DeviationsOther.cshtml" />
     <Content Include="Views\Output\_scheduleD.cshtml" />
     <Content Include="Views\Output\_scheduleE.cshtml" />
     <Content Include="Views\Forms\_ExtraExpenseForm.cshtml" />
@@ -535,7 +534,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Authentication\" />
-    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

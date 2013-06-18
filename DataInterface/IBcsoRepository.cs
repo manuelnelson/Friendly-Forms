@@ -4,6 +4,6 @@ namespace DataInterface
 {
     public interface IBcsoRepository : IRepository<Bcso>
     {
-        double GetAmount(double income, int numberOfChildren);
+        double GetAmount(int income, int numberOfChildren);
     }
 }

@@ -248,6 +248,11 @@ Financial.GetDeviations = function (child) {
     });
 };
 Financial.AddDeviations = function (caller, stop) {
+    //It's annoying that we need to do this for each child, but this is the only nice way
+    //I can think about doing this right now. Unless we add a separate next/previous button for children
+    //but that doesn't seem elegant from a user standpoint...
+    addDeviationForm();
+    
     var formName = 'deviations';
     if (caller != null && $(caller).hasClass('next'))
         Friendly.childNdx++;
@@ -293,7 +298,6 @@ Financial.AddDeviations = function (caller, stop) {
         data: model,
         success: function () {
             if (stop == null || !stop) {
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 var nextChild = Friendly.children[Friendly.childNdx];
                 Financial.GetDeviations(nextChild);
             }
@@ -302,6 +306,28 @@ Financial.AddDeviations = function (caller, stop) {
     });
     return true;
 };
+function addDeviationForm() {
+    Friendly.StartLoading();
+    var formName = 'deviationsForm';
+    var model = Friendly.GetFormInput(formName);
+    var submitType = 'POST';
+    if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
+        submitType = 'PUT';
+    else
+        model.Id = 0;
+    if ($('#' + formName).valid()) {
+        $.ajax({
+            url: '/api/' + formName + '/?format=json',
+            type: submitType,
+            data: model,
+            success: function () {
+                Friendly.EndLoading();
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    }
+    Friendly.EndLoading();
+}
 Financial.CheckDeviations = function (child, nextForm) {
     var formName = 'deviations';
     $.ajax({

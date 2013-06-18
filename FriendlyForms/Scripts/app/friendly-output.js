@@ -30,7 +30,7 @@
                     case 'scheduleE':
                         populateScheduleEForm(data);
                         break;
-                    case 'ChildSupport':
+                    case 'childSupportWorksheet':
                         populateCswForm(data);
                         break;
                     default:

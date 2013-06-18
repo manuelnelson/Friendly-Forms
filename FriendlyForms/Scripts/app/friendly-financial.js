@@ -37,11 +37,6 @@
                 Friendly.NextForm('extraExpense', Friendly.properties.iconError);
                 return;
             }
-            //check if we need to move to previous form
-            //if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-            //    Friendly.NextForm('deviations', Friendly.properties.iconError);
-            //    return;
-            //}
             $('html, body').animate({ scrollTop: 0 }, 'fast');
             var nextChild = Friendly.children[Friendly.childNdx];
             Financial.GetChildCare(nextChild);
@@ -157,36 +152,30 @@
         } else {
             $('#deviationsWrapper #deviations-show').hide();
         }
-        Friendly.StartLoading();
-        var formName = 'deviationsForm';
-        var model = Friendly.GetFormInput(formName);
-        var submitType = 'POST';
-        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
-            submitType = 'PUT';
-        else
-            model.Id = 0;
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '/?format=json',
-                type: submitType,
-                data: model,
-                success: function () {
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
     });
-
     $('input[name="HighLow"]').live('change',function () {
         if ($('#HighLow:checked').val() === "1") {
             $('.deviation-high').show();
             $('.deviation-low').hide();
+            if ($('#SpecificDeviations:checked').val() === "1") {
+                $('#deviations-specific').show();
+            } else {
+                $('#deviations-specific').hide();
+            }
         } else {
             $('.deviation-low').show();
             $('.deviation-high').hide();
+            $('#deviations-specific').hide();
         }
+
+    });
+    $('input[name="SpecificDeviations"]').live('change', function () {
+        if ($('#SpecificDeviations:checked').val() === "1") {
+            $('#deviations-specific').show();
+        } else {
+            $('#deviations-specific').hide();
+        }
+
     });
     //#endregion
     //#region Income
@@ -341,7 +330,7 @@
                         $('#otherChildWrapper #childrenId').val(data.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('deviationsOther', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -374,64 +363,6 @@
     });
     //#endregion
 
-    //#region Deviations Other
-    $('.financial-deviationsOther').click(function () {
-        //if the form isn't validated, we still need to move on
-        if (!Financial.AddDeviationsOther(this)) {
-            var child = Friendly.children[Friendly.childNdx - 1];
-            Friendly.DeviationsError.push(child.Name);
-            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('incomeOther', Friendly.properties.iconError);
-                return;
-            }
-            //check if we need to move to previous form
-            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('otherChildren', Friendly.properties.iconError);
-                return;
-            }
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Financial.GetDeviationsOther(nextChild);
-            Friendly.EndLoading();
-        }
-    });
-    $('#deviationsOtherForm input[name="Deviation"]').change(function () {
-        if ($('#deviationsOtherForm #Deviation:checked').val() === "1") {
-            $('#deviationsOtherWrapper #deviations-show').show();
-        } else {
-            $('#deviationsOtherWrapper #deviations-show').hide();
-        }
-        Friendly.StartLoading();
-        var formName = 'deviationsOtherForm';
-        var model = Friendly.GetFormInput(formName);
-        var submitType = 'POST';
-        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
-            submitType = 'PUT';
-        else
-            model.Id = 0;
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/deviationsForm/?format=json',
-                type: submitType,
-                data: model,
-                success: function () {
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    $('#deviationsOther input[name="HighLow"]').live('change', function () {
-        if ($('#deviationsOther #HighLow:checked').val() === "1") {
-            $('#deviationsOther .deviation-high').show();
-            $('#deviationsOther .deviation-low').hide();
-        } else {
-            $('#deviationsOther .deviation-low').show();
-            $('#deviationsOther .deviation-high').hide();
-        }
-    });
-    //#endregion
     //#region Income Other--------------------------------
     $('#incomeOther input[name="HaveSalary"]').change(function () {
         if ($('#incomeOther #HaveSalary:checked').val() === "1") {

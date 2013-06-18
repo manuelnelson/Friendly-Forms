@@ -11,15 +11,7 @@ namespace Models
         public long Id { get; set; }
         public long UserId { get; set; }
         public virtual User User { get; set; }
-        public bool IsOtherParent { get; set; }
         public long ChildId { get; set; }
-        public int Circumstances { get; set; }
-        public string Unjust { get; set; }
-        public string BestInterest { get; set; }
-        public string Impair { get; set; }
-        public int? HighLow { get; set; }
-        public int? LowDeviation { get; set; }
-        public string WhyLow { get; set; }
         public int? HighIncome { get; set; }
         public int? Health { get; set; }
         public int? Insurance { get; set; }
@@ -29,7 +21,6 @@ namespace Models
         public int? AlimonyPaid { get; set; }
         public int? Mortgage { get; set; }
         public int? Permanency { get; set; }
-        public int? NonSpecific { get; set; }
         public Child Child { get; set; }
 
         public IViewModel ConvertToModel()
