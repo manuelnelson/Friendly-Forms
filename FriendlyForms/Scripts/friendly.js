@@ -11541,232 +11541,379 @@ $.format = $.validator.format;
 	}
 })( jQuery );
 
-;/**
-* jquery.mask.js
-* @author: Igor Escobar
-*
-* Created by Igor Escobar on 2012-03-10. Please report any bug at http://blog.igorescobar.com
-*
-* Copyright (c) 2012 Igor Escobar http://blog.igorescobar.com
-*
-* The MIT License (http://www.opensource.org/licenses/mit-license.php)
-*
-* Permission is hereby granted, free of charge, to any person
-* obtaining a copy of this software and associated documentation
-* files (the "Software"), to deal in the Software without
-* restriction, including without limitation the rights to use,
-* copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the
-* Software is furnished to do so, subject to the following
-* conditions:
-*
-* The above copyright notice and this permission notice shall be
-* included in all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-* OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-* HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-* OTHER DEALINGS IN THE SOFTWARE.
+;/*
+* maskMoney plugin for jQuery
+* http://plentz.github.com/jquery-maskmoney/
+* version: 2.1.2
+* Licensed under the MIT license
 */
+;(function($) {
+	if(!$.browser){
+		$.browser = {};
+		$.browser.mozilla = /mozilla/.test(navigator.userAgent.toLowerCase()) && !/webkit/.test(navigator.userAgent.toLowerCase());
+		$.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
+		$.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
+		$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase());
+	}
 
-(function ($) {
-    "use strict";
+	var methods = {
+		destroy : function(){
+			var input = $(this);
+			input.unbind('.maskMoney');
 
-    var e, oValue, oNewValue, keyCode, pMask;
+			if ($.browser.msie) {
+				this.onpaste = null;
+			}
+			return this;
+		},
 
-    var Mask = function (el, mask, options) {
-        var plugin = this,
-            $el = $(el),
-            defaults = {
-                byPassKeys: [8, 9, 37, 38, 39, 40],
-                specialChars: { ':': 191, '-': 189, '.': 190, '(': 57, ')': 48, '/': 191, ',': 188, '_': 189, ' ': 32, '+': 187 },
-                translation: {
-                    0: '(.)', 1: '(.)', 2: '(.)', 3: '(.)', 4: '(.)', 5: '(.)', 6: '(.)', 7: '(.)', 8: '(.)', 9: '(.)',
-                    'A': '(.)', 'S': '(.)', ':': '(:)?', '-': '(-)?', '.': '(\\\.)?', '(': '(\\()?', ')': '(\\))?', '/': '(/)?',
-                    ',': '(,)?', '_': '(_)?', ' ': '(\\s)?', '+': '(\\\+)?'
-                }
-            };
+		mask : function(){
+			return this.trigger('mask');
+		},
+		
+		init : function(settings) {
+			settings = $.extend({
+				symbol: '',
+				symbolStay: false,
+				thousands: ',',
+				decimal: '.',
+				precision: 2,
+				defaultZero: true,
+				allowZero: false,
+				allowNegative: false
+			}, settings);
 
+			return this.each(function() {
+				var input = $(this);
+				var dirty = false;
 
-        plugin.settings = {};
-        plugin.init = function () {
-            plugin.settings = $.extend({}, defaults, options);
+				function markAsDirty() {
+					dirty = true;
+				}
 
-            options = options || {};
-            $el.each(function () {
-                mask = resolveDynamicMask(mask, $(this).val(), e, $(this), options);
-                $el.attr('maxlength', mask.length);
-                $el.attr('autocomplete', 'off');
+				function clearDirt(){
+					dirty = false;
+				}
 
-                destroyEvents();
-                setOnKeyUp();
-                setOnPaste();
-            });
-        };
+				function keypressEvent(e) {
+					e = e || window.event;
+					var k = e.which || e.charCode || e.keyCode;
+					if (k == undefined) return false; //needed to handle an IE "special" event
+					if (k < 48 || k > 57) { // any key except the numbers 0-9
+						if (k == 45) { // -(minus) key
+							markAsDirty();
+							input.val(changeSign(input));
+							return false;
+						} else if (k == 43) { // +(plus) key
+							markAsDirty();
+							input.val(input.val().replace('-',''));
+							return false;
+						} else if (k == 13 || k == 9) { // enter key or tab key
+							if(dirty){
+								clearDirt();
+								$(this).change();
+							}
+							return true;
+						} else if ($.browser.mozilla && (k == 37 || k == 39) && e.charCode == 0) {
+							// needed for left arrow key or right arrow key with firefox
+							// the charCode part is to avoid allowing '%'(e.charCode 0, e.keyCode 37)
+							return true;
+						} else { // any other key with keycode less than 48 and greater than 57
+							preventDefault(e);
+							return true;
+						}
+					} else if (canInputMoreNumbers(input)) {
+						return false;
+					} else {
+						preventDefault(e);
 
-        // public methods
-        plugin.remove = function () {
-            destroyEvents();
-            $el.val(onlyNumbers($el.val()));
-        };
+						var key = String.fromCharCode(k);
+						var x = input.get(0);
+						var selection = getInputSelection(x);
+						var startPos = selection.start;
+						var endPos = selection.end;
+						x.value = x.value.substring(0, startPos) + key + x.value.substring(endPos, x.value.length);
+						maskAndPosition(x, startPos + 1);
+						markAsDirty();
+						return false;
+					}
+				}
 
-        // private methods
-        var resolveDynamicMask = function (mask, oValue, e, currentField, options) {
-            return typeof mask == "function" ? mask(oValue, e, currentField, options) : mask;
-        };
+				function canInputMoreNumbers(element){
+					var reachedMaxLenght = (element.val().length >= element.attr('maxlength') && element.attr('maxlength') >= 0);
+					var selection = getInputSelection(element.get(0));
+					var start = selection.start;
+					var end = selection.end;
+					var hasNumberSelected = (selection.start != selection.end && element.val().substring(start,end).match(/\d/))? true : false;
+					return reachedMaxLenght && !hasNumberSelected;
+				}
 
-        var onlyNumbers = function (string) {
-            return string.replace(/\W/g, '');
-        };
+				function keydownEvent(e) {
+					e = e||window.event;
+					var k = e.which || e.charCode || e.keyCode;
+					if (k == undefined) return false; //needed to handle an IE "special" event
 
-        var onPasteMethod = function () {
-            setTimeout(function () {
-                $el.trigger('keyup');
-            }, 100);
-        };
+					var x = input.get(0);
+					var selection = getInputSelection(x);
+					var startPos = selection.start;
+					var endPos = selection.end;
 
-        var setOnPaste = function () {
-            (hasOnSupport()) ? $el.on("paste", onPasteMethod) : $el.onpaste = onPasteMethod;
-        };
+					if (k==8) { // backspace key
+						preventDefault(e);
 
-        var setOnKeyUp = function () {
-            $el.keyup(maskBehaviour).trigger('keyup');
-        };
+						if(startPos == endPos){
+							// Remove single character
+							x.value = x.value.substring(0, startPos - 1) + x.value.substring(endPos, x.value.length);
+							startPos = startPos - 1;
+						} else {
+							// Remove multiple characters
+							x.value = x.value.substring(0, startPos) + x.value.substring(endPos, x.value.length);
+						}
+						maskAndPosition(x, startPos);
+						markAsDirty();
+						return false;
+					} else if (k==9) { // tab key
+						if(dirty) {
+							$(this).change();
+							clearDirt();
+						}
+						return true;
+					} else if ( k==46 || k==63272 ) { // delete key (with special case for safari)
+						preventDefault(e);
+						if(x.selectionStart == x.selectionEnd){
+							// Remove single character
+							x.value = x.value.substring(0, startPos) + x.value.substring(endPos + 1, x.value.length);
+						} else {
+							//Remove multiple characters
+							x.value = x.value.substring(0, startPos) + x.value.substring(endPos, x.value.length);
+						}
+						maskAndPosition(x, startPos);
+						markAsDirty();
+						return false;
+					} else { // any other key
+						return true;
+					}
+				}
 
-        var hasOnSupport = function () {
-            return $.isFunction($.on);
-        };
+				function focusEvent(e) {
+					var mask = getDefaultMask();
+					if (input.val() == mask) {
+						input.val('');
+					} else if (input.val()=='' && settings.defaultZero) {
+						input.val(setSymbol(mask));
+					} else {
+						input.val(setSymbol(input.val()));
+					}
+					if (this.createTextRange) {
+						var textRange = this.createTextRange();
+						textRange.collapse(false); // set the cursor at the end of the input
+						textRange.select();
+					}
+				}
 
-        var destroyEvents = function () {
-            $el.unbind('keyup').unbind('onpaste');
-        };
+				function blurEvent(e) {
+					if ($.browser.msie) {
+						keypressEvent(e);
+					}
 
-        var maskBehaviour = function (e) {
-            e = e || window.event;
-            keyCode = e.keyCode || e.which;
+					if (input.val() == '' || input.val() == setSymbol(getDefaultMask()) || input.val() == settings.symbol) {
+						if(!settings.allowZero){
+							input.val('');
+						} else if (!settings.symbolStay){
+							input.val(getDefaultMask());
+						} else {
+							input.val(setSymbol(getDefaultMask()));
+						}
+					} else {
+						if (!settings.symbolStay){
+							input.val(input.val().replace(settings.symbol,''));
+						} else if (settings.symbolStay && input.val() == settings.symbol){
+							input.val(setSymbol(getDefaultMask()));
+						}
+					}
+				}
 
-            if ($.inArray(keyCode, plugin.settings.byPassKeys) >= 0)
-                return true;
+				function preventDefault(e) {
+					if (e.preventDefault) { //standard browsers
+						e.preventDefault();
+					} else { // old internet explorer
+						e.returnValue = false
+					}
+				}
 
-            var oCleanedValue = onlyNumbers($el.val());
+				function maskAndPosition(x, startPos) {
+					var originalLen = input.val().length;
+					input.val(maskValue(x.value));
+					var newLen = input.val().length;
+					startPos = startPos - (originalLen - newLen);
+					setCursorPosition(input, startPos);
+				}
+				
+				function mask(){
+					var value = input.val();
+					input.val(maskValue(value));
+				}
 
-            pMask = (typeof options.reverse == "boolean" && options.reverse === true) ?
-            getProportionalReverseMask(oCleanedValue, mask) :
-            getProportionalMask(oCleanedValue, mask);
+				function maskValue(v) {
+					v = v.replace(settings.symbol, '');
 
-            oNewValue = applyMask(e, $el, pMask, options);
+					var strCheck = '0123456789';
+					var len = v.length;
+					var a = '', t = '', neg='';
 
-            if (oNewValue !== $el.val()) {
-                // workaround to trigger the change Event when setted
-                $el.val(oNewValue).trigger('change');
-            }
+					if(len != 0 && v.charAt(0)=='-'){
+						v = v.replace('-','');
+						if(settings.allowNegative){
+							neg = '-';
+						}
+					}
 
-            return seekCallbacks(e, options, oNewValue, mask, $el);
-        };
+					if (len==0) {
+						if (!settings.defaultZero) return t;
+						t = '0.00';
+					}
 
-        var applyMask = function (e, fieldObject, mask, options) {
+					for (var i = 0; i<len; i++) {
+						if ((v.charAt(i)!='0') && (v.charAt(i)!=settings.decimal)) break;
+					}
 
-            oValue = onlyNumbers(fieldObject.val()).substring(0, onlyNumbers(mask).length);
+					for (; i < len; i++) {
+						if (strCheck.indexOf(v.charAt(i))!=-1) a+= v.charAt(i);
+					}
+					var n = parseFloat(a);
 
-            return oValue.replace(new RegExp(maskToRegex(mask)), function () {
-                oNewValue = '';
-                for (var i = 1; i < arguments.length - 2; i++) {
-                    if (typeof arguments[i] == "undefined" || arguments[i] === "") {
-                        arguments[i] = mask.charAt(i - 1);
-                    }
+					n = isNaN(n) ? 0 : n/Math.pow(10,settings.precision);
+					t = n.toFixed(settings.precision);
 
-                    oNewValue += arguments[i];
-                }
+					i = settings.precision == 0 ? 0 : 1;
+					var p, d = (t=t.split('.'))[i].substr(0,settings.precision);
+					for (p = (t=t[0]).length; (p-=3)>=1;) {
+						t = t.substr(0,p)+settings.thousands+t.substr(p);
+					}
 
-                return cleanBullShit(oNewValue, mask);
-            });
-        };
+					return (settings.precision>0)
+					? setSymbol(neg+t+settings.decimal+d+Array((settings.precision+1)-d.length).join(0))
+					: setSymbol(neg+t);
+				}
 
-        var getProportionalMask = function (oValue, mask) {
-            var endMask = 0, m = 0;
+				function getDefaultMask() {
+					var n = parseFloat('0')/Math.pow(10,settings.precision);
+					return (n.toFixed(settings.precision)).replace(new RegExp('\\.','g'),settings.decimal);
+				}
 
-            while (m <= oValue.length - 1) {
-                while (typeof plugin.settings.specialChars[mask.charAt(endMask)] === "number")
-                    endMask++;
-                endMask++;
-                m++;
-            }
+				function setSymbol(value){
+					if (settings.symbol != ''){
+						var operator = '';
+						if(value.length != 0 && value.charAt(0) == '-'){
+							value = value.replace('-', '');
+							operator = '-';
+						}
 
-            return mask.substring(0, endMask);
-        };
+						if(value.substr(0, settings.symbol.length) != settings.symbol){
+							value = operator + settings.symbol + value;
+						}
+					}
+					return value;
+				}
 
-        var getProportionalReverseMask = function (oValue, mask) {
-            var startMask = 0, endMask = 0, m = 0;
-            startMask = (mask.length >= 1) ? mask.length : mask.length - 1;
-            endMask = startMask;
+				function changeSign(input){
+					var inputValue = input.val();
+					if (settings.allowNegative){
+						if (inputValue != '' && inputValue.charAt(0) == '-'){
+							return inputValue.replace('-','');
+						} else {
+							return '-' + inputValue;
+						}
+					} else {
+						return inputValue;
+					}
+				}
 
-            while (m <= oValue.length - 1) {
-                while (typeof plugin.settings.specialChars[mask.charAt(endMask - 1)] === "number")
-                    endMask--;
-                endMask--;
-                m++;
-            }
+				function setCursorPosition(input, pos) {
+					// I'm not sure if we need to jqueryfy input
+					$(input).each(function(index, elem) {
+						if (elem.setSelectionRange) {
+							elem.focus();
+							elem.setSelectionRange(pos, pos);
+						} else if (elem.createTextRange) {
+							var range = elem.createTextRange();
+							range.collapse(true);
+							range.moveEnd('character', pos);
+							range.moveStart('character', pos);
+							range.select();
+						}
+					});
+					return this;
+				};
 
-            endMask = (mask.length >= 1) ? endMask : endMask - 1;
-            return mask.substring(startMask, endMask);
-        };
+				function getInputSelection(el) {
+					var start = 0, end = 0, normalizedValue, range, textInputRange, len, endRange;
 
-        var maskToRegex = function (mask) {
-            var regex = '';
-            for (var i = 0; i < mask.length; i++) {
-                if (plugin.settings.translation[mask.charAt(i)])
-                    regex += plugin.settings.translation[mask.charAt(i)];
-            }
-            return regex;
-        };
+					if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
+						start = el.selectionStart;
+						end = el.selectionEnd;
+					} else {
+						range = document.selection.createRange();
 
-        var validDigit = function (nowMask, nowDigit) {
-            if (isNaN(parseInt(nowMask, 10)) === false && /\d/.test(nowDigit) === false) {
-                return false;
-            } else if (nowMask === 'A' && /[a-zA-Z0-9]/.test(nowDigit) === false) {
-                return false;
-            } else if (nowMask === 'S' && /[a-zA-Z]/.test(nowDigit) === false) {
-                return false;
-            } else if (typeof plugin.settings.specialChars[nowDigit] === "number" && nowMask !== nowDigit) {
-                return false;
-            }
-            return true;
-        };
+						if (range && range.parentElement() == el) {
+							len = el.value.length;
+							normalizedValue = el.value.replace(/\r\n/g, "\n");
 
-        var cleanBullShit = function (oNewValue, mask) {
-            oNewValue = oNewValue.split('');
-            for (var i = 0; i < mask.length; i++) {
-                if (validDigit(mask.charAt(i), oNewValue[i]) === false)
-                    oNewValue[i] = '';
-            }
-            return oNewValue.join('');
-        };
+							// Create a working TextRange that lives only in the input
+							textInputRange = el.createTextRange();
+							textInputRange.moveToBookmark(range.getBookmark());
 
-        var seekCallbacks = function (e, options, oNewValue, mask, currentField) {
-            if (options.onKeyPress && e.isTrigger === undefined && typeof options.onKeyPress == "function") {
-                options.onKeyPress(oNewValue, e, currentField, options);
-            }
+							// Check if the start and end of the selection are at the very end
+							// of the input, since moveStart/moveEnd doesn't return what we want
+							// in those cases
+							endRange = el.createTextRange();
+							endRange.collapse(false);
 
-            if (options.onComplete && e.isTrigger === undefined &&
-                oNewValue.length === mask.length && typeof options.onComplete == "function") {
-                options.onComplete(oNewValue, e, currentField, options);
-            }
-        };
+							if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+								start = end = len;
+							} else {
+								start = -textInputRange.moveStart("character", -len);
+								start += normalizedValue.slice(0, start).split("\n").length - 1;
 
-        plugin.init();
-    };
+								if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+									end = len;
+								} else {
+									end = -textInputRange.moveEnd("character", -len);
+									end += normalizedValue.slice(0, end).split("\n").length - 1;
+								}
+							}
+						}
+					}
 
-    $.fn.mask = function (mask, options) {
-        return this.each(function () {
-            $(this).data('mask', new Mask(this, mask, options));
-        });
-    };
+					return {
+						start: start,
+						end: end
+					};
+				} // getInputSelection
 
+				if (!input.attr("readonly")){
+					input.unbind('.maskMoney');
+					input.bind('keypress.maskMoney', keypressEvent);
+					input.bind('keydown.maskMoney', keydownEvent);
+					input.bind('blur.maskMoney', blurEvent);
+					input.bind('focus.maskMoney', focusEvent);
+					input.bind('mask.maskMoney', mask);
+				}
+			})
+		}
+	}
+
+	$.fn.maskMoney = function(method) {
+		if ( methods[method] ) {
+			return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+		} else if ( typeof method === 'object' || ! method ) {
+			return methods.init.apply( this, arguments );
+		} else {
+			$.error( 'Method ' +  method + ' does not exist on jQuery.maskMoney' );
+		}
+	};
 })(jQuery);
+
 ;//     Underscore.js 1.4.4
 //     http://underscorejs.org
 //     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud Inc.
@@ -17979,23 +18126,23 @@ $(document).ready(function () {
         $(this).parent().parent().parent().remove();
     });
     //currency
-    $('.currency').mask('000,000,000,000,000', { reverse: true });
-    $.each($('.currencyText'), function (ndx, item) {
-        var text = $(item).text();
-        $(item).text(addCommas(text));
-    });
+    $('.currency').maskMoney();
+    //$.each($('.currencyText'), function (ndx, item) {
+    //    var text = $(item).text();
+    //    $(item).text(addCommas(text));
+    //});
 
-    function addCommas(nStr) {
-        nStr += '';
-        x = nStr.split('.');
-        x1 = x[0];
-        x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-    }
+    //function addCommas(nStr) {
+    //    nStr += '';
+    //    x = nStr.split('.');
+    //    x1 = x[0];
+    //    x2 = x.length > 1 ? '.' + x[1] : '';
+    //    var rgx = /(\-?)(\d+)(\d{3})/;
+    //    while (rgx.test(x1)) {
+    //        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    //    }
+    //    return x1 + x2;
+    //}
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form
@@ -18352,11 +18499,6 @@ $(document).ready(function () {
                 Friendly.NextForm('extraExpense', Friendly.properties.iconError);
                 return;
             }
-            //check if we need to move to previous form
-            //if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-            //    Friendly.NextForm('deviations', Friendly.properties.iconError);
-            //    return;
-            //}
             $('html, body').animate({ scrollTop: 0 }, 'fast');
             var nextChild = Friendly.children[Friendly.childNdx];
             Financial.GetChildCare(nextChild);
@@ -18419,14 +18561,22 @@ $(document).ready(function () {
     //#endregion 
     //#region Health--------------------------------
     $('.financial-part5').click(function () {
-        Friendly.SubmitForm('healths', 'deviations');
+        Friendly.SubmitForm('healths', 'income');
     });
     $('#healths input[name="ProvideHealth"]').change(function () {
-        $('#healths #health-provide input').val('');
+        $('#healths #health-provide input[type=text]').val('');
         if ($('#healths #ProvideHealth:checked').val() === "1") {
             $('#healths #health-provide').show();
         } else {
             $('#healths #health-provide').hide();
+        }
+    });
+    $('#healths input[name="Prorate"]').change(function () {
+        $('#healths #health-prorate input').val('');
+        if ($('#healths #Prorate:checked').val() === "1") {
+            $('.health-prorate').show();
+        } else {
+            $('.health-prorate').hide();
         }
     });
     $('#healths .percent').focusout(function () {
@@ -18434,9 +18584,9 @@ $(document).ready(function () {
             return $(element).val() != "";
         });
         //only alter if 
-        var remainingVal = 0;
+        var remainingVal;
         if (percentItems.length == 2) {
-            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+            remainingVal = 100.0 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
             percentItems = $.grep($('#healths .percent'), function (element, ndx) {
                 return $(element).val() === "";
             });
@@ -18445,65 +18595,6 @@ $(document).ready(function () {
     });
     //#endregion
 
-    //#region Deviations
-    $('.financial-deviations').click(function () {
-        //if the form isn't validated, we still need to move on
-        if (!Financial.AddDeviations(this)) {
-            var child = Friendly.children[Friendly.childNdx - 1];
-            Friendly.DeviationsError.push(child.Name);
-            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('income', Friendly.properties.iconError);
-                return;
-            }
-            //check if we need to move to previous form
-            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('extraExpense', Friendly.properties.iconError);
-                return;
-            }
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Financial.GetDeviations(nextChild);
-            Friendly.EndLoading();
-        }
-    });
-    $('#deviationsForm input[name="Deviation"]').change(function () {
-        if ($('#deviationsForm #Deviation:checked').val() === "1") {
-            $('#deviationsWrapper #deviations-show').show();
-        } else {
-            $('#deviationsWrapper #deviations-show').hide();
-        }
-        Friendly.StartLoading();
-        var formName = 'deviationsForm';
-        var model = Friendly.GetFormInput(formName);
-        var submitType = 'POST';
-        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
-            submitType = 'PUT';
-        else
-            model.Id = 0;
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/' + formName + '/?format=json',
-                type: submitType,
-                data: model,
-                success: function () {
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-
-    $('input[name="HighLow"]').live('change',function () {
-        if ($('#HighLow:checked').val() === "1") {
-            $('.deviation-high').show();
-            $('.deviation-low').hide();
-        } else {
-            $('.deviation-low').show();
-            $('.deviation-high').hide();
-        }
-    });
-    //#endregion
     //#region Income
     $('.financial-part1').click(function () {
         Friendly.SubmitForm('income', 'socialSecurity');
@@ -18643,12 +18734,17 @@ $(document).ready(function () {
             Friendly.NextForm('deviationsOther', Friendly.properties.iconSuccess);
             return false;
         }
-        Friendly.StartLoading();
+        Friendly.StartLoading();        
         var model = Friendly.GetFormInput('otherChildren');
+        var submitType = 'POST';
+        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
+            submitType = 'PUT';
+        else
+            model.Id = 0;
         if ($('#otherChildren').valid()) {
             $.ajax({
                 url: '/api/OtherChildren/?format=json',
-                type: 'POST',
+                type: submitType,
                 data: model,
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {
@@ -18656,7 +18752,7 @@ $(document).ready(function () {
                         $('#otherChildWrapper #childrenId').val(data.Id);
                         $('#otherChildWrapper').show();
                     } else {
-                        Friendly.NextForm('deviationsOther', Friendly.properties.iconSuccess);
+                        Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -18689,64 +18785,6 @@ $(document).ready(function () {
     });
     //#endregion
 
-    //#region Deviations Other
-    $('.financial-deviationsOther').click(function () {
-        //if the form isn't validated, we still need to move on
-        if (!Financial.AddDeviationsOther(this)) {
-            var child = Friendly.children[Friendly.childNdx - 1];
-            Friendly.DeviationsError.push(child.Name);
-            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('incomeOther', Friendly.properties.iconError);
-                return;
-            }
-            //check if we need to move to previous form
-            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('otherChildren', Friendly.properties.iconError);
-                return;
-            }
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Financial.GetDeviationsOther(nextChild);
-            Friendly.EndLoading();
-        }
-    });
-    $('#deviationsOtherForm input[name="Deviation"]').change(function () {
-        if ($('#deviationsOtherForm #Deviation:checked').val() === "1") {
-            $('#deviationsOtherWrapper #deviations-show').show();
-        } else {
-            $('#deviationsOtherWrapper #deviations-show').hide();
-        }
-        Friendly.StartLoading();
-        var formName = 'deviationsOtherForm';
-        var model = Friendly.GetFormInput(formName);
-        var submitType = 'POST';
-        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
-            submitType = 'PUT';
-        else
-            model.Id = 0;
-        if ($('#' + formName).valid()) {
-            $.ajax({
-                url: '/api/deviationsForm/?format=json',
-                type: submitType,
-                data: model,
-                success: function () {
-                    Friendly.EndLoading();
-                },
-                error: Friendly.GenericErrorMessage
-            });
-        }
-        Friendly.EndLoading();
-    });
-    $('#deviationsOther input[name="HighLow"]').live('change', function () {
-        if ($('#deviationsOther #HighLow:checked').val() === "1") {
-            $('#deviationsOther .deviation-high').show();
-            $('#deviationsOther .deviation-low').hide();
-        } else {
-            $('#deviationsOther .deviation-low').show();
-            $('#deviationsOther .deviation-high').hide();
-        }
-    });
-    //#endregion
     //#region Income Other--------------------------------
     $('#incomeOther input[name="HaveSalary"]').change(function () {
         if ($('#incomeOther #HaveSalary:checked').val() === "1") {
@@ -18880,15 +18918,20 @@ $(document).ready(function () {
     //#region Other Children---------------    
     $('.financial-part9').click(function () {
         if ($('#otherChildOtherWrapper').is(':visible')) {
-            Friendly.ValidateForms('.financial-part9');
+            Friendly.NextForm('deviations', Friendly.properties.iconSuccess);
             return false;
         }
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildrenOther');
+        var submitType = 'POST';
+        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
+            submitType = 'PUT';
+        else
+            model.Id = 0;
         if ($('#otherChildrenOther').valid()) {
             $.ajax({
                 url: '/api/OtherChildren/?format=json',
-                type: 'POST',
+                type: submitType,
                 data: model,
                 success: function (data) {
                     if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {                        
@@ -18896,7 +18939,7 @@ $(document).ready(function () {
                         $('#otherChildOtherWrapper #childrenId').val(data.Id);
                         $('#otherChildOtherWrapper').show();
                     } else {
-                        Friendly.ValidateForms('.financial-part9');
+                        Friendly.NextForm('deviations', Friendly.properties.iconSuccess);
                     }
                     Friendly.EndLoading();
                 },
@@ -18928,7 +18971,60 @@ $(document).ready(function () {
         Friendly.EndLoading();
     });
     //#endregion
- });
+    //#region Deviations
+    $('.financial-deviations').click(function () {
+        //if the form isn't validated, we still need to move on
+        if (!Financial.AddDeviations(this)) {
+            var child = Friendly.children[Friendly.childNdx - 1];
+            Friendly.DeviationsError.push(child.Name);
+            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
+                Friendly.NextForm('deviations', Friendly.properties.iconError);
+                return;
+            }
+            //check if we need to move to previous form
+            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
+                Friendly.NextForm('otherChildrenOther', Friendly.properties.iconError);
+                return;
+            }
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
+            var nextChild = Friendly.children[Friendly.childNdx];
+            Financial.GetDeviations(nextChild);
+            Friendly.EndLoading();
+        }
+    });
+    $('#deviationsForm input[name="Deviation"]').change(function () {
+        if ($('#deviationsForm #Deviation:checked').val() === "1") {
+            $('#deviationsWrapper #deviations-show').show();
+        } else {
+            $('#deviationsWrapper #deviations-show').hide();
+        }
+    });
+    $('input[name="HighLow"]').live('change', function () {
+        if ($('#HighLow:checked').val() === "1") {
+            $('.deviation-high').show();
+            $('.deviation-low').hide();
+            if ($('#SpecificDeviations:checked').val() === "1") {
+                $('#deviations-specific').show();
+            } else {
+                $('#deviations-specific').hide();
+            }
+        } else {
+            $('.deviation-low').show();
+            $('.deviation-high').hide();
+            $('#deviations-specific').hide();
+        }
+
+    });
+    $('input[name="SpecificDeviations"]').live('change', function () {
+        if ($('#SpecificDeviations:checked').val() === "1") {
+            $('#deviations-specific').show();
+        } else {
+            $('#deviations-specific').hide();
+        }
+
+    });
+    //#endregion
+});
 ;window.Financial = window.Financial|| {};
 Financial.GetChildCare = function(child) {
     var formName = 'childCare';
@@ -19179,6 +19275,11 @@ Financial.GetDeviations = function (child) {
     });
 };
 Financial.AddDeviations = function (caller, stop) {
+    //It's annoying that we need to do this for each child, but this is the only nice way
+    //I can think about doing this right now. Unless we add a separate next/previous button for children
+    //but that doesn't seem elegant from a user standpoint...
+    addDeviationForm();
+    
     var formName = 'deviations';
     if (caller != null && $(caller).hasClass('next'))
         Friendly.childNdx++;
@@ -19203,12 +19304,12 @@ Financial.AddDeviations = function (caller, stop) {
     $.jStorage.deleteKey(key);
     //check if we need to move to next form
     if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm(formName, 'income', model);
+        Friendly.ValidateForms('.financial-deviations');
         return true;
     }
     //check if we need to move to previous form
     if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm(formName, 'healths', model);
+        Friendly.SubmitForm(formName, 'otherChildrenOther', model);
         return true;
     }
     var submitType = 'POST';
@@ -19224,7 +19325,6 @@ Financial.AddDeviations = function (caller, stop) {
         data: model,
         success: function () {
             if (stop == null || !stop) {
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
                 var nextChild = Friendly.children[Friendly.childNdx];
                 Financial.GetDeviations(nextChild);
             }
@@ -19233,6 +19333,28 @@ Financial.AddDeviations = function (caller, stop) {
     });
     return true;
 };
+function addDeviationForm() {
+    Friendly.StartLoading();
+    var formName = 'deviationsForm';
+    var model = Friendly.GetFormInput(formName);
+    var submitType = 'POST';
+    if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
+        submitType = 'PUT';
+    else
+        model.Id = 0;
+    if ($('#' + formName).valid()) {
+        $.ajax({
+            url: '/api/' + formName + '/?format=json',
+            type: submitType,
+            data: model,
+            success: function () {
+                Friendly.EndLoading();
+            },
+            error: Friendly.GenericErrorMessage
+        });
+    }
+    Friendly.EndLoading();
+}
 Financial.CheckDeviations = function (child, nextForm) {
     var formName = 'deviations';
     $.ajax({
@@ -19271,118 +19393,6 @@ Financial.CheckDeviations = function (child, nextForm) {
     });
 };
 
-Financial.GetDeviationsOther = function (child) {
-    var formName = 'deviationsOther';
-    $.ajax({
-        url: '/api/deviations?ChildId=' + child.Id + '&isOtherParent=true&format=json',
-        type: 'GET',
-        success: function (data) {
-            var $form = $('#' + formName);
-            $form.empty();
-            if (data === "")
-                data = {};
-            data.Name = child.Name;
-            data.ChildId = child.Id;
-            var result = $("#friendly-deviations-template").tmpl(data);
-            $form.append(result);
-            //check if valid
-            $form.valid();
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
-Financial.AddDeviationsOther = function (caller, stop) {
-    var formName = 'deviationsOther';
-    if (caller != null && $(caller).hasClass('next'))
-        Friendly.childNdx++;
-    else if (caller != null) {
-        Friendly.childNdx--;
-    }
-    $.each($('#' + formName + ' input[type=text]'), function (ndx, item) {
-        if ($(item).val() === "") {
-            $(item).val(0);
-        }
-    });
-    var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#' + formName + ' #ChildId').val().trim();
-    //key is for local storage
-    var key = formName + model.ChildId;
-    if (!$('#' + formName).valid()) {
-        //if validation fails, save data to local storage for later retrieval
-        $.jStorage.set(key, model);
-        return false;
-    }
-    //delete key since form is valid (doesn't matter if it exists or not
-    $.jStorage.deleteKey(key);
-    //check if we need to move to next form
-    if (caller != null && $(caller).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-        Friendly.SubmitForm(formName, 'incomeOther', model);
-        return true;
-    }
-    //check if we need to move to previous form
-    if (caller != null && $(caller).hasClass('previous') && Friendly.childNdx < 0) {
-        Friendly.SubmitForm(formName, 'otherChildren', model);
-        return true;
-    }
-    var submitType = 'POST';
-    if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
-        submitType = 'PUT';
-    else
-        model.Id = 0;
-
-    //save current information
-    $.ajax({
-        url: '/api/deviations/?format=json',
-        type: submitType,
-        data: model,
-        success: function () {
-            if (stop == null || !stop) {
-                $('html, body').animate({ scrollTop: 0 }, 'fast');
-                var nextChild = Friendly.children[Friendly.childNdx];
-                Financial.GetDeviationsOther(nextChild);
-            }
-        },
-        error: Friendly.GenericErrorMessage
-    });
-    return true;
-};
-Financial.CheckDeviationsOther = function (child, nextForm) {
-    var formName = 'deviations';
-    $.ajax({
-        url: '/api/deviations?ChildId=' + child.Id + '&isOtherParent=true&format=json',
-        type: 'GET',
-        success: function (data) {
-            Friendly.ClearForm(formName);
-            Friendly.childNdx++;
-            data.Name = child.Name;
-            var result = $("#friendly-" + formName + "-template").tmpl(data);
-            var $form = $('#' + formName);
-            $form.append(result);
-            //Check if we've gone through all children. If not, continue on
-            if (Friendly.childNdx !== Friendly.children.length) {
-                if ($form.valid()) {
-                    //recursively go to next child
-                    Financial.CheckDeviationsOther(Friendly.children[Friendly.childNdx], nextForm);
-                    return;
-                }
-                //Record Error and recursively go to next child
-                Friendly.DeviationsErrorOther.push(child.Name);
-                Financial.CheckDeviationsOther(Friendly.children[Friendly.childNdx], nextForm);
-                return;
-            }
-            //At last child.  Advance to next form - show error if there are errors
-            if (!$form.valid()) {
-                Friendly.DeviationsErrorOther.push(child.Name);
-            }
-            if (Friendly.DeviationsErrorOther.length > 0) {
-                Friendly.NextForm(nextForm, Friendly.properties.iconError);
-            } else {
-                Friendly.NextForm(nextForm, Friendly.properties.iconSuccess);
-            }
-        },
-        error: Friendly.GenericErrorMessage
-    });
-};
 ;$(function ($) {
     getPdfHtml();
 
@@ -19415,6 +19425,9 @@ Financial.CheckDeviationsOther = function (child, nextForm) {
                     case 'scheduleE':
                         populateScheduleEForm(data);
                         break;
+                    case 'childSupportWorksheet':
+                        populateCswForm(data);
+                        break;
                     default:
                         var result = $("#friendly-" + form + "-template").tmpl(data);
                         $('#finanicalFormOutput').empty();
@@ -19443,7 +19456,14 @@ Financial.CheckDeviationsOther = function (child, nextForm) {
         addParentChildCareCosts(data.NonCustodialParentName, '#friendly-supplementalTableMother-template', data.ChildCare, data.MotherScheduleD);
         addParentChildCareCosts('Nonparent Custodian', '#friendly-supplementalTableNonParent-template', data.ChildCare, data.NonParentScheduleD);
     }
-    
+    function populateCswForm(data) {
+        var result = $("#friendly-childSupportWorksheet-template").tmpl(data);
+        $('#finanicalFormOutput').empty();
+        $('#finanicalFormOutput').append(result);
+        result = $("#friendly-CSWChildren-template").tmpl(data);
+        $('#children').append(result);
+
+    }
     function addParentChildCareCosts(parentName, templateName, childCareList, total) {
         var parent = {
             ParentName: parentName

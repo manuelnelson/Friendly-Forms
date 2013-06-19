@@ -11,7 +11,7 @@ namespace Models
         public long Id { get; set; }
         public long UserId { get; set; }
         public int ProvideHealth { get; set; }
-        public bool Prorate { get; set; }
+        public int Prorate { get; set; }
         public bool FathersHealth { get; set; }
         public bool MothersHealth { get; set; }
         public bool NonCustodialHealth { get; set; }

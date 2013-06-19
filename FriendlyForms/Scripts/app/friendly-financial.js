@@ -102,11 +102,19 @@
         Friendly.SubmitForm('healths', 'income');
     });
     $('#healths input[name="ProvideHealth"]').change(function () {
-        $('#healths #health-provide input').val('');
+        $('#healths #health-provide input[type=text]').val('');
         if ($('#healths #ProvideHealth:checked').val() === "1") {
             $('#healths #health-provide').show();
         } else {
             $('#healths #health-provide').hide();
+        }
+    });
+    $('#healths input[name="Prorate"]').change(function () {
+        $('#healths #health-prorate input').val('');
+        if ($('#healths #Prorate:checked').val() === "1") {
+            $('.health-prorate').show();
+        } else {
+            $('.health-prorate').hide();
         }
     });
     $('#healths .percent').focusout(function () {
@@ -114,9 +122,9 @@
             return $(element).val() != "";
         });
         //only alter if 
-        var remainingVal = 0;
+        var remainingVal;
         if (percentItems.length == 2) {
-            remainingVal = 100 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
+            remainingVal = 100.0 - (parseFloat($(percentItems[0]).val()) + parseFloat($(percentItems[1]).val()));
             percentItems = $.grep($('#healths .percent'), function (element, ndx) {
                 return $(element).val() === "";
             });

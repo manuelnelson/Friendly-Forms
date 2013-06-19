@@ -20,33 +20,64 @@
                             <label class="radio">No @Html.RadioButtonFor(m => m.ProvideHealth, (int)YesNo.No)</label>
                             @Html.ValidationMessageFor(m => m.ProvideHealth)
                         </div>
+                                @{
+                        var fathersHealth = Model.FathersHealth ? "checked=checked" : "";
+                        var mothersHealth = Model.MothersHealth ? "checked=checked" : "";
+                        var nonCustodialHealth = Model.NonCustodialHealth ? "checked=checked" : "";
+                                }
                         @if (Model.ProvideHealth == ((int)YesNo.Yes))
                         {
                             <div id="health-provide">
-                                <label class="informative">
-                                    If you do not know the monthly per child amount (eg If the monthly amount attributed to the child(ren)s 
-                                    benefit is unknown), then select the button labeled "Prorate" below.</label>
                                 <div class="control-group">
-                                    <label class="form-question">
-                                        How will health insurance be funded?</label>
-                                    @{
-                            var fathersHealth = Model.FathersHealth ? "checked=checked" : "";
-                            var mothersHealth = Model.MothersHealth ? "checked=checked" : "";
-                            var nonCustodialHealth = Model.NonCustodialHealth ? "checked=checked" : "";
-                                    }
-                                    <label class="checkbox">
-                                        The father's portion of health insurance is currently included in health insurance premiums.
-                                        <input class="valid" id="FathersHealth" name="FathersHealth" type="checkbox" value="@Model.FathersHealth.ToString()" @fathersHealth></label>
-                                    <label class="checkbox ">
-                                        The mother's portion of health insurance is currently included in health insurance premiums.
-                                        <input class="valid" id="MothersHealth" name="MothersHealth" type="checkbox" value="@Model.MothersHealth.ToString()" @mothersHealth></label>
-                                    <label class="checkbox">
-                                        The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
-                                        <input class="valid" id="NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="@Model.NonCustodialHealth.ToString()" @nonCustodialHealth></label>
-                                    @Html.ValidationMessageFor(m => m.FathersHealth)
-                                    @Html.ValidationMessageFor(m => m.MothersHealth)
-                                    @Html.ValidationMessageFor(m => m.NonCustodialHealth)
+                                    <label class="informative">
+                                        Do you know the monthly per child amount (eg If the monthly amount attributed to the child(ren)s 
+                                    benefit is unknown), then select the button labeled "Prorate" below.</label>
+                                    <label class="radio">Yes @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.Yes)</label>
+                                    <label class="radio">No @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.No)</label>
+                                    @Html.ValidationMessageFor(m => m.Prorate)
                                 </div>
+                                @if (Model.Prorate == ((int)YesNo.Yes))
+                                {
+                                    <div class="health-prorate">
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                How will health insurance be funded?</label>
+                                            <label class="checkbox">
+                                                The father's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="FathersHealth" name="FathersHealth" type="checkbox" value="@Model.FathersHealth.ToString()" @fathersHealth></label>
+                                            <label class="checkbox ">
+                                                The mother's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="MothersHealth" name="MothersHealth" type="checkbox" value="@Model.MothersHealth.ToString()" @mothersHealth></label>
+                                            <label class="checkbox">
+                                                The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="@Model.NonCustodialHealth.ToString()" @nonCustodialHealth></label>
+                                            @Html.ValidationMessageFor(m => m.FathersHealth)
+                                            @Html.ValidationMessageFor(m => m.MothersHealth)
+                                            @Html.ValidationMessageFor(m => m.NonCustodialHealth)
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="health-prorate hide">
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                How will health insurance be funded?</label>
+                                            <label class="checkbox">
+                                                The father's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="FathersHealth" name="FathersHealth" type="checkbox" value="@Model.FathersHealth.ToString()" @fathersHealth></label>
+                                            <label class="checkbox ">
+                                                The mother's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="MothersHealth" name="MothersHealth" type="checkbox" value="@Model.MothersHealth.ToString()" @mothersHealth></label>
+                                            <label class="checkbox">
+                                                The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="@Model.NonCustodialHealth.ToString()" @nonCustodialHealth></label>
+                                            @Html.ValidationMessageFor(m => m.FathersHealth)
+                                            @Html.ValidationMessageFor(m => m.MothersHealth)
+                                            @Html.ValidationMessageFor(m => m.NonCustodialHealth)
+                                        </div>
+                                    </div>
+                                }
                                 <div class="control-group">
                                     <label class="form-question span3">Father</label>
                                     @Html.TextBoxFor(m => m.FathersHealthAmount, new { placeholder = "Amount" })
@@ -66,17 +97,17 @@
                                     What percentage will each part pay of healthcare expenses not covered by inurance (eg. deductibles, copays, perscriptions, ER)?</label>
                                 <div class="control-group">
                                     <label class="form-question span3">Father</label>
-                                    @Html.TextBoxFor(m => m.FathersHealthPercentage, new { placeholder = "Percent", @class="percent" })
+                                    @Html.TextBoxFor(m => m.FathersHealthPercentage, new { placeholder = "Percent", @class = "percent" })
                                     @Html.ValidationMessageFor(m => m.FathersHealthPercentage)
                                 </div>
                                 <div class="control-group">
                                     <label class="form-question span3">Mother</label>
-                                    @Html.TextBoxFor(m => m.MothersHealthPercentage, new { placeholder = "Percent", @class="percent" })
+                                    @Html.TextBoxFor(m => m.MothersHealthPercentage, new { placeholder = "Percent", @class = "percent" })
                                     @Html.ValidationMessageFor(m => m.MothersHealthPercentage)
                                 </div>
                                 <div class="control-group">
                                     <label class="form-question span3">Nonparent Custodian</label>
-                                    @Html.TextBoxFor(m => m.NonCustodialHealthPercentage, new { placeholder = "Percent", @class="percent" })
+                                    @Html.TextBoxFor(m => m.NonCustodialHealthPercentage, new { placeholder = "Percent", @class = "percent" })
                                     @Html.ValidationMessageFor(m => m.NonCustodialHealthPercentage)
                                 </div>
                             </div>
@@ -84,30 +115,56 @@
                         else
                         {
                             <div id="health-provide" class="hide">
-                                <label class="informative">
-                                    If you do not know the monthly per child amount (eg If the monthly amount attributed to the child(ren)s 
-                                    benefit is unknown), then select the button labeled "Prorate" below.</label>
                                 <div class="control-group">
-                                    <label class="form-question">
-                                        How will health insurance be funded?</label>
-                                    @{
-                            var fathersHealth = Model.FathersHealth ? "checked=checked" : "";
-                            var mothersHealth = Model.MothersHealth ? "checked=checked" : "";
-                            var nonCustodialHealth = Model.NonCustodialHealth ? "checked=checked" : "";
-                                    }
-                                    <label class="checkbox">
-                                        The father's portion of health insurance is currently included in health insurance premiums.
-                                        <input class="valid" id="FathersHealth" name="FathersHealth" type="checkbox" value="@Model.FathersHealth.ToString()" @fathersHealth></label>
-                                    <label class="checkbox ">
-                                        The mother's portion of health insurance is currently included in health insurance premiums.
-                                        <input class="valid" id="MothersHealth" name="MothersHealth" type="checkbox" value="@Model.MothersHealth.ToString()" @mothersHealth></label>
-                                    <label class="checkbox">
-                                        The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
-                                        <input class="valid" id="NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="@Model.NonCustodialHealth.ToString()" @nonCustodialHealth></label>
-                                    @Html.ValidationMessageFor(m => m.FathersHealth)
-                                    @Html.ValidationMessageFor(m => m.MothersHealth)
-                                    @Html.ValidationMessageFor(m => m.NonCustodialHealth)
+                                    <label class="informative">
+                                        If you do not know the monthly per child amount (eg If the monthly amount attributed to the child(ren)s 
+                                    benefit is unknown), then select the button labeled "Prorate" below.</label>
+                                    <label class="radio">Yes @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.Yes)</label>
+                                    <label class="radio">No @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.No)</label>
+                                    @Html.ValidationMessageFor(m => m.Prorate)
                                 </div>
+                                @if (Model.Prorate == ((int)YesNo.Yes))
+                                {
+                                    <div class="health-prorate">
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                How will health insurance be funded?</label>
+                                            <label class="checkbox">
+                                                The father's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="FathersHealth" name="FathersHealth" type="checkbox" value="@Model.FathersHealth.ToString()" @fathersHealth></label>
+                                            <label class="checkbox ">
+                                                The mother's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="MothersHealth" name="MothersHealth" type="checkbox" value="@Model.MothersHealth.ToString()" @mothersHealth></label>
+                                            <label class="checkbox">
+                                                The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="@Model.NonCustodialHealth.ToString()" @nonCustodialHealth></label>
+                                            @Html.ValidationMessageFor(m => m.FathersHealth)
+                                            @Html.ValidationMessageFor(m => m.MothersHealth)
+                                            @Html.ValidationMessageFor(m => m.NonCustodialHealth)
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="health-prorate hide">
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                How will health insurance be funded?</label>
+                                            <label class="checkbox">
+                                                The father's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="FathersHealth" name="FathersHealth" type="checkbox" value="@Model.FathersHealth.ToString()" @fathersHealth></label>
+                                            <label class="checkbox ">
+                                                The mother's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="MothersHealth" name="MothersHealth" type="checkbox" value="@Model.MothersHealth.ToString()" @mothersHealth></label>
+                                            <label class="checkbox">
+                                                The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
+                                        <input class="valid" id="NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="@Model.NonCustodialHealth.ToString()" @nonCustodialHealth></label>
+                                            @Html.ValidationMessageFor(m => m.FathersHealth)
+                                            @Html.ValidationMessageFor(m => m.MothersHealth)
+                                            @Html.ValidationMessageFor(m => m.NonCustodialHealth)
+                                        </div>
+                                    </div>
+                                }
                                 <div class="control-group">
                                     <label class="form-question span3">Father</label>
                                     @Html.TextBoxFor(m => m.FathersHealthAmount, new { placeholder = "Amount" })
@@ -127,19 +184,20 @@
                                     What percentage will each part pay of healthcare expenses not covered by inurance (eg. deductibles, copays, perscriptions, ER)? The total should sum to 100%.</label>
                                 <div class="control-group">
                                     <label class="form-question span3">Father</label>
-                                    @Html.TextBoxFor(m => m.FathersHealthPercentage, new { placeholder = "Percent", @class="percent" })
+                                    @Html.TextBoxFor(m => m.FathersHealthPercentage, new { placeholder = "Percent", @class = "percent" })
                                     @Html.ValidationMessageFor(m => m.FathersHealthPercentage)
                                 </div>
                                 <div class="control-group">
                                     <label class="form-question span3">Mother</label>
-                                    @Html.TextBoxFor(m => m.MothersHealthPercentage, new { placeholder = "Percent", @class="percent" })
+                                    @Html.TextBoxFor(m => m.MothersHealthPercentage, new { placeholder = "Percent", @class = "percent" })
                                     @Html.ValidationMessageFor(m => m.MothersHealthPercentage)
                                 </div>
                                 <div class="control-group">
                                     <label class="form-question span3">Nonparent Custodian</label>
-                                    @Html.TextBoxFor(m => m.NonCustodialHealthPercentage, new { placeholder = "Percent", @class="percent" })
+                                    @Html.TextBoxFor(m => m.NonCustodialHealthPercentage, new { placeholder = "Percent", @class = "percent" })
                                     @Html.ValidationMessageFor(m => m.NonCustodialHealthPercentage)
-                                </div>                            </div>                        
+                                </div>
+                            </div>                        
                         }
                     </div>
                 </div>
