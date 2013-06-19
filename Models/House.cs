@@ -12,11 +12,12 @@ namespace Models
         public virtual User User { get; set; }
         public int MaritalHouse { get; set; }
         public string Address { get; set; }
+        public string SecondaryAddress { get; set; }
         public string CityState { get; set; }
         public string ZipCode { get; set; }
-        public int? RetailValue { get; set; }
-        public int? MoneyOwed { get; set; }
-        public int? Equity { get; set; }
+        public double? RetailValue { get; set; }
+        public double? MoneyOwed { get; set; }
+        public double? Equity { get; set; }
         public string MortgageOwner { get; set; }
         public string Divide { get; set; }
 
@@ -31,6 +32,7 @@ namespace Models
             UserId = updatingEntity.UserId;
             MaritalHouse = updatingEntity.MaritalHouse;
             Address = updatingEntity.Address;
+            SecondaryAddress = updatingEntity.SecondaryAddress;
             CityState = updatingEntity.CityState;
             ZipCode = updatingEntity.ZipCode;
             RetailValue = updatingEntity.RetailValue;

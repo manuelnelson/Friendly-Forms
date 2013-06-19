@@ -23,10 +23,10 @@ namespace Models.ViewModels
         public string ZipCode { get; set; }
 
         [Display(Name = "Retail Value")]
-        public int? RetailValue { get; set; }
+        public double? RetailValue { get; set; }
         [Display(Name = "Money owed")]
-        public int? MoneyOwed { get; set; }
-        public int? Equity { get; set; }
+        public double? MoneyOwed { get; set; }
+        public double? Equity { get; set; }
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         [Display(Name = "Mortgage owner")]
         [StringLength(100)]
@@ -34,6 +34,12 @@ namespace Models.ViewModels
 
         [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
         public string Divide { get; set; }
+
+        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
+        [StringLength(100)]
+        public string SecondaryAddress { get; set; }
+
+
         public IFormEntity ConvertToEntity()
         {
             return this.TranslateTo<House>();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;

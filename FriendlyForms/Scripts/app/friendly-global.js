@@ -504,6 +504,21 @@ $(document).ready(function () {
     });
     //currency
     $('.currency').maskMoney({ allowNegative: true });
+    $.each($('.currencyText'), function (ndx, item) {
+        var text = $(item).text();
+        $(item).text(addCommas(text));
+    });
+    function addCommas(nStr) {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
 
     //Form Navigation
     $('.nav-item').click(function () {
@@ -522,9 +537,9 @@ $(document).ready(function () {
     });
     /*-----------------------Login----------------------------*/
     $('#login-form input[type=submit]').click(function (e) {
-        if (e) e.preventDefault(); 
+        if (e) e.preventDefault();
         var form = $('#login-form');
-        var redirect = form.attr('data-continue'); 
+        var redirect = form.attr('data-continue');
         if (form.valid()) {
             Friendly.StartLoading("Logging in...Please wait");
             $.ajax({
@@ -549,7 +564,7 @@ $(document).ready(function () {
             error: Friendly.GenericErrorMessage
         });
     });
-    
+
     //Fetch login status and update login template
     $.ajax({
         url: '/api/userauths?format=json',
