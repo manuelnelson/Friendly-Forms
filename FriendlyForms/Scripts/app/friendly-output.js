@@ -62,7 +62,12 @@
         addParentChildCareCosts('Nonparent Custodian', '#friendly-supplementalTableNonParent-template', data.ChildCare, data.NonParentScheduleD);
     }
     function populateCswForm(data) {
-        
+        var result = $("#friendly-childSupportWorksheet-template").tmpl(data);
+        $('#finanicalFormOutput').empty();
+        $('#finanicalFormOutput').append(result);
+        result = $("#friendly-CSWChildren-template").tmpl(data);
+        $('#children').append(result);
+
     }
     function addParentChildCareCosts(parentName, templateName, childCareList, total) {
         var parent = {

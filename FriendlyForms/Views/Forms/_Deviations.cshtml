@@ -230,8 +230,8 @@
                                 <div class="control-group">
                                     <label class="form-question">
                                         Do you wish to apply for a Low Income or High Income Deviation?</label>
-                                    <label class="radio inline">Yes @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                    <label class="radio inline">No @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.No, new { @class = "inline" })</label>
+                                    <label class="radio inline">High @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                    <label class="radio inline">Low @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.No, new { @class = "inline" })</label>
                                     @Html.ValidationMessageFor(m => m.Deviation)
                                 </div>
                                 @if (Model.HighLow == (int)YesNo.No)
@@ -396,6 +396,8 @@
     </div>
     <button class="btn btn-primary financial-deviations previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary financial-deviations next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <p class="viewOutput hide"><span style="font-weight:bold;">Congratulations!</span> The financial form is completely done.  Click the button below to view the output.</p>
+    <button class="btn btn-primary next viewOutput hide" id="ViewOutput" data-url='/Output/Financial/#scheduleA' value="View">View Output<i class="icon-arrow-right icon-white"></i></button>
 </div>
 @Html.Partial("_templateDeviations")
 

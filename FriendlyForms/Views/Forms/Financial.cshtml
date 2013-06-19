@@ -31,14 +31,6 @@
                 {
                     <li class="nav-item" id="healthsNav"><a data-form="healths" href="#"><i class="@itemlock"></i>Health Insurance</a></li>
                 }  
-                @if (Model.FinancialFormsCompleted.Deviation)
-                {
-                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemDone"></i>Deviations</a></li>
-                }
-                else
-                {
-                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemlock"></i>Deviations</a></li>
-                }
                 @if (Model.FinancialFormsCompleted.Income)
                 {
                     <li class="nav-item" id="incomeNav"><a data-form="income" href="#"><i class="@itemDone"></i>Income (Father)</a></li>
@@ -103,6 +95,14 @@
                 else
                 {
                     <li class="nav-item" id="otherChildrenOtherNav"><a data-form="otherChildrenOther" href="#"><i class="@itemlock"></i>Other Children (Mother)</a></li>
+                }
+                @if (Model.FinancialFormsCompleted.Deviation)
+                {
+                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemDone"></i>Deviations</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemlock"></i>Deviations</a></li>
                 }
             </ul>
         </li>

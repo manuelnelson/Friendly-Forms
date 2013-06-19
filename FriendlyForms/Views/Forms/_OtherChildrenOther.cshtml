@@ -3,7 +3,7 @@
 <div class="form-vertical wrapper hide" id="otherChildrenOtherWrapper">
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "otherChildrenOther" }))
     {
-        <input type="hidden" id="otherChildrenId" value="@Model.Id"/>
+        <input type="hidden" id="otherChildrenOtherId" value="@Model.Id"/>
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -60,7 +60,5 @@
         </div>
     }
     @Html.Partial("_OtherChildrenFormOther", Model.OtherChildViewModel)
-    <button class="btn btn-primary financial-part9 next">Check Completion <i class="icon-arrow-right icon-white"></i></button>
-    <p class="viewOutput hide"><span style="font-weight:bold;">Congratulations!</span> The financial form is completely done.  Click the button below to view the output.</p>
-    <button class="btn btn-primary next viewOutput hide" id="ViewOutput" data-url='/Output/Financial/#scheduleA' value="View">View Output<i class="icon-arrow-right icon-white"></i></button>
+    <button class="btn btn-primary financial-part9 next">Next <i class="icon-arrow-right icon-white"></i></button>
 </div>

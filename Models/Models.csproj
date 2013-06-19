@@ -46,6 +46,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Common.3.9.45\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.OrmLite, Version=3.9.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataLayerContext\bin\Debug\ServiceStack.OrmLite.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.ServiceInterface">
       <HintPath>..\FriendlyForms\bin\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
