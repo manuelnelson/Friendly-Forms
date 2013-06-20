@@ -1,4 +1,4 @@
-.clearfix {
+﻿.clearfix {
   *zoom: 1;
 }
 .clearfix:before,
@@ -230,4 +230,8 @@
 }
 #main-content hr {
   border-color: black;
+}
+#nav-menu a.btn {
+  float: left;
+  padding: 4px 10px;
 }
