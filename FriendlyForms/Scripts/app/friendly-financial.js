@@ -197,7 +197,6 @@
         }
         Friendly.EndLoading();
     });
-
     $('#addSupport').click(function () {
         Friendly.StartLoading();
         var formName = 'support';
@@ -219,7 +218,6 @@
         }
         Friendly.EndLoading();
     });
-
     $('#supportWrapper table').on('click', '.view-children', function () {
         var id = $(this).attr('data-id');
         $.ajax({

@@ -32,8 +32,8 @@ Financial.AddChildCare = function (caller, stop) {
         }
     });
     var model = Friendly.GetFormInput(formName);
-    if ($('#ChildId').val()) {
-        model.ChildId = $('#ChildId').val().trim();
+    if ($('#'+ formName +' #ChildId').val()) {
+        model.ChildId = $('#' + formName + ' #ChildId').val().trim();
     }
     //key is for local storage
     var key = formName + model.ChildId;
@@ -147,7 +147,9 @@ Financial.AddExtraExpense = function (caller, stop) {
         }
     });
     var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#ChildId').val().trim();
+    if ($('#' + formName + ' #ChildId').val()) {
+        model.ChildId = $('#' + formName + ' #ChildId').val().trim();
+    }
     //key is for local storage
     var key = formName + model.ChildId;
     if (!$('#' + formName).valid()) {
@@ -265,7 +267,9 @@ Financial.AddDeviations = function (caller, stop) {
         }
     });
     var model = Friendly.GetFormInput(formName);
-    model.ChildId = $('#deviations #ChildId').val().trim();
+    if ($('#' + formName + ' #ChildId').val()) {
+        model.ChildId = $('#' + formName + ' #ChildId').val().trim();
+    }
     //key is for local storage
     var key = formName + model.ChildId;
     if (!$('#' + formName).valid()) {
