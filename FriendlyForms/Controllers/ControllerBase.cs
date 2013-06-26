@@ -9,14 +9,16 @@ namespace FriendlyForms.Controllers
     public class ControllerBase : ServiceStackController<CustomUserSession>
     {
         
-        public ActionResult RedirectIfNotAuthenticated(string returnUrl)
+        public override ActionResult AuthenticationErrorResult
         {
-            int userId;
-            if (!UserSession.IsAuthenticated || !int.TryParse(UserSession.CustomId, out userId))
+            get
             {
-                return RedirectToAction("LogOn", "Account", new { Continue = returnUrl });
+                if (AuthSession == null || AuthSession.IsAuthenticated == false)
+                {
+                    return RedirectToAction("LogOn", "Account");
+                }
+                return base.AuthenticationErrorResult;
             }
-            return null;
         }
     }
 }

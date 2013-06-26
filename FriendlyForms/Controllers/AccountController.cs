@@ -2,9 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Security;
 using BusinessLogic.Contracts;
-using BusinessLogic.Models;
 using FriendlyForms.Models;
-using Models.ViewModels;
 using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.Controllers
