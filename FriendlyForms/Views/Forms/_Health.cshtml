@@ -30,8 +30,8 @@
                             <div id="health-provide">
                                 <div class="control-group">
                                     <label class="informative">
-                                        Do you know the monthly per child amount (eg If the monthly amount attributed to the child(ren)s 
-                                    benefit is unknown), then select the button labeled "Prorate" below.</label>
+                                        Do you know the monthly health insurance amount per child (i.e. If the monthly amount attributed to the child(ren)s 
+                                    benefit is known)?</label>
                                     <label class="radio">Yes @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.Yes)</label>
                                     <label class="radio">No @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.No)</label>
                                     @Html.ValidationMessageFor(m => m.Prorate)
@@ -117,8 +117,8 @@
                             <div id="health-provide" class="hide">
                                 <div class="control-group">
                                     <label class="informative">
-                                        If you do not know the monthly per child amount (eg If the monthly amount attributed to the child(ren)s 
-                                    benefit is unknown), then select the button labeled "Prorate" below.</label>
+                                        Do you know the monthly health insurance amount per child (i.e. If the monthly amount attributed to the child(ren)s 
+                                    benefit is known)?</label>
                                     <label class="radio">Yes @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.Yes)</label>
                                     <label class="radio">No @Html.RadioButtonFor(m => m.Prorate, (int)YesNo.No)</label>
                                     @Html.ValidationMessageFor(m => m.Prorate)

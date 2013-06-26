@@ -20,6 +20,11 @@ namespace BusinessLogic
             try
             {
                 var nearest50 = income.RoundTo(50);
+                //TODO: temporary fix
+                if (nearest50 < 800)
+                    nearest50 = 800;
+                if (nearest50 > 30000)
+                    nearest50 = 30000;
                 return _bcsoRepository.GetAmount(nearest50, numberOfChildren);
             }
             catch (Exception ex)
