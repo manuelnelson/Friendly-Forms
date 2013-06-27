@@ -22,15 +22,17 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string Address { get; set; }
         [DataMember]
+        public string SecondaryAddress { get; set; }
+        [DataMember]
         public string CityState { get; set; }
         [DataMember]
         public string ZipCode { get; set; }
         [DataMember]
-        public int? RetailValue { get; set; }
+        public double? RetailValue { get; set; }
         [DataMember]
-        public int? MoneyOwed { get; set; }
+        public double? MoneyOwed { get; set; }
         [DataMember]
-        public int? Equity { get; set; }
+        public double? Equity { get; set; }
         [DataMember]
         public string MortgageOwner { get; set; }
         [DataMember]

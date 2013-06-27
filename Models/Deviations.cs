@@ -11,25 +11,23 @@ namespace Models
         public long Id { get; set; }
         public long UserId { get; set; }
         public virtual User User { get; set; }
-        public bool IsOtherParent { get; set; }
         public long ChildId { get; set; }
-        public int Circumstances { get; set; }
-        public string Unjust { get; set; }
-        public string BestInterest { get; set; }
-        public string Impair { get; set; }
-        public int? HighLow { get; set; }
-        public int? LowDeviation { get; set; }
-        public string WhyLow { get; set; }
-        public int? HighIncome { get; set; }
-        public int? Health { get; set; }
-        public int? Insurance { get; set; }
-        public int? TaxCredit { get; set; }
-        public int? TravelExpenses { get; set; }
-        public int? Visitation { get; set; }
-        public int? AlimonyPaid { get; set; }
-        public int? Mortgage { get; set; }
-        public int? Permanency { get; set; }
-        public int? NonSpecific { get; set; }
+        public int? HealthFather { get; set; }
+        public int? InsuranceFather { get; set; }
+        public int? TaxCreditFather { get; set; }
+        public int? TravelExpensesFather { get; set; }
+        public int? VisitationFather { get; set; }
+        public int? AlimonyPaidFather { get; set; }
+        public int? MortgageFather { get; set; }
+        public int? PermanencyFather { get; set; }
+        public int? HealthMother { get; set; }
+        public int? InsuranceMother { get; set; }
+        public int? TaxCreditMother { get; set; }
+        public int? TravelExpensesMother { get; set; }
+        public int? VisitationMother { get; set; }
+        public int? AlimonyPaidMother { get; set; }
+        public int? MortgageMother { get; set; }
+        public int? PermanencyMother { get; set; }
         public Child Child { get; set; }
 
         public IViewModel ConvertToModel()

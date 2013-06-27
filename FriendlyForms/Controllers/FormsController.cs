@@ -275,8 +275,7 @@ namespace FriendlyForms.Controllers
             var health = _healthService.GetByUserId(Id) as HealthViewModel;
             var extraExpense = _extraExpenseFormService.GetByUserId(Id) as ExtraExpenseFormViewModel;
             var childCareForm = _childCareFormService.GetByUserId(Id) as ChildCareFormViewModel;
-            var deviation = _deviationsFormService.GetByUserId(Id);
-            var deviationOther = _deviationsFormService.GetByUserId(Id, isOtherParent:true);
+            var deviation = _deviationsFormService.GetByUserId(Id) as DeviationsFormViewModel;
             other.OtherChildViewModel = new OtherChildViewModel()
                 {
                     Children = otherChildren.ToList()
@@ -319,7 +318,6 @@ namespace FriendlyForms.Controllers
                     ExtraExpenses = extraExpense.UserId != 0,
                     Health = health.UserId != 0,
                     ChildCareForm = childCareForm.UserId != 0,
-                    DeviationOther = deviationOther.UserId != 0,
                 };
             var model = new FinancialViewModel
                 {
@@ -337,11 +335,10 @@ namespace FriendlyForms.Controllers
                     PreexistingSupportOtherViewModel = allPreexistOther,
                     OtherChildrenViewModel = other,
                     OtherChildrenOtherViewModel = otherOther,
-                    DeviationsFormViewModel = deviation,
                     ExtraExpenseFormViewModel = extraExpense,
                     HealthViewModel = health,
                     ChildCareFormViewModel = childCareForm,
-                    DeviationsOtherFormViewModel = deviationOther
+                    DeviationsFormViewModel = deviation
                 };
             return View(model);
         }

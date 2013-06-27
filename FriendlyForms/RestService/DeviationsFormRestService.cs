@@ -30,8 +30,17 @@ namespace FriendlyForms.RestService
         {
             public long Id { get; set; }
             public long UserId { get; set; }
-            public bool IsOtherParent { get; set; }
             public int Deviation { get; set; }
+            public string Unjust { get; set; }
+            public string BestInterest { get; set; }
+            public string Impair { get; set; }
+            public int? HighLow { get; set; }
+            public int? LowDeviation { get; set; }
+            public string WhyLow { get; set; }
+            public int? HighIncome { get; set; }
+            public int? HighDeviation { get; set; }
+            public int? NonSpecific { get; set; }
+            public int? SpecificDeviations { get; set; }
         }
         [Authenticate]
         public class DeviationsFormsService : ServiceBase
@@ -41,7 +50,7 @@ namespace FriendlyForms.RestService
             public object Get(DeviationsFormDto request)
             {
                 request.UserId = Convert.ToInt32(UserSession.CustomId);
-                return DeviationsFormService.GetByUserId(request.UserId, request.IsOtherParent);
+                return DeviationsFormService.GetByUserId(request.UserId);
             }
 
             public object Get(DeviationsFormListDto request)

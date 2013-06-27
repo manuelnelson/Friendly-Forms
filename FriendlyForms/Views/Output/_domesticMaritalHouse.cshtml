@@ -1,4 +1,5 @@
-﻿@using Models.ViewModels
+﻿@model FriendlyForms.Models.DomesticMediationViewModel
+@using Models.ViewModels
 <h2>Marital House</h2>
 @if (Model.HouseViewModel.MaritalHouse==((int)YesNo.No))
 {
@@ -7,7 +8,11 @@
 else
 {
     <p class="indented">
-        The marital house is located at @Model.HouseViewModel.Address, @Model.HouseViewModel.CityState @Model.HouseViewModel.ZipCode. @Model.HouseViewModel.MortgageOwner is the mortgage owner. The home has an estimated value of $<span class="currencyText">@Model.HouseViewModel.RetailValue</span>, with $<span class="currencyText">@Model.HouseViewModel.MoneyOwed</span> still outstanding.  After subtracting estimated real estate commissions and other sale related expenses, 
+        The marital house is located at @Model.HouseViewModel.Address
+        @if (!string.IsNullOrEmpty(Model.HouseViewModel.SecondaryAddress))
+        {
+            <span> @Model.HouseViewModel.SecondaryAddress</span>
+        }, @Model.HouseViewModel.CityState @Model.HouseViewModel.ZipCode. @Model.HouseViewModel.MortgageOwner is the mortgage owner. The home has an estimated value of $<span class="currencyText">@Model.HouseViewModel.RetailValue</span>, with $<span class="currencyText">@Model.HouseViewModel.MoneyOwed</span> still outstanding.  After subtracting estimated real estate commissions and other sale related expenses, 
         the value of the equity in the property is approximately $<span class="currencyText">@Model.HouseViewModel.Equity</span>.        
     </p>
     <p class="indented">The parties have agreed that issues related to the marital home will be handled in the following manner: @Model.HouseViewModel.Divide</p>

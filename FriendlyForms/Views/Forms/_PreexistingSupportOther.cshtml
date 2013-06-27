@@ -3,7 +3,7 @@
 <div class="form-vertical wrapper hide" id="preexistingSupportFormOtherWrapper">
     @using (Html.BeginForm("Parenting", "Forms", FormMethod.Post, new { id = "preexistingSupportFormOther" }))
     {
-        <input type="hidden" id="preexistingSupportFormId" value="@Model.PreexistingSupportFormViewModel.Id"/>
+        <input type="hidden" id="preexistingSupportFormOtherId" value="@Model.PreexistingSupportFormViewModel.Id"/>
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -24,7 +24,7 @@
             </div>
         </div>
     }
-    @Html.Partial("_PreexistingSupportFormOther", Model.PreexistingSupportViewModel)
+    @Html.Partial("_PreexistingSupportFormOther", Model)
     @Html.Partial("_PreexistingChildFormOther", Model.ChildViewModel)
     @Html.Partial("_templateSupport")
     @Html.Partial("_templateChildSupport")

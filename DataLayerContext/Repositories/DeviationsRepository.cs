@@ -10,9 +10,9 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public Deviations GetChildById(long childId, bool isOtherParent = false)
+        public Deviations GetChildById(long childId)
         {
-            return GetDbSet().FirstOrDefault(c => c.ChildId == childId && c.IsOtherParent == isOtherParent);
+            return GetDbSet().FirstOrDefault(c => c.ChildId == childId);
         }
     }
 }

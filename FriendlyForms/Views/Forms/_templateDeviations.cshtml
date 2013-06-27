@@ -2,130 +2,78 @@
     <h4>${Name}</h4>
     <input type="hidden" id="ChildId" value="${ChildId}" />
     <input type="hidden" id="deviationsId" value="${Id}" />
-    <h5>High Income Deviation</h5>
-    <p>
-        Various life circumstances such as higher than average income, excess life insurance for children, sharing of tax 
-        credits for the children, etc can be considered by the court in allowing or disallowing deviation. This section may be used to 
-        request such deviation. You should consult the proper authority such as an attorney or tax advisor to determine eligibility.
-    </p>
-    <h5>Low Income Deviation</h5>
-    <p>
-        The Court or Jury has discretion to allow or not allow the noncustodial parent to receive a Low Income Deviation 
-        that will reduce the Presumptive Amount of Child Support.  If Low Income Deviation does not apply in this case, click the “No” 
-        button and proceed to the next section.
-    </p>
+    <h5>Specific Deviations</h5>
+    <label class="informative">
+        <p>
+            Requested deviation amounts may be entered as a positive or negative number. For 
+            negative numbers, add a minus sign "-" before the amount.
+        </p>
+        <p>
+            Do not enter the TOTAL amount of monthly expenses; enter the requested amount 
+            you want the court to consider as a deviation from the Presumptive Amount of Child Support.
+        </p>
+    </label>
     <div class="control-group row-fluid">
-        <label class="form-question">Would the amount of Child Support payable before you apply the deviation be unjust or inappropriate?</label>
-        <textarea class="input-xxlarge" cols="20" data-val="true" data-val-regex="Only alpha-numeric characters and []@@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$" id="Unjust" name="Unjust" placeholder="Explain" rows="2" >${Unjust}</textarea>
-        <span class="field-validation-valid" data-valmsg-for="Unjust" data-valmsg-replace="true"></span>
-    </div>
-    <div class="control-group row-fluid">
-        <label class="form-question">Would the deviation serve the best interests of the child(ren) for whom support is being determined?</label>
-        <textarea class="input-xxlarge" cols="20" data-val="true" data-val-regex="Only alpha-numeric characters and []@@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$" id="BestInterest" name="BestInterest" placeholder="Explain" rows="2">${BestInterest}</textarea>
-        <span class="field-validation-valid" data-valmsg-for="BestInterest" data-valmsg-replace="true"></span>
+        <label class="form-question">Other Health Related Insurance</label>
+        <label class="span2 form-question">Father</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="HealthFather" name="HealthFather" placeholder="Amount" type="text" value="${HealthFather}">
+        <span class="field-validation-valid" data-valmsg-for="HealthFather" data-valmsg-replace="true"></span><br/>
+        <label class="span2 form-question">Mother</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="HealthMother" name="HealthMother" placeholder="Amount" type="text" value="${HealthMother}">
+        <span class="field-validation-valid" data-valmsg-for="HealthMother" data-valmsg-replace="true"></span>
     </div>
     <div class="control-group row-fluid">
-        <label class="form-question">
-            Would the deviation seriously impair the ability of the custodial parent or non-parent custodian to 
-            maintain minimally adequate housing, food and clothing for the children being supported by the order and 
-            to provide other basic necessities?</label>
-        <textarea class="input-xxlarge" cols="20" data-val="true" data-val-regex="Only alpha-numeric characters and []@@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$" id="Impair" name="Impair" placeholder="Explain" rows="2">${Impair}</textarea>
-        <span class="field-validation-valid" data-valmsg-for="Impair" data-valmsg-replace="true"></span>
+        <label class="form-question">Life Insurance</label>
+        <label class="span2 form-question">Father</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="InsuranceFather" name="InsuranceFather" placeholder="Amount" type="text" value="${InsuranceFather}">
+        <span class="field-validation-valid" data-valmsg-for="InsuranceFather" data-valmsg-replace="true"></span><br/>
+        <label class="span2 form-question">Mother</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="InsuranceMother" name="InsuranceMother" placeholder="Amount" type="text" value="${InsuranceMother}">
+        <span class="field-validation-valid" data-valmsg-for="InsuranceMother" data-valmsg-replace="true"></span>
     </div>
     <div class="control-group row-fluid">
-        <label class="form-question">
-            Do you wish to apply for a Low Income or High Income Deviation?</label>
-        {{if HighLow===1}}
-        <label class="radio inline">High
-            <input checked="checked" class="inline" data-val="true" data-val-number="The field HighLow must be a number." id="HighLow" name="HighLow" type="radio" value="1"></label>
-        {{else}}
-        <label class="radio inline">High
-            <input class="inline" data-val="true" data-val-number="The field HighLow must be a number." id="HighLow" name="HighLow" type="radio" value="1"></label>
-        {{/if}}
-        {{if HighLow===2}}
-        <label class="radio inline">Low
-            <input checked="checked" class="inline" id="HighLow" name="HighLow" type="radio" value="2"></label>
-        {{else}}
-        <label class="radio inline">Low
-            <input class="inline" id="HighLow" name="HighLow" type="radio" value="2"></label>
-        {{/if}}
-        <span class="field-validation-valid" data-valmsg-for="HighLow" data-valmsg-replace="true"></span>
+        <label class="form-question">Child and Dependent Care Tax Credit</label>
+        <label class="span2 form-question">Father</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="TaxCreditFather" name="TaxCreditFather" placeholder="Amount" type="text" value="${TaxCreditFather}">
+        <span class="field-validation-valid" data-valmsg-for="TaxCreditFather" data-valmsg-replace="true"></span><br/>
+        <label class="span2 form-question">Mother</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="TaxCreditMother" name="TaxCreditMother" placeholder="Amount" type="text" value="${TaxCreditMother}">
+        <span class="field-validation-valid" data-valmsg-for="TaxCreditMother" data-valmsg-replace="true"></span>
     </div>
-    <div class="deviation-low hide">
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
-            <input data-val="true" data-val-number="The field LowDeviation must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="LowDeviation" name="LowDeviation" placeholder="Amount" type="text" value="${LowDeviation}">
-            <span class="field-validation-valid" data-valmsg-for="LowDeviation" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
-            <textarea cols="20" data-val="true" data-val-regex="Only alpha-numeric characters and []@@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$" id="WhyLow" name="WhyLow" placeholder="Explain" rows="2">${WhyLow}</textarea>
-            <span class="field-validation-valid" data-valmsg-for="WhyLow" data-valmsg-replace="true"></span>
-        </div>
+    <div class="control-group row-fluid">
+        <label class="form-question">Visitation Related Travel Expenses</label>
+        <label class="span2 form-question">Father</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="VisitationFather" name="VisitationFather" placeholder="Amount" type="text" value="${VisitationFather}">
+        <span class="field-validation-valid" data-valmsg-for="VisitationFather" data-valmsg-replace="true"></span><br/>
+        <label class="span2 form-question">Mother</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="VisitationMother" name="VisitationMother" placeholder="Amount" type="text" value="${VisitationMother}">
+        <span class="field-validation-valid" data-valmsg-for="VisitationMother" data-valmsg-replace="true"></span>
     </div>
-    <div class="deviation-high hide">
-        <label class="informative">
-            “Deviations are equally accepted by the court using either specific or non-specific reasons, 
-            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
-            to enter one or more specific deviations</label>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Non-specific Deviations</label>
-            <input data-val="true" data-val-number="The field NonSpecific must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="NonSpecific" name="NonSpecific" placeholder="Amount" type="text" value="${NonSpecific}">
-            <span class="field-validation-valid" data-valmsg-for="NonSpecific" data-valmsg-replace="true"></span>
-        </div>
-        <h5>Specific Deviations</h5>
-        <label class="informative">
-            <p>
-                Requested deviation amounts may be entered as a positive or negative number. For 
-                negative numbers, add a minus sign "-" before the amount.
-            </p>
-            <p>
-                Do not enter the TOTAL amount of monthly expenses; enter the requested amount 
-                you want the court to consider as a deviation from the Presumptive Amount of Child Support.
-            </p>
-        </label>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">
-                If you agree that the the Child Support Payment should be 
-                modified on a monthly basis due to high income, enter the amount of increase to be applied to 
-                the monthly Child Support Payment.</label>
-            <input data-val="true" data-val-number="The field HighIncome must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="HighIncome" name="HighIncome" placeholder="Amount" type="text" value="${HighIncome}">
-            <span class="field-validation-valid" data-valmsg-for="HighIncome" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Other Health Related Insurance</label>
-            <input data-val="true" data-val-number="The field Health must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="Health" name="Health" placeholder="Amount" type="text" value="${Health}">
-            <span class="field-validation-valid" data-valmsg-for="Health" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Life Insurance</label>
-            <input data-val="true" data-val-number="The field Insurance must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="Insurance" name="Insurance" placeholder="Amount" type="text" value="${Insurance}">
-            <span class="field-validation-valid" data-valmsg-for="Insurance" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Child and Dependent Care Tax Credit</label>
-            <input data-val="true" data-val-number="The field TaxCredit must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="TaxCredit" name="TaxCredit" placeholder="Amount" type="text" value="${TaxCredit}">
-            <span class="field-validation-valid" data-valmsg-for="TaxCredit" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Visitation Related Travel Expenses</label>
-            <input data-val="true" data-val-number="The field Visitation must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="Visitation" name="Visitation" placeholder="Amount" type="text" value="${Visitation}">
-            <span class="field-validation-valid" data-valmsg-for="Visitation" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Alimony PAID</label>
-            <input data-val="true" data-val-number="The field Alimony must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="AlimonyPaid" name="AlimonyPaid" placeholder="Amount" type="text" value="${AlimonyPaid}">
-            <span class="field-validation-valid" data-valmsg-for="AlimonyPaid" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
-            <input data-val="true" data-val-number="The field Mortgage must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="Mortgage" name="Mortgage" placeholder="Amount" type="text" value="${Mortgage}">
-            <span class="field-validation-valid" data-valmsg-for="Mortgage" data-valmsg-replace="true"></span>
-        </div>
-        <div class="control-group row-fluid">
-            <label class="span4 form-question">Permanency Plan or Foster Care Plan</label>
-            <input data-val="true" data-val-number="The field Permanency must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="Permanency" name="Permanency" placeholder="Amount" type="text" value="${Permanency}">
-            <span class="field-validation-valid" data-valmsg-for="Permanency" data-valmsg-replace="true"></span>
-        </div>
+    <div class="control-group row-fluid">
+        <label class="form-question">Alimony PAID</label>
+        <label class="span2 form-question">Father</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="AlimonyPaidFather" name="AlimonyPaidFather" placeholder="Amount" type="text" value="${AlimonyPaidFather}">
+        <span class="field-validation-valid" data-valmsg-for="AlimonyPaidFather" data-valmsg-replace="true"></span><br/>
+        <label class="span2 form-question">Mother</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="AlimonyPaidMother" name="AlimonyPaidMother" placeholder="Amount" type="text" value="${AlimonyPaidMother}">
+        <span class="field-validation-valid" data-valmsg-for="AlimonyPaidMother" data-valmsg-replace="true"></span>
+    </div>
+    <div class="control-group row-fluid">
+        <label class="form-question">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
+        <label class="span2 form-question">Father</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="MortgageFather" name="MortgageFather" placeholder="Amount" type="text" value="${MortgageFather}">
+        <span class="field-validation-valid" data-valmsg-for="MortgageFather" data-valmsg-replace="true"></span><br/>
+        <label class="span2 form-question">Mother</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="MortgageMother" name="MortgageMother" placeholder="Amount" type="text" value="${MortgageMother}">
+        <span class="field-validation-valid" data-valmsg-for="MortgageMother" data-valmsg-replace="true"></span>
+    </div>
+    <div class="control-group row-fluid">
+        <label class="form-question">Permanency Plan or Foster Care Plan</label>
+        <label class="span2 form-question">Father</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="PermanencyFather" name="PermanencyFather" placeholder="Amount" type="text" value="${PermanencyFather}">
+        <span class="field-validation-valid" data-valmsg-for="PermanencyFather" data-valmsg-replace="true"></span><br/>
+        <label class="span2 form-question">Mother</label>        
+        <input data-val="true" data-val-number="The field must be a number." data-val-regex="Amount must be a number" data-val-regex-pattern="^[0-9]*$" id="PermanencyMother" name="PermanencyMother" placeholder="Amount" type="text" value="${PermanencyMother}">
+        <span class="field-validation-valid" data-valmsg-for="PermanencyMother" data-valmsg-replace="true"></span>
     </div>
 </script>

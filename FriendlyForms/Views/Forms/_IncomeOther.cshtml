@@ -20,17 +20,12 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.HaveSalary, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.HaveSalary)
                         </div>
-                        @if (Model.HaveSalary == ((int)YesNo.No))
+                        @if(Model.HaveSalary == (int)YesNo.No)
                         {
-                            <div class="income-salary">
+                            <div class="income-nosalary">
                                 <div class="control-group row-fluid">
-                                    <label class="informative">
-                                        Where one parent states they have no income, the court will typically apply 
-                                    “imputed income” to that parent; that is, income equal to the salary one 
-                                    would receive if they were employed at minimum wage in a full time job. In 
-                                    your county, that amount equals $1,248 per month in gross wages. This 
-                                    amount will be applied in your case. (Do not include means-tested public 
-                                    assistance.)</label>
+                                    <label class="informative"> Where one parent states they have no income, the court will typically apply “imputed income” to that parent; that is, income equal to the salary one would receive if they were employed at minimum wage in a full time job. 
+                                        In your county, that amount equals $1,248 per month in gross wages. This amount will be applied in your case. (Do not include means-tested public assistance.)</label>
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="span4 form-question">
@@ -39,7 +34,25 @@
                                     @Html.ValidationMessageFor(m => m.OtherIncome)
                                 </div>
                             </div>  
+                        }
+                        else
+                        {
                             <div class="income-nosalary hide">
+                                <div class="control-group row-fluid">
+                                    <label class="informative"> Where one parent states they have no income, the court will typically apply “imputed income” to that parent; that is, income equal to the salary one would receive if they were employed at minimum wage in a full time job. 
+                                        In your county, that amount equals $1,248 per month in gross wages. This amount will be applied in your case. (Do not include means-tested public assistance.)</label>
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="span4 form-question">
+                                        Explain the basis for Other Income, including Imputed Income.</label>
+                                    @Html.TextAreaFor(m => m.OtherIncome, new { placeholder = "Other Income" })
+                                    @Html.ValidationMessageFor(m => m.OtherIncome)
+                                </div>
+                            </div>  
+                        }
+                        @if (Model.HaveSalary == ((int)YesNo.Yes))
+                        {                                 
+                            <div class="income-salary">
                                 <div class="control-group row-fluid">
                                     <label class="span4 form-question">
                                         What is your income for which you received a W-2 tax form for your job?</label>
@@ -188,28 +201,11 @@
                                     @Html.TextAreaFor(m => m.OtherDetails, new { placeholder = "Details", @class = "input-xxlarge" })
                                     @Html.ValidationMessageFor(m => m.OtherDetails)
                                 </div>
-                            </div> 
+                            </div>
                         }
                         else
-                        {
+                        {                                 
                             <div class="income-salary hide">
-                                <div class="control-group row-fluid">
-                                    <label class="informative">
-                                        Where one parent states they have no income, the court will typically apply 
-                                    “imputed income” to that parent; that is, income equal to the salary one 
-                                    would receive if they were employed at minimum wage in a full time job. In 
-                                    your county, that amount equals $1,248 per month in gross wages. This 
-                                    amount will be applied in your case. (Do not include means-tested public 
-                                    assistance.)</label>
-                                </div>
-                                <div class="control-group row-fluid">
-                                    <label class="span4 form-question">
-                                        Explain the basis for Other Income, including Imputed Income.</label>
-                                    @Html.TextAreaFor(m => m.OtherIncome, new { placeholder = "Other Income" })
-                                    @Html.ValidationMessageFor(m => m.OtherIncome)
-                                </div>
-                            </div>   
-                            <div class="income-nosalary">
                                 <div class="control-group row-fluid">
                                     <label class="span4 form-question">
                                         What is your income for which you received a W-2 tax form for your job?</label>

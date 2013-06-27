@@ -8,39 +8,43 @@ namespace Models.ViewModels
     {
         public long Id { get; set; }
         public long UserId { get; set; }
-        public bool IsOtherParent { get; set; }
         public int Deviation { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
-        public string Unjust { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
-        public string BestInterest { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
-        public string Impair { get; set; }
-        public int? HighLow { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? LowDeviation { get; set; }
-        [RegularExpression(pattern: @"^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&_\-,\%]*$", ErrorMessage = @"Only alpha-numeric characters and []@$'()!~:#&_,/-?\% are allowed.")]
-        public string WhyLow { get; set; }
+        public int? HealthFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? HighIncome { get; set; }
+        public int? InsuranceFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? Health { get; set; }
+        public int? TaxCreditFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? Insurance { get; set; }
+        public int? TravelExpensesFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? TaxCredit { get; set; }
+        public int? VisitationFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? TravelExpenses { get; set; }
+        public int? AlimonyPaidFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? Visitation { get; set; }
+        public int? MortgageFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? AlimonyPaid { get; set; }
+        public int? PermanencyFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? Mortgage { get; set; }
+        public int? NonSpecificFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? Permanency { get; set; }
+        public int? HealthMother { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? NonSpecific { get; set; }
+        public int? InsuranceMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? TaxCreditMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? TravelExpensesMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? VisitationMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? AlimonyPaidMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? MortgageMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? PermanencyMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? NonSpecificMother { get; set; }
         public IFormEntity ConvertToEntity()
         {
             return this.TranslateTo<Deviations>();

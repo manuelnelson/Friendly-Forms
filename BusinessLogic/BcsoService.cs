@@ -1,5 +1,6 @@
 ﻿using System;
 using BusinessLogic.Contracts;
+using BusinessLogic.Helpers;
 using DataInterface;
 using Elmah;
 
@@ -18,7 +19,13 @@ namespace BusinessLogic
         {
             try
             {
-                return _bcsoRepository.GetAmount(income, numberOfChildren);
+                var nearest50 = income.RoundTo(50);
+                //TODO: temporary fix
+                if (nearest50 < 800)
+                    nearest50 = 800;
+                if (nearest50 > 30000)
+                    nearest50 = 30000;
+                return _bcsoRepository.GetAmount(nearest50, numberOfChildren);
             }
             catch (Exception ex)
             {

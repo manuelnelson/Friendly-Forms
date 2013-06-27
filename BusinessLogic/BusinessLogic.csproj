@@ -187,6 +187,7 @@
     <Compile Include="FormService.cs" />
     <Compile Include="HealthInsuranceService.cs" />
     <Compile Include="HealthService.cs" />
+    <Compile Include="Helpers\Numbers.cs" />
     <Compile Include="HolidayService.cs" />
     <Compile Include="HouseService.cs" />
     <Compile Include="IncomeService.cs" />
@@ -251,7 +252,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Helpers\" />
     <Folder Include="Validators\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

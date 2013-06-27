@@ -16,7 +16,19 @@
                         </p>
                         <p>
                             This section pertains to what is acceptable to the recipient and affordable to whomever is paying. This typically pertains to parties who have either high or low income, or extraordinary expenses. 
-                                You may also apply other circumstances as both parties agree by using other non-specific deviations.
+                            You may also apply other circumstances as both parties agree by using other non-specific deviations.
+                        </p>
+                        <h5>High Income Deviation</h5>
+                        <p>
+                            Various life circumstances such as higher than average income, excess life insurance for children, sharing of tax 
+                            credits for the children, etc can be considered by the court in allowing or disallowing deviation. This section may be used to 
+                            request such deviation. You should consult the proper authority such as an attorney or tax advisor to determine eligibility.
+                        </p>
+                        <h5>Low Income Deviation</h5>
+                        <p>
+                            The Court or Jury has discretion to allow or not allow the noncustodial parent to receive a Low Income Deviation 
+                            that will reduce the Presumptive Amount of Child Support.  If Low Income Deviation does not apply in this case, click the “No” 
+                            button and proceed to the next section.
                         </p>
                     </label>
                     <form id="deviationsForm" method="POST" action="/api/deviationsForm/">
@@ -27,28 +39,365 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.Deviation, (int)YesNo.No, new { @class = "inline" })</label>
                             @Html.ValidationMessageFor(m => m.Deviation)
                         </div>
+                        @if (Model.Deviation == (int)YesNo.Yes)
+                        {
+                            <div id="deviations-show">
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Would the amount of Child Support payable before you apply the deviation be unjust or inappropriate?</label>
+                                    @Html.TextAreaFor(m => m.Unjust, new { placeholder = "Explain Why", @class = "input-xxlarge" })
+                                    @Html.ValidationMessageFor(m => m.Unjust)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Would the deviation serve the best interests of the child(ren) for whom support is being determined?</label>
+                                    @Html.TextAreaFor(m => m.BestInterest, new { placeholder = "Explain Why", @class = "input-xxlarge" })
+                                    @Html.ValidationMessageFor(m => m.BestInterest)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">
+                                        Would the deviation seriously impair the ability of the custodial parent or non-parent custodian to 
+                                    maintain minimally adequate housing, food and clothing for the children being supported by the order and 
+                                    to provide other basic necessities?</label>
+                                    @Html.TextAreaFor(m => m.Impair, new { placeholder = "Explain Why", @class = "input-xxlarge" })
+                                    @Html.ValidationMessageFor(m => m.Impair)
+                                </div>
+                                <div class="control-group">
+                                    <label class="form-question">
+                                        Do you wish to apply for a Low Income or High Income Deviation?</label>
+                                    <label class="radio inline">High @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                    <label class="radio inline">Low @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.No, new { @class = "inline" })</label>
+                                    @Html.ValidationMessageFor(m => m.Deviation)
+                                </div>
+                                @if (Model.HighLow == (int)YesNo.No)
+                                {
+                                    //Low
+                                    <div class="deviation-low">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
+                                            @Html.TextBoxFor(m => m.LowDeviation)
+                                            @Html.ValidationMessageFor(m => m.LowDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
+                                            @Html.TextAreaFor(m => m.WhyLow)
+                                            @Html.ValidationMessageFor(m => m.WhyLow)
+                                        </div>
+                                    </div>
+                                    <div class="deviation-high hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">
+                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                            monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                            reported income is included, the amount of child support payable (in addition to the 
+                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            the amount shown here, or enter another amount (including $0)?</label>
+                                            @Html.TextBoxFor(m => m.HighDeviation)
+                                            @Html.ValidationMessageFor(m => m.HighDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="informative">
+                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
+                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
+                                            to enter one or more specific deviations</label>
+                                            <div class="control-group row-fluid">
+                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
+                                                @Html.TextAreaFor(m => m.NonSpecific)
+                                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                Would you like to add Specific Deviations?</label>
+                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
+                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
+                                        </div>
+                                    </div>
+                                }
+                                else if (Model.HighLow == (int)YesNo.Yes)
+                                {
+                                    //High
+                                    <div class="deviation-low hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
+                                            @Html.TextBoxFor(m => m.LowDeviation)
+                                            @Html.ValidationMessageFor(m => m.LowDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
+                                            @Html.TextAreaFor(m => m.WhyLow)
+                                            @Html.ValidationMessageFor(m => m.WhyLow)
+                                        </div>
+                                    </div>
+                                    <div class="deviation-high">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">
+                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                            monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                            reported income is included, the amount of child support payable (in addition to the 
+                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            the amount shown here, or enter another amount (including $0)?</label>
+                                            @Html.TextBoxFor(m => m.HighDeviation)
+                                            @Html.ValidationMessageFor(m => m.HighDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="informative">
+                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
+                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
+                                            to enter one or more specific deviations</label>
+                                            <div class="control-group row-fluid">
+                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
+                                                @Html.TextAreaFor(m => m.NonSpecific)
+                                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                Would you like to add Specific Deviations?</label>
+                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
+                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="deviation-low hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
+                                            @Html.TextBoxFor(m => m.LowDeviation)
+                                            @Html.ValidationMessageFor(m => m.LowDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
+                                            @Html.TextAreaFor(m => m.WhyLow)
+                                            @Html.ValidationMessageFor(m => m.WhyLow)
+                                        </div>
+                                    </div>
+                                    <div class="deviation-high hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">
+                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                            monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                            reported income is included, the amount of child support payable (in addition to the 
+                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            the amount shown here, or enter another amount (including $0)?</label>
+                                            @Html.TextBoxFor(m => m.HighDeviation)
+                                            @Html.ValidationMessageFor(m => m.HighDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="informative">
+                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
+                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
+                                            to enter one or more specific deviations</label>
+                                            <div class="control-group row-fluid">
+                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
+                                                @Html.TextAreaFor(m => m.NonSpecific)
+                                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                Would you like to add Specific Deviations?</label>
+                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
+                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="deviations-show" class="hide">
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Would the amount of Child Support payable before you apply the deviation be unjust or inappropriate?</label>
+                                    @Html.TextAreaFor(m => m.Unjust, new { placeholder = "Explain Why", @class = "input-xxlarge" })
+                                    @Html.ValidationMessageFor(m => m.Unjust)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Would the deviation serve the best interests of the child(ren) for whom support is being determined?</label>
+                                    @Html.TextAreaFor(m => m.BestInterest, new { placeholder = "Explain Why", @class = "input-xxlarge" })
+                                    @Html.ValidationMessageFor(m => m.BestInterest)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">
+                                        Would the deviation seriously impair the ability of the custodial parent or non-parent custodian to 
+                                    maintain minimally adequate housing, food and clothing for the children being supported by the order and 
+                                    to provide other basic necessities?</label>
+                                    @Html.TextAreaFor(m => m.Impair, new { placeholder = "Explain Why", @class = "input-xxlarge" })
+                                    @Html.ValidationMessageFor(m => m.Impair)
+                                </div>
+                                <div class="control-group">
+                                    <label class="form-question">
+                                        Do you wish to apply for a Low Income or High Income Deviation?</label>
+                                    <label class="radio inline">High @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                    <label class="radio inline">Low @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.No, new { @class = "inline" })</label>
+                                    @Html.ValidationMessageFor(m => m.Deviation)
+                                </div>
+                                @if (Model.HighLow == (int)YesNo.No)
+                                {
+                                    //Low
+                                    <div class="deviation-low">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
+                                            @Html.TextBoxFor(m => m.LowDeviation)
+                                            @Html.ValidationMessageFor(m => m.LowDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
+                                            @Html.TextAreaFor(m => m.WhyLow)
+                                            @Html.ValidationMessageFor(m => m.WhyLow)
+                                        </div>
+                                    </div>
+                                    <div class="deviation-high hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">
+                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                            monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                            reported income is included, the amount of child support payable (in addition to the 
+                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            the amount shown here, or enter another amount (including $0)?</label>
+                                            @Html.TextBoxFor(m => m.HighDeviation)
+                                            @Html.ValidationMessageFor(m => m.HighDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="informative">
+                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
+                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
+                                            to enter one or more specific deviations</label>
+                                            <div class="control-group row-fluid">
+                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
+                                                @Html.TextAreaFor(m => m.NonSpecific)
+                                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                Would you like to add Specific Deviations?</label>
+                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
+                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
+                                        </div>
+                                    </div>
+                                }
+                                else if (Model.HighLow == (int)YesNo.Yes)
+                                {
+                                    //High
+                                    <div class="deviation-low hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
+                                            @Html.TextBoxFor(m => m.LowDeviation)
+                                            @Html.ValidationMessageFor(m => m.LowDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
+                                            @Html.TextAreaFor(m => m.WhyLow)
+                                            @Html.ValidationMessageFor(m => m.WhyLow)
+                                        </div>
+                                    </div>
+                                    <div class="deviation-high">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">
+                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                            monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                            reported income is included, the amount of child support payable (in addition to the 
+                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            the amount shown here, or enter another amount (including $0)?</label>
+                                            @Html.TextBoxFor(m => m.HighDeviation)
+                                            @Html.ValidationMessageFor(m => m.HighDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="informative">
+                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
+                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
+                                            to enter one or more specific deviations</label>
+                                            <div class="control-group row-fluid">
+                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
+                                                @Html.TextAreaFor(m => m.NonSpecific)
+                                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                Would you like to add Specific Deviations?</label>
+                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
+                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="deviation-low hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
+                                            @Html.TextBoxFor(m => m.LowDeviation)
+                                            @Html.ValidationMessageFor(m => m.LowDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
+                                            @Html.TextAreaFor(m => m.WhyLow)
+                                            @Html.ValidationMessageFor(m => m.WhyLow)
+                                        </div>
+                                    </div>
+                                    <div class="deviation-high hide">
+                                        <div class="control-group row-fluid">
+                                            <label class="span4 form-question">
+                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                            monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                            reported income is included, the amount of child support payable (in addition to the 
+                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            the amount shown here, or enter another amount (including $0)?</label>
+                                            @Html.TextBoxFor(m => m.HighDeviation)
+                                            @Html.ValidationMessageFor(m => m.HighDeviation)
+                                        </div>
+                                        <div class="control-group row-fluid">
+                                            <label class="informative">
+                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
+                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
+                                            to enter one or more specific deviations</label>
+                                            <div class="control-group row-fluid">
+                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
+                                                @Html.TextAreaFor(m => m.NonSpecific)
+                                                @Html.ValidationMessageFor(m => m.NonSpecific)
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="form-question">
+                                                Would you like to add Specific Deviations?</label>
+                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
+                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
+                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
+                                        </div>
+                                    </div>
+                                }
+                            </div>                        
+                        }
                         <input type="hidden" id="deviationsFormId" value="@Model.Id"/>
                     </form>
-                    @if (Model.Deviation == (int)YesNo.Yes)
+                    @if (Model.SpecificDeviations == (int)YesNo.Yes && Model.HighLow == (int)YesNo.Yes)
                     {
-                        <div id="deviations-show">
+                        <div id="deviations-specific">
                             <form id="deviations" method="POST" action="/api/deviations/">
                             </form>
                         </div>
                     }
                     else
                     {
-                        <div id="deviations-show" style="display:none">
+                        <div id="deviations-specific" style="display: none">
                             <form id="deviations" method="POST" action="/api/deviations/">
                             </form>
-                        </div>                        
+                        </div>                                    
                     }
+
                 </div>
             </div>
         </div>
     </div>
     <button class="btn btn-primary financial-deviations previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary financial-deviations next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <p class="viewOutput hide"><span style="font-weight:bold;">Congratulations!</span> The financial form is completely done.  Click the button below to view the output.</p>
+    <button class="btn btn-primary next viewOutput hide" id="ViewOutput" data-url='/Output/Financial/#scheduleA' value="View">View Output<i class="icon-arrow-right icon-white"></i></button>
 </div>
 @Html.Partial("_templateDeviations")
 

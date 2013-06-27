@@ -38,7 +38,7 @@ namespace FriendlyForms.RestService
             [DataMember]
             public int ProvideHealth { get; set; }
             [DataMember]
-            public bool Prorate { get; set; }
+            public int Prorate { get; set; }
             [DataMember]
             public bool FathersHealth { get; set; }
             [DataMember]

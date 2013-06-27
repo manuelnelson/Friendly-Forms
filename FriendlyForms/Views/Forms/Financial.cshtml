@@ -31,14 +31,6 @@
                 {
                     <li class="nav-item" id="healthsNav"><a data-form="healths" href="#"><i class="@itemlock"></i>Health Insurance</a></li>
                 }  
-                @if (Model.FinancialFormsCompleted.Deviation)
-                {
-                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemDone"></i>Deviations (Father)</a></li>
-                }
-                else
-                {
-                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemlock"></i>Deviations (Father)</a></li>
-                }
                 @if (Model.FinancialFormsCompleted.Income)
                 {
                     <li class="nav-item" id="incomeNav"><a data-form="income" href="#"><i class="@itemDone"></i>Income (Father)</a></li>
@@ -71,14 +63,6 @@
                 {
                     <li class="nav-item" id="otherChildrenNav"><a data-form="otherChildren" href="#"><i class="@itemlock"></i>Other Children (Father)</a></li>
                 }   
-                @if (Model.FinancialFormsCompleted.DeviationOther)
-                {
-                    <li class="nav-item" id="deviationsOtherNav"><a data-form="deviationsOther" href="#"><i class="@itemDone"></i>Deviations (Mother)</a></li>
-                }
-                else
-                {
-                    <li class="nav-item" id="deviationsOtherNav"><a data-form="deviationsOther" href="#"><i class="@itemlock"></i>Deviations (Mother)</a></li>
-                }
            
                 @if (Model.FinancialFormsCompleted.IncomeOther)
                 {
@@ -112,6 +96,14 @@
                 {
                     <li class="nav-item" id="otherChildrenOtherNav"><a data-form="otherChildrenOther" href="#"><i class="@itemlock"></i>Other Children (Mother)</a></li>
                 }
+                @if (Model.FinancialFormsCompleted.Deviation)
+                {
+                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemDone"></i>Deviations</a></li>
+                }
+                else
+                {
+                    <li class="nav-item" id="deviationsNav"><a data-form="deviations" href="#"><i class="@itemlock"></i>Deviations</a></li>
+                }
             </ul>
         </li>
         <li><a href="@Url.Action("LogOff","Account")"><i class="icon icon-share-alt"></i>Log Out</a></li>
@@ -135,6 +127,5 @@
 @Html.Partial("_OtherChildrenOther", Model.OtherChildrenOtherViewModel)
 @Html.Partial("_ExtraExpenseForm", Model.ExtraExpenseFormViewModel)
 @Html.Partial("_ChildCareForm", Model.ChildCareFormViewModel)
-@Html.Partial("_DeviationsOther", Model.DeviationsOtherFormViewModel)
 @* The child form below is used for the decisions form and holiday form to grab children information *@
 @Html.Partial("_Children", Model.ChildAllViewModel)

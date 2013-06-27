@@ -19,7 +19,6 @@ namespace FriendlyForms.Models
         public ChildCareFormViewModel ChildCareFormViewModel { get; set; }
         public FinancialFormsCompleted FinancialFormsCompleted { get; set; }
         public ChildAllViewModel ChildAllViewModel { get; set; }
-        public DeviationsFormViewModel DeviationsOtherFormViewModel { get; set; }
     }
 
     public class FinancialFormsCompleted
@@ -36,6 +35,5 @@ namespace FriendlyForms.Models
         public bool PreexistingOther { get; set; }
         public bool OtherChildrenOther { get; set; }
         public bool ExtraExpenses { get; set; }
-        public bool DeviationOther { get; set; }
     }
 }

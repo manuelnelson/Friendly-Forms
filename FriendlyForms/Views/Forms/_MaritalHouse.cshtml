@@ -28,6 +28,11 @@
                         @Html.ValidationMessageFor(m => m.Address)
                     </div>
                     <div class="control-group">
+                        <label class="form-question">Secondary address</label>
+                        @Html.TextBoxFor(m => m.SecondaryAddress, new { placeholder = "Secondary Address", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.SecondaryAddress)
+                    </div>
+                    <div class="control-group">
                         <label class="form-question">City, State</label>
                         @Html.TextBoxFor(m => m.CityState, new { placeholder = "City State", @class = "marital-info", autocomplete="off" })
                         @Html.ValidationMessageFor(m => m.CityState)
@@ -71,6 +76,11 @@
                         <label class="form-question">House address</label>
                         @Html.TextBoxFor(m => m.Address, new { placeholder = "Address", @class = "marital-info" })
                         @Html.ValidationMessageFor(m => m.Address)
+                    </div>
+                    <div class="control-group">
+                        <label class="form-question">Secondary address</label>
+                        @Html.TextBoxFor(m => m.SecondaryAddress, new { placeholder = "Secondary Address", @class = "marital-info" })
+                        @Html.ValidationMessageFor(m => m.SecondaryAddress)
                     </div>
                     <div class="control-group">
                         <label class="form-question">City, State</label>
