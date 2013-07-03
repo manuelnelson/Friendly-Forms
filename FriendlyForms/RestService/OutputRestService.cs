@@ -483,6 +483,7 @@ namespace FriendlyForms.RestService
         public IPreexistingSupportChildService PreexistingSupportChildService { get; set; }
         public IOtherChildrenService OtherChildrenService { get; set; }
         public IDeviationsService DeviationsService { get; set; }
+        public IDeviationsFormService DeviationsFormService { get; set; }
         public IOtherChildService OtherChildService { get; set; }
         public IParticipantService ParticipantService { get; set; }
         public IHealthService HealthService { get; set; }
@@ -532,22 +533,73 @@ namespace FriendlyForms.RestService
         public object Get(ScheduleEDto request)
         {
             request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var lowIncome = new LowIncomeDeviation()
+            var userId = request.UserId;
+            var deviations = DeviationsFormService.GetByUserId(userId).TranslateTo<DeviationsForm>();
+            var cswAll = GetAllCsw(userId);
+            var children = ChildService.GetByUserId(userId);
+            var participants = ParticipantService.GetByUserId(userId) as ParticipantViewModel;
+            var extraExpenses = ExtraExpenseService.GetByUserId(userId).TranslateTo<ExtraExpense>();
+            var custodyInformation = ParticipantService.GetCustodyInformation(participants);
+            var lowIncome = new LowIncomeDeviation
                 {
-                    DeviationAmount = 0,
-                    ActualAmount = 0,
-                    CalculatedAmount = 0,
-                    CompareAmount = 0,
-                    Explaination = "Nothing yet"
+                    DeviationAmount = deviations.LowDeviation ?? 0,
                 };
-            var highIncome = new HighIncomeDeviation();
-            var parentNames = GetParentNames(request.UserId);
+            lowIncome.CompareAmount = custodyInformation.NonCustodyIsFather
+                                          ? (cswAll.FatherCsw.PresumptiveAmount - lowIncome.DeviationAmount)
+                                          : (cswAll.MotherCsw.PresumptiveAmount - lowIncome.DeviationAmount);
+            var minChildSupportAmount = 100 + children.Children.Count * 50;
+            lowIncome.CalculatedAmount = Math.Abs(minChildSupportAmount - lowIncome.CompareAmount);
+            //TODO: still confused on this one. Ask for clarification
+            lowIncome.ActualAmount = minChildSupportAmount > lowIncome.CalculatedAmount ? 0 : 10;
+            lowIncome.Explaination = deviations.WhyLow;
+
+            var highIncome = new HighIncomeDeviation
+                {
+                    Deviation = deviations.HighDeviation ?? 0,
+                };
+            var parentNames = GetParentNames(userId);
+            var totalExpenses = new ExtraExpenses
+                {
+                    EducationFather = extraExpenses.EducationFather,
+                    EducationMother = extraExpenses.EducationMother,
+                    EducationNonParent = extraExpenses.EducationNonParent,
+                    EducationTotal = extraExpenses.EducationFather + extraExpenses.EducationMother + extraExpenses.EducationNonParent,
+                    MedicalFather = extraExpenses.MedicalFather,
+                    MedicalMother = extraExpenses.MedicalMother,
+                    MedicalNonParent = extraExpenses.MedicalNonParent,
+                    MedicalTotal = extraExpenses.MedicalFather + extraExpenses.MedicalMother + extraExpenses.MedicalNonParent,
+                    SpecialFather = extraExpenses.SpecialFather,
+                    SpecialMother = extraExpenses.SpecialMother,
+                    SpecialNonParent = extraExpenses.SpecialNonParent,
+                    SpecialTotal = extraExpenses.SpecialFather + extraExpenses.SpecialMother + extraExpenses.SpecialNonParent,
+                    TotalFather = extraExpenses.EducationFather + extraExpenses.MedicalFather + extraExpenses.SpecialFather,
+                    TotalMother = extraExpenses.EducationMother + extraExpenses.MedicalMother + extraExpenses.SpecialMother,
+                    TotalNonParent = extraExpenses.EducationNonParent + extraExpenses.MedicalNonParent + extraExpenses.SpecialNonParent,
+                    ProRataFather = cswAll.FatherCsw.CombinedIncome,
+                    ProRataMother = cswAll.MotherCsw.CombinedIncome,
+                    ProRataTotal = 100,                    
+                };
+            totalExpenses.TotalTotal = totalExpenses.TotalFather + totalExpenses.TotalMother + totalExpenses.TotalNonParent;
+            totalExpenses.PercentageFather = totalExpenses.TotalFather*totalExpenses.ProRataFather;
+            totalExpenses.PercentageMother = totalExpenses.TotalMother*totalExpenses.ProRataMother;
+            totalExpenses.DeviationFather = totalExpenses.PercentageFather - totalExpenses.TotalFather;
+            totalExpenses.DeviationMother = totalExpenses.PercentageMother - totalExpenses.TotalMother;
+
+
+            var allowableDeviation = new AllowableDeviation();
+            //var extraExpenses = new List<ExtraExpenses>();
+            var allowableExpenses = new AllowableExpenses();
             return new ScheduleEDtoResp
             {
                 LowIncomeDeviation = lowIncome,
                 HighIncomeAdjusted = 0,
                 HighIncomeDeviationFather = highIncome,
                 HighIncomeDeviationMother = highIncome,
+                TotalExpenses = totalExpenses,
+                ParentingTime = 5,
+                AllowableDeviation = allowableDeviation,
+                //ExtraExpenseses = extraExpenses,
+                AllowableExpenses = allowableExpenses,
                 Father = parentNames.Father,
                 Mother = parentNames.Mother
             };
@@ -785,8 +837,6 @@ namespace FriendlyForms.RestService
             csw.UninsuredExpenses = isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0;
             return csw;
         }
-
-
         private ParentNames GetParentNames(long userId)
         {
             var participants = ParticipantService.GetByUserId(userId) as ParticipantViewModel;

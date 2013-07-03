@@ -15,6 +15,23 @@ namespace Models
         public string Unjust { get; set; }
         public string BestInterest { get; set; }
         public string Impair { get; set; }
+        public int? HealthFather { get; set; }
+        public int? InsuranceFather { get; set; }
+        public int? TaxCreditFather { get; set; }
+        public int? TravelExpensesFather { get; set; }
+        public int? VisitationFather { get; set; }
+        public int? AlimonyPaidFather { get; set; }
+        public int? MortgageFather { get; set; }
+        public int? PermanencyFather { get; set; }
+        public int? HealthMother { get; set; }
+        public int? InsuranceMother { get; set; }
+        public int? TaxCreditMother { get; set; }
+        public int? TravelExpensesMother { get; set; }
+        public int? VisitationMother { get; set; }
+        public int? AlimonyPaidMother { get; set; }
+        public int? MortgageMother { get; set; }
+        public int? PermanencyMother { get; set; }
+
         public int? HighLow { get; set; }
         public int? LowDeviation { get; set; }
         public string WhyLow { get; set; }

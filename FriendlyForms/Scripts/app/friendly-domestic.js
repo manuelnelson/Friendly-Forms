@@ -214,8 +214,6 @@
                 type: 'POST',
                 data: model,
                 success: function () {
-                    //var forms = ["house", "property", "vehicleForm", "debt", "asset", "healthInsurance", "spousal", "tax"];
-                    //var properNames = ["Marital House", "Personal Property", "Vehicles", "Debt", "Assets", "Health Insurance", "Spousal Support", "Taxes"];
                     Friendly.ValidateForms('.domestic-part8');
                     Friendly.EndLoading();
                     return false;

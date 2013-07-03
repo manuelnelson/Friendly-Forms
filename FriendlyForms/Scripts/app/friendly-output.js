@@ -61,6 +61,12 @@
         addParentChildCareCosts(data.NonCustodialParentName, '#friendly-supplementalTableMother-template', data.ChildCare, data.MotherScheduleD);
         addParentChildCareCosts('Nonparent Custodian', '#friendly-supplementalTableNonParent-template', data.ChildCare, data.NonParentScheduleD);
     }
+    var populateScheduleEForm = function (data) {
+        var result = $("#friendly-scheduleE-template").tmpl(data);
+        $('#finanicalFormOutput').empty();
+        $('#finanicalFormOutput').append(result);
+
+    };
     function populateCswForm(data) {
         var result = $("#friendly-childSupportWorksheet-template").tmpl(data);
         $('#finanicalFormOutput').empty();

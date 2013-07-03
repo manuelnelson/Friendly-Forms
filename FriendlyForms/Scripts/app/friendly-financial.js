@@ -509,24 +509,35 @@
     //#endregion
     //#region Deviations
     $('.financial-deviations').click(function () {
-        //if the form isn't validated, we still need to move on
-        if (!Financial.AddDeviations(this)) {
-            var child = Friendly.children[Friendly.childNdx - 1];
-            Friendly.DeviationsError.push(child.Name);
-            if ($(this).hasClass('next') && Friendly.childNdx === Friendly.children.length) {
-                Friendly.NextForm('deviations', Friendly.properties.iconError);
-                return;
-            }
-            //check if we need to move to previous form
-            if ($(this).hasClass('previous') && Friendly.childNdx < 0) {
-                Friendly.NextForm('otherChildrenOther', Friendly.properties.iconError);
-                return;
-            }
-            $('html, body').animate({ scrollTop: 0 }, 'fast');
-            var nextChild = Friendly.children[Friendly.childNdx];
-            Financial.GetDeviations(nextChild);
+        //last form.  Let's try and validate this bi-atch
+        Friendly.StartLoading();
+        var formName = 'deviationsForm';
+        var model = Friendly.GetFormInput(formName);
+        var submitType = 'POST';
+
+        if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
+            submitType = 'PUT';
+        else
+            model.Id = 0;
+
+        var formSelector = '#' + formName;
+        if ($(formSelector).valid()) {
+            $.ajax({
+                url: '/api/' + formName + '/?format=json',
+                type: submitType,
+                data: model,
+                success: function () {
+                    Friendly.ValidateForms('.financial-deviations');
+                    Friendly.EndLoading();
+                    return false;
+                },
+                error: Friendly.GenericErrorMessage
+            });
+        } else {
             Friendly.EndLoading();
+            return false;
         }
+        return false;
     });
     $('#deviationsForm input[name="Deviation"]').change(function () {
         if ($('#deviationsForm #Deviation:checked').val() === "1") {
@@ -539,25 +550,10 @@
         if ($('#HighLow:checked').val() === "1") {
             $('.deviation-high').show();
             $('.deviation-low').hide();
-            if ($('#SpecificDeviations:checked').val() === "1") {
-                $('#deviations-specific').show();
-            } else {
-                $('#deviations-specific').hide();
-            }
         } else {
             $('.deviation-low').show();
             $('.deviation-high').hide();
-            $('#deviations-specific').hide();
         }
-
-    });
-    $('input[name="SpecificDeviations"]').live('change', function () {
-        if ($('#SpecificDeviations:checked').val() === "1") {
-            $('#deviations-specific').show();
-        } else {
-            $('#deviations-specific').hide();
-        }
-
     });
     //#endregion
 });

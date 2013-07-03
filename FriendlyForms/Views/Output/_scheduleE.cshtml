@@ -1,4 +1,4 @@
-﻿<script id="friendly-scheduleD-template" type="text/x-jquery-tmpl">
+﻿<script id="friendly-scheduleE-template" type="text/x-jquery-tmpl">
     <div class="row-fluid" style="text-align: center;">
         <h2>CHILD SUPPORT SCHEDULE E</h2>
         <h2>Deviation (Special Circumstances)</h2>
@@ -274,16 +274,95 @@
                 <td>12(g). Deviation amount for Extraordinary Educational, Medical and Special Expenses</td>
                 <td class="currency">$${TotalExpenses.DeviationFather}</td>
                 <td class="currency">$${TotalExpenses.DeviationMother}</td>
-                <td ></td>
-                <td ></td>
+                <td></td>
+                <td></td>
             </tr>
         </tbody>
     </table>
-
+    <table>
+        <thead>
+            <tr>
+                <th>Parenting Time Deviation for Noncustodial Parent</th>
+                <th></th>
+                <th>${NonCustodial}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>13. Monthly Excessive Parenting Time Deviation</td>
+                <td></td>
+                <td class="currency">$${TotalExpenses.EducationMother}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="4">Total Allowable Deviation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>${Custodial}</td>
+                <td>${NonCustodial}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>14. Total Allowable Deviations</td>
+                <td class="currency">$${AllowableDeviation.AllowableFather}</td>
+                <td class="currency">$${AllowableDeviation.AllowableMother}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="4">B. Would the presumptive amount be unjust or inappropriate?</td>
+            </tr>
+            <tr>
+                <td colspan="4">${AllowableDeviation.PresumptiveAmount}</td>
+            </tr>
+            <tr>
+                <td colspan="4">C. Would deviation serve the best interests of the children for whom support is being determined?</td>
+            </tr>
+            <tr>
+                <td colspan="4">${AllowableDeviation.BestInterest}</td>
+            </tr>
+            <tr>
+                <td colspan="4">D. Would deviation seriously impair the ability of the Custodial Parent or Nonparent Custodian to maintain minimally adequate housing, food and clothing for the children being supported by the order and to provide other basic necessities?</td>
+            </tr>
+            <tr>
+                <td colspan="4">${AllowableDeviation.ImpairAbility}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="7">SUPPLEMENTAL TABLE 1</th>
+            </tr>
+            <tr>
+                <th colspan="7">EXTRAORDINARY EDUCATIONAL EXPENSES</th>
+            </tr>
+        </thead>
+        <tbody id="supplemental-table">
+            <tr>
+                <td></td>
+                <td>Tuition, Room & Board, Fees and Books</td>
+                <td>Other Extraordinary Educational Expenses</td>
+                <td>Monthly Extraordinary Educational Expenses.</td>
+                <td>Total Yearly Extraordinary Medical Expense</td>
+                <td>Monthly Extraordinary Medical Expenses</td>
+                <td>Total Yearly Amount</td>
+                <td>Total Monthly Amount</td>
+            </tr>
+        </tbody>
+    </table>
 </script>
 <script id="friendly-supplementalTableHeader-template" type="text/x-jquery-tmpl">
     <tr>
         <td>${ParentName}</td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>

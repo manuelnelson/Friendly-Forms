@@ -145,12 +145,6 @@ Friendly.NextForm = function (nextForm, prevIcon) {
         case 'extraExpense':
             Friendly.LoadChildren('extraExpense');
             break;
-        case 'deviations':
-            Friendly.LoadChildren('deviations');
-            break;
-        case 'deviationsOther':
-            Friendly.LoadChildren('deviationsOther');
-            break;
     }
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
@@ -226,7 +220,7 @@ Friendly.FormInvalidationMessage = function (formName) {
 };
 //Checks if the form needs special attention. 
 Friendly.IsGenericForm = function (formName, nextForm) {
-    var genericForms = ['house', 'vehicle', 'child', 'decisions', 'holiday', 'preexistingSupportForm', 'preexistingSupportFormOther', 'childCare', 'extraExpense', 'deviations', 'deviationsOther'];
+    var genericForms = ['house', 'vehicle', 'child', 'decisions', 'holiday', 'preexistingSupportForm', 'preexistingSupportFormOther', 'childCare', 'extraExpense'];
     if (genericForms.indexOf(formName) >= 0) {
         switch (formName) {
             case 'house':
@@ -275,28 +269,6 @@ Friendly.IsGenericForm = function (formName, nextForm) {
                 var child = Friendly.children[Friendly.childNdx];
                 Friendly.ExtraExpenseError = [];
                 Financial.CheckExtraExpense(child, nextForm);
-                break;
-            case 'deviations':
-                //First, check if current form is valid
-                Financial.AddDeviations(null, true);
-                //let's hide the form while we go through them
-                $('#' + formName + 'Wrapper').hide();
-                //cycle through all children and make sure form is valid and saved
-                Friendly.childNdx = 0;
-                var child = Friendly.children[Friendly.childNdx];
-                Friendly.DeviationsError = [];
-                Financial.CheckDeviations(child, nextForm);
-                break;
-            case 'deviationsOther':
-                //First, check if current form is valid
-                Financial.AddDeviationsOther(null, true);
-                //let's hide the form while we go through them
-                $('#' + formName + 'Wrapper').hide();
-                //cycle through all children and make sure form is valid and saved
-                Friendly.childNdx = 0;
-                var child = Friendly.children[Friendly.childNdx];
-                Friendly.DeviationsErrorOther = [];
-                Financial.CheckDeviationsOther(child, nextForm);
                 break;
             case 'holiday':
                 //First, check if current form is valid
@@ -355,12 +327,6 @@ Friendly.LoadChildren = function (form) {
             break;
         case "extraExpense":
             Financial.GetExtraExpense(firstChild);
-            break;
-        case "deviations":
-            Financial.GetDeviations(firstChild);
-            break;
-        case "deviationsOther":
-            Financial.GetDeviationsOther(firstChild);
             break;
     }
 };

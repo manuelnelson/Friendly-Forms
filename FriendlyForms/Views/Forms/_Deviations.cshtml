@@ -60,6 +60,91 @@
                                     @Html.TextAreaFor(m => m.Impair, new { placeholder = "Explain Why", @class = "input-xxlarge" })
                                     @Html.ValidationMessageFor(m => m.Impair)
                                 </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">
+                                        <p>
+                                            Requested deviation amounts may be entered as a positive or negative number. For negative 
+                                            numbers, add the minus sign " - " before the amount. What do you want the result here to be? Specific and 
+                                            Nonspecific Deviations entered as a positive amount may increase the noncustodial parent's child support 
+                                            obligation, while those same deviations entered as a negative (-) amount may decrease the noncustodial parent's 
+                                            child support obligation
+                                        </p>
+                                        <p>
+                                            Do not enter the TOTAL amount of monthly expenses; enter the requested amount you want the 
+                                            court to consider as a deviation from the Presumptive Amount of Child Support.
+                                        </p>
+                                    </label>
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Other Health Related Insurance</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.HealthFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.HealthFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.HealthMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.HealthMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Life Insurance</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.InsuranceFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.InsuranceFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.InsuranceMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.InsuranceMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Child and Dependent Care Tax Credit</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.TaxCreditFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.TaxCreditFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.TaxCreditMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.TaxCreditMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Visitation Related Travel Expenses</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.VisitationFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.VisitationFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.VisitationMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.VisitationMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Alimony PAID</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.AlimonyPaidFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.AlimonyPaidFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.AlimonyPaidMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.AlimonyPaidMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.MortgageFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.MortgageFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.MortgageMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.MortgageMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Permanency Plan or Foster Care Plan</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.PermanencyFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.PermanencyFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.PermanencyMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.PermanencyMother)
+                                </div>
                                 <div class="control-group">
                                     <label class="form-question">
                                         Do you wish to apply for a Low Income or High Income Deviation?</label>
@@ -104,13 +189,6 @@
                                                 @Html.ValidationMessageFor(m => m.NonSpecific)
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="form-question">
-                                                Would you like to add Specific Deviations?</label>
-                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
-                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
-                                        </div>
                                     </div>
                                 }
                                 else if (Model.HighLow == (int)YesNo.Yes)
@@ -150,13 +228,6 @@
                                                 @Html.ValidationMessageFor(m => m.NonSpecific)
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="form-question">
-                                                Would you like to add Specific Deviations?</label>
-                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
-                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
-                                        </div>
                                     </div>
                                 }
                                 else
@@ -194,13 +265,6 @@
                                                 @Html.TextAreaFor(m => m.NonSpecific)
                                                 @Html.ValidationMessageFor(m => m.NonSpecific)
                                             </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="form-question">
-                                                Would you like to add Specific Deviations?</label>
-                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
-                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
                                         </div>
                                     </div>
                                 }
@@ -227,6 +291,92 @@
                                     @Html.TextAreaFor(m => m.Impair, new { placeholder = "Explain Why", @class = "input-xxlarge" })
                                     @Html.ValidationMessageFor(m => m.Impair)
                                 </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">
+                                        <p>
+                                            Requested deviation amounts may be entered as a positive or negative number. For negative 
+                                            numbers, add the minus sign " - " before the amount. What do you want the result here to be? Specific and 
+                                            Nonspecific Deviations entered as a positive amount may increase the noncustodial parent's child support 
+                                            obligation, while those same deviations entered as a negative (-) amount may decrease the noncustodial parent's 
+                                            child support obligation
+                                        </p>
+                                        <p>
+                                            Do not enter the TOTAL amount of monthly expenses; enter the requested amount you want the 
+                                            court to consider as a deviation from the Presumptive Amount of Child Support.
+                                        </p>
+                                    </label>
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Other Health Related Insurance</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.HealthFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.HealthFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.HealthMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.HealthMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Life Insurance</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.InsuranceFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.InsuranceFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.InsuranceMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.InsuranceMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Child and Dependent Care Tax Credit</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.TaxCreditFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.TaxCreditFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.TaxCreditMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.TaxCreditMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Visitation Related Travel Expenses</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.VisitationFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.VisitationFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.VisitationMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.VisitationMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Alimony PAID</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.AlimonyPaidFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.AlimonyPaidFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.AlimonyPaidMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.AlimonyPaidMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.MortgageFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.MortgageFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.MortgageMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.MortgageMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Permanency Plan or Foster Care Plan</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.PermanencyFather, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.PermanencyFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.PermanencyMother, new { placeholder = "Amount"})
+                                    @Html.ValidationMessageFor(m => m.PermanencyMother)
+                                </div>
+
                                 <div class="control-group">
                                     <label class="form-question">
                                         Do you wish to apply for a Low Income or High Income Deviation?</label>
@@ -271,13 +421,6 @@
                                                 @Html.ValidationMessageFor(m => m.NonSpecific)
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="form-question">
-                                                Would you like to add Specific Deviations?</label>
-                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
-                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
-                                        </div>
                                     </div>
                                 }
                                 else if (Model.HighLow == (int)YesNo.Yes)
@@ -317,13 +460,6 @@
                                                 @Html.ValidationMessageFor(m => m.NonSpecific)
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="form-question">
-                                                Would you like to add Specific Deviations?</label>
-                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
-                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
-                                        </div>
                                     </div>
                                 }
                                 else
@@ -362,41 +498,19 @@
                                                 @Html.ValidationMessageFor(m => m.NonSpecific)
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <label class="form-question">
-                                                Would you like to add Specific Deviations?</label>
-                                            <label class="radio inline">Yes @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                            <label class="radio inline">No @Html.RadioButtonFor(m => m.SpecificDeviations, (int)YesNo.No, new { @class = "inline" })</label>
-                                            @Html.ValidationMessageFor(m => m.SpecificDeviations)
-                                        </div>
                                     </div>
                                 }
-                            </div>                        
+                            </div>
                         }
                         <input type="hidden" id="deviationsFormId" value="@Model.Id"/>
                     </form>
-                    @if (Model.SpecificDeviations == (int)YesNo.Yes && Model.HighLow == (int)YesNo.Yes)
-                    {
-                        <div id="deviations-specific">
-                            <form id="deviations" method="POST" action="/api/deviations/">
-                            </form>
-                        </div>
-                    }
-                    else
-                    {
-                        <div id="deviations-specific" style="display: none">
-                            <form id="deviations" method="POST" action="/api/deviations/">
-                            </form>
-                        </div>                                    
-                    }
-
                 </div>
             </div>
         </div>
     </div>
     <button class="btn btn-primary financial-deviations previous" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
     <button class="btn btn-primary financial-deviations next" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
-    <p class="viewOutput hide"><span style="font-weight:bold;">Congratulations!</span> The financial form is completely done.  Click the button below to view the output.</p>
+    <p class="viewOutput hide"><span style="font-weight: bold;">Congratulations!</span> The financial form is completely done.  Click the button below to view the output.</p>
     <button class="btn btn-primary next viewOutput hide" id="ViewOutput" data-url='/Output/Financial/#scheduleA' value="View">View Output<i class="icon-arrow-right icon-white"></i></button>
 </div>
 @Html.Partial("_templateDeviations")
