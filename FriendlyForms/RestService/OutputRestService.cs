@@ -324,9 +324,9 @@ namespace FriendlyForms.RestService
     public class AllowableDeviation
     {
         [DataMember]
-        public int AllowableFather { get; set; }
+        public double AllowableFather { get; set; }
         [DataMember]
-        public int AllowableMother { get; set; }
+        public double AllowableMother { get; set; }
         [DataMember]
         public string PresumptiveAmount { get; set; }
         [DataMember]
@@ -553,10 +553,42 @@ namespace FriendlyForms.RestService
             lowIncome.ActualAmount = minChildSupportAmount > lowIncome.CalculatedAmount ? 0 : 10;
             lowIncome.Explaination = deviations.WhyLow;
 
-            var highIncome = new HighIncomeDeviation
+            var highIncomeFather = new HighIncomeDeviation
                 {
                     Deviation = deviations.HighDeviation ?? 0,
+                    Alimony = deviations.AlimonyPaidFather ?? 0,
+                    LifeInsurance = deviations.InsuranceFather ?? 0,
+                    Mortgage = deviations.MortgageFather ?? 0,
+                    ChildTaxCredit = deviations.TaxCreditFather ?? 0,
+                    OtherInsurance = deviations.HealthFather ??0,
+                    NonSpecific = deviations.NonSpecific ?? 0,
+                    PermanancyPlan = deviations.PermanencyFather ?? 0,
+                    VisitationExpense = deviations.VisitationFather ?? 0,
                 };
+            highIncomeFather.TotalDeviations = highIncomeFather.Deviation + highIncomeFather.Alimony +
+                                               highIncomeFather.LifeInsurance + highIncomeFather.Mortgage +
+                                               highIncomeFather.ChildTaxCredit + highIncomeFather.OtherInsurance +
+                                               highIncomeFather.NonSpecific + highIncomeFather.PermanancyPlan +
+                                               highIncomeFather.VisitationExpense;
+
+            var highIncomeMother = new HighIncomeDeviation
+            {
+                Deviation = deviations.HighDeviation ?? 0,
+                Alimony = deviations.AlimonyPaidMother ?? 0,
+                LifeInsurance = deviations.InsuranceMother ?? 0,
+                Mortgage = deviations.MortgageMother ?? 0,
+                ChildTaxCredit = deviations.TaxCreditMother ?? 0,
+                OtherInsurance = deviations.HealthMother ?? 0,
+                NonSpecific = deviations.NonSpecific ?? 0,
+                PermanancyPlan = deviations.PermanencyMother ?? 0,
+                VisitationExpense = deviations.VisitationMother ?? 0,
+            };
+            highIncomeMother.TotalDeviations = highIncomeMother.Deviation + highIncomeMother.Alimony +
+                                               highIncomeMother.LifeInsurance + highIncomeMother.Mortgage +
+                                               highIncomeMother.ChildTaxCredit + highIncomeMother.OtherInsurance +
+                                               highIncomeMother.NonSpecific + highIncomeMother.PermanancyPlan +
+                                               highIncomeMother.VisitationExpense;
+
             var parentNames = GetParentNames(userId);
             var totalExpenses = new ExtraExpenses
                 {
@@ -585,21 +617,29 @@ namespace FriendlyForms.RestService
             totalExpenses.DeviationFather = totalExpenses.PercentageFather - totalExpenses.TotalFather;
             totalExpenses.DeviationMother = totalExpenses.PercentageMother - totalExpenses.TotalMother;
 
+            var parentingTime = 5;
+            var allowableDeviation = new AllowableDeviation
+                {
+                    PresumptiveAmount = deviations.Unjust,
+                    BestInterest = deviations.BestInterest,
+                    ImpairAbility = deviations.Impair,
+                    //TODO: There's a difference for noncustodian vs custodian
+                    AllowableFather = lowIncome.CalculatedAmount + highIncomeFather.TotalDeviations + totalExpenses.DeviationFather + parentingTime,
+                    AllowableMother = lowIncome.CalculatedAmount + highIncomeMother.TotalDeviations + totalExpenses.DeviationFather + parentingTime,                    
+                };
 
-            var allowableDeviation = new AllowableDeviation();
-            //var extraExpenses = new List<ExtraExpenses>();
-            var allowableExpenses = new AllowableExpenses();
+   
             return new ScheduleEDtoResp
             {
                 LowIncomeDeviation = lowIncome,
                 HighIncomeAdjusted = 0,
-                HighIncomeDeviationFather = highIncome,
-                HighIncomeDeviationMother = highIncome,
+                HighIncomeDeviationFather = highIncomeFather,
+                HighIncomeDeviationMother = highIncomeMother,
                 TotalExpenses = totalExpenses,
-                ParentingTime = 5,
+                ParentingTime = parentingTime,
                 AllowableDeviation = allowableDeviation,
                 //ExtraExpenseses = extraExpenses,
-                AllowableExpenses = allowableExpenses,
+                //AllowableExpenses = allowableExpenses,
                 Father = parentNames.Father,
                 Mother = parentNames.Mother
             };
