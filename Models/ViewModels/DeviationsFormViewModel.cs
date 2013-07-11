@@ -33,6 +33,8 @@ namespace Models.ViewModels
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? PermanencyFather { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? NonSpecificFather { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? HealthMother { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? InsuranceMother { get; set; }
@@ -48,6 +50,8 @@ namespace Models.ViewModels
         public int? MortgageMother { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? PermanencyMother { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
+        public int? NonSpecificMother { get; set; }
         public int? HighLow { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? LowDeviation { get; set; }
@@ -57,8 +61,6 @@ namespace Models.ViewModels
         public int? HighIncome { get; set; }
         [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
         public int? HighDeviation { get; set; }
-        [RegularExpression("^[0-9]*$", ErrorMessage = "Amount must be a number")]
-        public int? NonSpecific { get; set; }
         public int? SpecificDeviations { get; set; }
 
         public IFormEntity ConvertToEntity()

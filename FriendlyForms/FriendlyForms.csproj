@@ -273,7 +273,6 @@
     <Compile Include="RestService\ScheduleRestService.cs" />
     <Compile Include="RestService\ServiceBase.cs" />
     <Compile Include="RestService\SocialSecurityRestService.cs" />
-    <Compile Include="RestService\DeviationsRestService.cs" />
     <Compile Include="RestService\SpousalRestService.cs" />
     <Compile Include="RestService\TaxRestService.cs" />
     <Compile Include="RestService\UserAuthRestService.cs" />

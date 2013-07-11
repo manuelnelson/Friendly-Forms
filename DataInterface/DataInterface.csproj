@@ -77,7 +77,6 @@
     <Compile Include="IResponsibilityRepository.cs" />
     <Compile Include="IScheduleRepository.cs" />
     <Compile Include="ISocialSecurityRepository.cs" />
-    <Compile Include="IDeviationsRepository.cs" />
     <Compile Include="ISpousalRepository.cs" />
     <Compile Include="ITaxRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />

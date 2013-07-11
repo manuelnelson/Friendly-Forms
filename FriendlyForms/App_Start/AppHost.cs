@@ -5,7 +5,6 @@ using BusinessLogic.Contracts;
 using DataInterface;
 using DataLayerContext;
 using DataLayerContext.Repositories;
-using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Funq;
 using ServiceStack.CacheAccess;
@@ -126,7 +125,6 @@ namespace FriendlyForms.App_Start
             container.Register<IPreexistingSupportChildRepository>(c => new PreexistingSupportChildRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IPreexistingSupportRepository>(c => new PreexistingSupportRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IOtherChildrenRepository>(c => new OtherChildrenRepository(c.Resolve<IUnitOfWork>()));
-            container.Register<IDeviationsRepository>(c => new DeviationsRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IOtherChildRepository>(c => new OtherChildRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IVehicleFormRepository>(c => new VehicleFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IChildFormRepository>(c => new ChildFormRepository(c.Resolve<IUnitOfWork>()));
@@ -173,7 +171,6 @@ namespace FriendlyForms.App_Start
             container.Register<IPreexistingSupportChildService>(c => new PreexistingSupportChildService(c.Resolve<IPreexistingSupportChildRepository>() as PreexistingSupportChildRepository));
             container.Register<IPreexistingSupportService>(c => new PreexistingSupportService(c.Resolve<IPreexistingSupportRepository>() as PreexistingSupportRepository));
             container.Register<IOtherChildrenService>(c => new OtherChildrenService(c.Resolve<IOtherChildrenRepository>() as OtherChildrenRepository));
-            container.Register<IDeviationsService>(c => new DeviationsService(c.Resolve<IDeviationsRepository>() as DeviationsRepository));
             container.Register<IOtherChildService>(c => new OtherChildService(c.Resolve<IOtherChildRepository>() as OtherChildRepository));
             container.Register<IVehicleFormService>(c => new VehicleFormService(c.Resolve<IVehicleFormRepository>() as VehicleFormRepository));
             container.Register<IChildFormService>(c => new ChildFormService(c.Resolve<IChildFormRepository>() as ChildFormRepository));

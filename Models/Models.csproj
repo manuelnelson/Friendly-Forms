@@ -107,7 +107,6 @@
     <Compile Include="Responsibility.cs" />
     <Compile Include="Schedule.cs" />
     <Compile Include="SocialSecurity.cs" />
-    <Compile Include="Deviations.cs" />
     <Compile Include="SpousalSupport.cs" />
     <Compile Include="Tax.cs" />
     <Compile Include="User.cs" />
@@ -148,7 +147,6 @@
     <Compile Include="ViewModels\ResponsibilityViewModel.cs" />
     <Compile Include="ViewModels\ScheduleViewModel.cs" />
     <Compile Include="ViewModels\SocialSecurityViewModel.cs" />
-    <Compile Include="ViewModels\DeviationsViewModel.cs" />
     <Compile Include="ViewModels\SpousalViewModel.cs" />
     <Compile Include="ViewModels\TaxViewModel.cs" />
     <Compile Include="ViewModels\VehicleFormViewModel.cs" />

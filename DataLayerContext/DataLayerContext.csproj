@@ -119,7 +119,6 @@
     <Compile Include="Repositories\ResponsibilityRepository.cs" />
     <Compile Include="Repositories\ScheduleRepository.cs" />
     <Compile Include="Repositories\SocialSecurityRepository.cs" />
-    <Compile Include="Repositories\DeviationsRepository.cs" />
     <Compile Include="Repositories\SpousalRepository.cs" />
     <Compile Include="Repositories\TaxRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />

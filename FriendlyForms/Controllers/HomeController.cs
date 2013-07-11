@@ -13,18 +13,18 @@ namespace FriendlyForms.Controllers
         private readonly IChildService _childService;
         private readonly IChildSupportService _childSupportService;
         private readonly IHolidayService _holidayService;
-        private readonly IDeviationsService _deviationsService;
         private readonly IChildFormService _childFormService;
+        private readonly IDeviationsFormService _deviationsFormService;
         //
         // GET: /Forms/
-        public HomeController(IParticipantService participantService, IChildService childService, IChildSupportService childSupportService, IHolidayService holidayService, IDeviationsService deviationsService, IChildFormService childFormService )
+        public HomeController(IParticipantService participantService, IChildService childService, IChildSupportService childSupportService, IHolidayService holidayService, IDeviationsFormService deviationsFormService, IChildFormService childFormService )
         {
             _participantService = participantService;
             _childService = childService;
             _childSupportService = childSupportService;
             _holidayService = holidayService;
-            _deviationsService = deviationsService;
             _childFormService = childFormService;
+            _deviationsFormService = deviationsFormService;
         }
         public ActionResult Index()
         {
@@ -38,7 +38,7 @@ namespace FriendlyForms.Controllers
                 var children = _childService.GetByUserId(userId);
                 var childSupport = _childSupportService.GetByUserId(userId);
                 var participants = _participantService.GetByUserId(userId);
-                var specialCircumstance = _deviationsService.GetByUserId(userId);
+                var specialCircumstance = _deviationsFormService.GetByUserId(userId);
                 if(childForm.UserId != 0 && children.Children.Any())
                 {
                     var holidays = _holidayService.GetByChildId(children.Children.First().Id) ?? new Holiday();

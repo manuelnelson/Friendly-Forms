@@ -23,6 +23,7 @@ namespace Models
         public int? AlimonyPaidFather { get; set; }
         public int? MortgageFather { get; set; }
         public int? PermanencyFather { get; set; }
+        public int? NonSpecificFather { get; set; }
         public int? HealthMother { get; set; }
         public int? InsuranceMother { get; set; }
         public int? TaxCreditMother { get; set; }
@@ -31,13 +32,12 @@ namespace Models
         public int? AlimonyPaidMother { get; set; }
         public int? MortgageMother { get; set; }
         public int? PermanencyMother { get; set; }
-
+        public int? NonSpecificMother { get; set; }
         public int? HighLow { get; set; }
         public int? LowDeviation { get; set; }
         public string WhyLow { get; set; }
         public int? HighIncome { get; set; }
         public int? HighDeviation { get; set; }
-        public int? NonSpecific { get; set; }
         public int? SpecificDeviations { get; set; }
 
         public IViewModel ConvertToModel()

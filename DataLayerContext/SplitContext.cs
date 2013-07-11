@@ -42,7 +42,6 @@ namespace DataLayerContext
         public DbSet<PreexistingSupportChild> PreexistingSupportChildren{ get; set; }
         public DbSet<PreexistingSupport> PreexistingSupports { get; set; }
         public DbSet<OtherChildren> OtherChildrens{ get; set; }
-        public DbSet<Deviations> Deviations{ get; set; }
         public DbSet<OtherChild> OtherChild { get; set; }
         public DbSet<Health> Health{ get; set; }
         public DbSet<ChildCareForm> ChildCareForm { get; set; }
@@ -85,7 +84,6 @@ namespace DataLayerContext
             SetupPreexistingEntity(modelBuilder);
             SetupPreexistingChildEntity(modelBuilder);
             SetupOtherChildrenEntity(modelBuilder);
-            SetupDeviationsEntity(modelBuilder);
             SetupOtherChildEntity(modelBuilder);
             SetupParentingAddendumEntity(modelBuilder);
             SetupHealthEntity(modelBuilder);
@@ -185,14 +183,6 @@ namespace DataLayerContext
             modelBuilder.Entity<OtherChild>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<OtherChild>().Property(t => t.Name).HasMaxLength(100);
-        }
-
-        private void SetupDeviationsEntity(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Deviations>().HasKey(t => new { t.Id });
-            modelBuilder.Entity<Deviations>().Property(t => t.Id)
-                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<Deviations>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupOtherChildrenEntity(DbModelBuilder modelBuilder)

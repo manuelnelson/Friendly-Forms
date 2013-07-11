@@ -169,7 +169,6 @@
     <Compile Include="Contracts\IScheduleService.cs" />
     <Compile Include="Contracts\IService.cs" />
     <Compile Include="Contracts\ISocialSecurityService.cs" />
-    <Compile Include="Contracts\IDeviationsService.cs" />
     <Compile Include="Contracts\ISpousalService.cs" />
     <Compile Include="Contracts\ITaxService.cs" />
     <Compile Include="Contracts\IUserService.cs" />
@@ -220,7 +219,6 @@
     <Compile Include="ScheduleService.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="SocialSecurityService.cs" />
-    <Compile Include="DeviationsService.cs" />
     <Compile Include="SpousalService.cs" />
     <Compile Include="TaxService.cs" />
     <Compile Include="UserService.cs" />

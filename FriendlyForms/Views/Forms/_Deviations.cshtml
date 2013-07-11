@@ -78,72 +78,82 @@
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Other Health Related Insurance</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.HealthFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.HealthFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.HealthFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.HealthMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.HealthMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.HealthMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Life Insurance</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.InsuranceFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.InsuranceFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.InsuranceFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.InsuranceMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.InsuranceMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.InsuranceMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Child and Dependent Care Tax Credit</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.TaxCreditFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.TaxCreditFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.TaxCreditFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.TaxCreditMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.TaxCreditMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.TaxCreditMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Visitation Related Travel Expenses</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.VisitationFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.VisitationFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.VisitationFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.VisitationMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.VisitationMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.VisitationMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Alimony PAID</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.AlimonyPaidFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.AlimonyPaidFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.AlimonyPaidFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.AlimonyPaidMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.AlimonyPaidMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.AlimonyPaidMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.MortgageFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.MortgageFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.MortgageFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.MortgageMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.MortgageMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.MortgageMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Permanency Plan or Foster Care Plan</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.PermanencyFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.PermanencyFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.PermanencyFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.PermanencyMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.PermanencyMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.PermanencyMother)
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Other or Non-specific Deviations</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.NonSpecificFather, new { placeholder = "Amount" })
+                                    @Html.ValidationMessageFor(m => m.NonSpecificFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.NonSpecificMother, new { placeholder = "Amount" })
+                                    @Html.ValidationMessageFor(m => m.NonSpecificMother)
                                 </div>
                                 <div class="control-group">
                                     <label class="form-question">
@@ -178,17 +188,6 @@
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
                                         </div>
-                                        <div class="control-group row-fluid">
-                                            <label class="informative">
-                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
-                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
-                                            to enter one or more specific deviations</label>
-                                            <div class="control-group row-fluid">
-                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
-                                                @Html.TextAreaFor(m => m.NonSpecific)
-                                                @Html.ValidationMessageFor(m => m.NonSpecific)
-                                            </div>
-                                        </div>
                                     </div>
                                 }
                                 else if (Model.HighLow == (int)YesNo.Yes)
@@ -217,17 +216,6 @@
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
                                         </div>
-                                        <div class="control-group row-fluid">
-                                            <label class="informative">
-                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
-                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
-                                            to enter one or more specific deviations</label>
-                                            <div class="control-group row-fluid">
-                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
-                                                @Html.TextAreaFor(m => m.NonSpecific)
-                                                @Html.ValidationMessageFor(m => m.NonSpecific)
-                                            </div>
-                                        </div>
                                     </div>
                                 }
                                 else
@@ -254,17 +242,6 @@
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
-                                        </div>
-                                        <div class="control-group row-fluid">
-                                            <label class="informative">
-                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
-                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
-                                            to enter one or more specific deviations</label>
-                                            <div class="control-group row-fluid">
-                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
-                                                @Html.TextAreaFor(m => m.NonSpecific)
-                                                @Html.ValidationMessageFor(m => m.NonSpecific)
-                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -309,74 +286,83 @@
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Other Health Related Insurance</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.HealthFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.HealthFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.HealthFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.HealthMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.HealthMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.HealthMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Life Insurance</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.InsuranceFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.InsuranceFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.InsuranceFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.InsuranceMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.InsuranceMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.InsuranceMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Child and Dependent Care Tax Credit</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.TaxCreditFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.TaxCreditFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.TaxCreditFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.TaxCreditMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.TaxCreditMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.TaxCreditMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Visitation Related Travel Expenses</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.VisitationFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.VisitationFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.VisitationFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.VisitationMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.VisitationMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.VisitationMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Alimony PAID</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.AlimonyPaidFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.AlimonyPaidFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.AlimonyPaidFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.AlimonyPaidMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.AlimonyPaidMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.AlimonyPaidMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.MortgageFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.MortgageFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.MortgageFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.MortgageMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.MortgageMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.MortgageMother)
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="form-question">Permanency Plan or Foster Care Plan</label>
                                     <label class="span2 form-question">Father</label>
-                                    @Html.TextBoxFor(m => m.PermanencyFather, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.PermanencyFather, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.PermanencyFather)
                                     <br />
                                     <label class="span2 form-question">Mother</label>
-                                    @Html.TextBoxFor(m => m.PermanencyMother, new { placeholder = "Amount"})
+                                    @Html.TextBoxFor(m => m.PermanencyMother, new { placeholder = "Amount" })
                                     @Html.ValidationMessageFor(m => m.PermanencyMother)
                                 </div>
-
+                                <div class="control-group row-fluid">
+                                    <label class="form-question">Other or Non-specific Deviations</label>
+                                    <label class="span2 form-question">Father</label>
+                                    @Html.TextBoxFor(m => m.NonSpecificFather, new { placeholder = "Amount" })
+                                    @Html.ValidationMessageFor(m => m.NonSpecificFather)
+                                    <br />
+                                    <label class="span2 form-question">Mother</label>
+                                    @Html.TextBoxFor(m => m.NonSpecificMother, new { placeholder = "Amount" })
+                                    @Html.ValidationMessageFor(m => m.NonSpecificMother)
+                                </div>
                                 <div class="control-group">
                                     <label class="form-question">
                                         Do you wish to apply for a Low Income or High Income Deviation?</label>
@@ -410,17 +396,6 @@
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
                                         </div>
-                                        <div class="control-group row-fluid">
-                                            <label class="informative">
-                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
-                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
-                                            to enter one or more specific deviations</label>
-                                            <div class="control-group row-fluid">
-                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
-                                                @Html.TextAreaFor(m => m.NonSpecific)
-                                                @Html.ValidationMessageFor(m => m.NonSpecific)
-                                            </div>
-                                        </div>
                                     </div>
                                 }
                                 else if (Model.HighLow == (int)YesNo.Yes)
@@ -449,17 +424,6 @@
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
                                         </div>
-                                        <div class="control-group row-fluid">
-                                            <label class="informative">
-                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
-                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
-                                            to enter one or more specific deviations</label>
-                                            <div class="control-group row-fluid">
-                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
-                                                @Html.TextAreaFor(m => m.NonSpecific)
-                                                @Html.ValidationMessageFor(m => m.NonSpecific)
-                                            </div>
-                                        </div>
                                     </div>
                                 }
                                 else
@@ -486,17 +450,6 @@
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
-                                        </div>
-                                        <div class="control-group row-fluid">
-                                            <label class="informative">
-                                                “Deviations are equally accepted by the court using either specific or non-specific reasons, 
-                                            therefore you may choose to simply enter a total amount as a non-specific deviation below or click the checkbox 
-                                            to enter one or more specific deviations</label>
-                                            <div class="control-group row-fluid">
-                                                <label class="span4 form-question">Other or Non-specific Deviations</label>
-                                                @Html.TextAreaFor(m => m.NonSpecific)
-                                                @Html.ValidationMessageFor(m => m.NonSpecific)
-                                            </div>
                                         </div>
                                     </div>
                                 }

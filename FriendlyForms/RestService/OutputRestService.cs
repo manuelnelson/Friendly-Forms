@@ -133,13 +133,13 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int SelfEmploymentIncome { get; set; }
         [DataMember]
-        public double FicaIncome { get; set; }
+        public int FicaIncome { get; set; }
         [DataMember]
-        public double MedicareTax { get; set; }
+        public int MedicareTax { get; set; }
         [DataMember]
-        public double Total34 { get; set; }
+        public int Total34 { get; set; }
         [DataMember]
-        public double Total5Minus1 { get; set; }
+        public int Total5Minus1 { get; set; }
         [DataMember]
         public List<PreexistingSupportChild> PreexistingSupportChild { get; set; }
         [DataMember]
@@ -147,20 +147,20 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int TotalSupport { get; set; }
         [DataMember]
-        public double AdjustedSupport { get; set; }
+        public int AdjustedSupport { get; set; }
 
         [DataMember]
         public List<OtherChildDto> OtherChildren { get; set; }
         [DataMember]
         public string OtherChildrenDescription { get; set; }
         [DataMember]
-        public double Subtotal { get; set; }
+        public int Subtotal { get; set; }
         [DataMember]
         public int GeorgiaObligations { get; set; }
         [DataMember]
-        public double TheoreticalSupport { get; set; }
+        public int TheoreticalSupport { get; set; }
         [DataMember]
-        public double PreexistingOrder { get; set; }
+        public int PreexistingOrder { get; set; }
     }
     #endregion
 
@@ -237,27 +237,27 @@ namespace FriendlyForms.RestService
     public class ScheduleD
     {
         [DataMember]
-        public double WorkRelated { get; set; }
+        public int WorkRelated { get; set; }
         [DataMember]
-        public double HealthInsurance { get; set; }
+        public int HealthInsurance { get; set; }
         [DataMember]
-        public double AdditionalExpenses { get; set; }
+        public int AdditionalExpenses { get; set; }
         [DataMember]
-        public double ProRataParents { get; set; }
+        public int ProRataParents { get; set; }
         [DataMember]
-        public double ProRataAdditional { get; set; }
+        public int ProRataAdditional { get; set; }
         [DataMember]
-        public double TotalSchool { get; set; }
+        public int TotalSchool { get; set; }
         [DataMember]
-        public double TotalSummer { get; set; }
+        public int TotalSummer { get; set; }
         [DataMember]
-        public double TotalOther { get; set; }
+        public int TotalOther { get; set; }
         [DataMember]
-        public double TotalBreaks { get; set; }
+        public int TotalBreaks { get; set; }
         [DataMember]
-        public double TotalYearly { get; set; }
+        public int TotalYearly { get; set; }
         [DataMember]
-        public double TotalMonthly { get; set; }
+        public int TotalMonthly { get; set; }
     }
 
     #endregion
@@ -297,36 +297,36 @@ namespace FriendlyForms.RestService
     public class AllowableExpenses
     {
         [DataMember]
-        public double YearlyAmountFather { get; set; }
+        public int YearlyAmountFather { get; set; }
         [DataMember]
-        public double YearlyAmountMother { get; set; }
+        public int YearlyAmountMother { get; set; }
         [DataMember]
-        public double YearlyAmountNonParent { get; set; }
+        public int YearlyAmountNonParent { get; set; }
         [DataMember]
-        public double YearlyAmountTotal { get; set; }
+        public int YearlyAmountTotal { get; set; }
         [DataMember]
-        public double MonthlyAverage { get; set; }
+        public int MonthlyAverage { get; set; }
         [DataMember]
-        public double Obligation { get; set; }
+        public int Obligation { get; set; }
         [DataMember]
-        public double SpecialExpenses { get; set; }
+        public int SpecialExpenses { get; set; }
         [DataMember]
-        public double ExpensesFactor { get; set; }
+        public int ExpensesFactor { get; set; }
         [DataMember]
-        public double MonthlyExpensesFather { get; set; }
+        public int MonthlyExpensesFather { get; set; }
         [DataMember]
-        public double MonthlyExpensesMother { get; set; }
+        public int MonthlyExpensesMother { get; set; }
         [DataMember]
-        public double MonthlyExpensesNonParent { get; set; }
+        public int MonthlyExpensesNonParent { get; set; }
     }
 
     [DataContract]
     public class AllowableDeviation
     {
         [DataMember]
-        public double AllowableFather { get; set; }
+        public int AllowableFather { get; set; }
         [DataMember]
-        public double AllowableMother { get; set; }
+        public int AllowableMother { get; set; }
         [DataMember]
         public string PresumptiveAmount { get; set; }
         [DataMember]
@@ -339,13 +339,13 @@ namespace FriendlyForms.RestService
     public class LowIncomeDeviation
     {
         [DataMember]
-        public double DeviationAmount { get; set; }
+        public int DeviationAmount { get; set; }
         [DataMember]
-        public double CompareAmount { get; set; }
+        public int CompareAmount { get; set; }
         [DataMember]
-        public double CalculatedAmount { get; set; }
+        public int CalculatedAmount { get; set; }
         [DataMember]
-        public double ActualAmount { get; set; }
+        public int ActualAmount { get; set; }
         [DataMember]
         public string Explaination { get; set; }
     }
@@ -353,83 +353,83 @@ namespace FriendlyForms.RestService
     public class HighIncomeDeviation
     {
         [DataMember]
-        public double Deviation { get; set; }
+        public int Deviation { get; set; }
         [DataMember]
-        public double OtherInsurance { get; set; }
+        public int OtherInsurance { get; set; }
         [DataMember]
-        public double LifeInsurance { get; set; }
+        public int LifeInsurance { get; set; }
         [DataMember]
-        public double ChildTaxCredit { get; set; }
+        public int ChildTaxCredit { get; set; }
         [DataMember]
-        public double VisitationExpense { get; set; }
+        public int VisitationExpense { get; set; }
         [DataMember]
-        public double Alimony { get; set; }
+        public int Alimony { get; set; }
         [DataMember]
-        public double Mortgage { get; set; }
+        public int Mortgage { get; set; }
         [DataMember]
-        public double PermanancyPlan { get; set; }
+        public int PermanancyPlan { get; set; }
         [DataMember]
-        public double NonSpecific { get; set; }
+        public int NonSpecific { get; set; }
         [DataMember]
-        public double TotalDeviations { get; set; }
+        public int TotalDeviations { get; set; }
     }
     [DataContract]
     public class ExtraExpenses
     {
         [DataMember]
-        public double TutitionFather { get; set; }
+        public int TutitionFather { get; set; }
         [DataMember]
-        public double TutitionMother { get; set; }
+        public int TutitionMother { get; set; }
         [DataMember]
-        public double TutitionNonParent { get; set; }
+        public int TutitionNonParent { get; set; }
         [DataMember]
-        public double TutitionNonTotal { get; set; }
+        public int TutitionNonTotal { get; set; }
         [DataMember]
-        public double EducationFather { get; set; }
+        public int EducationFather { get; set; }
         [DataMember]
-        public double EducationMother { get; set; }
+        public int EducationMother { get; set; }
         [DataMember]
-        public double EducationNonParent { get; set; }
+        public int EducationNonParent { get; set; }
         [DataMember]
-        public double EducationTotal { get; set; }
+        public int EducationTotal { get; set; }
         [DataMember]
-        public double MedicalFather { get; set; }
+        public int MedicalFather { get; set; }
         [DataMember]
-        public double MedicalMother { get; set; }
+        public int MedicalMother { get; set; }
         [DataMember]
-        public double MedicalNonParent { get; set; }
+        public int MedicalNonParent { get; set; }
         [DataMember]
-        public double MedicalTotal { get; set; }
+        public int MedicalTotal { get; set; }
         [DataMember]
-        public double SpecialFather { get; set; }
+        public int SpecialFather { get; set; }
         [DataMember]
-        public double SpecialMother { get; set; }
+        public int SpecialMother { get; set; }
         [DataMember]
-        public double SpecialNonParent { get; set; }
+        public int SpecialNonParent { get; set; }
         [DataMember]
-        public double SpecialTotal { get; set; }
+        public int SpecialTotal { get; set; }
         [DataMember]
-        public double TotalFather { get; set; }
+        public int TotalFather { get; set; }
         [DataMember]
-        public double TotalMother { get; set; }
+        public int TotalMother { get; set; }
         [DataMember]
-        public double TotalNonParent { get; set; }
+        public int TotalNonParent { get; set; }
         [DataMember]
-        public double TotalTotal { get; set; }
+        public int TotalTotal { get; set; }
         [DataMember]
-        public double ProRataFather { get; set; }
+        public int ProRataFather { get; set; }
         [DataMember]
-        public double ProRataMother { get; set; }
+        public int ProRataMother { get; set; }
         [DataMember]
-        public double ProRataTotal { get; set; }
+        public int ProRataTotal { get; set; }
         [DataMember]
-        public double PercentageFather { get; set; }
+        public int PercentageFather { get; set; }
         [DataMember]
-        public double PercentageMother { get; set; }
+        public int PercentageMother { get; set; }
         [DataMember]
-        public double DeviationFather { get; set; }
+        public int DeviationFather { get; set; }
         [DataMember]
-        public double DeviationMother { get; set; }
+        public int DeviationMother { get; set; }
         [DataMember]
         public string SpecialDescriptionFather { get; set; }
         [DataMember]
@@ -456,20 +456,20 @@ namespace FriendlyForms.RestService
 
     public class Csw
     {
-        public double GrossIncome { get; set; }
-        public double AdjustedIncome { get; set; }
-        public double CombinedIncome { get; set; }
-        public double SupportObligation { get; set; }
-        public double ProRataObligation { get; set; }
-        public double WorkRelatedExpenses { get; set; }
-        public double AdjustedObligation { get; set; }
-        public double AdjustedExpensesPaid { get; set; }
-        public double PresumptiveAmount { get; set; }
-        public double DeviationsAmount { get; set; }
-        public double Subtotal { get; set; }
-        public double SocialSecurity { get; set; }
-        public double FinalAmount { get; set; }
-        public double UninsuredExpenses { get; set; }
+        public int GrossIncome { get; set; }
+        public int AdjustedIncome { get; set; }
+        public int CombinedIncome { get; set; }
+        public int SupportObligation { get; set; }
+        public int ProRataObligation { get; set; }
+        public int WorkRelatedExpenses { get; set; }
+        public int AdjustedObligation { get; set; }
+        public int AdjustedExpensesPaid { get; set; }
+        public int PresumptiveAmount { get; set; }
+        public int DeviationsAmount { get; set; }
+        public int Subtotal { get; set; }
+        public int SocialSecurity { get; set; }
+        public int FinalAmount { get; set; }
+        public int UninsuredExpenses { get; set; }
     }
 
     #endregion
@@ -482,7 +482,6 @@ namespace FriendlyForms.RestService
         public IPreexistingSupportFormService PreexistingSupportFormService { get; set; }
         public IPreexistingSupportChildService PreexistingSupportChildService { get; set; }
         public IOtherChildrenService OtherChildrenService { get; set; }
-        public IDeviationsService DeviationsService { get; set; }
         public IDeviationsFormService DeviationsFormService { get; set; }
         public IOtherChildService OtherChildService { get; set; }
         public IParticipantService ParticipantService { get; set; }
@@ -561,7 +560,7 @@ namespace FriendlyForms.RestService
                     Mortgage = deviations.MortgageFather ?? 0,
                     ChildTaxCredit = deviations.TaxCreditFather ?? 0,
                     OtherInsurance = deviations.HealthFather ??0,
-                    NonSpecific = deviations.NonSpecific ?? 0,
+                    NonSpecific = deviations.NonSpecificFather ?? 0,
                     PermanancyPlan = deviations.PermanencyFather ?? 0,
                     VisitationExpense = deviations.VisitationFather ?? 0,
                 };
@@ -579,7 +578,7 @@ namespace FriendlyForms.RestService
                 Mortgage = deviations.MortgageMother ?? 0,
                 ChildTaxCredit = deviations.TaxCreditMother ?? 0,
                 OtherInsurance = deviations.HealthMother ?? 0,
-                NonSpecific = deviations.NonSpecific ?? 0,
+                NonSpecific = deviations.NonSpecificMother ?? 0,
                 PermanancyPlan = deviations.PermanencyMother ?? 0,
                 VisitationExpense = deviations.VisitationMother ?? 0,
             };
@@ -710,8 +709,8 @@ namespace FriendlyForms.RestService
                 GrossIncome = income.CalculateTotalIncome(),
                 SelfEmploymentIncome = income.SelfIncome
             };
-            schedule.FicaIncome = schedule.SelfEmploymentIncome * .62;
-            schedule.MedicareTax = schedule.SelfEmploymentIncome * .0145;
+            schedule.FicaIncome = (int) (schedule.SelfEmploymentIncome * .62);
+            schedule.MedicareTax = (int) (schedule.SelfEmploymentIncome * .0145);
             schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
             schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
             if (preexistingSupport != null)
@@ -734,7 +733,7 @@ namespace FriendlyForms.RestService
             schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0.0) > 0.01 ? schedule.Total5Minus1 : schedule.GrossIncome;
             //Todo: get this number
             schedule.GeorgiaObligations = 0;
-            schedule.TheoreticalSupport = schedule.GeorgiaObligations * .75;
+            schedule.TheoreticalSupport = (int) (schedule.GeorgiaObligations * .75);
             schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
                                             ? schedule.AdjustedSupport - schedule.TheoreticalSupport
                                             : schedule.Subtotal - schedule.TheoreticalSupport;
@@ -831,16 +830,16 @@ namespace FriendlyForms.RestService
             var cswFather = new Csw
                 {
                     GrossIncome = scheduleA.IncomeTotal,
-                    AdjustedIncome = scheduleBFather.AdjustedSupport,
+                    AdjustedIncome = (int) scheduleBFather.AdjustedSupport,
                     //Apparently this could be 14 as well? whats the logic here?
-                    CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
+                    CombinedIncome = (int) (scheduleBFather.AdjustedSupport / totalIncome),
                 };
             var cswMother = new Csw
             {
                 GrossIncome = scheduleA.IncomeTotal,
-                AdjustedIncome = scheduleBMother.AdjustedSupport,
+                AdjustedIncome = (int) scheduleBMother.AdjustedSupport,
                 //Apparently this could be 14 as well? whats the logic here?
-                CombinedIncome = scheduleBMother.AdjustedSupport / totalIncome,
+                CombinedIncome = (int) (scheduleBMother.AdjustedSupport / totalIncome),
             };
             var cswTotal = new Csw()
                 {
@@ -849,7 +848,7 @@ namespace FriendlyForms.RestService
                     CombinedIncome = 100
                 };
             var children = ChildService.GetByUserId(userId).Children;
-            cswTotal.SupportObligation = BcsoService.GetAmount(cswTotal.AdjustedIncome, children.Count); 
+            cswTotal.SupportObligation = (int) BcsoService.GetAmount(cswTotal.AdjustedIncome, children.Count); 
             cswFather = FinishCsw(cswFather, cswTotal, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
             cswMother = FinishCsw(cswMother, cswTotal, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
 
@@ -864,17 +863,17 @@ namespace FriendlyForms.RestService
         private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurityViewModel socialSecurity, HealthViewModel healthInsurance, bool isFather=true)
         {
             csw.ProRataObligation = csw.CombinedIncome*cswTotal.SupportObligation;
-            csw.WorkRelatedExpenses = csw.CombinedIncome*scheduleD.ProRataAdditional;
+            csw.WorkRelatedExpenses = (int) (csw.CombinedIncome*scheduleD.ProRataAdditional);
             csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;
-            csw.AdjustedExpensesPaid = scheduleD.TotalMonthly;
+            csw.AdjustedExpensesPaid = (int) scheduleD.TotalMonthly;
             csw.PresumptiveAmount = csw.AdjustedObligation - csw.AdjustedExpensesPaid;
             csw.DeviationsAmount = 0; //TODO: comes from scheduleE
             csw.Subtotal = csw.PresumptiveAmount + csw.DeviationsAmount;
-            csw.SocialSecurity = socialSecurity.Amount ?? 0.0;
+            csw.SocialSecurity = (int) (socialSecurity.Amount ?? 0.0);
             csw.FinalAmount = csw.SocialSecurity > csw.Subtotal
                                         ? csw.SocialSecurity
                                         : csw.Subtotal - csw.SocialSecurity;
-            csw.UninsuredExpenses = isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0;
+            csw.UninsuredExpenses = (int) (isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0);
             return csw;
         }
         private ParentNames GetParentNames(long userId)
