@@ -247,7 +247,7 @@
     <Compile Include="RestService\CourtRestService.cs" />
     <Compile Include="RestService\DebtRestService.cs" />
     <Compile Include="RestService\DecisionsRestService.cs" />
-    <Compile Include="RestService\DeviationsFormRestService.cs" />
+    <Compile Include="RestService\DeviationsRestService.cs" />
     <Compile Include="RestService\EmailRestService.cs" />
     <Compile Include="RestService\ExtraDecisionRestService.cs" />
     <Compile Include="RestService\ExtraExpenseFormRestService.cs" />

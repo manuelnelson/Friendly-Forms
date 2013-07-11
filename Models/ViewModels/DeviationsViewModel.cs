@@ -4,7 +4,7 @@ using ServiceStack.Common;
 
 namespace Models.ViewModels
 {
-    public class DeviationsFormViewModel : IViewModel
+    public class DeviationsViewModel : IViewModel
     {
         public long Id { get; set; }
         public long UserId { get; set; }
@@ -65,7 +65,7 @@ namespace Models.ViewModels
 
         public IFormEntity ConvertToEntity()
         {
-            return this.TranslateTo<DeviationsForm>();
+            return this.TranslateTo<Deviations>();
         }
 
     }

@@ -81,7 +81,7 @@
     <Compile Include="Court.cs" />
     <Compile Include="Debt.cs" />
     <Compile Include="Decisions.cs" />
-    <Compile Include="DeviationsForm.cs" />
+    <Compile Include="Deviations.cs" />
     <Compile Include="ExtraDecisions.cs" />
     <Compile Include="ExtraExpense.cs" />
     <Compile Include="ExtraExpenseForm.cs" />
@@ -122,7 +122,7 @@
     <Compile Include="ViewModels\CourtViewModel.cs" />
     <Compile Include="ViewModels\DebtViewModel.cs" />
     <Compile Include="ViewModels\DecisionsViewModel.cs" />
-    <Compile Include="ViewModels\DeviationsFormViewModel.cs" />
+    <Compile Include="ViewModels\DeviationsViewModel.cs" />
     <Compile Include="ViewModels\Enums.cs" />
     <Compile Include="ViewModels\ExtraDecisionsViewModel.cs" />
     <Compile Include="ViewModels\ExtraExpenseFormViewModel.cs" />

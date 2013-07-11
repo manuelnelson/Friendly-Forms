@@ -46,7 +46,7 @@ namespace DataLayerContext
         public DbSet<Health> Health{ get; set; }
         public DbSet<ChildCareForm> ChildCareForm { get; set; }
         public DbSet<PreexistingSupportForm> PreexistingSupportForm { get; set; }
-        public DbSet<DeviationsForm> DeviationsForm { get; set; }
+        public DbSet<Deviations> Deviations { get; set; }
         public DbSet<ExtraExpenseForm> ExtraExpenseForms { get; set; }
         public DbSet<ExtraExpense> ExtraExpenses { get; set; }
         public DbSet<Bcso> Bcsos { get; set; }
@@ -90,7 +90,7 @@ namespace DataLayerContext
             SetupChildCareFormEntity(modelBuilder);
             SetupChildCareEntity(modelBuilder);
             SetupPreexistingSupportFormEntity(modelBuilder);
-            SetupDeviationsFormEntity(modelBuilder);
+            SetupDeviationsEntity(modelBuilder);
             SetupExtraExpenseFormEntity(modelBuilder);
             SetupExtraExpenseEntity(modelBuilder);
             SetupBcsoEntity(modelBuilder);
@@ -119,10 +119,10 @@ namespace DataLayerContext
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
-        private void SetupDeviationsFormEntity(DbModelBuilder modelBuilder)
+        private void SetupDeviationsEntity(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DeviationsForm>().HasKey(t => new { t.Id });
-            modelBuilder.Entity<DeviationsForm>().Property(t => t.Id)
+            modelBuilder.Entity<Deviations>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Deviations>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 

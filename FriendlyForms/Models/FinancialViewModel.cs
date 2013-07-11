@@ -9,7 +9,7 @@ namespace FriendlyForms.Models
         public SocialSecurityViewModel SocialSecurityViewModel { get; set; }
         public AllPreexistingViewModel PreexistingSupportViewModel { get; set; }
         public OtherChildrenViewModel OtherChildrenViewModel { get; set; }
-        public DeviationsFormViewModel DeviationsFormViewModel { get; set; }
+        public DeviationsViewModel DeviationsViewModel { get; set; }
         public IncomeViewModel IncomeOtherViewModel { get; set; }
         public SocialSecurityViewModel SocialSecurityOtherViewModel { get; set; }
         public AllPreexistingViewModel PreexistingSupportOtherViewModel { get; set; }

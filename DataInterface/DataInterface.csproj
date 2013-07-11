@@ -51,7 +51,7 @@
     <Compile Include="ICourtRepository.cs" />
     <Compile Include="IDebtRepository.cs" />
     <Compile Include="IDecisionRepository.cs" />
-    <Compile Include="IDeviationsFormRepository.cs" />
+    <Compile Include="IDeviationsRepository.cs" />
     <Compile Include="IEfRepository.cs" />
     <Compile Include="IExtraDecisionRepository.cs" />
     <Compile Include="IExtraExpenseFormRepository.cs" />

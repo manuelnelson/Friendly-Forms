@@ -83,7 +83,7 @@
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="Repositories\ChildFormRepository.cs" />
     <Compile Include="Repositories\AddendumRepository.cs" />
-    <Compile Include="Repositories\DeviationsFormRepository.cs" />
+    <Compile Include="Repositories\DeviationsRepository.cs" />
     <Compile Include="Repositories\ExtraExpenseFormRepository.cs" />
     <Compile Include="Repositories\ExtraExpenseRepository.cs" />
     <Compile Include="Repositories\HeathRepository.cs" />

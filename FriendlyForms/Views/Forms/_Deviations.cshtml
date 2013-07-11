@@ -1,5 +1,5 @@
 ﻿@using Models.ViewModels
-@model DeviationsFormViewModel
+@model DeviationsViewModel
 <div class="form-vertical wrapper hide" id="deviationsWrapper">
     <div class="row-fluid">
         <div class="span12">
@@ -31,7 +31,7 @@
                             button and proceed to the next section.
                         </p>
                     </label>
-                    <form id="deviationsForm" method="POST" action="/api/deviationsForm/">
+                    <form id="deviations" method="POST" action="/api/deviations/">
                         <div class="control-group">
                             <label class="form-question">
                                 Are you applying for a Child Support Payment Deviation?</label>
@@ -455,7 +455,7 @@
                                 }
                             </div>
                         }
-                        <input type="hidden" id="deviationsFormId" value="@Model.Id"/>
+                        <input type="hidden" id="deviationsId" value="@Model.Id"/>
                     </form>
                 </div>
             </div>

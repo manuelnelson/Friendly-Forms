@@ -511,7 +511,7 @@
     $('.financial-deviations').click(function () {
         //last form.  Let's try and validate this bi-atch
         Friendly.StartLoading();
-        var formName = 'deviationsForm';
+        var formName = 'deviations';
         var model = Friendly.GetFormInput(formName);
         var submitType = 'POST';
 
@@ -539,8 +539,8 @@
         }
         return false;
     });
-    $('#deviationsForm input[name="Deviation"]').change(function () {
-        if ($('#deviationsForm #Deviation:checked').val() === "1") {
+    $('#deviations input[name="Deviation"]').change(function () {
+        if ($('#deviations #Deviation:checked').val() === "1") {
             $('#deviationsWrapper #deviations-show').show();
         } else {
             $('#deviationsWrapper #deviations-show').hide();

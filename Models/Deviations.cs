@@ -6,7 +6,7 @@ using ServiceStack.Common;
 
 namespace Models
 {
-    public class DeviationsForm : IEntity, IFormEntity
+    public class Deviations : IEntity, IFormEntity
     {
         public long Id { get; set; }
         public long UserId { get; set; }
@@ -42,7 +42,7 @@ namespace Models
 
         public IViewModel ConvertToModel()
         {
-            return this.TranslateTo<DeviationsFormViewModel>();
+            return this.TranslateTo<DeviationsViewModel>();
         }
 
         public void Update(IFormEntity entity)

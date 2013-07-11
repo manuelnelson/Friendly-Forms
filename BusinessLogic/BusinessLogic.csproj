@@ -102,6 +102,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
@@ -143,7 +144,7 @@
     <Compile Include="Contracts\ICourtService.cs" />
     <Compile Include="Contracts\IDebtService.cs" />
     <Compile Include="Contracts\IDecisionsService.cs" />
-    <Compile Include="Contracts\IDeviationsFormService.cs" />
+    <Compile Include="Contracts\IDeviationsService.cs" />
     <Compile Include="Contracts\IExtraDecisionsService.cs" />
     <Compile Include="Contracts\IExtraExpenseFormService.cs" />
     <Compile Include="Contracts\IExtraExpenseService.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Contracts\IOtherChildrenService.cs" />
     <Compile Include="Contracts\IOtherChildService.cs" />
     <Compile Include="Contracts\IAddendumService.cs" />
+    <Compile Include="Contracts\IOutputService.cs" />
     <Compile Include="Contracts\IParticipantService.cs" />
     <Compile Include="Contracts\IPreexistingSupportChildService.cs" />
     <Compile Include="Contracts\IPreexistingSupportFormService.cs" />
@@ -178,7 +180,7 @@
     <Compile Include="CourtService.cs" />
     <Compile Include="DebtService.cs" />
     <Compile Include="DecisionsService.cs" />
-    <Compile Include="DeviationsFormService.cs" />
+    <Compile Include="DeviationsService.cs" />
     <Compile Include="ExtraDecisionsService.cs" />
     <Compile Include="ExtraExpenseFormService.cs" />
     <Compile Include="ExtraExpenseService.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="HealthInsuranceService.cs" />
     <Compile Include="HealthService.cs" />
     <Compile Include="Helpers\Numbers.cs" />
+    <Compile Include="Helpers\OutputHelper.cs" />
     <Compile Include="HolidayService.cs" />
     <Compile Include="HouseService.cs" />
     <Compile Include="IncomeService.cs" />
@@ -198,11 +201,15 @@
     <Compile Include="Models\AllHolidaysViewModel.cs" />
     <Compile Include="Models\AllPreexistingViewModel.cs" />
     <Compile Include="Models\CustodyInformation.cs" />
+    <Compile Include="Models\IncomeDto.cs" />
+    <Compile Include="Models\OtherChildDto.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\ScheduleB.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="OtherChildrenService.cs" />
     <Compile Include="OtherChildService.cs" />
     <Compile Include="AddendumService.cs" />
+    <Compile Include="OutputService.cs" />
     <Compile Include="ParticipantService.cs" />
     <Compile Include="PreexistingSupportChildService.cs" />
     <Compile Include="PreexistingSupportFormService.cs" />

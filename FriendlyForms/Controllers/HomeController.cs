@@ -14,17 +14,17 @@ namespace FriendlyForms.Controllers
         private readonly IChildSupportService _childSupportService;
         private readonly IHolidayService _holidayService;
         private readonly IChildFormService _childFormService;
-        private readonly IDeviationsFormService _deviationsFormService;
+        private readonly IDeviationsService _deviationsService;
         //
         // GET: /Forms/
-        public HomeController(IParticipantService participantService, IChildService childService, IChildSupportService childSupportService, IHolidayService holidayService, IDeviationsFormService deviationsFormService, IChildFormService childFormService )
+        public HomeController(IParticipantService participantService, IChildService childService, IChildSupportService childSupportService, IHolidayService holidayService, IDeviationsService deviationsService, IChildFormService childFormService )
         {
             _participantService = participantService;
             _childService = childService;
             _childSupportService = childSupportService;
             _holidayService = holidayService;
             _childFormService = childFormService;
-            _deviationsFormService = deviationsFormService;
+            _deviationsService = deviationsService;
         }
         public ActionResult Index()
         {
@@ -38,7 +38,7 @@ namespace FriendlyForms.Controllers
                 var children = _childService.GetByUserId(userId);
                 var childSupport = _childSupportService.GetByUserId(userId);
                 var participants = _participantService.GetByUserId(userId);
-                var specialCircumstance = _deviationsFormService.GetByUserId(userId);
+                var specialCircumstance = _deviationsService.GetByUserId(userId);
                 if(childForm.UserId != 0 && children.Children.Any())
                 {
                     var holidays = _holidayService.GetByChildId(children.Children.First().Id) ?? new Holiday();

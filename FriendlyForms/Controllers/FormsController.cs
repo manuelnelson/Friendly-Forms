@@ -38,7 +38,7 @@ namespace FriendlyForms.Controllers
         private readonly ISocialSecurityService _socialSecurityService;
         private readonly IPreexistingSupportService _preexistingSupportService;
         private readonly IOtherChildrenService _otherChildrenService;
-        private readonly IDeviationsFormService _deviationsFormService;
+        private readonly IDeviationsService _deviationsService;
         private readonly IOtherChildService _otherChildService;
         private readonly IVehicleFormService _vehicleFormService;
         private readonly IAddendumService _addendumService;
@@ -50,7 +50,7 @@ namespace FriendlyForms.Controllers
         // GET: /Forms/
         public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IIncomeService incomeService, ISocialSecurityService socialSecurityService, 
-            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsFormService deviationsFormService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService, IPreexistingSupportFormService preexistingSupportFormService, IExtraExpenseFormService extraExpenseFormService)
+            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsService deviationsService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService, IPreexistingSupportFormService preexistingSupportFormService, IExtraExpenseFormService extraExpenseFormService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -76,7 +76,7 @@ namespace FriendlyForms.Controllers
             _socialSecurityService = socialSecurityService;
             _preexistingSupportService = preexistingSupportService;
             _otherChildrenService = otherChildrenService;
-            _deviationsFormService = deviationsFormService;
+            _deviationsService = deviationsService;
             _otherChildService = otherChildService;
             _vehicleFormService = vehicleFormService;
             _childFormService = childFormService;
@@ -275,7 +275,7 @@ namespace FriendlyForms.Controllers
             var health = _healthService.GetByUserId(Id) as HealthViewModel;
             var extraExpense = _extraExpenseFormService.GetByUserId(Id) as ExtraExpenseFormViewModel;
             var childCareForm = _childCareFormService.GetByUserId(Id) as ChildCareFormViewModel;
-            var deviation = _deviationsFormService.GetByUserId(Id) as DeviationsFormViewModel;
+            var deviation = _deviationsService.GetByUserId(Id) as DeviationsViewModel;
             other.OtherChildViewModel = new OtherChildViewModel()
                 {
                     Children = otherChildren.ToList()
@@ -338,7 +338,7 @@ namespace FriendlyForms.Controllers
                     ExtraExpenseFormViewModel = extraExpense,
                     HealthViewModel = health,
                     ChildCareFormViewModel = childCareForm,
-                    DeviationsFormViewModel = deviation
+                    DeviationsViewModel = deviation
                 };
             return View(model);
         }

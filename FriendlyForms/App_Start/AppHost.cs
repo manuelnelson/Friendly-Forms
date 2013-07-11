@@ -134,7 +134,7 @@ namespace FriendlyForms.App_Start
             container.Register<IChildCareRepository>(c => new ChildCareRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IChildCareFormRepository>(c => new ChildCareFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IPreexistingSupportFormRepository>(c => new PreexistingSupportFormRepository(c.Resolve<IUnitOfWork>()));
-            container.Register<IDeviationsFormRepository>(c => new DeviationsFormRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IDeviationsRepository>(c => new DeviationsRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IExtraExpenseFormRepository>(c => new ExtraExpenseFormRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IExtraExpenseRepository>(c => new ExtraExpenseRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IBcsoRepository>(c => new BcsoRepository(c.Resolve<IUnitOfWork>()));
@@ -180,10 +180,11 @@ namespace FriendlyForms.App_Start
             container.Register<IChildCareService>(c => new ChildCareService(c.Resolve<IChildCareRepository>() as ChildCareRepository));
             container.Register<IChildCareFormService>(c => new ChildCareFormService(c.Resolve<IChildCareFormRepository>() as ChildCareFormRepository));
             container.Register<IPreexistingSupportFormService>(c => new PreexistingSupportFormService(c.Resolve<IPreexistingSupportFormRepository>() as PreexistingSupportFormRepository));
-            container.Register<IDeviationsFormService>(c => new DeviationsFormService(c.Resolve<IDeviationsFormRepository>() as DeviationsFormRepository));
+            container.Register<IDeviationsService>(c => new DeviationsService(c.Resolve<IDeviationsRepository>() as DeviationsRepository));
             container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>() as ExtraExpenseFormRepository));
             container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>() as ExtraExpenseRepository));
-            container.Register<IBcsoService>(c => new BcsoService(c.Resolve<IBcsoRepository>() as BcsoRepository));
+            container.Register<IBcsoService>(c => new BcsoService(c.Resolve<IBcsoRepository>() as BcsoRepository));            
+            container.Register<IOutputService>(c => new OutputService(c.Resolve<IIncomeService>() as IncomeService, c.Resolve<IPreexistingSupportFormService>() as PreexistingSupportFormService, c.Resolve<IOtherChildService>() as OtherChildService, c.Resolve<IPreexistingSupportChildService>() as PreexistingSupportChildService, c.Resolve<IOtherChildrenService>() as OtherChildrenService));
         }
 
 	    // Uncomment to enable ServiceStack Authentication and CustomUserSession

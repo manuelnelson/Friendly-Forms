@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using BusinessLogic.Models;
+using BusinessLogic.Helpers;
 using FriendlyForms.Models;
 using Models;
 using Models.ViewModels;
@@ -59,36 +61,6 @@ namespace FriendlyForms.RestService
 
     #region ScheduleA
     //adding this dto to get rid of the nullable fields
-    public class IncomeDto
-    {
-        public int HaveSalary { get; set; }
-        public string OtherIncome { get; set; }
-        public int W2Income { get; set; }
-        public int NonW2Income { get; set; }
-        public int SelfIncome { get; set; }
-        public int SelfIncomeNoDeductions { get; set; }
-        public int Commisions { get; set; }
-        public int Bonuses { get; set; }
-        public int Overtime { get; set; }
-        public int Severance { get; set; }
-        public int Retirement { get; set; }
-        public int Interest { get; set; }
-        public int Dividends { get; set; }
-        public int Trust { get; set; }
-        public int Annuities { get; set; }
-        public int Capital { get; set; }
-        public int SocialSecurity { get; set; }
-        public int Compensation { get; set; }
-        public int Unemployment { get; set; }
-        public int CivilCase { get; set; }
-        public int Gifts { get; set; }
-        public int Prizes { get; set; }
-        public int Alimony { get; set; }
-        public int Assets { get; set; }
-        public int Fringe { get; set; }
-        public int Other { get; set; }
-        public string OtherDetails { get; set; }
-    }
     [DataContract]
     public class ScheduleADtoResp
     {
@@ -125,52 +97,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string Mother { get; set; }
     }
-    [DataContract]
-    public class ScheduleB
-    {
-        [DataMember]
-        public int GrossIncome { get; set; }
-        [DataMember]
-        public int SelfEmploymentIncome { get; set; }
-        [DataMember]
-        public int FicaIncome { get; set; }
-        [DataMember]
-        public int MedicareTax { get; set; }
-        [DataMember]
-        public int Total34 { get; set; }
-        [DataMember]
-        public int Total5Minus1 { get; set; }
-        [DataMember]
-        public List<PreexistingSupportChild> PreexistingSupportChild { get; set; }
-        [DataMember]
-        public List<PreexistingSupport> PreexistingSupport { get; set; }
-        [DataMember]
-        public int TotalSupport { get; set; }
-        [DataMember]
-        public int AdjustedSupport { get; set; }
-
-        [DataMember]
-        public List<OtherChildDto> OtherChildren { get; set; }
-        [DataMember]
-        public string OtherChildrenDescription { get; set; }
-        [DataMember]
-        public int Subtotal { get; set; }
-        [DataMember]
-        public int GeorgiaObligations { get; set; }
-        [DataMember]
-        public int TheoreticalSupport { get; set; }
-        [DataMember]
-        public int PreexistingOrder { get; set; }
-    }
     #endregion
 
     #region ScheduleD
-    public class OtherChildDto
-    {
-        public string Name { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public string ClaimedBy { get; set; }
-    }
 
     [DataContract]
     public class ScheduleDDtoResp
@@ -482,7 +411,7 @@ namespace FriendlyForms.RestService
         public IPreexistingSupportFormService PreexistingSupportFormService { get; set; }
         public IPreexistingSupportChildService PreexistingSupportChildService { get; set; }
         public IOtherChildrenService OtherChildrenService { get; set; }
-        public IDeviationsFormService DeviationsFormService { get; set; }
+        public IDeviationsService DeviationsService { get; set; }
         public IOtherChildService OtherChildService { get; set; }
         public IParticipantService ParticipantService { get; set; }
         public IHealthService HealthService { get; set; }
@@ -490,6 +419,7 @@ namespace FriendlyForms.RestService
         public IExtraExpenseService ExtraExpenseService { get; set; }
         public IChildService ChildService { get; set; }
         public IBcsoService BcsoService { get; set; }
+        public IOutputService OutputService { get; set; }
 
         public object Get(ScheduleADto request)
         {
@@ -507,8 +437,8 @@ namespace FriendlyForms.RestService
             //Setup output form            
             request.UserId = Convert.ToInt32(UserSession.CustomId);
             var parentNames = GetParentNames(request.UserId);
-            var schedule = GetScheduleB(request.UserId, parentNames.Father);
-            var scheduleOther = GetScheduleB(request.UserId, parentNames.Mother, true);
+            var schedule = OutputService.GetScheduleB(request.UserId, parentNames.Father);
+            var scheduleOther = OutputService.GetScheduleB(request.UserId, parentNames.Mother, true);
             return new ScheduleBDtoResp
                 {
                     ScheduleB = schedule,
@@ -533,7 +463,7 @@ namespace FriendlyForms.RestService
         {
             request.UserId = Convert.ToInt32(UserSession.CustomId);
             var userId = request.UserId;
-            var deviations = DeviationsFormService.GetByUserId(userId).TranslateTo<DeviationsForm>();
+            var deviations = DeviationsService.GetByUserId(userId).TranslateTo<Deviations>();
             var cswAll = GetAllCsw(userId);
             var children = ChildService.GetByUserId(userId);
             var participants = ParticipantService.GetByUserId(userId) as ParticipantViewModel;
@@ -698,47 +628,7 @@ namespace FriendlyForms.RestService
                 CombinedIncomeTotal = incomeCombined.CalculateTotalIncome()
             };
         }
-        private ScheduleB GetScheduleB(long userId, string parentName, bool isOtherParent = false)
-        {
-            var income = IncomeService.GetByUserId(userId, isOtherParent).TranslateTo<IncomeDto>();
-            var preexistingSupport = PreexistingSupportFormService.GetByUserId(userId, isOtherParent);
-            var otherChildren = OtherChildrenService.GetByUserId(userId, isOtherParent);
 
-            var schedule = new ScheduleB
-            {
-                GrossIncome = income.CalculateTotalIncome(),
-                SelfEmploymentIncome = income.SelfIncome
-            };
-            schedule.FicaIncome = (int) (schedule.SelfEmploymentIncome * .62);
-            schedule.MedicareTax = (int) (schedule.SelfEmploymentIncome * .0145);
-            schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
-            schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
-            if (preexistingSupport != null)
-            {
-                var preexistingSupportChildren = PreexistingSupportChildService.GetChildrenBySupportId(preexistingSupport.Id).ToList();
-                schedule.PreexistingSupportChild = preexistingSupportChildren.ToList();
-                schedule.PreexistingSupport = preexistingSupportChildren.Select(x => x.PreexistingSupport).ToList();
-                schedule.TotalSupport = schedule.PreexistingSupport.Sum(c => c.Monthly);
-            }
-            schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
-            if (otherChildren != null)
-            {
-                schedule.OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(otherChildren.Id).Select(x => x.TranslateTo<OtherChildDto>()).ToList();
-                foreach (var otherChildDto in schedule.OtherChildren)
-                {
-                    otherChildDto.ClaimedBy = parentName;
-                }
-                schedule.OtherChildrenDescription = otherChildren.Details;
-            }
-            schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0.0) > 0.01 ? schedule.Total5Minus1 : schedule.GrossIncome;
-            //Todo: get this number
-            schedule.GeorgiaObligations = 0;
-            schedule.TheoreticalSupport = (int) (schedule.GeorgiaObligations * .75);
-            schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
-                                            ? schedule.AdjustedSupport - schedule.TheoreticalSupport
-                                            : schedule.Subtotal - schedule.TheoreticalSupport;
-            return schedule;
-        }
         private ScheduleDDtoResp GetScheduleD(long userId)
         {
             var health = HealthService.GetByUserId(userId) as HealthViewModel;
@@ -817,11 +707,12 @@ namespace FriendlyForms.RestService
                     ChildCare = childCaresWithTotals,
                 };
         }
+
         private CswDtoResp GetAllCsw(long userId)
         {
             var scheduleA = GetScheduleA(userId);
-            var scheduleBFather = GetScheduleB(userId, "namehere");
-            var scheduleBMother = GetScheduleB(userId, "name", true);
+            var scheduleBFather = OutputService.GetScheduleB(userId, "namehere");
+            var scheduleBMother = OutputService.GetScheduleB(userId, "name", true);
             var scheduleD = GetScheduleD(userId);
             var socialSecurityFather = SocialSecurityService.GetByUserId(userId);
             var socialSecurityMother = SocialSecurityService.GetByUserId(userId, true);
@@ -830,16 +721,16 @@ namespace FriendlyForms.RestService
             var cswFather = new Csw
                 {
                     GrossIncome = scheduleA.IncomeTotal,
-                    AdjustedIncome = (int) scheduleBFather.AdjustedSupport,
+                    AdjustedIncome = scheduleBFather.AdjustedSupport,
                     //Apparently this could be 14 as well? whats the logic here?
-                    CombinedIncome = (int) (scheduleBFather.AdjustedSupport / totalIncome),
+                    CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
                 };
             var cswMother = new Csw
             {
                 GrossIncome = scheduleA.IncomeTotal,
-                AdjustedIncome = (int) scheduleBMother.AdjustedSupport,
+                AdjustedIncome = scheduleBMother.AdjustedSupport,
                 //Apparently this could be 14 as well? whats the logic here?
-                CombinedIncome = (int) (scheduleBMother.AdjustedSupport / totalIncome),
+                CombinedIncome = scheduleBMother.AdjustedSupport / totalIncome,
             };
             var cswTotal = new Csw()
                 {
@@ -860,6 +751,7 @@ namespace FriendlyForms.RestService
                     Children = children
                 };
         }
+
         private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurityViewModel socialSecurity, HealthViewModel healthInsurance, bool isFather=true)
         {
             csw.ProRataObligation = csw.CombinedIncome*cswTotal.SupportObligation;
@@ -876,6 +768,7 @@ namespace FriendlyForms.RestService
             csw.UninsuredExpenses = (int) (isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0);
             return csw;
         }
+
         private ParentNames GetParentNames(long userId)
         {
             var participants = ParticipantService.GetByUserId(userId) as ParticipantViewModel;
@@ -900,16 +793,4 @@ namespace FriendlyForms.RestService
         public string Father { get; set; }
         public string Mother { get; set; }
     }
-
-    public static class OutputHelper
-    {
-        public static int CalculateTotalIncome(this IncomeDto income)
-        {
-            return income.W2Income + income.Commisions + income.SelfIncomeNoDeductions + income.Bonuses + income.Overtime +
-                   income.Severance + income.Retirement + income.Interest + income.Dividends + income.Trust + income.Annuities +
-                   income.Capital + income.SocialSecurity + income.Compensation + income.Unemployment + income.CivilCase + income.Gifts + income.Prizes +
-                   income.Alimony + income.Assets + income.Fringe + income.Other;
-        }
-    }
-
 }
