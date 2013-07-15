@@ -44,11 +44,12 @@ namespace FriendlyForms.RestService
             OtherChildrenService.Add(otherChildren);
             return otherChildren;
         }
-        public void Put(ReqOtherChildren request)
+        public object Put(ReqOtherChildren request)
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
             otherChildren.UserId = Convert.ToInt32(UserSession.CustomId);
-            OtherChildrenService.Update(otherChildren);            
+            OtherChildrenService.Update(otherChildren);
+            return otherChildren;
         }
     }
 }

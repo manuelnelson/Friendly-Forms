@@ -46,11 +46,13 @@ namespace FriendlyForms.Controllers
         private readonly IChildCareFormService _childCareFormService;
         private readonly IPreexistingSupportFormService _preexistingSupportFormService;
         private readonly IExtraExpenseFormService _extraExpenseFormService;
+        private readonly IOutputService _outputService;
         //
         // GET: /Forms/
         public FormsController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,ICountyService countyService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IIncomeService incomeService, ISocialSecurityService socialSecurityService, 
-            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsService deviationsService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService, IPreexistingSupportFormService preexistingSupportFormService, IExtraExpenseFormService extraExpenseFormService)
+            IPreexistingSupportService preexistingSupportService, IOtherChildrenService otherChildrenService, IDeviationsService deviationsService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService, IChildFormService childFormService, IAddendumService addendumService, IHealthService healthService, IChildCareFormService childCareFormService, IPreexistingSupportFormService preexistingSupportFormService, IExtraExpenseFormService extraExpenseFormService,
+            IOutputService outputService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -85,6 +87,7 @@ namespace FriendlyForms.Controllers
             _childCareFormService = childCareFormService;
             _preexistingSupportFormService = preexistingSupportFormService;
             _extraExpenseFormService = extraExpenseFormService;
+            _outputService = outputService;
         }
         
         [Authenticate]

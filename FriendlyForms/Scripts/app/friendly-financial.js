@@ -267,10 +267,25 @@
     //#region Other Children---------------    
     $('.financial-part4').click(function () {
         if ($('#otherChildWrapper').is(':visible')) {
-            Friendly.NextForm('deviationsOther', Friendly.properties.iconSuccess);
-            return false;
+            submitOtherChildForm(function() {
+                Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
+                return false;
+            });
         }
-        Friendly.StartLoading();        
+        submitOtherChildForm(function(data) {
+            if (data.LegallyResponsible === 1 && data.AtHome === 1 && data.Support === 1 && data.Preexisting === 2 && data.InCourt === 2) {
+                //Eligible. Show add children.
+                $('#otherChildWrapper #childrenId').val(data.Id);
+                $('#otherChildrenWrapper .addOtherChildren').show();
+            } else {
+                $('#otherChildrenWrapper .addOtherChildren').hide();
+                Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
+            }
+            Friendly.EndLoading();
+        });
+    });
+    function submitOtherChildForm(successCallback) {
+        Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildren');
         var submitType = 'POST';
         if (typeof model.Id != 'undefined' && model.Id != '0' && model.Id != '')
@@ -282,21 +297,12 @@
                 url: '/api/OtherChildren/?format=json',
                 type: submitType,
                 data: model,
-                success: function (data) {
-                    if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {
-                        //Eligible. Show add children.
-                        $('#otherChildWrapper #childrenId').val(data.Id);
-                        $('#otherChildWrapper').show();
-                    } else {
-                        Friendly.NextForm('incomeOther', Friendly.properties.iconSuccess);
-                    }
-                    Friendly.EndLoading();
-                },
+                success: successCallback,
                 error: Friendly.GenericErrorMessage
             });
         }
         Friendly.EndLoading();
-    });
+    }
     $('#addOtherChild').click(function () {
         Friendly.StartLoading();
         var formName = 'otherchild';
@@ -451,12 +457,28 @@
         Friendly.NextForm('otherChildrenOther', Friendly.properties.iconSuccess);
     });
     //#endregion
-    //#region Other Children---------------    
+    //#region Other Children------------------------------    
     $('.financial-part9').click(function () {
         if ($('#otherChildOtherWrapper').is(':visible')) {
-            Friendly.NextForm('deviations', Friendly.properties.iconSuccess);
-            return false;
+            submitOtherChildOtherForm(function () {
+                Friendly.NextForm('deviations', Friendly.properties.iconSuccess);
+                return false;
+            });
         }
+        submitOtherChildOtherForm(function (data) {
+            if (data.LegallyResponsible === 1 && data.AtHome === 1 && data.Support === 1 && data.Preexisting === 2 && data.InCourt === 2) {
+                //Eligible. Show add children.
+                $('#otherChildOtherWrapper #childrenId').val(data.Id);
+                $('#otherChildrenOtherWrapper .addOtherChildren').show();
+            } else {
+                $('#otherChildrenOtherWrapper .addOtherChildren').hide();
+                Friendly.NextForm('deviations', Friendly.properties.iconSuccess);
+            }
+            Friendly.EndLoading();
+        });
+    });
+
+    function submitOtherChildOtherForm(successCallback) {
         Friendly.StartLoading();
         var model = Friendly.GetFormInput('otherChildrenOther');
         var submitType = 'POST';
@@ -469,21 +491,13 @@
                 url: '/api/OtherChildren/?format=json',
                 type: submitType,
                 data: model,
-                success: function (data) {
-                    if (model.LegallyResponsible === "1" && model.AtHome === "1" && model.Support === "1" && model.Preexisting === "2" && model.InCourt === "2") {                        
-                        //Eligible. Show add children.
-                        $('#otherChildOtherWrapper #childrenId').val(data.Id);
-                        $('#otherChildOtherWrapper').show();
-                    } else {
-                        Friendly.NextForm('deviations', Friendly.properties.iconSuccess);
-                    }
-                    Friendly.EndLoading();
-                },
+                success: successCallback,
                 error: Friendly.GenericErrorMessage
             });
         }
         Friendly.EndLoading();
-    });
+    }
+
     $('#addOtherChildOther').click(function () {
         Friendly.StartLoading();
         var formName = "otherchildOther";
@@ -550,8 +564,11 @@
         if ($('#HighLow:checked').val() === "1") {
             $('.deviation-high').show();
             $('.deviation-low').hide();
-        } else {
+        } else if ($('#HighLow:checked').val() === "2") {
             $('.deviation-low').show();
+            $('.deviation-high').hide();
+        } else {
+            $('.deviation-low').hide();
             $('.deviation-high').hide();
         }
     });

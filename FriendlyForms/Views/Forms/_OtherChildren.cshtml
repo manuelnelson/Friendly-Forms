@@ -48,7 +48,7 @@
                             <label class="radio inline">No @Html.RadioButtonFor(m => m.InCourt, (int)YesNo.No, new{@class="inline"})</label>
                             @Html.ValidationMessageFor(m => m.InCourt)
                         </div>
-                        <div class="control-group row-fluid">
+                        <div class="control-group row-fluid addOtherChildren hide">
                             <label class="span4 form-question">
                                 Enter a comment here explaining why you have included an other qualified child in the current court case.</label>
                             @Html.TextAreaFor(m => m.Details, new{@class="inline", placeholder="Details"})

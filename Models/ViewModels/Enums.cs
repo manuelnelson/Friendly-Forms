@@ -57,7 +57,8 @@
     public enum HighLow
     {
         High = 1,
-        Low
+        Low,
+        No
     };
     public enum TransportationCost
     {

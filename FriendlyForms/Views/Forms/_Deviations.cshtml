@@ -158,11 +158,12 @@
                                 <div class="control-group">
                                     <label class="form-question">
                                         Do you wish to apply for a Low Income or High Income Deviation?</label>
-                                    <label class="radio inline">High @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                    <label class="radio inline">Low @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.No, new { @class = "inline" })</label>
+                                    <label class="radio inline">No @Html.RadioButtonFor(m => m.HighLow, (int)HighLow.No, new { @class = "inline" })</label>
+                                    <label class="radio inline">High @Html.RadioButtonFor(m => m.HighLow, (int)HighLow.High, new { @class = "inline" })</label>
+                                    <label class="radio inline">Low @Html.RadioButtonFor(m => m.HighLow, (int)HighLow.Low, new { @class = "inline" })</label>
                                     @Html.ValidationMessageFor(m => m.Deviation)
                                 </div>
-                                @if (Model.HighLow == (int)YesNo.No)
+                                @if (Model.HighLow == (int)HighLow.Low)
                                 {
                                     //Low
                                     <div class="deviation-low">
@@ -180,17 +181,17 @@
                                     <div class="deviation-high hide">
                                         <div class="control-group row-fluid">
                                             <label class="span4 form-question">
-                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                                Your income is $<span class="IncomeHigherAmount"></span> higher than $30,000 per month, the highest 
                                             monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
                                             reported income is included, the amount of child support payable (in addition to the 
-                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            child support applicable to the first $30,000) would be $<span class="IncomeHigherAmount"></span>. Would you like to use 
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
                                         </div>
                                     </div>
                                 }
-                                else if (Model.HighLow == (int)YesNo.Yes)
+                                else if (Model.HighLow == (int)HighLow.High)
                                 {
                                     //High
                                     <div class="deviation-low hide">
@@ -208,10 +209,10 @@
                                     <div class="deviation-high">
                                         <div class="control-group row-fluid">
                                             <label class="span4 form-question">
-                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                                Your income is $<span class="IncomeHigherAmount"></span> higher than $30,000 per month, the highest 
                                             monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
                                             reported income is included, the amount of child support payable (in addition to the 
-                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            child support applicable to the first $30,000) would be $<span class="IncomeHigherAmount"></span>. Would you like to use 
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
@@ -235,10 +236,10 @@
                                     <div class="deviation-high hide">
                                         <div class="control-group row-fluid">
                                             <label class="span4 form-question">
-                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                                Your income is $<span class="IncomeHigherAmount"></span> higher than $30,000 per month, the highest 
                                             monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
                                             reported income is included, the amount of child support payable (in addition to the 
-                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            child support applicable to the first $30,000) would be $<span class="IncomeHigherAmount"></span>. Would you like to use 
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
@@ -366,11 +367,12 @@
                                 <div class="control-group">
                                     <label class="form-question">
                                         Do you wish to apply for a Low Income or High Income Deviation?</label>
-                                    <label class="radio inline">High @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.Yes, new { @class = "inline" })</label>
-                                    <label class="radio inline">Low @Html.RadioButtonFor(m => m.HighLow, (int)YesNo.No, new { @class = "inline" })</label>
+                                    <label class="radio inline">No @Html.RadioButtonFor(m => m.HighLow, (int)HighLow.No, new { @class = "inline" })</label>
+                                    <label class="radio inline">High @Html.RadioButtonFor(m => m.HighLow, (int)HighLow.High, new { @class = "inline" })</label>
+                                    <label class="radio inline">Low @Html.RadioButtonFor(m => m.HighLow, (int)HighLow.Low, new { @class = "inline" })</label>
                                     @Html.ValidationMessageFor(m => m.Deviation)
                                 </div>
-                                @if (Model.HighLow == (int)YesNo.No)
+                                @if (Model.HighLow == (int)HighLow.Low)
                                 {
                                     //Low
                                     <div class="deviation-low">
@@ -388,17 +390,17 @@
                                     <div class="deviation-high hide">
                                         <div class="control-group row-fluid">
                                             <label class="span4 form-question">
-                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                                Your income is $<span class="IncomeHigherAmount"></span> higher than $30,000 per month, the highest 
                                             monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
                                             reported income is included, the amount of child support payable (in addition to the 
-                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            child support applicable to the first $30,000) would be $<span class="IncomeHigherAmount"></span>. Would you like to use 
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
                                         </div>
                                     </div>
                                 }
-                                else if (Model.HighLow == (int)YesNo.Yes)
+                                else if (Model.HighLow == (int)HighLow.High)
                                 {
                                     //High
                                     <div class="deviation-low hide">
@@ -416,10 +418,10 @@
                                     <div class="deviation-high">
                                         <div class="control-group row-fluid">
                                             <label class="span4 form-question">
-                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                                Your income is $<span class="IncomeHigherAmount"></span> higher than $30,000 per month, the highest 
                                             monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
                                             reported income is included, the amount of child support payable (in addition to the 
-                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            child support applicable to the first $30,000) would be $<span class="IncomeHigherAmount"></span>. Would you like to use 
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)
@@ -443,10 +445,10 @@
                                     <div class="deviation-high hide">
                                         <div class="control-group row-fluid">
                                             <label class="span4 form-question">
-                                                Your income is $X,XXX higher than $30,000 per month, the highest 
+                                                Your income is $<span class="IncomeHigherAmount"></span> higher than $30,000 per month, the highest 
                                             monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
                                             reported income is included, the amount of child support payable (in addition to the 
-                                            child support applicable to the first $30,000) would be $X,XXX. Would you like to use 
+                                            child support applicable to the first $30,000) would be $<span class="IncomeHigherAmount"></span>. Would you like to use 
                                             the amount shown here, or enter another amount (including $0)?</label>
                                             @Html.TextBoxFor(m => m.HighDeviation)
                                             @Html.ValidationMessageFor(m => m.HighDeviation)

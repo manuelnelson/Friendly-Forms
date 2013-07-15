@@ -229,3 +229,19 @@ Financial.CheckExtraExpense = function (child, nextForm) {
     });
 };
 
+Financial.GetIncomeHighAmount = function (nextForm) {
+    var formName = '/Output/Financial/scheduleB/';
+    $.ajax({
+        url: '/api' + formName + '?format=json',
+        type: 'GET',
+        success: function (data) {
+            var incomeHigherAmount = parseInt(data.ScheduleB.AdjustedSupport) - 30000;
+            $('.IncomeHigherAmount').text(Friendly.addCommas(incomeHigherAmount));
+            $('#sidebar li').removeClass('active');
+            $('#' + nextForm + 'Wrapper').show();
+            $('#' + nextForm + 'Nav').addClass('active');
+            Friendly.EndLoading();
+        },
+        error: Friendly.GenericErrorMessage
+    });
+};

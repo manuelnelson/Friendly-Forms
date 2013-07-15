@@ -145,6 +145,9 @@ Friendly.NextForm = function (nextForm, prevIcon) {
         case 'extraExpense':
             Friendly.LoadChildren('extraExpense');
             break;
+        case 'deviations':
+            Financial.GetIncomeHighAmount(nextForm);
+            break;
     }
     $('#sidebar li').removeClass('active');
     $('#' + nextForm + 'Wrapper').show();
@@ -330,6 +333,17 @@ Friendly.LoadChildren = function (form) {
             break;
     }
 };
+Friendly.addCommas = function(nStr) {
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+};
 $(document).ready(function () {
     // === Sidebar navigation === //
 
@@ -472,20 +486,9 @@ $(document).ready(function () {
     $('.currency').maskMoney({ allowNegative: true });
     $.each($('.currencyText'), function (ndx, item) {
         var text = $(item).text();
-        $(item).text(addCommas(text));
+        $(item).text(Friendly.addCommas(text));
     });
-    function addCommas(nStr) {
-        nStr += '';
-        x = nStr.split('.');
-        x1 = x[0];
-        x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-    }
-
+   
     //Form Navigation
     $('.nav-item').click(function () {
         //before we navigate away, we need to check the status of the form

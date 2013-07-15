@@ -56,17 +56,22 @@ namespace FriendlyForms.RestService
         public int? HighIncome { get; set; }
         public int? HighDeviation { get; set; }
         public int? SpecificDeviations { get; set; }
+        public int IncomeHigherAmount { get; set; }
     }
 
     [Authenticate]
     public class DeviationsRestService : ServiceBase
     {
         public IDeviationsService DeviationsService { get; set; } //Injected by IOC
+        public IOutputService OutputService { get; set; } //Injected by IOC
 
         public object Get(DeviationsDto request)
         {
             request.UserId = Convert.ToInt32(UserSession.CustomId);
-            return DeviationsService.GetByUserId(request.UserId);
+            var deviationDto = DeviationsService.GetByUserId(request.UserId).TranslateTo<DeviationsDto>();
+            var scheduleB = OutputService.GetScheduleB(request.UserId, "Name");
+            deviationDto.IncomeHigherAmount = scheduleB.AdjustedSupport - 30000;
+            return deviationDto;
         }
 
         public object Get(DeviationsListDto request)
