@@ -46,7 +46,7 @@ namespace FriendlyForms.Controllers
         // GET: /Forms/
         public OutputController(ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionService, IExtraDecisionsService extraDecisionService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService, ICountyService countyService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ISpousalService spousalService, ITaxService taxService, IChildSupportService childSupportService, IHolidayService holidayService, IExtraHolidayService extraHolidayService,
-            IIncomeService incomeService, ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService)
+            ISocialSecurityService socialSecurityService, IPreexistingSupportService preexistingSupportService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService, IOtherChildService otherChildService, IVehicleFormService vehicleFormService)
         {
             _courtService = courtService;
             _participantService = participantService;
@@ -145,7 +145,8 @@ namespace FriendlyForms.Controllers
             //Setup output form            
             var outputViewModel = new PpOutputFormHelper
                 {
-                    CustodyInformation = _participantService.GetCustodyInformation(participants)
+                    CustodyInformation = _participantService.GetCustodyInformation(participants),
+                    County = _countyService.Get(court.CountyId).CountyName
                 };
             
             //Communication
@@ -169,7 +170,7 @@ namespace FriendlyForms.Controllers
             var childViewModel = new ParentingPlanViewModel
             {
                 CourtViewModel = court,
-                ParticipantViewModel = participants as ParticipantViewModel,
+                ParticipantViewModel = participants,
                 ChildAllViewModel = new ChildAllViewModel()
                     {
                         ChildViewModel = children,

@@ -47,10 +47,12 @@ Friendly.GenericErrorMessage = function (jqXHR, textStatus, errorThrown) {
         if (errorThrown === "Bad Request") {
             //Bad input error typically
             Friendly.ShowMessage("Input Error", responseStatus.ResponseStatus.Message, Friendly.properties.messageType.Error);
+            $('html, body').animate({ scrollTop: 0 }, 'fast');
             return false;
         }
     }
     Friendly.ShowMessage("Sorry!", "We could not process your request.  The error has been logged and we will do our best to correct the error asap.", Friendly.properties.messageType.Error);
+    $('html, body').animate({ scrollTop: 0 }, 'fast');
     return false;
 };
 Friendly.SubmitForm = function (formName, nextForm, model) {

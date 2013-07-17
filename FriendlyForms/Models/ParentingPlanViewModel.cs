@@ -25,6 +25,7 @@ namespace FriendlyForms.Models
     {
         public CustodyInformation CustodyInformation { get; set; }
         public string CommunicationTypePhrase { get; set; }
+        public string County { get; set; }
     }
 
     public class FormsCompleted

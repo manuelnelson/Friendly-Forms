@@ -379,6 +379,7 @@ namespace FriendlyForms.RestService
         public Csw TotalCsw { get; set; }
         public string Father { get; set; }
         public string Mother { get; set; }
+        public string County { get; set; }
         public string ValidSchedules { get; set; }
         public string InvalidSchedules { get; set; }
     }
@@ -420,6 +421,8 @@ namespace FriendlyForms.RestService
         public IChildService ChildService { get; set; }
         public IBcsoService BcsoService { get; set; }
         public IOutputService OutputService { get; set; }
+        public ICourtService CourtService { get; set; }
+        public ICountyService CountyService { get; set; }
 
         public object Get(ScheduleADto request)
         {
@@ -579,9 +582,12 @@ namespace FriendlyForms.RestService
             //Setup output form            
             request.UserId = Convert.ToInt32(UserSession.CustomId);
             var parentNames = GetParentNames(request.UserId);
+            var court = CourtService.GetByUserId(request.UserId).TranslateTo<Court>();
+            var county = CountyService.Get(court.CountyId).CountyName;
             var cswDto = GetAllCsw(request.UserId);
             cswDto.Father = parentNames.Father;
             cswDto.Mother = parentNames.Mother;
+            cswDto.County = county;
             return cswDto;
         }
 

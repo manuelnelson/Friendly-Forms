@@ -7,11 +7,11 @@ using Models;
 
 namespace BusinessLogic
 {
-    public class CountyService : ICountyService
+    public class CountyService : Service<ICountyRepository, County>, ICountyService
     {
         private readonly ICountyRepository _countyRepository;
 
-        public CountyService(ICountyRepository countyRepository)
+        public CountyService(ICountyRepository countyRepository) : base(countyRepository)
         {
             _countyRepository = countyRepository;
         }
