@@ -220,68 +220,6 @@
     <table>
         <thead>
             <tr>
-                <th>Extraordinary and Special Expenses</th>
-                <th>${Father}</th>
-                <th>${Mother}</th>
-                <th>Nonparent Custodian</th>
-                <th>Combined</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>12(a). Extraordinary Educational Expenses</td>
-                <td class="currency">$${TotalExpenses.EducationFather}</td>
-                <td class="currency">$${TotalExpenses.EducationMother}</td>
-                <td class="currency">$${TotalExpenses.EducationNonParent}</td>
-                <td class="currency">$${TotalExpenses.EducationTotal}</td>
-            </tr>
-            <tr>
-                <td>12(b). Extraordinary Medical Expenses</td>
-                <td class="currency">$${TotalExpenses.MedicalFather}</td>
-                <td class="currency">$${TotalExpenses.MedicalMother}</td>
-                <td class="currency">$${TotalExpenses.MedicalNonParent}</td>
-                <td class="currency">$${TotalExpenses.MedicalTotal}</td>
-            </tr>
-            <tr>
-                <td>12(c). Allowable Special Expenses</td>
-                <td class="currency">$${TotalExpenses.SpecialFather}</td>
-                <td class="currency">$${TotalExpenses.SpecialMother}</td>
-                <td class="currency">$${TotalExpenses.SpecialNonParent}</td>
-                <td class="currency">$${TotalExpenses.SpecialTotal}</td>
-            </tr>
-            <tr>
-                <td>12(d). Total Expenses</td>
-                <td class="currency">$${TotalExpenses.TotalFather}</td>
-                <td class="currency">$${TotalExpenses.TotalMother}</td>
-                <td class="currency">$${TotalExpenses.TotalNonParent}</td>
-                <td class="currency">$${TotalExpenses.TotalTotal}</td>
-            </tr>
-            <tr>
-                <td>12(e). Percentage Pro Rata Share of Income</td>
-                <td>${TotalExpenses.ProRataFather}%</td>
-                <td>${TotalExpenses.ProRataMother}%</td>
-                <td></td>
-                <td>${TotalExpenses.ProRataTotal}%</td>
-            </tr>
-            <tr>
-                <td>12(f). Amount times Percentage</td>
-                <td class="currency">$${TotalExpenses.PercentageFather}</td>
-                <td class="currency">$${TotalExpenses.PercentageMother}</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>12(g). Deviation amount for Extraordinary Educational, Medical and Special Expenses</td>
-                <td class="currency">$${TotalExpenses.DeviationFather}</td>
-                <td class="currency">$${TotalExpenses.DeviationMother}</td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
                 <th>Parenting Time Deviation for Noncustodial Parent</th>
                 <th></th>
                 <th>${NonCustodial}</th>
@@ -339,22 +277,67 @@
     <table>
         <thead>
             <tr>
-                <th colspan="7">SUPPLEMENTAL TABLE 1</th>
-            </tr>
-            <tr>
-                <th colspan="7">EXTRAORDINARY EDUCATIONAL EXPENSES</th>
+                <th colspan="4">SUPPLEMENTAL TABLE 1</th>
             </tr>
         </thead>
         <tbody id="supplemental-table">
             <tr>
-                <td></td>
-                <td>Tuition, Room & Board, Fees and Books</td>
-                <td>Other Extraordinary Educational Expenses</td>
-                <td>Monthly Extraordinary Educational Expenses.</td>
-                <td>Total Yearly Extraordinary Medical Expense</td>
-                <td>Monthly Extraordinary Medical Expenses</td>
-                <td>Total Yearly Amount</td>
-                <td>Total Monthly Amount</td>
+                <td colspan="4">EXTRAORDINARY EDUCATIONAL EXPENSES FOR EACH CHILD</td>
+            </tr>
+            <tr id="education">
+                <td>1. Tuition, Room & Board, Fees and Books</td>
+                <td>${Custodial}</td>
+                <td>${NonCustodial}</td>
+                <td>Non Parent Custodian</td>
+            </tr>
+            <tr id="other-education">
+                <td>2. Other Extraordinary Educational Expenses</td>
+                <td>${Custodial}</td>
+                <td>${NonCustodial}</td>
+                <td>Non Parent Custodian</td>
+            </tr>
+            <tr id="yearly-education">
+                <td>3. Total Yearly Extraordinary Medical Expense</td>
+                <td>TOTAL</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr id="monthly-education">
+                <td>4. Monthly Extraordinary Educational Expenses</td>
+                <td>TOTAL</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="4">EXTRAORDINARY MEDICAL EXPENSES FOR EACH CHILD</td>
+            </tr>
+            <tr id="medical">
+                <td>5. Extraordinary Medical Expenses</td>
+                <td>${Custodial}</td>
+                <td>${NonCustodial}</td>
+                <td>Non Parent Custodian</td>
+            </tr>
+            <tr id="yearly-medical">
+                <td>6. Yearly Expenditure for Extraordinary Medical Expenses</td>
+                <td>TOTAL</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr id="monthly-medical">
+                <td>7. Monthly Expenditure for Extraordinary Medical Expenses</td>
+                <td>TOTAL</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="4">SPECIAL EXPENSES FOR CHILD REARING</td>
+            </tr>
+            <tr id="rearing">
+                <td>8. Special Expenses for Child Rearing</td>
+                <td>${Custodial}</td>
+                <td>${NonCustodial}</td>
+                <td>Non Parent Custodian</td>
+            </tr>
+            <tr id="yearly-rearing">
+                <td>9. Yearly Expenditure for Special Expenses for Child Rearing</td>
+                <td>TOTAL</td>
+                <td colspan="2"></td>
             </tr>
         </tbody>
     </table>
