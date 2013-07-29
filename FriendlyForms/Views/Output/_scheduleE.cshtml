@@ -286,18 +286,18 @@
             </tr>
             <tr id="education">
                 <td>1. Tuition, Room & Board, Fees and Books</td>
-                <td>${Custodial}</td>
-                <td>${NonCustodial}</td>
+                <td>${Father}</td>
+                <td>${Mother}</td>
                 <td>Non Parent Custodian</td>
             </tr>
             <tr id="other-education">
                 <td>2. Other Extraordinary Educational Expenses</td>
-                <td>${Custodial}</td>
-                <td>${NonCustodial}</td>
+                <td>${Father}</td>
+                <td>${Mother}</td>
                 <td>Non Parent Custodian</td>
             </tr>
             <tr id="yearly-education">
-                <td>3. Total Yearly Extraordinary Medical Expense</td>
+                <td>3. Total Yearly Extraordinary Educational Expense</td>
                 <td>TOTAL</td>
                 <td colspan="2"></td>
             </tr>
@@ -311,8 +311,8 @@
             </tr>
             <tr id="medical">
                 <td>5. Extraordinary Medical Expenses</td>
-                <td>${Custodial}</td>
-                <td>${NonCustodial}</td>
+                <td>${Father}</td>
+                <td>${Mother}</td>
                 <td>Non Parent Custodian</td>
             </tr>
             <tr id="yearly-medical">
@@ -330,8 +330,8 @@
             </tr>
             <tr id="rearing">
                 <td>8. Special Expenses for Child Rearing</td>
-                <td>${Custodial}</td>
-                <td>${NonCustodial}</td>
+                <td>${Father}</td>
+                <td>${Mother}</td>
                 <td>Non Parent Custodian</td>
             </tr>
             <tr id="yearly-rearing">
@@ -339,22 +339,204 @@
                 <td>TOTAL</td>
                 <td colspan="2"></td>
             </tr>
+            <tr id="monthly-rearing">
+                <td>10. Monthly Expenditure for Special Expenses for Child Rearing</td>
+                <td>TOTAL</td>
+                <td colspan="2"></td>
+            </tr>
         </tbody>
     </table>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="4">TOTAL EXPENSE AMOUNTS PAID BY ALL PARTIES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td>${Father}</td>
+                <td>${Mother}</td>
+                <td>Non Parent Custodian</td>
+            </tr>
+            <tr>
+                <td>11. Yearly Expenditure for Extraordinary Educational Expenses</td>
+                <td class="currency">$${Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father}</td>
+                <td class="currency">$${Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother}</td>
+                <td class="currency">$${Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent}</td>
+            </tr>
+            <tr>
+                <td>12. Monthly Expenditure for Extraordinary Educational Expenses</td>
+                <td class="currency">$${parseInt(parseInt(Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father)/12)}</td>
+                <td class="currency">$${parseInt(parseInt(Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother)/12)}</td>
+                <td class="currency">$${parseInt(parseInt(Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent)/12)}</td>
+            </tr>
+            <tr>
+                <td>13. Yearly Expenditure for Extraordinary Medical Expenses</td>
+                <td class="currency">$${Extraordinaries.MedicalTotal.Father}</td>
+                <td class="currency">$${Extraordinaries.MedicalTotal.Mother}</td>
+                <td class="currency">$${Extraordinaries.MedicalTotal.NonParent}</td>
+            </tr>
+            <tr>
+                <td>14. Monthly Expenditure for Extraordinary Medical Expenses</td>
+                <td class="currency">$${parseInt(Extraordinaries.MedicalTotal.Father/12)}</td>
+                <td class="currency">$${parseInt(Extraordinaries.MedicalTotal.Mother/12)}</td>
+                <td class="currency">$${parseInt(Extraordinaries.MedicalTotal.NonParent/12)}</td>
+            </tr>
+            <tr>
+                <td>15. Yearly Expenditure for Special Child Rearing Expenses</td>
+                <td class="currency">$${Extraordinaries.RearingTotal.Father}</td>
+                <td class="currency">$${Extraordinaries.RearingTotal.Mother}</td>
+                <td class="currency">$${Extraordinaries.RearingTotal.NonParent}</td>
+            </tr>
+            <tr>
+                <td>16. Monthly Expenditure for Special Child Rearing Expenses</td>
+                <td class="currency">$${parseInt(Extraordinaries.RearingTotal.Father/12)}</td>
+                <td class="currency">$${parseInt(Extraordinaries.RearingTotal.Mother/12)}</td>
+                <td class="currency">$${parseInt(Extraordinaries.RearingTotal.NonParent/12)}</td>
+            </tr>
+            <tr>
+                <td>TOTAL EXPENSE PAID BY PARTY</td>
+                <td class="currency">$${parseInt(Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father + Extraordinaries.MedicalTotal.Father + Extraordinaries.RearingTotal.Father)}</td>
+                <td class="currency">$${parseInt(Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother + Extraordinaries.MedicalTotal.Mother + Extraordinaries.RearingTotal.Mother)}</td>
+                <td class="currency">$${parseInt(Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent + Extraordinaries.MedicalTotal.NonParent + Extraordinaries.RearingTotal.NonParent)}</td>
+            </tr>
+        </tbody>
+    </table>
+ @*   <table>
+        <thead>
+            <tr>
+                <th colspan="3">7 PERCENT TEST TO CALCULATE ALLOWABLE EXPENSES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${Father}</td>
+                <td>TOTALS</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>20. Yearly Amount Paid for Special Expenses for Child Rearing.</td>
+                <td>$${PercentTest.TotalChildFather}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>${Mother}</td>
+                <td>TOTALS</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>21. Yearly Amount Paid for Special Expenses for Child Rearing</td>
+                <td>$${PercentTest.TotalChildMother}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>${NonParent}</td>
+                <td>TOTALS</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>22. Yearly Amount Paid for Special Expenses for Child Rearing</td>
+                <td>$${PercentTest.TotalChildNonParent}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>23. TOTAL YEARLY AMOUNTS</td>
+                <td>$${PercentTest.TotalChild}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>24. MONTHLY AVERAGE</td>
+                <td>$${PercentTest.TotalChildMonthly}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>25. Basic Child Support Obligation</td>
+                <td>$${PercentTest.ChildSupport}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>26. Special Expenses Limitation</td>
+                <td>$${PercentTest.SpecialExpense}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>27. Determination of Allowable Expenses Factor</td>
+                <td>$${PercentTest.SpecialExpense}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>${Father}</td>
+                <td>TOTALS</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>28. Monthly Allowable Special Expenses for Child Rearing</td>
+                <td>$${PercentTest.MonthlyChildFather}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>${Mother}</td>
+                <td>TOTALS</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>29. Monthly Allowable Special Expenses for Child Rearing</td>
+                <td>$${PercentTest.MonthlyChildMother}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>${NonParent}</td>
+                <td>TOTALS</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>30. Monthly Allowable Special Expenses for Child Rearing</td>
+                <td>$${PercentTest.MonthlyChildNonParent}</td>
+                <td></td>
+            </tr>        
+        </tbody>
+    </table>*@
 </script>
-<script id="friendly-supplementalTableHeader-template" type="text/x-jquery-tmpl">
+<script id="friendly-supplementalTableChild-template" type="text/x-jquery-tmpl">
     <tr>
-        <td>${ParentName}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>${Name}</td>
+        <td>$${Father}</td>
+        <td>$${Mother}</td>
+        <td>$${NonParent}</td>
     </tr>
 </script>
-<script id="friendly-supplementalTableFather-template" type="text/x-jquery-tmpl">
+<script id="friendly-supplementalTableChildTotalAll-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>$${Total}</td>
+        <td colspan="2"></td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableChildSum-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td style="text-align: right;">TOTAL</td>
+        <td>$${Father}</td>
+        <td>$${Mother}</td>
+        <td>$${NonParent}</td>
+    </tr>
+</script>
+<script id="friendly-supplementalTableChildCombinedTotal-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td style="text-align: right;">COMBINED TOTAL</td>
+        <td>$${Total}</td>
+        <td colspan="2"></td>
+    </tr>
+</script>
+@*<script id="friendly-supplementalTableChild-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${Name}</td>
+        <td>$${Father}</td>
+        <td>$${Mother}</td>
+        <td>$${NonParent}</td>
+    </tr>
+</script>*@
+@*<script id="friendly-supplementalTableFather-template" type="text/x-jquery-tmpl">
     <tr>
         <td>${Name}</td>
         <td>${SchoolFather}</td>
@@ -386,4 +568,4 @@
         <td>${TotalNonParent}</td>
         <td>${TotalNonParentMonthly}</td>
     </tr>
-</script>
+</script>*@

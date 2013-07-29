@@ -65,8 +65,38 @@
         var result = $("#friendly-scheduleE-template").tmpl(data);
         $('#finanicalFormOutput').empty();
         $('#finanicalFormOutput').append(result);
-
+        scheduleETemplate(data.Extraordinaries.Education, data.Extraordinaries.EducationTotal, '#education');
+        scheduleETemplate(data.Extraordinaries.Tuition, data.Extraordinaries.TuitionTotal, '#other-education');
+        scheduleETotalTemplate(data.Extraordinaries.YearlyEducation, data.Extraordinaries.MonthlyEducation,data.Extraordinaries.YearlyEducationTotal, data.Extraordinaries.MonthlyEducationTotal, 'education');
+        scheduleETemplate(data.Extraordinaries.Medical, data.Extraordinaries.MedicalTotal, '#medical');
+        scheduleETotalTemplate(data.Extraordinaries.YearlyMedical, data.Extraordinaries.MonthlyMedical, data.Extraordinaries.YearlyMedicalTotal, data.Extraordinaries.MonthlyMedicalTotal, 'medical');
+        scheduleETemplate(data.Extraordinaries.Rearing, data.Extraordinaries.RearingTotal, '#rearing');
+        scheduleETotalTemplate(data.Extraordinaries.YearlyRearing, data.Extraordinaries.MonthlyRearing, data.Extraordinaries.YearlyRearingTotal, data.Extraordinaries.MonthlyRearingTotal, 'rearing');
     };
+    function scheduleETemplate(listModel, sumModel, name) {
+        var $template = $('#friendly-supplementalTableChild-template');
+        var $totalTemplate = $('#friendly-supplementalTableChildSum-template');
+        var result;
+        result = $totalTemplate.tmpl(sumModel);
+        $(result).insertAfter(name);
+        $.each(listModel, function (ndx, item) {
+            result = $template.tmpl(item);
+            $(result).insertAfter(name);
+        });
+    }
+    function scheduleETotalTemplate(yearlyModel, monthlyModel, yearlySum, monthlySum, name) {
+        var $template = $('#friendly-supplementalTableChildTotalAll-template');
+        var $totalTemplate = $('#friendly-supplementalTableChildCombinedTotal-template');
+        var result;
+        result = $totalTemplate.tmpl(yearlySum);
+        $(result).insertAfter('#yearly-' + name);
+        result = $template.tmpl(yearlyModel);
+        $(result).insertAfter('#yearly-' + name);
+        result = $totalTemplate.tmpl(monthlySum);
+        $(result).insertAfter('#monthly-' + name);
+        result = $template.tmpl(monthlyModel);
+        $(result).insertAfter('#monthly-' + name);
+    }
     function populateCswForm(data) {
         var result = $("#friendly-childSupportWorksheet-template").tmpl(data);
         $('#finanicalFormOutput').empty();

@@ -211,7 +211,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public AllowableDeviation AllowableDeviation { get; set; }
         [DataMember]
-        public List<ExtraExpenses> ExtraExpenseses { get; set; }
+        public Extraordinaries Extraordinaries { get; set; }
 
         [DataMember]
         public AllowableExpenses AllowableExpenses { get; set; }
@@ -368,6 +368,64 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int ExtraSpent { get; set; }
     }
+    [DataContract]
+    public class Extraordinaries
+    {
+        [DataMember]
+        public List<Extraordinary> Tuition { get; set; }
+        [DataMember]
+        public Extraordinary TuitionTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> Education { get; set; }
+        [DataMember]
+        public Extraordinary EducationTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> YearlyEducation { get; set; }
+        [DataMember]
+        public Extraordinary YearlyEducationTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> MonthlyEducation { get; set; }
+        [DataMember]
+        public Extraordinary MonthlyEducationTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> Medical { get; set; }
+        [DataMember]
+        public Extraordinary MedicalTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> YearlyMedical { get; set; }
+        [DataMember]
+        public Extraordinary YearlyMedicalTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> MonthlyMedical { get; set; }
+        [DataMember]
+        public Extraordinary MonthlyMedicalTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> Rearing { get; set; }
+        [DataMember]
+        public Extraordinary RearingTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> YearlyRearing { get; set; }
+        [DataMember]
+        public Extraordinary YearlyRearingTotal { get; set; }
+        [DataMember]
+        public List<Extraordinary> MonthlyRearing { get; set; }
+        [DataMember]
+        public Extraordinary MonthlyRearingTotal { get; set; }
+    }
+    [DataContract]
+    public class Extraordinary
+    {
+        [DataMember]
+        public int Father { get; set; }
+        [DataMember]
+        public int Mother { get; set; }
+        [DataMember]
+        public int NonParent { get; set; }
+        [DataMember]
+        public int Total { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+    }
     #endregion
 
     #region CSW
@@ -470,21 +528,118 @@ namespace FriendlyForms.RestService
             var cswAll = GetAllCsw(userId);
             var children = ChildService.GetByUserId(userId);
             var participants = ParticipantService.GetByUserId(userId) as ParticipantViewModel;
-            var extraExpenses = ExtraExpenseService.GetByUserId(userId).TranslateTo<ExtraExpense>();
+            var extraExpenses = ExtraExpenseService.GetAllByUserId(userId);
             var custodyInformation = ParticipantService.GetCustodyInformation(participants);
-            var lowIncome = new LowIncomeDeviation
-                {
-                    DeviationAmount = deviations.LowDeviation ?? 0,
-                };
-            lowIncome.CompareAmount = custodyInformation.NonCustodyIsFather
-                                          ? (cswAll.FatherCsw.PresumptiveAmount - lowIncome.DeviationAmount)
-                                          : (cswAll.MotherCsw.PresumptiveAmount - lowIncome.DeviationAmount);
-            var minChildSupportAmount = 100 + children.Children.Count * 50;
-            lowIncome.CalculatedAmount = Math.Abs(minChildSupportAmount - lowIncome.CompareAmount);
-            //TODO: still confused on this one. Ask for clarification
-            lowIncome.ActualAmount = minChildSupportAmount > lowIncome.CalculatedAmount ? 0 : 10;
-            lowIncome.Explaination = deviations.WhyLow;
+            /*-----Get Information---*/
+            var lowIncome = CalculateLowIncomeDeviation(deviations, custodyInformation, cswAll, children);
+            var highIncomeFather = CalculateHighIncomeFatherDeviation(deviations);
+            var highIncomeMother = CalculateHighIncomeMotherDeviation(deviations);
+            var parentNames = GetParentNames(userId);
+            var totalExpenses = CalculateTotalExpenses(extraExpenses, cswAll);
+            AllowableDeviation allowableDeviation;
+            var parentingTime = CalculateParentingTime(deviations, lowIncome, highIncomeFather, totalExpenses, highIncomeMother, out allowableDeviation);
+            var extraordinaries = CalculateExtraordinaries(extraExpenses);
 
+            return new ScheduleEDtoResp
+            {
+                LowIncomeDeviation = lowIncome,
+                HighIncomeAdjusted = 0,
+                HighIncomeDeviationFather = highIncomeFather,
+                HighIncomeDeviationMother = highIncomeMother,
+                TotalExpenses = totalExpenses,
+                
+                ParentingTime = parentingTime,
+                AllowableDeviation = allowableDeviation,
+                Extraordinaries = extraordinaries,
+                Father = parentNames.Father,
+                Mother = parentNames.Mother
+            };
+        }
+
+        private static int CalculateParentingTime(Deviations deviations, LowIncomeDeviation lowIncome,
+                                                  HighIncomeDeviation highIncomeFather, ExtraExpenses totalExpenses,
+                                                  HighIncomeDeviation highIncomeMother,
+                                                  out AllowableDeviation allowableDeviation)
+        {
+            var parentingTime = 5;
+            allowableDeviation = new AllowableDeviation
+                {
+                    PresumptiveAmount = deviations.Unjust,
+                    BestInterest = deviations.BestInterest,
+                    ImpairAbility = deviations.Impair,
+                    //TODO: There's a difference for noncustodian vs custodian
+                    AllowableFather =
+                        lowIncome.CalculatedAmount + highIncomeFather.TotalDeviations + totalExpenses.DeviationFather +
+                        parentingTime,
+                    AllowableMother =
+                        lowIncome.CalculatedAmount + highIncomeMother.TotalDeviations + totalExpenses.DeviationFather +
+                        parentingTime,
+                };
+            return parentingTime;
+        }
+
+        private static ExtraExpenses CalculateTotalExpenses(List<ExtraExpense> extraExpenses, CswDtoResp cswAll)
+        {
+            var totalExpenses = new ExtraExpenses();
+            foreach (var extraExpense in extraExpenses)
+            {
+                totalExpenses.EducationFather += extraExpense.EducationFather + extraExpense.TutitionFather;
+                totalExpenses.EducationMother += extraExpense.EducationMother + extraExpense.TutitionMother;
+                totalExpenses.EducationNonParent += extraExpense.EducationNonParent + extraExpense.TutitionNonParent;
+                totalExpenses.EducationTotal += extraExpense.EducationFather + extraExpense.EducationMother +
+                                                extraExpense.EducationNonParent;
+                totalExpenses.MedicalFather += extraExpense.MedicalFather;
+                totalExpenses.MedicalMother += extraExpense.MedicalMother;
+                totalExpenses.MedicalNonParent += extraExpense.MedicalNonParent;
+                totalExpenses.MedicalTotal += extraExpense.MedicalFather + extraExpense.MedicalMother +
+                                              extraExpense.MedicalNonParent;
+                totalExpenses.SpecialFather += extraExpense.SpecialFather;
+                totalExpenses.SpecialMother += extraExpense.SpecialMother;
+                totalExpenses.SpecialNonParent += extraExpense.SpecialNonParent;
+                totalExpenses.SpecialTotal += extraExpense.SpecialFather + extraExpense.SpecialMother +
+                                              extraExpense.SpecialNonParent;
+                totalExpenses.TotalFather += extraExpense.EducationFather + extraExpense.MedicalFather +
+                                             extraExpense.SpecialFather;
+                totalExpenses.TotalMother += extraExpense.EducationMother + extraExpense.MedicalMother +
+                                             extraExpense.SpecialMother;
+                totalExpenses.TotalNonParent += extraExpense.EducationNonParent + extraExpense.MedicalNonParent +
+                                                extraExpense.SpecialNonParent;
+            }
+            totalExpenses.ProRataFather = cswAll.FatherCsw.CombinedIncome;
+            totalExpenses.ProRataMother = cswAll.MotherCsw.CombinedIncome;
+            totalExpenses.ProRataTotal = 100;
+            totalExpenses.TotalTotal = totalExpenses.TotalFather + totalExpenses.TotalMother + totalExpenses.TotalNonParent;
+            totalExpenses.PercentageFather = totalExpenses.TotalFather*totalExpenses.ProRataFather;
+            totalExpenses.PercentageMother = totalExpenses.TotalMother*totalExpenses.ProRataMother;
+            totalExpenses.DeviationFather = totalExpenses.PercentageFather - totalExpenses.TotalFather;
+            totalExpenses.DeviationMother = totalExpenses.PercentageMother - totalExpenses.TotalMother;
+            return totalExpenses;
+        }
+
+        private static HighIncomeDeviation CalculateHighIncomeMotherDeviation(Deviations deviations)
+        {
+            var highIncomeMother = new HighIncomeDeviation
+                {
+                    Deviation = deviations.HighDeviation ?? 0,
+                    Alimony = deviations.AlimonyPaidMother ?? 0,
+                    LifeInsurance = deviations.InsuranceMother ?? 0,
+                    Mortgage = deviations.MortgageMother ?? 0,
+                    ChildTaxCredit = deviations.TaxCreditMother ?? 0,
+                    OtherInsurance = deviations.HealthMother ?? 0,
+                    NonSpecific = deviations.NonSpecificMother ?? 0,
+                    PermanancyPlan = deviations.PermanencyMother ?? 0,
+                    VisitationExpense = deviations.VisitationMother ?? 0,
+                };
+            highIncomeMother.TotalDeviations = highIncomeMother.Deviation + highIncomeMother.Alimony +
+                                               highIncomeMother.LifeInsurance + highIncomeMother.Mortgage +
+                                               highIncomeMother.ChildTaxCredit + highIncomeMother.OtherInsurance +
+                                               highIncomeMother.NonSpecific + highIncomeMother.PermanancyPlan +
+                                               highIncomeMother.VisitationExpense;
+            return highIncomeMother;
+        }
+
+        private static HighIncomeDeviation CalculateHighIncomeFatherDeviation(Deviations deviations)
+        {
             var highIncomeFather = new HighIncomeDeviation
                 {
                     Deviation = deviations.HighDeviation ?? 0,
@@ -492,7 +647,7 @@ namespace FriendlyForms.RestService
                     LifeInsurance = deviations.InsuranceFather ?? 0,
                     Mortgage = deviations.MortgageFather ?? 0,
                     ChildTaxCredit = deviations.TaxCreditFather ?? 0,
-                    OtherInsurance = deviations.HealthFather ??0,
+                    OtherInsurance = deviations.HealthFather ?? 0,
                     NonSpecific = deviations.NonSpecificFather ?? 0,
                     PermanancyPlan = deviations.PermanencyFather ?? 0,
                     VisitationExpense = deviations.VisitationFather ?? 0,
@@ -502,79 +657,169 @@ namespace FriendlyForms.RestService
                                                highIncomeFather.ChildTaxCredit + highIncomeFather.OtherInsurance +
                                                highIncomeFather.NonSpecific + highIncomeFather.PermanancyPlan +
                                                highIncomeFather.VisitationExpense;
+            return highIncomeFather;
+        }
 
-            var highIncomeMother = new HighIncomeDeviation
-            {
-                Deviation = deviations.HighDeviation ?? 0,
-                Alimony = deviations.AlimonyPaidMother ?? 0,
-                LifeInsurance = deviations.InsuranceMother ?? 0,
-                Mortgage = deviations.MortgageMother ?? 0,
-                ChildTaxCredit = deviations.TaxCreditMother ?? 0,
-                OtherInsurance = deviations.HealthMother ?? 0,
-                NonSpecific = deviations.NonSpecificMother ?? 0,
-                PermanancyPlan = deviations.PermanencyMother ?? 0,
-                VisitationExpense = deviations.VisitationMother ?? 0,
-            };
-            highIncomeMother.TotalDeviations = highIncomeMother.Deviation + highIncomeMother.Alimony +
-                                               highIncomeMother.LifeInsurance + highIncomeMother.Mortgage +
-                                               highIncomeMother.ChildTaxCredit + highIncomeMother.OtherInsurance +
-                                               highIncomeMother.NonSpecific + highIncomeMother.PermanancyPlan +
-                                               highIncomeMother.VisitationExpense;
-
-            var parentNames = GetParentNames(userId);
-            var totalExpenses = new ExtraExpenses
+        private static LowIncomeDeviation CalculateLowIncomeDeviation(Deviations deviations,
+                                                                      CustodyInformation custodyInformation, CswDtoResp cswAll,
+                                                                      ChildViewModel children)
+        {
+            var lowIncome = new LowIncomeDeviation
                 {
-                    EducationFather = extraExpenses.EducationFather,
-                    EducationMother = extraExpenses.EducationMother,
-                    EducationNonParent = extraExpenses.EducationNonParent,
-                    EducationTotal = extraExpenses.EducationFather + extraExpenses.EducationMother + extraExpenses.EducationNonParent,
-                    MedicalFather = extraExpenses.MedicalFather,
-                    MedicalMother = extraExpenses.MedicalMother,
-                    MedicalNonParent = extraExpenses.MedicalNonParent,
-                    MedicalTotal = extraExpenses.MedicalFather + extraExpenses.MedicalMother + extraExpenses.MedicalNonParent,
-                    SpecialFather = extraExpenses.SpecialFather,
-                    SpecialMother = extraExpenses.SpecialMother,
-                    SpecialNonParent = extraExpenses.SpecialNonParent,
-                    SpecialTotal = extraExpenses.SpecialFather + extraExpenses.SpecialMother + extraExpenses.SpecialNonParent,
-                    TotalFather = extraExpenses.EducationFather + extraExpenses.MedicalFather + extraExpenses.SpecialFather,
-                    TotalMother = extraExpenses.EducationMother + extraExpenses.MedicalMother + extraExpenses.SpecialMother,
-                    TotalNonParent = extraExpenses.EducationNonParent + extraExpenses.MedicalNonParent + extraExpenses.SpecialNonParent,
-                    ProRataFather = cswAll.FatherCsw.CombinedIncome,
-                    ProRataMother = cswAll.MotherCsw.CombinedIncome,
-                    ProRataTotal = 100,                    
+                    DeviationAmount = deviations.LowDeviation ?? 0,
                 };
-            totalExpenses.TotalTotal = totalExpenses.TotalFather + totalExpenses.TotalMother + totalExpenses.TotalNonParent;
-            totalExpenses.PercentageFather = totalExpenses.TotalFather*totalExpenses.ProRataFather;
-            totalExpenses.PercentageMother = totalExpenses.TotalMother*totalExpenses.ProRataMother;
-            totalExpenses.DeviationFather = totalExpenses.PercentageFather - totalExpenses.TotalFather;
-            totalExpenses.DeviationMother = totalExpenses.PercentageMother - totalExpenses.TotalMother;
+            lowIncome.CompareAmount = custodyInformation.NonCustodyIsFather
+                                          ? (cswAll.FatherCsw.PresumptiveAmount - lowIncome.DeviationAmount)
+                                          : (cswAll.MotherCsw.PresumptiveAmount - lowIncome.DeviationAmount);
+            var minChildSupportAmount = 100 + children.Children.Count*50;
+            lowIncome.CalculatedAmount = Math.Abs(minChildSupportAmount - lowIncome.CompareAmount);
+            //TODO: still confused on this one. Ask for clarification
+            lowIncome.ActualAmount = minChildSupportAmount > lowIncome.CalculatedAmount ? 0 : 10;
+            lowIncome.Explaination = deviations.WhyLow;
+            return lowIncome;
+        }
 
-            var parentingTime = 5;
-            var allowableDeviation = new AllowableDeviation
-                {
-                    PresumptiveAmount = deviations.Unjust,
-                    BestInterest = deviations.BestInterest,
-                    ImpairAbility = deviations.Impair,
-                    //TODO: There's a difference for noncustodian vs custodian
-                    AllowableFather = lowIncome.CalculatedAmount + highIncomeFather.TotalDeviations + totalExpenses.DeviationFather + parentingTime,
-                    AllowableMother = lowIncome.CalculatedAmount + highIncomeMother.TotalDeviations + totalExpenses.DeviationFather + parentingTime,                    
-                };
-
-   
-            return new ScheduleEDtoResp
+        private static Extraordinaries CalculateExtraordinaries(List<ExtraExpense> extraExpenses)
+        {
+            var tuition = new List<Extraordinary>();
+            var tuitionTotal = new Extraordinary();
+            var education = new List<Extraordinary>();
+            var educationTotal = new Extraordinary();
+            var medical = new List<Extraordinary>();
+            var medicalTotal = new Extraordinary();
+            var rearing = new List<Extraordinary>();
+            var rearingTotal = new Extraordinary();
+            var yearlyEducation = new List<Extraordinary>();
+            var yearlyEducationCombinedTotal = new Extraordinary();
+            var yearlyMedical = new List<Extraordinary>();
+            var yearlyMedicalCombinedTotal = new Extraordinary();
+            var yearlyRearing = new List<Extraordinary>();
+            var yearlyRearingCombinedTotal = new Extraordinary();
+            var monthlyEducation = new List<Extraordinary>();
+            var monthlyEducationCombinedTotal = new Extraordinary();
+            var monthlyMedical = new List<Extraordinary>();
+            var monthlyMedicalCombinedTotal = new Extraordinary();
+            var monthlyRearing = new List<Extraordinary>();
+            var monthlyRearingCombinedTotal = new Extraordinary();
+            foreach (var extraExpense in extraExpenses)
             {
-                LowIncomeDeviation = lowIncome,
-                HighIncomeAdjusted = 0,
-                HighIncomeDeviationFather = highIncomeFather,
-                HighIncomeDeviationMother = highIncomeMother,
-                TotalExpenses = totalExpenses,
-                ParentingTime = parentingTime,
-                AllowableDeviation = allowableDeviation,
-                //ExtraExpenseses = extraExpenses,
-                //AllowableExpenses = allowableExpenses,
-                Father = parentNames.Father,
-                Mother = parentNames.Mother
-            };
+                tuition.Add(new Extraordinary
+                    {
+                        Father = extraExpense.TutitionFather,
+                        Mother = extraExpense.TutitionMother,
+                        NonParent = extraExpense.TutitionNonParent,
+                        Name = extraExpense.Child.Name,
+                    });
+                tuitionTotal.Father += extraExpense.TutitionFather;
+                tuitionTotal.Mother += extraExpense.TutitionMother;
+                tuitionTotal.NonParent += extraExpense.TutitionNonParent;
+
+                education.Add(new Extraordinary
+                    {
+                        Father = extraExpense.EducationFather,
+                        Mother = extraExpense.EducationMother,
+                        NonParent = extraExpense.EducationNonParent,
+                        Name = extraExpense.Child.Name,
+                    });
+                educationTotal.Father += extraExpense.EducationFather;
+                educationTotal.Mother += extraExpense.EducationMother;
+                educationTotal.NonParent += extraExpense.EducationNonParent;
+                medical.Add(new Extraordinary
+                    {
+                        Father = extraExpense.MedicalFather,
+                        Mother = extraExpense.MedicalMother,
+                        NonParent = extraExpense.MedicalNonParent,
+                        Name = extraExpense.Child.Name,
+                    });
+                medicalTotal.Father += extraExpense.MedicalFather;
+                medicalTotal.Mother += extraExpense.MedicalMother;
+                medicalTotal.NonParent += extraExpense.MedicalNonParent;
+                rearing.Add(new Extraordinary
+                    {
+                        Father = extraExpense.SpecialFather,
+                        Mother = extraExpense.SpecialMother,
+                        NonParent = extraExpense.SpecialNonParent,
+                        Name = extraExpense.Child.Name,
+                    });
+                rearingTotal.Father += extraExpense.SpecialFather;
+                rearingTotal.Mother += extraExpense.SpecialMother;
+                rearingTotal.NonParent += extraExpense.SpecialNonParent;
+                var yearlyEducationTotal = extraExpense.EducationFather + extraExpense.EducationMother +
+                                           extraExpense.EducationNonParent + extraExpense.TutitionFather +
+                                           extraExpense.TutitionMother + extraExpense.TutitionNonParent;
+                yearlyEducation.Add(new Extraordinary
+                    {
+                        Total = yearlyEducationTotal,
+                        Name = extraExpense.Child.Name,
+                    });
+                yearlyEducationCombinedTotal.Total += yearlyEducationTotal;
+                var yearlyMedicalTotal = extraExpense.MedicalFather + extraExpense.MedicalMother +
+                                         extraExpense.MedicalNonParent;
+                yearlyMedical.Add(new Extraordinary
+                    {
+                        Total = yearlyMedicalTotal,
+                        Name = extraExpense.Child.Name,
+                    });
+                yearlyMedicalCombinedTotal.Total += yearlyMedicalTotal;
+                var yearlyRearingTotal = extraExpense.SpecialFather + extraExpense.SpecialMother +
+                                         extraExpense.SpecialNonParent;
+                yearlyRearing.Add(new Extraordinary
+                    {
+                        Father = yearlyRearingTotal,
+                        Name = extraExpense.Child.Name,
+                    });
+                yearlyRearingCombinedTotal.Total += yearlyRearingTotal;
+                var monthlyEducationTotal = (extraExpense.EducationFather + extraExpense.EducationMother +
+                                             extraExpense.EducationNonParent + extraExpense.TutitionFather +
+                                             extraExpense.TutitionMother + extraExpense.TutitionNonParent)/12;
+                monthlyEducation.Add(new Extraordinary
+                    {
+                        Total = monthlyEducationTotal,
+                        Name = extraExpense.Child.Name,
+                    });
+                monthlyEducationCombinedTotal.Total += monthlyEducationTotal;
+                var monthlyMedicalTotal = (extraExpense.MedicalFather + extraExpense.MedicalMother +
+                                           extraExpense.MedicalNonParent)/12;
+                monthlyMedical.Add(new Extraordinary
+                    {
+                        Total = monthlyMedicalTotal,
+                        Name = extraExpense.Child.Name,
+                    });
+                monthlyMedicalCombinedTotal.Total += monthlyMedicalTotal;
+                var monthlyRearingTotal = (extraExpense.SpecialFather + extraExpense.SpecialMother +
+                                           extraExpense.SpecialNonParent)/12;
+                monthlyRearing.Add(new Extraordinary
+                    {
+                        Father = monthlyRearingTotal,
+                        Name = extraExpense.Child.Name,
+                    });
+                monthlyRearingCombinedTotal.Total += monthlyRearingTotal;
+            }
+
+            var extraordinaries = new Extraordinaries
+                {
+                    Education = education,
+                    EducationTotal = educationTotal,
+                    Tuition = tuition,
+                    TuitionTotal = tuitionTotal,
+                    YearlyEducation = yearlyEducation,
+                    YearlyEducationTotal = yearlyEducationCombinedTotal,
+                    MonthlyEducation = monthlyEducation,
+                    MonthlyEducationTotal = monthlyEducationCombinedTotal,
+                    Medical = medical,
+                    MedicalTotal = medicalTotal,
+                    YearlyMedical = yearlyMedical,
+                    YearlyMedicalTotal = yearlyMedicalCombinedTotal,
+                    MonthlyMedical = monthlyMedical,
+                    MonthlyMedicalTotal = monthlyMedicalCombinedTotal,
+                    Rearing = rearing,
+                    RearingTotal = rearingTotal,
+                    YearlyRearing = yearlyRearing,
+                    YearlyRearingTotal = yearlyRearingCombinedTotal,
+                    MonthlyRearing = monthlyRearing,
+                    MonthlyRearingTotal = monthlyRearingCombinedTotal
+                };
+            return extraordinaries;
         }
 
         public object Get(CswDto request)
@@ -745,7 +990,7 @@ namespace FriendlyForms.RestService
                     CombinedIncome = 100
                 };
             var children = ChildService.GetByUserId(userId).Children;
-            cswTotal.SupportObligation = (int) BcsoService.GetAmount(cswTotal.AdjustedIncome, children.Count); 
+            cswTotal.SupportObligation = (int)BcsoService.GetAmount(cswTotal.AdjustedIncome, children.Count);
             cswFather = FinishCsw(cswFather, cswTotal, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
             cswMother = FinishCsw(cswMother, cswTotal, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
 
@@ -758,20 +1003,20 @@ namespace FriendlyForms.RestService
                 };
         }
 
-        private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurityViewModel socialSecurity, HealthViewModel healthInsurance, bool isFather=true)
+        private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurityViewModel socialSecurity, HealthViewModel healthInsurance, bool isFather = true)
         {
-            csw.ProRataObligation = csw.CombinedIncome*cswTotal.SupportObligation;
-            csw.WorkRelatedExpenses = (int) (csw.CombinedIncome*scheduleD.ProRataAdditional);
+            csw.ProRataObligation = csw.CombinedIncome * cswTotal.SupportObligation;
+            csw.WorkRelatedExpenses = (int)(csw.CombinedIncome * scheduleD.ProRataAdditional);
             csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;
-            csw.AdjustedExpensesPaid = (int) scheduleD.TotalMonthly;
+            csw.AdjustedExpensesPaid = (int)scheduleD.TotalMonthly;
             csw.PresumptiveAmount = csw.AdjustedObligation - csw.AdjustedExpensesPaid;
             csw.DeviationsAmount = 0; //TODO: comes from scheduleE
             csw.Subtotal = csw.PresumptiveAmount + csw.DeviationsAmount;
-            csw.SocialSecurity = (int) (socialSecurity.Amount ?? 0.0);
+            csw.SocialSecurity = (int)(socialSecurity.Amount ?? 0.0);
             csw.FinalAmount = csw.SocialSecurity > csw.Subtotal
                                         ? csw.SocialSecurity
                                         : csw.Subtotal - csw.SocialSecurity;
-            csw.UninsuredExpenses = (int) (isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0);
+            csw.UninsuredExpenses = (int)(isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0);
             return csw;
         }
 
@@ -790,7 +1035,7 @@ namespace FriendlyForms.RestService
                     Mother = outputViewModel.CustodyInformation.NonCustodyIsFather
                              ? outputViewModel.CustodyInformation.CustodyParentName
                              : outputViewModel.CustodyInformation.NonCustodyParentName
-                };        
+                };
         }
     }
 

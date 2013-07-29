@@ -53,14 +53,10 @@ else
     </p>
     <form action="/api/emails/" id="adminEmail" method="post">
         <div class="control-group">
-@*            <label class="form-question">
-                Client Email Address</label>*@
             @Html.TextBoxFor(m => m.Email.Email, new { placeholder = "Client Email" })
             @Html.ValidationMessageFor(m => m.Email.Email)
         </div>
         <div class="control-group">
-@*            <label class="form-question">
-                Your Law Firm</label>*@
             @Html.TextBoxFor(m => m.Email.LawFirm, new { placeholder = "Your Law Firm" })
             @Html.ValidationMessageFor(m => m.Email.LawFirm)
         </div>
