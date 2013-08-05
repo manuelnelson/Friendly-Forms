@@ -514,7 +514,7 @@
     <Content Include="Views\Output\_domesticHealth.cshtml" />
     <Content Include="Views\Output\_domesticSpousal.cshtml" />
     <Content Include="Views\Output\_domesticTaxes.cshtml" />
-    <Content Include="Views\Account\Admin.cshtml" />
+    <Content Include="Views\Admin\Admin.cshtml" />
     <Content Include="Views\Shared\NotAuthorized.cshtml" />
     <Content Include="Views\Forms\_Health.cshtml" />
     <Content Include="Views\Forms\_HealthOther.cshtml" />
@@ -535,7 +535,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Authentication\" />
-    <Folder Include="Views\Admin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

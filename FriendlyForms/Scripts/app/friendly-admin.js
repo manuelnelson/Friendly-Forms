@@ -43,7 +43,7 @@
                             Roles: ['Admin', 'Attorney']
                         },
                         success: function() {
-                            document.location.href = '/';
+                            document.location.href = '/Admin/';
                         }
                     })
                     Friendly.EndLoading();
