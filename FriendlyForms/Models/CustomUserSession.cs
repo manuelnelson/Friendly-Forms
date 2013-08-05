@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using BusinessLogic.Contracts;
+using FriendlyForms.App_Start;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceInterface;
@@ -32,18 +31,18 @@ namespace FriendlyForms.Models
 
             //Populate all matching fields from this session to your own custom User table            
             var user = session.TranslateTo<User>();
-            //if (AppHost.Config.AdminUserNames.Contains(session.UserAuthName)
-            //    && !session.HasRole(RoleNames.Admin))
-            //{
-            //    using (var assignRoles = authService.ResolveService<AssignRolesService>())
-            //    {
-            //        assignRoles.Post(new AssignRoles
-            //        {
-            //            UserName = session.UserAuthName,
-            //            Roles = { RoleNames.Admin }
-            //        });
-            //    }
-            //}
+            if (AppHost.AppConfig.AdminUserNames.Contains(session.UserAuthName)
+                && !session.HasRole(RoleNames.Admin))
+            {
+                using (var assignRoles = authService.ResolveService<AssignRolesService>())
+                {
+                    assignRoles.Post(new AssignRoles
+                    {
+                        UserName = session.UserAuthName,
+                        Roles = { RoleNames.Admin, "Attorney" }
+                    });
+                }
+            }
             //Resolve the DbFactory from the IOC and persist the user info
             var newUser = UserService.CreateOrUpdate(user);
             ((CustomUserSession)session).CustomId = newUser.Id.ToString();

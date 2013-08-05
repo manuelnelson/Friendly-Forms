@@ -530,10 +530,12 @@
     <Content Include="Views\Forms\_templateExtraExpense.cshtml" />
     <Content Include="subscription.pdf" />
     <Content Include="Views\Output\_ChildSupport.cshtml" />
+    <Content Include="Views\Account\RegisterAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Authentication\" />
+    <Folder Include="Views\Admin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

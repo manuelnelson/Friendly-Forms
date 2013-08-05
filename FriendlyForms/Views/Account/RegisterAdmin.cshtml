@@ -1,0 +1,39 @@
+﻿@section Sidebar{
+        <a href="@Url.Action("Index","Home")" class="visible-phone"><i class="icon icon-home"></i>Home</a>
+        <ul>
+            <li class="active"><a href="@Url.Action("Index","Home")"><i class="icon icon-home"></i><span>Home</span></a></li>
+            <li><a href="@Url.Action("About","Home")"><i class="icon icon-briefcase"></i><span>About</span></a></li>
+            <li><a href="@Url.Action("About","Home")"><i class="icon icon-question-sign"></i><span>Help</span></a></li>
+        </ul>
+}
+<h2>Create an Administrator Account</h2>
+<div class="row-fluid">
+    <div class="span6" style="margin-top: 15px">
+        <p>
+            Passwords are required to be a minimum of 7 characters in length.
+        </p>
+        <form class="well form-vertical" id="registerAdmin" action="/api/register" method="POST">
+            <div class="control-group">
+                <input id="DisplayName" name="DisplayName" placeholder="Name*" type="text" value="">
+            </div>
+            <div class="control-group">
+                <input id="Email" name="Email" placeholder="Email*" type="text" value="">
+            </div>
+            <div class="control-group">
+                <input id="Password" name="Password" placeholder="Password*" type="password">
+            </div>
+            <div class="control-group">
+                <input id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password*" type="password">
+            </div>
+            <input type="hidden" name="AutoLogin" value="true">
+@*            <input type="hidden" name="Continue" value="/">*@
+            <input type="submit" id="submit" class="btn btn-primary" value="Sign up">
+        </form>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+        <p>*E-mail is needed for verification purposes only.  We will never send you spam.</p>
+    </div>
+</div>
+

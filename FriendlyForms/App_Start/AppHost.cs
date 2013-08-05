@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Configuration;
 using System.Web.Mvc;
 using BusinessLogic;
@@ -25,9 +26,6 @@ using ServiceStack.WebHost.Endpoints;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(FriendlyForms.App_Start.AppHost), "Start")]
 
-//IMPORTANT: Add the line below to MvcApplication.RegisterRoutes(RouteCollection) in the Global.asax:
-//routes.IgnoreRoute("api/{*pathInfo}"); 
-
 /**
  * Entire ServiceStack Starter Template configured with a 'Hello' Web Service and a 'Todo' Rest Service.
  *
@@ -43,9 +41,27 @@ namespace FriendlyForms.App_Start
     //{
     //    public string CustomProperty { get; set; }
     //}
+    public class AppConfig
+    {
+        public AppConfig(IResourceManager appSettings)
+        {
+            AdminUserNames = appSettings.Get("AdminUserNames", new List<string>());
+            Env = appSettings.Get("Env", Env.Local);
+        }
+        public List<string> AdminUserNames { get; set; }
+        public Env Env { get; set; }
+    }
 
+    public enum Env
+    {
+        Local,
+        Dev,
+        Test,
+        Prod,
+    }
 	public class AppHost : AppHostBase
-	{		
+	{
+        public static AppConfig AppConfig;
 		public AppHost() //Tell ServiceStack the name and where to find your web services
 			: base("Split Solution Api", typeof(RestService.CourtRestService).Assembly) { }
 
@@ -58,8 +74,12 @@ namespace FriendlyForms.App_Start
 			//SetConfig(new EndpointHostConfig {
 			//    DebugMode = true, //Show StackTraces in responses in development
 			//});
+            //Register Typed Config some services might need to access
+		    var appSettings = new AppSettings();                
+            AppConfig = new AppConfig(appSettings);
+            container.Register(AppConfig);
 
-			//Enable Authentication
+            //Enable Authentication
 			ConfigureAuth(container);
 
 			//Register all your dependencies			

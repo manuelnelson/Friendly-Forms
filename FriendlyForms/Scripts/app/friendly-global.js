@@ -14,8 +14,49 @@ Friendly.properties = {
     iconError: 'icon-red icon-pencil',
     numberRegEx: /(\d{1,5})/
 };
+
+//#region Children
 Friendly.children = [];
 Friendly.childNdx = 0;
+Friendly.LoadChildren = function (form) {
+    Friendly.children = [];
+    $('.copy-button ul').empty();
+    $('.copy-button ul').append('<li><a title="all" data-id="0">All</a></li>');
+    $.each($('.child-table tbody tr'), function (ndx, item) {
+        var child = {
+            Name: $(item).find('.child-name').text(),
+            DateOfBirth: $(item).find('.child-dob').text(),
+            Id: $(item).find('.child-id').text().trim(),
+        };
+        Friendly.children.push(child);
+        //add to decision and holiday dropdown - we are removing this for now
+        //$('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
+    });
+
+    if (Friendly.children.length <= 1) {
+        $('.copy-wrapper').hide();
+    }
+
+    //get first child's information
+    Friendly.childNdx = 0;
+    var firstChild = Friendly.children[Friendly.childNdx];
+    switch (form) {
+        case "decision":
+            Parenting.GetChildDecisions(firstChild);
+            break;
+        case "holiday":
+            Parenting.GetChildHoliday(firstChild);
+            break;
+        case "childCare":
+            Financial.GetChildCare(firstChild);
+            break;
+        case "extraExpense":
+            Financial.GetExtraExpense(firstChild);
+            break;
+    }
+};
+//#endregion
+//#region Loading
 Friendly.StartLoading = function () {
     $('#loading').show();
     $('body').css('cursor', 'wait');
@@ -24,6 +65,8 @@ Friendly.EndLoading = function () {
     $('#loading').hide();
     $('body').css('cursor', 'default');
 };
+//#endregion 
+//#region Messages
 Friendly.ShowMessage = function (title, message, type, prependTo) {
     Friendly.EndLoading();
     type = (typeof type === "undefined") ? Friendly.properties.messageType.Warning : type;
@@ -55,6 +98,8 @@ Friendly.GenericErrorMessage = function (jqXHR, textStatus, errorThrown) {
     $('html, body').animate({ scrollTop: 0 }, 'fast');
     return false;
 };
+//#endregion
+//#region Form Functions
 Friendly.SubmitForm = function (formName, nextForm, model) {
     Friendly.StartLoading();
     //If the data of the form doesn't need massaging or have special requirements, we go ahead and sumbit.  Otherwise, we 
@@ -297,44 +342,8 @@ Friendly.IsGenericForm = function (formName, nextForm) {
     }
     return true;
 };
+//#endregion
 //Children Decisions
-Friendly.LoadChildren = function (form) {
-    Friendly.children = [];
-    $('.copy-button ul').empty();
-    $('.copy-button ul').append('<li><a title="all" data-id="0">All</a></li>');
-    $.each($('.child-table tbody tr'), function (ndx, item) {
-        var child = {
-            Name: $(item).find('.child-name').text(),
-            DateOfBirth: $(item).find('.child-dob').text(),
-            Id: $(item).find('.child-id').text().trim(),
-        };
-        Friendly.children.push(child);
-        //add to decision and holiday dropdown - we are removing this for now
-        //$('.copy-button ul').append('<li><a data-id="' + child.Id + '">' + child.Name + '</a></li>');
-    });
-
-    if (Friendly.children.length <= 1) {
-        $('.copy-wrapper').hide();
-    }
-
-    //get first child's information
-    Friendly.childNdx = 0;
-    var firstChild = Friendly.children[Friendly.childNdx];
-    switch (form) {
-        case "decision":
-            Parenting.GetChildDecisions(firstChild);
-            break;
-        case "holiday":
-            Parenting.GetChildHoliday(firstChild);
-            break;
-        case "childCare":
-            Financial.GetChildCare(firstChild);
-            break;
-        case "extraExpense":
-            Financial.GetExtraExpense(firstChild);
-            break;
-    }
-};
 Friendly.addCommas = function(nStr) {
     nStr += '';
     x = nStr.split('.');
@@ -346,6 +355,7 @@ Friendly.addCommas = function(nStr) {
     }
     return x1 + x2;
 };
+//#region Global wide
 $(document).ready(function () {
     // === Sidebar navigation === //
 
@@ -546,3 +556,4 @@ $(document).ready(function () {
         error: Friendly.GenericErrorMessage
     });
 });
+//#endregion

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using BusinessLogic.Contracts;
+using BusinessLogic.Models;
 using FriendlyForms.Models;
 using ServiceStack.ServiceInterface;
 
@@ -32,18 +34,20 @@ namespace FriendlyForms.Controllers
         [Authenticate]
         public ActionResult Admin()
         {
+            var roles = UserSession.HasRole("Admin");
+            
             //var roleId = User.FriendlyIdentity().RoleId;
-            //if(roleId == (int)Role.Default)                
-            //        return RedirectToAction("NotAuthorized", "Account");
+            //if (roleId == (int)Role.Default)
+            //    return RedirectToAction("NotAuthorized", "Account");
             //var model = new AdministrationModel();
-            //if(roleId == (int)Role.Lawyer)
+            //if (roleId == (int)Role.Lawyer)
             //{
             //    model.Clients = _clientService.GetUsersClients(User.FriendlyIdentity().Id);
             //    model.Email = new AdminEmail
             //        {
             //            UserId = User.FriendlyIdentity().Id
             //        };
-            //    return View(model);                                                
+            //    return View(model);
             //}            
             return RedirectToAction("NotAuthorized", "Account");
         }
@@ -56,6 +60,11 @@ namespace FriendlyForms.Controllers
         //
         // GET: /Account/Register
         public ActionResult Register()
+        {
+            return View();
+        }
+
+        public ActionResult RegisterAdmin()
         {
             return View();
         }
