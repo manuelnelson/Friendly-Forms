@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#propertyForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Participant/' + $scope.property.UserId);
+                $location.path('/Domestic/Property/' + $scope.property.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             propertyService.properties.save(null, $scope.property, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Property', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.property.UserId);
+                    $location.path('/Domestic/Property/' + $scope.property.UserId);
             });
         } else {
             propertyService.properties.update({ Id: $scope.property.Id }, $scope.property, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Property', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.property.UserId);
+                    $location.path('/Domestic/Property/' + $scope.property.UserId);
             });
         }
     };

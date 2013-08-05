@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -34,6 +34,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public object Child { get; set; }
         [DataMember]
+        public List<Child> Children { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
     [Authenticate]
@@ -58,22 +60,22 @@ namespace FriendlyForms.RestService
 
         public object Delete(ReqChild request)
         {
-            var child = request.TranslateTo<Child>();
-            ChildService.Delete(child);
+            ChildService.Delete(request.Id);
             return null;
         }
         public object Post(ReqChild request)
         {
-            var childViewModel = request.TranslateTo<ChildViewModel>();
-            childViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var updatedChild = ChildService.AddOrUpdate(childViewModel);
+            var child = request.TranslateTo<Child>();
+            child.UserId = Convert.ToInt32(UserSession.CustomId);
+            ChildService.Add(child);
             return new RespChild()
             {
                 Child = new 
                     {
-                        updatedChild.Id,
-                        updatedChild.Name,
-                        DateOfBirth = updatedChild.DateOfBirth == null ? "Not Provided" : updatedChild.DateOfBirth.Value.ToString("MM/dd/yyyy")
+                        child.Id,
+                        child.Name,
+                        DateOfBirth = child.DateOfBirth == null ? "Not Provided" : child.DateOfBirth.Value.ToString("MM/dd/yyyy"),
+                        child.DateOfBirthString
                     }
             };
         }

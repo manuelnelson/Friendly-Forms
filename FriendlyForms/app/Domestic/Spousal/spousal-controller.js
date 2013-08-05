@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#spousalForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Participant/' + $scope.spousal.UserId);
+                $location.path('/Domestic/Spousal/' + $scope.spousal.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             spousalService.spousals.save(null, $scope.spousal, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Spousal', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.spousal.UserId);
+                    $location.path('/Domestic/Spousal/' + $scope.spousal.UserId);
             });
         } else {
             spousalService.spousals.update({ Id: $scope.spousal.Id }, $scope.spousal, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Spousal', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.spousal.UserId);
+                    $location.path('/Domestic/Spousal/' + $scope.spousal.UserId);
             });
         }
     };

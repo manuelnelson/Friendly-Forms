@@ -64,19 +64,21 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.2.0.5.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Common">
-      <HintPath>..\packages\ServiceStack.Common.3.9.46\lib\net35\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\packages\ServiceStack.Common.3.9.46\lib\net35\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Logging.Elmah, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Common, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Logging.Elmah.1.0.9.0\lib\net35\ServiceStack.Logging.Elmah.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.3.9.56\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.45.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Interfaces, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.3.9.46\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.3.9.56\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Logging.Elmah, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ServiceStack.Logging.Elmah.1.0.10.0\lib\net35\ServiceStack.Logging.Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ServiceStack.Text.3.9.56\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -87,6 +89,7 @@
       <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.3.0.20105.1\lib\net40\System.Web.Mvc.dll</HintPath>
@@ -134,6 +137,7 @@
     <Compile Include="Contracts\IIncomeService.cs" />
     <Compile Include="Contracts\IInformationService.cs" />
     <Compile Include="Contracts\IEmailService.cs" />
+    <Compile Include="Contracts\IMenuService.cs" />
     <Compile Include="Contracts\IOtherChildrenService.cs" />
     <Compile Include="Contracts\IOtherChildService.cs" />
     <Compile Include="Contracts\IAddendumService.cs" />
@@ -153,6 +157,7 @@
     <Compile Include="Contracts\IUserService.cs" />
     <Compile Include="Contracts\IVehicleFormService.cs" />
     <Compile Include="Contracts\IVehicleService.cs" />
+    <Compile Include="Models\MenuItem.cs" />
     <Compile Include="CountyService.cs" />
     <Compile Include="CourtService.cs" />
     <Compile Include="DebtService.cs" />
@@ -170,6 +175,7 @@
     <Compile Include="IncomeService.cs" />
     <Compile Include="InformationService.cs" />
     <Compile Include="EmailService.cs" />
+    <Compile Include="MenuService.cs" />
     <Compile Include="Models\AccountUser.cs" />
     <Compile Include="Models\AdministrationModel.cs" />
     <Compile Include="Models\AllDecisionsViewModel.cs" />

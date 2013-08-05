@@ -42,8 +42,8 @@
                             <label class="radio">
                                 Plan Prepared by a judge
                                 <input id="Radio1" ng-model="court.AuthorOfPlan" type="radio" value="2" required></label>
-                            <div ng-show="courtForm.AuthorOfPlan.$dirty && courtForm.AuthorOfPlan.$invalid">
-                                <span class="form-error" ng-show="courtForm.AuthorOfPlan.$error.required">Author is required</span>
+                            <div ng-show="court.AuthorOfPlan.$dirty && court.AuthorOfPlan.$invalid">
+                                <span class="form-error" ng-show="court.AuthorOfPlan.$error.required">Author is required</span>
                             </div>
                         </div>
                         <div class="control-group">
@@ -59,15 +59,15 @@
                             <label class="radio">
                                 A modification of an existing order
                                 <input ng-model="court.PlanType" type="radio" value="3"></label>
-                            <div ng-show="courtForm.PlanType.$dirty && courtForm.PlanType.$invalid">
-                                <span class="form-error" ng-show="courtForm.PlanType.$error.required">Author is required</span>
+                            <div ng-show="court.PlanType.$dirty && court.PlanType.$invalid">
+                                <span class="form-error" ng-show="court.PlanType.$error.required">Author is required</span>
                             </div>
                         </div>
                         <div class="control-group" ng-show="court.PlanType==2 || court.PlanType==3">
                             <label class="form-question">Case Number</label>
                             <input ng-model="court.ExistCaseNumber" ui-jq="popover" data-content="Your case number can be found XXXX." placeholder="Case Number" type="text" ng-pattern="/^[0-9a-zA-Z\s-]*$/">
-                            <div ng-show="courtForm.ExistCaseNumber.$dirty && courtForm.ExistCaseNumber.$invalid">
-                                <span class="form-error" ng-show="courtForm.ExistCaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
+                            <div ng-show="court.ExistCaseNumber.$dirty && court.ExistCaseNumber.$invalid">
+                                <span class="form-error" ng-show="court.ExistCaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
                     </div>
