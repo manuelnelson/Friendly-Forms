@@ -10,7 +10,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/HealthInsurance/")]
+    [Route("/HealthInsurances/")]
     public class ReqHealthInsurance
     {
         [DataMember]

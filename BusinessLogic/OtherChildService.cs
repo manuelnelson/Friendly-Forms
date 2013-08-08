@@ -8,7 +8,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class OtherChildService : FormService<IOtherChildRepository, OtherChild, OtherChildViewModel>, IOtherChildService
+    public class OtherChildService : FormService<IOtherChildRepository, OtherChild>, IOtherChildService
     {
         public OtherChildService(IOtherChildRepository formRepository)
             : base(formRepository)

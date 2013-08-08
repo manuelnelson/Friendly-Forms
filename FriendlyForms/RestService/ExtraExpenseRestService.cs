@@ -11,7 +11,7 @@ namespace FriendlyForms.RestService
     public class ExtraExpenseRestService
     {
         //REST Resource DTO
-        [Route("/ExtraExpense/{Ids}")]
+        [Route("/ExtraExpenses/{Ids}")]
         public class ExtraExpenseListDto : IReturn<List<ExtraExpenseDto>>
         {
             public long[] Ids { get; set; }
@@ -22,10 +22,10 @@ namespace FriendlyForms.RestService
             }
         }
 
-        [Route("/ExtraExpense")]
-        [Route("/ExtraExpense", "POST")]
-        [Route("/ExtraExpense/", "PUT")]
-        [Route("/ExtraExpense/{Id}", "GET")]
+        [Route("/ExtraExpenses")]
+        [Route("/ExtraExpenses", "POST")]
+        [Route("/ExtraExpenses/", "PUT")]
+        [Route("/ExtraExpenses/{Id}", "GET")]
         public class ExtraExpenseDto : IReturn<ExtraExpenseDto>
         {
             public long Id { get; set; }

@@ -1,7 +1,7 @@
 ﻿<div class="form-vertical wrapper">
-    <form ng-submit="submit()" ng-controller="EntityCtrl" ng-model="entity.entityForm" name="entityForm" novalidate>
-        <input type="hidden" name="Id" ng-model="entity.Id">
-        <input type="hidden" name="UserId" ng-model="entity.UserId">
+    <form ng-submit="submit()" ng-controller="AssetCtrl" ng-model="asset.assetForm" name="assetForm" novalidate>
+        <input type="hidden" name="Id" ng-model="asset.Id">
+        <input type="hidden" name="UserId" ng-model="asset.UserId">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -15,18 +15,18 @@
                                 How will retirment assets be divided?</label>
                             <label class="radio">
                                 There are no retirement assets to be considered.
-                                <input required ng-model="entity.Retirement" name="Retirement" type="radio" value="2"></label>
+                                <input required ng-model="asset.Retirement" name="Retirement" type="radio" value="2"></label>
                             <label class="radio">
                                 Division of retirement assets will occur as follows:
-                                <input required ng-model="entity.Retirement" name="Retirement" type="radio" value="1"></label>
-                            <div ng-show="entityForm.Retirement.$dirty && entityForm.Retirement.$invalid">
-                                <span class="form-error" ng-show="entityForm.Retirement.$error.required">This field is required</span>
+                                <input required ng-model="asset.Retirement" name="Retirement" type="radio" value="1"></label>
+                            <div ng-show="assetForm.Retirement.$dirty && assetForm.Retirement.$invalid">
+                                <span class="form-error" ng-show="assetForm.Retirement.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group retirement-detail hide">
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="entity.RetirementDescription" name="RetirementDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="entityForm.RetirementDescription.$dirty && entityForm.RetirementDescription.$invalid">
-                                <span class="form-error" ng-show="entityForm.RetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                        <div class="control-group" ng-show="asset.Retirement == 1">
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.RetirementDescription" name="RetirementDescription" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="assetForm.RetirementDescription.$dirty && assetForm.RetirementDescription.$invalid">
+                                <span class="form-error" ng-show="assetForm.RetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
                         <div class="control-group">
@@ -34,18 +34,18 @@
                                 How will non-retirment assets be divided?</label>
                             <label class="radio">
                                 There are no non-retirement assets to be considered.
-                                <input required ng-model="entity.NonRetirement" name="NonRetirement" type="radio" value="2"></label>
+                                <input required ng-model="asset.NonRetirement" name="NonRetirement" type="radio" value="2"></label>
                             <label class="radio">
                                 Division of non-retirement assets will occur as follows:
-                                <input required ng-model="entity.NonRetirement" name="NonRetirement" type="radio" value="1"></label>
-                            <div ng-show="entityForm.NonRetirement.$dirty && entityForm.NonRetirement.$invalid">
-                                <span class="form-error" ng-show="entityForm.NonRetirement.$error.required">This field is required</span>
+                                <input required ng-model="asset.NonRetirement" name="NonRetirement" type="radio" value="1"></label>
+                            <div ng-show="assetForm.NonRetirement.$dirty && assetForm.NonRetirement.$invalid">
+                                <span class="form-error" ng-show="assetForm.NonRetirement.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group non-retirement-detail hide">
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="entity.NonRetirementDescription" name="NonRetirementDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="entityForm.NonRetirementDescription.$dirty && entityForm.NonRetirementDescription.$invalid">
-                                <span class="form-error" ng-show="entityForm.NonRetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                        <div class="control-group" ng-show="asset.NonRetirement == 1">
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.NonRetirementDescription" name="NonRetirementDescription" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="assetForm.NonRetirementDescription.$dirty && assetForm.NonRetirementDescription.$invalid">
+                                <span class="form-error" ng-show="assetForm.NonRetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
                         <div class="control-group">
@@ -53,26 +53,26 @@
                                 How will business assets and liabilites be divided?</label>
                             <label class="radio">
                                 There are no business assets or liabilities to be considered.
-                                <input required ng-model="entity.Business" name="Business" type="radio" value="2"></label>
+                                <input required ng-model="asset.Business" name="Business" type="radio" value="2"></label>
                             <label class="radio">
                                 Division of business assets or liabilities will occur as follows: 
-                                <input required ng-model="entity.Business" name="Business" type="radio" value="1"></label>
-                            <div ng-show="entityForm.Business.$dirty && entityForm.Business.$invalid">
-                                <span class="form-error" ng-show="entityForm.Business.$error.required">This field is required</span>
+                                <input required ng-model="asset.Business" name="Business" type="radio" value="1"></label>
+                            <div ng-show="assetForm.Business.$dirty && assetForm.Business.$invalid">
+                                <span class="form-error" ng-show="assetForm.Business.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group business-detail hide">
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="entity.BusinessDescription" name="BusinessDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="entityForm.BusinessDescription.$dirty && entityForm.BusinessDescription.$invalid">
-                                <span class="form-error" ng-show="entityForm.BusinessDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                        <div class="control-group" ng-show="asset.Business == 1">
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.BusinessDescription" name="BusinessDescription" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="assetForm.BusinessDescription.$dirty && assetForm.BusinessDescription.$invalid">
+                                <span class="form-error" ng-show="assetForm.BusinessDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="form-question">
                                 Are there any other assets or liabilities to be divided?</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="entity.AdditionalAssets" name="AdditionalAssets" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="entityForm.AdditionalAssets.$dirty && entityForm.AdditionalAssets.$invalid">
-                                <span class="form-error" ng-show="entityForm.AdditionalAssets.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.AdditionalAssets" name="AdditionalAssets" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="assetForm.AdditionalAssets.$dirty && assetForm.AdditionalAssets.$invalid">
+                                <span class="form-error" ng-show="assetForm.AdditionalAssets.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
                     </div>

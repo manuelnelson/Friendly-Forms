@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -11,7 +10,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Schedule/")]
+    [Route("/Schedules/")]
     public class ReqSchedule
     {
         [DataMember]
@@ -74,6 +73,8 @@ namespace FriendlyForms.RestService
     public class RespSchedule : IHasResponseStatus
     {
         [DataMember]
+        public Schedule Schedule { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
     [Authenticate]
@@ -90,10 +91,13 @@ namespace FriendlyForms.RestService
         }
         public object Post(ReqSchedule request)
         {
-            var scheduleViewModel = request.TranslateTo<ScheduleViewModel>();
-            scheduleViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            ScheduleService.AddOrUpdate(scheduleViewModel);
-            return new RespSchedule();
+            var schedule = request.TranslateTo<Schedule>();
+            schedule.UserId = Convert.ToInt32(UserSession.CustomId);
+            ScheduleService.Add(schedule);
+            return new RespSchedule()
+                {
+                    Schedule = schedule
+                };
         }
         public object Put(ReqSchedule request)
         {

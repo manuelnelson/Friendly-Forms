@@ -21,10 +21,10 @@
                                 <span class="form-error" ng-show="houseForm.MaritalHouse.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="hide marital-house">
+                        <div ng-show="house.MaritalHouse == 1">
                             <div class="control-group">
                                 <label class="form-question">House address</label>
-                                <input class="marital-info" maxlength="100" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="house.Address" name="Address" placeholder="Address" type="text" value="">
+                                <input class="marital-info" maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Address" name="Address" placeholder="Address" type="text" value="">
                                 <div ng-show="houseForm.Address.$dirty && houseForm.Address.$invalid">
                                     <span class="form-error" ng-show="houseForm.Address.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.Address.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -32,7 +32,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">City, State</label>
-                                <input autocomplete="off" class="marital-info" maxlength="100" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="house.CityState" name="CityState" placeholder="City State" type="text" value="">
+                                <input autocomplete="off" class="marital-info" maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.CityState" name="CityState" placeholder="City State" type="text" value="">
                                 <div ng-show="houseForm.CityState.$dirty && houseForm.CityState.$invalid">
                                     <span class="form-error" ng-show="houseForm.CityState.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.CityState.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -40,7 +40,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">Zip Code</label>
-                                <input class="marital-info" ng-pattern="^(\d{5}|\d{4})(?:[-\s]\d{4})?$" ng-model="house.ZipCode" name="ZipCode" placeholder="Zip Code" type="text" value="">
+                                <input class="marital-info" ng-pattern="/^(\d{5}|\d{4})(?:[-\s]\d{4})?$/" ng-model="house.ZipCode" name="ZipCode" placeholder="Zip Code" type="text" value="">
                                 <div ng-show="houseForm.ZipCode.$dirty && houseForm.ZipCode.$invalid">
                                     <span class="form-error" ng-show="houseForm.ZipCode.$error.pattern">This field must be a valid zip code.</span>
                                 </div>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">The mortgage holder on the house</label>
-                                <input class="marital-info" maxlength="100" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="house.MortgageOwner" name="MortgageOwner" placeholder="Mortgage holder" type="text" value="">
+                                <input class="marital-info" maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.MortgageOwner" name="MortgageOwner" placeholder="Mortgage holder" type="text" value="">
                                 <div ng-show="houseForm.MortgageOwner.$dirty && houseForm.MortgageOwner.$invalid">
                                     <span class="form-error" ng-show="houseForm.MortgageOwner.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.MortgageOwner.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">How will you divide the marital home?</label>
-                                <textarea class="marital-info input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="house.Divide" name="Divide" placeholder="Describe how assets and liabilities related to the marital home will be divided. Keep in mind how issues like the amount necessary to pay off the existing mortgage, current equity in the home, and the costs to maintain the home, or any need for the mortgage to be refinanced will be addressed." rows="2"></textarea>
+                                <textarea class="marital-info input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Divide" name="Divide" placeholder="Describe how assets and liabilities related to the marital home will be divided. Keep in mind how issues like the amount necessary to pay off the existing mortgage, current equity in the home, and the costs to maintain the home, or any need for the mortgage to be refinanced will be addressed." rows="2"></textarea>
                                 <div ng-show="houseForm.Divide.$dirty && houseForm.Divide.$invalid">
                                     <span class="form-error" ng-show="houseForm.Divide.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.Divide.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>

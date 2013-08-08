@@ -2,14 +2,13 @@
 using System.Linq;
 using BusinessLogic.Contracts;
 using DataInterface;
-using DataLayerContext.Repositories;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class SocialSecurityService : FormService<ISocialSecurityRepository,SocialSecurity,SocialSecurityViewModel>, ISocialSecurityService
+    public class SocialSecurityService : FormService<ISocialSecurityRepository, SocialSecurity>, ISocialSecurityService
     {
         public SocialSecurityService(ISocialSecurityRepository formRepository)
             : base(formRepository)

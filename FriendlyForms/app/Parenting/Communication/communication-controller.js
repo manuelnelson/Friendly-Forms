@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#communicationForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Parenting/Participant/' + $scope.communication.UserId);
+                $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             communicationService.communications.save(null, $scope.communication, function() {
                 menuService.setSubMenuIconClass('Parenting', 'Communication', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.communication.UserId);
+                    $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
             });
         } else {
             communicationService.communications.update({ Id: $scope.communication.Id }, $scope.communication, function() {
                 menuService.setSubMenuIconClass('Parenting', 'Communication', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.communication.UserId);
+                    $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Parenting', 'Communication');
     }
 };
-CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationsService', 'menuService', 'genericService', '$rootScope'];
+CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', '$rootScope'];

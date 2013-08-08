@@ -8,7 +8,7 @@ using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class DeviationsFormService : FormService<IDeviationsFormRepository, DeviationsForm, DeviationsFormViewModel>, IDeviationsFormService
+    public class DeviationsFormService : FormService<IDeviationsFormRepository, DeviationsForm>, IDeviationsFormService
     {
         private IDeviationsFormRepository DeviationsFormRepository { get; set; }
 

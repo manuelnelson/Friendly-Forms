@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#spousalForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Spousal/' + $scope.spousal.UserId);
+                $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             spousalService.spousals.save(null, $scope.spousal, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Spousal', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Spousal/' + $scope.spousal.UserId);
+                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
             });
         } else {
             spousalService.spousals.update({ Id: $scope.spousal.Id }, $scope.spousal, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Spousal', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Spousal/' + $scope.spousal.UserId);
+                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Domestic', 'Spousal');
     }
 };
-SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalsService', 'menuService', 'genericService', '$rootScope'];
+SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', '$rootScope'];

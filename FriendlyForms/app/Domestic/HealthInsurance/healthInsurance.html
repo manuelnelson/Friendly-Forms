@@ -23,10 +23,10 @@
                                 <span class="form-error" ng-show="healthInsuranceForm.Health.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group health-detail hide">
+                        <div class="control-group" ng-show="healthInsurance.Health == 2">
                             <label class="form-question">
                                 How will health insurance be funded?</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="healthInsurance.HealthDescription" name="HealthDescription" placeholder="Details" rows="2"></textarea>
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="healthInsurance.HealthDescription" name="HealthDescription" placeholder="Details" rows="2"></textarea>
                             <div ng-show="healthInsuranceForm.HealthDescription.$dirty && healthInsuranceForm.HealthDescription.$invalid">
                                 <span class="form-error" ng-show="healthInsuranceForm.HealthDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>

@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#healthInsuranceForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Participant/' + $scope.healthInsurance.UserId);
+                $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             healthInsuranceService.healthInsurances.save(null, $scope.healthInsurance, function() {
                 menuService.setSubMenuIconClass('Domestic', 'HealthInsurance', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.healthInsurance.UserId);
+                    $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
             });
         } else {
             healthInsuranceService.healthInsurances.update({ Id: $scope.healthInsurance.Id }, $scope.healthInsurance, function() {
                 menuService.setSubMenuIconClass('Domestic', 'HealthInsurance', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.healthInsurance.UserId);
+                    $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Domestic', 'HealthInsurance');
     }
 };
-HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsurancesService', 'menuService', 'genericService', '$rootScope'];
+HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', '$rootScope'];

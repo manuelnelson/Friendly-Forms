@@ -1,13 +1,21 @@
 ﻿using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
-using Models;
 
 namespace BusinessLogic
 {
     public class MenuService : IMenuService
     {
-        public List<MenuItem> GetMenuList(string route, User user, bool isAuthenticated = false)
+        private IChildService ChildService { get; set; }
+        private IChildFormService ChildFormService { get; set; }
+        private ICourtService CourtService { get; set; }
+        public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService)
+        {
+            ChildService = childService;
+            ChildFormService = childFormService;
+            CourtService = courtService;
+        }
+        public List<MenuItem> Get(string route, long userId, bool isAuthenticated = false)
         {
             //Always has Home Link
             var menuList = new List<MenuItem>
@@ -24,21 +32,23 @@ namespace BusinessLogic
             {
                 return menuList;
             }
-            if (UserIsAtStarterStage(user))
+            if (UserIsAtStarterStage(userId))
             {
-                menuList.Add(GetStarterMenu(user.Id));
+                var starterMenu = GetStarterMenu(userId);
+                //Get Completed Status of forms for the menu
+                menuList.Add(starterMenu);
             }
             else
             {
-                menuList.Add(GetMediationMenu(user.Id));
-                if (UserHasChildren(user))
+                menuList.Add(GetMediationMenu(userId));
+                if (UserHasChildren(userId))
                 {
-                    menuList.Add(GetParentingPlanMenu(user.Id));
-                    menuList.Add(GetFinancialFormMenu(user.Id));
+                    menuList.Add(GetParentingPlanMenu(userId));
+                    menuList.Add(GetFinancialFormMenu(userId));
                 }
             }
 
-            menuList.Add(new MenuItem()
+            menuList.Add(new MenuItem
                 {
                     itemClass = "",
                     path = "/Account/LogOff",
@@ -49,44 +59,58 @@ namespace BusinessLogic
         }
 
         #region Menu Logic Helpers
-        private bool UserHasChildren(User user)
+        private bool UserHasChildren(long userId)
         {
-            return true;
+            var childrenViewModel = ChildService.GetByUserId(userId);
+            return childrenViewModel.Children.Count > 0;
         }
 
-        private bool UserIsAtStarterStage(User user)
+        private bool UserIsAtStarterStage(long userId)
         {
+            var childForm = ChildFormService.GetByUserId(userId);
+            if (childForm.UserId == userId)
+                return false;
             return true;
         }
         #endregion
 
+        private enum MenuType
+        {
+            Starter,
+            DomesticMediation,
+            Parenting,
+            Financial
+        };
         #region GetMenus
         private MenuItem GetStarterMenu(long userId)
         {
-            var menuList = new List<MenuItem>
+            var menuList = new List<FormMenuItem>
                 {
-                    new MenuItem()
-                        {
-                            formName = "Court",
-                            text = "Court",
-                            iconClass = "",
-                            path = "/Starter/Court/" + userId,
-                            itemClass = ""
-                        },
-                    new MenuItem()
+                    new FormMenuItem
+                    {
+                        formName = "Court",
+                        text = "Court",
+                        iconClass = "",
+                        path = "/Starter/Court/" + userId,     
+                        pathIdentifier = "Court",
+                        itemClass = ""
+                    },
+                    new FormMenuItem
                         {
                             formName = "Participant",
                             text = "Participants",
                             iconClass = "",
                             path = "/Starter/Participant/" + userId,
+                            pathIdentifier = "Participant",
                             itemClass = ""
                         },
-                    new MenuItem()
+                    new FormMenuItem
                         {
                             formName = "Children",
                             text = "Children",
                             iconClass = "",
                             path = "/Starter/Children/" + userId,
+                            pathIdentifier = "Children",
                             itemClass = ""
                         }
                 };
@@ -94,6 +118,7 @@ namespace BusinessLogic
                 {
                     itemClass = "submenu",
                     path = "",
+                    pathIdentifier = "Starter",
                     iconClass = "icon icon-th-list",
                     text = "Starter",
                     showSubMenu = false,
@@ -102,78 +127,78 @@ namespace BusinessLogic
         }
         private MenuItem GetMediationMenu(long userId)
         {
-            var menuList = new List<MenuItem>
+            var menuList = new List<FormMenuItem>
                 {
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "House",
                             text = "Marital House",
                             iconClass = "",
                             path = "/Domestic/House/" + userId,
+                            pathIdentifier = "House",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Property",
                             text = "Personal Property",
                             iconClass = "",
                             path = "/Domestic/Property/" + userId,
+                            pathIdentifier = "Property",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Vehicle",
                             text = "Vehicles",
                             iconClass = "",
                             path = "/Domestic/Vehicle/" + userId,
+                            pathIdentifier = "Vehicle",
                             itemClass = ""
                         },
-                    new MenuItem
-                        {
-                            formName = "Children",
-                            text = "Children",
-                            iconClass = "",
-                            path = "/Domestic/Children/" + userId,
-                            itemClass = ""
-                        },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Debt",
                             text = "Debt",
                             iconClass = "",
                             path = "/Domestic/Debt/" + userId,
+                            pathIdentifier = "Debt",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Asset",
                             text = "Assets",
                             iconClass = "",
                             path = "/Domestic/Asset/" + userId,
+                            pathIdentifier = "Asset",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "HealthInsurance",
                             text = "Health Insurance",
                             iconClass = "",
                             path = "/Domestic/HealthInsurance/" + userId,
+                            pathIdentifier = "HealthInsurance",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Spousal",
                             text = "Spousal Support",
                             iconClass = "",
                             path = "/Domestic/Spousal/" + userId,
+                            pathIdentifier = "Spousal",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Tax",
                             text = "Taxes",
                             iconClass = "",
                             path = "/Domestic/Tax/" + userId,
+                            pathIdentifier = "Tax",
                             itemClass = ""
                         },
                 };
@@ -181,6 +206,7 @@ namespace BusinessLogic
             {
                 itemClass = "submenu",
                 path = "",
+                pathIdentifier = "Domestic",
                 iconClass = "icon icon-th-list",
                 text = "Mediation Agreement",
                 showSubMenu = false,
@@ -189,70 +215,78 @@ namespace BusinessLogic
         }
         private MenuItem GetParentingPlanMenu(long userId)
         {
-            var menuList = new List<MenuItem>
+            var menuList = new List<FormMenuItem>
                 {
-                    new MenuItem
+                    new FormMenuItem
                         {
-                            formName = "Supervision",
+                            formName = "Privacy",
                             text = "Supervision",
                             iconClass = "",
                             path = "/Parenting/Supervision/" + userId,
+                            pathIdentifier = "Supervision",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Information",
                             text = "Information",
                             iconClass = "",
                             path = "/Parenting/Information/" + userId,
+                            pathIdentifier = "Information",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Decisions",
                             text = "Decisions",
                             iconClass = "",
-                            path = "/Parenting/Vehicle/" + userId,
+                            path = "/Parenting/Decision/" + userId,
+                            pathIdentifier = "Decision",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Responsibility",
                             text = "Responsibility",
                             iconClass = "",
                             path = "/Parenting/Responsibility/" + userId,
+                            pathIdentifier = "Responsibility",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Communication",
                             text = "Communication",
                             iconClass = "",
                             path = "/Parenting/Communication/" + userId,
+                            pathIdentifier = "Communication",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Schedule",
                             text = "Schedule",
                             iconClass = "",
                             path = "/Parenting/Schedule/" + userId,
+                            pathIdentifier = "Schedule",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Holidays",
                             text = "Holidays",
                             iconClass = "",
-                            path = "/Parenting/Holidays/" + userId,
+                            path = "/Parenting/Holiday/" + userId,
+                            pathIdentifier = "Holiday",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Addendum",
                             text = "Special Considerations",
                             iconClass = "",
                             path = "/Parenting/Addendum/" + userId,
+                            pathIdentifier = "Addendum",
                             itemClass = ""
                         },
                 };
@@ -260,6 +294,7 @@ namespace BusinessLogic
             {
                 itemClass = "submenu",
                 path = "",
+                pathIdentifier = "Parenting",
                 iconClass = "icon icon-th-list",
                 text = "Parenting Plan",
                 showSubMenu = false,
@@ -270,102 +305,114 @@ namespace BusinessLogic
         }
         private MenuItem GetFinancialFormMenu(long userId)
         {
-            var menuList = new List<MenuItem>
+            var menuList = new List<FormMenuItem>
                 {
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "ChildCare",
                             text = "Child Care",
                             iconClass = "",
                             path = "/Financial/ChildCare/" + userId,
+                            pathIdentifier = "ChildCare",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "ExtraExpenses",
                             text = "Extra Expenses",
                             iconClass = "",
-                            path = "/Financial/ExtraExpenses/" + userId,
+                            path = "/Financial/ExtraExpense/" + userId,
+                            pathIdentifier = "ExtraExpense",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Health",
                             text = "Health Insurance",
                             iconClass = "",
                             path = "/Financial/Health/" + userId,
+                            pathIdentifier = "Health",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Income",
                             text = "Income (Father)",
                             iconClass = "",
-                            path = "/Financial/Income/" + userId,
+                            path = "/Financial/Income/" + userId + "/false",
+                            pathIdentifier = "Income",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "SocialSecurity",
                             text = "Social Security (Father)",
                             iconClass = "",
-                            path = "/Financial/SocialSecurity/" + userId,
+                            path = "/Financial/SocialSecurity/" + userId + "/false",
+                            pathIdentifier = "SocialSecurity",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Support",
                             text = "Preexisting Support (Father)",
                             iconClass = "",
-                            path = "/Financial/Support/" + userId,
+                            path = "/Financial/Support/" + userId + "/false",
+                            pathIdentifier = "Support",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "OtherChildren",
                             text = "Other Children (Father)",
                             iconClass = "",
-                            path = "/Financial/OtherChildren/" + userId,
+                            path = "/Financial/OtherChildren/" + userId + "/false",
+                            pathIdentifier = "OtherChildren",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Income",
                             text = "Income (Mother)",
                             iconClass = "",
-                            path = "/Financial/Income/" + userId,
+                            path = "/Financial/Income/" + userId + "/true",
+                            pathIdentifier = "Income",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "SocialSecurity",
                             text = "Social Security (Mother)",
                             iconClass = "",
-                            path = "/Financial/SocialSecurity/" + userId,
+                            path = "/Financial/SocialSecurity/" + userId+ "/true",
+                            pathIdentifier = "SocialSecurity",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Support",
                             text = "Preexisting Support (Mother)",
                             iconClass = "",
-                            path = "/Financial/Support/" + userId,
+                            path = "/Financial/Support/" + userId + "/true",
+                            pathIdentifier = "Support",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "OtherChildren",
                             text = "Other Children (Mother)",
                             iconClass = "",
-                            path = "/Financial/OtherChildren/" + userId,
+                            path = "/Financial/OtherChildren/" + userId + "/true",
+                            pathIdentifier = "OtherChildren",
                             itemClass = ""
                         },
-                    new MenuItem
+                    new FormMenuItem
                         {
                             formName = "Deviations",
                             text = "Deviations",
                             iconClass = "",
                             path = "/Financial/Deviations/" + userId,
+                            pathIdentifier = "Deviations",
                             itemClass = ""
                         },
                 };
@@ -373,12 +420,31 @@ namespace BusinessLogic
             {
                 itemClass = "submenu",
                 path = "",
+                pathIdentifier = "Financial",
                 iconClass = "icon icon-th-list",
-                text = "Mediation Agreement",
+                text = "Financial Form",
                 showSubMenu = false,
                 subMenuItems = menuList
             };
 
+        }
+        #endregion
+
+        #region GetCompletedStatus
+        private List<MenuItem> GetCompletedFormStatus(MenuType menuType, List<MenuItem> menuItems)
+        {
+            switch (menuType)
+            {
+                case MenuType.Starter:
+                    return GetStarterStatus(menuItems);
+                default:
+                    break;
+            }
+            return menuItems;
+        }
+        private List<MenuItem> GetStarterStatus(List<MenuItem> menuItems)
+        {
+            return menuItems;
         }
         #endregion
     }

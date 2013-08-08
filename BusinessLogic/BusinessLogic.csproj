@@ -157,6 +157,7 @@
     <Compile Include="Contracts\IUserService.cs" />
     <Compile Include="Contracts\IVehicleFormService.cs" />
     <Compile Include="Contracts\IVehicleService.cs" />
+    <Compile Include="Models\FormMenuItem.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="CountyService.cs" />
     <Compile Include="CourtService.cs" />

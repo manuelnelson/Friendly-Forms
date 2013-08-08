@@ -24,11 +24,22 @@
                                 <span class="form-error" ng-show="healthForm.ProvideHealth.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div ng-model="health.health-provide">
-                            <label class="informative">
-                                If you do not know the monthly per child amount (eg If the monthly amount attributed to the child(ren)s 
-                                    benefit is unknown), then select the button labeled "Prorate" below.</label>
+                        <div ng-show="health.ProvideHealth == 1">
                             <div class="control-group">
+                                <label class="informative">
+                                    Do you know the monthly health insurance amount per child (i.e. If the monthly amount attributed to the child(ren)s 
+                                    benefit is known)?</label>
+                                <label class="radio">
+                                    Yes
+                                <input required ng-model="health.Prorate" name="Prorate" type="radio" value="1"></label>
+                                <label class="radio">
+                                    No
+                                <input required ng-model="health.Prorate" name="Prorate" type="radio" value="2"></label>
+                                <div ng-show="healthForm.Prorate.$dirty && healthForm.Prorate.$invalid">
+                                    <span class="form-error" ng-show="healthForm.Prorate.$error.required">This field is required</span>
+                                </div>
+                            </div>
+                            <div class="control-group" ng-show="health.Prorate == 1">
                                 <label class="form-question">
                                     How will health insurance be funded?</label>
                                 <label class="checkbox">

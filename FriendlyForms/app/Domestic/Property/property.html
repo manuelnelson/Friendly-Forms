@@ -23,9 +23,9 @@
                                 <span class="form-error" ng-show="propertyForm.RealEstate.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group real-estate-details hide">
+                        <div class="control-group" ng-show="property.RealEstate == 1">
                             <label class="form-question">Provide details of additional property and how it will be divided.</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="property.RealEstateDescription" name="RealEstateDescription" placeholder="Details" rows="2"></textarea>
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="property.RealEstateDescription" name="RealEstateDescription" placeholder="Details" rows="2"></textarea>
                             <div ng-show="propertyForm.RealEstateDescription.$dirty && propertyForm.RealEstateDescription.$invalid">
                                 <span class="form-error" ng-show="propertyForm.RealEstateDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
@@ -46,8 +46,8 @@
                                 <span class="form-error" ng-show="propertyForm.PersonalProperty.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group property-details hide">
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="property.DividingProperty" name="DividingProperty" placeholder="Describe how personal property such as jewelry, home furnishings etc will be divided." rows="2"></textarea>
+                        <div class="control-group" ng-show="property.PersonalProperty == 3">
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="property.DividingProperty" name="DividingProperty" placeholder="Describe how personal property such as jewelry, home furnishings etc will be divided." rows="2"></textarea>
                             <div ng-show="propertyForm.DividingProperty.$dirty && propertyForm.DividingProperty.$invalid">
                                 <span class="form-error" ng-show="propertyForm.DividingProperty.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>

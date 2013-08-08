@@ -36,4 +36,4 @@
         menuService.setActive('Parenting', 'Addendum');
     }
 };
-AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumsService', 'menuService', 'genericService', '$rootScope'];
+AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', '$rootScope'];

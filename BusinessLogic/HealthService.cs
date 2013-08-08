@@ -1,11 +1,10 @@
 ﻿using BusinessLogic.Contracts;
 using DataInterface;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class HealthService : FormService<IHealthRepository, Health, HealthViewModel>, IHealthService
+    public class HealthService : FormService<IHealthRepository, Health>, IHealthService
     {
         private IHealthRepository HealthRepository { get; set; }
 

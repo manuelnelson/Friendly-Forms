@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#responsibilityForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Parenting/Participant/' + $scope.responsibility.UserId);
+                $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             responsibilityService.responsibilities.save(null, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass('Parenting', 'Responsibility', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.responsibility.UserId);
+                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
             });
         } else {
             responsibilityService.responsibilities.update({ Id: $scope.responsibility.Id }, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass('Parenting', 'Responsibility', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.responsibility.UserId);
+                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Parenting', 'Responsibility');
     }
 };
-ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilitiesService', 'menuService', 'genericService', '$rootScope'];
+ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];

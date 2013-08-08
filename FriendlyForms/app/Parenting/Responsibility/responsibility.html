@@ -57,26 +57,28 @@
                                 <span class="form-error" ng-show="responsibilityForm.TransportationCosts.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group responsibility-percentage hide">
-                            <label class="form-question">
-                                Father's percentage</label>
-                            <input ng-model="responsibility.FatherPercentage" class="input-mini" number name="FatherPercentage" placeholder="%" type="text" value="0">
-                            <div ng-show="responsibilityForm.FatherPercentage.$dirty && responsibilityForm.FatherPercentage.$invalid">
-                                <span class="form-error" ng-show="responsibilityForm.FatherPercentage.$error.number">This field must be a number</span>
+                        <div ng-show="responsibility.TransportationCosts == 3">
+                            <div class="control-group">
+                                <label class="form-question">
+                                    Father's percentage</label>
+                                <input ng-model="responsibility.FatherPercentage" class="input-mini" number name="FatherPercentage" placeholder="%" type="text" value="0">
+                                <div ng-show="responsibilityForm.FatherPercentage.$dirty && responsibilityForm.FatherPercentage.$invalid">
+                                    <span class="form-error" ng-show="responsibilityForm.FatherPercentage.$error.number">This field must be a number</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="form-question">
+                                    Mother's percentage</label>
+                                <input ng-model="responsibility.MotherPercentage" class="input-mini" number name="MotherPercentage" placeholder="%" type="text" value="0">
+                                <div ng-show="responsibilityForm.MotherPercentage.$dirty && responsibilityForm.MotherPercentage.$invalid">
+                                    <span class="form-error" ng-show="responsibilityForm.MotherPercentage.$error.number">This field must be a number</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="control-group responsibility-percentage hide">
-                            <label class="form-question">
-                                Mother's percentage</label>
-                            <input ng-model="responsibility.MotherPercentage" class="input-mini" number name="MotherPercentage" placeholder="%" type="text" value="0">
-                            <div ng-show="responsibilityForm.MotherPercentage.$dirty && responsibilityForm.MotherPercentage.$invalid">
-                                <span class="form-error" ng-show="responsibilityForm.MotherPercentage.$error.number">This field must be a number</span>
-                            </div>
-                        </div>
-                        <div class="control-group responsibility-cost hide">
+                        <div class="control-group" ng-show="responsibility.TransportationCosts == 4">
                             <label class="form-question">
                                 The parties agree that visitation-related expenses will be paid as follows:</label>
-                            <textarea ng-model="responsibility.OtherDetails" class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" name="OtherDetails" placeholder="Description" rows="2"></textarea>
+                            <textarea ng-model="responsibility.OtherDetails" class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="OtherDetails" placeholder="Description" rows="2"></textarea>
                             <div ng-show="responsibilityForm.OtherDetails.$dirty && responsibilityForm.OtherDetails.$invalid">
                                 <span class="form-error" ng-show="responsibilityForm.OtherDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>

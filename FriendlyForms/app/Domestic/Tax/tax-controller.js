@@ -36,4 +36,4 @@
         menuService.setActive('Domestic', 'Tax');
     }
 };
-TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxesService', 'menuService', 'genericService', '$rootScope'];
+TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', '$rootScope'];

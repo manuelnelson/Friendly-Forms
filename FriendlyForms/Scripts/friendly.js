@@ -12486,9 +12486,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 						'</div>';
 
 }( window.jQuery );
-;//     Underscore.js 1.4.4
+;//     Underscore.js 1.5.1
 //     http://underscorejs.org
-//     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud Inc.
+//     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
 
 (function() {
@@ -12509,11 +12509,12 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
 
   // Create quick reference variables for speed access to core prototypes.
-  var push             = ArrayProto.push,
-      slice            = ArrayProto.slice,
-      concat           = ArrayProto.concat,
-      toString         = ObjProto.toString,
-      hasOwnProperty   = ObjProto.hasOwnProperty;
+  var
+    push             = ArrayProto.push,
+    slice            = ArrayProto.slice,
+    concat           = ArrayProto.concat,
+    toString         = ObjProto.toString,
+    hasOwnProperty   = ObjProto.hasOwnProperty;
 
   // All **ECMAScript 5** native function implementations that we hope to use
   // are declared here.
@@ -12552,7 +12553,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   // Current version.
-  _.VERSION = '1.4.4';
+  _.VERSION = '1.5.1';
 
   // Collection Functions
   // --------------------
@@ -12584,7 +12585,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     if (obj == null) return results;
     if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
     each(obj, function(value, index, list) {
-      results[results.length] = iterator.call(context, value, index, list);
+      results.push(iterator.call(context, value, index, list));
     });
     return results;
   };
@@ -12659,7 +12660,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     if (obj == null) return results;
     if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context);
     each(obj, function(value, index, list) {
-      if (iterator.call(context, value, index, list)) results[results.length] = value;
+      if (iterator.call(context, value, index, list)) results.push(value);
     });
     return results;
   };
@@ -12743,7 +12744,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
   // Return the maximum element or (element-based computation).
   // Can't optimize arrays of integers longer than 65,535 elements.
-  // See: https://bugs.webkit.org/show_bug.cgi?id=80797
+  // See [WebKit Bug 80797](https://bugs.webkit.org/show_bug.cgi?id=80797)
   _.max = function(obj, iterator, context) {
     if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
       return Math.max.apply(Math, obj);
@@ -12752,7 +12753,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     var result = {computed : -Infinity, value: -Infinity};
     each(obj, function(value, index, list) {
       var computed = iterator ? iterator.call(context, value, index, list) : value;
-      computed >= result.computed && (result = {value : value, computed : computed});
+      computed > result.computed && (result = {value : value, computed : computed});
     });
     return result.value;
   };
@@ -12812,7 +12813,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   // An internal function used for aggregate "group by" operations.
   var group = function(obj, value, context, behavior) {
     var result = {};
-    var iterator = lookupIterator(value || _.identity);
+    var iterator = lookupIterator(value == null ? _.identity : value);
     each(obj, function(value, index) {
       var key = iterator.call(context, value, index, obj);
       behavior(result, key, value);
@@ -12851,7 +12852,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     return low;
   };
 
-  // Safely convert anything iterable into a real, live array.
+  // Safely create a real, live array from anything iterable.
   _.toArray = function(obj) {
     if (!obj) return [];
     if (_.isArray(obj)) return slice.call(obj);
@@ -12910,8 +12911,11 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
   // Internal implementation of a recursive `flatten` function.
   var flatten = function(input, shallow, output) {
+    if (shallow && _.every(input, _.isArray)) {
+      return concat.apply(output, input);
+    }
     each(input, function(value) {
-      if (_.isArray(value)) {
+      if (_.isArray(value) || _.isArguments(value)) {
         shallow ? push.apply(output, value) : flatten(value, shallow, output);
       } else {
         output.push(value);
@@ -12954,7 +12958,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   // Produce an array that contains the union: each distinct element from all of
   // the passed-in arrays.
   _.union = function() {
-    return _.uniq(concat.apply(ArrayProto, arguments));
+    return _.uniq(_.flatten(arguments, true));
   };
 
   // Produce an array that contains every item shared between all the
@@ -12978,11 +12982,10 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   // Zip together multiple lists into a single array -- elements that share
   // an index go together.
   _.zip = function() {
-    var args = slice.call(arguments);
-    var length = _.max(_.pluck(args, 'length'));
+    var length = _.max(_.pluck(arguments, "length").concat(0));
     var results = new Array(length);
     for (var i = 0; i < length; i++) {
-      results[i] = _.pluck(args, "" + i);
+      results[i] = _.pluck(arguments, '' + i);
     }
     return results;
   };
@@ -13062,14 +13065,25 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   // Function (ahem) Functions
   // ------------------
 
+  // Reusable constructor function for prototype setting.
+  var ctor = function(){};
+
   // Create a function bound to a given object (assigning `this`, and arguments,
   // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
   // available.
   _.bind = function(func, context) {
-    if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-    var args = slice.call(arguments, 2);
-    return function() {
-      return func.apply(context, args.concat(slice.call(arguments)));
+    var args, bound;
+    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    if (!_.isFunction(func)) throw new TypeError;
+    args = slice.call(arguments, 2);
+    return bound = function() {
+      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
+      ctor.prototype = func.prototype;
+      var self = new ctor;
+      ctor.prototype = null;
+      var result = func.apply(self, args.concat(slice.call(arguments)));
+      if (Object(result) === result) return result;
+      return self;
     };
   };
 
@@ -13115,17 +13129,23 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
-  // during a given window of time.
-  _.throttle = function(func, wait) {
-    var context, args, timeout, result;
+  // during a given window of time. Normally, the throttled function will run
+  // as much as it can, without ever going more than once per `wait` duration;
+  // but if you'd like to disable the execution on the leading edge, pass
+  // `{leading: false}`. To disable execution on the trailing edge, ditto.
+  _.throttle = function(func, wait, options) {
+    var context, args, result;
+    var timeout = null;
     var previous = 0;
+    options || (options = {});
     var later = function() {
-      previous = new Date;
+      previous = options.leading === false ? 0 : new Date;
       timeout = null;
       result = func.apply(context, args);
     };
     return function() {
       var now = new Date;
+      if (!previous && options.leading === false) previous = now;
       var remaining = wait - (now - previous);
       context = this;
       args = arguments;
@@ -13134,7 +13154,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         timeout = null;
         previous = now;
         result = func.apply(context, args);
-      } else if (!timeout) {
+      } else if (!timeout && options.trailing !== false) {
         timeout = setTimeout(later, remaining);
       }
       return result;
@@ -13146,7 +13166,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   // N milliseconds. If `immediate` is passed, trigger the function on the
   // leading edge, instead of the trailing.
   _.debounce = function(func, wait, immediate) {
-    var timeout, result;
+    var result;
+    var timeout = null;
     return function() {
       var context = this, args = arguments;
       var later = function() {
@@ -13200,7 +13221,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
   // Returns a function that will only be executed after being called N times.
   _.after = function(times, func) {
-    if (times <= 0) return func();
     return function() {
       if (--times < 1) {
         return func.apply(this, arguments);
@@ -13216,7 +13236,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   _.keys = nativeKeys || function(obj) {
     if (obj !== Object(obj)) throw new TypeError('Invalid object');
     var keys = [];
-    for (var key in obj) if (_.has(obj, key)) keys[keys.length] = key;
+    for (var key in obj) if (_.has(obj, key)) keys.push(key);
     return keys;
   };
 
@@ -13288,7 +13308,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     each(slice.call(arguments, 1), function(source) {
       if (source) {
         for (var prop in source) {
-          if (obj[prop] == null) obj[prop] = source[prop];
+          if (obj[prop] === void 0) obj[prop] = source[prop];
         }
       }
     });
@@ -13312,7 +13332,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   // Internal recursive comparison function for `isEqual`.
   var eq = function(a, b, aStack, bStack) {
     // Identical objects are equal. `0 === -0`, but they aren't identical.
-    // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
+    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
     if (a === b) return a !== 0 || 1 / a == 1 / b;
     // A strict comparison is necessary because `null == undefined`.
     if (a == null || b == null) return a === b;
@@ -13354,6 +13374,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       // unique nested structures.
       if (aStack[length] == a) return bStack[length] == b;
     }
+    // Objects with different constructors are not equivalent, but `Object`s
+    // from different frames are.
+    var aCtor = a.constructor, bCtor = b.constructor;
+    if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
+                             _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
+      return false;
+    }
     // Add the first object to the stack of traversed objects.
     aStack.push(a);
     bStack.push(b);
@@ -13370,13 +13397,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         }
       }
     } else {
-      // Objects with different constructors are not equivalent, but `Object`s
-      // from different frames are.
-      var aCtor = a.constructor, bCtor = b.constructor;
-      if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                               _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
-        return false;
-      }
       // Deep compare objects.
       for (var key in a) {
         if (_.has(a, key)) {
@@ -13500,7 +13520,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
   // Run a function **n** times.
   _.times = function(n, iterator, context) {
-    var accum = Array(n);
+    var accum = Array(Math.max(0, n));
     for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
     return accum;
   };
@@ -13543,8 +13563,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
   });
 
-  // If the value of the named property is a function then invoke it;
-  // otherwise, return it.
+  // If the value of the named `property` is a function then invoke it with the
+  // `object` as context; otherwise, return it.
   _.result = function(object, property) {
     if (object == null) return void 0;
     var value = object[property];
@@ -32491,6 +32511,24 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui"], ["$routeProvider
         when('/Starter/Court/:userId', { controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
         when('/Starter/Participant/:userId', { controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
         when('/Starter/Children/:userId', { controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
+        when('/Domestic/Asset/:userId', { controller: AssetCtrl, templateUrl: '/app/Domestic/Asset/asset.html' }).
+        when('/Domestic/Debt/:userId', { controller: DebtCtrl, templateUrl: '/app/Domestic/Debt/debt.html' }).
+        when('/Domestic/HealthInsurance/:userId', { controller: HealthInsuranceCtrl, templateUrl: '/app/Domestic/HealthInsurance/healthInsurance.html' }).
+        when('/Domestic/House/:userId', { controller: HouseCtrl, templateUrl: '/app/Domestic/House/house.html' }).
+        when('/Domestic/Property/:userId', { controller: PropertyCtrl, templateUrl: '/app/Domestic/Property/Property.html' }).
+        when('/Domestic/Spousal/:userId', { controller: SpousalCtrl, templateUrl: '/app/Domestic/Spousal/Spousal.html' }).
+        when('/Domestic/Tax/:userId', { controller: TaxCtrl, templateUrl: '/app/Domestic/Tax/Tax.html' }).
+        when('/Domestic/Vehicle/:userId', { controller: VehicleCtrl, templateUrl: '/app/Domestic/Vehicle/Vehicle.html' }).
+        when('/Parenting/Supervision/:userId', { controller: PrivacyCtrl, templateUrl: '/app/Parenting/Privacy/Privacy.html' }).
+        when('/Parenting/Information/:userId', { controller: InformationCtrl, templateUrl: '/app/Parenting/Information/Information.html' }).
+        when('/Parenting/Decision/:userId', { controller: DecisionCtrl, templateUrl: '/app/Parenting/Decision/Decision.html' }).
+        when('/Parenting/Responsibility/:userId', { controller: ResponsibilityCtrl, templateUrl: '/app/Parenting/Responsibility/Responsibility.html' }).
+        when('/Parenting/Communication/:userId', { controller: CommunicationCtrl, templateUrl: '/app/Parenting/Communication/Communication.html' }).
+        when('/Parenting/Schedule/:userId', { controller: ScheduleCtrl, templateUrl: '/app/Parenting/Schedule/Schedule.html' }).
+        when('/Parenting/Holiday/:userId', { controller: HolidayCtrl, templateUrl: '/app/Parenting/Holiday/Holiday.html' }).
+        when('/Parenting/Addendum/:userId', { controller: AddendumCtrl, templateUrl: '/app/Parenting/Addendum/Addendum.html' }).
+        when('/Financial/ChildCare/:userId/:isOtherParent', { controller: ChildCareCtrl, templateUrl: '/app/Financial/ChildCare/ChildCare.html' }).
+        when('/Financial/HealthInsurance/:userId/:isOtherParent', { controller: HealthInsuranceCtrl, templateUrl: '/app/Financial/HealthInsurance/HealthInsurance.html' }).
         when('/Account/Login/', { controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Register/', { controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
         when('/', { controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
@@ -32541,6 +32579,120 @@ FormsApp.directive('integer', function () {
             });
             return model;
         },
+    };
+    return service;
+});
+;//Loading contoller
+var LoadingCtrl = function ($scope, loadingService) {
+    $scope.message = Application.properties.defaultMessage;
+    $scope.$watch(function () { return loadingService.isLoading(); }, function (value) {
+        $scope.message = loadingService.message;
+        $scope.loading = value;
+    });
+};
+LoadingCtrl.$inject = ['$scope', 'loadingService'];
+;FormsApp.factory('loadingService', function () {
+    var service = {
+        requestCount: 0,
+        isLoading: function () {
+            return service.requestCount > 0;
+        },
+        //use these to manually show loading
+        increment: function () {
+            service.requestCount++;
+        },
+        decrement: function () {
+            service.requestCount--;
+            service.message = Application.properties.defaultMessage;
+        },
+        message: Application.properties.defaultMessage
+    };
+    return service;
+});
+
+FormsApp.factory('onStartInterceptor', ['loadingService', function (loadingService) {
+    return function (data, headersGetter) {
+        loadingService.requestCount++;
+        return data;
+    };
+}]);
+
+FormsApp.factory('onCompleteInterceptor', ['loadingService', 'messageService', function (loadingService, messageService) {
+    return function (promise) {
+        //successful response
+        var decrementRequestCount = function (response) {
+            loadingService.requestCount--;
+            //always return to default message
+            loadingService.message = Application.properties.defaultMessage;
+            return response;
+        };
+        //Error
+        var decrementRequestCountError = function (response) {
+            loadingService.requestCount--;
+            //return to default message for next loading... call
+            loadingService.message = Application.properties.defaultMessage;
+            //show error message
+            messageService.handleError(response);
+            return response;
+        };
+        return promise.then(decrementRequestCount, decrementRequestCountError);
+    };
+}]);
+
+FormsApp.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.responseInterceptors.push('onCompleteInterceptor');
+}]);
+
+FormsApp.run(['$http', 'onStartInterceptor', function ($http, onStartInterceptor) {
+    $http.defaults.transformRequest.push(onStartInterceptor);
+}]);
+
+;var MessageCtrl = function ($scope, messageService) {
+    $scope.$watch(function () { return messageService.isShowing(); }, function (value) {
+        $scope.Title = messageService.messageOptions.title;
+        $scope.AlertType = messageService.messageOptions.alertType;
+        $scope.Message = messageService.messageOptions.message;
+        $scope.showMessage = value;
+    });
+    $scope.close = function () {
+        messageService.closeMessage();
+    };
+};
+MessageCtrl.$inject = ['$scope', 'messageService'];
+;////Message Service
+FormsApp.factory('messageService', function () {
+    var service = {
+        messageOptions: {
+            title: '',
+            message: '',
+            alertType: Application.properties.messageType.Warning
+        },
+        showMessage: function (title, message, type) {
+            service.messageOptions.alertType = (typeof type === "undefined") ? Application.properties.messageType.Warning : type;
+            service.messageOptions.title = title;
+            service.messageOptions.message = message;
+            service.show = true;
+        },
+        isShowing: function () {
+            return service.show;
+        },
+        closeMessage: function () {
+            service.show = false;
+        },
+        handleError: function (response) {
+            switch (response.status) {
+                case 400://bad request
+                    //Should have a response status. Parse into json, display message
+                    service.showMessage("Not so fast", response.data.ResponseStatus.Message, Application.properties.messageType.Error);
+                    return false;
+                case 401://unauthorized 
+                    service.showMessage("Unauthorized", "You must be logged in to complete this action. Log in <a href='/Account/LogOn/' title='Log In' >here</a>", Application.properties.messageType.Warning);
+                    return false;
+                default:
+                    service.showMessage("Uh oh!", "Sorry, we could not process your request.  The error has been logged and we will do our best to correct the error asap.", Application.properties.messageType.Error);
+                    return false;
+            }
+        }
     };
     return service;
 });
@@ -32643,54 +32795,1331 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     };
     return service;
 });
-;var ChildrenCtrl = function ($scope, $location, childService, messageService) {
-    $scope.getChildren = function () {
-        childService.query({ format: 'json' }, function (children) {
-            $scope.children = [];
-            $scope.children = $scope.children.concat(children);
-        });
-    };
+;var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, $rootScope) {    
+    //#region properties
+    $scope.continuePressed = false;
+    $scope.storageKey = $location.path();
+    //#endregion
+    
+    //#region intialize
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Starter', 'Children')) {
+        menuService.setActive('Starter', 'Children');
+    }
 
-    $scope.addChild = function () {
-        childService.save($scope.todo, function (task) {
-            $scope.children.push(task);
-            $scope.todo.Task = '';
-        });
-    };
-
-    $scope.delete = function () {
-        var deleteTodos = $.grep($scope.children, function (todo) {
-            return todo.Completed;
-        });
-        var deleteIds = [];
-        angular.forEach(deleteTodos, function (value, key) {
-            deleteIds.push(value.Id);
-        });
-        childService.deleteAll({
-            format: 'json',
-            Ids: deleteIds
-        }, function () {
-            var keepTodos = $.grep($scope.children, function (todo) {
-                return !todo.Completed;
-            });
-            $scope.children = [];
-            $scope.children = keepTodos;
-        });
-    };
-    $scope.getChildren();
-};
-//Default service injection doesn't work with minification, so a manual injection is necessary. The one liner injection
-//TodoApp.controller('TodoListCtrl', ['$scope', '$location', 'todoService', 'loadingService', 'messageService', function ($scope, $location, todoService, loadingService, messageService) { ... }]);
-//doesn't seem to work for me as I'd prefer this 
-ChildrenCtrl.$inject = ['$scope', '$location', 'childService', 'messageService'];
-;//Todoservice
-FormsApp.factory('childService', ['$resource', function ($resource) {
-    return $resource('/api/child/:Id', { Id: '@Id' },
-    {
-        update: { method: 'PUT' },
-        deleteAll: { method: 'DELETE' }
+    childService.childForm.get({ UserId: $routeParams.userId }, function (data) {
+        if (typeof data.Id == 'undefined' || data.Id == 0) {
+            //see if garlic has something stored            
+            $scope.childForm = $.jStorage.get($scope.storageKey);
+        } else {
+            $scope.childForm = data;
+        }
     });
+    childService.child.get({ UserId: $routeParams.userId }, function (data) {
+        if (data.Children.length == 0)
+            $scope.children = [];
+        else
+            $scope.children = data.Children;
+    });
+    //#endregion
+    
+    //#region event handlers
+    $scope.submit = function () {
+        if ($scope.childForm.$invalid) {
+            menuService.setSubMenuIconClass('Starter', 'Children', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#childForm');
+            $.jStorage.set($scope.storageKey, value);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.childForm.UserId = $routeParams.userId;
+        if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
+            childService.childForm.save(null, $scope.childForm, function () {
+                menuService.setSubMenuIconClass('Starter', 'Children', 'icon-ok icon-green');
+            });
+        } else {
+            childService.childForm.update(null, $scope.childForm, function () {
+                menuService.setSubMenuIconClass('Starter', 'Children', 'icon-ok icon-green');
+            });
+        }
+    };
+    $scope.addChild = function () {
+        $scope.child.UserId = $routeParams.userId;
+        $scope.child.ChildFormId = $scope.childForm.Id;
+        childService.child.save(null, $scope.child, function (data) {
+            menuService.setSubMenuIconClass('Starter', 'Children', 'icon-ok icon-green');
+            $scope.children.push(data.Child);
+        });
+    };
+    $scope.deleteChild = function (child) {
+        childService.child.delete({Id: child.Id}, function () {
+            $scope.children = _.reject($scope.children, function(item) {
+                return item.Id == child.Id;
+            });
+        });
+    };
+    $scope.continue = function() {
+        $scope.continuePressed = true;
+    };
+    $scope.continue = function () {
+        $scope.continuePressed = true;
+    };
+    $scope.nextForm = function () {
+        menuService.getMenu(function() {
+            if ($scope.children.length > 0)
+                $location.path('/Parenting/Privacy/' + $routeParams.userId);
+            else
+                $location.path('/Domestic/House/' + $routeParams.userId);
+        });
+    };
+    //#endregion    
+};
+ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('childService', ['$resource', function ($resource) {
+    var childrenService = {
+        child: $resource('/api/child/', {},
+            {
+                update: { method: 'PUT' },
+                deleteAll: { method: 'DELETE' }
+            }),
+        childForm: $resource('/api/ChildForm/', null,
+            {
+                update: { method: 'PUT' },
+                deleteAll: { method: 'DELETE' }
+            })
+    };
+    return childrenService;
 }]);
+;var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.asset = assetService.assets.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.asset.Id == 'undefined' || $scope.asset.Id == 0) {
+            //see if garlic has something stored            
+            $scope.asset = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.assetForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'Asset', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#assetForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.asset.UserId = $routeParams.userId;
+        if (typeof $scope.asset.Id == 'undefined' || $scope.asset.Id == 0) {
+            assetService.assets.save(null, $scope.asset, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Asset', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
+            });
+        } else {
+            assetService.assets.update({ Id: $scope.asset.Id }, $scope.asset, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Asset', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'Asset')) {
+        menuService.setActive('Domestic', 'Asset');
+    }
+};
+AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('assetService', function($resource) {
+    var service = {
+        assets: $resource('/api/assets/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var DebtCtrl = function($scope, $routeParams, $location, debtService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
+            //see if garlic has something stored            
+            $scope.debt = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.debtForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'Debt', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#debtForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.debt.UserId = $routeParams.userId;
+        if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
+            debtService.debts.save(null, $scope.debt, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Debt', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+            });
+        } else {
+            debtService.debts.update({ Id: $scope.debt.Id }, $scope.debt, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Debt', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'Debt')) {
+        menuService.setActive('Domestic', 'Debt');
+    }
+};
+DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('debtService', function($resource) {
+    var service = {
+        debts: $resource('/api/debts/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.healthInsurance = healthInsuranceService.healthInsurances.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.healthInsurance.Id == 'undefined' || $scope.healthInsurance.Id == 0) {
+            //see if garlic has something stored            
+            $scope.healthInsurance = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.healthInsuranceForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'HealthInsurance', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#healthInsuranceForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.healthInsurance.UserId = $routeParams.userId;
+        if (typeof $scope.healthInsurance.Id == 'undefined' || $scope.healthInsurance.Id == 0) {
+            healthInsuranceService.healthInsurances.save(null, $scope.healthInsurance, function() {
+                menuService.setSubMenuIconClass('Domestic', 'HealthInsurance', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
+            });
+        } else {
+            healthInsuranceService.healthInsurances.update({ Id: $scope.healthInsurance.Id }, $scope.healthInsurance, function() {
+                menuService.setSubMenuIconClass('Domestic', 'HealthInsurance', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'HealthInsurance')) {
+        menuService.setActive('Domestic', 'HealthInsurance');
+    }
+};
+HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('healthInsuranceService', function($resource) {
+    var service = {
+        healthInsurances: $resource('/api/healthInsurances/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.house = houseService.houses.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
+            //see if garlic has something stored            
+            $scope.house = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.houseForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'House', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#houseForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/Property/' + $scope.house.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.house.UserId = $routeParams.userId;
+        if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
+            houseService.houses.save(null, $scope.house, function() {
+                menuService.setSubMenuIconClass('Domestic', 'House', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Property/' + $scope.house.UserId);
+            });
+        } else {
+            houseService.houses.update({ Id: $scope.house.Id }, $scope.house, function() {
+                menuService.setSubMenuIconClass('Domestic', 'House', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Property/' + $scope.house.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'House')) {
+        menuService.setActive('Domestic', 'House');
+    }
+};
+HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('houseService', function($resource) {
+    var service = {
+        houses: $resource('/api/houses/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var PropertyCtrl = function($scope, $routeParams, $location, propertyService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.property = propertyService.properties.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.property.Id == 'undefined' || $scope.property.Id == 0) {
+            //see if garlic has something stored            
+            $scope.property = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.propertyForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'Property', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#propertyForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.property.UserId = $routeParams.userId;
+        if (typeof $scope.property.Id == 'undefined' || $scope.property.Id == 0) {
+            propertyService.properties.save(null, $scope.property, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Property', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+            });
+        } else {
+            propertyService.properties.update({ Id: $scope.property.Id }, $scope.property, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Property', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'Property')) {
+        menuService.setActive('Domestic', 'Property');
+    }
+};
+PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('propertyService', function($resource) {
+    var service = {
+        properties: $resource('/api/properties/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.spousal = spousalService.spousals.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
+            //see if garlic has something stored            
+            $scope.spousal = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.spousalForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'Spousal', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#spousalForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.spousal.UserId = $routeParams.userId;
+        if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
+            spousalService.spousals.save(null, $scope.spousal, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Spousal', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+            });
+        } else {
+            spousalService.spousals.update({ Id: $scope.spousal.Id }, $scope.spousal, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Spousal', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'Spousal')) {
+        menuService.setActive('Domestic', 'Spousal');
+    }
+};
+SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('spousalService', function($resource) {
+    var service = {
+        spousals: $resource('/api/spousals/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.tax = taxService.taxes.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.tax.Id == 'undefined' || $scope.tax.Id == 0) {
+            //see if garlic has something stored            
+            $scope.tax = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.taxForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'Tax', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#taxForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/Participant/' + $scope.tax.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.tax.UserId = $routeParams.userId;
+        if (typeof $scope.tax.Id == 'undefined' || $scope.tax.Id == 0) {
+            taxService.taxes.save(null, $scope.tax, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Tax', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Participant/' + $scope.tax.UserId);
+            });
+        } else {
+            taxService.taxes.update({ Id: $scope.tax.Id }, $scope.tax, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Tax', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Participant/' + $scope.tax.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'Tax')) {
+        menuService.setActive('Domestic', 'Tax');
+    }
+};
+TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('taxService', function($resource) {
+    var service = {
+        taxes: $resource('/api/taxes/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var VehicleCtrl = function($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.model = vehicleService.vehicles.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.model.Id == 'undefined' || $scope.model.Id == 0) {
+            //see if garlic has something stored            
+            $scope.model = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.modelForm.$invalid) {
+            menuService.setSubMenuIconClass('Domestic', 'Vehicle', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#modelForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Domestic/Debt/' + $scope.model.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.model.UserId = $routeParams.userId;
+        if (typeof $scope.model.Id == 'undefined' || $scope.model.Id == 0) {
+            vehicleService.vehicles.save(null, $scope.model, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Vehicle', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Debt/' + $scope.model.UserId);
+            });
+        } else {
+            vehicleService.vehicles.update({ Id: $scope.model.Id }, $scope.model, function() {
+                menuService.setSubMenuIconClass('Domestic', 'Vehicle', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Domestic/Debt/' + $scope.model.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Domestic', 'Vehicle')) {
+        menuService.setActive('Domestic', 'Vehicle');
+    }
+};
+VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('vehicleService', function($resource) {
+    var service = {
+        vehicles: $resource('/api/vehicles/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.addendum = addendumService.addendums.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
+            //see if garlic has something stored            
+            $scope.addendum = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.addendumForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Addendum', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#addendumForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Participant/' + $scope.addendum.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.addendum.UserId = $routeParams.userId;
+        if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
+            addendumService.addendums.save(null, $scope.addendum, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Addendum', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Participant/' + $scope.addendum.UserId);
+            });
+        } else {
+            addendumService.addendums.update({ Id: $scope.addendum.Id }, $scope.addendum, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Addendum', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Participant/' + $scope.addendum.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Addendum')) {
+        menuService.setActive('Parenting', 'Addendum');
+    }
+};
+AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('addendumService', function($resource) {
+    var service = {
+        addendums: $resource('/api/addendums/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var CommunicationCtrl = function($scope, $routeParams, $location, communicationService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.communication = communicationService.communications.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.communication.Id == 'undefined' || $scope.communication.Id == 0) {
+            //see if garlic has something stored            
+            $scope.communication = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.communicationForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Communication', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#communicationForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.communication.UserId = $routeParams.userId;
+        if (typeof $scope.communication.Id == 'undefined' || $scope.communication.Id == 0) {
+            communicationService.communications.save(null, $scope.communication, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Communication', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
+            });
+        } else {
+            communicationService.communications.update({ Id: $scope.communication.Id }, $scope.communication, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Communication', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Communication')) {
+        menuService.setActive('Parenting', 'Communication');
+    }
+};
+CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('communicationService', function($resource) {
+    var service = {
+        communications: $resource('/api/communication/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var DecisionCtrl = function($scope, $routeParams, $location, decisionService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.decision = decisionService.decisions.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
+            //see if garlic has something stored            
+            $scope.decision = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.decisionForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Decision', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#decisionForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Responsibility/' + $scope.decision.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.decision.UserId = $routeParams.userId;
+        if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
+            decisionService.Decisions.save(null, $scope.decision, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Decision', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Responsibility/' + $scope.decision.UserId);
+            });
+        } else {
+            decisionService.Decisions.update({ Id: $scope.decision.Id }, $scope.decision, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Decision', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Responsibility/' + $scope.decision.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Decision')) {
+        menuService.setActive('Parenting', 'Decision');
+    }
+};
+DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('decisionService', function($resource) {
+    var service = {
+        decisions: $resource('/api/decisions/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var HolidayCtrl = function($scope, $routeParams, $location, holidayService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.holiday = holidayService.holidays.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
+            //see if garlic has something stored            
+            $scope.holiday = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.holidayForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Holiday', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#holidayForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Addendum/' + $scope.holiday.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.holiday.UserId = $routeParams.userId;
+        if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
+            holidayService.Holidays.save(null, $scope.holiday, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Holiday', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Addendum/' + $scope.holiday.UserId);
+            });
+        } else {
+            holidayService.Holidays.update({ Id: $scope.holiday.Id }, $scope.holiday, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Holiday', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Addendum/' + $scope.holiday.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Holiday')) {
+        menuService.setActive('Parenting', 'Holiday');
+    }
+};
+HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('holidayService', function($resource) {
+    var service = {
+        holidays: $resource('/api/holidays/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var InformationCtrl = function($scope, $routeParams, $location, informationService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.information = informationService.information.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.information.Id == 'undefined' || $scope.information.Id == 0) {
+            //see if garlic has something stored            
+            $scope.information = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.informationForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Information', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#informationForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Decision/' + $scope.information.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.information.UserId = $routeParams.userId;
+        if (typeof $scope.information.Id == 'undefined' || $scope.information.Id == 0) {
+            informationService.information.save(null, $scope.information, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Information', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
+            });
+        } else {
+            informationService.information.update({ Id: $scope.information.Id }, $scope.information, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Information', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Information')) {
+        menuService.setActive('Parenting', 'Information');
+    }
+};
+InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('informationService', function($resource) {
+    var service = {
+        information: $resource('/api/information/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.privacy = privacyService.privacies.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
+            //see if garlic has something stored            
+            $scope.privacy = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.privacyForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Supervision', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#privacyForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.privacy.UserId = $routeParams.userId;
+        if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
+            privacyService.privacies.save(null, $scope.privacy, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Supervision', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+            });
+        } else {
+            privacyService.privacies.update({ Id: $scope.privacy.Id }, $scope.privacy, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Supervision', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Supervision')) {
+        menuService.setActive('Parenting', 'Supervision');
+    }
+};
+PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('privacyService', function($resource) {
+    var service = {
+        privacies: $resource('/api/privacies/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.responsibility = responsibilityService.responsibilities.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
+            //see if garlic has something stored            
+            $scope.responsibility = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.responsibilityForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Responsibility', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#responsibilityForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.responsibility.UserId = $routeParams.userId;
+        if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
+            responsibilityService.responsibilities.save(null, $scope.responsibility, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Responsibility', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+            });
+        } else {
+            responsibilityService.responsibilities.update({ Id: $scope.responsibility.Id }, $scope.responsibility, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Responsibility', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Responsibility')) {
+        menuService.setActive('Parenting', 'Responsibility');
+    }
+};
+ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('responsibilityService', function($resource) {
+    var service = {
+        responsibilities: $resource('/api/responsibilities/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var ScheduleCtrl = function($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
+            //see if garlic has something stored            
+            $scope.schedule = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.scheduleForm.$invalid) {
+            menuService.setSubMenuIconClass('Parenting', 'Schedule', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#scheduleForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.schedule.UserId = $routeParams.userId;
+        if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
+            scheduleService.schedules.save(null, $scope.schedule, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Schedule', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+            });
+        } else {
+            scheduleService.schedules.update({ Id: $scope.schedule.Id }, $scope.schedule, function() {
+                menuService.setSubMenuIconClass('Parenting', 'Schedule', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+            });
+        }
+    };
+    $scope.nonCustodialChange = function (val) {
+        switch (val) {
+            case 1:
+                $scope.schedule.CustodianWeekend = 1;
+                break;
+            case 2:
+                $scope.schedule.CustodianWeekend = 4;
+                break;
+            case 3:
+                $scope.schedule.CustodianWeekend = 4;
+                break;
+            case 4:
+                $scope.schedule.CustodianWeekend = 3;
+                break;
+            case 5:
+                $scope.schedule.CustodianWeekend = 5;
+                break;                
+        }
+    };
+    $scope.custodialChange = function (val) {
+        switch (val) {
+            case 1:
+                $scope.schedule.NonCustodianWeekend = 1;
+                break;
+            case 2:
+                $scope.schedule.NonCustodianWeekend = 4;
+                break;
+            case 3:
+                $scope.schedule.NonCustodianWeekend = 4;
+                break;
+            case 4:
+                $scope.schedule.NonCustodianWeekend = 3;
+                break;
+            case 5:
+                $scope.schedule.NonCustodianWeekend = 5;
+                break;
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Parenting', 'Schedule')) {
+        menuService.setActive('Parenting', 'Schedule');
+    }
+};
+ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('scheduleService', function($resource) {
+    var service = {
+        schedules: $resource('/api/schedules/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var ChildCareCtrl = function($scope, $routeParams, $location, childCareService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.childCare = childCareService.childCares.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
+            //see if garlic has something stored            
+            $scope.childCare = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.childCareForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'ChildCare', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#childCareForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Financial/Participant/' + $scope.childCare.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.childCare.UserId = $routeParams.userId;
+        if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
+            childCareService.childCares.save(null, $scope.childCare, function() {
+                menuService.setSubMenuIconClass('Financial', 'ChildCare', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.childCare.UserId);
+            });
+        } else {
+            childCareService.childCares.update({ Id: $scope.childCare.Id }, $scope.childCare, function() {
+                menuService.setSubMenuIconClass('Financial', 'ChildCare', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.childCare.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'ChildCare')) {
+        menuService.setActive('Financial', 'ChildCare');
+    }
+};
+ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCaresService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('childCareService', function($resource) {
+    var service = {
+        childCares: $resource('/api/childCares/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var DeviationCtrl = function($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.deviation = deviationService.deviations.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
+            //see if garlic has something stored            
+            $scope.deviation = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.deviationForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'Deviation', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#deviationForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Financial/Participant/' + $scope.deviation.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.deviation.UserId = $routeParams.userId;
+        if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
+            deviationService.deviations.save(null, $scope.deviation, function() {
+                menuService.setSubMenuIconClass('Financial', 'Deviation', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.deviation.UserId);
+            });
+        } else {
+            deviationService.deviations.update({ Id: $scope.deviation.Id }, $scope.deviation, function() {
+                menuService.setSubMenuIconClass('Financial', 'Deviation', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.deviation.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'Deviation')) {
+        menuService.setActive('Financial', 'Deviation');
+    }
+};
+DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('deviationService', function($resource) {
+    var service = {
+        deviations: $resource('/api/deviations/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var ExtraExpenseCtrl = function($scope, $routeParams, $location, extraExpenseService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.extraExpense = extraExpenseService.extraExpenses.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
+            //see if garlic has something stored            
+            $scope.extraExpense = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.extraExpenseForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'ExtraExpense', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#extraExpenseForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Financial/Participant/' + $scope.extraExpense.UserId);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.extraExpense.UserId = $routeParams.userId;
+        if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
+            extraExpenseService.extraExpenses.save(null, $scope.extraExpense, function() {
+                menuService.setSubMenuIconClass('Financial', 'ExtraExpense', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.extraExpense.UserId);
+            });
+        } else {
+            extraExpenseService.extraExpenses.update({ Id: $scope.extraExpense.Id }, $scope.extraExpense, function() {
+                menuService.setSubMenuIconClass('Financial', 'ExtraExpense', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.extraExpense.UserId);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'ExtraExpense')) {
+        menuService.setActive('Financial', 'ExtraExpense');
+    }
+};
+ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('extraExpenseService', function($resource) {
+    var service = {
+        extraExpenses: $resource('/api/extraExpenses/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.health = healthService.healths.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
+            //see if garlic has something stored            
+            $scope.health = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.healthForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'Health', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#healthForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Financial/Income/' + $scope.health.UserId + "?isOtherParent=false");
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.health.UserId = $routeParams.userId;
+        if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
+            healthService.healths.save(null, $scope.health, function() {
+                menuService.setSubMenuIconClass('Financial', 'Health', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Income/' + $scope.health.UserId + "?isOtherParent=false");
+            });
+        } else {
+            healthService.healths.update({ Id: $scope.health.Id }, $scope.health, function() {
+                menuService.setSubMenuIconClass('Financial', 'Health', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Income/' + $scope.health.UserId + "?isOtherParent=false");
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'Health')) {
+        menuService.setActive('Financial', 'Health');
+    }
+};
+HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('healthService', function($resource) {
+    var service = {
+        healths: $resource('/api/healths/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var IncomeCtrl = function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.income = incomeService.incomes.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
+            //see if garlic has something stored            
+            $scope.income = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        var isOtherParent = $routeParams.isOtherParent;
+        if ($scope.incomeForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'Income', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#incomeForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "?isOtherParent=" + isOtherParent);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.income.UserId = $routeParams.userId;
+        if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
+            incomeService.incomes.save(null, $scope.income, function() {
+                menuService.setSubMenuIconClass('Financial', 'Income', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "?isOtherParent=" + isOtherParent);
+            });
+        } else {
+            incomeService.incomes.update({ Id: $scope.income.Id }, $scope.income, function() {
+                menuService.setSubMenuIconClass('Financial', 'Income', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "?isOtherParent=" + isOtherParent);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'Income')) {
+        menuService.setActive('Financial', 'Income');
+    }
+};
+IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('incomeService', function($resource) {
+    var service = {
+        incomes: $resource('/api/incomes/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var OtherChildCtrl = function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.otherChild = otherChildService.otherChildren.get({ UserId: $routeParams.userId }, function () {
+        if (typeof $scope.otherChild.Id == 'undefined' || $scope.otherChild.Id == 0) {
+            //see if garlic has something stored            
+            $scope.otherChild = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function (noNavigate) {
+        var isOtherParent = $routeParams.isOtherParent;
+        if ($scope.otherChildForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'OtherChild', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#otherChildForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate) {
+                if (isOtherParent)
+                    $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
+                else
+                    $location.path('/Financial/Income/' + $scope.otherChild.UserId + "?isOtherParent=" + !isOtherParent);
+            }
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.otherChild.UserId = $routeParams.userId;
+        if (typeof $scope.otherChild.Id == 'undefined' || $scope.otherChild.Id == 0) {
+            otherChildService.otherChildren.save(null, $scope.otherChild, function () {
+                menuService.setSubMenuIconClass('Financial', 'OtherChild', 'icon-ok icon-green');
+                if (!noNavigate) {
+                    if (isOtherParent)
+                        $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
+                    else
+                        $location.path('/Financial/Income/' + $scope.otherChild.UserId + "?isOtherParent=" + !isOtherParent);
+                }
+            });
+        } else {
+            otherChildService.otherChildren.update({ Id: $scope.otherChild.Id }, $scope.otherChild, function () {
+                menuService.setSubMenuIconClass('Financial', 'OtherChild', 'icon-ok icon-green');
+                if (!noNavigate) {
+                    if (isOtherParent)
+                        $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
+                    else
+                        $location.path('/Financial/Income/' + $scope.otherChild.UserId + "?isOtherParent=" + !isOtherParent);
+                }
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'OtherChild')) {
+        menuService.setActive('Financial', 'OtherChild');
+    }
+};
+OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('otherChildService', function($resource) {
+    var service = {
+        otherChildren: $resource('/api/otherChildren/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.socialSecurity = socialSecurityService.socialSecurities.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
+            //see if garlic has something stored            
+            $scope.socialSecurity = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function (noNavigate) {
+        var isOtherParent = $routeParams.isOtherParent;
+        if ($scope.socialSecurityForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'SocialSecurity', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#socialSecurityForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Financial/Participant/' + $scope.socialSecurity.UserId + "?isOtherParent=" + isOtherParent);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.socialSecurity.UserId = $routeParams.userId;
+        if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
+            socialSecurityService.socialsecurities.save(null, $scope.socialSecurity, function() {
+                menuService.setSubMenuIconClass('Financial', 'SocialSecurity', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.socialSecurity.UserId + "?isOtherParent=" + isOtherParent);
+            });
+        } else {
+            socialSecurityService.socialsecurities.update({ Id: $scope.socialSecurity.Id }, $scope.socialSecurity, function() {
+                menuService.setSubMenuIconClass('Financial', 'SocialSecurity', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/Participant/' + $scope.socialSecurity.UserId + "?isOtherParent=" + isOtherParent);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'SocialSecurity')) {
+        menuService.setActive('Financial', 'SocialSecurity');
+    }
+};
+SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('socialSecurityService', function($resource) {
+    var service = {
+        socialSecurities: $resource('/api/socialSecurities/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
+;var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope) {
+    $scope.storageKey = $location.path();
+    $scope.support = supportService.supports.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
+            //see if garlic has something stored            
+            $scope.support = $.jStorage.get($scope.storageKey);
+        }
+    });
+    $scope.submit = function (noNavigate) {
+        var isOtherParent = $routeParams.isOtherParent;
+        if ($scope.supportForm.$invalid) {
+            menuService.setSubMenuIconClass('Financial', 'Support', 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#supportForm');
+            $.jStorage.set($scope.storageKey, value);
+            if (!noNavigate)
+                $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "?isOtherParent=" + isOtherParent);
+            return;
+        }
+        $.jStorage.deleteKey($scope.storageKey);
+        $scope.support.UserId = $routeParams.userId;
+        if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
+            supportService.supportsFixedPosition.save(null, $scope.support, function() {
+                menuService.setSubMenuIconClass('Financial', 'Support', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "?isOtherParent=" + isOtherParent);
+            });
+        } else {
+            supportService.supportsFixedPosition.update({ Id: $scope.support.Id }, $scope.support, function() {
+                menuService.setSubMenuIconClass('Financial', 'Support', 'icon-ok icon-green');
+                if (!noNavigate)
+                    $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "?isOtherParent=" + isOtherParent);
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Financial', 'Support')) {
+        menuService.setActive('Financial', 'Support');
+    }
+};
+SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('supportService', function($resource) {
+    var service = {
+        supports: $resource('/api/supports/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+});
 ;var HomeCtrl = function ($scope, $routeParams, $location,  menuService) {
 };
 HomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
@@ -32717,99 +34146,78 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
     };
 };
 MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
-;FormsApp.factory('menuService', function ($location, $rootScope) {
+;FormsApp.factory('menuService', function ($location, $rootScope, $resource) {
     var service = {
         menuItems: [],
-        isSetup: false,
+        isInitialized: false,
         setItems: function (menuItems) {
             service.menuItems = menuItems;            
         },
-        setupMenu: function() {
+        menu: $resource('/api/menus/:userId', { userId: '@userId' },
+            {
+                getList: { method: 'GET', isArray:true, params: { format: 'json' } },
+            }),
+        getMenu: function (callback) {
             var userId = service.userId;
-            var menuItems = [{
-                itemClass: 'active',
-                path: '#/',
-                iconClass: 'icon icon-home',
-                text: 'Home',
-                subMenuItems: [],
-            }, {
-                itemClass: 'submenu',
-                path: '',
-                iconClass: 'icon icon-th-list',
-                text: 'Starter',
-                showSubMenu: false,
-                subMenuItems: [{
-                    itemClass: '',
-                    path: '/Starter/Court/' + userId,
-                    iconClass: '',
-                    text: 'Court',
-                    formName: 'Court'
-                }, {
-                    itemClass: '',
-                    path: '/Starter/Participant/' + userId,
-                    iconClass: '',
-                    text: 'Participants',
-                    formName: 'Participant'
-                }, {
-                    itemClass: '',
-                    path: '/Starter/Children/' + userId,
-                    iconClass: '',
-                    text: 'Children',
-                    formName: 'Children'
-                }],
-            }, {
-                itemClass: '',
-                path: '/Account/LogOff',
-                iconClass: 'icon icon-share-alt',
-                text: 'Log Out',
-                subMenuItems: [],
-            }];
-            service.setItems(menuItems);
-            service.isSetup = true;
+            if (typeof userId === 'undefined')
+                userId = 0;
+            service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {
+                service.setItems(menuItems);
+                service.isInitialized = true;
+                if (callback)
+                    callback();
+            });
         },
-        setSubMenuIconClass: function(menuItemText, subMenuItemText, iconClass) {
+        setSubMenuIconClass: function (pathIdentifier, subMenuPathIdentifier, iconClass) {
             var menuItem = _.find(service.menuItems, function (item) {
-                return item.text === menuItemText;
+                return item.pathIdentifier === pathIdentifier;
             });
             var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
-                return subItem.text === subMenuItemText;
+                return subItem.pathIdentifier === subMenuPathIdentifier;
             });
             subMenuItem.iconClass = iconClass;
         },
-        isActive: function(menuItemText, subMenuItemText) {
-            if (service.isSetup) {
+        isActive: function (pathIdentifier, subMenuPathIdentifier) {
+            if (service.isInitialized) {
                 var menuItem = _.find(service.menuItems, function(item) {
-                    return item.text === menuItemText;
+                    return item.pathIdentifier === pathIdentifier;
                 });
                 var subMenuItem = _.find(menuItem.subMenuItems, function(subItem) {
-                    return subItem.formName === subMenuItemText;
+                    return subItem.pathIdentifier === subMenuPathIdentifier;
                 });
                 return subMenuItem.itemClass === 'active';
             }
             return false;
         },
-        setActive: function (menuItemText, subMenuItemText) {
-            if (!service.isSetup) {
-                service.setupMenu();
-            }
-            service.checkForm();
-            service.clearActive();
-            var menuItem = _.find(service.menuItems, function(item) {
-                return item.text === menuItemText;
-            });
-            if (subMenuItemText === null) {
-                //no submenu to worry about
-                menuItem.itemClass = 'active';
+        setActive: function (pathIdentifier, subMenuPathIdentifier) {
+            if (!service.isInitialized) {
+                service.getMenu(service.setActiveCallback(pathIdentifier, subMenuPathIdentifier));                
             } else {
-                menuItem.showSubMenu = true;
-                menuItem.itemClass = 'submenu active';
-                var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
-                    return subItem.formName === subMenuItemText;
-                });
-                subMenuItem.itemClass = 'active';
-                subMenuItem.iconClass = 'icon-blue icon-pencil';
-                $location.path(subMenuItem.path);
+                service.setActiveCallback(pathIdentifier, subMenuPathIdentifier)();
             }
+        },
+        //Since Menu needs to load before we run this, we make this a callback function - made a closure so that we can pass args to the callback
+        setActiveCallback: function (pathIdentifier, subMenuPathIdentifier) {
+            return function() {
+                service.checkForm();
+                service.clearActive();
+                var menuItem = _.find(service.menuItems, function(item) {
+                    return item.pathIdentifier === pathIdentifier;
+                });
+                if (subMenuPathIdentifier === null) {
+                    //no submenu to worry about
+                    menuItem.itemClass = 'active';
+                } else {
+                    menuItem.showSubMenu = true;
+                    menuItem.itemClass = 'submenu active';
+                    var subMenuItem = _.find(menuItem.subMenuItems, function(subItem) {
+                        return subItem.pathIdentifier === subMenuPathIdentifier;
+                    });
+                    subMenuItem.itemClass = 'active';
+                    subMenuItem.iconClass = 'icon-blue icon-pencil';
+                    $location.path(subMenuItem.path);
+                }
+            };
         },
         clearActive: function() {
             angular.forEach(service.menuItems, function (item) {
@@ -32841,13 +34249,22 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
 });
 
 ;var LoginMenuCtrl = function ($scope, $routeParams, $location, loginMenuService, menuService) {
-    $scope.user = loginMenuService.userAuth.get({}, function (data) {
-        if (data.UserSession != null) {
-            loginMenuService.authUser = data.UserSession;
-            menuService.userId = loginMenuService.authUser.CustomId;
-            menuService.setupMenu();
-        }
-    });
+    $scope.getAuthStatus = function() {
+        $scope.user = loginMenuService.userAuth.get({}, function (data) {
+            if (data.UserSession != null) {
+                loginMenuService.authUser = data.UserSession;
+                menuService.userId = loginMenuService.authUser.CustomId;
+                menuService.getMenu();
+            }
+        });
+    };     
+    $scope.logOff = function () {
+        loginMenuService.auth.logout({}, function () {
+            $scope.getAuthStatus();
+            $location.path('/');
+        });
+    };
+    $scope.getAuthStatus();
 };
 LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuService', 'menuService'];
 ;FormsApp.factory('loginMenuService', function ($resource) {
@@ -32856,11 +34273,17 @@ LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuServic
             {
                 get: { method: 'GET', params: { format: 'json' } },
             }),
+        auth: $resource('/api/auth/logout', {},
+            {
+                logout: { method: 'GET', params: { format: 'json' } },
+            }),
     };
     return service;
 });
 ;var LoginCtrl = function ($scope, $routeParams, $location, loginService) {
-    $scope.login = loginService.login.post();
+    $scope.login = function() {
+        loginService.login.post();
+    };
 };
 LoginCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService'];
 ;FormsApp.factory('loginService', function ($resource) {
@@ -32874,7 +34297,9 @@ LoginCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService'];
     return service;
 });
 ;var RegisterCtrl = function ($scope, $routeParams, $location, registerService) {
-    $scope.user = registerService.register.post();
+    $scope.submit = function() {
+        registerService.register.post();
+    };
 };
 RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'];
 ;FormsApp.factory('registerService', function ($resource) {

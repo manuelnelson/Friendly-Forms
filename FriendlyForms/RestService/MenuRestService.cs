@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using ServiceStack.Common;
+﻿using System;
+using BusinessLogic.Contracts;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.RestService
 {
@@ -11,22 +10,17 @@ namespace FriendlyForms.RestService
         [Route("/Menus/")]
         public class MenuDto : IReturn<MenuDto>
         {
+            public long UserId { get; set; }
             public string Route { get; set; }
         }
 
-        public class MenusService : Service
+        public class MenusService : ServiceBase
         {
             public IMenuService MenuService { get; set; } //Injected by IOC
 
             public object Get(MenuDto request)
             {
-                return MenuService.Get(request.Id);
-            }
-
-            public object Get(MenuListDto request)
-            {
-                //TODO Do something more interested.  Add query possibly 
-                return MenuService.GetFiltered(t => t.Id != 0);
+                return MenuService.Get(request.Route, Convert.ToInt32(UserSession.CustomId), UserSession.IsAuthenticated);
             }
 
         }

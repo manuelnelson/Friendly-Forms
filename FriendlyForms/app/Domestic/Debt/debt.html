@@ -23,8 +23,8 @@
                                 <span class="form-error" ng-show="debtForm.MaritalDebt.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group debt-details hide">
-                            <textarea class="input-xxlarge" cols="20" required ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
+                        <div class="control-group" ng-show="debt.MaritalDebt == 1">
+                            <textarea class="input-xxlarge" cols="20" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
                             <div ng-show="debtForm.DebtDivision.$dirty && debtForm.DebtDivision.$invalid">
                                 <span class="form-error" ng-show="debtForm.DebtDivision.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>

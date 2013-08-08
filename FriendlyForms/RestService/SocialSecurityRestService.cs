@@ -10,7 +10,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/SocialSecurity/")]
+    [Route("/SocialSecurities/")]
     public class ReqSocialSecurity
     {
         [DataMember]

@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#informationForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Parenting/Participant/' + $scope.information.UserId);
+                $location.path('/Parenting/Decision/' + $scope.information.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             informationService.information.save(null, $scope.information, function() {
                 menuService.setSubMenuIconClass('Parenting', 'Information', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.information.UserId);
+                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
             });
         } else {
             informationService.information.update({ Id: $scope.information.Id }, $scope.information, function() {
                 menuService.setSubMenuIconClass('Parenting', 'Information', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.information.UserId);
+                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
             });
         }
     };

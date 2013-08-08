@@ -24,26 +24,22 @@
                                 <span class="form-error" ng-show="incomeForm.HaveSalary.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="income-salary hide">
+                        <div ng-show="income.HaveSalary == 2">
                             <div class="control-group row-fluid">
-                                <label class="span4 form-question">
-                                    Where one parent states they have no income, the court will typically apply 
-                                    “imputed income” to that parent; that is, income equal to the salary one 
-                                    would receive if they were employed at minimum wage in a full time job. In 
-                                    your county, that amount equals $1,248 per month in gross wages. This 
-                                    amount will be applied in your case. (Do not include means-tested public 
-                                    assistance.)</label>
+                                <label class="informative">
+                                    Where one parent states they have no income, the court will typically apply “imputed income” to that parent; that is, income equal to the salary one would receive if they were employed at minimum wage in a full time job. 
+                                        In your county, that amount equals $1,248 per month in gross wages. This amount will be applied in your case. (Do not include means-tested public assistance.)</label>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">
                                     Explain the basis for Other Income, including Imputed Income.</label>
-                                <textarea cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="income.OtherIncome" name="OtherIncome" placeholder="Other Income" rows="2"></textarea>
+                                <textarea cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="income.OtherIncome" name="OtherIncome" placeholder="Other Income" rows="2"></textarea>
                                 <div ng-show="incomeForm.OtherIncome.$dirty && incomeForm.OtherIncome.$invalid">
                                     <span class="form-error" ng-show="incomeForm.OtherIncome.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="income-nosalary">
+                        <div ng-show="income.HaveSalary == 1">
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">
                                     What is your income for which you received a W-2 tax form for your job?</label>
@@ -62,7 +58,7 @@
                                     No
                                     <input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="2"></label>
                             </div>
-                            <div class="income-nonW2 hide">
+                            <div ng-show="income.NonW2Income == 1">
                                 <div class="control-group row-fluid">
                                     <label class="span4 form-question">Annual self-employment income in which self-employment taxes for FICA and Medicare were deducted.</label>
                                     <input number ng-model="income.SelfIncome" name="SelfIncome" placeholder="Annual Amount" type="text" value="">
@@ -72,155 +68,155 @@
                                 </div>
                                 <div class="control-group row-fluid">
                                     <label class="span4 form-question">Annual self-employment income in which self-employment taxes for FICA and Medicare were NOT deducted.</label>
-                                    <input required number ng-model="income.SelfIncomeNoDeductions" name="SelfIncomeNoDeductions" placeholder="Annual Amount" type="text" value="">
-                                <div ng-show="incomeForm.SelfIncomeNoDeductions.$dirty && incomeForm.SelfIncomeNoDeductions.$invalid">
-                                    <span class="form-error" ng-show="incomeForm.SelfIncomeNoDeductions.$error.number">This field must be a number.</span>
-                                </div>
+                                    <input  number ng-model="income.SelfIncomeNoDeductions" name="SelfIncomeNoDeductions" placeholder="Annual Amount" type="text" value="">
+                                    <div ng-show="incomeForm.SelfIncomeNoDeductions.$dirty && incomeForm.SelfIncomeNoDeductions.$invalid">
+                                        <span class="form-error" ng-show="incomeForm.SelfIncomeNoDeductions.$error.number">This field must be a number.</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Commissions, Fees, Tips</label>
-                                <input required number ng-model="income.Commisions" name="Commisions" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Commisions" name="Commisions" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Commisions.$dirty && incomeForm.Commisions.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Commisions.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Bonuses</label>
-                                <input required number ng-model="income.Bonuses" name="Bonuses" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Bonuses" name="Bonuses" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Bonuses.$dirty && incomeForm.Bonuses.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Bonuses.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Overtime Payments</label>
-                                <input required number ng-model="income.Overtime" name="Overtime" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Overtime" name="Overtime" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Overtime.$dirty && incomeForm.Overtime.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Overtime.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Severance Pay</label>
-                                <input required number ng-model="income.Severance" name="Severance" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Severance" name="Severance" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Severance.$dirty && incomeForm.Severance.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Severance.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Recurring Income from Pensions or Retirement Plans</label>
-                                <input required number ng-model="income.Retirement" name="Retirement" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Retirement" name="Retirement" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Retirement.$dirty && incomeForm.Retirement.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Retirement.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Interest Income</label>
-                                <input required number ng-model="income.Interest" name="Interest" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Interest" name="Interest" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Interest.$dirty && incomeForm.Interest.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Interest.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Income from Dividends</label>
-                                <input required number ng-model="income.Dividends" name="Dividends" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Dividends" name="Dividends" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Dividends.$dirty && incomeForm.Dividends.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Dividends.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Trust Income</label>
-                                <input required number ng-model="income.Trust" name="Trust" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Trust" name="Trust" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Trust.$dirty && incomeForm.Trust.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Trust.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Income from Annuities</label>
-                                <input required number ng-model="income.Annuities" name="Annuities" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Annuities" name="Annuities" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Annuities.$dirty && incomeForm.Annuities.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Annuities.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Capital Gains</label>
-                                <input required number ng-model="income.Capital" name="Capital" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Capital" name="Capital" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Capital.$dirty && incomeForm.Capital.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Capital.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Social Security Disability or Retirement Benefits</label>
-                                <input required number ng-model="income.SocialSecurity" name="SocialSecurity" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.SocialSecurity" name="SocialSecurity" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.SocialSecurity.$dirty && incomeForm.SocialSecurity.$invalid">
                                     <span class="form-error" ng-show="incomeForm.SocialSecurity.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Worker's Compensation Benefits</label>
-                                <input required number ng-model="income.Compensation" name="Compensation" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Compensation" name="Compensation" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Compensation.$dirty && incomeForm.Compensation.$invalid">
                                     <span class="form-error" ng-show="incomeForm.W2Income.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Unemployment Benefits</label>
-                                <input required number ng-model="income.Unemployment" name="Unemployment" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Unemployment" name="Unemployment" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Unemployment.$dirty && incomeForm.Unemployment.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Unemployment.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Judgments from Personal Injury or Other Civil Cases</label>
-                                <input required number ng-model="income.CivilCase" name="CivilCase" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.CivilCase" name="CivilCase" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.CivilCase.$dirty && incomeForm.CivilCase.$invalid">
                                     <span class="form-error" ng-show="incomeForm.CivilCase.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Gifts (cash or other gifts that can be converted to cash)</label>
-                                <input required number ng-model="income.Gifts" name="Gifts" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Gifts" name="Gifts" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Gifts.$dirty && incomeForm.Gifts.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Gifts.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Prizes/Lottery Winnings</label>
-                                <input required number ng-model="income.Prizes" name="Prizes" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Prizes" name="Prizes" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Prizes.$dirty && incomeForm.Prizes.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Prizes.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Alimony &amp; maintenance from persons not in this case</label>
-                                <input required number ng-model="income.Alimony" name="Alimony" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Alimony" name="Alimony" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Alimony.$dirty && incomeForm.Alimony.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Alimony.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Assets which are used for support of family</label>
-                                <input required number ng-model="income.Assets" name="Assets" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Assets" name="Assets" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Assets.$dirty && incomeForm.Assets.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Assets.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Fringe Benefits (if significantly reduce living expenses)</label>
-                                <input required number ng-model="income.Fringe" name="Fringe" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Fringe" name="Fringe" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Fringe.$dirty && incomeForm.Fringe.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Fringe.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Any Other Income, including Imputed Income (Do not include means-tested public assistance, such as TANF or food stamps.)</label>
-                                <input required number ng-model="income.Other" name="Other" placeholder="Annual Amount" type="text" value="">
+                                <input  number ng-model="income.Other" name="Other" placeholder="Annual Amount" type="text" value="">
                                 <div ng-show="incomeForm.Other.$dirty && incomeForm.Other.$invalid">
                                     <span class="form-error" ng-show="incomeForm.Other.$error.number">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Please explain the basis for Imputed Income as entered above.</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="income.OtherDetails" name="OtherDetails" placeholder="Details" rows="2"></textarea>
+                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="income.OtherDetails" name="OtherDetails" placeholder="Details" rows="2"></textarea>
                                 <div ng-show="incomeForm.OtherDetails.$dirty && incomeForm.OtherDetails.$invalid">
                                     <span class="form-error" ng-show="incomeForm.OtherDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>

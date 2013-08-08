@@ -43,12 +43,12 @@ namespace FriendlyForms.RestService
         }
         public object Post(ReqChildForm request)
         {
-            var childFormViewModel = request.TranslateTo<ChildFormViewModel>();
-            childFormViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var updatedChildForm = ChildFormService.AddOrUpdate(childFormViewModel);
-            return new RespChildForm()
+            var childForm = request.TranslateTo<ChildForm>();
+            childForm.UserId = Convert.ToInt32(UserSession.CustomId);
+            ChildFormService.Add(childForm);
+            return new RespChildForm
                 {
-                    ChildForm = updatedChildForm
+                    ChildForm = childForm
                 };
         }
         public object Put(ReqChildForm request)

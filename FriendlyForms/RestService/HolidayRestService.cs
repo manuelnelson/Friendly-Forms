@@ -12,8 +12,8 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Holiday/")]
-    [Route("/Holiday/{ChildId}", Verbs = "GET")]
+    [Route("/Holidays/")]
+    [Route("/Holidays/{ChildId}", Verbs = "GET")]
     public class ReqHoliday
     {
         [DataMember]
@@ -158,12 +158,6 @@ namespace FriendlyForms.RestService
             HolidayService.AddOrUpdate(holiday);
             return new RespHoliday();
 
-            //var holiday = request.TranslateTo<Holiday>();
-            //HolidayService.Add(holiday);
-            //return new RespHoliday
-            //    {
-            //        Id = holiday.Id
-            //    };
         }
         public object Put(ReqHoliday request)
         {

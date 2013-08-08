@@ -1,5 +1,4 @@
-﻿//Todoservice
-FormsApp.factory('childService', ['$resource', function ($resource) {
+﻿FormsApp.factory('childService', ['$resource', function ($resource) {
     var childrenService = {
         child: $resource('/api/child/', {},
             {

@@ -8,32 +8,32 @@
     });
     $scope.submit = function(noNavigate) {
         if ($scope.privacyForm.$invalid) {
-            menuService.setSubMenuIconClass('Parenting', 'Privacy', 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass('Parenting', 'Supervision', 'icon-pencil icon-red');
             var value = genericService.getFormInput('#privacyForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Parenting/Participant/' + $scope.privacy.UserId);
+                $location.path('/Parenting/Information/' + $scope.privacy.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
         $scope.privacy.UserId = $routeParams.userId;
         if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
             privacyService.privacies.save(null, $scope.privacy, function() {
-                menuService.setSubMenuIconClass('Parenting', 'Privacy', 'icon-ok icon-green');
+                menuService.setSubMenuIconClass('Parenting', 'Supervision', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.privacy.UserId);
+                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
             });
         } else {
             privacyService.privacies.update({ Id: $scope.privacy.Id }, $scope.privacy, function() {
-                menuService.setSubMenuIconClass('Parenting', 'Privacy', 'icon-ok icon-green');
+                menuService.setSubMenuIconClass('Parenting', 'Supervision', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.privacy.UserId);
+                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive('Parenting', 'Privacy')) {
-        menuService.setActive('Parenting', 'Privacy');
+    if (!menuService.isActive('Parenting', 'Supervision')) {
+        menuService.setActive('Parenting', 'Supervision');
     }
 };
-PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privaciesService', 'menuService', 'genericService', '$rootScope'];
+PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', '$rootScope'];

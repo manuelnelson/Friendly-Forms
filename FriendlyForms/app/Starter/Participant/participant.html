@@ -21,12 +21,12 @@
                         </ul>
                         <div class="control-group span4">
                             <h4>Plaintiff</h4>
-                            <input class="hoverHelp" ng-model="participant.PlaintiffsName" data-content="Enter the plaintiff's full name here." data-val="true" data-val-regex="Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" data-val-required="The Plaintiff's Name field is required."  placeholder="Plaintiff's Name" type="text" data-original-title="">
+                            <input class="hoverHelp" ng-model="participant.PlaintiffsName" data-content="Enter the plaintiff's full name here." data-val="true" data-val-regex="Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" data-val-required="The Plaintiff's Name field is required."  placeholder="Plaintiff's Name" type="text" data-original-title="">
                             <span class="field-validation-valid" data-valmsg-for="PlaintiffsName" data-valmsg-replace="true"></span>
                         </div>
                         <div class="control-group span4">
                             <h4>Defendant</h4>
-                            <input class="hoverHelp" data-content="Enter the defendants's full name here." data-val="true" data-val-regex="Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" data-val-required="The Defendant's Name field is required." ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
+                            <input class="hoverHelp" data-content="Enter the defendants's full name here." data-val="true" data-val-regex="Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed." data-val-regex-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" data-val-required="The Defendant's Name field is required." ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
                             <span class="field-validation-valid" data-valmsg-for="DefendantsName" data-valmsg-replace="true"></span>
                         </div>
                         <div class="control-group span4">

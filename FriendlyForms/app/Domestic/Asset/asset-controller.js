@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#assetForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Participant/' + $scope.asset.UserId);
+                $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             assetService.assets.save(null, $scope.asset, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Asset', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.asset.UserId);
+                    $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
             });
         } else {
             assetService.assets.update({ Id: $scope.asset.Id }, $scope.asset, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Asset', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.asset.UserId);
+                    $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Domestic', 'Asset');
     }
 };
-AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetsService', 'menuService', 'genericService', '$rootScope'];
+AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', '$rootScope'];

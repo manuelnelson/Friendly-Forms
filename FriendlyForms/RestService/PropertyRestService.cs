@@ -10,7 +10,7 @@ using Property = Models.Property;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Property/")]
+    [Route("/Properties/")]
     public class ReqProperty
     {
         [DataMember]

@@ -3,11 +3,10 @@ using System.Linq;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ChildCareService : FormService<IChildCareRepository, ChildCare, ChildCareViewModel>, IChildCareService
+    public class ChildCareService : FormService<IChildCareRepository, ChildCare>, IChildCareService
     {
         private IChildCareRepository ChildCareRepository { get; set; }
 

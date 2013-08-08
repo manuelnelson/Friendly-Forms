@@ -11,7 +11,7 @@ namespace FriendlyForms.RestService
 {
         //will name it to asset/ eventually, but doing this to appease my previous stupidity
         [DataContract]
-        [Route("/asset/")]
+        [Route("/assets/")]
         public class ReqAsset
         {
             [DataMember]

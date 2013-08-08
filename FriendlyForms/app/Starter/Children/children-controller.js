@@ -1,5 +1,15 @@
-﻿var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, $rootScope) {
+﻿var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, $rootScope) {    
+    //#region properties
+    $scope.continuePressed = false;
     $scope.storageKey = $location.path();
+    //#endregion
+    
+    //#region intialize
+    $rootScope.currentScope = $scope;
+    if (!menuService.isActive('Starter', 'Children')) {
+        menuService.setActive('Starter', 'Children');
+    }
+
     childService.childForm.get({ UserId: $routeParams.userId }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
@@ -14,7 +24,10 @@
         else
             $scope.children = data.Children;
     });
-    $scope.submitChildForm = function () {
+    //#endregion
+    
+    //#region event handlers
+    $scope.submit = function () {
         if ($scope.childForm.$invalid) {
             menuService.setSubMenuIconClass('Starter', 'Children', 'icon-pencil icon-red');
             var value = genericService.getFormInput('#childForm');
@@ -48,9 +61,20 @@
             });
         });
     };
-    $rootScope.currentScope = $scope;
-    if (!menuService.isActive('Starter', 'Children')) {
-        menuService.setActive('Starter', 'Children');
-    }
+    $scope.continue = function() {
+        $scope.continuePressed = true;
+    };
+    $scope.continue = function () {
+        $scope.continuePressed = true;
+    };
+    $scope.nextForm = function () {
+        menuService.getMenu(function() {
+            if ($scope.children.length > 0)
+                $location.path('/Parenting/Privacy/' + $routeParams.userId);
+            else
+                $location.path('/Domestic/House/' + $routeParams.userId);
+        });
+    };
+    //#endregion    
 };
 ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', 'menuService', 'genericService', '$rootScope'];

@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -44,12 +43,12 @@ namespace FriendlyForms.RestService
         }
         public object Post(ReqVehicleForm request)
         {
-            var vehicleFormViewModel = request.TranslateTo<VehicleFormViewModel>();
-            vehicleFormViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var updatedModel = VehicleFormService.AddOrUpdate(vehicleFormViewModel);
+            var vehicleForm = request.TranslateTo<VehicleForm>();
+            vehicleForm.UserId = Convert.ToInt32(UserSession.CustomId);
+            VehicleFormService.Add(vehicleForm);
             return new RespVehicleForm()
                 {
-                    VehicleForm = updatedModel
+                    VehicleForm = vehicleForm
                 };
         }
         public object Put(ReqVehicleForm request)

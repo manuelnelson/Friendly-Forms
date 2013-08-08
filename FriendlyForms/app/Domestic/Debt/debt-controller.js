@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#debtForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Participant/' + $scope.debt.UserId);
+                $location.path('/Domestic/Asset/' + $scope.debt.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             debtService.debts.save(null, $scope.debt, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Debt', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.debt.UserId);
+                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
             });
         } else {
             debtService.debts.update({ Id: $scope.debt.Id }, $scope.debt, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Debt', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.debt.UserId);
+                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Domestic', 'Debt');
     }
 };
-DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtsService', 'menuService', 'genericService', '$rootScope'];
+DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope'];

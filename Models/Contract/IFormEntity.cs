@@ -1,6 +1,6 @@
 ﻿namespace Models.Contract
 {
-    public interface IFormEntity        
+    public interface IFormEntity : IEntity       
     {
         long Id { get; set; }
         long UserId { get; set; }

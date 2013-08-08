@@ -1,96 +1,75 @@
-﻿FormsApp.factory('menuService', function ($location, $rootScope) {
+﻿FormsApp.factory('menuService', function ($location, $rootScope, $resource) {
     var service = {
         menuItems: [],
-        isSetup: false,
+        isInitialized: false,
         setItems: function (menuItems) {
             service.menuItems = menuItems;            
         },
-        setupMenu: function() {
+        menu: $resource('/api/menus/:userId', { userId: '@userId' },
+            {
+                getList: { method: 'GET', isArray:true, params: { format: 'json' } },
+            }),
+        getMenu: function (callback) {
             var userId = service.userId;
-            var menuItems = [{
-                itemClass: 'active',
-                path: '#/',
-                iconClass: 'icon icon-home',
-                text: 'Home',
-                subMenuItems: [],
-            }, {
-                itemClass: 'submenu',
-                path: '',
-                iconClass: 'icon icon-th-list',
-                text: 'Starter',
-                showSubMenu: false,
-                subMenuItems: [{
-                    itemClass: '',
-                    path: '/Starter/Court/' + userId,
-                    iconClass: '',
-                    text: 'Court',
-                    formName: 'Court'
-                }, {
-                    itemClass: '',
-                    path: '/Starter/Participant/' + userId,
-                    iconClass: '',
-                    text: 'Participants',
-                    formName: 'Participant'
-                }, {
-                    itemClass: '',
-                    path: '/Starter/Children/' + userId,
-                    iconClass: '',
-                    text: 'Children',
-                    formName: 'Children'
-                }],
-            }, {
-                itemClass: '',
-                path: '/Account/LogOff',
-                iconClass: 'icon icon-share-alt',
-                text: 'Log Out',
-                subMenuItems: [],
-            }];
-            service.setItems(menuItems);
-            service.isSetup = true;
+            if (typeof userId === 'undefined')
+                userId = 0;
+            service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {
+                service.setItems(menuItems);
+                service.isInitialized = true;
+                if (callback)
+                    callback();
+            });
         },
-        setSubMenuIconClass: function(menuItemText, subMenuItemText, iconClass) {
+        setSubMenuIconClass: function (pathIdentifier, subMenuPathIdentifier, iconClass) {
             var menuItem = _.find(service.menuItems, function (item) {
-                return item.text === menuItemText;
+                return item.pathIdentifier === pathIdentifier;
             });
             var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
-                return subItem.formName === subMenuItemText;
+                return subItem.pathIdentifier === subMenuPathIdentifier;
             });
             subMenuItem.iconClass = iconClass;
         },
-        isActive: function(menuItemText, subMenuItemText) {
-            if (service.isSetup) {
+        isActive: function (pathIdentifier, subMenuPathIdentifier) {
+            if (service.isInitialized) {
                 var menuItem = _.find(service.menuItems, function(item) {
-                    return item.text === menuItemText;
+                    return item.pathIdentifier === pathIdentifier;
                 });
                 var subMenuItem = _.find(menuItem.subMenuItems, function(subItem) {
-                    return subItem.formName === subMenuItemText;
+                    return subItem.pathIdentifier === subMenuPathIdentifier;
                 });
                 return subMenuItem.itemClass === 'active';
             }
             return false;
         },
-        setActive: function (menuItemText, subMenuItemText) {
-            if (!service.isSetup) {
-                service.setupMenu();
-            }
-            service.checkForm();
-            service.clearActive();
-            var menuItem = _.find(service.menuItems, function(item) {
-                return item.text === menuItemText;
-            });
-            if (subMenuItemText === null) {
-                //no submenu to worry about
-                menuItem.itemClass = 'active';
+        setActive: function (pathIdentifier, subMenuPathIdentifier) {
+            if (!service.isInitialized) {
+                service.getMenu(service.setActiveCallback(pathIdentifier, subMenuPathIdentifier));                
             } else {
-                menuItem.showSubMenu = true;
-                menuItem.itemClass = 'submenu active';
-                var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
-                    return subItem.formName === subMenuItemText;
-                });
-                subMenuItem.itemClass = 'active';
-                subMenuItem.iconClass = 'icon-blue icon-pencil';
-                $location.path(subMenuItem.path);
+                service.setActiveCallback(pathIdentifier, subMenuPathIdentifier)();
             }
+        },
+        //Since Menu needs to load before we run this, we make this a callback function - made a closure so that we can pass args to the callback
+        setActiveCallback: function (pathIdentifier, subMenuPathIdentifier) {
+            return function() {
+                service.checkForm();
+                service.clearActive();
+                var menuItem = _.find(service.menuItems, function(item) {
+                    return item.pathIdentifier === pathIdentifier;
+                });
+                if (subMenuPathIdentifier === null) {
+                    //no submenu to worry about
+                    menuItem.itemClass = 'active';
+                } else {
+                    menuItem.showSubMenu = true;
+                    menuItem.itemClass = 'submenu active';
+                    var subMenuItem = _.find(menuItem.subMenuItems, function(subItem) {
+                        return subItem.pathIdentifier === subMenuPathIdentifier;
+                    });
+                    subMenuItem.itemClass = 'active';
+                    subMenuItem.iconClass = 'icon-blue icon-pencil';
+                    $location.path(encodeURI(subMenuItem.path));
+                }
+            };
         },
         clearActive: function() {
             angular.forEach(service.menuItems, function (item) {
@@ -115,7 +94,7 @@
                 }
             }
         },
-        userId: 0
+        userId: 0,
     };
     return service;
 

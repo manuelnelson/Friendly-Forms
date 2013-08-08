@@ -6,15 +6,14 @@ using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
-using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
     public class ChildCareRestService
     {
         //REST Resource DTO
-        [Route("/ChildCare")]
-        [Route("/ChildCare/{Ids}")]
+        [Route("/ChildCares")]
+        [Route("/ChildCares/{Ids}")]
         public class ChildCareListDto : IReturn<List<ChildCareDto>>
         {
             public long[] Ids { get; set; }
@@ -25,9 +24,9 @@ namespace FriendlyForms.RestService
             }
         }
 
-        [Route("/ChildCare", "POST")]
-        [Route("/ChildCare/", "PUT")]
-        [Route("/ChildCare/", "GET")]
+        [Route("/ChildCares", "POST")]
+        [Route("/ChildCares/", "PUT")]
+        [Route("/ChildCares/", "GET")]
         public class ChildCareDto : IReturn<ChildCareDto>
         {
             [DataMember]

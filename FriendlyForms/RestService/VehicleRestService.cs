@@ -11,7 +11,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Vehicle/")]
+    [Route("/Vehicles/")]
     public class ReqVehicle
     {
         [DataMember]

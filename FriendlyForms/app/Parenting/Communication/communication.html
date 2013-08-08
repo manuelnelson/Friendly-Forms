@@ -39,8 +39,8 @@
                                 Other
                                 <input class="inline" required ng-model="communication.Other" name="Other" type="checkbox" value="False"></label>
                         </div>
-                        <div class="control-group communicate-other hide">
-                            <input ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="communication.OtherMethod" name="OtherMethod" placeholder="Other method" type="text" value="">
+                        <div class="control-group" ng-show="communication.Other">
+                            <input ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.OtherMethod" name="OtherMethod" placeholder="Other method" type="text" value="">
                             <div ng-show="communicationForm.OtherMethod.$dirty && communicationForm.OtherMethod.$invalid">
                                 <span class="form-error" ng-show="communicationForm.OtherMethod.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
@@ -58,10 +58,10 @@
                                 <span class="form-error" ng-show="communicationForm.Limitations.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group communicate-method hide">
+                        <div class="control-group" ng-show="communication.Limitations == 1">
                             <label class="form-question">
                                 Define any limitations on communication</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea>
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea>
                             <div ng-show="communicationForm.LimitationDetails.$dirty && communicationForm.LimitationDetails.$invalid">
                                 <span class="form-error" ng-show="communicationForm.LimitationDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
@@ -92,15 +92,14 @@
                                 <span class="form-error" ng-show="communicationForm.AccessOfRights.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group communicate-rights hide">
+                        <div class="control-group"  ng-show="communication.AccessOfRights == 1">
                             <label class="form-question">
                                 How should the rights of either parent be limited?</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="communication.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain Here" rows="2"></textarea>
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain Here" rows="2"></textarea>
                             <div ng-show="communicationForm.AccessOfRightsDetails.$dirty && communicationForm.AccessOfRightsDetails.$invalid">
                                 <span class="form-error" ng-show="communicationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

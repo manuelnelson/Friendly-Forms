@@ -10,7 +10,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Tax/")]
+    [Route("/Taxes/")]
     public class ReqTax
     {
         [DataMember]

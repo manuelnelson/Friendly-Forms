@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#propertyForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Property/' + $scope.property.UserId);
+                $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             propertyService.properties.save(null, $scope.property, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Property', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Property/' + $scope.property.UserId);
+                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
             });
         } else {
             propertyService.properties.update({ Id: $scope.property.Id }, $scope.property, function() {
                 menuService.setSubMenuIconClass('Domestic', 'Property', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Property/' + $scope.property.UserId);
+                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Domestic', 'Property');
     }
 };
-PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertiesService', 'menuService', 'genericService', '$rootScope'];
+PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService', 'menuService', 'genericService', '$rootScope'];

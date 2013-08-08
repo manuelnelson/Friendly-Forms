@@ -2,7 +2,6 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -40,6 +39,8 @@ namespace FriendlyForms.RestService
     public class RespChildSupport : IHasResponseStatus
     {
         [DataMember]
+        public ChildSupport ChildSupport { get; set; }
+        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
     [Authenticate]
@@ -56,10 +57,13 @@ namespace FriendlyForms.RestService
         }
         public object Post(ReqChildSupport request)
         {
-            var childSupportViewModel = request.TranslateTo<ChildSupportViewModel>();
-            childSupportViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            ChildSupportService.AddOrUpdate(childSupportViewModel);
-            return new RespChildSupport();
+            var childSupport = request.TranslateTo<ChildSupport>();
+            childSupport.UserId = Convert.ToInt32(UserSession.CustomId);
+            ChildSupportService.Add(childSupport);
+            return new RespChildSupport()
+                {
+                    ChildSupport = childSupport
+                };
         }
         public object Put(ReqChildSupport request)
         {

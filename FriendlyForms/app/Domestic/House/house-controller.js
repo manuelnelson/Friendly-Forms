@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#houseForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Domestic/Participant/' + $scope.house.UserId);
+                $location.path('/Domestic/Property/' + $scope.house.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             houseService.houses.save(null, $scope.house, function() {
                 menuService.setSubMenuIconClass('Domestic', 'House', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.house.UserId);
+                    $location.path('/Domestic/Property/' + $scope.house.UserId);
             });
         } else {
             houseService.houses.update({ Id: $scope.house.Id }, $scope.house, function() {
                 menuService.setSubMenuIconClass('Domestic', 'House', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.house.UserId);
+                    $location.path('/Domestic/Property/' + $scope.house.UserId);
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Domestic', 'House');
     }
 };
-HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'housesService', 'menuService', 'genericService', '$rootScope'];
+HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', '$rootScope'];

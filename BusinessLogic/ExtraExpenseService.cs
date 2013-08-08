@@ -3,11 +3,10 @@ using System.Linq;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ExtraExpenseService : FormService<IExtraExpenseRepository, ExtraExpense, ExtraExpenseViewModel>, IExtraExpenseService
+    public class ExtraExpenseService : FormService<IExtraExpenseRepository, ExtraExpense>, IExtraExpenseService
     {
         private IExtraExpenseRepository ExtraExpenseRepository { get; set; }
 

@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#healthForm');
             $.jStorage.set($scope.storageKey, value);
             if (!noNavigate)
-                $location.path('/Financial/Participant/' + $scope.health.UserId);
+                $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
             return;
         }
         $.jStorage.deleteKey($scope.storageKey);
@@ -21,13 +21,13 @@
             healthService.healths.save(null, $scope.health, function() {
                 menuService.setSubMenuIconClass('Financial', 'Health', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Participant/' + $scope.health.UserId);
+                    $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
             });
         } else {
             healthService.healths.update({ Id: $scope.health.Id }, $scope.health, function() {
                 menuService.setSubMenuIconClass('Financial', 'Health', 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Participant/' + $scope.health.UserId);
+                    $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
             });
         }
     };
@@ -36,4 +36,4 @@
         menuService.setActive('Financial', 'Health');
     }
 };
-HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthsService', 'menuService', 'genericService', '$rootScope'];
+HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', '$rootScope'];

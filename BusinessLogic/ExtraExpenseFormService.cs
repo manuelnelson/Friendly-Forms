@@ -1,11 +1,10 @@
 ﻿using BusinessLogic.Contracts;
 using DataInterface;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ExtraExpenseFormService : FormService<IExtraExpenseFormRepository, ExtraExpenseForm, ExtraExpenseFormViewModel>, IExtraExpenseFormService
+    public class ExtraExpenseFormService : FormService<IExtraExpenseFormRepository, ExtraExpenseForm>, IExtraExpenseFormService
     {
         private IExtraExpenseFormRepository ExtraExpenseFormRepository { get; set; }
 

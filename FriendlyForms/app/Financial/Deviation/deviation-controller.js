@@ -36,4 +36,4 @@
         menuService.setActive('Financial', 'Deviation');
     }
 };
-DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationsService', 'menuService', 'genericService', '$rootScope'];
+DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];

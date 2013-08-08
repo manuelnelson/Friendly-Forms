@@ -19,9 +19,9 @@
     </div>
     <div id="user-nav" class="navbar" ng-controller="LoginMenuCtrl">
         <ul class="nav btn-group">
-                <li class="btn btn-mini btn-inverse" ng-show="user.UserSession.IsAuthenticated" style="display:none"><a title="" href="/"><i class="icon icon-home"></i><span class="text">Home</span></a></li>
-                <li class="btn btn-mini btn-inverse" ng-show="user.UserSession.IsAuthenticated" style="display:none"><a title="Log off" id="logOff" href="#logOff"><i class="icon icon-share-alt"></i><span class="text">Logout</span></a></li>
-                <li class="btn btn-mini btn-inverse" ng-show="!user.UserSession.IsAuthenticated" style="display:none"><a title="" href="#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a></li>
+            <li class="btn btn-mini btn-inverse" ng-show="user.UserSession.IsAuthenticated" style="display: none"><a title="" href="/"><i class="icon icon-home"></i><span class="text">Home</span></a></li>
+            <li class="btn btn-mini btn-inverse" ng-show="user.UserSession.IsAuthenticated" style="display: none"><a title="Log off" id="logOff" ng-click="logOff()"><i class="icon icon-share-alt"></i><span class="text">Logout</span></a></li>
+            <li class="btn btn-mini btn-inverse" ng-show="!user.UserSession.IsAuthenticated" style="display: none"><a title="" href="#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a></li>
         </ul>
     </div>
     @RenderBody()
@@ -29,7 +29,7 @@
         <ul class="ng-cloak">
             <li ng-repeat="menuItem in menuItems" ng-click="menuClick()" class="{{menuItem.itemClass}}"><a href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>
                 <ul ng-show="menuItem.showSubMenu">
-                    <li ng-repeat="subMenuItem in menuItem.subMenuItems" class="{{subMenuItem.itemClass}}" ng-click="subMenuClick(menuItem.text, subMenuItem.text)" data-path="{{subMenuItem.path}}"><a href="javascript:"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
+                    <li ng-repeat="subMenuItem in menuItem.subMenuItems" class="{{subMenuItem.itemClass}}" ng-click="subMenuClick(menuItem.pathIdentifier, subMenuItem.pathIdentifier)" data-path="{{subMenuItem.path}}"><a href="javascript:"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
                 </ul>
             </li>
         </ul>
@@ -39,6 +39,14 @@
             <h1>@ViewBag.Title</h1>
         </div>
         <div class="container-fluid" id="main-content">
+            <div ng-controller="MessageCtrl" ng-show="showMessage" class="row">
+                <div class="span12">
+                    <div class="alert {{AlertType}}">
+                        <a ng-click="close();" class="close">×</a>
+                        <strong>{{Title}}</strong> {{Message}}
+                    </div>
+                </div>
+            </div>
             <div ng-view></div>
             <hr />
             <footer>
@@ -49,7 +57,7 @@
         </div>
     </div>
     @Html.Raw(Profiler.RenderIncludes().ToHtmlString())
-    <div id="loading" class="hide">Loading...Please Wait</div>
+    <div ng-controller="LoadingCtrl" id="loading" ng-show="loading"><span>{{message}}</span></div>
     @Html.Partial("_templateErrorMessage")
     @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))
 </body>

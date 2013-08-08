@@ -21,9 +21,9 @@
                                     <td>{{childAdded.Name}}</td>
                                     <td>{{childAdded.DateOfBirthString}}</td>
                                     <td>
-<!--                                        <button class="btn-small btn-primary btn childEdit" title="Edit"><i class="icon-white icon-edit"></i></button>-->
+                                        <!--                                        <button class="btn-small btn-primary btn childEdit" title="Edit"><i class="icon-white icon-edit"></i></button>-->
                                         <button class="btn-small btn-primary btn" title="Delete" ng-click="deleteChild(childAdded)"><i class="icon-white icon-trash"></i></button>
-<!--                                        <button class="btn-small btn-primary btn childDone hide" data-id="1" title="Done"><i class="icon-white icon-ok"></i>Done</button>-->
+                                        <!--                                        <button class="btn-small btn-primary btn childDone hide" data-id="1" title="Done"><i class="icon-white icon-ok"></i>Done</button>-->
                                     </td>
                                 </tr>
                             </tbody>
@@ -34,10 +34,10 @@
                             <label class="form-question">Are there children involved in this case?</label>
                             <label class="radio inline">
                                 Yes
-                                <input class="inline" ng-change="submitChildForm()" required ng-model="childForm.ChildrenInvolved" type="radio" value="1"></label>
+                                <input class="inline" ng-change="submit()" required ng-model="childForm.ChildrenInvolved" type="radio" value="1"></label>
                             <label class="radio inline">
                                 No
-                                <input class="inline" ng-change="submitChildForm()" ng-model="childForm.ChildrenInvolved" type="radio" value="2"></label>
+                                <input class="inline" ng-change="submit()" ng-model="childForm.ChildrenInvolved" type="radio" value="2"></label>
                             <div ng-show="childForm.ChildrenInvolved.$dirty && childForm.ChildrenInvolved.$invalid">
                                 <span class="form-error" ng-show="childForm.ChildrenInvolved.$error.required">Please select an option</span>
                             </div>
@@ -46,7 +46,7 @@
                     <form ng-submit="addChild()" id="addChildForm" ng-show="childForm.ChildrenInvolved == 1" name="addChildForm" novalidate>
                         <div class="control-group row-fluid">
                             <label class="span2">Name</label>
-                            <input ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
+                            <input ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="//^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$//" ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
                             <div ng-show="child.Name.$dirty && child.Name.$invalid">
                                 <span class="form-error" ng-show="child.Name.$error.required">The Name field is required</span>
                                 <span class="form-error" ng-show="child.Name.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
@@ -60,12 +60,21 @@
                                 <span class="form-error" ng-show="child.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                             </div>
                         </div>
-                    <button class="btn btn-primary" style="margin-bottom: 20px;" value="Add">Add</button>
+                        <button class="btn btn-primary" style="margin-bottom: 20px;" value="Add">Add</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <div ng-model="starterWarning"></div>
-    <button class="btn btn-primary" value="Done">Continue<i class="icon-arrow-right icon-white"></i></button>
+    <button class="btn btn-primary" ng-click="continue()" ng-show="!continuePressed">Continue<i class="icon-arrow-right icon-white"></i></button>
+    <!-- User Message -->
+    <div class="row-fluid" ng-show="continuePressed">
+        <div class="span12">
+            <div class="alert alert-success">
+                <a class="close">×</a>
+                <strong>Please note</strong> Before proceeding, please review the data you entered as you will not be able to edit this data past this point. 
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" ng-click="nextForm()" ng-show="continuePressed">Next Form<i class="icon-arrow-right icon-white"></i></button>
 </div>
