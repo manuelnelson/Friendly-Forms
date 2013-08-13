@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.DataAnnotations;
@@ -16,7 +17,12 @@ namespace Models
         public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
-
+        [NotMapped]
+        [Ignore]
+        public virtual string DateOfBirthString
+        {
+            get { return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
+        }
         public virtual int OtherChildrenId { get; set; }
         [Ignore]
         public virtual OtherChildren OtherChildren { get; set; }

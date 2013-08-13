@@ -12,7 +12,6 @@ namespace FriendlyForms.RestService
     public class ChildCareRestService
     {
         //REST Resource DTO
-        [Route("/ChildCares")]
         [Route("/ChildCares/{Ids}")]
         public class ChildCareListDto : IReturn<List<ChildCareDto>>
         {
@@ -26,7 +25,7 @@ namespace FriendlyForms.RestService
 
         [Route("/ChildCares", "POST")]
         [Route("/ChildCares/", "PUT")]
-        [Route("/ChildCares/", "GET")]
+        [Route("/ChildCares")]
         public class ChildCareDto : IReturn<ChildCareDto>
         {
             [DataMember]

@@ -1,10 +1,15 @@
 ﻿FormsApp.factory('otherChildService', function($resource) {
     var service = {
-        otherChildren: $resource('/api/otherChildren/:userId', { userId: '@userId' },
+        otherChildren: $resource('/api/otherChildren/', {},
             {
-                get: { method: 'GET', params: { format: 'json' } },
-                update: { method: 'PUT', params: { format: 'json' } }
+                update: { method: 'PUT' },
+                deleteAll: { method: 'DELETE' }
             }),
+        otherChild: $resource('/api/otherChild/', null,
+            {
+                update: { method: 'PUT' },
+                deleteAll: { method: 'DELETE' }
+            })
     };
     return service;
 });

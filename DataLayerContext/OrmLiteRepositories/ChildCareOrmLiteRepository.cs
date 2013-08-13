@@ -13,12 +13,18 @@ namespace DataLayerContext.OrmLiteRepositories
 
         public ChildCare GetChildById(long childId)
         {
-            throw new System.NotImplementedException();
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.FirstOrDefault<ChildCare>(x => x.ChildId == childId);
+            }
         }
 
         public IEnumerable<ChildCare> GetAllByUserId(long userId)
         {
-            throw new System.NotImplementedException();
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.Select<ChildCare>(x => x.UserId == userId);
+            }
         }
     }
 }

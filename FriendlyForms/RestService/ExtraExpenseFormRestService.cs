@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BusinessLogic;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
@@ -12,8 +11,8 @@ namespace FriendlyForms.RestService
     public class ExtraExpenseFormRestService
     {
         //REST Resource DTO
-        [Route("/ExtraExpenseForm")]
-        [Route("/ExtraExpenseForm/{Ids}")]
+        [Route("/ExtraExpenseForms")]
+        [Route("/ExtraExpenseForms/{Ids}")]
         public class ExtraExpenseFormListDto : IReturn<List<ExtraExpenseFormDto>>
         {
             public long[] Ids { get; set; }
@@ -24,9 +23,9 @@ namespace FriendlyForms.RestService
             }
         }
 
-        [Route("/ExtraExpenseForm", "POST")]
-        [Route("/ExtraExpenseForm/", "PUT")]
-        [Route("/ExtraExpenseForm", "GET")]
+        [Route("/ExtraExpenseForms", "POST")]
+        [Route("/ExtraExpenseForms/", "PUT")]
+        [Route("/ExtraExpenseForms", "GET")]
         public class ExtraExpenseFormDto : IReturn<ExtraExpenseFormDto>
         {
             public long Id { get; set; }

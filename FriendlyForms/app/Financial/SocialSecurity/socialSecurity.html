@@ -23,7 +23,7 @@
                                 <span class="form-error" ng-show="socialSecurityForm.ReceiveSocial.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group row-fluid social-social hide" style="display: block;">
+                        <div class="control-group row-fluid" ng-show="socialSecurity.ReceiveSocial == 1">
                             <label class="span4 form-question">Amount per month</label>
                             <input required number ng-model="socialSecurity.Amount" name="Amount" placeholder="Monthly Amount" type="text" value="">
                             <div ng-show="socialSecurityForm.Amount.$dirty && socialSecurityForm.Amount.$invalid">
@@ -34,6 +34,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+        <button class="btn btn-primary" ng-click="">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

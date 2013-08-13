@@ -26,7 +26,7 @@ namespace FriendlyForms.RestService
 
         [Route("/Healths", "POST")]
         [Route("/Healths", "PUT")]
-        [Route("/Healths/{Id}", "GET")]
+        [Route("/Healths")]
         public class HealthDto : IReturn<HealthDto>
         {
             [DataMember]
