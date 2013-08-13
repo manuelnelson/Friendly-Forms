@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -30,7 +31,9 @@ namespace FriendlyForms.RestService
     public class RespOtherChild : IHasResponseStatus
     {
         [DataMember]
-        public ReqOtherChild OtherChild { get; set; }
+        public OtherChild OtherChild { get; set; }
+        [DataMember]
+        public List<OtherChild> OtherChildren { get; set; }
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
@@ -38,25 +41,27 @@ namespace FriendlyForms.RestService
     public class OtherChildRestService : ServiceBase
     {
         public IOtherChildService OtherChildService { get; set; }
+
         public object Get(ReqOtherChild request)
         {
             if (request.Id != 0)
             {
                 return OtherChildService.Get(request.Id);
             }
-            return OtherChildService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
+            return new RespOtherChild
+                {
+                    OtherChildren = OtherChildService.GetChildrenByOtherChildrenId(request.OtherChildrenId).ToList()
+                };
         }
+    
         public object Post(ReqOtherChild request)
         {
-            var otherChildViewModel = request.TranslateTo<OtherChildViewModel>();
-            otherChildViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var otherChildEntity = OtherChildService.AddOrUpdate(otherChildViewModel);
-            var otherChild = otherChildEntity.TranslateTo<ReqOtherChild>();
-            if (otherChildEntity.DateOfBirth != null)
-                otherChild.DateOfBirth = otherChildEntity.DateOfBirth.Value.ToShortDateString();
+            var otherChildEntity = request.TranslateTo<OtherChild>();
+            otherChildEntity.UserId = Convert.ToInt32(UserSession.CustomId);
+            OtherChildService.Add(otherChildEntity);
             return new RespOtherChild()
                 {
-                    OtherChild = otherChild
+                    OtherChild = otherChildEntity
                 };
         }
 
@@ -66,6 +71,11 @@ namespace FriendlyForms.RestService
             otherChild.UserId = Convert.ToInt32(UserSession.CustomId);
             OtherChildService.Update(otherChild);
             return new RespOtherChild();
+        }
+        public object Delete(ReqOtherChild request)
+        {
+            OtherChildService.Delete(request.Id);
+            return null;
         }
     }
 }

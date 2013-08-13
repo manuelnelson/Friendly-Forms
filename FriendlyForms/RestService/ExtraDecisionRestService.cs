@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -13,7 +12,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/ExtraDecisions/",Verbs = "POST")]
-    [Route("/ExtraDecisions/{ChildId}", Verbs = "GET")]
+    [Route("/ExtraDecisions/")]
     public class ReqExtraDecisions
     {
         [DataMember]
@@ -53,24 +52,24 @@ namespace FriendlyForms.RestService
         public object Get(ReqExtraDecisions request)
         {            
             var extraDecisions = ExtraDecisionsService.GetByChildId(request.ChildId);
-            return extraDecisions;
+            return new RespExtraDecisions
+                {
+                    ExtraDecisions = extraDecisions
+                };
         }
 
         public object Post(ReqExtraDecisions request)
         {
-            var extraDecisionsViewModel = request.TranslateTo<ExtraDecisionsViewModel>();
-            extraDecisionsViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var updatedDecision = ExtraDecisionsService.AddOrUpdate(extraDecisionsViewModel);
-            return new RespExtraDecisionsPost()
-                {
-                    ExtraDecision = updatedDecision
-                };
+            var extraDecisions = request.TranslateTo<ExtraDecisions>();
+            extraDecisions.UserId = Convert.ToInt32(UserSession.CustomId);
+            ExtraDecisionsService.Add(extraDecisions);
+            return extraDecisions;
         }
         public object Put(ReqExtraDecisions request)
         {
             var extraDecisions = request.TranslateTo<ExtraDecisions>();
             extraDecisions.UserId = Convert.ToInt32(UserSession.CustomId);
-            //ExtraDecisionsService.Update(extraDecisions);
+            ExtraDecisionsService.Update(extraDecisions);
             return new RespExtraDecisionsPost();
         }
     }

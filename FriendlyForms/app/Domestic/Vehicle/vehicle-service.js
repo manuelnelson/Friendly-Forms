@@ -1,10 +1,15 @@
 ﻿FormsApp.factory('vehicleService', function($resource) {
     var service = {
-        vehicles: $resource('/api/vehicles/:userId', { userId: '@userId' },
+        vehicles: $resource('/api/vehicles/', {},
             {
-                get: { method: 'GET', params: { format: 'json' } },
-                update: { method: 'PUT', params: { format: 'json' } }
+                update: { method: 'PUT' },
+                deleteAll: { method: 'DELETE' }
             }),
+        vehicleForm: $resource('/api/vehicleForm/', null,
+            {
+                update: { method: 'PUT' },
+                deleteAll: { method: 'DELETE' }
+            })
     };
     return service;
 });

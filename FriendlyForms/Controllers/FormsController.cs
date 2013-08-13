@@ -132,7 +132,7 @@ namespace FriendlyForms.Controllers
                 //schedule.CustodialParent = custodyInformation.CustodyParent;
             }
 
-            var holiday = children.Children.Any() ? _holidayService.GetByChildId(children.Children.First().Id) : new Holiday();
+            var holiday = children.Any() ? _holidayService.GetByChildId(children.First().Id) : new Holiday();
             var addendum = _addendumService.GetByUserId(Id);
             var allDecisions = new AllDecisionsViewModel()
                 {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
+using Models;
 
 namespace BusinessLogic
 {
@@ -15,6 +16,7 @@ namespace BusinessLogic
             ChildFormService = childFormService;
             CourtService = courtService;
         }
+
         public List<MenuItem> Get(string route, long userId, bool isAuthenticated = false)
         {
             //Always has Home Link
@@ -41,10 +43,11 @@ namespace BusinessLogic
             else
             {
                 menuList.Add(GetMediationMenu(userId));
-                if (UserHasChildren(userId))
+                var children = ChildService.GetByUserId(userId);
+                if (children.Count > 0)
                 {
-                    menuList.Add(GetParentingPlanMenu(userId));
-                    menuList.Add(GetFinancialFormMenu(userId));
+                    menuList.Add(GetParentingPlanMenu(userId, children[0]));
+                    menuList.Add(GetFinancialFormMenu(userId, children[0]));
                 }
             }
 
@@ -59,12 +62,6 @@ namespace BusinessLogic
         }
 
         #region Menu Logic Helpers
-        private bool UserHasChildren(long userId)
-        {
-            var childrenViewModel = ChildService.GetByUserId(userId);
-            return childrenViewModel.Children.Count > 0;
-        }
-
         private bool UserIsAtStarterStage(long userId)
         {
             var childForm = ChildFormService.GetByUserId(userId);
@@ -213,7 +210,7 @@ namespace BusinessLogic
                 subMenuItems = menuList
             };
         }
-        private MenuItem GetParentingPlanMenu(long userId)
+        private MenuItem GetParentingPlanMenu(long userId, Child firstChild)
         {
             var menuList = new List<FormMenuItem>
                 {
@@ -240,7 +237,7 @@ namespace BusinessLogic
                             formName = "Decisions",
                             text = "Decisions",
                             iconClass = "",
-                            path = "/Parenting/Decision/" + userId,
+                            path = "/Parenting/Decision/" + userId + "/" + firstChild.Id,
                             pathIdentifier = "Decision",
                             itemClass = ""
                         },
@@ -276,7 +273,7 @@ namespace BusinessLogic
                             formName = "Holidays",
                             text = "Holidays",
                             iconClass = "",
-                            path = "/Parenting/Holiday/" + userId,
+                            path = "/Parenting/Holiday/" + userId + "/" + firstChild.Id,
                             pathIdentifier = "Holiday",
                             itemClass = ""
                         },
@@ -303,7 +300,7 @@ namespace BusinessLogic
 
 
         }
-        private MenuItem GetFinancialFormMenu(long userId)
+        private MenuItem GetFinancialFormMenu(long userId, Child firstChild)
         {
             var menuList = new List<FormMenuItem>
                 {
@@ -312,7 +309,7 @@ namespace BusinessLogic
                             formName = "ChildCare",
                             text = "Child Care",
                             iconClass = "",
-                            path = "/Financial/ChildCare/" + userId,
+                            path = "/Financial/ChildCare/" + userId + "/" + firstChild.Id,
                             pathIdentifier = "ChildCare",
                             itemClass = ""
                         },
@@ -321,7 +318,7 @@ namespace BusinessLogic
                             formName = "ExtraExpenses",
                             text = "Extra Expenses",
                             iconClass = "",
-                            path = "/Financial/ExtraExpense/" + userId,
+                            path = "/Financial/ExtraExpense/" + userId + "/" + firstChild.Id,
                             pathIdentifier = "ExtraExpense",
                             itemClass = ""
                         },
@@ -366,8 +363,8 @@ namespace BusinessLogic
                             formName = "OtherChildren",
                             text = "Other Children (Father)",
                             iconClass = "",
-                            path = "/Financial/OtherChildren/" + userId + "/false",
-                            pathIdentifier = "OtherChildren",
+                            path = "/Financial/OtherChild/" + userId + "/false",
+                            pathIdentifier = "OtherChild",
                             itemClass = ""
                         },
                     new FormMenuItem
@@ -402,8 +399,8 @@ namespace BusinessLogic
                             formName = "OtherChildren",
                             text = "Other Children (Mother)",
                             iconClass = "",
-                            path = "/Financial/OtherChildren/" + userId + "/true",
-                            pathIdentifier = "OtherChildren",
+                            path = "/Financial/OtherChild/" + userId + "/true",
+                            pathIdentifier = "OtherChild",
                             itemClass = ""
                         },
                     new FormMenuItem

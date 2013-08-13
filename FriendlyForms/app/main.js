@@ -24,15 +24,15 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui"], ["$routeProvider
         when('/Domestic/Vehicle/:userId', { controller: VehicleCtrl, templateUrl: '/app/Domestic/Vehicle/Vehicle.html' }).
         when('/Parenting/Supervision/:userId', { controller: PrivacyCtrl, templateUrl: '/app/Parenting/Privacy/Privacy.html' }).
         when('/Parenting/Information/:userId', { controller: InformationCtrl, templateUrl: '/app/Parenting/Information/Information.html' }).
-        when('/Parenting/Decision/:userId', { controller: DecisionCtrl, templateUrl: '/app/Parenting/Decision/Decision.html' }).
+        when('/Parenting/Decision/:userId/:childId', { controller: DecisionCtrl, templateUrl: '/app/Parenting/Decision/Decision.html' }).
         when('/Parenting/Responsibility/:userId', { controller: ResponsibilityCtrl, templateUrl: '/app/Parenting/Responsibility/Responsibility.html' }).
         when('/Parenting/Communication/:userId', { controller: CommunicationCtrl, templateUrl: '/app/Parenting/Communication/Communication.html' }).
         when('/Parenting/Schedule/:userId', { controller: ScheduleCtrl, templateUrl: '/app/Parenting/Schedule/Schedule.html' }).
-        when('/Parenting/Holiday/:userId', { controller: HolidayCtrl, templateUrl: '/app/Parenting/Holiday/Holiday.html' }).
+        when('/Parenting/Holiday/:userId/:childId', { controller: HolidayCtrl, templateUrl: '/app/Parenting/Holiday/Holiday.html' }).
         when('/Parenting/Addendum/:userId', { controller: AddendumCtrl, templateUrl: '/app/Parenting/Addendum/Addendum.html' }).
-        when('/Financial/ChildCare/:userId', { controller: ChildCareCtrl, templateUrl: '/app/Financial/ChildCare/ChildCare.html' }).
-        when('/Financial/Health/:userId', { controller: HealthInsuranceCtrl, templateUrl: '/app/Financial/HealthInsurance/HealthInsurance.html' }).
-        when('/Financial/ExtraExpense/:userId', { controller: ExtraExpenseCtrl, templateUrl: '/app/Financial/ExtraExpense/ExtraExpense.html' }).
+        when('/Financial/ChildCare/:userId/:childId', { controller: ChildCareCtrl, templateUrl: '/app/Financial/ChildCare/ChildCare.html' }).
+        when('/Financial/Health/:userId', { controller: HealthInsuranceCtrl, templateUrl: '/app/Financial/Health/Health.html' }).
+        when('/Financial/ExtraExpense/:userId/:childId', { controller: ExtraExpenseCtrl, templateUrl: '/app/Financial/ExtraExpense/ExtraExpense.html' }).
         when('/Financial/Income/:userId/:isOtherParent', { controller: IncomeCtrl, templateUrl: '/app/Financial/Income/Income.html' }).
         when('/Financial/SocialSecurity/:userId/:isOtherParent', { controller: SocialSecurityCtrl, templateUrl: '/app/Financial/SocialSecurity/SocialSecurity.html' }).
         when('/Financial/Support/:userId/:isOtherParent', { controller: SupportCtrl, templateUrl: '/app/Financial/Support/Support.html' }).

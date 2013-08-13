@@ -12,12 +12,12 @@
             //show/collapse menu
             $curItem.showSubMenu = !$curItem.showSubMenu;
         } else {
-            menuService.setActive($curItem.text);
+            menuService.setActive($curItem.path);
         }            
     };
-    $scope.subMenuClick = function (menuText, subMenuText) {
+    $scope.subMenuClick = function (path) {
         $scope.isSubMenuClick = true;
-        menuService.setActive(menuText, subMenuText);
+        menuService.setActive(path);
     };
 };
 MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];

@@ -81,10 +81,21 @@ namespace FriendlyForms.App_Start
 #endif
             container.Register<ISessionFactory>(c => new SessionFactory(c.Resolve<ICacheClient>()));
 
+		    CreateMissingTables(container, run:false);
 
 			//Set MVC to use the same Funq IOC as ServiceStack
 			ControllerBuilder.Current.SetControllerFactory(new FunqControllerFactory(container));
 		}
+
+        private void CreateMissingTables(Container container, bool run)
+        {
+            //We don't need to run this all the time
+            if (!run) return;
+
+            var vehicleRepo = (VehicleOrmLiteRepository)container.Resolve<IVehicleRepository>();
+            vehicleRepo.CreateMissingTables();
+        }
+
         private void SetupEFRepositories(Container container)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["SplitContext"].ConnectionString;
@@ -237,6 +248,7 @@ namespace FriendlyForms.App_Start
             container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>() as ExtraExpenseRepository));
             container.Register<IMenuService>(c => new MenuService(c.Resolve<IChildService>(), c.Resolve<IChildFormService>(), c.Resolve<ICourtService>()));
         }
+
         private void SetupOrmLiteServices(Container container)
         {
             container.Register<ICourtService>(c => new CourtService(c.Resolve<ICourtRepository>()));
@@ -305,6 +317,7 @@ namespace FriendlyForms.App_Start
 
             var authRepo = (OrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();
             authRepo.CreateMissingTables();
+
 		}
 		
 

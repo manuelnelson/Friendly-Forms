@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -41,8 +40,6 @@ namespace FriendlyForms.RestService
         [DataMember]
         public Decisions Decisions { get; set; }
         [DataMember]
-        public List<ExtraDecisions> ExtraDecisions { get; set; }
-        [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
     [Authenticate]
@@ -53,21 +50,15 @@ namespace FriendlyForms.RestService
 
         public object Get(ReqDecisions request)
         {
-            var decision = DecisionsService.GetByChildId(request.ChildId);
-            var extraDecisions = ExtraDecisionsService.GetByChildId(request.ChildId);
-            return new RespDecisions()
-                {
-                    Decisions     = decision,
-                    ExtraDecisions = extraDecisions
-                };
+            return DecisionsService.GetByChildId(request.ChildId);
         }
 
         public object Post(ReqDecisions request)
         {
-            var decisions = request.TranslateTo<DecisionsViewModel>();
+            var decisions = request.TranslateTo<Decisions>();
             decisions.UserId = Convert.ToInt32(UserSession.CustomId);
 
-            DecisionsService.AddOrUpdate(decisions);
+            DecisionsService.Add(decisions);
             return new RespDecisions();
         }
         public object Put(ReqDecisions request)

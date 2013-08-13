@@ -100,25 +100,25 @@ namespace FriendlyForms.Controllers
             var extraDecisions = new List<ExtraDecisions>();
             var holidays = new List<Holiday>();
             var extraHolidays = new List<ExtraHoliday>();
-            if (children.Children.Any())
+            if (children.Any())
             {
-                decisions.AddRange(children.Children.Select(child => _decisionsService.GetByChildId(child.Id)));
+                decisions.AddRange(children.Select(child => _decisionsService.GetByChildId(child.Id)));
             }
-            if (children.Children.Any())
+            if (children.Any())
             {
-                foreach (var child in children.Children)
+                foreach (var child in children)
                 {
                     var tempDecisions = _extraDecisionsService.GetByChildId(child.Id);
                     extraDecisions.AddRange(tempDecisions);
                 }
             }
-            if (children.Children.Any())
+            if (children.Any())
             {
-                holidays.AddRange(children.Children.Select(child => _holidayService.GetByChildId(child.Id)));
+                holidays.AddRange(children.Select(child => _holidayService.GetByChildId(child.Id)));
             }
-            if (children.Children.Any())
+            if (children.Any())
             {
-                foreach (var child in children.Children)
+                foreach (var child in children)
                 {
                     var tempHolidays = _extraHolidayService.GetByChildId(child.Id);
                     extraHolidays.AddRange(tempHolidays);
@@ -169,7 +169,7 @@ namespace FriendlyForms.Controllers
             var childViewModel = new ParentingPlanViewModel
             {
                 CourtViewModel = court,
-                ParticipantViewModel = participants as ParticipantViewModel,
+                ParticipantViewModel = participants,
                 ChildAllViewModel = new ChildAllViewModel()
                     {
                         ChildViewModel = children,

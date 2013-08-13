@@ -20,55 +20,67 @@
                     callback();
             });
         },
-        setSubMenuIconClass: function (pathIdentifier, subMenuPathIdentifier, iconClass) {
-            var menuItem = _.find(service.menuItems, function (item) {
-                return item.pathIdentifier === pathIdentifier;
-            });
-            var subMenuItem = _.find(menuItem.subMenuItems, function (subItem) {
-                return subItem.pathIdentifier === subMenuPathIdentifier;
-            });
-            subMenuItem.iconClass = iconClass;
+        getMenuGroupByPath: function (path) {
+            for (var i = 0; i < service.menuItems.length; i++) {
+                var item = service.menuItems[i];
+                //Return just menu item if match
+                if (item.path === path) {
+                    return {
+                        menuItem: item,
+                        subMenuItem: null
+                    };
+                }
+                //else look for submenuItem
+                var subMenuItem = _.find(item.subMenuItems, function (subItem) {
+                    return subItem.path === path;
+                });
+                if (subMenuItem) {                    
+                    return {
+                        menuItem: item,
+                        subMenuItem: subMenuItem
+                    };
+                }
+            }
         },
-        isActive: function (pathIdentifier, subMenuPathIdentifier) {
+        setSubMenuIconClass: function (path, iconClass) {
+            var menuGroup = service.getMenuGroupByPath(path);
+            if (menuGroup.subMenuItem)
+                menuGroup.subMenuItem.iconClass = iconClass;
+        },
+        isActive: function (path) {
             if (service.isInitialized) {
-                var menuItem = _.find(service.menuItems, function(item) {
-                    return item.pathIdentifier === pathIdentifier;
-                });
-                var subMenuItem = _.find(menuItem.subMenuItems, function(subItem) {
-                    return subItem.pathIdentifier === subMenuPathIdentifier;
-                });
-                return subMenuItem.itemClass === 'active';
+                var menuGroup = service.getMenuGroupByPath(path);
+                if(menuGroup.subMenuItem)
+                    return menuGroup.subMenuItem.itemClass === 'active';
             }
             return false;
         },
-        setActive: function (pathIdentifier, subMenuPathIdentifier) {
+        setActive: function (path) {
             if (!service.isInitialized) {
-                service.getMenu(service.setActiveCallback(pathIdentifier, subMenuPathIdentifier));                
+                service.getMenu(service.setActiveCallback(path));                
             } else {
-                service.setActiveCallback(pathIdentifier, subMenuPathIdentifier)();
+                service.setActiveCallback(path)();
             }
         },
         //Since Menu needs to load before we run this, we make this a callback function - made a closure so that we can pass args to the callback
-        setActiveCallback: function (pathIdentifier, subMenuPathIdentifier) {
+        setActiveCallback: function (path) {
             return function() {
                 service.checkForm();
                 service.clearActive();
-                var menuItem = _.find(service.menuItems, function(item) {
-                    return item.pathIdentifier === pathIdentifier;
+                //Check to see if first menu level is the path
+                var menuItem = _.find(service.menuItems, function (item) {
+                    return item.path === path;
                 });
-                if (subMenuPathIdentifier === null) {
-                    //no submenu to worry about
+                if (menuItem) {
                     menuItem.itemClass = 'active';
-                } else {
-                    menuItem.showSubMenu = true;
-                    menuItem.itemClass = 'submenu active';
-                    var subMenuItem = _.find(menuItem.subMenuItems, function(subItem) {
-                        return subItem.pathIdentifier === subMenuPathIdentifier;
-                    });
-                    subMenuItem.itemClass = 'active';
-                    subMenuItem.iconClass = 'icon-blue icon-pencil';
-                    $location.path(encodeURI(subMenuItem.path));
                 }
+                //Must be subMenu Level
+                var menuGroup = service.getMenuGroupByPath(path);
+                menuGroup.menuItem.showSubMenu = true;
+                menuGroup.menuItem.itemClass = 'submenu active';
+                menuGroup.subMenuItem.itemClass = 'active';
+                menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
+                $location.path(menuGroup.subMenuItem.path);
             };
         },
         clearActive: function() {

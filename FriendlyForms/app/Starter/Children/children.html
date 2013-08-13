@@ -47,17 +47,17 @@
                         <div class="control-group row-fluid">
                             <label class="span2">Name</label>
                             <input ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="//^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$//" ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
-                            <div ng-show="child.Name.$dirty && child.Name.$invalid">
-                                <span class="form-error" ng-show="child.Name.$error.required">The Name field is required</span>
-                                <span class="form-error" ng-show="child.Name.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
+                            <div ng-show="addChildForm.Name.$dirty && addChildForm.Name.$invalid">
+                                <span class="form-error" ng-show="addChildForm.Name.$error.required">The Name field is required</span>
+                                <span class="form-error" ng-show="addChildForm.Name.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
                         <div class="control-group row-fluid">
                             <label class="span2">Date of Birth</label>
-                            <input class="datepicker" data-date="06/05/2013" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="child.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
-                            <div ng-show="child.DateOfBirth.$dirty && child.DateOfBirth.$invalid">
-                                <span class="form-error" ng-show="child.DateOfBirth.$error.required">The Date of Birth field is required</span>
-                                <span class="form-error" ng-show="child.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
+                            <input class="datepicker" data-date="06/05/2013" required ng-pattern="//^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$//" ng-model="child.DateOfBirth" name="child.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
+                            <div ng-show="addChildForm.DateOfBirth.$dirty && addChildForm.DateOfBirth.$invalid">
+                                <span class="form-error" ng-show="addChildForm.DateOfBirth.$error.required">The Date of Birth field is required</span>
+                                <span class="form-error" ng-show="addChildForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                             </div>
                         </div>
                         <button class="btn btn-primary" style="margin-bottom: 20px;" value="Add">Add</button>

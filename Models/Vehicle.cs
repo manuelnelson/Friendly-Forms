@@ -23,6 +23,7 @@ namespace Models
         public DateTime? RefinanceDate { get; set; }
 
         public int VehicleFormId { get; set; }
+        [Ignore]
         public virtual VehicleForm VehicleForm { get; set; }
 
         public IViewModel ConvertToModel()

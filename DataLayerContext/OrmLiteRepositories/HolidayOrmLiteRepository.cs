@@ -9,5 +9,13 @@ namespace DataLayerContext.OrmLiteRepositories
         public HolidayOrmLiteRepository(IDbConnectionFactory dbFactory) : base(dbFactory)
         {
         }
+
+        public Holiday GetByChildId(long childId)
+        {
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.FirstOrDefault<Holiday>(x => x.ChildId == childId);
+            }  
+        }
     }
 }

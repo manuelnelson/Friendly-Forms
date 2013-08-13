@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DataLayerContext.Migrations;
+using ServiceStack.MiniProfiler;
 
 namespace FriendlyForms
 {
@@ -42,13 +43,13 @@ namespace FriendlyForms
 
         protected void Application_BeginRequest()
         {
-            //if(Request.IsLocal)
-            //    Profiler.Start();
+            if (Request.IsLocal)
+                Profiler.Start();
         }
 
         protected void Application_EndRequest()
         {
-            //Profiler.Stop();
+            Profiler.Stop();
         }
     
     }

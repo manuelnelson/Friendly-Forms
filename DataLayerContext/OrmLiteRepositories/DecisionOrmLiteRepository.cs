@@ -14,7 +14,7 @@ namespace DataLayerContext.OrmLiteRepositories
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.First<Decisions>(x => x.ChildId == childId);
+                return db.FirstOrDefault<Decisions>(x => x.ChildId == childId);
             }  
         }
     }

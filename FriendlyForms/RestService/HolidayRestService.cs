@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -142,20 +141,14 @@ namespace FriendlyForms.RestService
 
         public object Get(ReqHoliday request)
         {
-            var holiday = HolidayService.GetByChildId(request.ChildId);
-            var extraHoliday = ExtraHolidayService.GetByChildId(request.ChildId);
-            return new RespHoliday()
-            {
-                Holidays = holiday,
-                ExtraHolidays = extraHoliday
-            };
+            return HolidayService.GetByChildId(request.ChildId);
         }
 
         public object Post(ReqHoliday request)
         {
-            var holiday = request.TranslateTo<HolidayViewModel>();
+            var holiday = request.TranslateTo<Holiday>();
             holiday.UserId = Convert.ToInt32(UserSession.CustomId);
-            HolidayService.AddOrUpdate(holiday);
+            HolidayService.Add(holiday);
             return new RespHoliday();
 
         }

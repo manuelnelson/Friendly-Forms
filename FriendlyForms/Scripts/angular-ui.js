@@ -808,7 +808,7 @@ angular.module('ui.directives').directive('uiRoute', ['$location', '$parse', fun
                     if ((hash = newVal.indexOf('#')) > -1)
                         newVal = newVal.substr(hash + 1);
                     watcher = function watchHref() {
-                        modelSetter($scope, ($location.path().indexOf(newVal) > -1));
+                        modelSetter($scope, ($scope.path.indexOf(newVal) > -1));
                     };
                     watcher();
                 }
@@ -818,7 +818,7 @@ angular.module('ui.directives').directive('uiRoute', ['$location', '$parse', fun
                         newVal = newVal.substr(hash + 1);
                     watcher = function watchRegex() {
                         var regexp = new RegExp('^' + newVal + '$', ['i']);
-                        modelSetter($scope, regexp.test($location.path()));
+                        modelSetter($scope, regexp.test($scope.path));
                     };
                     watcher();
                 }

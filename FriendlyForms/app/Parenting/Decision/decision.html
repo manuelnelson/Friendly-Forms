@@ -1,1 +1,225 @@
-﻿
+﻿<div class="form-vertical wrapper" id="decisionsWrapper" ng-controller="DecisionCtrl">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Decisions</h5>
+                </div>
+                <div class="widget-content">
+                    <form ng-submit="submit()" id="decisionForm" name="decisionForm" novalidate>
+                        <h3>{{childName}}</h3>
+                        <br>
+                        <div id="radio-decisions">
+                            <div class="control-group">
+                                <label class="form-question">
+                                    Educational Decisions</label>
+                                <label class="radio inline">
+                                    Father
+                                    <input class="inline" required number ng-model="decision.Education" name="decision.Education" type="radio" value="1"></label>
+                                <label class="radio inline">
+                                    Mother
+                                    <input class="inline" ng-model="decision.Education" name="decision.Education" type="radio" value="2"></label>
+                                <label class="radio inline">
+                                    Both
+                                    <input class="inline" ng-model="decision.Education" name="decision.Education" type="radio" value="3"></label>
+                                <label class="radio inline">
+                                    Not Applicable
+                                    <input class="inline" ng-model="decision.Education" name="decision.Education" type="radio" value="4"></label>
+                                <div ng-show="showErrors && decisionForm.Education.$invalid">
+                                    <span class="form-error" ng-show="decisionForm.Education.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="form-question">
+                                    Non-Emergency Healthcare</label>
+                                <label class="radio inline">
+                                    Father
+                                    <input class="inline" required number ng-model="decision.HealthCare" name="decision.HealthCare" type="radio" value="1"></label>
+                                <label class="radio inline">
+                                    Mother
+                                    <input class="inline" ng-model="decision.HealthCare" name="decision.HealthCare" type="radio" value="2"></label>
+                                <label class="radio inline">
+                                    Both
+                                    <input class="inline" ng-model="decision.HealthCare" name="decision.HealthCare" type="radio" value="3"></label>
+                                <label class="radio inline">
+                                    Not Applicable
+                                    <input class="inline" ng-model="decision.HealthCare" name="decision.HealthCare" type="radio" value="4"></label>
+                                <div ng-show="showErrors && decisionForm.HealthCare.$invalid">
+                                    <span class="form-error" ng-show="decisionForm.HealthCare.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="form-question">
+                                    Religious Upbringing</label>
+                                <label class="radio inline">
+                                    Father
+                                    <input class="inline" required number ng-model="decision.Religion" name="decision.Religion" type="radio" value="1"></label>
+                                <label class="radio inline">
+                                    Mother
+                                    <input class="inline" ng-model="decision.Religion" name="decision.Religion" type="radio" value="2"></label>
+                                <label class="radio inline">
+                                    Both
+                                    <input class="inline" ng-model="decision.Religion" name="decision.Religion" type="radio" value="3"></label>
+                                <label class="radio inline">
+                                    Not Applicable
+                                    <input class="inline" ng-model="decision.Religion" name="decision.Religion" type="radio" value="4"></label>
+                                <div ng-show="showErrors && decisionForm.Religion.$invalid">
+                                    <span class="form-error" ng-show="decisionForm.Religion.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="form-question">
+                                    Extracurricular Activities</label>
+                                <label class="radio inline">
+                                    Father
+                                    <input class="inline" required number ng-model="decision.ExtraCurricular" name="decision.ExtraCurricular" type="radio" value="1"></label>
+                                <label class="radio inline">
+                                    Mother
+                                    <input class="inline" ng-model="decision.ExtraCurricular" name="decision.ExtraCurricular" type="radio" value="2"></label>
+                                <label class="radio inline">
+                                    Both
+                                    <input class="inline" ng-model="decision.ExtraCurricular" name="decision.ExtraCurricular" type="radio" value="3"></label>
+                                <label class="radio inline">
+                                    Not Applicable
+                                    <input class="inline" ng-model="decision.ExtraCurricular" name="decision.ExtraCurricular" type="radio" value="4"></label>
+                                <div ng-show="showErrors && decisionForm.ExtraCurricular.$invalid">
+                                    <span class="form-error" ng-show="decisionForm.ExtraCurricular.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="control-group" ng-repeat="otherDecision in extraDecisions">
+                                <label class="form-question">
+                                    {{otherDecision.Description}}</label>
+                                <label class="radio inline">
+                                    Father
+                                    <input class="inline" required ng-model="otherDecision.DecisionMaker" type="radio" value="1"></label>
+                                <label class="radio inline">
+                                    Mother
+                                    <input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="2"></label>
+                                <label class="radio inline">
+                                    Both
+                                    <input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="3"></label>
+                                <label class="radio inline">
+                                    Not Applicable
+                                    <input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="4"></label>
+                                <div ng-show="showErrors && decisionForm.otherDecision.DecisionMaker.$invalid">
+                                    <span class="form-error" ng-show="decisionForm.otherDecision.DecisionMaker.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group" ng-show="decision.Education == 3 || decision.HealthCare == 3 || decision.Religion == 3 || decision.ExtraCurricular == 3">
+                            <label class="form-question">You have indicated that both parents have the authroity to make certain decisions. However, in case of disagreement, how will disagreements be resolved.</label>
+                            <textarea class="input-xxlarge valid" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="decision.BothResolve" name="decision.BothResolve" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="decisionForm.BothResolve.$dirty && decisionForm.BothResolve.$invalid">
+                                <span class="form-error" ng-show="decisionForm.BothResolve.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Add additional decisions (Optional)</h5>
+                </div>
+                <div class="widget-content">
+                    <form ng-submit="addExtraDecision()" id="addDecisionForm" name="addDecisionForm" novalidate>
+                        <div class="control-group">
+                            <input ng-model="extraDecision.Description" required name="extraDecision.Description" placeholder="Description" type="text" value="">
+                            <div ng-show="addDecisionForm.Description.$dirty && addDecisionForm.Description.$invalid">
+                                <span class="form-error" ng-show="addDecisionForm.Description.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="form-question">
+                                Other Decisions</label>
+                            <label class="radio inline">
+                                Father
+                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="1"></label>
+                            <label class="radio inline">
+                                Mother
+                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="2"></label>
+                            <label class="radio inline">
+                                Both
+                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="3"></label>
+                            <label class="radio inline">
+                                Not Applicable
+                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="4"></label>
+                            <div ng-show="addDecisionForm.DecisionMaker.$dirty && addDecisionForm.DecisionMaker.$invalid">
+                                <span class="form-error" ng-show="addDecisionForm.DecisionMaker.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" value="Add This Decision">Add This Decision</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-bottom: 20px;" ng-show="children.length > 1">
+        <div class="row-fluid" ng-show="showMessage">
+            <div class="span12">
+                <div class="alert alert-success"><a class="close">×</a><strong>Success!</strong> The decisions section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.             </div>
+            </div>
+        </div>
+        <label class="informative">
+            To aid you in completing this section for the remaining child(ren), we suggest you use this copy button to copy your choices for your other child(ren), especially if all choices are the same. 
+            You will still have the opportunity to make changes to any of your selections on the page(s) that follow this one. Please note that this will overwrite any existing data you may have entered for other 
+            children.</label>
+        <div class="btn btn-primary dropdown copy-button" ng-click="copyChild(6)">
+            <span style="display: block; color: white;" data-target="#copy-decisions" class="dropdown-toggle">Copy To<i class="icon-share icon-white"></i></span>
+            <ul class="dropdown-menu" ng-show="showDropdown">
+                <li><a title="all" ng-click="copyChild(0)">All</a></li>
+                <li ng-repeat="child in children"><a ng-click="copyChild(child.Id)" title="{{child.Name}}">{{child.Name}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <button class="btn btn-primary" ng-click="previousChild()" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-primary" ng-click="nextChild()" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <br>
+    <!--    <script id="friendly-extraDecisions-template" type="text/x-jquery-tmpl">
+        <div class="control-group extra-decision-item">
+            <label class="form-question" id="extra-decision-description">
+                ${Description}</label>
+            <label class="radio inline">
+                Father 
+            {{if DecisionMaker===1}}
+            <input checked="checked" class="inlineextra-decision-maker" name="ExtraDecisions${Id}" id="ExtraDecisions${Id}" required number  type="radio" value="1">
+                {{else}}
+            <input class="inlineextra-decision-maker" required name="ExtraDecisions${Id}" id="Radio16" number  type="radio" value="1">
+                {{/if}}
+            </label>
+            <label class="radio inline">
+                Mother
+            {{if DecisionMaker===2}}
+            <input checked="checked" class="inlineextra-decision-maker" name="ExtraDecisions${Id}" id="Radio17" type="radio" value="2">
+                {{else}}
+            <input class="inline" name="ExtraDecisions${Id}" id="Radio18" type="radio" value="2">
+                {{/if}}
+            </label>
+            <label class="radio inline">
+                Both
+            {{if DecisionMaker===3}}
+            <input checked="checked" class="inlineextra-decision-maker" name="ExtraDecisions${Id}" id="Radio19" type="radio" value="3">
+                {{else}}
+            <input class="inline" name="ExtraDecisions${Id}" id="Radio20" type="radio" value="3">
+                {{/if}}
+            </label>
+            <label class="radio inline">
+                Not Applicable
+            {{if DecisionMaker===4}}
+            <input checked="checked" class="inlineextra-decision-maker" name="ExtraDecisions${Id}" id="Radio21" type="radio" value="4">
+                {{else}}
+            <input class="inline" name="ExtraDecisions${Id}" id="Radio22" type="radio" value="4">
+                {{/if}}
+            </label>
+            <span class="field-validation-valid" data-valmsg-for="ExtraDecisions${Id}" data-valmsg-replace="true"></span>
+            <input type="hidden" id="extra-decision-childId" value="${ChildId}" />
+            <input type="hidden" id="extra-decision-Id" value="${Id}" />
+        </div>
+    </script>-->
+
+</div>

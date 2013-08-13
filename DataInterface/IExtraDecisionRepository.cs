@@ -2,7 +2,7 @@
 
 namespace DataInterface
 {
-    public interface IExtraDecisionRepository : IRepository<ExtraDecisions>
+    public interface IExtraDecisionRepository : IFormRepository<ExtraDecisions>
     {
     }
 }

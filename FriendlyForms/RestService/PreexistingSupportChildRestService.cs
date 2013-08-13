@@ -62,9 +62,9 @@ namespace FriendlyForms.RestService
         }
         public object Post(ReqPreexistingSupportChild request)
         {
-            var preexistingSupportChildViewModel = request.TranslateTo<PreexistingSupportChildViewModel>();
-            preexistingSupportChildViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var preexistingSupportEntity = PreexistingSupportChildService.AddOrUpdate(preexistingSupportChildViewModel);
+            var preexistingSupportEntity = request.TranslateTo<PreexistingSupportChild>();
+            preexistingSupportEntity.UserId = Convert.ToInt32(UserSession.CustomId);
+            PreexistingSupportChildService.Add(preexistingSupportEntity);
             var preexistingSupport = preexistingSupportEntity.TranslateTo<ReqPreexistingSupportChild>();
             if (preexistingSupportEntity.DateOfBirth != null)
                 preexistingSupport.DateOfBirth = preexistingSupportEntity.DateOfBirth.Value.ToShortDateString();

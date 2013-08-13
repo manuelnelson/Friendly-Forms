@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
@@ -39,15 +40,11 @@ namespace BusinessLogic
             }
         }
 
-        public new ChildViewModel GetByUserId(long userId)
+        public new List<Child> GetByUserId(long userId)
         {
             try
             {
-                var childList = ChildRepository.GetByUserId(userId);
-                return new ChildViewModel()
-                    {
-                        Children = childList
-                    };
+                return ChildRepository.GetByUserId(userId);
             }
             catch(Exception ex)
             {

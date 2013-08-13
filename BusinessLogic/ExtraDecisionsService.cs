@@ -3,37 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using BusinessLogic.Contracts;
 using DataInterface;
-using DataLayerContext.Repositories;
 using Elmah;
 using Models;
 using Models.ViewModels;
 
 namespace BusinessLogic
 {
-    public class ExtraDecisionsService : IExtraDecisionsService
+    public class ExtraDecisionsService : FormService<IExtraDecisionRepository, ExtraDecisions>, IExtraDecisionsService
     {
-        private readonly IExtraDecisionRepository _extraDecisionRepository;
-
-        public ExtraDecisionsService(IExtraDecisionRepository extraDecisionRepository)
-        {
-            _extraDecisionRepository = extraDecisionRepository;
-        }
+        public ExtraDecisionsService(IExtraDecisionRepository formRepository) : base(formRepository){}
         public ExtraDecisions AddOrUpdate(ExtraDecisionsViewModel model)
         {
             try
             {
                 var entity = model.ConvertToEntity();
                 //Check if court already exists and we need to update record
-                var existCourt = _extraDecisionRepository.Get(model.Id);
+                var existCourt = FormRepository.Get(model.Id);
                 if (existCourt != null)
                 {
                     existCourt.DecisionMaker = entity.DecisionMaker;
                     existCourt.Description = entity.Description;
                     existCourt.ChildId = entity.ChildId;
-                    _extraDecisionRepository.Update(existCourt);
+                    FormRepository.Update(existCourt);
                     return existCourt;
                 }
-                _extraDecisionRepository.Add(entity);
+                FormRepository.Add(entity);
                 return entity;
             }
             catch (Exception ex)
@@ -47,7 +41,7 @@ namespace BusinessLogic
         {
             try
             {
-                var enumerable = _extraDecisionRepository.GetFiltered(e => e.ChildId == childId);
+                var enumerable = FormRepository.GetFiltered(e => e.ChildId == childId);
                 return enumerable == null ? new List<ExtraDecisions>() : enumerable.ToList();
             }
             catch (Exception ex)

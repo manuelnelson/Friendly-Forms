@@ -1,1 +1,116 @@
-﻿
+﻿<div class="form-vertical wrapper" ng-model="vehicleWrapper">
+    <div class="row-fluid" ng-controller="VehicleCtrl">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Vehicles</h5>
+                </div>
+                <div class="widget-content" >
+                    <div class="row-fluid" ng-show="vehicles.length>0" style="display: block;">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Manufacturer</th>
+                                    <th>Model</th>
+                                    <th>Year</th>
+                                    <th>Owner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="vehicleAdded in vehicles">
+                                    <td>{{vehicleAdded.Make}}</td>
+                                    <td>{{vehicleAdded.Model}}</td>
+                                    <td>{{vehicleAdded.Year}}</td>
+                                    <td>{{vehicleAdded.Owner}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <form id="vehicleForm" name="vehicleForm" novalidate>
+                        <div class="control-group">
+                            <label class="form-question">Is the ownership of any vehicle(s) at issue in this case?</label>
+                            <label class="radio inline">
+                                Yes
+                                <input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" type="radio" value="1"></label>
+                            <label class="radio inline">
+                                No
+                                <input class="inline" ng-change="submit()" ng-model="vehicleForm.VehiclesInvolved" type="radio" value="2"></label>
+                            <div ng-show="vehicleForm.VehiclesInvolved.$dirty && vehicleForm.VehiclesInvolved.$invalid">
+                                <span class="form-error" ng-show="vehicleForm.VehiclesInvolved.$error.required">Please select an option</span>
+                            </div>
+                        </div>
+                    </form>
+                    <form ng-submit="addVehicle()" id="addVehicleForm" ng-show="vehicleForm.VehiclesInvolved == 1" name="addVehicleForm" novalidate>
+                        <label class="informative">
+                            List each vehicle under consideration in this agreement.
+                        </label>
+                        <div class="control-group">
+                            <label class="form-question">Manufacturer</label>
+                            <input ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="vehicle.Make" name="vehicle.Make" placeholder="Manufacturer" type="text" value="">
+                            <div ng-show="addVehicleForm.Make.$dirty && addVehicleForm.Make.$invalid">
+                                <span class="form-error" ng-show="addVehicleForm.Make.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <span class="form-error" ng-show="addVehicleForm.Make.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="form-question">Model</label>
+                            <input required ng-model="vehicle.Model" name="vehicle.Model" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Model" type="text" value="">
+                            <div ng-show="addVehicleForm.Model.$dirty && addVehicleForm.Model.$invalid">
+                                <span class="form-error" ng-show="addVehicleForm.VehicleModel.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <span class="form-error" ng-show="addVehicleForm.VehicleModel.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="form-question">Year</label>
+                            <input ng-pattern="/^[0-9]{4}$/" required ng-model="vehicle.Year" name="vehicle.Year" placeholder="Year" type="text" value="">
+                            <div ng-show="addVehicleForm.Year.$dirty && addVehicleForm.Year.$invalid">
+                                <span class="form-error" ng-show="addVehicleForm.Year.$error.number">This field must be a number.</span>
+                                <span class="form-error" ng-show="addVehicleForm.Year.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="form-question">Who will have possession of the vehicle</label>
+                            <input ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="vehicle.Owner" name="vehicle.Owner" placeholder="Owner" type="text" value="">
+                            <div ng-show="addVehicleForm.Owner.$dirty && addVehicleForm.Owner.$invalid">
+                                <span class="form-error" ng-show="addVehicleForm.Owner.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <span class="form-error" ng-show="addVehicleForm.Owner.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="form-question">Will this vehicle be refinanced?</label>
+                            <label class="radio">
+                                Yes
+                                <input required ng-model="vehicle.Refinanced" name="vehicle.Refinanced" type="radio" value="1"></label>
+                            <label class="radio">
+                                No
+                                <input ng-model="vehicle.Refinanced" name="vehicle.Refinanced" type="radio" value="2"></label>
+                            <div ng-show="addVehicleForm.Owner.$dirty && addVehicleForm.Refinanced.$invalid">
+                                <span class="form-error" ng-show="addVehicleForm.Refinanced.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div ng-show="vehicle.Refinanced == 1">
+                            <div class="control-group">
+                                <label class="form-question">In whose name will the vehicle be refinanced?</label>
+                                <!--                                <select      ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="vehicle.Name" name="vehicle.Name">
+                                                                        <option value="asdfds">asdfds</option>
+                                                                        <option value="asdfs">asdfs</option>
+                                                                    </select>-->
+                                <!--                                <span class="field-validation-valid" data-valmsg-for="VehicleViewModel.Name" data-valmsg-replace="true"></span>-->
+                            </div>
+                            <div class="control-group">
+                                <label class="form-question">By what date will the vehicle be refinanced?</label>
+                                <input class="datepicker" data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="vehicle.RefinanceDate" name="vehicle.RefinanceDate" placeholder="MM/DD/YYYY" type="text" value="">
+                                <div ng-show="addVehicleForm.RefinanceDate.$dirty && addVehicleForm.RefinanceDate.$invalid">
+                                    <span class="form-error" ng-show="addVehicleForm.RefinanceDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-bottom: 15px; display: inline-block;" value="Add">Add </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary next">Continue <i class="icon-arrow-right icon-white"></i></button>
+</div>

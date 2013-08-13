@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -12,8 +11,8 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/ExtraHoliday/", Verbs = "POST")]
-    [Route("/ExtraHoliday/{ChildId}", Verbs = "GET")]
+    [Route("/ExtraHolidays/", Verbs = "POST")]
+    [Route("/ExtraHolidays/")]
     public class ReqExtraHoliday
     {
         [DataMember]
@@ -56,18 +55,18 @@ namespace FriendlyForms.RestService
         public object Get(ReqExtraHoliday request)
         {
             var extraHolidays = ExtraHolidayService.GetByChildId(request.ChildId);
-            return extraHolidays;
+            return new RespExtraHoliday()
+                {
+                    ExtraHolidays = extraHolidays
+                };
         }
 
         public object Post(ReqExtraHoliday request)
         {
-            var extraHolidayViewModel = request.TranslateTo<ExtraHolidayViewModel>();
-            extraHolidayViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var extraHoliday = ExtraHolidayService.AddOrUpdate(extraHolidayViewModel);
-            return new RespExtraHolidayPost()
-                {
-                    ExtraHoliday = extraHoliday
-                };
+            var extraHoliday = request.TranslateTo<ExtraHoliday>();
+            extraHoliday.UserId = Convert.ToInt32(UserSession.CustomId);
+            ExtraHolidayService.Add(extraHoliday);
+            return extraHoliday;
         }
         public object Put(ReqExtraHoliday request)
         {

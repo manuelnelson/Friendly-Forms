@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -21,7 +22,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string Make { get; set; }
         [DataMember]
-        public string VehicleModel { get; set; }
+        public string Model { get; set; }
         [DataMember]
         public string Year { get; set; }
         [DataMember]
@@ -41,7 +42,8 @@ namespace FriendlyForms.RestService
     {
         [DataMember]
         public Vehicle Vehicle { get; set; }
-
+        [DataMember]
+        public List<Vehicle> Vehicles { get; set; }
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
@@ -55,16 +57,21 @@ namespace FriendlyForms.RestService
             {
                 return VehicleService.Get(request.Id);
             }
-            return VehicleService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
+            return new RespVehicle
+                {
+                    Vehicles = VehicleService.GetByUserId(request.UserId != 0
+                                                       ? request.UserId
+                                                       : Convert.ToInt32(UserSession.CustomId)).ToList()
+                };
         }
         public object Post(ReqVehicle request)
         {
-            var vehicleViewModel = request.TranslateTo<VehicleViewModel>();
-            vehicleViewModel.UserId = Convert.ToInt32(UserSession.CustomId);
-            var updatedVehicle = VehicleService.AddOrUpdate(vehicleViewModel);
+            var vehicle = request.TranslateTo<Vehicle>();
+            vehicle.UserId = Convert.ToInt32(UserSession.CustomId);
+            VehicleService.Add(vehicle);
             return new RespVehicle()
                 {
-                    Vehicle = updatedVehicle
+                    Vehicle = vehicle
                 };
         }
         public object Put(ReqVehicle request)

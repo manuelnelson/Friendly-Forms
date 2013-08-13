@@ -48,7 +48,10 @@ namespace FriendlyForms.RestService
             {
                 return ChildService.Get(request.Id);
             }
-            return ChildService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
+            return new RespChild()
+                {
+                    Children = ChildService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId))
+                };
         }
         public object Put(ReqChild request)
         {
