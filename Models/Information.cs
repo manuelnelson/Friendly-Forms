@@ -19,6 +19,11 @@ namespace Models
             return this.TranslateTo<InformationViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var update = (Information) entity;

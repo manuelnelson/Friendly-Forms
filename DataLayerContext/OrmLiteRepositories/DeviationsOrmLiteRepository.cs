@@ -10,12 +10,5 @@ namespace DataLayerContext.OrmLiteRepositories
         {
         }
 
-        public Deviations GetChildById(long childId, bool isOtherParent = false)
-        {
-            using (var db = DbFactory.OpenDbConnection())
-            {
-                return db.First<Deviations>(x => x.ChildId == childId);
-            }  
-        }
     }
 }

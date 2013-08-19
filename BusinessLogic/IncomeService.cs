@@ -15,12 +15,11 @@ namespace BusinessLogic
         {
         }
 
-        public IncomeViewModel GetByUserId(long userId, bool isOtherParent = false)
+        public Income GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {
-                var entity = FormRepository.GetFiltered(m=>m.UserId == userId && m.IsOtherParent == isOtherParent).FirstOrDefault();
-                return (entity == null ? new IncomeViewModel() : entity.ConvertToModel()) as IncomeViewModel;
+                return FormRepository.GetFiltered(m=>m.UserId == userId && m.IsOtherParent == isOtherParent).FirstOrDefault();
             }
             catch (Exception ex)
             {

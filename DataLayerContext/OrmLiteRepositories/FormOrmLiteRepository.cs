@@ -1,4 +1,5 @@
-﻿using DataInterface;
+﻿using System.Collections.Generic;
+using DataInterface;
 using Models.Contract;
 using ServiceStack.OrmLite;
 
@@ -16,8 +17,16 @@ namespace DataLayerContext.OrmLiteRepositories
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.FirstOrDefault<TFormEntity>(x => x.UserId == userId); //< TFormEntity > (x => x.u);
+                return db.FirstOrDefault<TFormEntity>(x => x.UserId == userId); 
             }              
-        }        
+        }
+
+        public List<TFormEntity> GetListByUserId(long userId)
+        {
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.Select<TFormEntity>(x => x.UserId == userId);
+            }
+        }
     }
 }

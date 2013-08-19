@@ -1,4 +1,5 @@
-﻿using DataInterface;
+﻿using System.Collections.Generic;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
@@ -8,5 +9,6 @@ namespace BusinessLogic.Contracts
     {
         void AddOrUpdate(DecisionsViewModel model);
         Decisions GetByChildId(long childId);
+        List<Decisions> GetChildrenListByUserId(long userId);
     }
 }

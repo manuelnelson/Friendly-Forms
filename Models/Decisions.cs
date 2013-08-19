@@ -6,7 +6,7 @@ using ServiceStack.DataAnnotations;
 
 namespace Models
 {
-    public class Decisions : IEntity, IFormEntity
+    public class Decisions : IChildFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -27,6 +27,11 @@ namespace Models
         public IViewModel ConvertToModel()
         {
             return this.TranslateTo<DecisionsViewModel>();
+        }
+
+        public bool IsValid()
+        {
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

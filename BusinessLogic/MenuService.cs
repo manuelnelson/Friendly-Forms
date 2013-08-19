@@ -408,8 +408,8 @@ namespace BusinessLogic
                             formName = "Deviations",
                             text = "Deviations",
                             iconClass = "",
-                            path = "/Financial/Deviations/" + userId,
-                            pathIdentifier = "Deviations",
+                            path = "/Financial/Deviation/" + userId,
+                            pathIdentifier = "Deviation",
                             itemClass = ""
                         },
                 };

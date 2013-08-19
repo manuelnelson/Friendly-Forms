@@ -18,6 +18,7 @@
         }
         $.jStorage.deleteKey($scope.path);
         $scope.socialSecurity.UserId = $routeParams.userId;
+        $scope.socialSecurity.IsOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
             socialSecurityService.socialSecurities.save(null, $scope.socialSecurity, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');

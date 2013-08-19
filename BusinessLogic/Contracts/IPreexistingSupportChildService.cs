@@ -7,7 +7,7 @@ namespace BusinessLogic.Contracts
 {
     public interface IPreexistingSupportChildService : IFormService<IPreexistingSupportChildRepository, PreexistingSupportChild>
    {
-        IEnumerable<PreexistingSupportChild> GetChildrenBySupportId(long id);
+        IEnumerable<PreexistingSupportChild> GetChildrenBySupportId(long preexistingSupportId);
         PreexistingSupportChild AddOrUpdate(PreexistingSupportChildViewModel model);
    }
 }

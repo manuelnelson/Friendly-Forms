@@ -26,7 +26,7 @@
                         <div class="control-group" ng-show="schedule.DetermineBeginDate == 2">
                             <label class="form-question">
                                 Parenting schedule begins on:</label>
-                            <input class="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="schedule.BeginDate" name="BeginDate" placeholder="MM/DD/YYYY" type="text" value="">
+                            <input ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="schedule.BeginDate" name="BeginDate" placeholder="MM/DD/YYYY" type="text" value="">
                             <div ng-show="scheduleForm.BeginDate.$dirty && scheduleForm.BeginDate.$invalid">
                                 <span class="form-error" ng-show="scheduleForm.BeginDate.$error.pattern">This field must be a valid date.</span>
                             </div>
@@ -46,7 +46,7 @@
                                 <option value="Friday">Friday</option>
                                 <option value="Saturday">Saturday</option>
                             </select>
-                            <input class="timepicker input-small" required ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.PickedUp" name="PickedUp" placeholder="hh:mm am/pm" type="text" value="">
+                            <input ui-jq="timepicker" class="input-small" required ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.PickedUp" name="PickedUp" placeholder="hh:mm am/pm" type="text" value="">
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="scheduleForm.WeekendDayStart.$dirty && scheduleForm.WeekendDayStart.$invalid">
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayStart.$error.required">This field is required</span>
@@ -81,7 +81,7 @@
                                 <option value="Friday">Friday</option>
                                 <option value="Saturday">Saturday</option>
                             </select>
-                            <input class="timepicker input-small" required ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.DroppedOff" name="DroppedOff" placeholder="hh:mm am/pm" type="text" value="">
+                            <input ui-jq="timepicker" class="input-small" required ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.DroppedOff" name="DroppedOff" placeholder="hh:mm am/pm" type="text" value="">
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="scheduleForm.WeekendDayEnd.$dirty && scheduleForm.WeekendDayEnd.$invalid">
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayEnd.$error.required">This field is required</span>
@@ -182,7 +182,7 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     What time will the child(ren) be picked up on weekdays?</label>
-                                <input class="timepicker input-small" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayPickup" name="WeekdayPickup" placeholder="hh:mm am/pm" type="text" value="">
+                                <input ui-jq="timepicker" class="input-small" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayPickup" name="WeekdayPickup" placeholder="hh:mm am/pm" type="text" value="">
                                 <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 <div ng-show="scheduleForm.WeekdayPickup.$dirty && scheduleForm.WeekdayPickup.$invalid">
                                     <span class="form-error" ng-show="scheduleForm.WeekdayPickup.$error.pattern">This field must be a valid time.</span>
@@ -201,7 +201,7 @@
                             <div class="control-group schedule-weekday">
                                 <label class="form-question">
                                     What time will the child(ren) be dropped off on weekdays?</label>
-                                <input class="timepicker input-small" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayDropoff" name="WeekdayDropoff" placeholder="hh:mm am/pm" type="text" value="">
+                                <input ui-jq="timepicker" class="input-small" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayDropoff" name="WeekdayDropoff" placeholder="hh:mm am/pm" type="text" value="">
                                 <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 <div ng-show="scheduleForm.WeekdayDropoff.$dirty && scheduleForm.WeekdayDropoff.$invalid">
                                     <span class="form-error" ng-show="scheduleForm.WeekdayDropoff.$error.pattern">This field must be a valid time.</span>

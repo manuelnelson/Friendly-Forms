@@ -22,6 +22,11 @@ namespace Models
             return this.TranslateTo<HealthInsuranceViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var updatingEntity = (HealthInsurance)entity;

@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAssetRepository.cs" />
+    <Compile Include="IBcsoRepository.cs" />
     <Compile Include="IChildCareFormRepository.cs" />
     <Compile Include="IChildCareRepository.cs" />
     <Compile Include="IChildFormRepository.cs" />
@@ -50,7 +51,6 @@
     <Compile Include="ICourtRepository.cs" />
     <Compile Include="IDebtRepository.cs" />
     <Compile Include="IDecisionRepository.cs" />
-    <Compile Include="IDeviationsFormRepository.cs" />
     <Compile Include="IEfRepository.cs" />
     <Compile Include="IExtraDecisionRepository.cs" />
     <Compile Include="IExtraExpenseFormRepository.cs" />

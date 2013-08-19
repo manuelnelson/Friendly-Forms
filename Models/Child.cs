@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.DataAnnotations;
 
 
@@ -27,18 +26,9 @@ namespace Models
         [Ignore]
         public virtual ChildForm ChildForm { get; set; }
 
-
-        public IViewModel ConvertToModel()
+        public bool IsValid()
         {
-            return new ChildViewModel
-                {
-                    DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided",
-                    Name = Name,
-                    UserId = UserId,
-                    Id = Id,
-                    ChildFormId = ChildFormId
-                };
-
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

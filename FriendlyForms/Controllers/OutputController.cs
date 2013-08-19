@@ -87,105 +87,103 @@ namespace FriendlyForms.Controllers
             return View();
         }
 
-        [Authenticate]
-        public ActionResult Parenting()
-        {
-            var userId = Convert.ToInt32(UserSession.CustomId);
-            var court = _courtService.GetByUserId(userId) as CourtViewModel;
-            var participants = _participantService.GetByUserId(userId) as ParticipantViewModel;
-            var children = _childService.GetByUserId(userId);
-            var privacy = _privacyService.GetByUserId(userId);
-            var information = _informationService.GetByUserId(userId);
-            var decisions = new List<Decisions>();
-            var extraDecisions = new List<ExtraDecisions>();
-            var holidays = new List<Holiday>();
-            var extraHolidays = new List<ExtraHoliday>();
-            if (children.Any())
-            {
-                decisions.AddRange(children.Select(child => _decisionsService.GetByChildId(child.Id)));
-            }
-            if (children.Any())
-            {
-                foreach (var child in children)
-                {
-                    var tempDecisions = _extraDecisionsService.GetByChildId(child.Id);
-                    extraDecisions.AddRange(tempDecisions);
-                }
-            }
-            if (children.Any())
-            {
-                holidays.AddRange(children.Select(child => _holidayService.GetByChildId(child.Id)));
-            }
-            if (children.Any())
-            {
-                foreach (var child in children)
-                {
-                    var tempHolidays = _extraHolidayService.GetByChildId(child.Id);
-                    extraHolidays.AddRange(tempHolidays);
-                }
-            }
-            var responsibility = _responsibilityService.GetByUserId(userId);
-            var communication = _communicationService.GetByUserId(userId) as CommunicationViewModel;
-            var schedule = _scheduleService.GetByUserId(userId);
-            var allDecisions = new AllDecisionsViewModel
-            {
-                ChildDecisions = decisions,
-                ChildExtraDecisions = extraDecisions
-            };
-            var allHolidays = new AllHolidaysViewModel
-                {
-                    ChildHolidays = holidays,
-                    ExtraChildHolidays = extraHolidays
-                };
-            var counties = _countyService.GetAll();
-            court.Counties = counties;
+        //[Authenticate]
+        //public ActionResult Parenting()
+        //{
+        //    var userId = Convert.ToInt32(UserSession.CustomId);
+        //    var court = _courtService.GetByUserId(userId) as CourtViewModel;
+        //    var participants = _participantService.GetByUserId(userId) as Participant;
+        //    var children = _childService.GetByUserId(userId);
+        //    var privacy = _privacyService.GetByUserId(userId);
+        //    var information = _informationService.GetByUserId(userId);
+        //    var decisions = new List<Decisions>();
+        //    var extraDecisions = new List<ExtraDecisions>();
+        //    var holidays = new List<Holiday>();
+        //    var extraHolidays = new List<ExtraHoliday>();
+        //    if (children.Any())
+        //    {
+        //        decisions.AddRange(children.Select(child => _decisionsService.GetByChildId(child.Id)));
+        //    }
+        //    if (children.Any())
+        //    {
+        //        foreach (var child in children)
+        //        {
+        //            var tempDecisions = _extraDecisionsService.GetByChildId(child.Id);
+        //            extraDecisions.AddRange(tempDecisions);
+        //        }
+        //    }
+        //    if (children.Any())
+        //    {
+        //        holidays.AddRange(children.Select(child => _holidayService.GetByChildId(child.Id)));
+        //    }
+        //    if (children.Any())
+        //    {
+        //        foreach (var child in children)
+        //        {
+        //            var tempHolidays = _extraHolidayService.GetByChildId(child.Id);
+        //            extraHolidays.AddRange(tempHolidays);
+        //        }
+        //    }
+        //    var responsibility = _responsibilityService.GetByUserId(userId);
+        //    var communication = _communicationService.GetByUserId(userId) as CommunicationViewModel;
+        //    var schedule = _scheduleService.GetByUserId(userId);
+        //    var allDecisions = new AllDecisionsViewModel
+        //    {
+        //        ChildDecisions = decisions,
+        //        ChildExtraDecisions = extraDecisions
+        //    };
+        //    var allHolidays = new AllHolidaysViewModel
+        //        {
+        //            ChildHolidays = holidays,
+        //            ExtraChildHolidays = extraHolidays
+        //        };
+        //    var counties = _countyService.GetAll();
+        //    court.Counties = counties;
 
-            var formsViewModel = new FormsCompleted();
+        //    var formsViewModel = new FormsCompleted();
 
-            //Setup output form            
-            var outputViewModel = new PpOutputFormHelper
-                {
-                    CustodyInformation = _participantService.GetCustodyInformation(participants)
-                };
+        //    //Setup output form            
+        //    var outputViewModel = new PpOutputFormHelper
+        //        {
+        //            CustodyInformation = _participantService.GetCustodyInformation(participants)
+        //        };
             
-            //Communication
-            var communicationTypes = new List<string>();
-            if (communication.Telephone)
-            {
-                communicationTypes.Add("telephone");
-            }
-            if (communication.Email)
-            {
-                communicationTypes.Add("email");
-            }
-            if (communication.Other)
-            {
-                communicationTypes.Add(communication.OtherMethod);
-            }
-            outputViewModel.CommunicationTypePhrase = string.Join(", ", communicationTypes);
+        //    //Communication
+        //    var communicationTypes = new List<string>();
+        //    if (communication.Telephone)
+        //    {
+        //        communicationTypes.Add("telephone");
+        //    }
+        //    if (communication.Email)
+        //    {
+        //        communicationTypes.Add("email");
+        //    }
+        //    if (communication.Other)
+        //    {
+        //        communicationTypes.Add(communication.OtherMethod);
+        //    }
+        //    outputViewModel.CommunicationTypePhrase = string.Join(", ", communicationTypes);
 
-
-
-            var childViewModel = new ParentingPlanViewModel
-            {
-                CourtViewModel = court,
-                ParticipantViewModel = participants,
-                ChildAllViewModel = new ChildAllViewModel()
-                    {
-                        ChildViewModel = children,
-                    },
-                PrivacyViewModel = privacy as PrivacyViewModel,
-                InformationViewModel = information as InformationViewModel,
-                AllDecisionsViewModel = allDecisions,
-                ResponsibilityViewModel = responsibility as ResponsibilityViewModel,
-                CommunicationViewModel = communication,
-                ScheduleViewModel = schedule as ScheduleViewModel,
-                HolidayViewModel = allHolidays,
-                PpOutputFormHelper = outputViewModel,
-                FormsCompleted = formsViewModel
-            };
-            return View(childViewModel);
-        }
+        //    var childViewModel = new ParentingPlanViewModel
+        //    {
+        //        CourtViewModel = court,
+        //        ParticipantViewModel = participants.ConvertToModel() as ParticipantViewModel,
+        //        ChildAllViewModel = new ChildAllViewModel()
+        //            {
+        //                ChildViewModel = children,
+        //            },
+        //        PrivacyViewModel = privacy as PrivacyViewModel,
+        //        InformationViewModel = information as InformationViewModel,
+        //        AllDecisionsViewModel = allDecisions,
+        //        ResponsibilityViewModel = responsibility as ResponsibilityViewModel,
+        //        CommunicationViewModel = communication,
+        //        ScheduleViewModel = schedule as ScheduleViewModel,
+        //        HolidayViewModel = allHolidays,
+        //        PpOutputFormHelper = outputViewModel,
+        //        FormsCompleted = formsViewModel
+        //    };
+        //    return View(childViewModel);
+        //}
 
         [HttpPost]
         [ValidateInput(false)]
@@ -231,58 +229,58 @@ namespace FriendlyForms.Controllers
             //System.IO.File.WriteAllBytes(contentPath, pdfBuf);
         }
 
-        [Authenticate]
-        public ActionResult DomesticMediation()
-        {
-            var userId = Convert.ToInt32(UserSession.CustomId);
-            var house = _houseService.GetByUserId(userId);
-            var property = _propertyService.GetByUserId(userId);
-            var debt = _debtService.GetByUserId(userId);
-            var assets = _assetService.GetByUserId(userId);
-            var health = _healthInsuranceService.GetByUserId(userId);
-            var spousal = _spousalService.GetByUserId(userId);
-            var taxes = _taxService.GetByUserId(userId);
-            var support = _childSupportService.GetByUserId(userId);
-            var vehicles = _vehicleService.GetByUserId(userId).ToList();
-            var vehicleForm = _vehicleFormService.GetByUserId(userId);
-            var participants = _participantService.GetByUserId(userId);
-            var court = _courtService.GetByUserId(userId);
-            var vehicleModel = new VehicleViewModel()
-            {
-                VehicleList = vehicles
-            };
-            var formsViewModel = new FormsCompletedDomestic()
-            {
-                AssetCompleted = assets.UserId != 0,
-                RealEstateCompleted = property.UserId != 0,
-                DebtCompleted = debt.UserId != 0,
-                HealthCompleted = health.UserId != 0,
-                SpousalCompleted = spousal.UserId != 0,
-                TaxCompleted = taxes.UserId != 0,
-                ChildCompleted = support.UserId != 0,
-                VehicleCompleted = vehicles.Any()
-            };
-            var domesticModel = new DomesticMediationViewModel
-            {
-                HouseViewModel = house as HouseViewModel,
-                PropertyViewModel = property as PropertyViewModel,
-                VehicleAllViewModel = new VehicleAllViewModel()
-                    {
-                      VehicleViewModel = vehicleModel,
-                      VehicleFormViewModel = vehicleForm as VehicleFormViewModel
-                    },
-                DebtViewModel = debt as DebtViewModel,
-                AssetViewModel = assets as AssetViewModel,
-                HealthInsuranceViewModel = health as HealthInsuranceViewModel,
-                SpousalViewModel = spousal as SpousalViewModel,
-                TaxViewModel = taxes as TaxViewModel,
-                ChildSupportViewModel = support as ChildSupportViewModel,
-                ParticipantsViewModel = participants as ParticipantViewModel,
-                CourtViewModel = court as CourtViewModel,
-                FormsCompleted = formsViewModel
-            };
-            return View(domesticModel);
-        }
+        //[Authenticate]
+        //public ActionResult DomesticMediation()
+        //{
+        //    var userId = Convert.ToInt32(UserSession.CustomId);
+        //    var house = _houseService.GetByUserId(userId);
+        //    var property = _propertyService.GetByUserId(userId);
+        //    var debt = _debtService.GetByUserId(userId);
+        //    var assets = _assetService.GetByUserId(userId);
+        //    var health = _healthInsuranceService.GetByUserId(userId);
+        //    var spousal = _spousalService.GetByUserId(userId);
+        //    var taxes = _taxService.GetByUserId(userId);
+        //    var support = _childSupportService.GetByUserId(userId);
+        //    var vehicles = _vehicleService.GetByUserId(userId).ToList();
+        //    var vehicleForm = _vehicleFormService.GetByUserId(userId);
+        //    var participants = _participantService.GetByUserId(userId);
+        //    var court = _courtService.GetByUserId(userId);
+        //    var vehicleModel = new VehicleViewModel()
+        //    {
+        //        VehicleList = vehicles
+        //    };
+        //    var formsViewModel = new FormsCompletedDomestic()
+        //    {
+        //        AssetCompleted = assets.UserId != 0,
+        //        RealEstateCompleted = property.UserId != 0,
+        //        DebtCompleted = debt.UserId != 0,
+        //        HealthCompleted = health.UserId != 0,
+        //        SpousalCompleted = spousal.UserId != 0,
+        //        TaxCompleted = taxes.UserId != 0,
+        //        ChildCompleted = support.UserId != 0,
+        //        VehicleCompleted = vehicles.Any()
+        //    };
+        //    var domesticModel = new DomesticMediationViewModel
+        //    {
+        //        HouseViewModel = house as HouseViewModel,
+        //        PropertyViewModel = property as PropertyViewModel,
+        //        VehicleAllViewModel = new VehicleAllViewModel()
+        //            {
+        //              VehicleViewModel = vehicleModel,
+        //              VehicleFormViewModel = vehicleForm as VehicleFormViewModel
+        //            },
+        //        DebtViewModel = debt as DebtViewModel,
+        //        AssetViewModel = assets as AssetViewModel,
+        //        HealthInsuranceViewModel = health as HealthInsuranceViewModel,
+        //        SpousalViewModel = spousal as SpousalViewModel,
+        //        TaxViewModel = taxes as TaxViewModel,
+        //        ChildSupportViewModel = support as ChildSupportViewModel,
+        //        ParticipantsViewModel = participants as ParticipantViewModel,
+        //        CourtViewModel = court as CourtViewModel,
+        //        FormsCompleted = formsViewModel
+        //    };
+        //    return View(domesticModel);
+        //}
 
         [Authenticate]
         public ActionResult Financial()

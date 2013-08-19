@@ -1,0 +1,32 @@
+﻿<div class="form-vertical wrapper">
+    <form ng-submit="submit()" ng-controller="FormCompleteCtrl" id="formCompleteForm" name="formCompleteForm" novalidate>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Completion</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div ng-show="CheckingFormProgress">
+                            <h4>Checking Progress...</h4>
+                            <p>Please wait while we double check to make sure the {{FormName}} is entirely complete...</p>
+                        </div>
+                        <div ng-show="!CheckingFormProgress && NoErrors">
+                            <h4>Complete!</h4>
+                            <p>You have successfully completed the {{FormName}} form.  Click continue to preview the output</p>
+                        </div>
+                        <div ng-show="!CheckingFormProgress && !NoErrors">
+                            <h4>Needs Attention</h4>
+                            <p>The following forms still need attention: </p>
+                            <ul>
+                                <li ng-repeat="formName in IncompleteForms">{{formName}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" ng-show="!CheckingFormProgress && NoErrors">Continue <i class="icon-arrow-right icon-white"></i></button>
+    </form>
+</div>

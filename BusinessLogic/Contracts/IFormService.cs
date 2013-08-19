@@ -1,4 +1,5 @@
-﻿using DataInterface;
+﻿using System.Collections.Generic;
+using DataInterface;
 using Models.Contract;
 
 namespace BusinessLogic.Contracts
@@ -13,5 +14,7 @@ namespace BusinessLogic.Contracts
         /// <param name="userId"></param>
         /// <returns></returns>
         IFormEntity GetByUserId(long userId);
+
+        List<IFormEntity> GetListByUserId(long userId);
     }
 }

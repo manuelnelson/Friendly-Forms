@@ -1,4 +1,5 @@
-﻿using Models.Contract;
+﻿using System.Collections.Generic;
+using Models.Contract;
 
 namespace DataInterface
 {
@@ -6,5 +7,7 @@ namespace DataInterface
         where TFormEntity : IEntity, IFormEntity
     {
         TFormEntity GetByUserId(long userId);
+
+        List<TFormEntity> GetListByUserId(long userId);
     }
 }

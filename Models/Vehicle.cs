@@ -41,7 +41,12 @@ namespace Models
                     VehicleFormId = VehicleFormId
                 };
         }
-        
+
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var updatingEntity = (Vehicle) entity;

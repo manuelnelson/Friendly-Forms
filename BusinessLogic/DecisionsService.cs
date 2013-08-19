@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
 using Models;
+using Models.Contract;
 using Models.ViewModels;
 
 namespace BusinessLogic
@@ -45,6 +47,19 @@ namespace BusinessLogic
             try
             {
                 return FormRepository.GetByChildId(childId);
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new Exception("Unable to retrieve child information", ex);
+            }
+        }
+
+        public List<Decisions> GetChildrenListByUserId(long userId)
+        {
+            try
+            {
+                return FormRepository.GetChildListByUserId(userId);
             }
             catch (Exception ex)
             {

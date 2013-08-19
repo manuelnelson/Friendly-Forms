@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -12,8 +12,8 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/PreexistingSupportChild/")]
-    [Route("/PreexistingSupportChild/{Id}/")]
+    [Route("/PreexistingSupportChildren/")]
+    [Route("/PreexistingSupportChildren/{Id}/")]
     public class ReqPreexistingSupportChild
     {
         [DataMember]
@@ -34,9 +34,9 @@ namespace FriendlyForms.RestService
     public class RespPreexistingSupportChild : IHasResponseStatus
     {
         [DataMember]
-        public ReqPreexistingSupportChild Child { get; set; }
+        public PreexistingSupportChild Child { get; set; }
         [DataMember]
-        public List<ReqPreexistingSupportChild> Children { get; set; }
+        public List<PreexistingSupportChild> Children { get; set; }
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
@@ -46,31 +46,19 @@ namespace FriendlyForms.RestService
         public IPreexistingSupportChildService PreexistingSupportChildService { get; set; }
         public object Get(ReqPreexistingSupportChild request)
         {
-            var childrenEntities = PreexistingSupportChildService.GetChildrenBySupportId(request.Id);
-            var children = new List<ReqPreexistingSupportChild>();
-            foreach (var preexistingSupportChild in childrenEntities)
-            {
-                var child = preexistingSupportChild.TranslateTo<ReqPreexistingSupportChild>();
-                if (preexistingSupportChild.DateOfBirth != null)
-                    child.DateOfBirth = preexistingSupportChild.DateOfBirth.Value.ToShortDateString();
-                children.Add(child);
-            }
+            var childrenEntities = PreexistingSupportChildService.GetChildrenBySupportId(request.PreexistingSupportId).ToList();
             return new RespPreexistingSupportChild
                 {
-                    Children = children
+                    Children = childrenEntities
                 };
         }
         public object Post(ReqPreexistingSupportChild request)
         {
             var preexistingSupportEntity = request.TranslateTo<PreexistingSupportChild>();
-            preexistingSupportEntity.UserId = Convert.ToInt32(UserSession.CustomId);
             PreexistingSupportChildService.Add(preexistingSupportEntity);
-            var preexistingSupport = preexistingSupportEntity.TranslateTo<ReqPreexistingSupportChild>();
-            if (preexistingSupportEntity.DateOfBirth != null)
-                preexistingSupport.DateOfBirth = preexistingSupportEntity.DateOfBirth.Value.ToShortDateString();
             return new RespPreexistingSupportChild()
                 {
-                    Child = preexistingSupport
+                    Child = preexistingSupportEntity
                 };
         }
         public object Put(ReqPreexistingSupportChild request)

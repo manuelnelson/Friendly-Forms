@@ -15,12 +15,11 @@ namespace BusinessLogic
         {
         }
 
-        public SocialSecurityViewModel GetByUserId(long userId, bool isOtherParent = false)
+        public SocialSecurity GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {
-                var entity = FormRepository.GetFiltered(m => m.UserId==userId && m.IsOtherParent==isOtherParent).FirstOrDefault();
-                return (entity == null ? new SocialSecurityViewModel() : entity.ConvertToModel()) as SocialSecurityViewModel;
+                return FormRepository.GetFiltered(m => m.UserId==userId && m.IsOtherParent==isOtherParent).FirstOrDefault();
             }
             catch (Exception ex)
             {

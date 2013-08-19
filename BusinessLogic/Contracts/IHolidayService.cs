@@ -1,4 +1,5 @@
-﻿using DataInterface;
+﻿using System.Collections.Generic;
+using DataInterface;
 using Models;
 using Models.ViewModels;
 
@@ -19,5 +20,6 @@ namespace BusinessLogic.Contracts
         /// <param name="holiday"></param>
         Holiday AddOrUpdate(HolidayViewModel holiday);
 
+        List<Holiday> GetChildrenListByUserId(long userId);
     }
 }

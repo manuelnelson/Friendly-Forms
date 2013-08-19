@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using DataInterface;
 using Models.Contract;
 
@@ -13,7 +14,12 @@ namespace DataLayerContext.Repositories
 
         public TFormEntity GetByUserId(long userId)
         {
-            return GetDbSet().FirstOrDefault(u => u.UserId.Equals(userId));
+            return GetDbSet().FirstOrDefault(u => u.UserId == userId);
+        }
+
+        public List<TFormEntity> GetListByUserId(long userId)
+        {
+            return GetDbSet().Where(u => u.UserId == userId).ToList();
         }
     }
 }

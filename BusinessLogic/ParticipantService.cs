@@ -18,10 +18,10 @@ namespace BusinessLogic
         public CustodyInformation GetCustodyInformation(long userId)
         {
             var participant = ParticipantRepository.GetByUserId(userId);            
-            return GetCustodyInformation(participant.ConvertToModel() as ParticipantViewModel);
+            return GetCustodyInformation(participant);
         }
 
-        public CustodyInformation GetCustodyInformation(ParticipantViewModel participant)
+        public CustodyInformation GetCustodyInformation(Participant participant)
         {
             if (participant == null)
                 throw new ArgumentNullException();

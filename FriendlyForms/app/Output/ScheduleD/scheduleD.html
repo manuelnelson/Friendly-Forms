@@ -1,0 +1,162 @@
+﻿<div class="row-fluid" style="text-align: center;">
+    <h2>CHILD SUPPORT SCHEDULE D</h2>
+    <h2>ADDITIONAL EXPENSES</h2>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>WORK RELATED CHILD CARE COSTS</th>
+            <th>{{scheduleD.Father}}</th>
+            <th>{{scheduleD.Mother}}</th>
+            <th>Nonparent Custodian</th>
+            <th>Combined</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1. Work Related Child Care</td>
+            <td class="currency">${{scheduleD.FatherScheduleD.WorkRelated}}</td>
+            <td class="currency">${{scheduleD.MotherScheduleD.WorkRelated}}</td>
+            <td class="currency">${{scheduleD.NonParentScheduleD.WorkRelated}}</td>
+            <td class="currency">${{scheduleD.TotalScheduleD.WorkRelated}}</td>
+        </tr>
+        <tr>
+            <td>2. Health Insurance Paid for Children</td>
+            <td class="currency">${{scheduleD.FatherScheduleD.HealthInsurance}}</td>
+            <td class="currency">${{scheduleD.MotherScheduleD.HealthInsurance}}</td>
+            <td class="currency">${{scheduleD.NonParentScheduleD.HealthInsurance}}</td>
+            <td class="currency">${{scheduleD.TotalScheduleD.HealthInsurance}}</td>
+        </tr>
+        <tr>
+            <td>3. Total Monthly Additional Expenses</td>
+            <td class="currency">${{scheduleD.FatherScheduleD.AdditionalExpenses}}</td>
+            <td class="currency">${{scheduleD.MotherScheduleD.AdditionalExpenses}}</td>
+            <td class="currency">${{scheduleD.NonParentScheduleD.AdditionalExpenses}}</td>
+            <td class="currency">${{scheduleD.TotalScheduleD.AdditionalExpenses}}</td>
+        </tr>
+        <tr>
+            <td>4. Pro Rata Share of Parents' Income</td>
+            <td class="currency">${{scheduleD.FatherScheduleD.ProRataParents}}</td>
+            <td class="currency">${{scheduleD.MotherScheduleD.ProRataParents}}</td>
+            <td class="currency">${{scheduleD.NonParentScheduleD.ProRataParents}}</td>
+            <td class="currency">${{scheduleD.TotalScheduleD.ProRataParents}}</td>
+        </tr>
+        <tr>
+            <td>5. Pro Rata Share of Additional Expenses</td>
+            <td class="currency">${{scheduleD.FatherScheduleD.ProRataAdditional}}</td>
+            <td class="currency">${{scheduleD.MotherScheduleD.ProRataAdditional}}</td>
+            <td class="currency">${{scheduleD.NonParentScheduleD.ProRataAdditional}}</td>
+            <td class="currency">${{scheduleD.TotalScheduleD.ProRataAdditional}}</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th colspan="7">SUPPLEMENTAL TABLE 1-WORK RELATED CHILD CARE COSTS</th>
+        </tr>
+    </thead>
+    <tbody id="supplemental-table">
+        <tr>
+            <td></td>
+            <td>School</td>
+            <td>Summer Break</td>
+            <td>Other Break</td>
+            <td>Other Child Care</td>
+            <td>Total Yearly Amount</td>
+            <td>Total Monthly Amount</td>
+        </tr>
+        <tr>
+            <td>{{scheduleD.Father}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr ng-repeat="child in scheduleD.ChildCare">
+            <td>{{child.Name}}</td>
+            <td>${{child.SchoolFather}}</td>
+            <td>${{child.SummerFather}}</td>
+            <td>${{child.BreaksFather}}</td>
+            <td>${{child.OtherFather}}</td>
+            <td>${{child.TotalFather}}</td>
+            <td>${{child.TotalFatherMonthly}}</td>
+        </tr>
+        <tr>
+            <td>Totals</td>
+            <td>${{scheduleD.FatherScheduleD.TotalSchool}}</td>
+            <td>${{scheduleD.FatherScheduleD.TotalSummer}}</td>
+            <td>${{scheduleD.FatherScheduleD.TotalBreaks}}</td>
+            <td>${{scheduleD.FatherScheduleD.TotalOther}}</td>
+            <td>${{scheduleD.FatherScheduleD.TotalYearly}}</td>
+            <td>${{scheduleD.FatherScheduleD.TotalMonthly}}</td>
+        </tr>
+        <tr>
+            <td>{{scheduleD.Mother}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr ng-repeat="child in scheduleD.ChildCare">
+            <td>{{child.Name}}</td>
+            <td>${{child.SchoolMother}}</td>
+            <td>${{child.SummerMother}}</td>
+            <td>${{child.BreaksMother}}</td>
+            <td>${{child.OtherMother}}</td>
+            <td>${{child.TotalMother}}</td>
+            <td>${{child.TotalMotherMonthly}}</td>
+        </tr>
+        <tr>
+            <td>Totals</td>
+            <td>${{scheduleD.MotherScheduleD.TotalSchool}}</td>
+            <td>${{scheduleD.MotherScheduleD.TotalSummer}}</td>
+            <td>${{scheduleD.MotherScheduleD.TotalBreaks}}</td>
+            <td>${{scheduleD.MotherScheduleD.TotalOther}}</td>
+            <td>${{scheduleD.MotherScheduleD.TotalYearly}}</td>
+            <td>${{scheduleD.MotherScheduleD.TotalMonthly}}</td>
+        </tr>
+        <tr>
+            <td>{{scheduleD.NonParent}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr ng-repeat="child in scheduleD.ChildCare">
+            <td>{{child.Name}}</td>
+            <td>${{child.SchoolNonParent}}</td>
+            <td>${{child.SummerNonParent}}</td>
+            <td>${{child.BreaksNonParent}}</td>
+            <td>${{child.OtherNonParent}}</td>
+            <td>${{child.TotalNonParent}}</td>
+            <td>${{child.TotalNonParentMonthly}}</td>
+        </tr>
+        <tr>
+            <td>Totals</td>
+            <td>${{scheduleD.NonParentScheduleD.TotalSchool}}</td>
+            <td>${{scheduleD.NonParentScheduleD.TotalSummer}}</td>
+            <td>${{scheduleD.NonParentScheduleD.TotalBreaks}}</td>
+            <td>${{scheduleD.NonParentScheduleD.TotalOther}}</td>
+            <td>${{scheduleD.NonParentScheduleD.TotalYearly}}</td>
+            <td>${{scheduleD.NonParentScheduleD.TotalMonthly}}</td>
+        </tr>
+    </tbody>
+</table>
+<!--<script id="friendly-supplementalTableTotal-template" type="text/x-jquery-tmpl">
+    <tr>
+        <td>{{scheduleD.Name}}</td>
+        <td>${{scheduleD.TotalSchool}}</td>
+        <td>${{scheduleD.TotalSummer}}</td>
+        <td>${{scheduleD.TotalBreaks}}</td>
+        <td>${{scheduleD.TotalOther}}</td>
+        <td>${{scheduleD.TotalYearly}}</td>
+        <td>${{scheduleD.TotalMonthly}}</td>
+    </tr>
+</script>-->

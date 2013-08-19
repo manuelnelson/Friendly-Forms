@@ -11,8 +11,8 @@ namespace FriendlyForms.RestService
     public class PreexistingSupportFormRestService
     {
         //REST Resource DTO
-        [Route("/PreexistingSupportForm")]
-        [Route("/PreexistingSupportForm/{Ids}")]
+        [Route("/PreexistingSupportForms")]
+        [Route("/PreexistingSupportForms/{Ids}")]
         public class PreexistingSupportFormListDto : IReturn<List<PreexistingSupportFormDto>>
         {
             public long[] Ids { get; set; }
@@ -23,9 +23,9 @@ namespace FriendlyForms.RestService
             }
         }
 
-        [Route("/PreexistingSupportForm", "POST")]
-        [Route("/PreexistingSupportForm", "PUT")]
-        [Route("/PreexistingSupportForm/{Id}", "GET")]
+        [Route("/PreexistingSupportForms", "POST")]
+        [Route("/PreexistingSupportForms", "PUT")]
+        [Route("/PreexistingSupportForms")]
         public class PreexistingSupportFormDto : IReturn<PreexistingSupportFormDto>
         {
             public long Id { get; set; }
@@ -40,7 +40,7 @@ namespace FriendlyForms.RestService
 
             public object Get(PreexistingSupportFormDto request)
             {
-                return PreexistingSupportFormService.Get(request.Id);
+                return PreexistingSupportFormService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId), request.IsOtherParent);
             }
 
             public object Get(PreexistingSupportFormListDto request)

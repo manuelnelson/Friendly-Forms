@@ -37,7 +37,10 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui"], ["$routeProvider
         when('/Financial/SocialSecurity/:userId/:isOtherParent', { controller: SocialSecurityCtrl, templateUrl: '/app/Financial/SocialSecurity/SocialSecurity.html' }).
         when('/Financial/Support/:userId/:isOtherParent', { controller: SupportCtrl, templateUrl: '/app/Financial/Support/Support.html' }).
         when('/Financial/OtherChild/:userId/:isOtherParent', { controller: OtherChildCtrl, templateUrl: '/app/Financial/OtherChild/OtherChild.html' }).
-        when('/Financial/Deviation/:userId/:isOtherParent', { controller: DeviationCtrl, templateUrl: '/app/Financial/Deviation/Deviation.html' }).
+        when('/Financial/Deviation/:userId', { controller: DeviationCtrl, templateUrl: '/app/Financial/Deviation/Deviation.html' }).
+        when('/Output/FormComplete/:formName/user/:userId', { controller: FormCompleteCtrl, templateUrl: '/app/Output/FormComplete/FormComplete.html' }).
+        when('/Output/Parenting/User/:userId', { controller: ParentingCtrl, templateUrl: '/app/Output/Parenting/Parenting.html' }).
+        when('/Output/DomesticMediation/User/:userId', { controller: DomesticMediationCtrl, templateUrl: '/app/Output/DomesticMediation/DomesticMediation.html' }).
         when('/Account/Login/', { controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Register/', { controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
         when('/', { controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
@@ -49,7 +52,12 @@ FormsApp.value('ui.config', {
             placement: 'left',
             title: 'Tip',
             trigger: 'hover'
-        }
+        },
+        timepicker: {
+            minuteStep: 15,
+            showInputs: false,
+            disableFocus: true
+        },
     }
 });
 

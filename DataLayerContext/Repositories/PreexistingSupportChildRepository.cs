@@ -12,9 +12,9 @@ namespace DataLayerContext.Repositories
         {
         }
 
-        public IEnumerable<PreexistingSupportChild> GetChildrenById(long id)
+        public IEnumerable<PreexistingSupportChild> GetChildrenById(long preexistingSupportId)
         {
-            return GetDbSet().Where(p => p.PreexistingSupportId ==id).Include(x=>x.PreexistingSupport);
+            return GetDbSet().Where(p => p.PreexistingSupportId == preexistingSupportId).Include(x=>x.PreexistingSupport);
         }
     }
 }

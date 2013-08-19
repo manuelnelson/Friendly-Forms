@@ -16,9 +16,9 @@ namespace Models
         public virtual User User { get; set; }
         public int ChildrenInvolved { get; set; }
 
-        public IViewModel ConvertToModel()
+        public bool IsValid()
         {
-            return this.TranslateTo<ChildFormViewModel>();
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

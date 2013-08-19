@@ -39,6 +39,11 @@ namespace Models
                 };
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var update = (OtherChild) entity;

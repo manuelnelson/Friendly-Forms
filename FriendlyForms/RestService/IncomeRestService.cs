@@ -93,7 +93,7 @@ namespace FriendlyForms.RestService
             {
                 return IncomeService.Get(request.Id);
             }
-            return IncomeService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
+            return IncomeService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId), request.IsOtherParent);
         }
         public object Post(ReqIncome request)
         {

@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -22,9 +20,10 @@ namespace Models
         public string BusinessDescription { get; set; }
         public string AdditionalAssets { get; set; }
 
-        public IViewModel ConvertToModel()
+
+        public bool IsValid()
         {
-            return this.TranslateTo<AssetViewModel>();
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

@@ -4,7 +4,6 @@ using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
@@ -15,12 +14,11 @@ namespace BusinessLogic
         {
         }
 
-        public OtherChildrenViewModel GetByUserId(long userId, bool isOtherParent = false)
+        public OtherChildren GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {
-                var entity = FormRepository.GetFiltered(m => m.UserId == userId && m.IsOtherParent == isOtherParent).FirstOrDefault();
-                return (entity == null ? new OtherChildrenViewModel() : entity.ConvertToModel()) as OtherChildrenViewModel;
+                return FormRepository.GetFiltered(m => m.UserId == userId && m.IsOtherParent == isOtherParent).FirstOrDefault();
             }
             catch (Exception ex)
             {

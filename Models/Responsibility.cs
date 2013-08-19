@@ -26,6 +26,11 @@ namespace Models
             return this.TranslateTo<ResponsibilityViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var update = (Responsibility)entity;

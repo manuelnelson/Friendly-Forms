@@ -100,7 +100,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">By what date will the vehicle be refinanced?</label>
-                                <input class="datepicker" data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="vehicle.RefinanceDate" name="vehicle.RefinanceDate" placeholder="MM/DD/YYYY" type="text" value="">
+                                <input ui-jq="datepicker" data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="vehicle.RefinanceDate" name="vehicle.RefinanceDate" placeholder="MM/DD/YYYY" type="text" value="">
                                 <div ng-show="addVehicleForm.RefinanceDate.$dirty && addVehicleForm.RefinanceDate.$invalid">
                                     <span class="form-error" ng-show="addVehicleForm.RefinanceDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                 </div>

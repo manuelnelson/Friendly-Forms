@@ -70,6 +70,12 @@ namespace Models
                 FridayParent = FridayParent
             };
         }
+
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var update = (Schedule)entity;

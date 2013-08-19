@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\BcsoOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\ChildCareFormOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\ChildCareOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\ChildFormOrmLiteRepository.cs" />
@@ -82,7 +83,6 @@
     <Compile Include="OrmLiteRepositories\CourtOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\DebtOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\DecisionOrmLiteRepository.cs" />
-    <Compile Include="OrmLiteRepositories\DeviationsOrmLiteFormRepository.cs" />
     <Compile Include="OrmLiteRepositories\DeviationsOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\ExtraDecisionOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\ExtraExpenseFormOrmLiteRepository.cs" />
@@ -112,12 +112,12 @@
     <Compile Include="OrmLiteRepositories\UserOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\VehicleFormOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\VehicleOrmLiteRepository.cs" />
+    <Compile Include="Repositories\BcsoRepository.cs" />
     <Compile Include="Repositories\ChildCareFormRepository.cs" />
     <Compile Include="Repositories\ChildCareRepository.cs" />
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="Repositories\ChildFormRepository.cs" />
     <Compile Include="Repositories\AddendumRepository.cs" />
-    <Compile Include="Repositories\DeviationsFormRepository.cs" />
     <Compile Include="Repositories\ExtraExpenseFormRepository.cs" />
     <Compile Include="Repositories\ExtraExpenseRepository.cs" />
     <Compile Include="Repositories\HeathRepository.cs" />

@@ -20,6 +20,11 @@ namespace Models
             return this.TranslateTo<VehicleFormViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var updatingEntity = (VehicleForm)entity;

@@ -32,6 +32,11 @@ namespace Models
             return this.TranslateTo<HealthViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             throw new NotImplementedException();

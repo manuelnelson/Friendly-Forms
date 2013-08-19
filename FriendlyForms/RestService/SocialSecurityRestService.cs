@@ -43,7 +43,7 @@ namespace FriendlyForms.RestService
             {
                 return SocialSecurityService.Get(request.Id);
             }
-            return SocialSecurityService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
+            return SocialSecurityService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId), request.IsOtherParent);
         }
         public object Post(ReqSocialSecurity request)
         {

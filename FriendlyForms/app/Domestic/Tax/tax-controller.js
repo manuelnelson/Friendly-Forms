@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#taxForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Participant/' + $scope.tax.UserId);
+                $location.path('/Output/FormComplete/DomesticMediation/user/' + $scope.tax.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,13 +21,13 @@
             taxService.taxes.save(null, $scope.tax, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.tax.UserId);
+                    $location.path('/Output/FormComplete/DomesticMediation/user/' + $scope.tax.UserId);
             });
         } else {
             taxService.taxes.update({ Id: $scope.tax.Id }, $scope.tax, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Participant/' + $scope.tax.UserId);
+                    $location.path('/Output/FormComplete/DomesticMediation/user/' + $scope.tax.UserId);
             });
         }
     };

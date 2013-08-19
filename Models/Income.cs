@@ -49,6 +49,11 @@ namespace Models
             return this.TranslateTo<IncomeViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             throw new NotImplementedException();

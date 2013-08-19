@@ -131,7 +131,7 @@
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Date of Birth</label>
-                                <input class="datepicker" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="otherChild.DateOfBirth" name="otherChild.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
+                                <input ui-jq="datepicker" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="otherChild.DateOfBirth" name="otherChild.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
                                 <div ng-show="otherChildForm.DateOfBirth.$dirty && otherChildForm.DateOfBirth.$invalid">
                                     <span class="form-error" ng-show="otherChildForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                     <span class="form-error" ng-show="otherChildForm.DateOfBirth.$error.required">The field is required</span>

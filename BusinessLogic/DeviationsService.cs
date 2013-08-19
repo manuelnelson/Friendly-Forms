@@ -11,9 +11,5 @@ namespace BusinessLogic
         {
         }
 
-        public Deviations GetByChildId(long childId, bool isOtherParent = false)
-        {
-            return FormRepository.GetChildById(childId, isOtherParent);
-        }
     }
 }

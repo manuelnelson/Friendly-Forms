@@ -47,10 +47,9 @@ namespace DataLayerContext
         public DbSet<Health> Health{ get; set; }
         public DbSet<ChildCareForm> ChildCareForm { get; set; }
         public DbSet<PreexistingSupportForm> PreexistingSupportForm { get; set; }
-        public DbSet<DeviationsForm> DeviationsForm { get; set; }
         public DbSet<ExtraExpenseForm> ExtraExpenseForms { get; set; }
         public DbSet<ExtraExpense> ExtraExpenses { get; set; }
-
+        public DbSet<Bcso> Bcsos { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             SetupCourtMapping(modelBuilder);
@@ -91,10 +90,17 @@ namespace DataLayerContext
             SetupChildCareFormEntity(modelBuilder);
             SetupChildCareEntity(modelBuilder);
             SetupPreexistingSupportFormEntity(modelBuilder);
-            SetupDeviationsFormEntity(modelBuilder);
             SetupExtraExpenseFormEntity(modelBuilder);
             SetupExtraExpenseEntity(modelBuilder);
+            SetupBcsoEntity(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
+        }
+        private void SetupBcsoEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Bcso>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<Bcso>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupExtraExpenseEntity(DbModelBuilder modelBuilder)
@@ -112,12 +118,6 @@ namespace DataLayerContext
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
-        private void SetupDeviationsFormEntity(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<DeviationsForm>().HasKey(t => new { t.Id });
-            modelBuilder.Entity<DeviationsForm>().Property(t => t.Id)
-                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-        }
 
         private void SetupPreexistingSupportFormEntity(DbModelBuilder modelBuilder)
         {
@@ -183,7 +183,6 @@ namespace DataLayerContext
             modelBuilder.Entity<Deviations>().HasKey(t => new { t.Id });
             modelBuilder.Entity<Deviations>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<Deviations>().HasRequired(t => t.Child).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupOtherChildrenEntity(DbModelBuilder modelBuilder)

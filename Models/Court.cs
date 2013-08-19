@@ -20,9 +20,9 @@ namespace Models
         public int PlanType { get; set; }
         public string ExistCaseNumber { get; set; }
 
-        public IViewModel ConvertToModel()
+        public bool IsValid()
         {
-            return this.TranslateTo<CourtViewModel>();
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

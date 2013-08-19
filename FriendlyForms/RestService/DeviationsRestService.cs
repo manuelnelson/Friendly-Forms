@@ -18,17 +18,49 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long UserId { get; set; }
         [DataMember]
-        public bool IsOtherParent { get; set; }
-        [DataMember]
-        public long ChildId { get; set; }
-        [DataMember]
-        public int Circumstances { get; set; }
+        public int Deviation { get; set; }
         [DataMember]
         public string Unjust { get; set; }
         [DataMember]
         public string BestInterest { get; set; }
         [DataMember]
         public string Impair { get; set; }
+        [DataMember]
+        public int? HealthFather { get; set; }
+        [DataMember]
+        public int? InsuranceFather { get; set; }
+        [DataMember]
+        public int? TaxCreditFather { get; set; }
+        [DataMember]
+        public int? TravelExpensesFather { get; set; }
+        [DataMember]
+        public int? VisitationFather { get; set; }
+        [DataMember]
+        public int? AlimonyPaidFather { get; set; }
+        [DataMember]
+        public int? MortgageFather { get; set; }
+        [DataMember]
+        public int? PermanencyFather { get; set; }
+        [DataMember]
+        public int? NonSpecificFather { get; set; }
+        [DataMember]
+        public int? HealthMother { get; set; }
+        [DataMember]
+        public int? InsuranceMother { get; set; }
+        [DataMember]
+        public int? TaxCreditMother { get; set; }
+        [DataMember]
+        public int? TravelExpensesMother { get; set; }
+        [DataMember]
+        public int? VisitationMother { get; set; }
+        [DataMember]
+        public int? AlimonyPaidMother { get; set; }
+        [DataMember]
+        public int? MortgageMother { get; set; }
+        [DataMember]
+        public int? PermanencyMother { get; set; }
+        [DataMember]
+        public int? NonSpecificMother { get; set; }
         [DataMember]
         public int? HighLow { get; set; }
         [DataMember]
@@ -38,23 +70,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int? HighIncome { get; set; }
         [DataMember]
-        public int? Health { get; set; }
+        public int? HighDeviation { get; set; }
         [DataMember]
-        public int? Insurance { get; set; }
-        [DataMember]
-        public int? TaxCredit { get; set; }
-        [DataMember]
-        public int? TravelExpenses { get; set; }
-        [DataMember]
-        public int? Visitation { get; set; }
-        [DataMember]
-        public int? AlimonyPaid { get; set; }
-        [DataMember]
-        public int? Mortgage { get; set; }
-        [DataMember]
-        public int? Permanency { get; set; }
-        [DataMember]
-        public int? NonSpecific { get; set; }
+        public int? SpecificDeviations { get; set; }
     }
     [Authenticate]
     public class DeviationsRestService : ServiceBase
@@ -63,16 +81,15 @@ namespace FriendlyForms.RestService
 
         public object Get(DeviationsDto request)
         {
-            if (request.ChildId != 0)
+            if (request.Id != 0)
             {
-                var deviations = DeviationsService.GetByChildId(request.ChildId, request.IsOtherParent) ?? new Deviations()
-                    {
-                        ChildId = request.ChildId,    
-                    };
-                deviations.HighLow = deviations.HighLow ?? 0;
-                return deviations.TranslateTo<DeviationsDto>();
-            }                
-            return DeviationsService.Get(request.Id);
+                return DeviationsService.Get(request.Id);
+            }
+            if (request.UserId != 0)
+            {
+                return DeviationsService.GetByUserId(request.UserId);
+            }
+            return DeviationsService.GetByUserId(Convert.ToInt32(UserSession.CustomId));
         }
 
         public object Post(DeviationsDto request)

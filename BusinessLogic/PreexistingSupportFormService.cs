@@ -4,7 +4,6 @@ using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
@@ -17,12 +16,11 @@ namespace BusinessLogic
             PreexistingSupportFormRepository = repository;
         }
 
-        public PreexistingSupportFormViewModel GetByUserId(long userId, bool isOtherParent = false)
+        public PreexistingSupportForm GetByUserId(long userId, bool isOtherParent = false)
         {
             try
             {
-                var entity = FormRepository.GetFiltered(m => m.UserId == userId && m.IsOtherParent == isOtherParent).FirstOrDefault();
-                return (entity == null ? new PreexistingSupportFormViewModel() : entity.ConvertToModel()) as PreexistingSupportFormViewModel;
+                return FormRepository.GetFiltered(m => m.UserId == userId && m.IsOtherParent == isOtherParent).FirstOrDefault();
             }
             catch (Exception ex)
             {

@@ -116,7 +116,7 @@ namespace FriendlyForms.Controllers
         {
             var Id = Convert.ToInt32(UserSession.CustomId);
             var court = _courtService.GetByUserId(Id) as CourtViewModel;
-            var participants = _participantService.GetByUserId(Id) as ParticipantViewModel;
+            var participants = _participantService.GetByUserId(Id) as Participant;
             var children = _childService.GetByUserId(Id);
             var childForm = _childFormService.GetByUserId(Id);
             var privacy = _privacyService.GetByUserId(Id);
@@ -162,7 +162,7 @@ namespace FriendlyForms.Controllers
             var childViewModel = new ParentingPlanViewModel
                 {
                     CourtViewModel = court,
-                    ParticipantViewModel = participants,
+                    ParticipantViewModel = participants.ConvertToModel() as ParticipantViewModel,
                     ChildAllViewModel = new ChildAllViewModel()
                         {
                             ChildViewModel = children,
@@ -247,83 +247,83 @@ namespace FriendlyForms.Controllers
             return View(domesticModel);
         }
 
-        [Authenticate]
-        public ActionResult Financial()
-        {
-            //only show form if userId is current user, or if curerent user is lawyer of userId
-            var Id = Convert.ToInt32(UserSession.CustomId);
-            var income = _incomeService.GetByUserId(Id);
-            var incomeOther = _incomeService.GetByUserId(Id, isOtherParent:true);
-            var children = _childService.GetByUserId(Id);
-            var childForm = _childFormService.GetByUserId(Id);
-            var social = _socialSecurityService.GetByUserId(Id);
-            var socialOther = _socialSecurityService.GetByUserId(Id, isOtherParent:true);
-            var preexistList = _preexistingSupportService.GetByUserId(Id);
-            var preexistListOther = _preexistingSupportService.GetByUserId(Id, isOtherParent:true);
-            var other = _otherChildrenService.GetByUserId(Id);
-            var otherChildren = _otherChildService.GetChildrenByOtherChildrenId(other.Id);
-            var otherOther = _otherChildrenService.GetByUserId(Id, isOtherParent: true);
-            var otherChildrenOther = _otherChildService.GetChildrenByOtherChildrenId(otherOther.Id);
-            var health = _healthService.GetByUserId(Id) as HealthViewModel;
-            var childCareForm = _childCareFormService.GetByUserId(Id) as ChildCareFormViewModel;
-            other.OtherChildViewModel = new OtherChildViewModel()
-                {
-                    Children = otherChildren.ToList()
-                };
-            otherOther.OtherChildViewModel = new OtherChildViewModel()
-                {
-                    Children = otherChildrenOther.ToList()
-                };
+        //[Authenticate]
+        //public ActionResult Financial()
+        //{
+        //    //only show form if userId is current user, or if curerent user is lawyer of userId
+        //    var Id = Convert.ToInt32(UserSession.CustomId);
+        //    var income = _incomeService.GetByUserId(Id);
+        //    var incomeOther = _incomeService.GetByUserId(Id, isOtherParent:true);
+        //    var children = _childService.GetByUserId(Id);
+        //    var childForm = _childFormService.GetByUserId(Id);
+        //    var social = _socialSecurityService.GetByUserId(Id);
+        //    var socialOther = _socialSecurityService.GetByUserId(Id, isOtherParent:true);
+        //    var preexistList = _preexistingSupportService.GetByUserId(Id);
+        //    var preexistListOther = _preexistingSupportService.GetByUserId(Id, isOtherParent:true);
+        //    var other = _otherChildrenService.GetByUserId(Id);
+        //    var otherChildren = _otherChildService.GetChildrenByOtherChildrenId(other.Id);
+        //    var otherOther = _otherChildrenService.GetByUserId(Id, isOtherParent: true);
+        //    var otherChildrenOther = _otherChildService.GetChildrenByOtherChildrenId(otherOther.Id);
+        //    var health = _healthService.GetByUserId(Id) as HealthViewModel;
+        //    var childCareForm = _childCareFormService.GetByUserId(Id) as ChildCareFormViewModel;
+        //    other.OtherChildViewModel = new OtherChildViewModel()
+        //        {
+        //            Children = otherChildren.ToList()
+        //        };
+        //    otherOther.OtherChildViewModel = new OtherChildViewModel()
+        //        {
+        //            Children = otherChildrenOther.ToList()
+        //        };
 
-            var allPreexist = new AllPreexistingViewModel()
-                {
-                    PreexistingSupportViewModel = new PreexistingSupportViewModel()
-                        {
-                            PreexistingSupportList = preexistList
-                        },
-                        ChildViewModel = new ChildViewModel()                        
-                };
-            var allPreexistOther = new AllPreexistingViewModel()
-                {
-                    PreexistingSupportViewModel = new PreexistingSupportViewModel()
-                        {
-                            PreexistingSupportList = preexistListOther
-                        },
-                    ChildViewModel = new ChildViewModel()
-                };
+        //    var allPreexist = new AllPreexistingViewModel()
+        //        {
+        //            PreexistingSupportViewModel = new PreexistingSupportViewModel()
+        //                {
+        //                    PreexistingSupportList = preexistList
+        //                },
+        //                ChildViewModel = new ChildViewModel()                        
+        //        };
+        //    var allPreexistOther = new AllPreexistingViewModel()
+        //        {
+        //            PreexistingSupportViewModel = new PreexistingSupportViewModel()
+        //                {
+        //                    PreexistingSupportList = preexistListOther
+        //                },
+        //            ChildViewModel = new ChildViewModel()
+        //        };
 
-            var financial = new FinancialFormsCompleted()
-                {
-                    Income = income.UserId != 0,
-                    IncomeOther = incomeOther.UserId != 0,
-                    OtherChildren = other.UserId != 0,
-                    OtherChildrenOther = otherOther.UserId != 0,
-                    SocialSecurity = social.UserId != 0,
-                    SocialSecurityOther = socialOther.UserId != 0,
-                    Health = health.UserId != 0,
-                    ChildCareForm = childCareForm.UserId != 0,
-                };
-            var model = new FinancialViewModel
-                {
-                    FinancialFormsCompleted = financial,
-                    IncomeViewModel = income,
-                    IncomeOtherViewModel = incomeOther,
-                    ChildAllViewModel = new ChildAllViewModel()
-                        {
-                            ChildViewModel = children,
-                            ChildFormViewModel = childForm as ChildFormViewModel
-                        },
-                    SocialSecurityViewModel = social,
-                    SocialSecurityOtherViewModel = socialOther,
-                    PreexistingSupportViewModel = allPreexist,
-                    PreexistingSupportOtherViewModel = allPreexistOther,
-                    OtherChildrenViewModel = other,
-                    OtherChildrenOtherViewModel = otherOther,
-                    HealthViewModel = health,
-                    ChildCareFormViewModel = childCareForm,
-                };
-            return View(model);
-        }
+        //    var financial = new FinancialFormsCompleted()
+        //        {
+        //            Income = income.UserId != 0,
+        //            IncomeOther = incomeOther.UserId != 0,
+        //            OtherChildren = other.UserId != 0,
+        //            OtherChildrenOther = otherOther.UserId != 0,
+        //            SocialSecurity = social.UserId != 0,
+        //            SocialSecurityOther = socialOther.UserId != 0,
+        //            Health = health.UserId != 0,
+        //            ChildCareForm = childCareForm.UserId != 0,
+        //        };
+        //    var model = new FinancialViewModel
+        //        {
+        //            FinancialFormsCompleted = financial,
+        //            IncomeViewModel = income,
+        //            IncomeOtherViewModel = incomeOther,
+        //            ChildAllViewModel = new ChildAllViewModel()
+        //                {
+        //                    ChildViewModel = children,
+        //                    ChildFormViewModel = childForm as ChildFormViewModel
+        //                },
+        //            SocialSecurityViewModel = social,
+        //            SocialSecurityOtherViewModel = socialOther,
+        //            PreexistingSupportViewModel = allPreexist,
+        //            PreexistingSupportOtherViewModel = allPreexistOther,
+        //            OtherChildrenViewModel = other,
+        //            OtherChildrenOtherViewModel = otherOther,
+        //            HealthViewModel = health,
+        //            ChildCareFormViewModel = childCareForm,
+        //        };
+        //    return View(model);
+        //}
 
     }
 }

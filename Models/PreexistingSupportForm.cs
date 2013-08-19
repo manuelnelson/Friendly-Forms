@@ -21,6 +21,11 @@ namespace Models
             return this.TranslateTo<PreexistingSupportFormViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var update = (PreexistingSupport)entity;

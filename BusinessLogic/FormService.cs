@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
@@ -26,8 +27,19 @@ namespace BusinessLogic
             try
             {
                 return FormRepository.GetByUserId(userId);
-                //var entity = FormRepository.GetByUserId(userId);
-                //return entity == null ? new TViewModel() : entity.ConvertToModel();
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new Exception("Unable to retrieve information", ex);
+            }
+        }
+
+        public List<IFormEntity> GetListByUserId(long userId)
+        {
+            try
+            {
+                return FormRepository.GetListByUserId(userId) as List<IFormEntity>;
             }
             catch (Exception ex)
             {

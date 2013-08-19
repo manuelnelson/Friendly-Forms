@@ -22,6 +22,11 @@ namespace Models
             return this.TranslateTo<TaxViewModel>();
         }
 
+        public bool IsValid()
+        {
+            return UserId > 0;
+        }
+
         public void Update(IFormEntity entity)
         {
             var updatingEntity = (Tax) entity;

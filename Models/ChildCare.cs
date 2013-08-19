@@ -31,9 +31,9 @@ namespace Models
         [Ignore]
         public Child Child { get; set; }
 
-        public IViewModel ConvertToModel()
+        public bool IsValid()
         {
-            return this.TranslateTo<ChildCareViewModel>();
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

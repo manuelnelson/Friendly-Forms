@@ -6,7 +6,7 @@ namespace BusinessLogic.Contracts
 {
     public interface IIncomeService : IFormService<IIncomeRepository, Income>
     {
-        IncomeViewModel GetByUserId(long userId, bool isOtherParent = false);
+        Income GetByUserId(long userId, bool isOtherParent = false);
         Income AddOrUpdate(IncomeViewModel model);
     }
 }

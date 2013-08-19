@@ -16,11 +16,11 @@ namespace BusinessLogic
         {
         }
 
-        public IEnumerable<PreexistingSupportChild> GetChildrenBySupportId(long id)
+        public IEnumerable<PreexistingSupportChild> GetChildrenBySupportId(long preexistingSupportId)
         {
             try
             {
-                return ((PreexistingSupportChildRepository)FormRepository).GetChildrenById(id);
+                return ((PreexistingSupportChildRepository)FormRepository).GetChildrenById(preexistingSupportId);
             }
             catch(Exception ex)
             {

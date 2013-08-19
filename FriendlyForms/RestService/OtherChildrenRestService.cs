@@ -42,7 +42,7 @@ namespace FriendlyForms.RestService
             {
                 return OtherChildrenService.Get(request.Id);
             }
-            return OtherChildrenService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
+            return OtherChildrenService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId), request.IsOtherParent);
         }
         public object Post(ReqOtherChildren request)
         {

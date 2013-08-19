@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
-using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Supports/")]
-    public class ReqPreexistingSupport
+    public class ReqPreexistingSupport : IReturn<RespPreexistingSupport>
     {
         [DataMember]
         public long Id { get; set; }
@@ -32,12 +32,10 @@ namespace FriendlyForms.RestService
     }
 
     [DataContract]
-    public class RespPreexistingSupport : IHasResponseStatus
+    public class RespPreexistingSupport
     {
         [DataMember]
-        public ReqPreexistingSupport PreexistingSupport { get; set; }
-        [DataMember]
-        public ResponseStatus ResponseStatus { get; set; }
+        public List<PreexistingSupport> PreexistingSupports { get; set; }
     }
     [Authenticate]
     public class PreexistingSupportRestService : ServiceBase
@@ -49,7 +47,13 @@ namespace FriendlyForms.RestService
             {
                 return PreexistingSupportService.Get(request.Id);
             }
-            return PreexistingSupportService.GetByUserId(request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId));
+            return new RespPreexistingSupport
+                {
+                    PreexistingSupports =
+                        PreexistingSupportService.GetByUserId(
+                            request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId),
+                            request.IsOtherParent)
+                };
         }
         public object Post(ReqPreexistingSupport request)
         {
@@ -58,10 +62,7 @@ namespace FriendlyForms.RestService
             PreexistingSupportService.Add(preexistingSupportEntity);
             var preexistSupport = preexistingSupportEntity.TranslateTo<ReqPreexistingSupport>();
             preexistSupport.OrderDate = preexistingSupportEntity.OrderDate.ToShortDateString();
-            return new RespPreexistingSupport()
-                {
-                    PreexistingSupport = preexistSupport
-                };
+            return preexistSupport;
         }
         public object Put(ReqPreexistingSupport request)
         {

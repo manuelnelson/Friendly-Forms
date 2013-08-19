@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
@@ -55,6 +56,19 @@ namespace BusinessLogic
             {
                 ErrorSignal.FromCurrentContext().Raise(ex);
                 throw new Exception("Unable to add holiday information", ex);
+            }
+        }
+
+        public List<Holiday> GetChildrenListByUserId(long userId)
+        {
+            try
+            {
+                return FormRepository.GetChildListByUserId(userId);
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new Exception("Unable to retrieve child information", ex);
             }
         }
     }

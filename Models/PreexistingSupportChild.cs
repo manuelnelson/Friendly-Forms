@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using Models.ViewModels;
 using ServiceStack.DataAnnotations;
@@ -7,7 +8,7 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("PreexistingSupportChilds")]
-    public class PreexistingSupportChild : IEntity, IFormEntity
+    public class PreexistingSupportChild : IFormEntity
     {
         [AutoIncrement]
         public virtual long Id { get; set; }
@@ -16,6 +17,12 @@ namespace Models
         public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
+        [NotMapped]
+        [Ignore]
+        public virtual string DateOfBirthString
+        {
+            get { return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
+        }
         public virtual int Gender { get; set; }
 
         public virtual int PreexistingSupportId { get; set; }
@@ -33,6 +40,11 @@ namespace Models
                     UserId = UserId,
                     PreexistingSupportId = PreexistingSupportId
                 };
+        }
+
+        public bool IsValid()
+        {
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

@@ -7,7 +7,7 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("Holidays")]
-    public class Holiday : IEntity, IFormEntity
+    public class Holiday : IChildFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -71,6 +71,11 @@ namespace Models
         public IViewModel ConvertToModel()
         {
             return this.TranslateTo<HolidayViewModel>();
+        }
+
+        public bool IsValid()
+        {
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

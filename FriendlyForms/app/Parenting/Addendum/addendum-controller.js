@@ -12,7 +12,7 @@
             var value = genericService.getFormInput('#addendumForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Participant/' + $scope.addendum.UserId);
+                $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,13 +21,13 @@
             addendumService.addendums.save(null, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.addendum.UserId);
+                    $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
             });
         } else {
             addendumService.addendums.update({ Id: $scope.addendum.Id }, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Participant/' + $scope.addendum.UserId);
+                    $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
             });
         }
     };

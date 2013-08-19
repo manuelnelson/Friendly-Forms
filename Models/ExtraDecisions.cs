@@ -14,9 +14,9 @@ namespace Models
         [Ignore]
         public virtual User User { get; set; }
 
-        IViewModel IFormEntity.ConvertToModel()
+        public bool IsValid()
         {
-            throw new System.NotImplementedException();
+            return UserId > 0;
         }
 
         public void Update(IFormEntity entity)

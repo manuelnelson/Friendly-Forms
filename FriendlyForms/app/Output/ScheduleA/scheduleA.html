@@ -1,0 +1,159 @@
+﻿<div class="row-fluid" style="text-align: center;">
+    <h2>CHILD SUPPORT SCHEDULE A</h2>
+    <h2>GROSS INCOME</h2>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>GROSS INCOME</th>
+            <th>{{scheduleA.Father}}</th>
+            <th>{{scheduleA.Mother}}</th>
+            <th>Combined</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1. Salary and wages</td>
+            <td class="currency">${{scheduleA.Income.W2Income}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.W2Income}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.W2Income}}</td>
+        </tr>
+        <tr>
+            <td>2. Commissions, Fees, Tips</td>
+            <td class="currency">${{scheduleA.Income.Commisions}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Commisions}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Commisions}}</td>
+        </tr>
+        <tr>
+            <td>3. Income From Self-Employment</td>
+            <td class="currency">${{scheduleA.Income.SelfIncomeNoDeductions}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.SelfIncomeNoDeductions}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.SelfIncomeNoDeductions}}</td>
+        </tr>
+        <tr>
+            <td>4. Bonuses</td>
+            <td class="currency">${{scheduleA.Income.Bonuses}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Bonuses}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Bonuses}}</td>
+        </tr>
+        <tr>
+            <td>5. Overtime Payments</td>
+            <td class="currency">${{scheduleA.Income.Overtime}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Overtime}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Overtime}}</td>
+        </tr>
+        <tr>
+            <td>6. Severance Pay</td>
+            <td class="currency">${{scheduleA.Income.Severance}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Severance}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Severance}}</td>
+        </tr>
+        <tr>
+            <td>7. Recurring Income from Pensions or Retirement Plans</td>
+            <td class="currency">${{scheduleA.Income.Retirement}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Retirement}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Retirement}}</td>
+        </tr>
+        <tr>
+            <td>8. Interest Income</td>
+            <td class="currency">${{scheduleA.Income.Interest}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Interest}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Interest}}</td>
+        </tr>
+        <tr>
+            <td>9. Income from Dividends</td>
+            <td class="currency">${{scheduleA.Income.Dividends}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Dividends}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Dividends}}</td>
+        </tr>
+        <tr>
+            <td>10. Trust Income</td>
+            <td class="currency">${{scheduleA.Income.Trust}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Trust}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Trust}}</td>
+        </tr>
+        <tr>
+            <td>11. Income from Annuities</td>
+            <td class="currency">${{scheduleA.Income.Annuities}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Annuities}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Annuities}}</td>
+        </tr>
+        <tr>
+            <td>12. Capital Gains</td>
+            <td class="currency">${{scheduleA.Income.Capital}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Capital}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Capital}}</td>
+        </tr>
+        <tr>
+            <td>13. Social Security Disability or Retirement Benefits</td>
+            <td class="currency">${{scheduleA.Income.SocialSecurity}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.SocialSecurity}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.SocialSecurity}}</td>
+        </tr>
+        <tr>
+            <td>14. Worker's Compensation Benefits</td>
+            <td class="currency">${{scheduleA.Income.Compensation}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Compensation}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Compensation}}</td>
+        </tr>
+        <tr>
+            <td>15. Unemployment Benefits</td>
+            <td class="currency">${{scheduleA.Income.Unemployment}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Unemployment}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Unemployment}}</td>
+        </tr>
+        <tr>
+            <td>16. Judgements from Personal Injury or Other Civil Cases</td>
+            <td class="currency">${{scheduleA.Income.CivilCase}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.CivilCase}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.CivilCase}}</td>
+        </tr>
+        <tr>
+            <td>17. Gifts</td>
+            <td class="currency">${{scheduleA.Income.Gifts}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Gifts}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Gifts}}</td>
+        </tr>
+        <tr>
+            <td>18. Prizes / Lottery Winnings</td>
+            <td class="currency">${{scheduleA.Income.Prizes}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Prizes}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Prizes}}</td>
+        </tr>
+        <tr>
+            <td>19. Alimony & maintenance from persons not in this case</td>
+            <td class="currency">${{scheduleA.Income.Alimony}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Alimony}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Alimony}}</td>
+        </tr>
+        <tr>
+            <td>20. Assets which are used for support of family</td>
+            <td class="currency">${{scheduleA.Income.Assets}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Assets}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Assets}}</td>
+        </tr>
+        <tr>
+            <td>21. Fringe Benefits</td>
+            <td class="currency">${{scheduleA.Income.Fringe}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Fringe}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Fringe}}</td>
+        </tr>
+        <tr>
+            <td>22. Any Other Income, including Imputed Income</td>
+            <td class="currency">${{scheduleA.Income.Other}}</td>
+            <td class="currency">${{scheduleA.OtherIncome.Other}}</td>
+            <td class="currency">${{scheduleA.CombinedIncome.Other}}</td>
+        </tr>
+        <tr>
+            <td>23. TOTAL GROSS MONTHLY INCOME</td>
+            <td class="currency">${{scheduleA.IncomeTotal}}</td>
+            <td class="currency">${{scheduleA.OtherIncomeTotal}}</td>
+            <td class="currency">${{scheduleA.CombinedIncomeTotal}}</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<div class="borderBox centered" style="width: 90%;">
+    <p><span style="font-weight: bold">Other income for {{scheduleA.Father}} is based upon:</span> {{scheduleA.Income.OtherDetails}}</p>
+    <p><span style="font-weight: bold">Other income for {{scheduleA.Mother}} is based upon:</span> {{scheduleA.OtherIncome.OtherDetails}}</p>
+</div>

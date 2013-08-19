@@ -18,6 +18,7 @@
         }
         $.jStorage.deleteKey($scope.path);
         $scope.income.UserId = $routeParams.userId;
+        $scope.income.isOtherParent = isOtherParent;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             incomeService.incomes.save(null, $scope.income, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -33,7 +34,6 @@
         }
     };
     $rootScope.currentScope = $scope;
-    var test = $scope.path;
     if (!menuService.isActive($scope.path)) {
         menuService.setActive($scope.path);
     }
