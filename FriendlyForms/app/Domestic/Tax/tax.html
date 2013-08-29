@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper">
     <form ng-submit="submit()" ng-controller="TaxCtrl" id="taxForm" name="taxForm" novalidate>
-        <input type="hidden" name="Id" ng-model="tax.Id">
-        <input type="hidden" name="UserId" ng-model="tax.UserId">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -19,7 +17,7 @@
                             <label class="radio">
                                 No
                                 <input required ng-model="tax.Taxes" name="Taxes" type="radio" value="2"></label>
-                            <div ng-show="taxForm.Taxes.$dirty && taxForm.Taxes.$invalid">
+                            <div ng-show="taxForm.Taxes.$dirty && taxForm.Taxes.$invalid || (showErrors && taxForm.Taxes.$invalid)">
                                 <span class="form-error" ng-show="taxForm.Taxes.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -27,7 +25,7 @@
                             <label>
                                 How will tax filing be handled at the conclusion of this case?</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="tax.TaxDescription" name="TaxDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="taxForm.TaxDescription.$dirty && taxForm.TaxDescription.$invalid">
+                            <div ng-show="taxForm.TaxDescription.$dirty && taxForm.TaxDescription.$invalid || (showErrors && taxForm.TaxDescription.$invalid)">
                                 <span class="form-error" ng-show="taxForm.TaxDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>

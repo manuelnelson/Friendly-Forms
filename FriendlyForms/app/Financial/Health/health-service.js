@@ -1,4 +1,4 @@
-﻿FormsApp.factory('healthService', function($resource) {
+﻿FormsApp.factory('healthService', ['$resource',function($resource) {
     var service = {
         healths: $resource('/api/healths/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

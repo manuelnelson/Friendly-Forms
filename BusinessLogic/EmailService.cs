@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using BusinessLogic.Contracts;
@@ -27,10 +26,14 @@ namespace BusinessLogic
             var message = "First, we need to verify your account.  To verify your account, please click on the following link:<br><br>";
             message += "<a href='http://www.splitsolutions.com/Account/Verify?email=" + email + "' target='_blank' title='Verification'>Verify</a> <br><br>";
             message += "We hope the application is as easy to use as possible!<br><br> -The Split Solutions Team";
-            SendEmail(email, subject, message);
+            var toEmails = new List<string>
+                {
+                    email
+                };
+            SendEmail(toEmails, subject, message);
         }
 
-        public void SendEmail(string email, string subject, string body)
+        public void SendEmail(List<string> toEmails, string subject, string body)
         {
             var message = new MailMessage()
             {
@@ -40,8 +43,10 @@ namespace BusinessLogic
                 SubjectEncoding = Encoding.UTF8,
                 IsBodyHtml = true
             };
-
-            message.To.Add(new MailAddress(email));
+            foreach (var email in toEmails)
+            {
+                message.To.Add(new MailAddress(email));                
+            }
 
             var mine = new System.Net.NetworkCredential(_fromEmail, _fromPassword);
             var mailClient = new SmtpClient

@@ -1,9 +1,12 @@
-﻿var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, $rootScope) {
+﻿var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, limitToFilter, $http, $rootScope) {
     $scope.path = $location.path();
-    $scope.house = houseService.houses.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.house = houseService.houses.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
             //see if garlic has something stored            
             $scope.house = $.jStorage.get($scope.path);
+            if($scope.house)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#houseForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Property/' + $scope.house.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,28 @@
             houseService.houses.save(null, $scope.house, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Property/' + $scope.house.UserId);
+                    menuService.nextMenu();
             });
         } else {
             houseService.houses.update({ Id: $scope.house.Id }, $scope.house, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Property/' + $scope.house.UserId);
+                    menuService.nextMenu();
             });
         }
     };
+    $scope.cities = function(cityName) {
+        return $http.get('http://ws.geonames.org/searchJSON?country=US&name_startsWith=' + cityName).then(function (response) {
+            var names = _.map(response.data.geonames, function(geoName) {
+                return geoName.name + ', ' + geoName.adminCode1;
+            });
+            return limitToFilter(names, 8);
+        });
+    };
+
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
-HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', '$rootScope'];
+HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'limitToFilter', '$http', '$rootScope'];

@@ -10,7 +10,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Support/")]
+    [Route("/ChildSupports/")]
     public class ReqChildSupport
     {
         [DataMember]
@@ -18,21 +18,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public long UserId { get; set; }
         [DataMember]
-        public string PaidBy { get; set; }
+        public int SupportBegin { get; set; }
         [DataMember]
-        public string PaidTo { get; set; }
+        public DateTime? BeginDate { get; set; }
         [DataMember]
-        public string MonthlyAmount { get; set; }
+        public int SupportEnd { get; set; }
         [DataMember]
-        public string EffectiveDate { get; set; }
+        public DateTime? EndDate { get; set; }
         [DataMember]
-        public int TemporaryAgreement { get; set; }
-        [DataMember]
-        public int Payment { get; set; }
-        [DataMember]
-        public int? PaymentDay { get; set; }
-        [DataMember]
-        public string AdditionalAssets { get; set; }
+        public int BothParties { get; set; }
     }
 
     [DataContract]

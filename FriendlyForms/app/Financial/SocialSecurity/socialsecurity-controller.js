@@ -1,19 +1,21 @@
 ﻿var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.socialSecurity = socialSecurityService.socialSecurities.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.socialSecurity = socialSecurityService.socialSecurities.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
             //see if garlic has something stored            
             $scope.socialSecurity = $.jStorage.get($scope.path);
+            if ($scope.socialSecurity)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function (noNavigate) {
-        var isOtherParent = $routeParams.isOtherParent;
         if ($scope.socialSecurityForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#socialSecurityForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Financial/Support/' + $scope.socialSecurity.UserId + "/" + isOtherParent);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -23,19 +25,19 @@
             socialSecurityService.socialSecurities.save(null, $scope.socialSecurity, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Support/' + $scope.socialSecurity.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         } else {
             socialSecurityService.socialSecurities.update({ Id: $scope.socialSecurity.Id }, $scope.socialSecurity, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Support/' + $scope.socialSecurity.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', '$rootScope'];

@@ -1,0 +1,83 @@
+﻿<div class="form-vertical wrapper">
+    <form ng-submit="submit()" ng-controller="ChildSupportCtrl" id="childSupportForm" name="childSupportForm" novalidate>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Child Support</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="control-group">
+                            <label class="form-question">
+                                When will child support payment begin?</label>
+                            <label class="radio">
+                                The first day of the first month after the divorce is finalized
+                                <input required ng-model="childSupport.SupportBegin" name="SupportBegin" type="radio" value="1"></label>
+                            <label class="radio">
+                                Other
+                                <input required ng-model="childSupport.SupportBegin" name="SupportBegin" type="radio" value="2"></label>
+                            <div ng-show="childSupportForm.SupportBegin.$dirty && childSupportForm.SupportBegin.$invalid || (showErrors && communicationForm.SupportBegin.$invalid)">
+                                <span class="form-error" ng-show="childSupportForm.SupportBegin.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div ng-show="childSupport.SupportBegin == 2">
+                            <div class="control-group">
+                                <label class="form-question">
+                                    Begin Date</label>
+                                <input ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childSupport.BeginDate" name="childSupport.BeginDate" placeholder="MM/DD/YYYY" type="text" value="">
+                                <div ng-show="childSupportForm.BeginDate.$dirty && childSupportForm.BeginDate.$invalid || (showErrors && childSupportForm.BeginDate.$invalid)">
+                                    <span class="form-error" ng-show="childSupportForm.BeginDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="form-question">
+                                When will child support payment end?</label>
+                            <label class="radio" ui-jq="popover" data-content="The child support shall continue monthly thereafter until each child reaches the age of eighteen, dies, marries, or otherwise becomes emancipated; provided that if a child becomes eighteen years old while enrolled in and attending secondary school on a full-time basis, then the child support shall continue for the child until the child has graduated from secondary school or reaches twenty years of age, whichever occurs first.">
+                                Beyond Age 18 for High School
+                                <input required ng-model="childSupport.SupportEnd" name="SupportEnd" type="radio" value="1"></label>
+                            <label class="radio" ui-jq="popover" data-content="The child support shall continue monthly thereafter until each child reaches the age of eighteen, dies, marries, or otherwise becomes emancipated.">
+                                Stops at Age 18
+                                <input required ng-model="childSupport.SupportEnd" name="SupportEnd" type="radio" value="2"></label>
+                            <label class="radio" ui-jq="popover" data-content="This is not a final order, so the child support shall continue until further order of this Court.">
+                                Until Further Order
+                                <input required ng-model="childSupport.SupportEnd" name="SupportEnd" type="radio" value="3"></label>
+                            <label class="radio">
+                                Until Specific Date - The child support shall continue monthly thereafter until:
+                                <input required ng-model="childSupport.SupportEnd" name="SupportEnd" type="radio" value="4"></label>
+                            <div ng-show="childSupportForm.SupportEnd.$dirty && childSupportForm.SupportEnd.$invalid || (showErrors && childSupportForm.SupportEnd.$invalid)">
+                                <span class="form-error" ng-show="childSupportForm.SupportEnd.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div ng-show="childSupport.SupportEnd == 4">
+                            <div class="control-group">
+                                <label class="form-question">
+                                    End Date</label>
+                                <input ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childSupport.EndDate" name="childSupport.EndDate" placeholder="MM/DD/YYYY" type="text" value="">
+                                <div ng-show="childSupportForm.EndDate.$dirty && childSupportForm.EndDate.$invalid || (showErrors && childSupportForm.EndDate.$invalid)">
+                                    <span class="form-error" ng-show="childSupportForm.EndDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="form-question">
+                                Are both parties in the divorce working together, either directly or indirectly, and in agreement on the information provided in this document, or is one party providing this information in order to generate a settlement proposal?
+                            </label>
+                            <label class="radio">
+                                Both parties are in agreement.
+                                <input required ng-model="childSupport.BothParties" name="BothParties" type="radio" value="1"></label>
+                            <label class="radio">
+                                One party is providing this information in order to generate a settlement proposal.
+                                <input required ng-model="childSupport.BothParties" name="BothParties" type="radio" value="2"></label>
+                            <div ng-show="childSupportForm.BothParties.$dirty && childSupportForm.BothParties.$invalid || (showErrors && childSupportForm.BothParties.$invalid)">
+                                <span class="form-error" ng-show="childSupportForm.BothParties.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+    </form>
+</div>

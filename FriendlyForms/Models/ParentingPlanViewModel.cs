@@ -1,27 +1,7 @@
 ﻿using BusinessLogic.Models;
-using Models.ViewModels;
 
 namespace FriendlyForms.Models
 {
-    public class ParentingPlanViewModel
-    {
-        public CourtViewModel CourtViewModel { get; set; }
-        public ParticipantViewModel ParticipantViewModel { get; set; }
-        public ChildAllViewModel ChildAllViewModel { get; set; }
-        public PrivacyViewModel PrivacyViewModel { get; set; }
-        public InformationViewModel InformationViewModel { get; set; }
-        public AllDecisionsViewModel AllDecisionsViewModel { get; set; }
-        public ResponsibilityViewModel ResponsibilityViewModel { get; set; }
-        public CommunicationViewModel CommunicationViewModel { get; set; }
-        public ScheduleViewModel ScheduleViewModel { get; set; }
-        public AllHolidaysViewModel HolidayViewModel { get; set; }
-        public AddendumViewModel AddendumViewModel { get; set; }
-        public FormsCompleted FormsCompleted { get; set; }
-        //Only used for output form
-        public PpOutputFormHelper PpOutputFormHelper { get; set; }
-        public int FormUserId { get; set; }
-    }
-
     public class PpOutputFormHelper
     {
         public CustodyInformation CustodyInformation { get; set; }

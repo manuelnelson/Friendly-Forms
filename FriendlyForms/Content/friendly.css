@@ -7764,4 +7764,16 @@ input.ng-invalid.ng-dirty {
 #main-content hr {
   border-color: black;
 }
+/*List changes*/
+ul.no-style li,
+ol.no-style li {
+  list-style-type: none;
+}
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
+#content-header {
+  height: 70px;
+}
 

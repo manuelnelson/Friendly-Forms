@@ -1,4 +1,4 @@
-﻿FormsApp.factory('communicationService', function($resource) {
+﻿FormsApp.factory('communicationService', ['$resource',function($resource) {
     var service = {
         communications: $resource('/api/communication/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

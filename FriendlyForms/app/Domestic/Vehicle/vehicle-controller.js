@@ -6,17 +6,22 @@
 
     //#region intialize
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+    $scope.showErrors = false;
+
 
     vehicleService.vehicleForm.get({ UserId: $routeParams.userId }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.vehicleForm = $.jStorage.get($scope.path);
+            $scope.showErrors = true;
         } else {
             $scope.vehicleForm = data;
         }
+    });
+    vehicleService.custody.get({ UserId: $routeParams.userId }, function (data) {
+        $scope.custodianNames = data.CustodyInformation.CustodianNames;
     });
     vehicleService.vehicles.get({ UserId: $routeParams.userId }, function (data) {
         if (data.Vehicles.length == 0)
@@ -52,6 +57,9 @@
         vehicleService.vehicles.save(null, $scope.vehicle, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             $scope.vehicles.push(data.Vehicle);
+            $scope.addVehicleForm.$setPristine();
+            $scope.vehicle = '';
+
         });
     };
     $scope.deleteVehicle = function (vehicle) {
@@ -62,7 +70,12 @@
         });
     };
     $scope.continue = function () {
-        $scope.submit();
+        if ($scope.vehicleForm.$invalid) {
+            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+        } else {
+            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+        }
+        menuService.nextMenu();
     };
     //#endregion    
 };

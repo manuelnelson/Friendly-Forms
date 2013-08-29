@@ -15,7 +15,7 @@ namespace DataLayerContext.OrmLiteRepositories
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.First<User>(u=>u.UserAuthId == userAuthId);
+                return db.FirstOrDefault<User>(u=>u.UserAuthId == userAuthId);
             }  
         }
     }

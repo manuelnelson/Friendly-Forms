@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -17,10 +15,6 @@ namespace Models
         public virtual User User { get; set; }
         public int ReceiveSocial { get; set; }
         public int? Amount { get; set; } 
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<SocialSecurityViewModel>();
-        }
 
         public bool IsValid()
         {

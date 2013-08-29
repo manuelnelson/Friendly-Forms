@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -20,11 +18,6 @@ namespace Models
         public double FatherPercentage { get; set; }
         public double MotherPercentage { get; set; }
         public string OtherDetails { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<ResponsibilityViewModel>();
-        }
 
         public bool IsValid()
         {

@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -16,10 +14,6 @@ namespace Models
         public virtual User User { get; set; }
         public int Assistance { get; set; }
         public int OtherAssistance { get; set; }
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<PublicAssistanceViewModel>();
-        }
 
         public bool IsValid()
         {

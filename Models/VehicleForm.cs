@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -15,10 +13,6 @@ namespace Models
         [Ignore]
         public virtual User User { get; set; }
 
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<VehicleFormViewModel>();
-        }
 
         public bool IsValid()
         {

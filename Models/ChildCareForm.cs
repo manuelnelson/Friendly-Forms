@@ -1,7 +1,5 @@
 ﻿using System;
 using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -16,11 +14,6 @@ namespace Models
         public int ChildrenInvolved { get; set; }
         [Ignore]
         public virtual User User { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<ChildCareFormViewModel>();
-        }
 
         public bool IsValid()
         {

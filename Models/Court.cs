@@ -1,13 +1,11 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
     [Alias("Courts")]
-    public class Court : IEntity, IFormEntity
+    public class Court : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }

@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper">
     <form ng-submit="submit()" ng-controller="SpousalCtrl" id="spousalForm" name="spousalForm" novalidate>
-        <input type="hidden" name="Id" ng-model="spousal.Id">
-        <input type="hidden" name="UserId" ng-model="spousal.UserId">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -19,13 +17,13 @@
                             <label class="radio">
                                 Provisions for spousal support will occur as follows
                                 <input required ng-model="spousal.Spousal" name="Spousal" type="radio" value="1"></label>
-                            <div ng-show="spousalForm.Spousal.$dirty && spousalForm.Spousal.$invalid">
+                            <div ng-show="spousalForm.Spousal.$dirty && spousalForm.Spousal.$invalid || (showErrors && spousalForm.Spousal.$invalid)">
                                 <span class="form-error" ng-show="spousalForm.Spousal.$error.required">This field is required</span>
                             </div>
                         </div>
                         <div class="control-group" ng-show="spousal.Spousal == 1">
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="spousal.SpousalDescription" name="SpousalDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="spousalForm.SpousalDescription.$dirty && spousalForm.SpousalDescription.$invalid">
+                            <div ng-show="spousalForm.SpousalDescription.$dirty && spousalForm.SpousalDescription.$invalid || (showErrors && spousalForm.SpousalDescription.$invalid)">
                                 <span class="form-error" ng-show="spousalForm.SpousalDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>

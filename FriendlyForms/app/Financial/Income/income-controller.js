@@ -1,9 +1,12 @@
 ﻿var IncomeCtrl = function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
     $scope.income = incomeService.incomes.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             //see if garlic has something stored            
             $scope.income = $.jStorage.get($scope.path);
+            if ($scope.income)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -13,7 +16,7 @@
             var value = genericService.getFormInput('#incomeForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "/" + isOtherParent);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -23,19 +26,17 @@
             incomeService.incomes.save(null, $scope.income, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         } else {
             incomeService.incomes.update({ Id: $scope.income.Id }, $scope.income, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    genericService.refreshPage();
 };
 IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope'];

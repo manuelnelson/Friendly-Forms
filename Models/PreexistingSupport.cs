@@ -1,13 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
     [Alias("PreexistingSupports")]
-    public class PreexistingSupport : IEntity, IFormEntity
+    public class PreexistingSupport : IFormEntity
     {
         [AutoIncrement]
         public virtual long Id { get; set; }
@@ -19,22 +19,14 @@ namespace Models
         public virtual string CourtName { get; set; }
         public virtual int CaseNumber { get; set; }
         public virtual DateTime OrderDate { get; set; }
-        public virtual int Monthly { get; set; }
-
-        public IViewModel ConvertToModel()
+        [NotMapped]
+        [Ignore]
+        public virtual string OrderDateString
         {
-            return new PreexistingSupportViewModel
-                {
-                    IsOtherParent = IsOtherParent,
-                    Support = Support,
-                    CaseNumber = CaseNumber.ToString(),
-                    CourtName = CourtName,
-                    Monthly = Monthly.ToString(),
-                    OrderDate = OrderDate.ToString("MM/dd/yyyy"),
-                    Id = Id,
-                    UserId = UserId
-                };
+            get { return OrderDate.ToString("MM/dd/yyyy"); }
         }
+
+        public virtual int Monthly { get; set; }
 
         public bool IsValid()
         {

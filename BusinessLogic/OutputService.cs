@@ -44,13 +44,14 @@ namespace BusinessLogic
         private IHealthService HealthService { get; set; }
         private ISocialSecurityService SocialSecurityService { get; set; }
         private IDeviationsService DeviationsService { get; set; }
-
+        private IChildFormService ChildFormService { get; set; }
+        private IAddendumService AddendumService { get; set; }
         public OutputService(IIncomeService incomeService, IPreexistingSupportFormService preexistingSupportFormService, IOtherChildService otherChildService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService,
             ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionsService, IExtraDecisionsService extraDecisionsService,
-            IHolidayService holidayService, IExtraHolidayService extraHolidayService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService, 
+            IHolidayService holidayService, IExtraHolidayService extraHolidayService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ITaxService taxService, ISpousalService spousalService,
             IChildSupportService childSupportService, IVehicleFormService vehicleFormService, IChildCareFormService childCareFormService, IExtraExpenseFormService extraExpenseFormService,
-            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService)
+            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService, IChildFormService childFormService, IAddendumService addendumService)
         {
             DeviationsService = deviationsService;
             ExtraExpenseFormService = extraExpenseFormService;
@@ -84,6 +85,8 @@ namespace BusinessLogic
             SpousalService = spousalService;
             ChildSupportService = childSupportService;
             VehicleFormService = vehicleFormService;
+            ChildFormService = childFormService;
+            AddendumService = addendumService;
         }
 
         public ScheduleB GetScheduleB(long userId, string parentName, bool isOtherParent = false)
@@ -129,47 +132,98 @@ namespace BusinessLogic
 
         }
 
-        public List<string> GetParentingIncompleteForms(long userId)
+        public List<IncompleteForm> GetParentingIncompleteForms(long userId)
         {
             var children = ChildService.GetByUserId(userId);
-
+            var firstChild = children[0];
             var court = CourtService.GetByUserId(userId);
             var privacy = PrivacyService.GetByUserId(userId);
             var information = InformationService.GetByUserId(userId);
             var responsibility = ResponsibilityService.GetByUserId(userId);
             var communication = CommunicationService.GetByUserId(userId);
             var schedule = ScheduleService.GetByUserId(userId);
-
             var decisions = DecisionsService.GetChildrenListByUserId(userId);
             var holidays = HolidayService.GetChildrenListByUserId(userId);
-            
-            var incompleteForms = new List<string>();
-            if(court != null && !court.IsValid())
-                incompleteForms.Add("Court");
-            if (privacy != null && !privacy.IsValid())
-                incompleteForms.Add("Privacy");
-            if (information != null && !information.IsValid())
-                incompleteForms.Add("Information");
-            if (responsibility != null && !responsibility.IsValid())
-                incompleteForms.Add("Responsibility");
-            if (communication != null && !communication.IsValid())
-                incompleteForms.Add("Communication");
-            if (schedule != null && !schedule.IsValid())
-                incompleteForms.Add("Schedule");
+            var addendum = AddendumService.GetByUserId(userId);
+            var incompleteForms = new List<IncompleteForm>();
+            if (court == null || !court.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Court",
+                    Path = "/Domestic/House/User/" + userId,
+                });
+            }
+            if (privacy == null || !privacy.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Privacy",
+                    Path = "/Parenting/Supervision/User/" + userId,
+                });
+            }
+            if (information == null || !information.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Information",
+                    Path = "/Parenting/Information/User/" + userId,
+                });
+            }
+            if (responsibility == null || !responsibility.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Responsibility",
+                    Path = "/Parenting/Responsibility/User/" + userId,
+                });
+            }
+            if (communication == null || !communication.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Communication",
+                    Path = "/Parenting/Communication/User/" + userId,
+                });
+            }
+            if (schedule == null || !schedule.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Schedule",
+                    Path = "/Parenting/Schedule/User/" + userId,
+                });
+            }
+            if (addendum == null || !addendum.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Special Considerations",
+                    Path = "/Parenting/Addendum/User/" + userId,
+                });
+            }
             var names = IsFormCompleteForAllChildren(children, new List<IChildFormEntity>(decisions));
             if (names.Count > 0)
             {
-                incompleteForms.Add("Decisions - children: " + names.Join(","));
+                incompleteForms.Add(new IncompleteForm
+                    {
+                        Name = "Decisions - Children: " + names.Join(","),
+                        Path = "/Parenting/Decision/User/" + userId + "/Child/" + firstChild.Id,
+                    });
             }
             names = IsFormCompleteForAllChildren(children, new List<IChildFormEntity>(holidays));
             if (names.Count > 0)
             {
-                incompleteForms.Add("Holidays - children:" + names.Join(","));
+                incompleteForms.Add(new IncompleteForm
+                    {
+                        Name = "Holidays - Children:" + names.Join(","),
+                        Path = "/Parenting/Holiday/User/" + userId + "/Child/" + firstChild.Id,
+                    });
             } 
             return incompleteForms;
         }
 
-        public List<string> GetDomesticIncompleteForms(long userId)
+        public List<IncompleteForm> GetDomesticIncompleteForms(long userId)
         {
             var house = HouseService.GetByUserId(userId);
             var property = PropertyService.GetByUserId(userId);
@@ -177,37 +231,83 @@ namespace BusinessLogic
             var assets = AssetService.GetByUserId(userId);
             var health = HealthInsuranceService.GetByUserId(userId);
             var taxes = TaxService.GetByUserId(userId);
-            var support = SpousalService.GetByUserId(userId);
             var vehicleForm = VehicleFormService.GetByUserId(userId);
+            var spousal = SpousalService.GetByUserId(userId);
+            var incompleteForms = new List<IncompleteForm>();
+            if (house == null || !house.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Marital House",
+                    Path = "/Domestic/House/User/" + userId,
+                });
+            }
+            if (property == null || !property.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Property",
+                    Path = "/Domestic/Property/User/" + userId,
+                });
+            }
+            if (vehicleForm == null || !vehicleForm.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Vehicle",
+                    Path = "/Domestic/Vehicle/User/" + userId,
+                });
+            }
+            if (debt == null || !debt.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Debt",
+                    Path = "/Domestic/Debt/User/" + userId,
+                });
+            }
+            if (assets == null || !assets.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Assets",
+                    Path = "/Domestic/Asset/User/" + userId,
+                });
+            }
+            if (health == null || !health.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Health Insurance",
+                    Path = "/Domestic/HealthInsurance/User/" + userId,
+                });
+            }
+            if (spousal == null || !spousal.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Spousal Support",
+                    Path = "/Domestic/Spousal/User/" + userId,
+                });
+            } 
+            if (taxes == null || !taxes.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Taxes",
+                    Path = "/Domestic/Tax/User/" + userId,
+                });
+            }
 
-            var incompleteForms = new List<string>();
-            if (!house.IsValid())
-                incompleteForms.Add("Marital House");
-            if (!property.IsValid())
-                incompleteForms.Add("Property");
-            if (!debt.IsValid())
-                incompleteForms.Add("Debt");
-            if (!assets.IsValid())
-                incompleteForms.Add("Assets");
-            if (!health.IsValid())
-                incompleteForms.Add("Health Insurance");
-            if (!taxes.IsValid())
-                incompleteForms.Add("Taxes");
-            if (!support.IsValid())
-                incompleteForms.Add("Child Support");
-            if (!vehicleForm.IsValid())
-                incompleteForms.Add("Vehicle");
-            if (!taxes.IsValid())
-                incompleteForms.Add("Taxes");
-
-            return incompleteForms;            
+            return incompleteForms;
         }
 
-        public List<string> GetFinancialIncompleteForms(long userId)
+        public List<IncompleteForm> GetFinancialIncompleteForms(long userId)
         {
             var children = ChildService.GetByUserId(userId);
-
+            var firstChild = children[0];
             var childCare = ChildCareFormService.GetByUserId(userId);
+            var childSupport = ChildSupportService.GetByUserId(userId);
             var extraExpense = ExtraExpenseFormService.GetByUserId(userId);
             var health = HealthService.GetByUserId(userId);
             var incomeFather = IncomeService.GetByUserId(userId);
@@ -221,34 +321,146 @@ namespace BusinessLogic
             var deviations = DeviationsService.GetByUserId(userId);
 
             //Validate
-            var incompleteForms = new List<string>();
+            var incompleteForms = new List<IncompleteForm>();
             if (childCare == null || !childCare.IsValid())
-                incompleteForms.Add("Child Care");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Child Care",
+                    Path = "/Financial/ChildCare/User/" + userId + "/Child/" + firstChild.Id,
+                });
+            }
+            if (childSupport == null || !childSupport.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Child Support",
+                    Path = "/Financial/ChildSupport/User/" + userId,
+                });
+            } 
             if (extraExpense == null || !extraExpense.IsValid())
-                incompleteForms.Add("Extra Expenses");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Extra Expenses",
+                    Path = "/Financial/ExtraExpense/User/" + userId + "/Child/" + firstChild.Id,
+                });
+            }
             if (health == null || !health.IsValid())
-                incompleteForms.Add("Health Insurance");
-            if (health == null || !incomeFather.IsValid())
-                incompleteForms.Add("Income (Father)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Health Insurance",
+                    Path = "/Financial/Health/User/" + userId,
+                });
+            }
+            if (incomeFather == null || !incomeFather.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Income (Father)",
+                    Path = "/Financial/Income/User/" + userId + "/false",
+                });
+            }
             if (incomeMother == null || !incomeMother.IsValid())
-                incompleteForms.Add("Income (Mother)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Income (Mother)",
+                    Path = "/Financial/Income/User/" + userId + "/true",
+                });
+            }
             if (socialSecurityFather == null || !socialSecurityFather.IsValid())
-                incompleteForms.Add("Social Security (Father)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Social Security (Father)",
+                    Path = "/Financial/SocialSecurity/User/" + userId + "/false",
+                });
+            }
             if (socialSecurityMother == null || !socialSecurityMother.IsValid())
-                incompleteForms.Add("Social Security (Mother)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Social Security (Mother)",
+                    Path = "/Financial/SocialSecurity/User/" + userId + "/true",
+                });
+            }
             if (preexistingSupportFather == null || !preexistingSupportFather.IsValid())
-                incompleteForms.Add("Preexisting Support (Father)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Preexisting Support (Father)",
+                    Path = "/Financial/Support/User/" + userId + "/false",
+                });
+            }
             if (preexistingSupportMother == null || !preexistingSupportMother.IsValid())
-                incompleteForms.Add("Preexisting Support (Mother)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Preexisting Support (Mother)",
+                    Path = "/Financial/Support/User/" + userId + "/true",
+                });
+            }
             if (otherChildrenFormFather == null || !otherChildrenFormFather.IsValid())
-                incompleteForms.Add("Other Children (Father)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Other Children (Father)",
+                    Path = "/Financial/OtherChild/User/" + userId + "/false",
+                });
+            }
             if (otherChildrenFormMother == null || !otherChildrenFormMother.IsValid())
-                incompleteForms.Add("Other Children (Mother)");
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Other Children (Mother)",
+                    Path = "/Financial/OtherChild/User/" + userId + "/true",
+                });
+            }
             if (deviations == null || !deviations.IsValid())
-                incompleteForms.Add("Deviations");
-
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Deviations",
+                    Path = "/Financial/Deviation/User/" + userId,
+                });
+            }
             return incompleteForms;
+        }
 
+        public List<IncompleteForm> GetStarterIncompleteForms(long userId)
+        {
+            var court = CourtService.GetByUserId(userId);
+            var participants = ParticipantService.GetByUserId(userId);
+            var childForm = ChildFormService.GetByUserId(userId);
+
+            var incompleteForms = new List<IncompleteForm>();
+            if (court == null || !court.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                    {
+                        Name = "Court",
+                        Path = "/Starter/Court/User/" + userId
+                    });                
+            }
+            if (participants == null || !participants.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                    {
+                        Name = "Participants",
+                        Path = "/Starter/Participant/User/" + userId
+                    });                
+            }
+            if (childForm == null || !childForm.IsValid())
+            {
+                incompleteForms.Add(new IncompleteForm
+                    {
+                        Name = "Children",
+                        Path = "/Starter/Children/User/" + userId
+                    });                
+            }
+            return incompleteForms;
         }
 
         /// <summary>
@@ -263,7 +475,7 @@ namespace BusinessLogic
             foreach (var child in children)
             {
                 var childFormEntity = childFormEntities.FirstOrDefault(x => x.ChildId == child.Id);
-                if(childFormEntity != null && !childFormEntity.IsValid())
+                if (childFormEntity == null || !childFormEntity.IsValid())
                     names.Add(child.Name);
             }
             return names;

@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -24,10 +22,6 @@ namespace Models
         public int Notification { get; set; }
         public int AccessOfRights { get; set; }
         public string AccessOfRightsDetails { get; set; }
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<CommunicationViewModel>();
-        }
 
         public bool IsValid()
         {

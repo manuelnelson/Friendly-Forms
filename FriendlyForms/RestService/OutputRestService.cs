@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using BusinessLogic;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using BusinessLogic.Helpers;
 using FriendlyForms.Models;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -15,7 +15,8 @@ using ServiceStack.ServiceInterface;
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Output/Financial/ScheduleA")]
+    [Route("/Output/ScheduleA")]
+    [Route("/Output/ScheduleA/{UserId}")]
     public class ScheduleADto : IReturn<ScheduleADtoResp>
     {
         [DataMember]
@@ -23,8 +24,8 @@ namespace FriendlyForms.RestService
     }
 
     [DataContract]
-    [Route("/Output/Financial/ScheduleB/{UserId}")]
-    [Route("/Output/Financial/ScheduleB")]
+    [Route("/Output/ScheduleB/{UserId}")]
+    [Route("/Output/ScheduleB")]
     public class ScheduleBDto : IReturn<ScheduleBDtoResp>
     {
         [DataMember]
@@ -32,8 +33,8 @@ namespace FriendlyForms.RestService
     }
 
     [DataContract]
-    [Route("/Output/Financial/ScheduleD/{UserId}")]
-    [Route("/Output/Financial/ScheduleD")]
+    [Route("/Output/ScheduleD/{UserId}")]
+    [Route("/Output/ScheduleD")]
     public class ScheduleDDto : IReturn<ScheduleDDtoResp>
     {
         [DataMember]
@@ -41,8 +42,8 @@ namespace FriendlyForms.RestService
     }
 
     [DataContract]
-    [Route("/Output/Financial/ScheduleE/{UserId}")]
-    [Route("/Output/Financial/ScheduleE")]
+    [Route("/Output/ScheduleE/{UserId}")]
+    [Route("/Output/ScheduleE")]
     public class ScheduleEDto : IReturn<ScheduleEDtoResp>
     {
         [DataMember]
@@ -50,9 +51,18 @@ namespace FriendlyForms.RestService
     }
 
     [DataContract]
-    [Route("/Output/Financial/ChildSupportWorkSheet/{UserId}")]
-    [Route("/Output/Financial/ChildSupportWorkSheet")]
+    [Route("/Output/ChildSupport/{UserId}")]
+    [Route("/Output/ChildSupport")]
     public class CswDto : IReturn<CswDtoResp>
+    {
+        [DataMember]
+        public long UserId { get; set; }
+    }
+
+    [DataContract]
+    [Route("/Output/CSA/{UserId}")]
+    [Route("/Output/CSA")]
+    public class CsaDto : IReturn<CsaDtoResp>
     {
         [DataMember]
         public long UserId { get; set; }
@@ -89,7 +99,7 @@ namespace FriendlyForms.RestService
     public class FormCompleteDtoResp
     {
         [DataMember]
-        public List<string> IncompleteForms { get; set; } 
+        public List<IncompleteForm> IncompleteForms { get; set; } 
     }
     #endregion
 
@@ -102,7 +112,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public Participant ParticipantViewModel { get; set; }
         [DataMember]
-        public ChildAllViewModel ChildAllViewModel { get; set; }
+        public List<Child> Children { get; set; }
         [DataMember]
         public Privacy PrivacyViewModel { get; set; }
         [DataMember]
@@ -164,8 +174,6 @@ namespace FriendlyForms.RestService
         public List<Vehicle> Vehicles { get; set; }
         [DataMember]
         public VehicleForm VehicleForm { get; set; }
-        [DataMember]
-        public VehicleAllViewModel VehicleAllViewModel { get; set; }
         [DataMember]
         public Debt DebtViewModel { get; set; }
         [DataMember]
@@ -506,9 +514,17 @@ namespace FriendlyForms.RestService
         [DataMember]
         public Extraordinary TuitionTotal { get; set; }
         [DataMember]
+        public Extraordinary TuitionTotalMonthly { get; set; }
+        [DataMember]
         public List<Extraordinary> Education { get; set; }
         [DataMember]
         public Extraordinary EducationTotal { get; set; }
+        [DataMember]
+        public Extraordinary EducationTotalMonthly { get; set; }
+        [DataMember]
+        public Extraordinary AllEducationTotal { get; set; }
+        [DataMember]
+        public Extraordinary AllEducationTotalMonthly { get; set; }
         [DataMember]
         public List<Extraordinary> YearlyEducation { get; set; }
         [DataMember]
@@ -522,6 +538,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public Extraordinary MedicalTotal { get; set; }
         [DataMember]
+        public Extraordinary MedicalTotalMonthly { get; set; }
+        [DataMember]
         public List<Extraordinary> YearlyMedical { get; set; }
         [DataMember]
         public Extraordinary YearlyMedicalTotal { get; set; }
@@ -533,6 +551,8 @@ namespace FriendlyForms.RestService
         public List<Extraordinary> Rearing { get; set; }
         [DataMember]
         public Extraordinary RearingTotal { get; set; }
+        [DataMember]
+        public Extraordinary RearingTotalMonthly { get; set; }
         [DataMember]
         public List<Extraordinary> YearlyRearing { get; set; }
         [DataMember]
@@ -588,6 +608,45 @@ namespace FriendlyForms.RestService
         public int SocialSecurity { get; set; }
         public int FinalAmount { get; set; }
         public int UninsuredExpenses { get; set; }
+    }
+
+    #endregion
+
+    #region CSA
+    public class CsaDtoResp
+    {
+        public List<Child> Children { get; set; }
+        public GrossIncome GrossIncome { get; set; }
+        public ChildSupportAmount ChildSupportAmount { get; set; }
+        public ChildSupport ChildSupport { get; set; }
+        public Deviation Deviation { get; set; }
+        public Health HealthInsurance { get; set; }
+        public SocialSecurity SocialSecurity { get; set; }
+        public Court Court { get; set; }
+        public string Father { get; set; }
+        public string Mother { get; set; }
+        public string NonCustodialParent { get; set; }
+        public string CustodialParent { get; set; }
+        public string InsuranceProvider { get; set; }
+        public string County { get; set; }
+        public bool ChildSupportDifferent { get; set; }
+    }
+
+    public class Deviation
+    {
+        public bool HasDeviation { get; set; }
+        public int? Amount { get; set; }    
+    }
+    public class ChildSupportAmount
+    {
+        public string MonthlyAmountWritten { get; set; }
+        public int MonthlyAmount { get; set; }
+    }
+
+    public class GrossIncome    
+    {
+        public int FatherAmount { get; set; }
+        public int MotherAmount { get; set; }
     }
 
     #endregion
@@ -701,10 +760,7 @@ namespace FriendlyForms.RestService
             {
                 CourtViewModel = court as Court,
                 ParticipantViewModel = participants,
-                ChildAllViewModel = new ChildAllViewModel()
-                {
-                    ChildViewModel = children,
-                },
+                Children = children,
                 PrivacyViewModel = privacy as Privacy,
                 InformationViewModel = information as Information,
                 ChildDecisions = decisionList,
@@ -721,7 +777,7 @@ namespace FriendlyForms.RestService
 
         public object Get(DomesticMediationDto request)
         {
-            var userId = Convert.ToInt32(UserSession.CustomId);
+            var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
             var house = HouseService.GetByUserId(userId) as House;
             var property = PropertyService.GetByUserId(userId) as Property;
             var debt = DebtService.GetByUserId(userId) as Debt;
@@ -729,13 +785,12 @@ namespace FriendlyForms.RestService
             var health = HealthInsuranceService.GetByUserId(userId) as HealthInsurance;
             var spousal = SpousalService.GetByUserId(userId) as SpousalSupport;
             var taxes = TaxService.GetByUserId(userId) as Tax;
-            var support = ChildSupportService.GetByUserId(userId) as ChildSupport;
             var vehicles = VehicleService.GetByUserId(userId).ToList();
             var vehicleForm = VehicleFormService.GetByUserId(userId) as VehicleForm;
             var participants = ParticipantService.GetByUserId(userId) as Participant;
             var court = CourtService.GetByUserId(userId) as Court;
-            return new DomesticMediationDtoResp()
-            {
+            return new DomesticMediationDtoResp
+                {
                 HouseViewModel = house,
                 PropertyViewModel = property,
                 VehicleForm = vehicleForm,
@@ -745,7 +800,6 @@ namespace FriendlyForms.RestService
                 HealthInsuranceViewModel = health,
                 SpousalViewModel = spousal,
                 TaxViewModel = taxes,
-                ChildSupportViewModel = support,
                 ParticipantsViewModel = participants,
                 CourtViewModel = court,
             };
@@ -757,20 +811,25 @@ namespace FriendlyForms.RestService
             var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
             switch (request.FormName)
             {
-                case "Parenting":
+                case "ParentingPlan":
                     return new FormCompleteDtoResp
                         {
                             IncompleteForms = OutputService.GetParentingIncompleteForms(userId)
                         };
-                case "DomesticMediation":
+                case "MediationAgreement":
                     return new FormCompleteDtoResp
                         {
                             IncompleteForms = OutputService.GetDomesticIncompleteForms(userId)
                         };
-                case "Financial":
+                case "FinancialForm":
                     return new FormCompleteDtoResp
                         {
                             IncompleteForms = OutputService.GetFinancialIncompleteForms(userId)
+                        };
+                case "Starter":
+                    return new FormCompleteDtoResp
+                        {
+                            IncompleteForms = OutputService.GetStarterIncompleteForms(userId)
                         };
             }
             //Setup output form            
@@ -779,10 +838,10 @@ namespace FriendlyForms.RestService
 
         public object Get(ScheduleADto request)
         {
-            request.UserId = Convert.ToInt32(UserSession.CustomId);
+            var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
             //Setup output form            
-            var parentNames = GetParentNames(request.UserId);
-            var schedule = GetScheduleA(request.UserId);
+            var parentNames = GetParentNames(userId);
+            var schedule = GetScheduleA(userId);
             schedule.Father = parentNames.Father;
             schedule.Mother = parentNames.Mother;
             return schedule;
@@ -791,10 +850,10 @@ namespace FriendlyForms.RestService
         public object Get(ScheduleBDto request)
         {
             //Setup output form            
-            request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var parentNames = GetParentNames(request.UserId);
-            var schedule = OutputService.GetScheduleB(request.UserId, parentNames.Father);
-            var scheduleOther = OutputService.GetScheduleB(request.UserId, parentNames.Mother, true);
+            var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
+            var parentNames = GetParentNames(userId);
+            var schedule = OutputService.GetScheduleB(userId, parentNames.Father);
+            var scheduleOther = OutputService.GetScheduleB(userId, parentNames.Mother, true);
             return new ScheduleBDtoResp
             {
                 ScheduleB = schedule,
@@ -807,9 +866,9 @@ namespace FriendlyForms.RestService
         public object Get(ScheduleDDto request)
         {
             //Setup output form            
-            request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var parentNames = GetParentNames(request.UserId);
-            var scheduleD = GetScheduleD(request.UserId);
+            var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
+            var parentNames = GetParentNames(userId);
+            var scheduleD = GetScheduleD(userId);
             scheduleD.Father = parentNames.Father;
             scheduleD.Mother = parentNames.Mother;
             return scheduleD;
@@ -817,8 +876,7 @@ namespace FriendlyForms.RestService
 
         public object Get(ScheduleEDto request)
         {
-            request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var userId = request.UserId;
+            var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
             var deviations = DeviationsService.GetByUserId(userId).TranslateTo<Deviations>();
             var cswAll = GetAllCsw(userId);
             var children = ChildService.GetByUserId(userId);
@@ -833,7 +891,7 @@ namespace FriendlyForms.RestService
             var totalExpenses = CalculateTotalExpenses(extraExpenses, cswAll);
             AllowableDeviation allowableDeviation;
             var parentingTime = CalculateParentingTime(deviations, lowIncome, highIncomeFather, totalExpenses, highIncomeMother, out allowableDeviation);
-            var extraordinaries = CalculateExtraordinaries(extraExpenses);
+            var extraordinaries = CalculateExtraordinaries(extraExpenses, children);
 
             return new ScheduleEDtoResp
             {
@@ -851,8 +909,72 @@ namespace FriendlyForms.RestService
             };
         }
 
+        public object Get(CswDto request)
+        {
+            //Setup output form            
+            var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
+            var parentNames = GetParentNames(userId);
+            var court = CourtService.GetByUserId(userId).TranslateTo<Court>();
+            var county = CountyService.Get(court.CountyId).CountyName;
+            var cswDto = GetAllCsw(userId);
+            cswDto.Father = parentNames.Father;
+            cswDto.Mother = parentNames.Mother;
+            cswDto.County = county;
+            return cswDto;
+        }
+        
+        public object Get(CsaDto request)
+        {
+            //Setup output form            
+            var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
+            var csaDto = GetCsa(userId);
+            return csaDto;
+        }
 
         #region Private Helper Functions
+        private CsaDtoResp GetCsa(long userId)
+        {
+            var court = CourtService.GetByUserId(userId).TranslateTo<Court>();
+            var county = CountyService.Get(court.CountyId).CountyName;
+            var parentNames = GetParentNames(userId);
+            var csw = GetAllCsw(userId);
+            var grossIncome = new GrossIncome
+                {
+                    MotherAmount = csw.MotherCsw.GrossIncome,
+                    FatherAmount = csw.FatherCsw.GrossIncome
+                };
+            var childSupportAmount = new ChildSupportAmount
+                {
+                    MonthlyAmount =
+                        parentNames.NonCustodyIsFather ? csw.FatherCsw.FinalAmount : csw.MotherCsw.FinalAmount
+                };
+            childSupportAmount.MonthlyAmountWritten = Numbers.IntegerToWritten(childSupportAmount.MonthlyAmount);
+            var deviations = DeviationsService.GetByUserId(userId) as Deviations;
+            var deviation = new Deviation
+                {
+                    HasDeviation = deviations.Deviation == 1,
+                    Amount = csw.FatherCsw.DeviationsAmount
+                };
+
+            var csaDto = new CsaDtoResp
+            {
+                Children = ChildService.GetByUserId(userId),
+                GrossIncome = grossIncome,
+                ChildSupportAmount = childSupportAmount,
+                ChildSupport = ChildSupportService.GetByUserId(userId) as ChildSupport,
+                Father = parentNames.Father,
+                Mother = parentNames.Mother,
+                NonCustodialParent = parentNames.NonCustodialParent,
+                CustodialParent = parentNames.CustodialParent,
+                Deviation = deviation,
+                HealthInsurance = HealthService.GetByUserId(userId) as Health,
+                SocialSecurity = SocialSecurityService.GetByUserId(userId),
+                County = county,
+            };
+            return csaDto;
+        }
+
+
         private static int CalculateParentingTime(Deviations deviations, LowIncomeDeviation lowIncome,
                                                   HighIncomeDeviation highIncomeFather, ExtraExpenses totalExpenses,
                                                   HighIncomeDeviation highIncomeMother,
@@ -875,7 +997,7 @@ namespace FriendlyForms.RestService
             return parentingTime;
         }
 
-        private static ExtraExpenses CalculateTotalExpenses(List<ExtraExpense> extraExpenses, CswDtoResp cswAll)
+        private static ExtraExpenses CalculateTotalExpenses(IEnumerable<ExtraExpense> extraExpenses, CswDtoResp cswAll)
         {
             var totalExpenses = new ExtraExpenses();
             foreach (var extraExpense in extraExpenses)
@@ -974,16 +1096,22 @@ namespace FriendlyForms.RestService
             return lowIncome;
         }
 
-        private static Extraordinaries CalculateExtraordinaries(List<ExtraExpense> extraExpenses)
+        private static Extraordinaries CalculateExtraordinaries(IEnumerable<ExtraExpense> extraExpenses, List<Child> children)
         {
             var tuition = new List<Extraordinary>();
             var tuitionTotal = new Extraordinary();
+            var tuitionTotalMonthly = new Extraordinary();
             var education = new List<Extraordinary>();
             var educationTotal = new Extraordinary();
+            var educationTotalMonthly = new Extraordinary();
+            var allEducationTotal = new Extraordinary();
+            var allEducationTotalMonthly = new Extraordinary();
             var medical = new List<Extraordinary>();
             var medicalTotal = new Extraordinary();
+            var medicalTotalMonthly = new Extraordinary();
             var rearing = new List<Extraordinary>();
             var rearingTotal = new Extraordinary();
+            var rearingTotalMonthly = new Extraordinary();
             var yearlyEducation = new List<Extraordinary>();
             var yearlyEducationCombinedTotal = new Extraordinary();
             var yearlyMedical = new List<Extraordinary>();
@@ -998,12 +1126,13 @@ namespace FriendlyForms.RestService
             var monthlyRearingCombinedTotal = new Extraordinary();
             foreach (var extraExpense in extraExpenses)
             {
+                var child = children.First(x => x.Id == extraExpense.ChildId);
                 tuition.Add(new Extraordinary
                 {
                     Father = extraExpense.TutitionFather,
                     Mother = extraExpense.TutitionMother,
                     NonParent = extraExpense.TutitionNonParent,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 tuitionTotal.Father += extraExpense.TutitionFather;
                 tuitionTotal.Mother += extraExpense.TutitionMother;
@@ -1014,7 +1143,7 @@ namespace FriendlyForms.RestService
                     Father = extraExpense.EducationFather,
                     Mother = extraExpense.EducationMother,
                     NonParent = extraExpense.EducationNonParent,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 educationTotal.Father += extraExpense.EducationFather;
                 educationTotal.Mother += extraExpense.EducationMother;
@@ -1024,7 +1153,7 @@ namespace FriendlyForms.RestService
                     Father = extraExpense.MedicalFather,
                     Mother = extraExpense.MedicalMother,
                     NonParent = extraExpense.MedicalNonParent,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 medicalTotal.Father += extraExpense.MedicalFather;
                 medicalTotal.Mother += extraExpense.MedicalMother;
@@ -1034,7 +1163,7 @@ namespace FriendlyForms.RestService
                     Father = extraExpense.SpecialFather,
                     Mother = extraExpense.SpecialMother,
                     NonParent = extraExpense.SpecialNonParent,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 rearingTotal.Father += extraExpense.SpecialFather;
                 rearingTotal.Mother += extraExpense.SpecialMother;
@@ -1045,7 +1174,7 @@ namespace FriendlyForms.RestService
                 yearlyEducation.Add(new Extraordinary
                 {
                     Total = yearlyEducationTotal,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 yearlyEducationCombinedTotal.Total += yearlyEducationTotal;
                 var yearlyMedicalTotal = extraExpense.MedicalFather + extraExpense.MedicalMother +
@@ -1053,7 +1182,7 @@ namespace FriendlyForms.RestService
                 yearlyMedical.Add(new Extraordinary
                 {
                     Total = yearlyMedicalTotal,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 yearlyMedicalCombinedTotal.Total += yearlyMedicalTotal;
                 var yearlyRearingTotal = extraExpense.SpecialFather + extraExpense.SpecialMother +
@@ -1061,7 +1190,7 @@ namespace FriendlyForms.RestService
                 yearlyRearing.Add(new Extraordinary
                 {
                     Father = yearlyRearingTotal,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 yearlyRearingCombinedTotal.Total += yearlyRearingTotal;
                 var monthlyEducationTotal = (extraExpense.EducationFather + extraExpense.EducationMother +
@@ -1070,7 +1199,7 @@ namespace FriendlyForms.RestService
                 monthlyEducation.Add(new Extraordinary
                 {
                     Total = monthlyEducationTotal,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 monthlyEducationCombinedTotal.Total += monthlyEducationTotal;
                 var monthlyMedicalTotal = (extraExpense.MedicalFather + extraExpense.MedicalMother +
@@ -1078,7 +1207,7 @@ namespace FriendlyForms.RestService
                 monthlyMedical.Add(new Extraordinary
                 {
                     Total = monthlyMedicalTotal,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 monthlyMedicalCombinedTotal.Total += monthlyMedicalTotal;
                 var monthlyRearingTotal = (extraExpense.SpecialFather + extraExpense.SpecialMother +
@@ -1086,49 +1215,63 @@ namespace FriendlyForms.RestService
                 monthlyRearing.Add(new Extraordinary
                 {
                     Father = monthlyRearingTotal,
-                    Name = extraExpense.Child.Name,
+                    Name = child.Name,
                 });
                 monthlyRearingCombinedTotal.Total += monthlyRearingTotal;
             }
+
+            tuitionTotalMonthly.Father = Convert.ToInt32((float)tuitionTotal.Father / 12);
+            tuitionTotalMonthly.Mother = Convert.ToInt32((float)tuitionTotal.Mother / 12);
+            tuitionTotalMonthly.NonParent = Convert.ToInt32((float)tuitionTotal.NonParent / 12);
+            educationTotalMonthly.Father = Convert.ToInt32((float)educationTotal.Father / 12);
+            educationTotalMonthly.Mother = Convert.ToInt32((float)educationTotal.Mother / 12);
+            educationTotalMonthly.NonParent = Convert.ToInt32((float)educationTotal.NonParent / 12);
+
+            allEducationTotal.Father = tuitionTotal.Father + educationTotal.Father;
+            allEducationTotal.Mother = tuitionTotal.Mother + educationTotal.Mother;
+            allEducationTotal.NonParent = tuitionTotal.NonParent + educationTotal.NonParent;
+
+            allEducationTotalMonthly.Father = Convert.ToInt32((float)allEducationTotal.Father / 12);
+            allEducationTotalMonthly.Mother = Convert.ToInt32((float)allEducationTotal.Mother / 12);
+            allEducationTotalMonthly.NonParent = Convert.ToInt32((float)allEducationTotal.NonParent / 12);  
+            
+            medicalTotalMonthly.Father = Convert.ToInt32((float)medicalTotal.Father / 12);
+            medicalTotalMonthly.Mother = Convert.ToInt32((float)medicalTotal.Mother / 12);
+            medicalTotalMonthly.NonParent = Convert.ToInt32((float)medicalTotal.NonParent / 12);
+            rearingTotalMonthly.Father = Convert.ToInt32((float)rearingTotal.Father / 12);
+            rearingTotalMonthly.Mother = Convert.ToInt32((float)rearingTotal.Mother / 12);
+            rearingTotalMonthly.NonParent = Convert.ToInt32((float)rearingTotal.NonParent / 12);
 
             var extraordinaries = new Extraordinaries
             {
                 Education = education,
                 EducationTotal = educationTotal,
+                EducationTotalMonthly = educationTotalMonthly,
+                AllEducationTotal = allEducationTotal,
+                AllEducationTotalMonthly = allEducationTotalMonthly,
                 Tuition = tuition,
                 TuitionTotal = tuitionTotal,
+                TuitionTotalMonthly = tuitionTotalMonthly,
                 YearlyEducation = yearlyEducation,
                 YearlyEducationTotal = yearlyEducationCombinedTotal,
                 MonthlyEducation = monthlyEducation,
                 MonthlyEducationTotal = monthlyEducationCombinedTotal,
                 Medical = medical,
                 MedicalTotal = medicalTotal,
+                MedicalTotalMonthly = medicalTotalMonthly,
                 YearlyMedical = yearlyMedical,
                 YearlyMedicalTotal = yearlyMedicalCombinedTotal,
                 MonthlyMedical = monthlyMedical,
                 MonthlyMedicalTotal = monthlyMedicalCombinedTotal,
                 Rearing = rearing,
                 RearingTotal = rearingTotal,
+                RearingTotalMonthly = rearingTotalMonthly,
                 YearlyRearing = yearlyRearing,
                 YearlyRearingTotal = yearlyRearingCombinedTotal,
                 MonthlyRearing = monthlyRearing,
                 MonthlyRearingTotal = monthlyRearingCombinedTotal
             };
             return extraordinaries;
-        }
-
-        public object Get(CswDto request)
-        {
-            //Setup output form            
-            request.UserId = Convert.ToInt32(UserSession.CustomId);
-            var parentNames = GetParentNames(request.UserId);
-            var court = CourtService.GetByUserId(request.UserId).TranslateTo<Court>();
-            var county = CountyService.Get(court.CountyId).CountyName;
-            var cswDto = GetAllCsw(request.UserId);
-            cswDto.Father = parentNames.Father;
-            cswDto.Mother = parentNames.Mother;
-            cswDto.County = county;
-            return cswDto;
         }
 
         private ScheduleADtoResp GetScheduleA(long userId)
@@ -1164,8 +1307,8 @@ namespace FriendlyForms.RestService
                 Unemployment = income.Unemployment + incomeOther.Unemployment,
                 W2Income = income.W2Income + incomeOther.W2Income,
             };
-            return new ScheduleADtoResp()
-            {
+            return new ScheduleADtoResp
+                {
                 Income = income,
                 OtherIncome = incomeOther,
                 CombinedIncome = incomeCombined,
@@ -1177,7 +1320,7 @@ namespace FriendlyForms.RestService
 
         private ScheduleDDtoResp GetScheduleD(long userId)
         {
-            var health = HealthService.GetByUserId(userId) as HealthViewModel;
+            var health = HealthService.GetByUserId(userId) as Health;
             var childCares = ChildCareService.GetAllByUserId(userId);
             var childCaresWithTotals = childCares.Select(childCare => childCare.TranslateTo<ChildCareWithTotals>()).ToList();
 
@@ -1202,6 +1345,7 @@ namespace FriendlyForms.RestService
             {
                 var childCareWithTotal = childCaresWithTotals[i];
                 var childCare = childCares[i];
+                var child = ChildService.Get(childCare.ChildId);
                 childCareWithTotal.TotalFather = childCareWithTotal.BreaksFather + childCareWithTotal.OtherFather +
                                                    childCareWithTotal.SchoolFather + childCareWithTotal.SummerFather;
                 childCareWithTotal.TotalMother = childCareWithTotal.BreaksMother + childCareWithTotal.OtherMother +
@@ -1211,7 +1355,7 @@ namespace FriendlyForms.RestService
                 childCareWithTotal.TotalFatherMonthly = childCareWithTotal.TotalFather / 12;
                 childCareWithTotal.TotalMotherMonthly = childCareWithTotal.TotalMother / 12;
                 childCareWithTotal.TotalNonParentMonthly = childCareWithTotal.TotalNonParent / 12;
-                childCareWithTotal.Name = childCare.Child.Name;
+                childCareWithTotal.Name = child.Name;
                 schedule.TotalSummer += childCare.SummerFather;
                 otherSchedule.TotalSummer += childCare.SummerMother;
                 nonParentSchedule.TotalSummer += childCare.SummerNonParent;
@@ -1244,8 +1388,8 @@ namespace FriendlyForms.RestService
             schedule.ProRataAdditional = 0;
             otherSchedule.ProRataAdditional = 0;
             nonParentSchedule.ProRataAdditional = 0;
-            return new ScheduleDDtoResp()
-            {
+            return new ScheduleDDtoResp
+                {
                 FatherScheduleD = schedule,
                 MotherScheduleD = otherSchedule,
                 NonParentScheduleD = nonParentSchedule,
@@ -1262,7 +1406,7 @@ namespace FriendlyForms.RestService
             var scheduleD = GetScheduleD(userId);
             var socialSecurityFather = SocialSecurityService.GetByUserId(userId);
             var socialSecurityMother = SocialSecurityService.GetByUserId(userId, true);
-            var healthInsurance = HealthService.GetByUserId(userId) as HealthViewModel;
+            var healthInsurance = HealthService.GetByUserId(userId) as Health;
             var totalIncome = scheduleBFather.AdjustedSupport + scheduleBMother.AdjustedSupport;
             var cswFather = new Csw
             {
@@ -1278,8 +1422,8 @@ namespace FriendlyForms.RestService
                 //Apparently this could be 14 as well? whats the logic here?
                 CombinedIncome = scheduleBMother.AdjustedSupport / totalIncome,
             };
-            var cswTotal = new Csw()
-            {
+            var cswTotal = new Csw
+                {
                 GrossIncome = cswFather.GrossIncome + cswMother.GrossIncome,
                 AdjustedIncome = cswFather.AdjustedIncome + cswMother.AdjustedIncome,
                 CombinedIncome = 100
@@ -1289,8 +1433,8 @@ namespace FriendlyForms.RestService
             cswFather = FinishCsw(cswFather, cswTotal, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
             cswMother = FinishCsw(cswMother, cswTotal, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
 
-            return new CswDtoResp()
-            {
+            return new CswDtoResp
+                {
                 FatherCsw = cswFather,
                 MotherCsw = cswMother,
                 TotalCsw = cswTotal,
@@ -1298,7 +1442,7 @@ namespace FriendlyForms.RestService
             };
         }
 
-        private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurity socialSecurity, HealthViewModel healthInsurance, bool isFather = true)
+        private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurity socialSecurity, Health healthInsurance, bool isFather = true)
         {
             csw.ProRataObligation = csw.CombinedIncome * cswTotal.SupportObligation;
             csw.WorkRelatedExpenses = csw.CombinedIncome * scheduleD.ProRataAdditional;
@@ -1329,7 +1473,10 @@ namespace FriendlyForms.RestService
                              : outputViewModel.CustodyInformation.CustodyParentName,
                 Mother = outputViewModel.CustodyInformation.NonCustodyIsFather
                          ? outputViewModel.CustodyInformation.CustodyParentName
-                         : outputViewModel.CustodyInformation.NonCustodyParentName
+                         : outputViewModel.CustodyInformation.NonCustodyParentName,
+                CustodialParent = outputViewModel.CustodyInformation.CustodyParentName,
+                NonCustodialParent = outputViewModel.CustodyInformation.NonCustodyParentName,
+                NonCustodyIsFather = outputViewModel.CustodyInformation.NonCustodyIsFather,
             };
         }
         #endregion
@@ -1339,5 +1486,8 @@ namespace FriendlyForms.RestService
     {
         public string Father { get; set; }
         public string Mother { get; set; }
+        public string CustodialParent { get; set; }
+        public string NonCustodialParent { get; set; }
+        public bool NonCustodyIsFather { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿FormsApp.factory('parentingService', function ($resource) {
+﻿FormsApp.factory('parentingService', ['$resource', function ($resource) {
     var service = {
         parentings: $resource('/api/output/parenting/', {},
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

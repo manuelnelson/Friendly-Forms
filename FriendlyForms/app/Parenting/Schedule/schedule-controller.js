@@ -1,10 +1,15 @@
 ﻿var ScheduleCtrl = function($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
             //see if garlic has something stored            
             $scope.schedule = $.jStorage.get($scope.path);
-            
+            if ($scope.schedule)
+                $scope.showErrors = true;
+            //The default time for control makes it dirty. Undo this
+            $scope.scheduleForm.PickedUp.$dirty = false;
+            $scope.scheduleForm.DroppedOff.$dirty = false;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -13,7 +18,7 @@
             var value = genericService.getFormInput('#scheduleForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -22,13 +27,13 @@
             scheduleService.schedules.save(null, $scope.schedule, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+                    menuService.nextMenu();
             });
         } else {
             scheduleService.schedules.update({ Id: $scope.schedule.Id }, $scope.schedule, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+                    menuService.nextMenu();
             });
         }
     };
@@ -71,8 +76,8 @@
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope'];

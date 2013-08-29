@@ -34,8 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,6 +63,7 @@
       <HintPath>..\packages\ServiceStack.Text.3.9.56\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,6 +71,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201308261503559_AddCounties.cs" />
+    <Compile Include="Migrations\201308261503559_AddCounties.Designer.cs">
+      <DependentUpon>201308261503559_AddCounties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201308292058372_AddLawFirmModel.cs" />
+    <Compile Include="Migrations\201308292058372_AddLawFirmModel.Designer.cs">
+      <DependentUpon>201308292058372_AddLawFirmModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\BcsoOrmLiteRepository.cs" />
@@ -81,6 +91,7 @@
     <Compile Include="OrmLiteRepositories\CommunicationOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\CountyOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\CourtOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\CustomOrmLiteAuthRepository.cs" />
     <Compile Include="OrmLiteRepositories\DebtOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\DecisionOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\DeviationsOrmLiteRepository.cs" />
@@ -95,6 +106,7 @@
     <Compile Include="OrmLiteRepositories\HouseOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\IncomeOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\InformationOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\LawFirmOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\OrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\OtherChildOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\OtherChildrenOrmLiteRepository.cs" />
@@ -121,6 +133,7 @@
     <Compile Include="Repositories\ExtraExpenseFormRepository.cs" />
     <Compile Include="Repositories\ExtraExpenseRepository.cs" />
     <Compile Include="Repositories\HeathRepository.cs" />
+    <Compile Include="Repositories\LawFirmRepository.cs" />
     <Compile Include="Repositories\PreexistingSupportFormRepository.cs" />
     <Compile Include="Repositories\VehicleFormRepository.cs" />
     <Compile Include="SplitContext.cs" />
@@ -172,6 +185,14 @@
       <Project>{161FD438-470C-4ACA-BC77-3D8405A36D9C}</Project>
       <Name>Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201308261503559_AddCounties.resx">
+      <DependentUpon>201308261503559_AddCounties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201308292058372_AddLawFirmModel.resx">
+      <DependentUpon>201308292058372_AddLawFirmModel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

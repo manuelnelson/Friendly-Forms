@@ -1,4 +1,4 @@
-﻿FormsApp.factory('otherChildService', function($resource) {
+﻿FormsApp.factory('otherChildService', ['$resource', function($resource) {
     var service = {
         otherChildren: $resource('/api/otherChildren/', {},
             {
@@ -12,4 +12,4 @@
             })
     };
     return service;
-});
+}]);

@@ -4,7 +4,6 @@ using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
@@ -14,30 +13,6 @@ namespace BusinessLogic
         public ChildService(IChildRepository formRepository) : base(formRepository)
         {
             ChildRepository = formRepository;
-        }
-
-        public Child AddOrUpdate(ChildViewModel model)
-        {
-            try
-            {
-                //Check if entity already exists and we need to update record
-                var entity = model.ConvertToEntity() as Child;
-                var existEntity = ChildRepository.Get(model.Id);
-                if (existEntity != null)
-                {
-                    existEntity.Update(entity);
-                    FormRepository.Update(existEntity);
-                    return existEntity;
-                }
-                //Add entity to database
-                FormRepository.Add(entity);
-                return entity;
-            }
-            catch (Exception ex)
-            {
-                ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to save", ex);
-            }
         }
 
         public new List<Child> GetByUserId(long userId)

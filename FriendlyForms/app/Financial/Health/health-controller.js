@@ -1,9 +1,12 @@
 ﻿var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.health = healthService.healths.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.health = healthService.healths.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
             //see if garlic has something stored            
             $scope.health = $.jStorage.get($scope.path);
+            if ($scope.health)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#healthForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,19 @@
             healthService.healths.save(null, $scope.health, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
+                    menuService.nextMenu();
             });
         } else {
             healthService.healths.update({ Id: $scope.health.Id }, $scope.health, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', '$rootScope'];

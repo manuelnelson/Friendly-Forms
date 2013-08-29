@@ -1,4 +1,4 @@
-﻿var ScheduleBCtrl = function($scope, $routeParams, $location, scheduleBService, menuService, genericService, $rootScope) {
+﻿var ScheduleBCtrl = function ($scope, $routeParams, $location, scheduleBService, menuService, genericService, headerService, $rootScope) {
     $scope.storageKey = $location.path();
     scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function(data) {
         $scope.scheduleB = data;
@@ -6,8 +6,6 @@
     $scope.submit = function() {
     };
     $rootScope.currentScope = $scope;
-    //if (!menuService.isActive('Output', 'ScheduleB')) {
-    //    menuService.setActive('Output', 'ScheduleB');
-    //}
+    headerService.hide();
 };
-ScheduleBCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleBService', 'menuService', 'genericService', '$rootScope'];
+ScheduleBCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleBService', 'menuService', 'genericService', 'headerService','$rootScope'];

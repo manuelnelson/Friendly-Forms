@@ -10583,330 +10583,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   })
 
 }(window.jQuery);
-;/* =============================================================
- * bootstrap-typeahead.js v2.0.3
- * http://twitter.github.com/bootstrap/javascript.html#typeahead
- * =============================================================
- * Copyright 2012 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ============================================================ */
-
-
-!function ($) {
-
-    "use strict"; // jshint ;_;
-
-
-    /* TYPEAHEAD PUBLIC CLASS DEFINITION
-     * ================================= */
-
-    var Typeahead = function (element, options) {
-        this.$element = $(element)
-        this.options = $.extend({}, $.fn.typeahead.defaults, options)
-        this.matcher = this.options.matcher || this.matcher
-        this.sorter = this.options.sorter || this.sorter
-        this.highlighter = this.options.highlighter || this.highlighter
-        this.updater = this.options.updater || this.updater
-        this.$menu = $(this.options.menu).appendTo('body')
-        this.source = this.options.source
-        this.onselect = this.options.onselect
-        this.strings = true
-        this.shown = false
-        this.listen()
-    }
-
-    Typeahead.prototype = {
-
-        constructor: Typeahead
-
-    , select: function () {
-        var val = JSON.parse(this.$menu.find('.active').attr('data-value'))
-              , text
-
-        if (!this.strings) text = val[this.options.property]
-        else text = val
-
-        this.$element.val(this.updater(text)).change()
-
-        if (typeof this.onselect == "function")
-            this.onselect(val)
-
-        return this.hide()
-    }
-
-    , updater: function (item) {
-        return item
-    }
-
-    , show: function () {
-        var pos = $.extend({}, this.$element.offset(), {
-            height: this.$element[0].offsetHeight
-        })
-
-        this.$menu.css({
-            top: pos.top + pos.height
-        , left: pos.left
-        })
-
-        this.$menu.show()
-        this.shown = true
-        return this
-    }
-
-    , hide: function () {
-        this.$menu.hide()
-        this.shown = false
-        return this
-    }
-
-    , lookup: function (event) {
-        var that = this
-          , items
-          , q
-          , value
-
-        this.query = this.$element.val()
-
-        if (typeof this.source == "function")
-            value = this.source(this, this.query)
-        if (value)
-            this.process(value)
-        else
-            this.process(this.source)
-    }
-
-    , process: function (results) {
-        var that = this
-          , items
-          , q
-
-        if (results.length && typeof results[0] != "string")
-            this.strings = false
-
-        this.query = this.$element.val()
-
-        if (!this.query) {
-            return this.shown ? this.hide() : this
-        }
-
-        items = $.grep(results, function (item) {
-            if (!that.strings)
-                item = item[that.options.property]
-
-            return that.matcher(item)
-        })
-
-        items = this.sorter(items)
-
-        if (!items.length) {
-            return this.shown ? this.hide() : this
-        }
-
-        return this.render(items.slice(0, this.options.items)).show()
-    }
-
-    , matcher: function (item) {
-        return ~item.toLowerCase().indexOf(this.query.toLowerCase())
-    }
-
-    , sorter: function (items) {
-        var beginswith = []
-          , caseSensitive = []
-          , caseInsensitive = []
-          , item
-          , sortby
-
-        while (item = items.shift()) {
-            if (this.strings) sortby = item
-            else sortby = item[this.options.property]
-
-            if (!sortby.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item)
-            else if (~sortby.indexOf(this.query)) caseSensitive.push(item)
-            else caseInsensitive.push(item)
-        }
-
-        return beginswith.concat(caseSensitive, caseInsensitive)
-    }
-
-    , highlighter: function (item) {
-        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
-        return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-            return '<strong>' + match + '</strong>'
-        })
-    }
-
-    , render: function (items) {
-        var that = this
-
-        items = $(items).map(function (i, item) {
-            i = $(that.options.item).attr('data-value', JSON.stringify(item))
-            if (!that.strings)
-                item = item[that.options.property]
-            i.find('a').html(that.highlighter(item))
-            return i[0]
-        })
-
-        items.first().addClass('active')
-        this.$menu.html(items)
-        return this
-    }
-
-    , next: function (event) {
-        var active = this.$menu.find('.active').removeClass('active')
-          , next = active.next()
-
-        if (!next.length) {
-            next = $(this.$menu.find('li')[0])
-        }
-
-        next.addClass('active')
-    }
-
-    , prev: function (event) {
-        var active = this.$menu.find('.active').removeClass('active')
-          , prev = active.prev()
-
-        if (!prev.length) {
-            prev = this.$menu.find('li').last()
-        }
-
-        prev.addClass('active')
-    }
-
-    , listen: function () {
-        this.$element
-          .on('blur', $.proxy(this.blur, this))
-          .on('keypress', $.proxy(this.keypress, this))
-          .on('keyup', $.proxy(this.keyup, this))
-
-        if ($.browser.webkit || $.browser.msie) {
-            this.$element.on('keydown', $.proxy(this.keypress, this))
-        }
-
-        this.$menu
-          .on('click', $.proxy(this.click, this))
-          .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
-    }
-
-    , keyup: function (e) {
-        switch (e.keyCode) {
-            case 40: // down arrow
-            case 38: // up arrow
-                break
-
-            case 9: // tab
-            case 13: // enter
-                if (!this.shown) return
-                this.select()
-                break
-
-            case 27: // escape
-                if (!this.shown) return
-                this.hide()
-                break
-
-            default:
-                this.lookup();
-        }
-
-        e.stopPropagation()
-        e.preventDefault()
-    }
-
-    , keypress: function (e) {
-        if (!this.shown) return
-
-        switch (e.keyCode) {
-            case 9: // tab
-            case 13: // enter
-            case 27: // escape
-                e.preventDefault()
-                break
-
-            case 38: // up arrow
-                if (e.type != 'keydown') break
-                e.preventDefault()
-                this.prev()
-                break
-
-            case 40: // down arrow
-                if (e.type != 'keydown') break
-                e.preventDefault()
-                this.next()
-                break
-        }
-
-        e.stopPropagation()
-    }
-
-    , blur: function (e) {
-        var that = this
-        setTimeout(function () { that.hide() }, 150)
-    }
-
-    , click: function (e) {
-        e.stopPropagation()
-        e.preventDefault()
-        this.select()
-    }
-
-    , mouseenter: function (e) {
-        this.$menu.find('.active').removeClass('active')
-        $(e.currentTarget).addClass('active')
-    }
-
-    }
-
-
-    /* TYPEAHEAD PLUGIN DEFINITION
-     * =========================== */
-
-    $.fn.typeahead = function (option) {
-        return this.each(function () {
-            var $this = $(this)
-              , data = $this.data('typeahead')
-              , options = typeof option == 'object' && option
-            if (!data) $this.data('typeahead', (data = new Typeahead(this, options)))
-            if (typeof option == 'string') data[option]()
-        })
-    }
-
-    $.fn.typeahead.defaults = {
-        source: []
-    , items: 8
-    , menu: '<ul class="typeahead dropdown-menu"></ul>'
-    , item: '<li><a href="#"></a></li>'
-    , onselect: null
-    , property: 'value'
-    }
-
-    $.fn.typeahead.Constructor = Typeahead
-
-
-    /* TYPEAHEAD DATA-API
-     * ================== */
-
-    $(function () {
-        $('body').on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
-            var $this = $(this)
-            if ($this.data('typeahead')) return
-            e.preventDefault()
-            $this.typeahead($this.data())
-        })
-    })
-
-}(window.jQuery);
 ;/* =========================================================
  * bootstrap-timepicker.js
  * http://www.github.com/jdewit/bootstrap-timepicker
@@ -15818,7 +15494,7 @@ if (!JSON) {
     }
 }());
 ;/**
- * @license AngularJS v1.0.7
+ * @license AngularJS v1.1.5
  * (c) 2010-2012 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -15880,12 +15556,31 @@ var /** holds major version number for IE or NaN for real browsers */
     push              = [].push,
     toString          = Object.prototype.toString,
 
+
+    _angular          = window.angular,
     /** @name angular */
     angular           = window.angular || (window.angular = {}),
     angularModule,
     nodeName_,
     uid               = ['0', '0', '0'];
 
+/**
+ * @ngdoc function
+ * @name angular.noConflict
+ * @function
+ *
+ * @description
+ * Restores the previous global value of angular and returns the current instance. Other libraries may already use the
+ * angular namespace. Or a previous version of angular is already loaded on the page. In these cases you may want to
+ * restore the previous namespace and keep a reference to angular.
+ *
+ * @return {Object} The current angular namespace
+ */
+function noConflict() {
+  var a = window.angular;
+  window.angular = _angular;
+  return a;
+}
 
 /**
  * @private
@@ -15907,7 +15602,6 @@ function isArrayLike(obj) {
            typeof obj.callee === 'function';              // arguments (on IE8 looks like regular obj)
   }
 }
-
 
 /**
  * @ngdoc function
@@ -16070,6 +15764,11 @@ function inherit(parent, extra) {
   return extend(new (extend(function() {}, {prototype:parent}))(), extra);
 }
 
+var START_SPACE = /^\s*/;
+var END_SPACE = /\s*$/;
+function stripWhitespace(str) {
+  return isString(str) ? str.replace(START_SPACE, '').replace(END_SPACE, '') : str;
+}
 
 /**
  * @ngdoc function
@@ -16456,7 +16155,7 @@ function shallowCopy(src, dst) {
  * * Both objects or values are of the same type and all of their properties pass `===` comparison.
  * * Both values are NaN. (In JavasScript, NaN == NaN => false. But we consider two NaN as equal)
  *
- * During a property comparision, properties of `function` type and properties with names
+ * During a property comparison, properties of `function` type and properties with names
  * that begin with `$` are ignored.
  *
  * Scope and DOMWindow objects are being compared only by identify (`===`).
@@ -16663,7 +16362,7 @@ function toKeyValue(obj) {
 
 
 /**
- * We need our custom method because encodeURIComponent is too agressive and doesn't follow
+ * We need our custom method because encodeURIComponent is too aggressive and doesn't follow
  * http://www.ietf.org/rfc/rfc3986.txt with regards to the character set (pchar) allowed in path
  * segments:
  *    segment       = *pchar
@@ -16683,7 +16382,7 @@ function encodeUriSegment(val) {
 
 /**
  * This method is intended for encoding *key* or *value* parts of query component. We need a custom
- * method becuase encodeURIComponent is too agressive and encodes stuff that doesn't have to be
+ * method because encodeURIComponent is too aggressive and encodes stuff that doesn't have to be
  * encoded per http://tools.ietf.org/html/rfc3986:
  *    query       = *( pchar / "/" / "?" )
  *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
@@ -16795,12 +16494,13 @@ function bootstrap(element, modules) {
     }]);
     modules.unshift('ng');
     var injector = createInjector(modules);
-    injector.invoke(['$rootScope', '$rootElement', '$compile', '$injector',
-       function(scope, element, compile, injector) {
+    injector.invoke(['$rootScope', '$rootElement', '$compile', '$injector', '$animator',
+       function(scope, element, compile, injector, animator) {
         scope.$apply(function() {
           element.data('$injector', injector);
           compile(element)(scope);
         });
+        animator.enabled(true);
       }]
     );
     return injector;
@@ -17035,6 +16735,33 @@ function setupModuleLoader(window) {
 
           /**
            * @ngdoc method
+           * @name angular.Module#animation
+           * @methodOf angular.Module
+           * @param {string} name animation name
+           * @param {Function} animationFactory Factory function for creating new instance of an animation.
+           * @description
+           *
+           * Defines an animation hook that can be later used with {@link ng.directive:ngAnimate ngAnimate}
+           * alongside {@link ng.directive:ngAnimate#Description common ng directives} as well as custom directives.
+           * <pre>
+           * module.animation('animation-name', function($inject1, $inject2) {
+           *   return {
+           *     //this gets called in preparation to setup an animation
+           *     setup : function(element) { ... },
+           *
+           *     //this gets called once the animation is run
+           *     start : function(element, done, memo) { ... }
+           *   }
+           * })
+           * </pre>
+           *
+           * See {@link ng.$animationProvider#register $animationProvider.register()} and
+           * {@link ng.directive:ngAnimate ngAnimate} for more information.
+           */
+          animation: invokeLater('$animationProvider', 'register'),
+
+          /**
+           * @ngdoc method
            * @name angular.Module#filter
            * @methodOf angular.Module
            * @param {string} name Filter name.
@@ -17132,11 +16859,11 @@ function setupModuleLoader(window) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.0.7',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.1.5',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
-  minor: 0,
-  dot: 7,
-  codeName: 'monochromatic-rainbow'
+  minor: 1,
+  dot: 5,
+  codeName: 'triangle-squarification'
 };
 
 
@@ -17166,7 +16893,8 @@ function publishExternalAPI(angular){
     'isDate': isDate,
     'lowercase': lowercase,
     'uppercase': uppercase,
-    'callbacks': {counter: 0}
+    'callbacks': {counter: 0},
+    'noConflict': noConflict
   });
 
   angularModule = setupModuleLoader(window);
@@ -17199,6 +16927,7 @@ function publishExternalAPI(angular){
             ngController: ngControllerDirective,
             ngForm: ngFormDirective,
             ngHide: ngHideDirective,
+            ngIf: ngIfDirective,
             ngInclude: ngIncludeDirective,
             ngInit: ngInitDirective,
             ngNonBindable: ngNonBindableDirective,
@@ -17224,6 +16953,8 @@ function publishExternalAPI(angular){
         directive(ngEventDirectives);
       $provide.provider({
         $anchorScroll: $AnchorScrollProvider,
+        $animation: $AnimationProvider,
+        $animator: $AnimatorProvider,
         $browser: $BrowserProvider,
         $cacheFactory: $CacheFactoryProvider,
         $controller: $ControllerProvider,
@@ -17303,12 +17034,12 @@ function publishExternalAPI(angular){
  * - [replaceWith()](http://api.jquery.com/replaceWith/)
  * - [text()](http://api.jquery.com/text/)
  * - [toggleClass()](http://api.jquery.com/toggleClass/)
- * - [triggerHandler()](http://api.jquery.com/triggerHandler/) - Doesn't pass native event objects to handlers.
+ * - [triggerHandler()](http://api.jquery.com/triggerHandler/) - Passes a dummy event object to handlers.
  * - [unbind()](http://api.jquery.com/unbind/) - Does not support namespaces
  * - [val()](http://api.jquery.com/val/)
  * - [wrap()](http://api.jquery.com/wrap/)
  *
- * ## In addtion to the above, Angular provides additional methods to both jQuery and jQuery lite:
+ * ## In addition to the above, Angular provides additional methods to both jQuery and jQuery lite:
  *
  * - `controller(name)` - retrieves the controller of the current element or its parent. By default
  *   retrieves controller associated with the `ngController` directive. If `name` is provided as
@@ -17576,9 +17307,14 @@ var JQLitePrototype = JQLite.prototype = {
       fn();
     }
 
-    this.bind('DOMContentLoaded', trigger); // works for modern browsers and IE9
-    // we can not use jqLite since we are not done loading and jQuery could be loaded later.
-    JQLite(window).bind('load', trigger); // fallback to window.onload for others
+    // check if document already is loaded
+    if (document.readyState === 'complete'){
+      setTimeout(trigger);
+    } else {
+      this.bind('DOMContentLoaded', trigger); // works for modern browsers and IE9
+      // we can not use jqLite since we are not done loading and jQuery could be loaded later.
+      JQLite(window).bind('load', trigger); // fallback to window.onload for others
+    }
   },
   toString: function() {
     var value = [];
@@ -17602,11 +17338,11 @@ var JQLitePrototype = JQLite.prototype = {
 // value on get.
 //////////////////////////////////////////
 var BOOLEAN_ATTR = {};
-forEach('multiple,selected,checked,disabled,readOnly,required'.split(','), function(value) {
+forEach('multiple,selected,checked,disabled,readOnly,required,open'.split(','), function(value) {
   BOOLEAN_ATTR[lowercase(value)] = value;
 });
 var BOOLEAN_ELEMENTS = {};
-forEach('input,select,option,textarea,button,form'.split(','), function(value) {
+forEach('input,select,option,textarea,button,form,details'.split(','), function(value) {
   BOOLEAN_ELEMENTS[uppercase(value)] = true;
 });
 
@@ -17804,7 +17540,7 @@ function createEventHandler(element, events) {
     }
 
     event.isDefaultPrevented = function() {
-      return event.defaultPrevented;
+      return event.defaultPrevented || event.returnValue == false;
     };
 
     forEach(events[type || event.type], function(fn) {
@@ -17928,8 +17664,9 @@ forEach({
 
   append: function(element, node) {
     forEach(new JQLite(node), function(child){
-      if (element.nodeType === 1)
+      if (element.nodeType === 1 || element.nodeType === 11) {
         element.appendChild(child);
+      }
     });
   },
 
@@ -18006,9 +17743,10 @@ forEach({
 
   triggerHandler: function(element, eventName) {
     var eventFns = (JQLiteExpandoStore(element, 'events') || {})[eventName];
+    var event;
 
     forEach(eventFns, function(fn) {
-      fn.call(element, null);
+      fn.call(element, {preventDefault: noop});
     });
   }
 }, function(fn, name){
@@ -18094,50 +17832,6 @@ HashMap.prototype = {
     var value = this[key = hashKey(key)];
     delete this[key];
     return value;
-  }
-};
-
-/**
- * A map where multiple values can be added to the same key such that they form a queue.
- * @returns {HashQueueMap}
- */
-function HashQueueMap() {}
-HashQueueMap.prototype = {
-  /**
-   * Same as array push, but using an array as the value for the hash
-   */
-  push: function(key, value) {
-    var array = this[key = hashKey(key)];
-    if (!array) {
-      this[key] = [value];
-    } else {
-      array.push(value);
-    }
-  },
-
-  /**
-   * Same as array shift, but using an array as the value for the hash
-   */
-  shift: function(key) {
-    var array = this[key = hashKey(key)];
-    if (array) {
-      if (array.length == 1) {
-        delete this[key];
-        return array[0];
-      } else {
-        return array.shift();
-      }
-    }
-  },
-
-  /**
-   * return the first item without deleting it
-   */
-  peek: function(key) {
-    var array = this[hashKey(key)];
-    if (array) {
-    return array[0];
-    }
   }
 };
 
@@ -18290,6 +17984,18 @@ function annotate(fn) {
  * @param {Object=} locals Optional object. If preset then any argument names are read from this object first, before
  *   the `$injector` is consulted.
  * @returns {*} the value returned by the invoked `fn` function.
+ */
+
+/**
+ * @ngdoc method
+ * @name AUTO.$injector#has
+ * @methodOf AUTO.$injector
+ *
+ * @description
+ * Allows the user to query if the particular service exist.
+ *
+ * @param {string} Name of the service to query.
+ * @returns {boolean} returns true if injector has given service.
  */
 
 /**
@@ -18549,9 +18255,10 @@ function createInjector(modulesToLoad) {
             decorator: decorator
           }
       },
-      providerInjector = createInternalInjector(providerCache, function() {
-        throw Error("Unknown provider: " + path.join(' <- '));
-      }),
+      providerInjector = (providerCache.$injector =
+          createInternalInjector(providerCache, function() {
+            throw Error("Unknown provider: " + path.join(' <- '));
+          })),
       instanceCache = {},
       instanceInjector = (instanceCache.$injector =
           createInternalInjector(instanceCache, function(servicename) {
@@ -18628,9 +18335,7 @@ function createInjector(modulesToLoad) {
         try {
           for(var invokeQueue = moduleFn._invokeQueue, i = 0, ii = invokeQueue.length; i < ii; i++) {
             var invokeArgs = invokeQueue[i],
-                provider = invokeArgs[0] == '$injector'
-                    ? providerInjector
-                    : providerInjector.get(invokeArgs[0]);
+                provider = providerInjector.get(invokeArgs[0]);
 
             provider[invokeArgs[1]].apply(provider, invokeArgs[2]);
           }
@@ -18739,7 +18444,10 @@ function createInjector(modulesToLoad) {
       invoke: invoke,
       instantiate: instantiate,
       get: getService,
-      annotate: annotate
+      annotate: annotate,
+      has: function(name) {
+        return providerCache.hasOwnProperty(name + providerSuffix) || cache.hasOwnProperty(name);
+      }
     };
   }
 }
@@ -18810,6 +18518,506 @@ function $AnchorScrollProvider() {
     return scroll;
   }];
 }
+
+
+/**
+ * @ngdoc object
+ * @name ng.$animationProvider
+ * @description
+ *
+ * The $AnimationProvider provider allows developers to register and access custom JavaScript animations directly inside
+ * of a module.
+ *
+ */
+$AnimationProvider.$inject = ['$provide'];
+function $AnimationProvider($provide) {
+  var suffix = 'Animation';
+
+  /**
+   * @ngdoc function
+   * @name ng.$animation#register
+   * @methodOf ng.$animationProvider
+   *
+   * @description
+   * Registers a new injectable animation factory function. The factory function produces the animation object which
+   * has these two properties:
+   *
+   *   * `setup`: `function(Element):*` A function which receives the starting state of the element. The purpose
+   *   of this function is to get the element ready for animation. Optionally the function returns an memento which
+   *   is passed to the `start` function.
+   *   * `start`: `function(Element, doneFunction, *)` The element to animate, the `doneFunction` to be called on
+   *   element animation completion, and an optional memento from the `setup` function.
+   *
+   * @param {string} name The name of the animation.
+   * @param {function} factory The factory function that will be executed to return the animation object.
+   * 
+   */
+  this.register = function(name, factory) {
+    $provide.factory(camelCase(name) + suffix, factory);
+  };
+
+  this.$get = ['$injector', function($injector) {
+    /**
+     * @ngdoc function
+     * @name ng.$animation
+     * @function
+     *
+     * @description
+     * The $animation service is used to retrieve any defined animation functions. When executed, the $animation service
+     * will return a object that contains the setup and start functions that were defined for the animation.
+     *
+     * @param {String} name Name of the animation function to retrieve. Animation functions are registered and stored
+     *        inside of the AngularJS DI so a call to $animate('custom') is the same as injecting `customAnimation`
+     *        via dependency injection.
+     * @return {Object} the animation object which contains the `setup` and `start` functions that perform the animation.
+     */
+    return function $animation(name) {
+      if (name) {
+        var animationName = camelCase(name) + suffix;
+        if ($injector.has(animationName)) {
+          return $injector.get(animationName);
+        }
+      }
+    };
+  }];
+}
+
+// NOTE: this is a pseudo directive.
+
+/**
+ * @ngdoc directive
+ * @name ng.directive:ngAnimate
+ *
+ * @description
+ * The `ngAnimate` directive works as an attribute that is attached alongside pre-existing directives.
+ * It effects how the directive will perform DOM manipulation. This allows for complex animations to take place
+ * without burdening the directive which uses the animation with animation details. The built in directives
+ * `ngRepeat`, `ngInclude`, `ngSwitch`, `ngShow`, `ngHide` and `ngView` already accept `ngAnimate` directive.
+ * Custom directives can take advantage of animation through {@link ng.$animator $animator service}.
+ *
+ * Below is a more detailed breakdown of the supported callback events provided by pre-exisitng ng directives:
+ *
+ * | Directive                                                 | Supported Animations                               |
+ * |========================================================== |====================================================|
+ * | {@link ng.directive:ngRepeat#animations ngRepeat}         | enter, leave and move                              |
+ * | {@link ng.directive:ngView#animations ngView}             | enter and leave                                    |
+ * | {@link ng.directive:ngInclude#animations ngInclude}       | enter and leave                                    |
+ * | {@link ng.directive:ngSwitch#animations ngSwitch}         | enter and leave                                    |
+ * | {@link ng.directive:ngIf#animations ngIf}                 | enter and leave                                    |
+ * | {@link ng.directive:ngShow#animations ngShow & ngHide}    | show and hide                                      |
+ *
+ * You can find out more information about animations upon visiting each directive page.
+ *
+ * Below is an example of a directive that makes use of the ngAnimate attribute:
+ *
+ * <pre>
+ * <!-- you can also use data-ng-animate, ng:animate or x-ng-animate as well -->
+ * <ANY ng-directive ng-animate="{event1: 'animation-name', event2: 'animation-name-2'}"></ANY>
+ *
+ * <!-- you can also use a short hand -->
+ * <ANY ng-directive ng-animate=" 'animation' "></ANY>
+ * <!-- which expands to -->
+ * <ANY ng-directive ng-animate="{ enter: 'animation-enter', leave: 'animation-leave', ...}"></ANY>
+ *
+ * <!-- keep in mind that ng-animate can take expressions -->
+ * <ANY ng-directive ng-animate=" computeCurrentAnimation() "></ANY>
+ * </pre>
+ *
+ * The `event1` and `event2` attributes refer to the animation events specific to the directive that has been assigned.
+ *
+ * Keep in mind that if an animation is running, no child element of such animation can also be animated.
+ *
+ * <h2>CSS-defined Animations</h2>
+ * By default, ngAnimate attaches two CSS classes per animation event to the DOM element to achieve the animation.
+ * It is up to you, the developer, to ensure that the animations take place using cross-browser CSS3 transitions as
+ * well as CSS animations.
+ *
+ * The following code below demonstrates how to perform animations using **CSS transitions** with ngAnimate:
+ *
+ * <pre>
+ * <style type="text/css">
+ * /&#42;
+ *  The animate-enter CSS class is the event name that you
+ *  have provided within the ngAnimate attribute.
+ * &#42;/
+ * .animate-enter {
+ *  -webkit-transition: 1s linear all; /&#42; Safari/Chrome &#42;/
+ *  -moz-transition: 1s linear all; /&#42; Firefox &#42;/
+ *  -o-transition: 1s linear all; /&#42; Opera &#42;/
+ *  transition: 1s linear all; /&#42; IE10+ and Future Browsers &#42;/
+ *
+ *  /&#42; The animation preparation code &#42;/
+ *  opacity: 0;
+ * }
+ *
+ * /&#42;
+ *  Keep in mind that you want to combine both CSS
+ *  classes together to avoid any CSS-specificity
+ *  conflicts
+ * &#42;/
+ * .animate-enter.animate-enter-active {
+ *  /&#42; The animation code itself &#42;/
+ *  opacity: 1;
+ * }
+ * </style>
+ *
+ * <div ng-directive ng-animate="{enter: 'animate-enter'}"></div>
+ * </pre>
+ *
+ * The following code below demonstrates how to perform animations using **CSS animations** with ngAnimate:
+ *
+ * <pre>
+ * <style type="text/css">
+ * .animate-enter {
+ *   -webkit-animation: enter_sequence 1s linear; /&#42; Safari/Chrome &#42;/
+ *   -moz-animation: enter_sequence 1s linear; /&#42; Firefox &#42;/
+ *   -o-animation: enter_sequence 1s linear; /&#42; Opera &#42;/
+ *   animation: enter_sequence 1s linear; /&#42; IE10+ and Future Browsers &#42;/
+ * }
+ * &#64-webkit-keyframes enter_sequence {
+ *   from { opacity:0; }
+ *   to { opacity:1; }
+ * }
+ * &#64-moz-keyframes enter_sequence {
+ *   from { opacity:0; }
+ *   to { opacity:1; }
+ * }
+ * &#64-o-keyframes enter_sequence {
+ *   from { opacity:0; }
+ *   to { opacity:1; }
+ * }
+ * &#64keyframes enter_sequence {
+ *   from { opacity:0; }
+ *   to { opacity:1; }
+ * }
+ * </style>
+ *
+ * <div ng-directive ng-animate="{enter: 'animate-enter'}"></div>
+ * </pre>
+ *
+ * ngAnimate will first examine any CSS animation code and then fallback to using CSS transitions.
+ *
+ * Upon DOM mutation, the event class is added first, then the browser is allowed to reflow the content and then,
+ * the active class is added to trigger the animation. The ngAnimate directive will automatically extract the duration
+ * of the animation to determine when the animation ends. Once the animation is over then both CSS classes will be
+ * removed from the DOM. If a browser does not support CSS transitions or CSS animations then the animation will start and end
+ * immediately resulting in a DOM element that is at it's final state. This final state is when the DOM element
+ * has no CSS transition/animation classes surrounding it.
+ *
+ * <h2>JavaScript-defined Animations</h2>
+ * In the event that you do not want to use CSS3 transitions or CSS3 animations or if you wish to offer animations to browsers that do not
+ * yet support them, then you can make use of JavaScript animations defined inside of your AngularJS module.
+ *
+ * <pre>
+ * var ngModule = angular.module('YourApp', []);
+ * ngModule.animation('animate-enter', function() {
+ *   return {
+ *     setup : function(element) {
+ *       //prepare the element for animation
+ *       element.css({ 'opacity': 0 });
+ *       var memo = "..."; //this value is passed to the start function
+ *       return memo;
+ *     },
+ *     start : function(element, done, memo) {
+ *       //start the animation
+ *       element.animate({
+ *         'opacity' : 1
+ *       }, function() {
+ *         //call when the animation is complete
+ *         done()
+ *       });
+ *     }
+ *   }
+ * });
+ * </pre>
+ *
+ * As you can see, the JavaScript code follows a similar template to the CSS3 animations. Once defined, the animation
+ * can be used in the same way with the ngAnimate attribute. Keep in mind that, when using JavaScript-enabled
+ * animations, ngAnimate will also add in the same CSS classes that CSS-enabled animations do (even if you're not using
+ * CSS animations) to animated the element, but it will not attempt to find any CSS3 transition or animation duration/delay values.
+ * It will instead close off the animation once the provided done function is executed. So it's important that you
+ * make sure your animations remember to fire off the done function once the animations are complete.
+ *
+ * @param {expression} ngAnimate Used to configure the DOM manipulation animations.
+ *
+ */
+
+var $AnimatorProvider = function() {
+  var NG_ANIMATE_CONTROLLER = '$ngAnimateController';
+  var rootAnimateController = {running:true};
+
+  this.$get = ['$animation', '$window', '$sniffer', '$rootElement', '$rootScope',
+      function($animation, $window, $sniffer, $rootElement, $rootScope) {
+    $rootElement.data(NG_ANIMATE_CONTROLLER, rootAnimateController);
+
+    /**
+     * @ngdoc function
+     * @name ng.$animator
+     * @function
+     *
+     * @description
+     * The $animator.create service provides the DOM manipulation API which is decorated with animations.
+     *
+     * @param {Scope} scope the scope for the ng-animate.
+     * @param {Attributes} attr the attributes object which contains the ngAnimate key / value pair. (The attributes are
+     *        passed into the linking function of the directive using the `$animator`.)
+     * @return {object} the animator object which contains the enter, leave, move, show, hide and animate methods.
+     */
+     var AnimatorService = function(scope, attrs) {
+        var animator = {};
+  
+        /**
+         * @ngdoc function
+         * @name ng.animator#enter
+         * @methodOf ng.$animator
+         * @function
+         *
+         * @description
+         * Injects the element object into the DOM (inside of the parent element) and then runs the enter animation.
+         *
+         * @param {jQuery/jqLite element} element the element that will be the focus of the enter animation
+         * @param {jQuery/jqLite element} parent the parent element of the element that will be the focus of the enter animation
+         * @param {jQuery/jqLite element} after the sibling element (which is the previous element) of the element that will be the focus of the enter animation
+        */
+        animator.enter = animateActionFactory('enter', insert, noop);
+  
+        /**
+         * @ngdoc function
+         * @name ng.animator#leave
+         * @methodOf ng.$animator
+         * @function
+         *
+         * @description
+         * Runs the leave animation operation and, upon completion, removes the element from the DOM.
+         *
+         * @param {jQuery/jqLite element} element the element that will be the focus of the leave animation
+         * @param {jQuery/jqLite element} parent the parent element of the element that will be the focus of the leave animation
+        */
+        animator.leave = animateActionFactory('leave', noop, remove);
+  
+        /**
+         * @ngdoc function
+         * @name ng.animator#move
+         * @methodOf ng.$animator
+         * @function
+         *
+         * @description
+         * Fires the move DOM operation. Just before the animation starts, the animator will either append it into the parent container or
+         * add the element directly after the after element if present. Then the move animation will be run.
+         *
+         * @param {jQuery/jqLite element} element the element that will be the focus of the move animation
+         * @param {jQuery/jqLite element} parent the parent element of the element that will be the focus of the move animation
+         * @param {jQuery/jqLite element} after the sibling element (which is the previous element) of the element that will be the focus of the move animation
+        */
+        animator.move = animateActionFactory('move', move, noop);
+  
+        /**
+         * @ngdoc function
+         * @name ng.animator#show
+         * @methodOf ng.$animator
+         * @function
+         *
+         * @description
+         * Reveals the element by setting the CSS property `display` to `block` and then starts the show animation directly after.
+         *
+         * @param {jQuery/jqLite element} element the element that will be rendered visible or hidden
+        */
+        animator.show = animateActionFactory('show', show, noop);
+  
+        /**
+         * @ngdoc function
+         * @name ng.animator#hide
+         * @methodOf ng.$animator
+         *
+         * @description
+         * Starts the hide animation first and sets the CSS `display` property to `none` upon completion.
+         *
+         * @param {jQuery/jqLite element} element the element that will be rendered visible or hidden
+        */
+        animator.hide = animateActionFactory('hide', noop, hide);
+
+        /**
+         * @ngdoc function
+         * @name ng.animator#animate
+         * @methodOf ng.$animator
+         *
+         * @description
+         * Triggers a custom animation event to be executed on the given element
+         *
+         * @param {jQuery/jqLite element} element that will be animated
+        */
+        animator.animate = function(event, element) {
+          animateActionFactory(event, noop, noop)(element);
+        }
+        return animator;
+  
+        function animateActionFactory(type, beforeFn, afterFn) {
+          return function(element, parent, after) {
+            var ngAnimateValue = scope.$eval(attrs.ngAnimate);
+            var className = ngAnimateValue
+                ? isObject(ngAnimateValue) ? ngAnimateValue[type] : ngAnimateValue + '-' + type
+                : '';
+            var animationPolyfill = $animation(className);
+            var polyfillSetup = animationPolyfill && animationPolyfill.setup;
+            var polyfillStart = animationPolyfill && animationPolyfill.start;
+            var polyfillCancel = animationPolyfill && animationPolyfill.cancel;
+
+            if (!className) {
+              beforeFn(element, parent, after);
+              afterFn(element, parent, after);
+            } else {
+              var activeClassName = className + '-active';
+
+              if (!parent) {
+                parent = after ? after.parent() : element.parent();
+              }
+              if ((!$sniffer.transitions && !polyfillSetup && !polyfillStart) ||
+                  (parent.inheritedData(NG_ANIMATE_CONTROLLER) || noop).running) {
+                beforeFn(element, parent, after);
+                afterFn(element, parent, after);
+                return;
+              }
+
+              var animationData = element.data(NG_ANIMATE_CONTROLLER) || {};
+              if(animationData.running) {
+                (polyfillCancel || noop)(element);
+                animationData.done();
+              }
+
+              element.data(NG_ANIMATE_CONTROLLER, {running:true, done:done});
+              element.addClass(className);
+              beforeFn(element, parent, after);
+              if (element.length == 0) return done();
+
+              var memento = (polyfillSetup || noop)(element);
+
+              // $window.setTimeout(beginAnimation, 0); this was causing the element not to animate
+              // keep at 1 for animation dom rerender
+              $window.setTimeout(beginAnimation, 1);
+            }
+
+            function parseMaxTime(str) {
+              var total = 0, values = isString(str) ? str.split(/\s*,\s*/) : [];
+              forEach(values, function(value) {
+                total = Math.max(parseFloat(value) || 0, total);
+              });
+              return total;
+            }
+
+            function beginAnimation() {
+              element.addClass(activeClassName);
+              if (polyfillStart) {
+                polyfillStart(element, done, memento);
+              } else if (isFunction($window.getComputedStyle)) {
+                //one day all browsers will have these properties
+                var w3cAnimationProp = 'animation'; 
+                var w3cTransitionProp = 'transition';
+
+                //but some still use vendor-prefixed styles 
+                var vendorAnimationProp = $sniffer.vendorPrefix + 'Animation';
+                var vendorTransitionProp = $sniffer.vendorPrefix + 'Transition';
+
+                var durationKey = 'Duration',
+                    delayKey = 'Delay',
+                    animationIterationCountKey = 'IterationCount',
+                    duration = 0;
+                
+                //we want all the styles defined before and after
+                var ELEMENT_NODE = 1;
+                forEach(element, function(element) {
+                  if (element.nodeType == ELEMENT_NODE) {
+                    var w3cProp = w3cTransitionProp,
+                        vendorProp = vendorTransitionProp,
+                        iterations = 1,
+                        elementStyles = $window.getComputedStyle(element) || {};
+
+                    //use CSS Animations over CSS Transitions
+                    if(parseFloat(elementStyles[w3cAnimationProp + durationKey]) > 0 ||
+                       parseFloat(elementStyles[vendorAnimationProp + durationKey]) > 0) {
+                      w3cProp = w3cAnimationProp;
+                      vendorProp = vendorAnimationProp;
+                      iterations = Math.max(parseInt(elementStyles[w3cProp    + animationIterationCountKey]) || 0,
+                                            parseInt(elementStyles[vendorProp + animationIterationCountKey]) || 0,
+                                            iterations);
+                    }
+
+                    var parsedDelay     = Math.max(parseMaxTime(elementStyles[w3cProp     + delayKey]),
+                                                   parseMaxTime(elementStyles[vendorProp  + delayKey]));
+
+                    var parsedDuration  = Math.max(parseMaxTime(elementStyles[w3cProp     + durationKey]),
+                                                   parseMaxTime(elementStyles[vendorProp  + durationKey]));
+
+                    duration = Math.max(parsedDelay + (iterations * parsedDuration), duration);
+                  }
+                });
+                $window.setTimeout(done, duration * 1000);
+              } else {
+                done();
+              }
+            }
+
+            function done() {
+              if(!done.run) {
+                done.run = true;
+                afterFn(element, parent, after);
+                element.removeClass(className);
+                element.removeClass(activeClassName);
+                element.removeData(NG_ANIMATE_CONTROLLER);
+              }
+            }
+          };
+        }
+  
+        function show(element) {
+          element.css('display', '');
+        }
+  
+        function hide(element) {
+          element.css('display', 'none');
+        }
+  
+        function insert(element, parent, after) {
+          if (after) {
+            after.after(element);
+          } else {
+            parent.append(element);
+          }
+        }
+  
+        function remove(element) {
+          element.remove();
+        }
+  
+        function move(element, parent, after) {
+          // Do not remove element before insert. Removing will cause data associated with the
+          // element to be dropped. Insert will implicitly do the remove.
+          insert(element, parent, after);
+        }
+      };
+
+    /**
+     * @ngdoc function
+     * @name ng.animator#enabled
+     * @methodOf ng.$animator
+     * @function
+     *
+     * @param {Boolean=} If provided then set the animation on or off.
+     * @return {Boolean} Current animation state.
+     *
+     * @description
+     * Globally enables/disables animations.
+     *
+    */
+    AnimatorService.enabled = function(value) {
+      if (arguments.length) {
+        rootAnimateController.running = !value;
+      }
+      return !rootAnimateController.running;
+    };
+
+    return AnimatorService;
+  }];
+};
 
 /**
  * ! This is a private undocumented service !
@@ -19063,7 +19271,7 @@ function Browser(window, document, $log, $sniffer) {
    * @methodOf ng.$browser
    *
    * @param {string=} name Cookie name
-   * @param {string=} value Cokkie value
+   * @param {string=} value Cookie value
    *
    * @description
    * The cookies method provides a 'private' low level access to browser cookies.
@@ -19131,7 +19339,7 @@ function Browser(window, document, $log, $sniffer) {
    * @returns {*} DeferId that can be used to cancel the task via `$browser.defer.cancel()`.
    *
    * @description
-   * Executes a fn asynchroniously via `setTimeout(fn, delay)`.
+   * Executes a fn asynchronously via `setTimeout(fn, delay)`.
    *
    * Unlike when calling `setTimeout` directly, in test this function is mocked and instead of using
    * `setTimeout` in tests, the fns are queued in an array, which can be programmatically flushed
@@ -19158,7 +19366,7 @@ function Browser(window, document, $log, $sniffer) {
    * Cancels a defered task identified with `deferId`.
    *
    * @param {*} deferId Token returned by the `$browser.defer` function.
-   * @returns {boolean} Returns `true` if the task hasn't executed yet and was successfuly canceled.
+   * @returns {boolean} Returns `true` if the task hasn't executed yet and was successfully canceled.
    */
   self.defer.cancel = function(deferId) {
     if (pendingDeferIds[deferId]) {
@@ -19195,7 +19403,7 @@ function $BrowserProvider(){
  * @returns {object} Newly created cache object with the following set of methods:
  *
  * - `{object}` `info()` — Returns id, size, and options of cache.
- * - `{void}` `put({string} key, {*} value)` — Puts a new key-value pair into the cache.
+ * - `{{*}}` `put({string} key, {*} value)` — Puts a new key-value pair into the cache and returns it.
  * - `{{*}}` `get({string} key)` — Returns cached value for `key` or undefined for cache miss.
  * - `{void}` `remove({string} key)` — Removes a key-value pair from the cache.
  * - `{void}` `removeAll()` — Removes all cached values.
@@ -19234,6 +19442,8 @@ function $CacheFactoryProvider() {
           if (size > capacity) {
             this.remove(staleEnd.key);
           }
+
+          return value;
         },
 
 
@@ -19520,7 +19730,7 @@ function $CompileProvider($provide) {
    *
    * @param {string} name Name of the directive in camel-case. (ie <code>ngBind</code> which will match as
    *                <code>ng-bind</code>).
-   * @param {function} directiveFactory An injectable directive factroy function. See {@link guide/directive} for more
+   * @param {function} directiveFactory An injectable directive factory function. See {@link guide/directive} for more
    *                info.
    * @returns {ng.$compileProvider} Self for chaining.
    */
@@ -19699,7 +19909,8 @@ function $CompileProvider($provide) {
             ? identity
             : function denormalizeTemplate(template) {
               return template.replace(/\{\{/g, startSymbol).replace(/}}/g, endSymbol);
-            };
+        },
+        NG_ATTR_BINDING = /^ngAttr[A-Z]/;
 
 
     return compile;
@@ -19864,11 +20075,16 @@ function $CompileProvider($provide) {
               directiveNormalize(nodeName_(node).toLowerCase()), 'E', maxPriority);
 
           // iterate over the attributes
-          for (var attr, name, nName, value, nAttrs = node.attributes,
+          for (var attr, name, nName, ngAttrName, value, nAttrs = node.attributes,
                    j = 0, jj = nAttrs && nAttrs.length; j < jj; j++) {
             attr = nAttrs[j];
             if (attr.specified) {
               name = attr.name;
+              // support ngAttr attribute binding
+              ngAttrName = directiveNormalize(name);
+              if (NG_ATTR_BINDING.test(ngAttrName)) {
+                name = ngAttrName.substr(6).toLowerCase();
+              }
               nName = directiveNormalize(name.toLowerCase());
               attrsMap[nName] = name;
               attrs[nName] = value = trim((msie && name == 'href')
@@ -19996,9 +20212,14 @@ function $CompileProvider($provide) {
           }
         }
 
-        if ((directiveValue = directive.template)) {
+        if (directive.template) {
           assertNoDuplicate('template', templateDirective, directive, $compileNode);
           templateDirective = directive;
+
+          directiveValue = (isFunction(directive.template))
+              ? directive.template($compileNode, templateAttrs)
+              : directive.template;
+
           directiveValue = denormalizeTemplate(directiveValue);
 
           if (directive.replace) {
@@ -20118,13 +20339,14 @@ function $CompileProvider($provide) {
         $element = attrs.$$element;
 
         if (newIsolateScopeDirective) {
-          var LOCAL_REGEXP = /^\s*([@=&])\s*(\w*)\s*$/;
+          var LOCAL_REGEXP = /^\s*([@=&])(\??)\s*(\w*)\s*$/;
 
           var parentScope = scope.$parent || scope;
 
           forEach(newIsolateScopeDirective.scope, function(definiton, scopeName) {
             var match = definiton.match(LOCAL_REGEXP) || [],
-                attrName = match[2]|| scopeName,
+                attrName = match[3] || scopeName,
+                optional = (match[2] == '?'),
                 mode = match[1], // @, =, or &
                 lastValue,
                 parentGet, parentSet;
@@ -20138,10 +20360,17 @@ function $CompileProvider($provide) {
                   scope[scopeName] = value;
                 });
                 attrs.$$observers[attrName].$$scope = parentScope;
+                if( attrs[attrName] ) {
+                  // If the attribute has been provided then we trigger an interpolation to ensure the value is there for use in the link fn
+                  scope[scopeName] = $interpolate(attrs[attrName])(parentScope);
+                }
                 break;
               }
 
               case '=': {
+                if (optional && !attrs[attrName]) {
+                  return;
+                }
                 parentGet = $parse(attrs[attrName]);
                 parentSet = parentGet.assign || function() {
                   // reset the change, or we will throw this exception on every $digest
@@ -20313,11 +20542,14 @@ function $CompileProvider($provide) {
           // The fact that we have to copy and patch the directive seems wrong!
           derivedSyncDirective = extend({}, origAsyncDirective, {
             controller: null, templateUrl: null, transclude: null, scope: null
-          });
+          }),
+          templateUrl = (isFunction(origAsyncDirective.templateUrl))
+              ? origAsyncDirective.templateUrl($compileNode, tAttrs)
+              : origAsyncDirective.templateUrl;
 
       $compileNode.html('');
 
-      $http.get(origAsyncDirective.templateUrl, {cache: $templateCache}).
+      $http.get(templateUrl, {cache: $templateCache}).
         success(function(content) {
           var compileNode, tempTemplateAttrs, $template;
 
@@ -20346,10 +20578,10 @@ function $CompileProvider($provide) {
 
 
           while(linkQueue.length) {
-            var controller = linkQueue.pop(),
-                linkRootElement = linkQueue.pop(),
-                beforeTemplateLinkNode = linkQueue.pop(),
-                scope = linkQueue.pop(),
+            var scope = linkQueue.shift(),
+                beforeTemplateLinkNode = linkQueue.shift(),
+                linkRootElement = linkQueue.shift(),
+                controller = linkQueue.shift(),
                 linkNode = compileNode;
 
             if (beforeTemplateLinkNode !== beforeTemplateCompileNode) {
@@ -20430,13 +20662,15 @@ function $CompileProvider($provide) {
         compile: valueFn(function attrInterpolateLinkFn(scope, element, attr) {
           var $$observers = (attr.$$observers || (attr.$$observers = {}));
 
-          if (name === 'class') {
-            // we need to interpolate classes again, in the case the element was replaced
-            // and therefore the two class attrs got merged - we want to interpolate the result
-            interpolateFn = $interpolate(attr[name], true);
-          }
+          // we need to interpolate again, in case the attribute value has been updated
+          // (e.g. by another directive's compile function)
+          interpolateFn = $interpolate(attr[name], true);
 
-          attr[name] = undefined;
+          // if attribute was updated so that there is no interpolation going on we don't want to
+          // register any observers
+          if (!interpolateFn) return;
+
+          attr[name] = interpolateFn(scope);
           ($$observers[name] || ($$observers[name] = [])).$$inter = true;
           (attr.$$observers && attr.$$observers[name].$$scope || scope).
             $watch(interpolateFn, function interpolateFnWatchAction(value) {
@@ -20531,7 +20765,7 @@ function directiveNormalize(name) {
  * @param {string} name Normalized element attribute name of the property to modify. The name is
  *          revers translated using the {@link ng.$compile.directive.Attributes#$attr $attr}
  *          property to the original name.
- * @param {string} value Value to set the attribute to.
+ * @param {string} value Value to set the attribute to. The value can be an interpolated string.
  */
 
 
@@ -20566,7 +20800,8 @@ function directiveLinkingFn(
  * {@link ng.$controllerProvider#register register} method.
  */
 function $ControllerProvider() {
-  var controllers = {};
+  var controllers = {},
+      CNTRL_REG = /^(\S+)(\s+as\s+(\w+))?$/;
 
 
   /**
@@ -20611,17 +20846,32 @@ function $ControllerProvider() {
      * a service, so that one can override this service with {@link https://gist.github.com/1649788
      * BC version}.
      */
-    return function(constructor, locals) {
-      if(isString(constructor)) {
-        var name = constructor;
-        constructor = controllers.hasOwnProperty(name)
-            ? controllers[name]
-            : getter(locals.$scope, name, true) || getter($window, name, true);
+    return function(expression, locals) {
+      var instance, match, constructor, identifier;
 
-        assertArgFn(constructor, name, true);
+      if(isString(expression)) {
+        match = expression.match(CNTRL_REG),
+        constructor = match[1],
+        identifier = match[3];
+        expression = controllers.hasOwnProperty(constructor)
+            ? controllers[constructor]
+            : getter(locals.$scope, constructor, true) || getter($window, constructor, true);
+
+        assertArgFn(expression, constructor, true);
       }
 
-      return $injector.instantiate(constructor, locals);
+      instance = $injector.instantiate(expression, locals);
+
+      if (identifier) {
+        if (typeof locals.$scope !== 'object') {
+          throw new Error('Can not export controller as "' + identifier + '". ' +
+              'No scope object provided!');
+        }
+
+        locals.$scope[identifier] = instance;
+      }
+
+      return instance;
     };
   }];
 }
@@ -20719,7 +20969,7 @@ function $InterpolateProvider() {
   };
 
 
-  this.$get = ['$parse', function($parse) {
+  this.$get = ['$parse', '$exceptionHandler', function($parse, $exceptionHandler) {
     var startSymbolLength = startSymbol.length,
         endSymbolLength = endSymbol.length;
 
@@ -20791,18 +21041,24 @@ function $InterpolateProvider() {
       if (!mustHaveExpression  || hasInterpolation) {
         concat.length = length;
         fn = function(context) {
-          for(var i = 0, ii = length, part; i<ii; i++) {
-            if (typeof (part = parts[i]) == 'function') {
-              part = part(context);
-              if (part == null || part == undefined) {
-                part = '';
-              } else if (typeof part != 'string') {
-                part = toJson(part);
+          try {
+            for(var i = 0, ii = length, part; i<ii; i++) {
+              if (typeof (part = parts[i]) == 'function') {
+                part = part(context);
+                if (part == null || part == undefined) {
+                  part = '';
+                } else if (typeof part != 'string') {
+                  part = toJson(part);
+                }
               }
+              concat[i] = part;
             }
-            concat[i] = part;
+            return concat.join('');
           }
-          return concat.join('');
+          catch(err) {
+            var newErr = new Error('Error while interpolating: ' + text + '\n' + err.toString());
+            $exceptionHandler(newErr);
+          }
         };
         fn.exp = text;
         fn.parts = parts;
@@ -20848,9 +21104,8 @@ function $InterpolateProvider() {
   }];
 }
 
-var URL_MATCH = /^([^:]+):\/\/(\w+:{0,1}\w*@)?(\{?[\w\.-]*\}?)(:([0-9]+))?(\/[^\?#]*)?(\?([^#]*))?(#(.*))?$/,
-    PATH_MATCH = /^([^\?#]*)?(\?([^#]*))?(#(.*))?$/,
-    HASH_MATCH = PATH_MATCH,
+var SERVER_MATCH = /^([^:]+):\/\/(\w+:{0,1}\w*@)?(\{?[\w\.-]*\}?)(:([0-9]+))?(\/[^\?#]*)?(\?([^#]*))?(#(.*))?$/,
+    PATH_MATCH = /^([^\?#]*)(\?([^#]*))?(#(.*))?$/,
     DEFAULT_PORTS = {'http': 80, 'https': 443, 'ftp': 21};
 
 
@@ -20871,30 +21126,23 @@ function encodePath(path) {
   return segments.join('/');
 }
 
-function stripHash(url) {
-  return url.split('#')[0];
+function matchUrl(url, obj) {
+  var match = SERVER_MATCH.exec(url);
+
+  obj.$$protocol = match[1];
+  obj.$$host = match[3];
+  obj.$$port = int(match[5]) || DEFAULT_PORTS[match[1]] || null;
 }
 
+function matchAppUrl(url, obj) {
+  var match = PATH_MATCH.exec(url);
 
-function matchUrl(url, obj) {
-  var match = URL_MATCH.exec(url);
+  obj.$$path = decodeURIComponent(match[1]);
+  obj.$$search = parseKeyValue(match[3]);
+  obj.$$hash = decodeURIComponent(match[5] || '');
 
-  match = {
-      protocol: match[1],
-      host: match[3],
-      port: int(match[5]) || DEFAULT_PORTS[match[1]] || null,
-      path: match[6] || '/',
-      search: match[8],
-      hash: match[10]
-    };
-
-  if (obj) {
-    obj.$$protocol = match.protocol;
-    obj.$$host = match.host;
-    obj.$$port = match.port;
-  }
-
-  return match;
+  // make sure path starts with '/';
+  if (obj.$$path && obj.$$path.charAt(0) != '/') obj.$$path = '/' + obj.$$path;
 }
 
 
@@ -20902,77 +21150,62 @@ function composeProtocolHostPort(protocol, host, port) {
   return protocol + '://' + host + (port == DEFAULT_PORTS[protocol] ? '' : ':' + port);
 }
 
-
-function pathPrefixFromBase(basePath) {
-  return basePath.substr(0, basePath.lastIndexOf('/'));
+/**
+ *
+ * @param {string} begin
+ * @param {string} whole
+ * @param {string} otherwise
+ * @returns {string} returns text from whole after begin or otherwise if it does not begin with expected string.
+ */
+function beginsWith(begin, whole, otherwise) {
+  return whole.indexOf(begin) == 0 ? whole.substr(begin.length) : otherwise;
 }
 
 
-function convertToHtml5Url(url, basePath, hashPrefix) {
-  var match = matchUrl(url);
-
-  // already html5 url
-  if (decodeURIComponent(match.path) != basePath || isUndefined(match.hash) ||
-      match.hash.indexOf(hashPrefix) !== 0) {
-    return url;
-  // convert hashbang url -> html5 url
-  } else {
-    return composeProtocolHostPort(match.protocol, match.host, match.port) +
-           pathPrefixFromBase(basePath) + match.hash.substr(hashPrefix.length);
-  }
+function stripHash(url) {
+  var index = url.indexOf('#');
+  return index == -1 ? url : url.substr(0, index);
 }
 
 
-function convertToHashbangUrl(url, basePath, hashPrefix) {
-  var match = matchUrl(url);
+function stripFile(url) {
+  return url.substr(0, stripHash(url).lastIndexOf('/') + 1);
+}
 
-  // already hashbang url
-  if (decodeURIComponent(match.path) == basePath && !isUndefined(match.hash) &&
-      match.hash.indexOf(hashPrefix) === 0) {
-    return url;
-  // convert html5 url -> hashbang url
-  } else {
-    var search = match.search && '?' + match.search || '',
-        hash = match.hash && '#' + match.hash || '',
-        pathPrefix = pathPrefixFromBase(basePath),
-        path = match.path.substr(pathPrefix.length);
-
-    if (match.path.indexOf(pathPrefix) !== 0) {
-      throw Error('Invalid url "' + url + '", missing path prefix "' + pathPrefix + '" !');
-    }
-
-    return composeProtocolHostPort(match.protocol, match.host, match.port) + basePath +
-           '#' + hashPrefix + path + search + hash;
-  }
+/* return the server only */
+function serverBase(url) {
+  return url.substring(0, url.indexOf('/', url.indexOf('//') + 2));
 }
 
 
 /**
- * LocationUrl represents an url
+ * LocationHtml5Url represents an url
  * This object is exposed as $location service when HTML5 mode is enabled and supported
  *
  * @constructor
- * @param {string} url HTML5 url
- * @param {string} pathPrefix
+ * @param {string} appBase application base URL
+ * @param {string} basePrefix url path prefix
  */
-function LocationUrl(url, pathPrefix, appBaseUrl) {
-  pathPrefix = pathPrefix || '';
-
+function LocationHtml5Url(appBase, basePrefix) {
+  basePrefix = basePrefix || '';
+  var appBaseNoFile = stripFile(appBase);
   /**
    * Parse given html5 (regular) url string into properties
    * @param {string} newAbsoluteUrl HTML5 url
    * @private
    */
-  this.$$parse = function(newAbsoluteUrl) {
-    var match = matchUrl(newAbsoluteUrl, this);
-
-    if (match.path.indexOf(pathPrefix) !== 0) {
-      throw Error('Invalid url "' + newAbsoluteUrl + '", missing path prefix "' + pathPrefix + '" !');
+  this.$$parse = function(url) {
+    var parsed = {}
+    matchUrl(url, parsed);
+    var pathUrl = beginsWith(appBaseNoFile, url);
+    if (!isString(pathUrl)) {
+      throw Error('Invalid url "' + url + '", missing path prefix "' + appBaseNoFile + '".');
     }
-
-    this.$$path = decodeURIComponent(match.path.substr(pathPrefix.length));
-    this.$$search = parseKeyValue(match.search);
-    this.$$hash = match.hash && decodeURIComponent(match.hash) || '';
+    matchAppUrl(pathUrl, parsed);
+    extend(this, parsed);
+    if (!this.$$path) {
+      this.$$path = '/';
+    }
 
     this.$$compose();
   };
@@ -20986,19 +21219,25 @@ function LocationUrl(url, pathPrefix, appBaseUrl) {
         hash = this.$$hash ? '#' + encodeUriSegment(this.$$hash) : '';
 
     this.$$url = encodePath(this.$$path) + (search ? '?' + search : '') + hash;
-    this.$$absUrl = composeProtocolHostPort(this.$$protocol, this.$$host, this.$$port) +
-                    pathPrefix + this.$$url;
+    this.$$absUrl = appBaseNoFile + this.$$url.substr(1); // first char is always '/'
   };
 
+  this.$$rewrite = function(url) {
+    var appUrl, prevAppUrl;
 
-  this.$$rewriteAppUrl = function(absoluteLinkUrl) {
-    if(absoluteLinkUrl.indexOf(appBaseUrl) == 0) {
-      return absoluteLinkUrl;
+    if ( (appUrl = beginsWith(appBase, url)) !== undefined ) {
+      prevAppUrl = appUrl;
+      if ( (appUrl = beginsWith(basePrefix, appUrl)) !== undefined ) {
+        return appBaseNoFile + (beginsWith('/', appUrl) || appUrl);
+      } else {
+        return appBase + prevAppUrl;
+      }
+    } else if ( (appUrl = beginsWith(appBaseNoFile, url)) !== undefined ) {
+      return appBaseNoFile + appUrl;
+    } else if (appBaseNoFile == url + '/') {
+      return appBaseNoFile;
     }
   }
-
-
-  this.$$parse(url);
 }
 
 
@@ -21007,11 +21246,11 @@ function LocationUrl(url, pathPrefix, appBaseUrl) {
  * This object is exposed as $location service when html5 history api is disabled or not supported
  *
  * @constructor
- * @param {string} url Legacy url
- * @param {string} hashPrefix Prefix for hash part (containing path and search)
+ * @param {string} appBase application base URL
+ * @param {string} hashPrefix hashbang prefix
  */
-function LocationHashbangUrl(url, hashPrefix, appBaseUrl) {
-  var basePath;
+function LocationHashbangUrl(appBase, hashPrefix) {
+  var appBaseNoFile = stripFile(appBase);
 
   /**
    * Parse given hashbang url into properties
@@ -21019,24 +21258,16 @@ function LocationHashbangUrl(url, hashPrefix, appBaseUrl) {
    * @private
    */
   this.$$parse = function(url) {
-    var match = matchUrl(url, this);
-
-
-    if (match.hash && match.hash.indexOf(hashPrefix) !== 0) {
-      throw Error('Invalid url "' + url + '", missing hash prefix "' + hashPrefix + '" !');
+    matchUrl(url, this);
+    var withoutBaseUrl = beginsWith(appBase, url) || beginsWith(appBaseNoFile, url);
+    if (!isString(withoutBaseUrl)) {
+      throw new Error('Invalid url "' + url + '", does not start with "' + appBase +  '".');
     }
-
-    basePath = match.path + (match.search ? '?' + match.search : '');
-    match = HASH_MATCH.exec((match.hash || '').substr(hashPrefix.length));
-    if (match[1]) {
-      this.$$path = (match[1].charAt(0) == '/' ? '' : '/') + decodeURIComponent(match[1]);
-    } else {
-      this.$$path = '';
+    var withoutHashUrl = withoutBaseUrl.charAt(0) == '#' ? beginsWith(hashPrefix, withoutBaseUrl) : withoutBaseUrl;
+    if (!isString(withoutHashUrl)) {
+      throw new Error('Invalid url "' + url + '", missing hash prefix "' + hashPrefix + '".');
     }
-
-    this.$$search = parseKeyValue(match[3]);
-    this.$$hash = match[5] && decodeURIComponent(match[5]) || '';
-
+    matchAppUrl(withoutHashUrl, this);
     this.$$compose();
   };
 
@@ -21049,22 +21280,48 @@ function LocationHashbangUrl(url, hashPrefix, appBaseUrl) {
         hash = this.$$hash ? '#' + encodeUriSegment(this.$$hash) : '';
 
     this.$$url = encodePath(this.$$path) + (search ? '?' + search : '') + hash;
-    this.$$absUrl = composeProtocolHostPort(this.$$protocol, this.$$host, this.$$port) +
-                    basePath + (this.$$url ? '#' + hashPrefix + this.$$url : '');
+    this.$$absUrl = appBase + (this.$$url ? hashPrefix + this.$$url : '');
   };
 
-  this.$$rewriteAppUrl = function(absoluteLinkUrl) {
-    if(absoluteLinkUrl.indexOf(appBaseUrl) == 0) {
-      return absoluteLinkUrl;
+  this.$$rewrite = function(url) {
+    if(stripHash(appBase) == stripHash(url)) {
+      return url;
     }
   }
-
-
-  this.$$parse(url);
 }
 
 
-LocationUrl.prototype = {
+/**
+ * LocationHashbangUrl represents url
+ * This object is exposed as $location service when html5 history api is enabled but the browser
+ * does not support it.
+ *
+ * @constructor
+ * @param {string} appBase application base URL
+ * @param {string} hashPrefix hashbang prefix
+ */
+function LocationHashbangInHtml5Url(appBase, hashPrefix) {
+  LocationHashbangUrl.apply(this, arguments);
+
+  var appBaseNoFile = stripFile(appBase);
+
+  this.$$rewrite = function(url) {
+    var appUrl;
+
+    if ( appBase == stripHash(url) ) {
+      return url;
+    } else if ( (appUrl = beginsWith(appBaseNoFile, url)) ) {
+      return appBase + hashPrefix + appUrl;
+    } else if ( appBaseNoFile === url + '/') {
+      return appBaseNoFile;
+    }
+  }
+}
+
+
+LocationHashbangInHtml5Url.prototype =
+  LocationHashbangUrl.prototype =
+  LocationHtml5Url.prototype = {
 
   /**
    * Has any change been replacing ?
@@ -21246,21 +21503,6 @@ LocationUrl.prototype = {
   }
 };
 
-LocationHashbangUrl.prototype = inherit(LocationUrl.prototype);
-
-function LocationHashbangInHtml5Url(url, hashPrefix, appBaseUrl, baseExtra) {
-  LocationHashbangUrl.apply(this, arguments);
-
-
-  this.$$rewriteAppUrl = function(absoluteLinkUrl) {
-    if (absoluteLinkUrl.indexOf(appBaseUrl) == 0) {
-      return appBaseUrl + baseExtra + '#' + hashPrefix  + absoluteLinkUrl.substr(appBaseUrl.length);
-    }
-  }
-}
-
-LocationHashbangInHtml5Url.prototype = inherit(LocationHashbangUrl.prototype);
-
 function locationGetter(property) {
   return function() {
     return this[property];
@@ -21357,37 +21599,20 @@ function $LocationProvider(){
   this.$get = ['$rootScope', '$browser', '$sniffer', '$rootElement',
       function( $rootScope,   $browser,   $sniffer,   $rootElement) {
     var $location,
-        basePath,
-        pathPrefix,
-        initUrl = $browser.url(),
-        initUrlParts = matchUrl(initUrl),
-        appBaseUrl;
+        LocationMode,
+        baseHref = $browser.baseHref(),
+        initialUrl = $browser.url(),
+        appBase;
 
     if (html5Mode) {
-      basePath = $browser.baseHref() || '/';
-      pathPrefix = pathPrefixFromBase(basePath);
-      appBaseUrl =
-          composeProtocolHostPort(initUrlParts.protocol, initUrlParts.host, initUrlParts.port) +
-          pathPrefix + '/';
-
-      if ($sniffer.history) {
-        $location = new LocationUrl(
-          convertToHtml5Url(initUrl, basePath, hashPrefix),
-          pathPrefix, appBaseUrl);
-      } else {
-        $location = new LocationHashbangInHtml5Url(
-          convertToHashbangUrl(initUrl, basePath, hashPrefix),
-          hashPrefix, appBaseUrl, basePath.substr(pathPrefix.length + 1));
-      }
+      appBase = baseHref ? serverBase(initialUrl) + baseHref : initialUrl;
+      LocationMode = $sniffer.history ? LocationHtml5Url : LocationHashbangInHtml5Url;
     } else {
-      appBaseUrl =
-          composeProtocolHostPort(initUrlParts.protocol, initUrlParts.host, initUrlParts.port) +
-          (initUrlParts.path || '') +
-          (initUrlParts.search ? ('?' + initUrlParts.search) : '') +
-          '#' + hashPrefix + '/';
-
-      $location = new LocationHashbangUrl(initUrl, hashPrefix, appBaseUrl);
+      appBase = stripHash(initialUrl);
+      LocationMode = LocationHashbangUrl;
     }
+    $location = new LocationMode(appBase, '#' + hashPrefix);
+    $location.$$parse($location.$$rewrite(initialUrl));
 
     $rootElement.bind('click', function(event) {
       // TODO(vojta): rewrite link when opening in new tab/window (in legacy browser)
@@ -21403,22 +21628,24 @@ function $LocationProvider(){
         if (elm[0] === $rootElement[0] || !(elm = elm.parent())[0]) return;
       }
 
-      var absHref = elm.prop('href'),
-          rewrittenUrl = $location.$$rewriteAppUrl(absHref);
+      var absHref = elm.prop('href');
+      var rewrittenUrl = $location.$$rewrite(absHref);
 
-      if (absHref && !elm.attr('target') && rewrittenUrl) {
-        // update location manually
-        $location.$$parse(rewrittenUrl);
-        $rootScope.$apply();
+      if (absHref && !elm.attr('target') && rewrittenUrl && !event.isDefaultPrevented()) {
         event.preventDefault();
-        // hack to work around FF6 bug 684208 when scenario runner clicks on links
-        window.angular['ff-684208-preventDefault'] = true;
+        if (rewrittenUrl != $browser.url()) {
+          // update location manually
+          $location.$$parse(rewrittenUrl);
+          $rootScope.$apply();
+          // hack to work around FF6 bug 684208 when scenario runner clicks on links
+          window.angular['ff-684208-preventDefault'] = true;
+        }
       }
     });
 
 
     // rewrite hashbang url <> html5 url
-    if ($location.absUrl() != initUrl) {
+    if ($location.absUrl() != initialUrl) {
       $browser.url($location.absUrl(), true);
     }
 
@@ -21503,7 +21730,33 @@ function $LocationProvider(){
    </example>
  */
 
+/**
+ * @ngdoc object
+ * @name ng.$logProvider
+ * @description
+ * Use the `$logProvider` to configure how the application logs messages
+ */
 function $LogProvider(){
+  var debug = true,
+      self = this;
+  
+  /**
+   * @ngdoc property
+   * @name ng.$logProvider#debugEnabled
+   * @methodOf ng.$logProvider
+   * @description
+   * @param {string=} flag enable or disable debug level messages
+   * @returns {*} current value if used as getter or itself (chaining) if used as setter
+   */
+  this.debugEnabled = function(flag) {
+	  if (isDefined(flag)) {
+		  debug = flag;
+		  return this;
+	  } else {
+		  return debug;
+	  }
+  };
+  
   this.$get = ['$window', function($window){
     return {
       /**
@@ -21544,7 +21797,25 @@ function $LogProvider(){
        * @description
        * Write an error message
        */
-      error: consoleLog('error')
+      error: consoleLog('error'),
+      
+      /**
+       * @ngdoc method
+       * @name ng.$log#debug
+       * @methodOf ng.$log
+       * 
+       * @description
+       * Write a debug message
+       */
+      debug: (function () {
+    	var fn = consoleLog('debug');
+    	
+    	return function() {
+    		if (debug) {
+    			fn.apply(self, arguments);
+    		}
+    	}
+      }())
     };
 
     function formatError(arg) {
@@ -21603,6 +21874,8 @@ var OPERATORS = {
     '%':function(self, locals, a,b){return a(self, locals)%b(self, locals);},
     '^':function(self, locals, a,b){return a(self, locals)^b(self, locals);},
     '=':noop,
+    '===':function(self, locals, a, b){return a(self, locals)===b(self, locals);},
+    '!==':function(self, locals, a, b){return a(self, locals)!==b(self, locals);},
     '==':function(self, locals, a,b){return a(self, locals)==b(self, locals);},
     '!=':function(self, locals, a,b){return a(self, locals)!=b(self, locals);},
     '<':function(self, locals, a,b){return a(self, locals)<b(self, locals);},
@@ -21639,7 +21912,7 @@ function lex(text, csp){
          (token=tokens[tokens.length-1])) {
         token.json = token.text.indexOf('.') == -1;
       }
-    } else if (is('(){}[].,;:')) {
+    } else if (is('(){}[].,;:?')) {
       tokens.push({
         index:index,
         text:ch,
@@ -21653,9 +21926,14 @@ function lex(text, csp){
       continue;
     } else {
       var ch2 = ch + peek(),
+          ch3 = ch2 + peek(2),
           fn = OPERATORS[ch],
-          fn2 = OPERATORS[ch2];
-      if (fn2) {
+          fn2 = OPERATORS[ch2],
+          fn3 = OPERATORS[ch3];
+      if (fn3) {
+        tokens.push({index:index, text:ch3, fn:fn3});
+        index += 3;
+      } else if (fn2) {
         tokens.push({index:index, text:ch2, fn:fn2});
         index += 2;
       } else if (fn) {
@@ -21677,8 +21955,9 @@ function lex(text, csp){
     return chars.indexOf(lastCh) != -1;
   }
 
-  function peek() {
-    return index + 1 < text.length ? text.charAt(index + 1) : false;
+  function peek(i) {
+    var num = i || 1;
+    return index + num < text.length ? text.charAt(index + num) : false;
   }
   function isNumber(ch) {
     return '0' <= ch && ch <= '9';
@@ -21878,6 +22157,8 @@ function parser(text, json, $filter, csp){
   if (tokens.length !== 0) {
     throwError("is an unexpected token", tokens[0]);
   }
+  value.literal = !!value.literal;
+  value.constant = !!value.constant;
   return value;
 
   ///////////////////////////////////
@@ -21925,15 +22206,27 @@ function parser(text, json, $filter, csp){
   }
 
   function unaryFn(fn, right) {
-    return function(self, locals) {
+    return extend(function(self, locals) {
       return fn(self, locals, right);
-    };
+    }, {
+      constant:right.constant
+    });
   }
 
+  function ternaryFn(left, middle, right){
+    return extend(function(self, locals){
+      return left(self, locals) ? middle(self, locals) : right(self, locals);
+    }, {
+      constant: left.constant && middle.constant && right.constant
+    });
+  }
+  
   function binaryFn(left, fn, right) {
-    return function(self, locals) {
+    return extend(function(self, locals) {
       return fn(self, locals, left, right);
-    };
+    }, {
+      constant:left.constant && right.constant
+    });
   }
 
   function statements() {
@@ -21998,7 +22291,7 @@ function parser(text, json, $filter, csp){
   }
 
   function _assignment() {
-    var left = logicalOR();
+    var left = ternary();
     var right;
     var token;
     if ((token = expect('='))) {
@@ -22006,7 +22299,7 @@ function parser(text, json, $filter, csp){
         throwError("implies assignment but [" +
           text.substring(0, token.index) + "] can not be assigned to", token);
       }
-      right = logicalOR();
+      right = ternary();
       return function(scope, locals){
         return left.assign(scope, right(scope, locals), locals);
       };
@@ -22015,6 +22308,24 @@ function parser(text, json, $filter, csp){
     }
   }
 
+  function ternary() {
+    var left = logicalOR();
+    var middle;
+    var token;
+    if((token = expect('?'))){
+      middle = ternary();
+      if((token = expect(':'))){
+        return ternaryFn(left, middle, ternary());
+      }
+      else {
+        throwError('expected :', token);
+      }
+    }
+    else {
+      return left;
+    }
+  }
+  
   function logicalOR() {
     var left = logicalAND();
     var token;
@@ -22039,7 +22350,7 @@ function parser(text, json, $filter, csp){
   function equality() {
     var left = relational();
     var token;
-    if ((token = expect('==','!='))) {
+    if ((token = expect('==','!=','===','!=='))) {
       left = binaryFn(left, token.fn, equality());
     }
     return left;
@@ -22100,6 +22411,9 @@ function parser(text, json, $filter, csp){
       primary = token.fn;
       if (!primary) {
         throwError("not a primary expression", token);
+      }
+      if (token.json) {
+        primary.constant = primary.literal = true;
       }
     }
 
@@ -22189,23 +22503,32 @@ function parser(text, json, $filter, csp){
   // This is used with json array declaration
   function arrayDeclaration () {
     var elementFns = [];
+    var allConstant = true;
     if (peekToken().text != ']') {
       do {
-        elementFns.push(expression());
+        var elementFn = expression();
+        elementFns.push(elementFn);
+        if (!elementFn.constant) {
+          allConstant = false;
+        }
       } while (expect(','));
     }
     consume(']');
-    return function(self, locals){
+    return extend(function(self, locals){
       var array = [];
       for ( var i = 0; i < elementFns.length; i++) {
         array.push(elementFns[i](self, locals));
       }
       return array;
-    };
+    }, {
+      literal:true,
+      constant:allConstant
+    });
   }
 
   function object () {
     var keyValues = [];
+    var allConstant = true;
     if (peekToken().text != '}') {
       do {
         var token = expect(),
@@ -22213,17 +22536,23 @@ function parser(text, json, $filter, csp){
         consume(":");
         var value = expression();
         keyValues.push({key:key, value:value});
+        if (!value.constant) {
+          allConstant = false;
+        }
       } while (expect(','));
     }
     consume('}');
-    return function(self, locals){
+    return extend(function(self, locals){
       var object = {};
       for ( var i = 0; i < keyValues.length; i++) {
         var keyValue = keyValues[i];
         object[keyValue.key] = keyValue.value(self, locals);
       }
       return object;
-    };
+    }, {
+      literal:true,
+      constant:allConstant
+    });
   }
 }
 
@@ -22247,11 +22576,11 @@ function setter(obj, path, setValue) {
 }
 
 /**
- * Return the value accesible from the object by path. Any undefined traversals are ignored
+ * Return the value accessible from the object by path. Any undefined traversals are ignored
  * @param {Object} obj starting object
  * @param {string} path path to traverse
  * @param {boolean=true} bindFnToScope
- * @returns value as accesbile by path
+ * @returns value as accessible by path
  */
 //TODO(misko): this function needs to be removed
 function getter(obj, path, bindFnToScope) {
@@ -22423,12 +22752,17 @@ function getterFn(path, csp) {
  * @returns {function(context, locals)} a function which represents the compiled expression:
  *
  *    * `context` – `{object}` – an object against which any expressions embedded in the strings
- *      are evaluated against (tipically a scope object).
+ *      are evaluated against (typically a scope object).
  *    * `locals` – `{object=}` – local variables context object, useful for overriding values in
  *      `context`.
  *
- *    The return function also has an `assign` property, if the expression is assignable, which
- *    allows one to set values to expressions.
+ *    The returned function also has the following properties:
+ *      * `literal` – `{boolean}` – whether the expression's top-level node is a JavaScript
+ *        literal.
+ *      * `constant` – `{boolean}` – whether the expression is made entirely of JavaScript
+ *        constant literals.
+ *      * `assign` – `{?function(context, value)}` – if the expression is assignable, this will be
+ *        set to a function to change its value on the given context.
  *
  */
 function $ParseProvider() {
@@ -22540,6 +22874,11 @@ function $ParseProvider() {
  *   This method *returns a new promise* which is resolved or rejected via the return value of the
  *   `successCallback` or `errorCallback`.
  *
+ * - `always(callback)` – allows you to observe either the fulfillment or rejection of a promise,
+ *   but to do so without modifying the final value. This is useful to release resources or do some
+ *   clean-up that needs to be done whether the promise was rejected or resolved. See the [full
+ *   specification](https://github.com/kriskowal/q/wiki/API-Reference#promisefinallycallback) for
+ *   more information.
  *
  * # Chaining promises
  *
@@ -22685,6 +23024,42 @@ function qFactory(nextTick, exceptionHandler) {
           }
 
           return result.promise;
+        },
+        always: function(callback) {
+          
+          function makePromise(value, resolved) {
+            var result = defer();
+            if (resolved) {
+              result.resolve(value);
+            } else {
+              result.reject(value);
+            }
+            return result.promise;
+          }
+          
+          function handleCallback(value, isResolved) {
+            var callbackOutput = null;            
+            try {
+              callbackOutput = (callback ||defaultCallback)();
+            } catch(e) {
+              return makePromise(e, false);
+            }            
+            if (callbackOutput && callbackOutput.then) {
+              return callbackOutput.then(function() {
+                return makePromise(value, isResolved);
+              }, function(error) {
+                return makePromise(error, false);
+              });
+            } else {
+              return makePromise(value, isResolved);
+            }
+          }
+          
+          return this.then(function(value) {
+            return handleCallback(value, true);
+          }, function(error) {
+            return handleCallback(error, false);
+          });
         }
       }
     };
@@ -22823,29 +23198,30 @@ function qFactory(nextTick, exceptionHandler) {
    * Combines multiple promises into a single promise that is resolved when all of the input
    * promises are resolved.
    *
-   * @param {Array.<Promise>} promises An array of promises.
-   * @returns {Promise} Returns a single promise that will be resolved with an array of values,
-   *   each value corresponding to the promise at the same index in the `promises` array. If any of
+   * @param {Array.<Promise>|Object.<Promise>} promises An array or hash of promises.
+   * @returns {Promise} Returns a single promise that will be resolved with an array/hash of values,
+   *   each value corresponding to the promise at the same index/key in the `promises` array/hash. If any of
    *   the promises is resolved with a rejection, this resulting promise will be resolved with the
    *   same rejection.
    */
   function all(promises) {
     var deferred = defer(),
-        counter = promises.length,
-        results = [];
+        counter = 0,
+        results = isArray(promises) ? [] : {};
 
-    if (counter) {
-      forEach(promises, function(promise, index) {
-        ref(promise).then(function(value) {
-          if (index in results) return;
-          results[index] = value;
-          if (!(--counter)) deferred.resolve(results);
-        }, function(reason) {
-          if (index in results) return;
-          deferred.reject(reason);
-        });
+    forEach(promises, function(promise, key) {
+      counter++;
+      ref(promise).then(function(value) {
+        if (results.hasOwnProperty(key)) return;
+        results[key] = value;
+        if (!(--counter)) deferred.resolve(results);
+      }, function(reason) {
+        if (results.hasOwnProperty(key)) return;
+        deferred.reject(reason);
       });
-    } else {
+    });
+
+    if (counter === 0) {
       deferred.resolve(results);
     }
 
@@ -22882,9 +23258,18 @@ function $RouteProvider(){
    *    `$location.path` will be updated to add or drop the trailing slash to exactly match the
    *    route definition.
    *
-   *    `path` can contain named groups starting with a colon (`:name`). All characters up to the
-   *    next slash are matched and stored in `$routeParams` under the given `name` when the route
-   *    matches.
+   *      * `path` can contain named groups starting with a colon (`:name`). All characters up
+   *        to the next slash are matched and stored in `$routeParams` under the given `name`
+   *        when the route matches.
+   *      * `path` can contain named groups starting with a star (`*name`). All characters are
+   *        eagerly stored in `$routeParams` under the given `name` when the route matches.
+   *
+   *    For example, routes like `/color/:color/largecode/*largecode/edit` will match
+   *    `/color/brown/largecode/code/with/slashs/edit` and extract:
+   *
+   *      * `color: brown`
+   *      * `largecode: code/with/slashs`.
+   *
    *
    * @param {Object} route Mapping information to be assigned to `$route.current` on route
    *    match.
@@ -22894,12 +23279,26 @@ function $RouteProvider(){
    *    - `controller` – `{(string|function()=}` – Controller fn that should be associated with newly
    *      created scope or the name of a {@link angular.Module#controller registered controller}
    *      if passed as a string.
-   *    - `template` – `{string=}` –  html template as a string that should be used by
-   *      {@link ng.directive:ngView ngView} or
+   *    - `controllerAs` – `{string=}` – A controller alias name. If present the controller will be
+   *      published to scope under the `controllerAs` name.
+   *    - `template` – `{string=|function()=}` – html template as a string or function that returns
+   *      an html template as a string which should be used by {@link ng.directive:ngView ngView} or
    *      {@link ng.directive:ngInclude ngInclude} directives.
-   *      this property takes precedence over `templateUrl`.
-   *    - `templateUrl` – `{string=}` – path to an html template that should be used by
-   *      {@link ng.directive:ngView ngView}.
+   *      This property takes precedence over `templateUrl`.
+   *
+   *      If `template` is a function, it will be called with the following parameters:
+   *
+   *      - `{Array.<Object>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route
+   *
+   *    - `templateUrl` – `{string=|function()=}` – path or function that returns a path to an html
+   *      template that should be used by {@link ng.directive:ngView ngView}.
+   *
+   *      If `templateUrl` is a function, it will be called with the following parameters:
+   *
+   *      - `{Array.<Object>}` - route parameters extracted from the current
+   *        `$location.path()` by applying the current route
+   *
    *    - `resolve` - `{Object.<string, function>=}` - An optional map of dependencies which should
    *      be injected into the controller. If any of these dependencies are promises, they will be
    *      resolved and converted to a value before the controller is instantiated and the
@@ -22930,13 +23329,18 @@ function $RouteProvider(){
    *      If the option is set to `false` and url in the browser changes, then
    *      `$routeUpdate` event is broadcasted on the root scope.
    *
+   *    - `[caseInsensitiveMatch=false]` - {boolean=} - match routes without being case sensitive
+   *
+   *      If the option is set to `true`, then the particular route can be matched without being
+   *      case sensitive
+   *
    * @returns {Object} self
    *
    * @description
    * Adds a new route definition to the `$route` service.
    */
   this.when = function(path, route) {
-    routes[path] = extend({reloadOnSearch: true}, route);
+    routes[path] = extend({reloadOnSearch: true, caseInsensitiveMatch: false}, route);
 
     // create redirection for trailing slashes
     if (path) {
@@ -23182,19 +23586,21 @@ function $RouteProvider(){
     /**
      * @param on {string} current url
      * @param when {string} route when template to match the url against
+     * @param whenProperties {Object} properties to define when's matching behavior
      * @return {?Object}
      */
-    function switchRouteMatcher(on, when) {
+    function switchRouteMatcher(on, when, whenProperties) {
       // TODO(i): this code is convoluted and inefficient, we should construct the route matching
       //   regex only once and then reuse it
 
       // Escape regexp special characters.
-      when = '^' + when.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") + '$';
+      when = '^' + when.replace(/[-\/\\^$:*+?.()|[\]{}]/g, "\\$&") + '$';
+
       var regex = '',
           params = [],
           dst = {};
 
-      var re = /:(\w+)/g,
+      var re = /\\([:*])(\w+)/g,
           paramMatch,
           lastMatchedIndex = 0;
 
@@ -23202,14 +23608,21 @@ function $RouteProvider(){
         // Find each :param in `when` and replace it with a capturing group.
         // Append all other sections of when unchanged.
         regex += when.slice(lastMatchedIndex, paramMatch.index);
-        regex += '([^\\/]*)';
-        params.push(paramMatch[1]);
+        switch(paramMatch[1]) {
+          case ':':
+            regex += '([^\\/]*)';
+            break;
+          case '*':
+            regex += '(.*)';
+            break;
+        }
+        params.push(paramMatch[2]);
         lastMatchedIndex = re.lastIndex;
       }
       // Append trailing path part.
       regex += when.substr(lastMatchedIndex);
 
-      var match = on.match(new RegExp(regex));
+      var match = on.match(new RegExp(regex, whenProperties.caseInsensitiveMatch ? 'i' : ''));
       if (match) {
         forEach(params, function(name, index) {
           dst[name] = match[index + 1];
@@ -23246,30 +23659,31 @@ function $RouteProvider(){
         $q.when(next).
           then(function() {
             if (next) {
-              var keys = [],
-                  values = [],
+              var locals = extend({}, next.resolve),
                   template;
 
-              forEach(next.resolve || {}, function(value, key) {
-                keys.push(key);
-                values.push(isString(value) ? $injector.get(value) : $injector.invoke(value));
+              forEach(locals, function(value, key) {
+                locals[key] = isString(value) ? $injector.get(value) : $injector.invoke(value);
               });
+
               if (isDefined(template = next.template)) {
+                if (isFunction(template)) {
+                  template = template(next.params);
+                }
               } else if (isDefined(template = next.templateUrl)) {
-                template = $http.get(template, {cache: $templateCache}).
-                    then(function(response) { return response.data; });
+                if (isFunction(template)) {
+                  template = template(next.params);
+                }
+                if (isDefined(template)) {
+                  next.loadedTemplateUrl = template;
+                  template = $http.get(template, {cache: $templateCache}).
+                      then(function(response) { return response.data; });
+                }
               }
               if (isDefined(template)) {
-                keys.push('$template');
-                values.push(template);
+                locals['$template'] = template;
               }
-              return $q.all(values).then(function(values) {
-                var locals = {};
-                forEach(values, function(value, index) {
-                  locals[keys[index]] = value;
-                });
-                return locals;
-              });
+              return $q.all(locals);
             }
           }).
           // after route change
@@ -23297,7 +23711,7 @@ function $RouteProvider(){
       // Match a route
       var params, match;
       forEach(routes, function(route, path) {
-        if (!match && (params = switchRouteMatcher($location.path(), path))) {
+        if (!match && (params = switchRouteMatcher($location.path(), path, route))) {
           match = inherit(route, {
             params: extend({}, $location.search(), params),
             pathParams: params});
@@ -23309,7 +23723,7 @@ function $RouteProvider(){
     }
 
     /**
-     * @returns interpolation of the redirect path with the parametrs
+     * @returns interpolation of the redirect path with the parameters
      */
     function interpolate(string, params) {
       var result = [];
@@ -23441,25 +23855,7 @@ function $RootScopeProvider(){
      *
      * Here is a simple scope snippet to show how you can interact with the scope.
      * <pre>
-        angular.injector(['ng']).invoke(function($rootScope) {
-           var scope = $rootScope.$new();
-           scope.salutation = 'Hello';
-           scope.name = 'World';
-
-           expect(scope.greeting).toEqual(undefined);
-
-           scope.$watch('name', function() {
-             scope.greeting = scope.salutation + ' ' + scope.name + '!';
-           }); // initialize the watch
-
-           expect(scope.greeting).toEqual(undefined);
-           scope.name = 'Misko';
-           // still old value, since watches have not been called yet
-           expect(scope.greeting).toEqual(undefined);
-
-           scope.$digest(); // fire all  the watches
-           expect(scope.greeting).toEqual('Hello Misko!');
-        });
+     * <file src="./test/ng/rootScopeSpec.js" tag="docs1" />
      * </pre>
      *
      * # Inheritance
@@ -23555,7 +23951,6 @@ function $RootScopeProvider(){
         child['this'] = child;
         child.$$listeners = {};
         child.$parent = this;
-        child.$$asyncQueue = [];
         child.$$watchers = child.$$nextSibling = child.$$childHead = child.$$childTail = null;
         child.$$prevSibling = this.$$childTail;
         if (this.$$childHead) {
@@ -23659,6 +24054,14 @@ function $RootScopeProvider(){
           watcher.fn = function(newVal, oldVal, scope) {listenFn(scope);};
         }
 
+        if (typeof watchExp == 'string' && get.constant) {
+          var originalFn = watcher.fn;
+          watcher.fn = function(newVal, oldVal, scope) {
+            originalFn.call(this, newVal, oldVal, scope);
+            arrayRemove(array, watcher);
+          };
+        }
+
         if (!array) {
           array = scope.$$watchers = [];
         }
@@ -23669,6 +24072,147 @@ function $RootScopeProvider(){
         return function() {
           arrayRemove(array, watcher);
         };
+      },
+
+
+      /**
+       * @ngdoc function
+       * @name ng.$rootScope.Scope#$watchCollection
+       * @methodOf ng.$rootScope.Scope
+       * @function
+       *
+       * @description
+       * Shallow watches the properties of an object and fires whenever any of the properties change
+       * (for arrays this implies watching the array items, for object maps this implies watching the properties).
+       * If a change is detected the `listener` callback is fired.
+       *
+       * - The `obj` collection is observed via standard $watch operation and is examined on every call to $digest() to
+       *   see if any items have been added, removed, or moved.
+       * - The `listener` is called whenever anything within the `obj` has changed. Examples include adding new items
+       *   into the object or array, removing and moving items around.
+       *
+       *
+       * # Example
+       * <pre>
+          $scope.names = ['igor', 'matias', 'misko', 'james'];
+          $scope.dataCount = 4;
+
+          $scope.$watchCollection('names', function(newNames, oldNames) {
+            $scope.dataCount = newNames.length;
+          });
+
+          expect($scope.dataCount).toEqual(4);
+          $scope.$digest();
+
+          //still at 4 ... no changes
+          expect($scope.dataCount).toEqual(4);
+
+          $scope.names.pop();
+          $scope.$digest();
+
+          //now there's been a change
+          expect($scope.dataCount).toEqual(3);
+       * </pre>
+       *
+       *
+       * @param {string|Function(scope)} obj Evaluated as {@link guide/expression expression}. The expression value
+       *    should evaluate to an object or an array which is observed on each
+       *    {@link ng.$rootScope.Scope#$digest $digest} cycle. Any shallow change within the collection will trigger
+       *    a call to the `listener`.
+       *
+       * @param {function(newCollection, oldCollection, scope)} listener a callback function that is fired with both
+       *    the `newCollection` and `oldCollection` as parameters.
+       *    The `newCollection` object is the newly modified data obtained from the `obj` expression and the
+       *    `oldCollection` object is a copy of the former collection data.
+       *    The `scope` refers to the current scope.
+       *
+       * @returns {function()} Returns a de-registration function for this listener. When the de-registration function is executed
+       * then the internal watch operation is terminated.
+       */
+      $watchCollection: function(obj, listener) {
+        var self = this;
+        var oldValue;
+        var newValue;
+        var changeDetected = 0;
+        var objGetter = $parse(obj);
+        var internalArray = [];
+        var internalObject = {};
+        var oldLength = 0;
+
+        function $watchCollectionWatch() {
+          newValue = objGetter(self);
+          var newLength, key;
+
+          if (!isObject(newValue)) {
+            if (oldValue !== newValue) {
+              oldValue = newValue;
+              changeDetected++;
+            }
+          } else if (isArrayLike(newValue)) {
+            if (oldValue !== internalArray) {
+              // we are transitioning from something which was not an array into array.
+              oldValue = internalArray;
+              oldLength = oldValue.length = 0;
+              changeDetected++;
+            }
+
+            newLength = newValue.length;
+
+            if (oldLength !== newLength) {
+              // if lengths do not match we need to trigger change notification
+              changeDetected++;
+              oldValue.length = oldLength = newLength;
+            }
+            // copy the items to oldValue and look for changes.
+            for (var i = 0; i < newLength; i++) {
+              if (oldValue[i] !== newValue[i]) {
+                changeDetected++;
+                oldValue[i] = newValue[i];
+              }
+            }
+          } else {
+            if (oldValue !== internalObject) {
+              // we are transitioning from something which was not an object into object.
+              oldValue = internalObject = {};
+              oldLength = 0;
+              changeDetected++;
+            }
+            // copy the items to oldValue and look for changes.
+            newLength = 0;
+            for (key in newValue) {
+              if (newValue.hasOwnProperty(key)) {
+                newLength++;
+                if (oldValue.hasOwnProperty(key)) {
+                  if (oldValue[key] !== newValue[key]) {
+                    changeDetected++;
+                    oldValue[key] = newValue[key];
+                  }
+                } else {
+                  oldLength++;
+                  oldValue[key] = newValue[key];
+                  changeDetected++;
+                }
+              }
+            }
+            if (oldLength > newLength) {
+              // we used to have more keys, need to find them and destroy them.
+              changeDetected++;
+              for(key in oldValue) {
+                if (oldValue.hasOwnProperty(key) && !newValue.hasOwnProperty(key)) {
+                  oldLength--;
+                  delete oldValue[key];
+                }
+              }
+            }
+          }
+          return changeDetected;
+        }
+
+        function $watchCollectionAction() {
+          listener(newValue, oldValue, self);
+        }
+
+        return this.$watch($watchCollectionWatch, $watchCollectionAction);
       },
 
       /**
@@ -23722,7 +24266,7 @@ function $RootScopeProvider(){
       $digest: function() {
         var watch, value, last,
             watchers,
-            asyncQueue,
+            asyncQueue = this.$$asyncQueue,
             length,
             dirty, ttl = TTL,
             next, current, target = this,
@@ -23731,18 +24275,19 @@ function $RootScopeProvider(){
 
         beginPhase('$digest');
 
-        do {
+        do { // "while dirty" loop
           dirty = false;
           current = target;
-          do {
-            asyncQueue = current.$$asyncQueue;
-            while(asyncQueue.length) {
-              try {
-                current.$eval(asyncQueue.shift());
-              } catch (e) {
-                $exceptionHandler(e);
-              }
+
+          while(asyncQueue.length) {
+            try {
+              current.$eval(asyncQueue.shift());
+            } catch (e) {
+              $exceptionHandler(e);
             }
+          }
+
+          do { // "traverse the scopes" loop
             if ((watchers = current.$$watchers)) {
               // process our watches
               length = watchers.length;
@@ -24086,7 +24631,7 @@ function $RootScopeProvider(){
        * Afterwards, the event propagates to all direct and indirect scopes of the current scope and
        * calls all registered listeners along the way. The event cannot be canceled.
        *
-       * Any exception emmited from the {@link ng.$rootScope.Scope#$on listeners} will be passed
+       * Any exception emitted from the {@link ng.$rootScope.Scope#$on listeners} will be passed
        * onto the {@link ng.$exceptionHandler $exceptionHandler} service.
        *
        * @param {string} name Event name to broadcast.
@@ -24179,17 +24724,40 @@ function $RootScopeProvider(){
  *
  * @name ng.$sniffer
  * @requires $window
+ * @requires $document
  *
  * @property {boolean} history Does the browser support html5 history api ?
  * @property {boolean} hashchange Does the browser support hashchange event ?
+ * @property {boolean} transitions Does the browser support CSS transition events ?
+ * @property {boolean} animations Does the browser support CSS animation events ?
  *
  * @description
  * This is very simple implementation of testing browser's features.
  */
 function $SnifferProvider() {
-  this.$get = ['$window', function($window) {
+  this.$get = ['$window', '$document', function($window, $document) {
     var eventSupport = {},
-        android = int((/android (\d+)/.exec(lowercase($window.navigator.userAgent)) || [])[1]);
+        android = int((/android (\d+)/.exec(lowercase(($window.navigator || {}).userAgent)) || [])[1]),
+        document = $document[0] || {},
+        vendorPrefix,
+        vendorRegex = /^(Moz|webkit|O|ms)(?=[A-Z])/,
+        bodyStyle = document.body && document.body.style,
+        transitions = false,
+        animations = false,
+        match;
+
+    if (bodyStyle) {
+      for(var prop in bodyStyle) {
+        if(match = vendorRegex.exec(prop)) {
+          vendorPrefix = match[0];
+          vendorPrefix = vendorPrefix.substr(0, 1).toUpperCase() + vendorPrefix.substr(1);
+          break;
+        }
+      }
+      transitions = !!(('transition' in bodyStyle) || (vendorPrefix + 'Transition' in bodyStyle));
+      animations  = !!(('animation' in bodyStyle) || (vendorPrefix + 'Animation' in bodyStyle));
+    }
+
 
     return {
       // Android has history.pushState, but it does not update location correctly
@@ -24199,7 +24767,7 @@ function $SnifferProvider() {
       history: !!($window.history && $window.history.pushState && !(android < 4)),
       hashchange: 'onhashchange' in $window &&
                   // IE8 compatible mode lies
-                  (!$window.document.documentMode || $window.document.documentMode > 7),
+                  (!document.documentMode || document.documentMode > 7),
       hasEvent: function(event) {
         // IE9 implements 'input' event it's so fubared that we rather pretend that it doesn't have
         // it. In particular the event is not fired when backspace or delete key are pressed or
@@ -24207,14 +24775,16 @@ function $SnifferProvider() {
         if (event == 'input' && msie == 9) return false;
 
         if (isUndefined(eventSupport[event])) {
-          var divElm = $window.document.createElement('div');
+          var divElm = document.createElement('div');
           eventSupport[event] = 'on' + event in divElm;
         }
 
         return eventSupport[event];
       },
-      // TODO(i): currently there is no way to feature detect CSP without triggering alerts
-      csp: false
+      csp: document.securityPolicy ? document.securityPolicy.isActive : false,
+      vendorPrefix: vendorPrefix,
+      transitions : transitions,
+      animations : animations
     };
   }];
 }
@@ -24227,7 +24797,7 @@ function $SnifferProvider() {
  * A reference to the browser's `window` object. While `window`
  * is globally available in JavaScript, it causes testability problems, because
  * it is a global variable. In angular we always refer to it through the
- * `$window` service, so it may be overriden, removed or mocked for testing.
+ * `$window` service, so it may be overridden, removed or mocked for testing.
  *
  * All expressions are evaluated with respect to current scope so they don't
  * suffer from window globality.
@@ -24288,6 +24858,43 @@ function parseHeaders(headers) {
 }
 
 
+var IS_SAME_DOMAIN_URL_MATCH = /^(([^:]+):)?\/\/(\w+:{0,1}\w*@)?([\w\.-]*)?(:([0-9]+))?(.*)$/;
+
+
+/**
+ * Parse a request and location URL and determine whether this is a same-domain request.
+ *
+ * @param {string} requestUrl The url of the request.
+ * @param {string} locationUrl The current browser location url.
+ * @returns {boolean} Whether the request is for the same domain.
+ */
+function isSameDomain(requestUrl, locationUrl) {
+  var match = IS_SAME_DOMAIN_URL_MATCH.exec(requestUrl);
+  // if requestUrl is relative, the regex does not match.
+  if (match == null) return true;
+
+  var domain1 = {
+      protocol: match[2],
+      host: match[4],
+      port: int(match[6]) || DEFAULT_PORTS[match[2]] || null,
+      // IE8 sets unmatched groups to '' instead of undefined.
+      relativeProtocol: match[2] === undefined || match[2] === ''
+    };
+
+  match = SERVER_MATCH.exec(locationUrl);
+  var domain2 = {
+      protocol: match[1],
+      host: match[3],
+      port: int(match[5]) || DEFAULT_PORTS[match[1]] || null
+    };
+
+  return (domain1.protocol == domain2.protocol || domain1.relativeProtocol) &&
+         domain1.host == domain2.host &&
+         (domain1.port == domain2.port || (domain1.relativeProtocol &&
+             domain2.port == DEFAULT_PORTS[domain2.protocol]));
+}
+
+
 /**
  * Returns a function that provides access to parsed headers.
  *
@@ -24345,9 +24952,10 @@ function isSuccess(status) {
 function $HttpProvider() {
   var JSON_START = /^\s*(\[|\{[^\{])/,
       JSON_END = /[\}\]]\s*$/,
-      PROTECTION_PREFIX = /^\)\]\}',?\n/;
+      PROTECTION_PREFIX = /^\)\]\}',?\n/,
+      CONTENT_TYPE_APPLICATION_JSON = {'Content-Type': 'application/json;charset=utf-8'};
 
-  var $config = this.defaults = {
+  var defaults = this.defaults = {
     // transform incoming response data
     transformResponse: [function(data) {
       if (isString(data)) {
@@ -24367,28 +24975,63 @@ function $HttpProvider() {
     // default headers
     headers: {
       common: {
-        'Accept': 'application/json, text/plain, */*',
-        'X-Requested-With': 'XMLHttpRequest'
+        'Accept': 'application/json, text/plain, */*'
       },
-      post: {'Content-Type': 'application/json;charset=utf-8'},
-      put:  {'Content-Type': 'application/json;charset=utf-8'}
-    }
+      post:   CONTENT_TYPE_APPLICATION_JSON,
+      put:    CONTENT_TYPE_APPLICATION_JSON,
+      patch:  CONTENT_TYPE_APPLICATION_JSON
+    },
+
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN'
   };
 
-  var providerResponseInterceptors = this.responseInterceptors = [];
+  /**
+   * Are order by request. I.E. they are applied in the same order as
+   * array on request, but revers order on response.
+   */
+  var interceptorFactories = this.interceptors = [];
+  /**
+   * For historical reasons, response interceptors ordered by the order in which
+   * they are applied to response. (This is in revers to interceptorFactories)
+   */
+  var responseInterceptorFactories = this.responseInterceptors = [];
 
   this.$get = ['$httpBackend', '$browser', '$cacheFactory', '$rootScope', '$q', '$injector',
       function($httpBackend, $browser, $cacheFactory, $rootScope, $q, $injector) {
 
-    var defaultCache = $cacheFactory('$http'),
-        responseInterceptors = [];
+    var defaultCache = $cacheFactory('$http');
 
-    forEach(providerResponseInterceptors, function(interceptor) {
-      responseInterceptors.push(
-          isString(interceptor)
-              ? $injector.get(interceptor)
-              : $injector.invoke(interceptor)
-      );
+    /**
+     * Interceptors stored in reverse order. Inner interceptors before outer interceptors.
+     * The reversal is needed so that we can build up the interception chain around the
+     * server request.
+     */
+    var reversedInterceptors = [];
+
+    forEach(interceptorFactories, function(interceptorFactory) {
+      reversedInterceptors.unshift(isString(interceptorFactory)
+          ? $injector.get(interceptorFactory) : $injector.invoke(interceptorFactory));
+    });
+
+    forEach(responseInterceptorFactories, function(interceptorFactory, index) {
+      var responseFn = isString(interceptorFactory)
+          ? $injector.get(interceptorFactory)
+          : $injector.invoke(interceptorFactory);
+
+      /**
+       * Response interceptors go before "around" interceptors (no real reason, just
+       * had to pick one.) But they are already revesed, so we can't use unshift, hence
+       * the splice.
+       */
+      reversedInterceptors.splice(index, 0, {
+        response: function(response) {
+          return responseFn($q.when(response));
+        },
+        responseError: function(response) {
+          return responseFn($q.reject(response));
+        }
+      });
     });
 
 
@@ -24474,7 +25117,6 @@ function $HttpProvider() {
      *
      * - `$httpProvider.defaults.headers.common` (headers that are common for all requests):
      *   - `Accept: application/json, text/plain, * / *`
-     *   - `X-Requested-With: XMLHttpRequest`
      * - `$httpProvider.defaults.headers.post`: (header defaults for POST requests)
      *   - `Content-Type: application/json`
      * - `$httpProvider.defaults.headers.put` (header defaults for PUT requests)
@@ -24527,8 +25169,94 @@ function $HttpProvider() {
      * cache, but the cache is not populated yet, only one request to the server will be made and
      * the remaining requests will be fulfilled using the response from the first request.
      *
+     * A custom default cache built with $cacheFactory can be provided in $http.defaults.cache.
+     * To skip it, set configuration property `cache` to `false`.
      *
-     * # Response interceptors
+     *
+     * # Interceptors
+     *
+     * Before you start creating interceptors, be sure to understand the
+     * {@link ng.$q $q and deferred/promise APIs}.
+     *
+     * For purposes of global error handling, authentication, or any kind of synchronous or
+     * asynchronous pre-processing of request or postprocessing of responses, it is desirable to be
+     * able to intercept requests before they are handed to the server and
+     * responses before they are handed over to the application code that
+     * initiated these requests. The interceptors leverage the {@link ng.$q
+     * promise APIs} to fulfill this need for both synchronous and asynchronous pre-processing.
+     *
+     * The interceptors are service factories that are registered with the `$httpProvider` by
+     * adding them to the `$httpProvider.interceptors` array. The factory is called and
+     * injected with dependencies (if specified) and returns the interceptor.
+     *
+     * There are two kinds of interceptors (and two kinds of rejection interceptors):
+     *
+     *   * `request`: interceptors get called with http `config` object. The function is free to modify
+     *     the `config` or create a new one. The function needs to return the `config` directly or as a
+     *     promise.
+     *   * `requestError`: interceptor gets called when a previous interceptor threw an error or resolved
+     *      with a rejection.
+     *   * `response`: interceptors get called with http `response` object. The function is free to modify
+     *     the `response` or create a new one. The function needs to return the `response` directly or as a
+     *     promise.
+     *   * `responseError`: interceptor gets called when a previous interceptor threw an error or resolved
+     *      with a rejection.
+     *
+     *
+     * <pre>
+     *   // register the interceptor as a service
+     *   $provide.factory('myHttpInterceptor', function($q, dependency1, dependency2) {
+     *     return {
+     *       // optional method
+     *       'request': function(config) {
+     *         // do something on success
+     *         return config || $q.when(config);
+     *       },
+     *
+     *       // optional method
+     *      'requestError': function(rejection) {
+     *         // do something on error
+     *         if (canRecover(rejection)) {
+     *           return responseOrNewPromise
+     *         }
+     *         return $q.reject(rejection);
+     *       },
+     *
+     *
+     *
+     *       // optional method
+     *       'response': function(response) {
+     *         // do something on success
+     *         return response || $q.when(response);
+     *       },
+     *
+     *       // optional method
+     *      'responseError': function(rejection) {
+     *         // do something on error
+     *         if (canRecover(rejection)) {
+     *           return responseOrNewPromise
+     *         }
+     *         return $q.reject(rejection);
+     *       };
+     *     }
+     *   });
+     *
+     *   $httpProvider.interceptors.push('myHttpInterceptor');
+     *
+     *
+     *   // register the interceptor via an anonymous factory
+     *   $httpProvider.interceptors.push(function($q, dependency1, dependency2) {
+     *     return {
+     *      'request': function(config) {
+     *          // same as above
+     *       },
+     *       'response': function(response) {
+     *          // same as above
+     *       }
+     *   });
+     * </pre>
+     *
+     * # Response interceptors (DEPRECATED)
      *
      * Before you start creating interceptors, be sure to understand the
      * {@link ng.$q $q and deferred/promise APIs}.
@@ -24611,9 +25339,10 @@ function $HttpProvider() {
      * {@link http://en.wikipedia.org/wiki/Cross-site_request_forgery XSRF} is a technique by which
      * an unauthorized site can gain your user's private data. Angular provides a mechanism
      * to counter XSRF. When performing XHR requests, the $http service reads a token from a cookie
-     * called `XSRF-TOKEN` and sets it as the HTTP header `X-XSRF-TOKEN`. Since only JavaScript that
-     * runs on your domain could read the cookie, your server can be assured that the XHR came from
-     * JavaScript running on your domain.
+     * (by default, `XSRF-TOKEN`) and sets it as an HTTP header (`X-XSRF-TOKEN`). Since only
+     * JavaScript that runs on your domain could read the cookie, your server can be assured that
+     * the XHR came from JavaScript running on your domain. The header will not be set for
+     * cross-domain requests.
      *
      * To take advantage of this, your server needs to set a token in a JavaScript readable session
      * cookie called `XSRF-TOKEN` on the first HTTP GET request. On subsequent XHR requests the
@@ -24622,6 +25351,9 @@ function $HttpProvider() {
      * unique for each user and must be verifiable by the server (to prevent the JavaScript from making
      * up its own tokens). We recommend that the token is a digest of your site's authentication
      * cookie with a {@link https://en.wikipedia.org/wiki/Salt_(cryptography) salt} for added security.
+     *
+     * The name of the headers can be specified using the xsrfHeaderName and xsrfCookieName
+     * properties of either $httpProvider.defaults, or the per-request config object.
      *
      *
      * @param {object} config Object describing the request to be made and how it should be
@@ -24633,6 +25365,8 @@ function $HttpProvider() {
      *      `?key1=value1&key2=value2` after the url. If the value is not a string, it will be JSONified.
      *    - **data** – `{string|Object}` – Data to be sent as the request message data.
      *    - **headers** – `{Object}` – Map of strings representing HTTP headers to send to the server.
+     *    - **xsrfHeaderName** – `{string}` – Name of HTTP header to populate with the XSRF token.
+     *    - **xsrfCookieName** – `{string}` – Name of cookie containing the XSRF token.
      *    - **transformRequest** – `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
      *      transform function or an array of such functions. The transform function takes the http
      *      request body and headers and returns its transformed (typically serialized) version.
@@ -24643,10 +25377,13 @@ function $HttpProvider() {
      *      GET request, otherwise if a cache instance built with
      *      {@link ng.$cacheFactory $cacheFactory}, this cache will be used for
      *      caching.
-     *    - **timeout** – `{number}` – timeout in milliseconds.
+     *    - **timeout** – `{number|Promise}` – timeout in milliseconds, or {@link ng.$q promise}
+     *      that should abort the request when resolved.
      *    - **withCredentials** - `{boolean}` - whether to to set the `withCredentials` flag on the
      *      XHR object. See {@link https://developer.mozilla.org/en/http_access_control#section_5
      *      requests with credentials} for more information.
+     *    - **responseType** - `{string}` - see {@link
+     *      https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#responseType requestType}.
      *
      * @returns {HttpPromise} Returns a {@link ng.$q promise} object with the
      *   standard `then` method and two http specific methods: `success` and `error`. The `then`
@@ -24736,33 +25473,65 @@ function $HttpProvider() {
         </file>
       </example>
      */
-    function $http(config) {
+    function $http(requestConfig) {
+      var config = {
+        transformRequest: defaults.transformRequest,
+        transformResponse: defaults.transformResponse
+      };
+      var headers = {};
+
+      extend(config, requestConfig);
+      config.headers = headers;
       config.method = uppercase(config.method);
 
-      var reqTransformFn = config.transformRequest || $config.transformRequest,
-          respTransformFn = config.transformResponse || $config.transformResponse,
-          defHeaders = $config.headers,
-          reqHeaders = extend({'X-XSRF-TOKEN': $browser.cookies()['XSRF-TOKEN']},
-              defHeaders.common, defHeaders[lowercase(config.method)], config.headers),
-          reqData = transformData(config.data, headersGetter(reqHeaders), reqTransformFn),
-          promise;
+      extend(headers,
+          defaults.headers.common,
+          defaults.headers[lowercase(config.method)],
+          requestConfig.headers);
 
-      // strip content-type if data is undefined
-      if (isUndefined(config.data)) {
-        delete reqHeaders['Content-Type'];
+      var xsrfValue = isSameDomain(config.url, $browser.url())
+          ? $browser.cookies()[config.xsrfCookieName || defaults.xsrfCookieName]
+          : undefined;
+      if (xsrfValue) {
+        headers[(config.xsrfHeaderName || defaults.xsrfHeaderName)] = xsrfValue;
       }
 
-      // send request
-      promise = sendReq(config, reqData, reqHeaders);
 
+      var serverRequest = function(config) {
+        var reqData = transformData(config.data, headersGetter(headers), config.transformRequest);
 
-      // transform future response
-      promise = promise.then(transformResponse, transformResponse);
+        // strip content-type if data is undefined
+        if (isUndefined(config.data)) {
+          delete headers['Content-Type'];
+        }
+
+        if (isUndefined(config.withCredentials) && !isUndefined(defaults.withCredentials)) {
+          config.withCredentials = defaults.withCredentials;
+        }
+
+        // send request
+        return sendReq(config, reqData, headers).then(transformResponse, transformResponse);
+      };
+
+      var chain = [serverRequest, undefined];
+      var promise = $q.when(config);
 
       // apply interceptors
-      forEach(responseInterceptors, function(interceptor) {
-        promise = interceptor(promise);
+      forEach(reversedInterceptors, function(interceptor) {
+        if (interceptor.request || interceptor.requestError) {
+          chain.unshift(interceptor.request, interceptor.requestError);
+        }
+        if (interceptor.response || interceptor.responseError) {
+          chain.push(interceptor.response, interceptor.responseError);
+        }
       });
+
+      while(chain.length) {
+        var thenFn = chain.shift();
+        var rejectFn = chain.shift();
+
+        promise = promise.then(thenFn, rejectFn);
+      }
 
       promise.success = function(fn) {
         promise.then(function(response) {
@@ -24783,7 +25552,7 @@ function $HttpProvider() {
       function transformResponse(response) {
         // make a copy since the response must be cacheable
         var resp = extend({}, response, {
-          data: transformData(response.data, response.headers, respTransformFn)
+          data: transformData(response.data, response.headers, config.transformResponse)
         });
         return (isSuccess(response.status))
           ? resp
@@ -24883,11 +25652,11 @@ function $HttpProvider() {
          *
          * @description
          * Runtime equivalent of the `$httpProvider.defaults` property. Allows configuration of
-         * default headers as well as request and response transformations.
+         * default headers, withCredentials as well as request and response transformations.
          *
          * See "Setting HTTP Headers" and "Transforming Requests and Responses" sections above.
          */
-    $http.defaults = $config;
+    $http.defaults = defaults;
 
 
     return $http;
@@ -24922,7 +25691,7 @@ function $HttpProvider() {
      * Makes the request.
      *
      * !!! ACCESSES CLOSURE VARS:
-     * $httpBackend, $config, $log, $rootScope, defaultCache, $http.pendingRequests
+     * $httpBackend, defaults, $log, $rootScope, defaultCache, $http.pendingRequests
      */
     function sendReq(config, reqData, reqHeaders) {
       var deferred = $q.defer(),
@@ -24935,8 +25704,10 @@ function $HttpProvider() {
       promise.then(removePendingReq, removePendingReq);
 
 
-      if (config.cache && config.method == 'GET') {
-        cache = isObject(config.cache) ? config.cache : defaultCache;
+      if ((config.cache || defaults.cache) && config.cache !== false && config.method == 'GET') {
+        cache = isObject(config.cache) ? config.cache
+              : isObject(defaults.cache) ? defaults.cache
+              : defaultCache;
       }
 
       if (cache) {
@@ -24963,7 +25734,7 @@ function $HttpProvider() {
       // if we won't have the response in cache, send the request to the backend
       if (!cachedResp) {
         $httpBackend(config.method, url, reqData, done, reqHeaders, config.timeout,
-            config.withCredentials);
+            config.withCredentials, config.responseType);
       }
 
       return promise;
@@ -24986,7 +25757,7 @@ function $HttpProvider() {
         }
 
         resolvePromise(response, status, headersString);
-        $rootScope.$apply();
+        if (!$rootScope.$$phase) $rootScope.$apply();
       }
 
 
@@ -25018,10 +25789,15 @@ function $HttpProvider() {
           var parts = [];
           forEachSorted(params, function(value, key) {
             if (value == null || value == undefined) return;
-            if (isObject(value)) {
-              value = toJson(value);
-            }
-            parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+            if (!isArray(value)) value = [value];
+
+            forEach(value, function(v) {
+              if (isObject(v)) {
+                v = toJson(v);
+              }
+              parts.push(encodeUriQuery(key) + '=' +
+                         encodeUriQuery(v));
+            });
           });
           return url + ((url.indexOf('?') == -1) ? '?' : '&') + parts.join('&');
         }
@@ -25064,7 +25840,8 @@ function $HttpBackendProvider() {
 
 function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument, locationProtocol) {
   // TODO(vojta): fix the signature
-  return function(method, url, post, callback, headers, timeout, withCredentials) {
+  return function(method, url, post, callback, headers, timeout, withCredentials, responseType) {
+    var status;
     $browser.$$incOutstandingRequestCount();
     url = url || $browser.url();
 
@@ -25074,12 +25851,12 @@ function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument,
         callbacks[callbackId].data = data;
       };
 
-      jsonpReq(url.replace('JSON_CALLBACK', 'angular.callbacks.' + callbackId),
+      var jsonpDone = jsonpReq(url.replace('JSON_CALLBACK', 'angular.callbacks.' + callbackId),
           function() {
         if (callbacks[callbackId].data) {
           completeRequest(callback, 200, callbacks[callbackId].data);
         } else {
-          completeRequest(callback, -2);
+          completeRequest(callback, status || -2);
         }
         delete callbacks[callbackId];
       });
@@ -25089,8 +25866,6 @@ function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument,
       forEach(headers, function(value, key) {
         if (value) xhr.setRequestHeader(key, value);
       });
-
-      var status;
 
       // In IE6 and 7, this might be called synchronously when xhr.send below is called and the
       // response is in the cache. the promise api will ensure that to the app code the api is
@@ -25119,8 +25894,12 @@ function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument,
           }
           // end of the workaround.
 
-          completeRequest(callback, status || xhr.status, xhr.responseText,
-                          responseHeaders);
+          // responseText is the old-school way of retrieving response (supported by IE8 & 9)
+          // response and responseType properties were introduced in XHR Level2 spec (supported by IE10)
+          completeRequest(callback,
+              status || xhr.status,
+              (xhr.responseType ? xhr.response : xhr.responseText),
+              responseHeaders);
         }
       };
 
@@ -25128,20 +25907,33 @@ function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument,
         xhr.withCredentials = true;
       }
 
-      xhr.send(post || '');
-
-      if (timeout > 0) {
-        $browserDefer(function() {
-          status = -1;
-          xhr.abort();
-        }, timeout);
+      if (responseType) {
+        xhr.responseType = responseType;
       }
+
+      xhr.send(post || '');
+    }
+
+    if (timeout > 0) {
+      var timeoutId = $browserDefer(timeoutRequest, timeout);
+    } else if (timeout && timeout.then) {
+      timeout.then(timeoutRequest);
     }
 
 
+    function timeoutRequest() {
+      status = -1;
+      jsonpDone && jsonpDone();
+      xhr && xhr.abort();
+    }
+
     function completeRequest(callback, status, response, headersString) {
       // URL_MATCH is defined in src/service/location.js
-      var protocol = (url.match(URL_MATCH) || ['', locationProtocol])[1];
+      var protocol = (url.match(SERVER_MATCH) || ['', locationProtocol])[1];
+
+      // cancel timeout and subsequent timeout promise resolution
+      timeoutId && $browserDefer.cancel(timeoutId);
+      jsonpDone = xhr = null;
 
       // fix status code for file protocol (it's always 0)
       status = (protocol == 'file') ? (response ? 200 : 404) : status;
@@ -25176,6 +25968,7 @@ function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument,
     }
 
     rawDocument.body.appendChild(script);
+    return doneWrapper;
   }
 }
 
@@ -25469,6 +26262,22 @@ function $FilterProvider($provide) {
  *     called for each element of `array`. The final result is an array of those elements that
  *     the predicate returned true for.
  *
+ * @param {function(expected, actual)|true|undefined} comparator Comparator which is used in
+ *     determining if the expected value (from the filter expression) and actual value (from
+ *     the object in the array) should be considered a match.
+ *
+ *   Can be one of:
+ *
+ *     - `function(expected, actual)`:
+ *       The function will be given the object value and the predicate value to compare and
+ *       should return true if the item should be included in filtered result.
+ *
+ *     - `true`: A shorthand for `function(expected, actual) { return angular.equals(expected, actual)}`.
+ *       this is essentially strict comparison of expected and actual.
+ *
+ *     - `false|undefined`: A short hand for a function which will look for a substring match in case
+ *       insensitive way.
+ *
  * @example
    <doc:example>
      <doc:source>
@@ -25476,7 +26285,8 @@ function $FilterProvider($provide) {
                                 {name:'Mary', phone:'800-BIG-MARY'},
                                 {name:'Mike', phone:'555-4321'},
                                 {name:'Adam', phone:'555-5678'},
-                                {name:'Julie', phone:'555-8765'}]"></div>
+                                {name:'Julie', phone:'555-8765'},
+                                {name:'Juliette', phone:'555-5678'}]"></div>
 
        Search: <input ng-model="searchText">
        <table id="searchTextResults">
@@ -25490,9 +26300,10 @@ function $FilterProvider($provide) {
        Any: <input ng-model="search.$"> <br>
        Name only <input ng-model="search.name"><br>
        Phone only <input ng-model="search.phone"><br>
+       Equality <input type="checkbox" ng-model="strict"><br>
        <table id="searchObjResults">
          <tr><th>Name</th><th>Phone</th></tr>
-         <tr ng-repeat="friend in friends | filter:search">
+         <tr ng-repeat="friend in friends | filter:search:strict">
            <td>{{friend.name}}</td>
            <td>{{friend.phone}}</td>
          </tr>
@@ -25512,13 +26323,19 @@ function $FilterProvider($provide) {
        it('should search in specific fields when filtering with a predicate object', function() {
          input('search.$').enter('i');
          expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
-           toEqual(['Mary', 'Mike', 'Julie']);
+           toEqual(['Mary', 'Mike', 'Julie', 'Juliette']);
+       });
+       it('should use a equal comparison when comparator is true', function() {
+         input('search.name').enter('Julie');
+         input('strict').check();
+         expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
+           toEqual(['Julie']);
        });
      </doc:scenario>
    </doc:example>
  */
 function filterFilter() {
-  return function(array, expression) {
+  return function(array, expression, comperator) {
     if (!isArray(array)) return array;
     var predicates = [];
     predicates.check = function(value) {
@@ -25529,20 +26346,43 @@ function filterFilter() {
       }
       return true;
     };
+    switch(typeof comperator) {
+      case "function":
+        break;
+      case "boolean":
+        if(comperator == true) {
+          comperator = function(obj, text) {
+            return angular.equals(obj, text);
+          }
+          break;
+        }
+      default:
+        comperator = function(obj, text) {
+          text = (''+text).toLowerCase();
+          return (''+obj).toLowerCase().indexOf(text) > -1
+        };
+    }
     var search = function(obj, text){
-      if (text.charAt(0) === '!') {
+      if (typeof text == 'string' && text.charAt(0) === '!') {
         return !search(obj, text.substr(1));
       }
       switch (typeof obj) {
         case "boolean":
         case "number":
         case "string":
-          return ('' + obj).toLowerCase().indexOf(text) > -1;
+          return comperator(obj, text);
         case "object":
-          for ( var objKey in obj) {
-            if (objKey.charAt(0) !== '$' && search(obj[objKey], text)) {
-              return true;
-            }
+          switch (typeof text) {
+            case "object":
+              return comperator(obj, text);
+              break;
+            default:
+              for ( var objKey in obj) {
+                if (objKey.charAt(0) !== '$' && search(obj[objKey], text)) {
+                  return true;
+                }
+              }
+              break;
           }
           return false;
         case "array":
@@ -25565,19 +26405,18 @@ function filterFilter() {
         for (var key in expression) {
           if (key == '$') {
             (function() {
-              var text = (''+expression[key]).toLowerCase();
-              if (!text) return;
+              if (!expression[key]) return;
+              var path = key
               predicates.push(function(value) {
-                return search(value, text);
+                return search(value, expression[path]);
               });
             })();
           } else {
             (function() {
+              if (!expression[key]) return;
               var path = key;
-              var text = (''+expression[key]).toLowerCase();
-              if (!text) return;
               predicates.push(function(value) {
-                return search(getter(value, path), text);
+                return search(getter(value,path), expression[path]);
               });
             })();
           }
@@ -25843,6 +26682,9 @@ var DATE_FORMATS = {
      m: dateGetter('Minutes', 1),
     ss: dateGetter('Seconds', 2),
      s: dateGetter('Seconds', 1),
+     // while ISO 8601 requires fractions to be prefixed with `.` or `,` 
+     // we can be just safely rely on using `sss` since we currently don't support single or two digit fractions
+   sss: dateGetter('Milliseconds', 3),
   EEEE: dateStrGetter('Day'),
    EEE: dateStrGetter('Day', true),
      a: ampmGetter,
@@ -25881,6 +26723,7 @@ var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZE']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+
  *   * `'m'`: Minute in hour (0-59)
  *   * `'ss'`: Second in minute, padded (00-59)
  *   * `'s'`: Second in minute (0-59)
+ *   * `'.sss' or ',sss'`: Millisecond in second, padded (000-999)
  *   * `'a'`: am/pm marker
  *   * `'Z'`: 4 digit (+sign) representation of the timezone offset (-1200-+1200)
  *
@@ -25937,18 +26780,26 @@ function dateFilter($locale) {
 
 
   var R_ISO8601_STR = /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
-  function jsonStringToDate(string){
+                     // 1        2       3         4          5          6          7          8  9     10      11
+  function jsonStringToDate(string) {
     var match;
     if (match = string.match(R_ISO8601_STR)) {
       var date = new Date(0),
           tzHour = 0,
-          tzMin  = 0;
+          tzMin  = 0,
+          dateSetter = match[8] ? date.setUTCFullYear : date.setFullYear,
+          timeSetter = match[8] ? date.setUTCHours : date.setHours;
+
       if (match[9]) {
         tzHour = int(match[9] + match[10]);
         tzMin = int(match[9] + match[11]);
       }
-      date.setUTCFullYear(int(match[1]), int(match[2]) - 1, int(match[3]));
-      date.setUTCHours(int(match[4]||0) - tzHour, int(match[5]||0) - tzMin, int(match[6]||0), int(match[7]||0));
+      dateSetter.call(date, int(match[1]), int(match[2]) - 1, int(match[3]));
+      var h = int(match[4]||0) - tzHour;
+      var m = int(match[5]||0) - tzMin
+      var s = int(match[6]||0);
+      var ms = Math.round(parseFloat('0.' + (match[7]||0)) * 1000);
+      timeSetter.call(date, h, m, s, ms);
       return date;
     }
     return string;
@@ -26062,20 +26913,20 @@ var uppercaseFilter = valueFn(uppercase);
  * @function
  *
  * @description
- * Creates a new array containing only a specified number of elements in an array. The elements
- * are taken from either the beginning or the end of the source array, as specified by the
- * value and sign (positive or negative) of `limit`.
+ * Creates a new array or string containing only a specified number of elements. The elements
+ * are taken from either the beginning or the end of the source array or string, as specified by
+ * the value and sign (positive or negative) of `limit`.
  *
  * Note: This function is used to augment the `Array` type in Angular expressions. See
  * {@link ng.$filter} for more information about Angular arrays.
  *
- * @param {Array} array Source array to be limited.
- * @param {string|Number} limit The length of the returned array. If the `limit` number is
- *     positive, `limit` number of items from the beginning of the source array are copied.
- *     If the number is negative, `limit` number  of items from the end of the source array are
- *     copied. The `limit` will be trimmed if it exceeds `array.length`
- * @returns {Array} A new sub-array of length `limit` or less if input array had less than `limit`
- *     elements.
+ * @param {Array|string} input Source array or string to be limited.
+ * @param {string|number} limit The length of the returned array or string. If the `limit` number 
+ *     is positive, `limit` number of items from the beginning of the source array/string are copied.
+ *     If the number is negative, `limit` number  of items from the end of the source array/string 
+ *     are copied. The `limit` will be trimmed if it exceeds `array.length`
+ * @returns {Array|string} A new sub-array or substring of length `limit` or less if input array
+ *     had less than `limit` elements.
  *
  * @example
    <doc:example>
@@ -26083,59 +26934,76 @@ var uppercaseFilter = valueFn(uppercase);
        <script>
          function Ctrl($scope) {
            $scope.numbers = [1,2,3,4,5,6,7,8,9];
-           $scope.limit = 3;
+           $scope.letters = "abcdefghi";
+           $scope.numLimit = 3;
+           $scope.letterLimit = 3;
          }
        </script>
        <div ng-controller="Ctrl">
-         Limit {{numbers}} to: <input type="integer" ng-model="limit">
-         <p>Output: {{ numbers | limitTo:limit }}</p>
+         Limit {{numbers}} to: <input type="integer" ng-model="numLimit">
+         <p>Output numbers: {{ numbers | limitTo:numLimit }}</p>
+         Limit {{letters}} to: <input type="integer" ng-model="letterLimit">
+         <p>Output letters: {{ letters | limitTo:letterLimit }}</p>
        </div>
      </doc:source>
      <doc:scenario>
-       it('should limit the numer array to first three items', function() {
-         expect(element('.doc-example-live input[ng-model=limit]').val()).toBe('3');
-         expect(binding('numbers | limitTo:limit')).toEqual('[1,2,3]');
+       it('should limit the number array to first three items', function() {
+         expect(element('.doc-example-live input[ng-model=numLimit]').val()).toBe('3');
+         expect(element('.doc-example-live input[ng-model=letterLimit]').val()).toBe('3');
+         expect(binding('numbers | limitTo:numLimit')).toEqual('[1,2,3]');
+         expect(binding('letters | limitTo:letterLimit')).toEqual('abc');
        });
 
        it('should update the output when -3 is entered', function() {
-         input('limit').enter(-3);
-         expect(binding('numbers | limitTo:limit')).toEqual('[7,8,9]');
+         input('numLimit').enter(-3);
+         input('letterLimit').enter(-3);
+         expect(binding('numbers | limitTo:numLimit')).toEqual('[7,8,9]');
+         expect(binding('letters | limitTo:letterLimit')).toEqual('ghi');
        });
 
        it('should not exceed the maximum size of input array', function() {
-         input('limit').enter(100);
-         expect(binding('numbers | limitTo:limit')).toEqual('[1,2,3,4,5,6,7,8,9]');
+         input('numLimit').enter(100);
+         input('letterLimit').enter(100);
+         expect(binding('numbers | limitTo:numLimit')).toEqual('[1,2,3,4,5,6,7,8,9]');
+         expect(binding('letters | limitTo:letterLimit')).toEqual('abcdefghi');
        });
      </doc:scenario>
    </doc:example>
  */
 function limitToFilter(){
-  return function(array, limit) {
-    if (!(array instanceof Array)) return array;
+  return function(input, limit) {
+    if (!isArray(input) && !isString(input)) return input;
+    
     limit = int(limit);
+
+    if (isString(input)) {
+      //NaN check on limit
+      if (limit) {
+        return limit >= 0 ? input.slice(0, limit) : input.slice(limit, input.length);
+      } else {
+        return "";
+      }
+    }
+
     var out = [],
       i, n;
 
-    // check that array is iterable
-    if (!array || !(array instanceof Array))
-      return out;
-
     // if abs(limit) exceeds maximum length, trim it
-    if (limit > array.length)
-      limit = array.length;
-    else if (limit < -array.length)
-      limit = -array.length;
+    if (limit > input.length)
+      limit = input.length;
+    else if (limit < -input.length)
+      limit = -input.length;
 
     if (limit > 0) {
       i = 0;
       n = limit;
     } else {
-      i = array.length + limit;
-      n = array.length;
+      i = input.length + limit;
+      n = input.length;
     }
 
     for (; i<n; i++) {
-      out.push(array[i]);
+      out.push(input[i]);
     }
 
     return out;
@@ -26151,7 +27019,7 @@ function limitToFilter(){
  * Orders a specified `array` by the `expression` predicate.
  *
  * Note: this function is used to augment the `Array` type in Angular expressions. See
- * {@link ng.$filter} for more informaton about Angular arrays.
+ * {@link ng.$filter} for more information about Angular arrays.
  *
  * @param {Array} array The array to sort.
  * @param {function(*)|string|Array.<(function(*)|string)>} expression A predicate to be
@@ -26438,6 +27306,31 @@ var htmlAnchorDirective = valueFn({
 
 /**
  * @ngdoc directive
+ * @name ng.directive:ngSrcset
+ * @restrict A
+ *
+ * @description
+ * Using Angular markup like `{{hash}}` in a `srcset` attribute doesn't
+ * work right: The browser will fetch from the URL with the literal
+ * text `{{hash}}` until Angular replaces the expression inside
+ * `{{hash}}`. The `ngSrcset` directive solves this problem.
+ *
+ * The buggy way to write it:
+ * <pre>
+ * <img srcset="http://www.gravatar.com/avatar/{{hash}} 2x"/>
+ * </pre>
+ *
+ * The correct way to write it:
+ * <pre>
+ * <img ng-srcset="http://www.gravatar.com/avatar/{{hash}} 2x"/>
+ * </pre>
+ *
+ * @element IMG
+ * @param {template} ngSrcset any string which can contain `{{}}` markup.
+ */
+
+/**
+ * @ngdoc directive
  * @name ng.directive:ngDisabled
  * @restrict A
  *
@@ -26603,6 +27496,37 @@ var htmlAnchorDirective = valueFn({
  * @param {string} expression Angular expression that will be evaluated.
  */
 
+/**
+ * @ngdoc directive
+ * @name ng.directive:ngOpen
+ * @restrict A
+ *
+ * @description
+ * The HTML specs do not require browsers to preserve the special attributes such as open.
+ * (The presence of them means true and absence means false)
+ * This prevents the angular compiler from correctly retrieving the binding expression.
+ * To solve this problem, we introduce the `ngOpen` directive.
+ *
+ * @example
+     <doc:example>
+       <doc:source>
+         Check me check multiple: <input type="checkbox" ng-model="open"><br/>
+         <details id="details" ng-open="open">
+            <summary>Show/Hide me</summary>
+         </details>
+       </doc:source>
+       <doc:scenario>
+         it('should toggle open', function() {
+           expect(element('#details').prop('open')).toBeFalsy();
+           input('open').check();
+           expect(element('#details').prop('open')).toBeTruthy();
+         });
+       </doc:scenario>
+     </doc:example>
+ *
+ * @element DETAILS
+ * @param {string} expression Angular expression that will be evaluated.
+ */
 
 var ngAttributeAliasDirectives = {};
 
@@ -26625,8 +27549,8 @@ forEach(BOOLEAN_ATTR, function(propName, attrName) {
 });
 
 
-// ng-src, ng-href are interpolated
-forEach(['src', 'href'], function(attrName) {
+// ng-src, ng-srcset, ng-href are interpolated
+forEach(['src', 'srcset', 'href'], function(attrName) {
   var normalized = directiveNormalize('ng-' + attrName);
   ngAttributeAliasDirectives[normalized] = function() {
     return {
@@ -26653,7 +27577,8 @@ var nullFormCtrl = {
   $addControl: noop,
   $removeControl: noop,
   $setValidity: noop,
-  $setDirty: noop
+  $setDirty: noop,
+  $setPristine: noop
 };
 
 /**
@@ -26685,7 +27610,8 @@ function FormController(element, attrs) {
   var form = this,
       parentForm = element.parent().controller('form') || nullFormCtrl,
       invalidCount = 0, // used to easily determine if we are valid
-      errors = form.$error = {};
+      errors = form.$error = {},
+      controls = [];
 
   // init state
   form.$name = attrs.name;
@@ -26709,6 +27635,8 @@ function FormController(element, attrs) {
   }
 
   form.$addControl = function(control) {
+    controls.push(control);
+
     if (control.$name && !form.hasOwnProperty(control.$name)) {
       form[control.$name] = control;
     }
@@ -26721,6 +27649,8 @@ function FormController(element, attrs) {
     forEach(errors, function(queue, validationToken) {
       form.$setValidity(validationToken, true, control);
     });
+
+    arrayRemove(controls, control);
   };
 
   form.$setValidity = function(validationToken, isValid, control) {
@@ -26768,6 +27698,29 @@ function FormController(element, attrs) {
     parentForm.$setDirty();
   };
 
+  /**
+   * @ngdoc function
+   * @name ng.directive:form.FormController#$setPristine
+   * @methodOf ng.directive:form.FormController
+   *
+   * @description
+   * Sets the form to its pristine state.
+   *
+   * This method can be called to remove the 'ng-dirty' class and set the form to its pristine
+   * state (ng-pristine class). This method will also propagate to all the controls contained
+   * in this form.
+   *
+   * Setting a form back to a pristine state is often useful when we want to 'reuse' a form after
+   * saving or resetting it.
+   */
+  form.$setPristine = function () {
+    element.removeClass(DIRTY_CLASS).addClass(PRISTINE_CLASS);
+    form.$dirty = false;
+    form.$pristine = true;
+    forEach(controls, function(control) {
+      control.$setPristine();
+    });
+  };
 }
 
 
@@ -26964,6 +27917,8 @@ var inputType = {
    *    patterns defined as scope expressions.
    * @param {string=} ngChange Angular expression to be executed when input changes due to user
    *    interaction with the input element.
+   * @param {boolean=} [ngTrim=true] If set to false Angular will not automatically trimming the
+   *    input.
    *
    * @example
       <doc:example>
@@ -26971,12 +27926,12 @@ var inputType = {
          <script>
            function Ctrl($scope) {
              $scope.text = 'guest';
-             $scope.word = /^\w*$/;
+             $scope.word = /^\s*\w*\s*$/;
            }
          </script>
          <form name="myForm" ng-controller="Ctrl">
            Single word: <input type="text" name="input" ng-model="text"
-                               ng-pattern="word" required>
+                               ng-pattern="word" required ng-trim="false">
            <span class="error" ng-show="myForm.input.$error.required">
              Required!</span>
            <span class="error" ng-show="myForm.input.$error.pattern">
@@ -27004,6 +27959,12 @@ var inputType = {
           it('should be invalid if multi word', function() {
             input('text').enter('hello world');
             expect(binding('myForm.input.$valid')).toEqual('false');
+          });
+
+          it('should not be trimmed', function() {
+            input('text').enter('untrimmed ');
+            expect(binding('text')).toEqual('untrimmed ');
+            expect(binding('myForm.input.$valid')).toEqual('true');
           });
         </doc:scenario>
       </doc:example>
@@ -27318,7 +28279,14 @@ function isEmpty(value) {
 function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
 
   var listener = function() {
-    var value = trim(element.val());
+    var value = element.val();
+
+    // By default we will trim the value
+    // If the attribute ng-trim exists we will avoid trimming
+    // e.g. <input ng-model="foo" ng-trim="false">
+    if (toBoolean(attr.ngTrim || 'T')) {
+      value = trim(value);
+    }
 
     if (ctrl.$viewValue !== value) {
       scope.$apply(function() {
@@ -27369,7 +28337,8 @@ function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
 
   // pattern validator
   var pattern = attr.ngPattern,
-      patternValidator;
+      patternValidator,
+      match;
 
   var validate = function(regexp, value) {
     if (isEmpty(value) || regexp.test(value)) {
@@ -27382,8 +28351,9 @@ function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
   };
 
   if (pattern) {
-    if (pattern.match(/^\/(.*)\/$/)) {
-      pattern = new RegExp(pattern.substr(1, pattern.length - 2));
+    match = pattern.match(/^\/(.*)\/([gim]*)$/);
+    if (match) {
+      pattern = new RegExp(match[1], match[2]);
       patternValidator = function(value) {
         return validate(pattern, value)
       };
@@ -27735,7 +28705,7 @@ var VALID_CLASS = 'ng-valid',
  * @property {Array.<Function>} $formatters Whenever the model value changes, it executes all of
  *     these functions to convert the value as well as validate.
  *
- * @property {Object} $error An bject hash with all errors as keys.
+ * @property {Object} $error An object hash with all errors as keys.
  *
  * @property {boolean} $pristine True if user has not interacted with the control yet.
  * @property {boolean} $dirty True if user has already interacted with the control.
@@ -27908,6 +28878,22 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
     parentForm.$setValidity(validationErrorKey, isValid, this);
   };
 
+  /**
+   * @ngdoc function
+   * @name ng.directive:ngModel.NgModelController#$setPristine
+   * @methodOf ng.directive:ngModel.NgModelController
+   *
+   * @description
+   * Sets the control to its pristine state.
+   *
+   * This method can be called to remove the 'ng-dirty' class and set the control to its pristine
+   * state (ng-pristine class).
+   */
+  this.$setPristine = function () {
+    this.$dirty = false;
+    this.$pristine = true;
+    $element.removeClass(DIRTY_CLASS).addClass(PRISTINE_CLASS);
+  };
 
   /**
    * @ngdoc function
@@ -28565,7 +29551,7 @@ var ngClassEvenDirective = classDirective('Even', 1);
  * directive to avoid the undesirable flicker effect caused by the html template display.
  *
  * The directive can be applied to the `<body>` element, but typically a fine-grained application is
- * prefered in order to benefit from progressive rendering of the browser view.
+ * preferred in order to benefit from progressive rendering of the browser view.
  *
  * `ngCloak` works in cooperation with a css rule that is embedded within `angular.js` and
  *  `angular.min.js` files. Following is the css rule:
@@ -28636,7 +29622,8 @@ var ngCloakDirective = ngDirective({
  * @scope
  * @param {expression} ngController Name of a globally accessible constructor function or an
  *     {@link guide/expression expression} that on the current scope evaluates to a
- *     constructor function.
+ *     constructor function. The controller instance can further be published into the scope
+ *     by adding `as localName` the controller name attribute.
  *
  * @example
  * Here is a simple form for editing user contact information. Adding, removing, clearing, and
@@ -28644,8 +29631,75 @@ var ngCloakDirective = ngDirective({
  * easily be called from the angular markup. Notice that the scope becomes the `this` for the
  * controller's instance. This allows for easy access to the view data from the controller. Also
  * notice that any changes to the data are automatically reflected in the View without the need
- * for a manual update.
+ * for a manual update. The example is included in two different declaration styles based on
+ * your style preferences.
    <doc:example>
+     <doc:source>
+      <script>
+        function SettingsController() {
+          this.name = "John Smith";
+          this.contacts = [
+            {type: 'phone', value: '408 555 1212'},
+            {type: 'email', value: 'john.smith@example.org'} ];
+          };
+
+        SettingsController.prototype.greet = function() {
+          alert(this.name);
+        };
+
+        SettingsController.prototype.addContact = function() {
+          this.contacts.push({type: 'email', value: 'yourname@example.org'});
+        };
+
+        SettingsController.prototype.removeContact = function(contactToRemove) {
+         var index = this.contacts.indexOf(contactToRemove);
+          this.contacts.splice(index, 1);
+        };
+
+        SettingsController.prototype.clearContact = function(contact) {
+          contact.type = 'phone';
+          contact.value = '';
+        };
+      </script>
+      <div ng-controller="SettingsController as settings">
+        Name: <input type="text" ng-model="settings.name"/>
+        [ <a href="" ng-click="settings.greet()">greet</a> ]<br/>
+        Contact:
+        <ul>
+          <li ng-repeat="contact in settings.contacts">
+            <select ng-model="contact.type">
+               <option>phone</option>
+               <option>email</option>
+            </select>
+            <input type="text" ng-model="contact.value"/>
+            [ <a href="" ng-click="settings.clearContact(contact)">clear</a>
+            | <a href="" ng-click="settings.removeContact(contact)">X</a> ]
+          </li>
+          <li>[ <a href="" ng-click="settings.addContact()">add</a> ]</li>
+       </ul>
+      </div>
+     </doc:source>
+     <doc:scenario>
+       it('should check controller', function() {
+         expect(element('.doc-example-live div>:input').val()).toBe('John Smith');
+         expect(element('.doc-example-live li:nth-child(1) input').val())
+           .toBe('408 555 1212');
+         expect(element('.doc-example-live li:nth-child(2) input').val())
+           .toBe('john.smith@example.org');
+
+         element('.doc-example-live li:first a:contains("clear")').click();
+         expect(element('.doc-example-live li:first input').val()).toBe('');
+
+         element('.doc-example-live li:last a:contains("add")').click();
+         expect(element('.doc-example-live li:nth-child(3) input').val())
+           .toBe('yourname@example.org');
+       });
+     </doc:scenario>
+   </doc:example>
+
+
+
+    <doc:example>
      <doc:source>
       <script>
         function SettingsController($scope) {
@@ -28708,6 +29762,7 @@ var ngCloakDirective = ngDirective({
        });
      </doc:scenario>
    </doc:example>
+
  */
 var ngControllerDirective = [function() {
   return {
@@ -28795,7 +29850,7 @@ var ngCspDirective = ['$sniffer', function($sniffer) {
  */
 var ngEventDirectives = {};
 forEach(
-  'click dblclick mousedown mouseup mouseover mouseout mousemove mouseenter mouseleave'.split(' '),
+  'click dblclick mousedown mouseup mouseover mouseout mousemove mouseenter mouseleave keydown keyup keypress'.split(' '),
   function(name) {
     var directiveName = directiveNormalize('ng-' + name);
     ngEventDirectives[directiveName] = ['$parse', function($parse) {
@@ -28924,6 +29979,54 @@ forEach(
 
 /**
  * @ngdoc directive
+ * @name ng.directive:ngKeydown
+ *
+ * @description
+ * Specify custom behavior on keydown event.
+ *
+ * @element ANY
+ * @param {expression} ngKeydown {@link guide/expression Expression} to evaluate upon
+ * keydown. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
+ *
+ * @example
+ * See {@link ng.directive:ngClick ngClick}
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ng.directive:ngKeyup
+ *
+ * @description
+ * Specify custom behavior on keyup event.
+ *
+ * @element ANY
+ * @param {expression} ngKeyup {@link guide/expression Expression} to evaluate upon
+ * keyup. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
+ *
+ * @example
+ * See {@link ng.directive:ngClick ngClick}
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ng.directive:ngKeypress
+ *
+ * @description
+ * Specify custom behavior on keypress event.
+ *
+ * @element ANY
+ * @param {expression} ngKeypress {@link guide/expression Expression} to evaluate upon
+ * keypress. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
+ *
+ * @example
+ * See {@link ng.directive:ngClick ngClick}
+ */
+
+
+/**
+ * @ngdoc directive
  * @name ng.directive:ngSubmit
  *
  * @description
@@ -28981,6 +30084,114 @@ var ngSubmitDirective = ngDirective(function(scope, element, attrs) {
 
 /**
  * @ngdoc directive
+ * @name ng.directive:ngIf
+ * @restrict A
+ *
+ * @description
+ * The `ngIf` directive removes and recreates a portion of the DOM tree (HTML)
+ * conditionally based on **"falsy"** and **"truthy"** values, respectively, evaluated within
+ * an {expression}. In other words, if the expression assigned to **ngIf evaluates to a false
+ * value** then **the element is removed from the DOM** and **if true** then **a clone of the
+ * element is reinserted into the DOM**.
+ *
+ * `ngIf` differs from `ngShow` and `ngHide` in that `ngIf` completely removes and recreates the
+ * element in the DOM rather than changing its visibility via the `display` css property.  A common
+ * case when this difference is significant is when using css selectors that rely on an element's
+ * position within the DOM (HTML), such as the `:first-child` or `:last-child` pseudo-classes.
+ *
+ * Note that **when an element is removed using ngIf its scope is destroyed** and **a new scope
+ * is created when the element is restored**.  The scope created within `ngIf` inherits from 
+ * its parent scope using
+ * {@link https://github.com/angular/angular.js/wiki/The-Nuances-of-Scope-Prototypal-Inheritance prototypal inheritance}.
+ * An important implication of this is if `ngModel` is used within `ngIf` to bind to
+ * a javascript primitive defined in the parent scope. In this case any modifications made to the
+ * variable within the child scope will override (hide) the value in the parent scope.
+ *
+ * Also, `ngIf` recreates elements using their compiled state. An example scenario of this behavior
+ * is if an element's class attribute is directly modified after it's compiled, using something like 
+ * jQuery's `.addClass()` method, and the element is later removed. When `ngIf` recreates the element
+ * the added class will be lost because the original compiled state is used to regenerate the element.
+ *
+ * Additionally, you can provide animations via the ngAnimate attribute to animate the **enter**
+ * and **leave** effects.
+ *
+ * @animations
+ * enter - happens just after the ngIf contents change and a new DOM element is created and injected into the ngIf container
+ * leave - happens just before the ngIf contents are removed from the DOM
+ *
+ * @element ANY
+ * @scope
+ * @param {expression} ngIf If the {@link guide/expression expression} is falsy then
+ *     the element is removed from the DOM tree (HTML).
+ *
+ * @example
+  <example animations="true">
+    <file name="index.html">
+      Click me: <input type="checkbox" ng-model="checked" ng-init="checked=true" /><br/>
+      Show when checked:
+      <span ng-if="checked" ng-animate="'example'">
+        I'm removed when the checkbox is unchecked.
+      </span>
+    </file>
+    <file name="animations.css">
+      .example-leave, .example-enter {
+        -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -ms-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+      }
+
+      .example-enter {
+        opacity:0;
+      }
+      .example-enter.example-enter-active {
+        opacity:1;
+      }
+
+      .example-leave {
+        opacity:1;
+      }
+      .example-leave.example-leave-active {
+        opacity:0;
+      }
+    </file>
+  </example>
+ */
+var ngIfDirective = ['$animator', function($animator) {
+  return {
+    transclude: 'element',
+    priority: 1000,
+    terminal: true,
+    restrict: 'A',
+    compile: function (element, attr, transclude) {
+      return function ($scope, $element, $attr) {
+        var animate = $animator($scope, $attr);
+        var childElement, childScope;
+        $scope.$watch($attr.ngIf, function ngIfWatchAction(value) {
+          if (childElement) {
+            animate.leave(childElement);
+            childElement = undefined;
+          }
+          if (childScope) {
+            childScope.$destroy();
+            childScope = undefined;
+          }
+          if (toBoolean(value)) {
+            childScope = $scope.$new();
+            transclude(childScope, function (clone) {
+              childElement = clone;
+              animate.enter(clone, $element.parent(), $element);
+            });
+          }
+        });
+      }
+    }
+  }
+}];
+
+/**
+ * @ngdoc directive
  * @name ng.directive:ngInclude
  * @restrict ECA
  *
@@ -28990,6 +30201,13 @@ var ngSubmitDirective = ngDirective(function(scope, element, attrs) {
  * Keep in mind that Same Origin Policy applies to included resources
  * (e.g. ngInclude won't work for cross-domain requests on all browsers and for
  *  file:// access on some browsers).
+ *
+ * Additionally, you can also provide animations via the ngAnimate attribute to animate the **enter**
+ * and **leave** effects.
+ *
+ * @animations
+ * enter - happens just after the ngInclude contents change and a new DOM element is created and injected into the ngInclude container
+ * leave - happens just after the ngInclude contents change and just before the former contents are removed from the DOM
  *
  * @scope
  *
@@ -29005,7 +30223,7 @@ var ngSubmitDirective = ngDirective(function(scope, element, attrs) {
  *                  - Otherwise enable scrolling only if the expression evaluates to truthy value.
  *
  * @example
-  <example>
+  <example animations="true">
     <file name="index.html">
      <div ng-controller="Ctrl">
        <select ng-model="template" ng-options="t.name for t in templates">
@@ -29013,7 +30231,9 @@ var ngSubmitDirective = ngDirective(function(scope, element, attrs) {
        </select>
        url of the template: <tt>{{template.url}}</tt>
        <hr/>
-       <div ng-include src="template.url"></div>
+       <div class="example-animate-container"
+            ng-include="template.url"
+            ng-animate="{enter: 'example-enter', leave: 'example-leave'}"></div>
      </div>
     </file>
     <file name="script.js">
@@ -29025,10 +30245,45 @@ var ngSubmitDirective = ngDirective(function(scope, element, attrs) {
       }
      </file>
     <file name="template1.html">
-      Content of template1.html
+      <div>Content of template1.html</div>
     </file>
     <file name="template2.html">
-      Content of template2.html
+      <div>Content of template2.html</div>
+    </file>
+    <file name="animations.css">
+      .example-leave,
+      .example-enter {
+        -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -ms-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+      }
+
+      .example-animate-container > * {
+        display:block;
+        padding:10px;
+      }
+
+      .example-enter {
+        top:-50px;
+      }
+      .example-enter.example-enter-active {
+        top:0;
+      }
+
+      .example-leave {
+        top:0;
+      }
+      .example-leave.example-leave-active {
+        top:50px;
+      }
     </file>
     <file name="scenario.js">
       it('should load template1.html', function() {
@@ -29051,14 +30306,24 @@ var ngSubmitDirective = ngDirective(function(scope, element, attrs) {
 
 /**
  * @ngdoc event
+ * @name ng.directive:ngInclude#$includeContentRequested
+ * @eventOf ng.directive:ngInclude
+ * @eventType emit on the scope ngInclude was declared in
+ * @description
+ * Emitted every time the ngInclude content is requested.
+ */
+
+
+/**
+ * @ngdoc event
  * @name ng.directive:ngInclude#$includeContentLoaded
  * @eventOf ng.directive:ngInclude
  * @eventType emit on the current ngInclude scope
  * @description
  * Emitted every time the ngInclude content is reloaded.
  */
-var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile',
-                  function($http,   $templateCache,   $anchorScroll,   $compile) {
+var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile', '$animator',
+                  function($http,   $templateCache,   $anchorScroll,   $compile,   $animator) {
   return {
     restrict: 'ECA',
     terminal: true,
@@ -29067,7 +30332,8 @@ var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile'
           onloadExp = attr.onload || '',
           autoScrollExp = attr.autoscroll;
 
-      return function(scope, element) {
+      return function(scope, element, attr) {
+        var animate = $animator(scope, attr);
         var changeCounter = 0,
             childScope;
 
@@ -29076,8 +30342,7 @@ var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile'
             childScope.$destroy();
             childScope = null;
           }
-
-          element.html('');
+          animate.leave(element.contents(), element);
         };
 
         scope.$watch(srcExp, function ngIncludeWatchAction(src) {
@@ -29089,9 +30354,12 @@ var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile'
 
               if (childScope) childScope.$destroy();
               childScope = scope.$new();
+              animate.leave(element.contents(), element);
 
-              element.html(response);
-              $compile(element.contents())(childScope);
+              var contents = jqLite('<div/>').html(response).contents();
+
+              animate.enter(contents, element);
+              $compile(contents)(childScope);
 
               if (isDefined(autoScrollExp) && (!autoScrollExp || scope.$eval(autoScrollExp))) {
                 $anchorScroll();
@@ -29102,7 +30370,10 @@ var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile'
             }).error(function() {
               if (thisChangeId === changeCounter) clearContent();
             });
-          } else clearContent();
+            scope.$emit('$includeContentRequested');
+          } else {
+            clearContent();
+          }
         });
       };
     }
@@ -29196,7 +30467,7 @@ var ngNonBindableDirective = ngDirective({ terminal: true, priority: 1000 });
  * {@link http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
  * plural categories} in Angular's default en-US locale: "one" and "other".
  *
- * While a pural category may match many numbers (for example, in en-US locale, "other" can match
+ * While a plural category may match many numbers (for example, in en-US locale, "other" can match
  * any number that is not 1), an explicit number rule can only match one number. For example, the
  * explicit number rule for "3" matches the number 3. You will see the use of plural categories
  * and explicit number rules throughout later parts of this documentation.
@@ -29264,7 +30535,7 @@ var ngNonBindableDirective = ngDirective({ terminal: true, priority: 1000 });
  * plural categories "one" and "other".
  *
  * @param {string|expression} count The variable to be bounded to.
- * @param {string} when The mapping between plural category to its correspoding strings.
+ * @param {string} when The mapping between plural category to its corresponding strings.
  * @param {number=} offset Offset to deduct from the total number.
  *
  * @example
@@ -29399,11 +30670,18 @@ var ngPluralizeDirective = ['$locale', '$interpolate', function($locale, $interp
  *   * `$middle` – `{boolean}` – true if the repeated element is between the first and last in the iterator.
  *   * `$last` – `{boolean}` – true if the repeated element is last in the iterator.
  *
+ * Additionally, you can also provide animations via the ngAnimate attribute to animate the **enter**,
+ * **leave** and **move** effects.
+ *
+ * @animations
+ * enter - when a new item is added to the list or when an item is revealed after a filter
+ * leave - when an item is removed from the list or when an item is filtered out
+ * move - when an adjacent item is filtered out causing a reorder or when the item contents are reordered
  *
  * @element ANY
  * @scope
  * @priority 1000
- * @param {repeat_expression} ngRepeat The expression indicating how to enumerate a collection. Two
+ * @param {repeat_expression} ngRepeat The expression indicating how to enumerate a collection. These
  *   formats are currently supported:
  *
  *   * `variable in expression` – where variable is the user defined loop variable and `expression`
@@ -29416,160 +30694,281 @@ var ngPluralizeDirective = ['$locale', '$interpolate', function($locale, $interp
  *
  *     For example: `(name, age) in {'adam':10, 'amalie':12}`.
  *
+ *   * `variable in expression track by tracking_expression` – You can also provide an optional tracking function
+ *     which can be used to associate the objects in the collection with the DOM elements. If no tractking function
+ *     is specified the ng-repeat associates elements by identity in the collection. It is an error to have
+ *     more then one tractking function to  resolve to the same key. (This would mean that two distinct objects are
+ *     mapped to the same DOM element, which is not possible.)
+ *
+ *     For example: `item in items` is equivalent to `item in items track by $id(item)'. This implies that the DOM elements
+ *     will be associated by item identity in the array.
+ *
+ *     For example: `item in items track by $id(item)`. A built in `$id()` function can be used to assign a unique
+ *     `$$hashKey` property to each item in the array. This property is then used as a key to associated DOM elements
+ *     with the corresponding item in the array by identity. Moving the same object in array would move the DOM
+ *     element in the same way ian the DOM.
+ *
+ *     For example: `item in items track by item.id` Is a typical pattern when the items come from the database. In this
+ *     case the object identity does not matter. Two objects are considered equivalent as long as their `id`
+ *     property is same.
+ *
  * @example
  * This example initializes the scope to a list of names and
  * then uses `ngRepeat` to display every person:
-    <doc:example>
-      <doc:source>
-        <div ng-init="friends = [{name:'John', age:25}, {name:'Mary', age:28}]">
-          I have {{friends.length}} friends. They are:
-          <ul>
-            <li ng-repeat="friend in friends">
-              [{{$index + 1}}] {{friend.name}} who is {{friend.age}} years old.
-            </li>
-          </ul>
-        </div>
-      </doc:source>
-      <doc:scenario>
-         it('should check ng-repeat', function() {
-           var r = using('.doc-example-live').repeater('ul li');
-           expect(r.count()).toBe(2);
-           expect(r.row(0)).toEqual(["1","John","25"]);
-           expect(r.row(1)).toEqual(["2","Mary","28"]);
-         });
-      </doc:scenario>
-    </doc:example>
+  <example animations="true">
+    <file name="index.html">
+      <div ng-init="friends = [
+        {name:'John', age:25, gender:'boy'},
+        {name:'Jessie', age:30, gender:'girl'},
+        {name:'Johanna', age:28, gender:'girl'},
+        {name:'Joy', age:15, gender:'girl'},
+        {name:'Mary', age:28, gender:'girl'},
+        {name:'Peter', age:95, gender:'boy'},
+        {name:'Sebastian', age:50, gender:'boy'},
+        {name:'Erika', age:27, gender:'girl'},
+        {name:'Patrick', age:40, gender:'boy'},
+        {name:'Samantha', age:60, gender:'girl'}
+      ]">
+        I have {{friends.length}} friends. They are:
+        <input type="search" ng-model="q" placeholder="filter friends..." />
+        <ul>
+          <li ng-repeat="friend in friends | filter:q"
+              ng-animate="{enter: 'example-repeat-enter',
+                          leave: 'example-repeat-leave',
+                          move: 'example-repeat-move'}">
+            [{{$index + 1}}] {{friend.name}} who is {{friend.age}} years old.
+          </li>
+        </ul>
+      </div>
+    </file>
+    <file name="animations.css">
+      .example-repeat-enter,
+      .example-repeat-leave,
+      .example-repeat-move {
+        -webkit-transition:all linear 0.5s;
+        -moz-transition:all linear 0.5s;
+        -ms-transition:all linear 0.5s;
+        -o-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+      }
+
+      .example-repeat-enter {
+        line-height:0;
+        opacity:0;
+      }
+      .example-repeat-enter.example-repeat-enter-active {
+        line-height:20px;
+        opacity:1;
+      }
+
+      .example-repeat-leave {
+        opacity:1;
+        line-height:20px;
+      }
+      .example-repeat-leave.example-repeat-leave-active {
+        opacity:0;
+        line-height:0;
+      }
+
+      .example-repeat-move { }
+      .example-repeat-move.example-repeat-move-active { }
+    </file>
+    <file name="scenario.js">
+       it('should render initial data set', function() {
+         var r = using('.doc-example-live').repeater('ul li');
+         expect(r.count()).toBe(10);
+         expect(r.row(0)).toEqual(["1","John","25"]);
+         expect(r.row(1)).toEqual(["2","Jessie","30"]);
+         expect(r.row(9)).toEqual(["10","Samantha","60"]);
+         expect(binding('friends.length')).toBe("10");
+       });
+
+       it('should update repeater when filter predicate changes', function() {
+         var r = using('.doc-example-live').repeater('ul li');
+         expect(r.count()).toBe(10);
+
+         input('q').enter('ma');
+
+         expect(r.count()).toBe(2);
+         expect(r.row(0)).toEqual(["1","Mary","28"]);
+         expect(r.row(1)).toEqual(["2","Samantha","60"]);
+       });
+      </file>
+    </example>
  */
-var ngRepeatDirective = ngDirective({
-  transclude: 'element',
-  priority: 1000,
-  terminal: true,
-  compile: function(element, attr, linker) {
-    return function(scope, iterStartElement, attr){
-      var expression = attr.ngRepeat;
-      var match = expression.match(/^\s*(.+)\s+in\s+(.*)\s*$/),
-        lhs, rhs, valueIdent, keyIdent;
-      if (! match) {
-        throw Error("Expected ngRepeat in form of '_item_ in _collection_' but got '" +
-          expression + "'.");
-      }
-      lhs = match[1];
-      rhs = match[2];
-      match = lhs.match(/^(?:([\$\w]+)|\(([\$\w]+)\s*,\s*([\$\w]+)\))$/);
-      if (!match) {
-        throw Error("'item' in 'item in collection' should be identifier or (key, value) but got '" +
-            lhs + "'.");
-      }
-      valueIdent = match[3] || match[1];
-      keyIdent = match[2];
+var ngRepeatDirective = ['$parse', '$animator', function($parse, $animator) {
+  var NG_REMOVED = '$$NG_REMOVED';
+  return {
+    transclude: 'element',
+    priority: 1000,
+    terminal: true,
+    compile: function(element, attr, linker) {
+      return function($scope, $element, $attr){
+        var animate = $animator($scope, $attr);
+        var expression = $attr.ngRepeat;
+        var match = expression.match(/^\s*(.+)\s+in\s+(.*?)\s*(\s+track\s+by\s+(.+)\s*)?$/),
+          trackByExp, trackByExpGetter, trackByIdFn, lhs, rhs, valueIdentifier, keyIdentifier,
+          hashFnLocals = {$id: hashKey};
 
-      // Store a list of elements from previous run. This is a hash where key is the item from the
-      // iterator, and the value is an array of objects with following properties.
-      //   - scope: bound scope
-      //   - element: previous element.
-      //   - index: position
-      // We need an array of these objects since the same object can be returned from the iterator.
-      // We expect this to be a rare case.
-      var lastOrder = new HashQueueMap();
+        if (!match) {
+          throw Error("Expected ngRepeat in form of '_item_ in _collection_[ track by _id_]' but got '" +
+            expression + "'.");
+        }
 
-      scope.$watch(function ngRepeatWatch(scope){
-        var index, length,
-            collection = scope.$eval(rhs),
-            cursor = iterStartElement,     // current position of the node
-            // Same as lastOrder but it has the current state. It will become the
-            // lastOrder on the next iteration.
-            nextOrder = new HashQueueMap(),
-            arrayBound,
-            childScope,
-            key, value, // key/value of iteration
-            array,
-            last;       // last object information {scope, element, index}
+        lhs = match[1];
+        rhs = match[2];
+        trackByExp = match[4];
 
-
-
-        if (!isArray(collection)) {
-          // if object, extract keys, sort them and use to determine order of iteration over obj props
-          array = [];
-          for(key in collection) {
-            if (collection.hasOwnProperty(key) && key.charAt(0) != '$') {
-              array.push(key);
-            }
-          }
-          array.sort();
+        if (trackByExp) {
+          trackByExpGetter = $parse(trackByExp);
+          trackByIdFn = function(key, value, index) {
+            // assign key, value, and $index to the locals so that they can be used in hash functions
+            if (keyIdentifier) hashFnLocals[keyIdentifier] = key;
+            hashFnLocals[valueIdentifier] = value;
+            hashFnLocals.$index = index;
+            return trackByExpGetter($scope, hashFnLocals);
+          };
         } else {
-          array = collection || [];
+          trackByIdFn = function(key, value) {
+            return hashKey(value);
+          }
         }
 
-        arrayBound = array.length-1;
+        match = lhs.match(/^(?:([\$\w]+)|\(([\$\w]+)\s*,\s*([\$\w]+)\))$/);
+        if (!match) {
+          throw Error("'item' in 'item in collection' should be identifier or (key, value) but got '" +
+              lhs + "'.");
+        }
+        valueIdentifier = match[3] || match[1];
+        keyIdentifier = match[2];
 
-        // we are not using forEach for perf reasons (trying to avoid #call)
-        for (index = 0, length = array.length; index < length; index++) {
-          key = (collection === array) ? index : array[index];
-          value = collection[key];
+        // Store a list of elements from previous run. This is a hash where key is the item from the
+        // iterator, and the value is objects with following properties.
+        //   - scope: bound scope
+        //   - element: previous element.
+        //   - index: position
+        var lastBlockMap = {};
 
-          last = lastOrder.shift(value);
+        //watch props
+        $scope.$watchCollection(rhs, function ngRepeatAction(collection){
+          var index, length,
+              cursor = $element,     // current position of the node
+              nextCursor,
+              // Same as lastBlockMap but it has the current state. It will become the
+              // lastBlockMap on the next iteration.
+              nextBlockMap = {},
+              arrayLength,
+              childScope,
+              key, value, // key/value of iteration
+              trackById,
+              collectionKeys,
+              block,       // last object information {scope, element, id}
+              nextBlockOrder = [];
 
-          if (last) {
-            // if we have already seen this object, then we need to reuse the
-            // associated scope/element
-            childScope = last.scope;
-            nextOrder.push(value, last);
 
-            if (index === last.index) {
-              // do nothing
-              cursor = last.element;
-            } else {
-              // existing item which got moved
-              last.index = index;
-              // This may be a noop, if the element is next, but I don't know of a good way to
-              // figure this out,  since it would require extra DOM access, so let's just hope that
-              // the browsers realizes that it is noop, and treats it as such.
-              cursor.after(last.element);
-              cursor = last.element;
-            }
+          if (isArrayLike(collection)) {
+            collectionKeys = collection;
           } else {
-            // new item which we don't know about
-            childScope = scope.$new();
+            // if object, extract keys, sort them and use to determine order of iteration over obj props
+            collectionKeys = [];
+            for (key in collection) {
+              if (collection.hasOwnProperty(key) && key.charAt(0) != '$') {
+                collectionKeys.push(key);
+              }
+            }
+            collectionKeys.sort();
           }
 
-          childScope[valueIdent] = value;
-          if (keyIdent) childScope[keyIdent] = key;
-          childScope.$index = index;
+          arrayLength = collectionKeys.length;
 
-          childScope.$first = (index === 0);
-          childScope.$last = (index === arrayBound);
-          childScope.$middle = !(childScope.$first || childScope.$last);
+          // locate existing items
+          length = nextBlockOrder.length = collectionKeys.length;
+          for(index = 0; index < length; index++) {
+           key = (collection === collectionKeys) ? index : collectionKeys[index];
+           value = collection[key];
+           trackById = trackByIdFn(key, value, index);
+           if(lastBlockMap.hasOwnProperty(trackById)) {
+             block = lastBlockMap[trackById]
+             delete lastBlockMap[trackById];
+             nextBlockMap[trackById] = block;
+             nextBlockOrder[index] = block;
+           } else if (nextBlockMap.hasOwnProperty(trackById)) {
+             // restore lastBlockMap
+             forEach(nextBlockOrder, function(block) {
+               if (block && block.element) lastBlockMap[block.id] = block;
+             });
+             // This is a duplicate and we need to throw an error
+             throw new Error('Duplicates in a repeater are not allowed. Repeater: ' + expression +
+                 ' key: ' + trackById);
+           } else {
+             // new never before seen block
+             nextBlockOrder[index] = { id: trackById };
+             nextBlockMap[trackById] = false;
+           }
+         }
 
-          if (!last) {
-            linker(childScope, function(clone){
-              cursor.after(clone);
-              last = {
-                  scope: childScope,
-                  element: (cursor = clone),
-                  index: index
-                };
-              nextOrder.push(value, last);
-            });
-          }
-        }
-
-        //shrink children
-        for (key in lastOrder) {
-          if (lastOrder.hasOwnProperty(key)) {
-            array = lastOrder[key];
-            while(array.length) {
-              value = array.pop();
-              value.element.remove();
-              value.scope.$destroy();
+          // remove existing items
+          for (key in lastBlockMap) {
+            if (lastBlockMap.hasOwnProperty(key)) {
+              block = lastBlockMap[key];
+              animate.leave(block.element);
+              block.element[0][NG_REMOVED] = true;
+              block.scope.$destroy();
             }
           }
-        }
 
-        lastOrder = nextOrder;
-      });
-    };
-  }
-});
+          // we are not using forEach for perf reasons (trying to avoid #call)
+          for (index = 0, length = collectionKeys.length; index < length; index++) {
+            key = (collection === collectionKeys) ? index : collectionKeys[index];
+            value = collection[key];
+            block = nextBlockOrder[index];
+
+            if (block.element) {
+              // if we have already seen this object, then we need to reuse the
+              // associated scope/element
+              childScope = block.scope;
+
+              nextCursor = cursor[0];
+              do {
+                nextCursor = nextCursor.nextSibling;
+              } while(nextCursor && nextCursor[NG_REMOVED]);
+
+              if (block.element[0] == nextCursor) {
+                // do nothing
+                cursor = block.element;
+              } else {
+                // existing item which got moved
+                animate.move(block.element, null, cursor);
+                cursor = block.element;
+              }
+            } else {
+              // new item which we don't know about
+              childScope = $scope.$new();
+            }
+
+            childScope[valueIdentifier] = value;
+            if (keyIdentifier) childScope[keyIdentifier] = key;
+            childScope.$index = index;
+            childScope.$first = (index === 0);
+            childScope.$last = (index === (arrayLength - 1));
+            childScope.$middle = !(childScope.$first || childScope.$last);
+
+            if (!block.element) {
+              linker(childScope, function(clone) {
+                animate.enter(clone, null, cursor);
+                cursor = clone;
+                block.scope = childScope;
+                block.element = clone;
+                nextBlockMap[block.id] = block;
+              });
+            }
+          }
+          lastBlockMap = nextBlockMap;
+        });
+      };
+    }
+  };
+}];
 
 /**
  * @ngdoc directive
@@ -29577,20 +30976,86 @@ var ngRepeatDirective = ngDirective({
  *
  * @description
  * The `ngShow` and `ngHide` directives show or hide a portion of the DOM tree (HTML)
- * conditionally.
+ * conditionally based on **"truthy"** values evaluated within an {expression}. In other
+ * words, if the expression assigned to **ngShow evaluates to a true value** then **the element is set to visible**
+ * (via `display:block` in css) and **if false** then **the element is set to hidden** (so display:none).
+ * With ngHide this is the reverse whereas true values cause the element itself to become
+ * hidden.
+ *
+ * Additionally, you can also provide animations via the ngAnimate attribute to animate the **show**
+ * and **hide** effects.
+ *
+ * @animations
+ * show - happens after the ngShow expression evaluates to a truthy value and the contents are set to visible
+ * hide - happens before the ngShow expression evaluates to a non truthy value and just before the contents are set to hidden
  *
  * @element ANY
  * @param {expression} ngShow If the {@link guide/expression expression} is truthy
  *     then the element is shown or hidden respectively.
  *
  * @example
-   <doc:example>
-     <doc:source>
-        Click me: <input type="checkbox" ng-model="checked"><br/>
-        Show: <span ng-show="checked">I show up when your checkbox is checked.</span> <br/>
-        Hide: <span ng-hide="checked">I hide when your checkbox is checked.</span>
-     </doc:source>
-     <doc:scenario>
+  <example animations="true">
+    <file name="index.html">
+      Click me: <input type="checkbox" ng-model="checked"><br/>
+      <div>
+        Show:
+        <span class="check-element"
+              ng-show="checked"
+              ng-animate="{show: 'example-show', hide: 'example-hide'}">
+          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
+        </span>
+      </div>
+      <div>
+        Hide:
+        <span class="check-element"
+              ng-hide="checked"
+              ng-animate="{show: 'example-show', hide: 'example-hide'}">
+          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
+        </span>
+      </div>
+    </file>
+    <file name="animations.css">
+      .example-show, .example-hide {
+        -webkit-transition:all linear 0.5s;
+        -moz-transition:all linear 0.5s;
+        -ms-transition:all linear 0.5s;
+        -o-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+      }
+
+      .example-show {
+        line-height:0;
+        opacity:0;
+        padding:0 10px;
+      }
+      .example-show-active.example-show-active {
+        line-height:20px;
+        opacity:1;
+        padding:10px;
+        border:1px solid black;
+        background:white;
+      }
+
+      .example-hide {
+        line-height:20px;
+        opacity:1;
+        padding:10px;
+        border:1px solid black;
+        background:white;
+      }
+      .example-hide-active.example-hide-active {
+        line-height:0;
+        opacity:0;
+        padding:0 10px;
+      }
+
+      .check-element {
+        padding:10px;
+        border:1px solid black;
+        background:white;
+      }
+    </file>
+    <file name="scenario.js">
        it('should check ng-show / ng-hide', function() {
          expect(element('.doc-example-live span:first:hidden').count()).toEqual(1);
          expect(element('.doc-example-live span:last:visible').count()).toEqual(1);
@@ -29600,15 +31065,18 @@ var ngRepeatDirective = ngDirective({
          expect(element('.doc-example-live span:first:visible').count()).toEqual(1);
          expect(element('.doc-example-live span:last:hidden').count()).toEqual(1);
        });
-     </doc:scenario>
-   </doc:example>
+    </file>
+  </example>
  */
 //TODO(misko): refactor to remove element from the DOM
-var ngShowDirective = ngDirective(function(scope, element, attr){
-  scope.$watch(attr.ngShow, function ngShowWatchAction(value){
-    element.css('display', toBoolean(value) ? '' : 'none');
-  });
-});
+var ngShowDirective = ['$animator', function($animator) {
+  return function(scope, element, attr) {
+    var animate = $animator(scope, attr);
+    scope.$watch(attr.ngShow, function ngShowWatchAction(value){
+      animate[toBoolean(value) ? 'show' : 'hide'](element);
+    });
+  };
+}];
 
 
 /**
@@ -29616,39 +31084,108 @@ var ngShowDirective = ngDirective(function(scope, element, attr){
  * @name ng.directive:ngHide
  *
  * @description
- * The `ngHide` and `ngShow` directives hide or show a portion of the DOM tree (HTML)
- * conditionally.
+ * The `ngShow` and `ngHide` directives show or hide a portion of the DOM tree (HTML)
+ * conditionally based on **"truthy"** values evaluated within an {expression}. In other
+ * words, if the expression assigned to **ngShow evaluates to a true value** then **the element is set to visible**
+ * (via `display:block` in css) and **if false** then **the element is set to hidden** (so display:none).
+ * With ngHide this is the reverse whereas true values cause the element itself to become
+ * hidden.
+ *
+ * Additionally, you can also provide animations via the ngAnimate attribute to animate the **show**
+ * and **hide** effects.
+ *
+ * @animations
+ * show - happens after the ngHide expression evaluates to a non truthy value and the contents are set to visible
+ * hide - happens after the ngHide expression evaluates to a truthy value and just before the contents are set to hidden
  *
  * @element ANY
  * @param {expression} ngHide If the {@link guide/expression expression} is truthy then
  *     the element is shown or hidden respectively.
  *
  * @example
-   <doc:example>
-     <doc:source>
-        Click me: <input type="checkbox" ng-model="checked"><br/>
-        Show: <span ng-show="checked">I show up when you checkbox is checked?</span> <br/>
-        Hide: <span ng-hide="checked">I hide when you checkbox is checked?</span>
-     </doc:source>
-     <doc:scenario>
+  <example animations="true">
+    <file name="index.html">
+      Click me: <input type="checkbox" ng-model="checked"><br/>
+      <div>
+        Show:
+        <span class="check-element"
+              ng-show="checked"
+              ng-animate="{show: 'example-show', hide: 'example-hide'}">
+          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
+        </span>
+      </div>
+      <div>
+        Hide:
+        <span class="check-element"
+              ng-hide="checked"
+              ng-animate="{show: 'example-show', hide: 'example-hide'}">
+          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
+        </span>
+      </div>
+    </file>
+    <file name="animations.css">
+      .example-show, .example-hide {
+        -webkit-transition:all linear 0.5s;
+        -moz-transition:all linear 0.5s;
+        -ms-transition:all linear 0.5s;
+        -o-transition:all linear 0.5s;
+        transition:all linear 0.5s;
+      }
+
+      .example-show {
+        line-height:0;
+        opacity:0;
+        padding:0 10px;
+      }
+      .example-show.example-show-active {
+        line-height:20px;
+        opacity:1;
+        padding:10px;
+        border:1px solid black;
+        background:white;
+      }
+
+      .example-hide {
+        line-height:20px;
+        opacity:1;
+        padding:10px;
+        border:1px solid black;
+        background:white;
+      }
+      .example-hide.example-hide-active {
+        line-height:0;
+        opacity:0;
+        padding:0 10px;
+      }
+
+      .check-element {
+        padding:10px;
+        border:1px solid black;
+        background:white;
+      }
+    </file>
+    <file name="scenario.js">
        it('should check ng-show / ng-hide', function() {
-         expect(element('.doc-example-live span:first:hidden').count()).toEqual(1);
-         expect(element('.doc-example-live span:last:visible').count()).toEqual(1);
+         expect(element('.doc-example-live .check-element:first:hidden').count()).toEqual(1);
+         expect(element('.doc-example-live .check-element:last:visible').count()).toEqual(1);
 
          input('checked').check();
 
-         expect(element('.doc-example-live span:first:visible').count()).toEqual(1);
-         expect(element('.doc-example-live span:last:hidden').count()).toEqual(1);
+         expect(element('.doc-example-live .check-element:first:visible').count()).toEqual(1);
+         expect(element('.doc-example-live .check-element:last:hidden').count()).toEqual(1);
        });
-     </doc:scenario>
-   </doc:example>
+    </file>
+  </example>
  */
 //TODO(misko): refactor to remove element from the DOM
-var ngHideDirective = ngDirective(function(scope, element, attr){
-  scope.$watch(attr.ngHide, function ngHideWatchAction(value){
-    element.css('display', toBoolean(value) ? 'none' : '');
-  });
-});
+var ngHideDirective = ['$animator', function($animator) {
+  return function(scope, element, attr) {
+    var animate = $animator(scope, attr);
+    scope.$watch(attr.ngHide, function ngHideWatchAction(value){
+      animate[toBoolean(value) ? 'hide' : 'show'](element);
+    });
+  };
+}];
 
 /**
  * @ngdoc directive
@@ -29702,92 +31239,161 @@ var ngStyleDirective = ngDirective(function(scope, element, attr) {
  * @restrict EA
  *
  * @description
- * Conditionally change the DOM structure.
+ * The ngSwitch directive is used to conditionally swap DOM structure on your template based on a scope expression.
+ * Elements within ngSwitch but without ngSwitchWhen or ngSwitchDefault directives will be preserved at the location
+ * as specified in the template.
+ *
+ * The directive itself works similar to ngInclude, however, instead of downloading template code (or loading it
+ * from the template cache), ngSwitch simply choses one of the nested elements and makes it visible based on which element
+ * matches the value obtained from the evaluated expression. In other words, you define a container element
+ * (where you place the directive), place an expression on the **on="..." attribute**
+ * (or the **ng-switch="..." attribute**), define any inner elements inside of the directive and place
+ * a when attribute per element. The when attribute is used to inform ngSwitch which element to display when the on
+ * expression is evaluated. If a matching expression is not found via a when attribute then an element with the default
+ * attribute is displayed.
+ *
+ * Additionally, you can also provide animations via the ngAnimate attribute to animate the **enter**
+ * and **leave** effects.
+ *
+ * @animations
+ * enter - happens after the ngSwtich contents change and the matched child element is placed inside the container
+ * leave - happens just after the ngSwitch contents change and just before the former contents are removed from the DOM
  *
  * @usage
  * <ANY ng-switch="expression">
  *   <ANY ng-switch-when="matchValue1">...</ANY>
  *   <ANY ng-switch-when="matchValue2">...</ANY>
- *   ...
  *   <ANY ng-switch-default>...</ANY>
  * </ANY>
  *
  * @scope
  * @param {*} ngSwitch|on expression to match against <tt>ng-switch-when</tt>.
  * @paramDescription
- * On child elments add:
+ * On child elements add:
  *
  * * `ngSwitchWhen`: the case statement to match against. If match then this
- *   case will be displayed.
- * * `ngSwitchDefault`: the default case when no other casses match.
+ *   case will be displayed. If the same match appears multiple times, all the
+ *   elements will be displayed.
+ * * `ngSwitchDefault`: the default case when no other case match. If there
+ *   are multiple default cases, all of them will be displayed when no other
+ *   case match.
+ *
  *
  * @example
-    <doc:example>
-      <doc:source>
-        <script>
-          function Ctrl($scope) {
-            $scope.items = ['settings', 'home', 'other'];
-            $scope.selection = $scope.items[0];
-          }
-        </script>
-        <div ng-controller="Ctrl">
-          <select ng-model="selection" ng-options="item for item in items">
-          </select>
-          <tt>selection={{selection}}</tt>
-          <hr/>
-          <div ng-switch on="selection" >
+  <example animations="true">
+    <file name="index.html">
+      <div ng-controller="Ctrl">
+        <select ng-model="selection" ng-options="item for item in items">
+        </select>
+        <tt>selection={{selection}}</tt>
+        <hr/>
+        <div
+          class="example-animate-container"
+          ng-switch on="selection"
+          ng-animate="{enter: 'example-enter', leave: 'example-leave'}">
             <div ng-switch-when="settings">Settings Div</div>
-            <span ng-switch-when="home">Home Span</span>
-            <span ng-switch-default>default</span>
-          </div>
+            <div ng-switch-when="home">Home Span</div>
+            <div ng-switch-default>default</div>
         </div>
-      </doc:source>
-      <doc:scenario>
-        it('should start in settings', function() {
-         expect(element('.doc-example-live [ng-switch]').text()).toMatch(/Settings Div/);
-        });
-        it('should change to home', function() {
-         select('selection').option('home');
-         expect(element('.doc-example-live [ng-switch]').text()).toMatch(/Home Span/);
-        });
-        it('should select deafault', function() {
-         select('selection').option('other');
-         expect(element('.doc-example-live [ng-switch]').text()).toMatch(/default/);
-        });
-      </doc:scenario>
-    </doc:example>
- */
-var NG_SWITCH = 'ng-switch';
-var ngSwitchDirective = valueFn({
-  restrict: 'EA',
-  require: 'ngSwitch',
-  // asks for $scope to fool the BC controller module
-  controller: ['$scope', function ngSwitchController() {
-    this.cases = {};
-  }],
-  link: function(scope, element, attr, ctrl) {
-    var watchExpr = attr.ngSwitch || attr.on,
-        selectedTransclude,
-        selectedElement,
-        selectedScope;
+      </div>
+    </file>
+    <file name="script.js">
+      function Ctrl($scope) {
+        $scope.items = ['settings', 'home', 'other'];
+        $scope.selection = $scope.items[0];
+      }
+    </file>
+    <file name="animations.css">
+      .example-leave, .example-enter {
+        -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -ms-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 
-    scope.$watch(watchExpr, function ngSwitchWatchAction(value) {
-      if (selectedElement) {
-        selectedScope.$destroy();
-        selectedElement.remove();
-        selectedElement = selectedScope = null;
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
       }
-      if ((selectedTransclude = ctrl.cases['!' + value] || ctrl.cases['?'])) {
-        scope.$eval(attr.change);
-        selectedScope = scope.$new();
-        selectedTransclude(selectedScope, function(caseElement) {
-          selectedElement = caseElement;
-          element.append(caseElement);
-        });
+
+      .example-animate-container > * {
+        display:block;
+        padding:10px;
       }
-    });
+
+      .example-enter {
+        top:-50px;
+      }
+      .example-enter.example-enter-active {
+        top:0;
+      }
+
+      .example-leave {
+        top:0;
+      }
+      .example-leave.example-leave-active {
+        top:50px;
+      }
+    </file>
+    <file name="scenario.js">
+      it('should start in settings', function() {
+        expect(element('.doc-example-live [ng-switch]').text()).toMatch(/Settings Div/);
+      });
+      it('should change to home', function() {
+        select('selection').option('home');
+        expect(element('.doc-example-live [ng-switch]').text()).toMatch(/Home Span/);
+      });
+      it('should select default', function() {
+        select('selection').option('other');
+        expect(element('.doc-example-live [ng-switch]').text()).toMatch(/default/);
+      });
+    </file>
+  </example>
+ */
+var ngSwitchDirective = ['$animator', function($animator) {
+  return {
+    restrict: 'EA',
+    require: 'ngSwitch',
+
+    // asks for $scope to fool the BC controller module
+    controller: ['$scope', function ngSwitchController() {
+     this.cases = {};
+    }],
+    link: function(scope, element, attr, ngSwitchController) {
+      var animate = $animator(scope, attr);
+      var watchExpr = attr.ngSwitch || attr.on,
+          selectedTranscludes,
+          selectedElements,
+          selectedScopes = [];
+
+      scope.$watch(watchExpr, function ngSwitchWatchAction(value) {
+        for (var i= 0, ii=selectedScopes.length; i<ii; i++) {
+          selectedScopes[i].$destroy();
+          animate.leave(selectedElements[i]);
+        }
+
+        selectedElements = [];
+        selectedScopes = [];
+
+        if ((selectedTranscludes = ngSwitchController.cases['!' + value] || ngSwitchController.cases['?'])) {
+          scope.$eval(attr.change);
+          forEach(selectedTranscludes, function(selectedTransclude) {
+            var selectedScope = scope.$new();
+            selectedScopes.push(selectedScope);
+            selectedTransclude.transclude(selectedScope, function(caseElement) {
+              var anchor = selectedTransclude.element;
+
+              selectedElements.push(caseElement);
+              animate.enter(caseElement, anchor.parent(), anchor);
+            });
+          });
+        }
+      });
+    }
   }
-});
+}];
 
 var ngSwitchWhenDirective = ngDirective({
   transclude: 'element',
@@ -29795,7 +31401,8 @@ var ngSwitchWhenDirective = ngDirective({
   require: '^ngSwitch',
   compile: function(element, attrs, transclude) {
     return function(scope, element, attr, ctrl) {
-      ctrl.cases['!' + attrs.ngSwitchWhen] = transclude;
+      ctrl.cases['!' + attrs.ngSwitchWhen] = (ctrl.cases['!' + attrs.ngSwitchWhen] || []);
+      ctrl.cases['!' + attrs.ngSwitchWhen].push({ transclude: transclude, element: element });
     };
   }
 });
@@ -29806,7 +31413,8 @@ var ngSwitchDefaultDirective = ngDirective({
   require: '^ngSwitch',
   compile: function(element, attrs, transclude) {
     return function(scope, element, attr, ctrl) {
-      ctrl.cases['?'] = transclude;
+      ctrl.cases['?'] = (ctrl.cases['?'] || []);
+      ctrl.cases['?'].push({ transclude: transclude, element: element });
     };
   }
 });
@@ -29880,11 +31488,18 @@ var ngTranscludeDirective = ngDirective({
  * Every time the current route changes, the included view changes with it according to the
  * configuration of the `$route` service.
  *
+ * Additionally, you can also provide animations via the ngAnimate attribute to animate the **enter**
+ * and **leave** effects.
+ *
+ * @animations
+ * enter - happens just after the ngView contents are changed (when the new view DOM element is inserted into the DOM)
+ * leave - happens just after the current ngView contents change and just before the former contents are removed from the DOM
+ *
  * @scope
  * @example
-    <example module="ngView">
+    <example module="ngView" animations="true">
       <file name="index.html">
-        <div ng-controller="MainCntl">
+        <div ng-controller="MainCntl as main">
           Choose:
           <a href="Book/Moby">Moby</a> |
           <a href="Book/Moby/ch/1">Moby: Ch1</a> |
@@ -29892,57 +31507,106 @@ var ngTranscludeDirective = ngDirective({
           <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
           <a href="Book/Scarlet">Scarlet Letter</a><br/>
 
-          <div ng-view></div>
+          <div
+            ng-view
+            class="example-animate-container"
+            ng-animate="{enter: 'example-enter', leave: 'example-leave'}"></div>
           <hr />
 
-          <pre>$location.path() = {{$location.path()}}</pre>
-          <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
-          <pre>$route.current.params = {{$route.current.params}}</pre>
-          <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-          <pre>$routeParams = {{$routeParams}}</pre>
+          <pre>$location.path() = {{main.$location.path()}}</pre>
+          <pre>$route.current.templateUrl = {{main.$route.current.templateUrl}}</pre>
+          <pre>$route.current.params = {{main.$route.current.params}}</pre>
+          <pre>$route.current.scope.name = {{main.$route.current.scope.name}}</pre>
+          <pre>$routeParams = {{main.$routeParams}}</pre>
         </div>
       </file>
 
       <file name="book.html">
-        controller: {{name}}<br />
-        Book Id: {{params.bookId}}<br />
+        <div>
+          controller: {{book.name}}<br />
+          Book Id: {{book.params.bookId}}<br />
+        </div>
       </file>
 
       <file name="chapter.html">
-        controller: {{name}}<br />
-        Book Id: {{params.bookId}}<br />
-        Chapter Id: {{params.chapterId}}
+        <div>
+          controller: {{chapter.name}}<br />
+          Book Id: {{chapter.params.bookId}}<br />
+          Chapter Id: {{chapter.params.chapterId}}
+        </div>
+      </file>
+
+      <file name="animations.css">
+        .example-leave, .example-enter {
+          -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+          -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+          -ms-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+          -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+          transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+        }
+
+        .example-animate-container {
+          position:relative;
+          height:100px;
+        }
+
+        .example-animate-container > * {
+          display:block;
+          width:100%;
+          border-left:1px solid black;
+
+          position:absolute;
+          top:0;
+          left:0;
+          right:0;
+          bottom:0;
+          padding:10px;
+        }
+
+        .example-enter {
+          left:100%;
+        }
+        .example-enter.example-enter-active {
+          left:0;
+        }
+
+        .example-leave { }
+        .example-leave.example-leave-active {
+          left:-100%;
+        }
       </file>
 
       <file name="script.js">
         angular.module('ngView', [], function($routeProvider, $locationProvider) {
           $routeProvider.when('/Book/:bookId', {
             templateUrl: 'book.html',
-            controller: BookCntl
+            controller: BookCntl,
+            controllerAs: 'book'
           });
           $routeProvider.when('/Book/:bookId/ch/:chapterId', {
             templateUrl: 'chapter.html',
-            controller: ChapterCntl
+            controller: ChapterCntl,
+            controllerAs: 'chapter'
           });
 
           // configure html5 to get links working on jsfiddle
           $locationProvider.html5Mode(true);
         });
 
-        function MainCntl($scope, $route, $routeParams, $location) {
-          $scope.$route = $route;
-          $scope.$location = $location;
-          $scope.$routeParams = $routeParams;
+        function MainCntl($route, $routeParams, $location) {
+          this.$route = $route;
+          this.$location = $location;
+          this.$routeParams = $routeParams;
         }
 
-        function BookCntl($scope, $routeParams) {
-          $scope.name = "BookCntl";
-          $scope.params = $routeParams;
+        function BookCntl($routeParams) {
+          this.name = "BookCntl";
+          this.params = $routeParams;
         }
 
-        function ChapterCntl($scope, $routeParams) {
-          $scope.name = "ChapterCntl";
-          $scope.params = $routeParams;
+        function ChapterCntl($routeParams) {
+          this.name = "ChapterCntl";
+          this.params = $routeParams;
         }
       </file>
 
@@ -29973,15 +31637,16 @@ var ngTranscludeDirective = ngDirective({
  * Emitted every time the ngView content is reloaded.
  */
 var ngViewDirective = ['$http', '$templateCache', '$route', '$anchorScroll', '$compile',
-                       '$controller',
+                       '$controller', '$animator',
                function($http,   $templateCache,   $route,   $anchorScroll,   $compile,
-                        $controller) {
+                        $controller,  $animator) {
   return {
     restrict: 'ECA',
     terminal: true,
     link: function(scope, element, attr) {
       var lastScope,
-          onloadExp = attr.onload || '';
+          onloadExp = attr.onload || '',
+          animate = $animator(scope, attr);
 
       scope.$on('$routeChangeSuccess', update);
       update();
@@ -29995,7 +31660,7 @@ var ngViewDirective = ['$http', '$templateCache', '$route', '$anchorScroll', '$c
       }
 
       function clearContent() {
-        element.html('');
+        animate.leave(element.contents(), element);
         destroyLastScope();
       }
 
@@ -30004,10 +31669,11 @@ var ngViewDirective = ['$http', '$templateCache', '$route', '$anchorScroll', '$c
             template = locals && locals.$template;
 
         if (template) {
-          element.html(template);
-          destroyLastScope();
+          clearContent();
+          var enterElements = jqLite('<div></div>').html(template).contents();
+          animate.enter(enterElements, element);
 
-          var link = $compile(element.contents()),
+          var link = $compile(enterElements),
               current = $route.current,
               controller;
 
@@ -30015,6 +31681,9 @@ var ngViewDirective = ['$http', '$templateCache', '$route', '$anchorScroll', '$c
           if (current.controller) {
             locals.$scope = lastScope;
             controller = $controller(current.controller, locals);
+            if (current.controllerAs) {
+              lastScope[current.controllerAs] = controller;
+            }
             element.children().data('$ngControllerController', controller);
           }
 
@@ -30116,7 +31785,7 @@ var scriptDirective = ['$templateCache', function($templateCache) {
  *     * `label` **`for`** `value` **`in`** `array`
  *     * `select` **`as`** `label` **`for`** `value` **`in`** `array`
  *     * `label`  **`group by`** `group` **`for`** `value` **`in`** `array`
- *     * `select` **`as`** `label` **`group by`** `group` **`for`** `value` **`in`** `array`
+ *     * `select` **`as`** `label` **`group by`** `group` **`for`** `value` **`in`** `array` **`track by`** `trackexpr`
  *   * for object data sources:
  *     * `label` **`for (`**`key` **`,`** `value`**`) in`** `object`
  *     * `select` **`as`** `label` **`for (`**`key` **`,`** `value`**`) in`** `object`
@@ -30136,6 +31805,9 @@ var scriptDirective = ['$templateCache', function($templateCache) {
  *      element. If not specified, `select` expression will default to `value`.
  *   * `group`: The result of this expression will be used to group options using the `<optgroup>`
  *      DOM element.
+ *   * `trackexpr`: Used when working with an array of objects. The result of this expression will be
+ *      used to identify the objects in the array. The `trackexpr` will most likely refer to the
+ *     `value` variable (e.g. `value.propertyName`).
  *
  * @example
     <doc:example>
@@ -30200,8 +31872,8 @@ var scriptDirective = ['$templateCache', function($templateCache) {
 
 var ngOptionsDirective = valueFn({ terminal: true });
 var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
-                         //0000111110000000000022220000000000000000000000333300000000000000444444444444444440000000005555555555555555500000006666666666666666600000000000000077770
-  var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*)$/,
+                         //0000111110000000000022220000000000000000000000333300000000000000444444444444444440000000005555555555555555500000006666666666666666600000000000000007777000000000000000000088888
+  var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w\d]*)|(?:\(\s*([\$\w][\$\w\d]*)\s*,\s*([\$\w][\$\w\d]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/,
       nullModelCtrl = {$setViewValue: noop};
 
   return {
@@ -30375,7 +32047,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
 
         if (! (match = optionsExp.match(NG_OPTIONS_REGEXP))) {
           throw Error(
-            "Expected ngOptions in form of '_select_ (as _label_)? for (_key_,)?_value_ in _collection_'" +
+            "Expected ngOptions in form of '_select_ (as _label_)? for (_key_,)?_value_ in _collection_ (track by _expr_)?'" +
             " but got '" + optionsExp + "'.");
         }
 
@@ -30385,6 +32057,8 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
             groupByFn = $parse(match[3] || ''),
             valueFn = $parse(match[2] ? match[1] : valueName),
             valuesFn = $parse(match[7]),
+            track = match[8],
+            trackFn = track ? $parse(match[8]) : null,
             // This is an array of array of existing option groups in DOM. We try to reuse these if possible
             // optionGroupsCache[0] is the options with no option group
             // optionGroupsCache[?][0] is the parent: either the SELECT or OPTGROUP element
@@ -30425,7 +32099,14 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
                   if ((optionElement = optionGroup[index].element)[0].selected) {
                     key = optionElement.val();
                     if (keyName) locals[keyName] = key;
-                    locals[valueName] = collection[key];
+                    if (trackFn) {
+                      for (var trackIndex = 0; trackIndex < collection.length; trackIndex++) {
+                        locals[valueName] = collection[trackIndex];
+                        if (trackFn(scope, locals) == key) break;
+                      } 
+                    } else {
+                      locals[valueName] = collection[key];
+                    }
                     value.push(valueFn(scope, locals));
                   }
                 }
@@ -30437,9 +32118,19 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
               } else if (key == ''){
                 value = null;
               } else {
-                locals[valueName] = collection[key];
-                if (keyName) locals[keyName] = key;
-                value = valueFn(scope, locals);
+                if (trackFn) {
+                  for (var trackIndex = 0; trackIndex < collection.length; trackIndex++) {
+                    locals[valueName] = collection[trackIndex];
+                    if (trackFn(scope, locals) == key) {
+                      value = valueFn(scope, locals);
+                      break;
+                    }
+                  }
+                } else {
+                  locals[valueName] = collection[key];
+                  if (keyName) locals[keyName] = key;
+                  value = valueFn(scope, locals);
+                }
               }
             }
             ctrl.$setViewValue(value);
@@ -30471,7 +32162,15 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
               label;
 
           if (multiple) {
-            selectedSet = new HashMap(modelValue);
+            if (trackFn && isArray(modelValue)) {
+              selectedSet = new HashMap([]);
+              for (var trackIndex = 0; trackIndex < modelValue.length; trackIndex++) {
+                locals[valueName] = modelValue[trackIndex];
+                selectedSet.put(trackFn(scope, locals), modelValue[trackIndex]);
+              }
+            } else {
+              selectedSet = new HashMap(modelValue);
+            }
           }
 
           // We now build up the list of options we need (we merge later)
@@ -30483,15 +32182,21 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
               optionGroupNames.push(optionGroupName);
             }
             if (multiple) {
-              selected = selectedSet.remove(valueFn(scope, locals)) != undefined;
+              selected = selectedSet.remove(trackFn ? trackFn(scope, locals) : valueFn(scope, locals)) != undefined;
             } else {
-              selected = modelValue === valueFn(scope, locals);
+              if (trackFn) {
+                var modelCast = {};
+                modelCast[valueName] = modelValue;
+                selected = trackFn(scope, modelCast) === trackFn(scope, locals);
+              } else {
+                selected = modelValue === valueFn(scope, locals);
+              }
               selectedSet = selectedSet || selected; // see if at least one item is selected
             }
             label = displayFn(scope, locals); // what will be seen by the user
             label = label === undefined ? '' : label; // doing displayFn(scope, locals) || '' overwrites zero values
             optionGroup.push({
-              id: keyName ? keys[index] : index,   // either the index into array or key from object
+              id: trackFn ? trackFn(scope, locals) : (keyName ? keys[index] : index),   // either the index into array or key from object
               label: label,
               selected: selected                   // determine if we should be selected
             });
@@ -30665,7 +32370,7 @@ var styleDirective = valueFn({
 })(window, document);
 angular.element(document).find('head').append('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\\:form{display:block;}</style>');
 ;/**
- * @license AngularJS v1.0.7
+ * @license AngularJS v1.1.5
  * (c) 2010-2012 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -30691,7 +32396,7 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
  * the need to interact with the low level {@link ng.$http $http} service.
  *
  * # Installation
- * To use $resource make sure you have included the `angular-resource.js` that comes in Angular 
+ * To use $resource make sure you have included the `angular-resource.js` that comes in Angular
  * package. You can also find this file on Google CDN, bower as well as at
  * {@link http://code.angularjs.org/ code.angularjs.org}.
  *
@@ -30701,13 +32406,21 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
  *
  * and you are ready to get started!
  *
- * @param {string} url A parameterized URL template with parameters prefixed by `:` as in
- *   `/user/:username`. If you are using a URL with a port number (e.g. 
+ * @param {string} url A parametrized URL template with parameters prefixed by `:` as in
+ *   `/user/:username`. If you are using a URL with a port number (e.g.
  *   `http://example.com:8080/api`), you'll need to escape the colon character before the port
  *   number, like this: `$resource('http://example.com\\:8080/api')`.
  *
+ *   If you are using a url with a suffix, just add the suffix, like this: 
+ *   `$resource('http://example.com/resource.json')` or `$resource('http://example.com/:id.json')
+ *   or even `$resource('http://example.com/resource/:resource_id.:format')` 
+ *   If the parameter before the suffix is empty, :resource_id in this case, then the `/.` will be
+ *   collapsed down to a single `.`.  If you need this sequence to appear and not collapse then you
+ *   can escape it with `/\.`.
+ *
  * @param {Object=} paramDefaults Default values for `url` parameters. These can be overridden in
- *   `actions` methods.
+ *   `actions` methods. If any of the parameter value is a function, it will be executed every time
+ *   when a param value needs to be obtained for a request (unless the param was overridden).
  *
  *   Each key value in the parameter object is first bound to url template if present and then any
  *   excess keys are appended to the url search query after the `?`.
@@ -30719,21 +32432,43 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
  *   the data object (useful for non-GET operations).
  *
  * @param {Object.<Object>=} actions Hash with declaration of custom action that should extend the
- *   default set of resource actions. The declaration should be created in the following format:
+ *   default set of resource actions. The declaration should be created in the format of {@link
+ *   ng.$http#Parameters $http.config}:
  *
- *       {action1: {method:?, params:?, isArray:?},
- *        action2: {method:?, params:?, isArray:?},
+ *       {action1: {method:?, params:?, isArray:?, headers:?, ...},
+ *        action2: {method:?, params:?, isArray:?, headers:?, ...},
  *        ...}
  *
  *   Where:
  *
- *   - `action` – {string} – The name of action. This name becomes the name of the method on your
+ *   - **`action`** – {string} – The name of action. This name becomes the name of the method on your
  *     resource object.
- *   - `method` – {string} – HTTP request method. Valid methods are: `GET`, `POST`, `PUT`, `DELETE`,
- *     and `JSONP`
- *   - `params` – {object=} – Optional set of pre-bound parameters for this action.
- *   - isArray – {boolean=} – If true then the returned object for this action is an array, see
+ *   - **`method`** – {string} – HTTP request method. Valid methods are: `GET`, `POST`, `PUT`, `DELETE`,
+ *     and `JSONP`.
+ *   - **`params`** – {Object=} – Optional set of pre-bound parameters for this action. If any of the
+ *     parameter value is a function, it will be executed every time when a param value needs to be
+ *     obtained for a request (unless the param was overridden).
+ *   - **`url`** – {string} – action specific `url` override. The url templating is supported just like
+ *     for the resource-level urls.
+ *   - **`isArray`** – {boolean=} – If true then the returned object for this action is an array, see
  *     `returns` section.
+ *   - **`transformRequest`** – `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
+ *     transform function or an array of such functions. The transform function takes the http
+ *     request body and headers and returns its transformed (typically serialized) version.
+ *   - **`transformResponse`** – `{function(data, headersGetter)|Array.<function(data, headersGetter)>}` –
+ *     transform function or an array of such functions. The transform function takes the http
+ *     response body and headers and returns its transformed (typically deserialized) version.
+ *   - **`cache`** – `{boolean|Cache}` – If true, a default $http cache will be used to cache the
+ *     GET request, otherwise if a cache instance built with
+ *     {@link ng.$cacheFactory $cacheFactory}, this cache will be used for
+ *     caching.
+ *   - **`timeout`** – `{number|Promise}` – timeout in milliseconds, or {@link ng.$q promise} that
+ *     should abort the request when resolved.
+ *   - **`withCredentials`** - `{boolean}` - whether to to set the `withCredentials` flag on the
+ *     XHR object. See {@link https://developer.mozilla.org/en/http_access_control#section_5
+ *     requests with credentials} for more information.
+ *   - **`responseType`** - `{string}` - see {@link
+ *     https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#responseType requestType}.
  *
  * @returns {Object} A resource "class" object with methods for the default set of resource actions
  *   optionally extended with custom `actions`. The default set contains these actions:
@@ -30772,6 +32507,24 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
  *   - non-GET "class" actions: `Resource.action([parameters], postData, [success], [error])`
  *   - non-GET instance actions:  `instance.$action([parameters], [success], [error])`
  *
+ *
+ *   The Resource instances and collection have these additional properties:
+ *
+ *   - `$then`: the `then` method of a {@link ng.$q promise} derived from the underlying
+ *     {@link ng.$http $http} call.
+ *
+ *     The success callback for the `$then` method will be resolved if the underlying `$http` requests
+ *     succeeds.
+ *
+ *     The success callback is called with a single object which is the {@link ng.$http http response}
+ *     object extended with a new property `resource`. This `resource` property is a reference to the
+ *     result of the resource action — resource object or array of resources.
+ *
+ *     The error callback is called with the {@link ng.$http http response} object when an http
+ *     error occurs.
+ *
+ *   - `$resolved`: true if the promise has been resolved (either with success or rejection);
+ *     Knowing if the Resource has been resolved is useful in data-binding.
  *
  * @example
  *
@@ -30815,7 +32568,7 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
  * The object returned from this function execution is a resource "class" which has "static" method
  * for each action in the definition.
  *
- * Calling these methods invoke `$http` on the `url` template with the given `method` and `params`.
+ * Calling these methods invoke `$http` on the `url` template with the given `method`, `params` and `headers`.
  * When the data is returned from the server then the object is an instance of the resource type and
  * all of the non-GET methods are available with `$` prefix. This allows you to easily support CRUD
  * operations (create, read, update, delete) on server-side data.
@@ -30930,7 +32683,7 @@ angular.module('ngResource', ['ng']).
 
     /**
      * This method is intended for encoding *key* or *value* parts of query component. We need a custom
-     * method becuase encodeURIComponent is too agressive and encodes stuff that doesn't have to be
+     * method because encodeURIComponent is too aggressive and encodes stuff that doesn't have to be
      * encoded per http://tools.ietf.org/html/rfc3986:
      *    query       = *( pchar / "/" / "?" )
      *    pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
@@ -30949,32 +32702,34 @@ angular.module('ngResource', ['ng']).
     }
 
     function Route(template, defaults) {
-      this.template = template = template + '#';
+      this.template = template;
       this.defaults = defaults || {};
-      var urlParams = this.urlParams = {};
-      forEach(template.split(/\W/), function(param){
-        if (param && (new RegExp("(^|[^\\\\]):" + param + "\\W").test(template))) {
-          urlParams[param] = true;
-        }
-      });
-      this.template = template.replace(/\\:/g, ':');
+      this.urlParams = {};
     }
 
     Route.prototype = {
-      url: function(params) {
+      setUrlParams: function(config, params, actionUrl) {
         var self = this,
-            url = this.template,
+            url = actionUrl || self.template,
             val,
             encodedVal;
 
+        var urlParams = self.urlParams = {};
+        forEach(url.split(/\W/), function(param){
+          if (param && (new RegExp("(^|[^\\\\]):" + param + "(\\W|$)").test(url))) {
+              urlParams[param] = true;
+          }
+        });
+        url = url.replace(/\\:/g, ':');
+
         params = params || {};
-        forEach(this.urlParams, function(_, urlParam){
+        forEach(self.urlParams, function(_, urlParam){
           val = params.hasOwnProperty(urlParam) ? params[urlParam] : self.defaults[urlParam];
           if (angular.isDefined(val) && val !== null) {
             encodedVal = encodeUriSegment(val);
-            url = url.replace(new RegExp(":" + urlParam + "(\\W)", "g"), encodedVal + "$1");
+            url = url.replace(new RegExp(":" + urlParam + "(\\W|$)", "g"), encodedVal + "$1");
           } else {
-            url = url.replace(new RegExp("(\/?):" + urlParam + "(\\W)", "g"), function(match,
+            url = url.replace(new RegExp("(\/?):" + urlParam + "(\\W|$)", "g"), function(match,
                 leadingSlashes, tail) {
               if (tail.charAt(0) == '/') {
                 return tail;
@@ -30984,16 +32739,23 @@ angular.module('ngResource', ['ng']).
             });
           }
         });
-        url = url.replace(/\/?#$/, '');
-        var query = [];
+
+        // strip trailing slashes and set the url
+        url = url.replace(/\/+$/, '');
+        // then replace collapse `/.` if found in the last URL path segment before the query
+        // E.g. `http://url.com/id./format?q=x` becomes `http://url.com/id.format?q=x`
+        url = url.replace(/\/\.(?=\w+($|\?))/, '.');
+        // replace escaped `/\.` with `/.`
+        config.url = url.replace(/\/\\\./, '/.');
+          
+
+        // set params - delegate param encoding to $http
         forEach(params, function(value, key){
           if (!self.urlParams[key]) {
-            query.push(encodeUriQuery(key) + '=' + encodeUriQuery(value));
+            config.params = config.params || {};
+            config.params[key] = value;
           }
         });
-        query.sort();
-        url = url.replace(/\/*$/, '');
-        return url + (query.length ? '?' + query.join('&') : '');
       }
     };
 
@@ -31007,7 +32769,8 @@ angular.module('ngResource', ['ng']).
         var ids = {};
         actionParams = extend({}, paramDefaults, actionParams);
         forEach(actionParams, function(value, key){
-          ids[key] = value.charAt && value.charAt(0) == '@' ? getter(data, value.substr(1)) : value;
+          if (isFunction(value)) { value = value(); }
+          ids[key] = value && value.charAt && value.charAt(0) == '@' ? getter(data, value.substr(1)) : value;
         });
         return ids;
       }
@@ -31024,6 +32787,8 @@ angular.module('ngResource', ['ng']).
           var data;
           var success = noop;
           var error = null;
+          var promise;
+
           switch(arguments.length) {
           case 4:
             error = a4;
@@ -31059,25 +32824,45 @@ angular.module('ngResource', ['ng']).
           }
 
           var value = this instanceof Resource ? this : (action.isArray ? [] : new Resource(data));
-          $http({
-            method: action.method,
-            url: route.url(extend({}, extractParams(data, action.params || {}), params)),
-            data: data
-          }).then(function(response) {
-              var data = response.data;
+          var httpConfig = {},
+              promise;
 
-              if (data) {
-                if (action.isArray) {
-                  value.length = 0;
-                  forEach(data, function(item) {
-                    value.push(new Resource(item));
-                  });
-                } else {
-                  copy(data, value);
-                }
+          forEach(action, function(value, key) {
+            if (key != 'params' && key != 'isArray' ) {
+              httpConfig[key] = copy(value);
+            }
+          });
+          httpConfig.data = data;
+          route.setUrlParams(httpConfig, extend({}, extractParams(data, action.params || {}), params), action.url);
+
+          function markResolved() { value.$resolved = true; }
+
+          promise = $http(httpConfig);
+          value.$resolved = false;
+
+          promise.then(markResolved, markResolved);
+          value.$then = promise.then(function(response) {
+            var data = response.data;
+            var then = value.$then, resolved = value.$resolved;
+
+            if (data) {
+              if (action.isArray) {
+                value.length = 0;
+                forEach(data, function(item) {
+                  value.push(new Resource(item));
+                });
+              } else {
+                copy(data, value);
+                value.$then = then;
+                value.$resolved = resolved;
               }
-              (success||noop)(value, response.headers);
-            }, error);
+            }
+
+            (success||noop)(value, response.headers);
+
+            response.resource = value;
+            return response;
+          }, error).then;
 
           return value;
         };
@@ -32582,6 +34367,1595 @@ angular.module('ui.filters').filter('unique', function () {
         return items;
     };
 });
+;angular.module("ui.bootstrap", ["ui.bootstrap.tpls", "ui.bootstrap.position","ui.bootstrap.datepicker","ui.bootstrap.dropdownToggle","ui.bootstrap.tooltip","ui.bootstrap.popover","ui.bootstrap.timepicker","ui.bootstrap.typeahead"]);
+angular.module("ui.bootstrap.tpls", ["template/datepicker/datepicker.html","template/datepicker/popup.html","template/tooltip/tooltip-html-unsafe-popup.html","template/tooltip/tooltip-popup.html","template/popover/popover.html","template/timepicker/timepicker.html","template/typeahead/typeahead-match.html","template/typeahead/typeahead-popup.html"]);
+angular.module('ui.bootstrap.position', [])
+
+/**
+ * A set of utility methods that can be use to retrieve position of DOM elements.
+ * It is meant to be used where we need to absolute-position DOM elements in
+ * relation to other, existing elements (this is the case for tooltips, popovers,
+ * typeahead suggestions etc.).
+ */
+  .factory('$position', ['$document', '$window', function ($document, $window) {
+
+    var mouseX, mouseY;
+
+    $document.bind('mousemove', function mouseMoved(event) {
+      mouseX = event.pageX;
+      mouseY = event.pageY;
+    });
+
+    function getStyle(el, cssprop) {
+      if (el.currentStyle) { //IE
+        return el.currentStyle[cssprop];
+      } else if ($window.getComputedStyle) {
+        return $window.getComputedStyle(el)[cssprop];
+      }
+      // finally try and get inline style
+      return el.style[cssprop];
+    }
+
+    /**
+     * Checks if a given element is statically positioned
+     * @param element - raw DOM element
+     */
+    function isStaticPositioned(element) {
+      return (getStyle(element, "position") || 'static' ) === 'static';
+    }
+
+    /**
+     * returns the closest, non-statically positioned parentOffset of a given element
+     * @param element
+     */
+    var parentOffsetEl = function (element) {
+      var docDomEl = $document[0];
+      var offsetParent = element.offsetParent || docDomEl;
+      while (offsetParent && offsetParent !== docDomEl && isStaticPositioned(offsetParent) ) {
+        offsetParent = offsetParent.offsetParent;
+      }
+      return offsetParent || docDomEl;
+    };
+
+    return {
+      /**
+       * Provides read-only equivalent of jQuery's position function:
+       * http://api.jquery.com/position/
+       */
+      position: function (element) {
+        var elBCR = this.offset(element);
+        var offsetParentBCR = { top: 0, left: 0 };
+        var offsetParentEl = parentOffsetEl(element[0]);
+        if (offsetParentEl != $document[0]) {
+          offsetParentBCR = this.offset(angular.element(offsetParentEl));
+          offsetParentBCR.top += offsetParentEl.clientTop - offsetParentEl.scrollTop;
+          offsetParentBCR.left += offsetParentEl.clientLeft - offsetParentEl.scrollLeft;
+        }
+
+        return {
+          width: element.prop('offsetWidth'),
+          height: element.prop('offsetHeight'),
+          top: elBCR.top - offsetParentBCR.top,
+          left: elBCR.left - offsetParentBCR.left
+        };
+      },
+
+      /**
+       * Provides read-only equivalent of jQuery's offset function:
+       * http://api.jquery.com/offset/
+       */
+      offset: function (element) {
+        var boundingClientRect = element[0].getBoundingClientRect();
+        return {
+          width: element.prop('offsetWidth'),
+          height: element.prop('offsetHeight'),
+          top: boundingClientRect.top + ($window.pageYOffset || $document[0].body.scrollTop),
+          left: boundingClientRect.left + ($window.pageXOffset || $document[0].body.scrollLeft)
+        };
+      },
+
+      /**
+       * Provides the coordinates of the mouse
+       */
+      mouse: function () {
+        return {x: mouseX, y: mouseY};
+      }
+    };
+  }]);
+
+angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.position'])
+
+.constant('datepickerConfig', {
+  dayFormat: 'dd',
+  monthFormat: 'MMMM',
+  yearFormat: 'yyyy',
+  dayHeaderFormat: 'EEE',
+  dayTitleFormat: 'MMMM yyyy',
+  monthTitleFormat: 'yyyy',
+  showWeeks: true,
+  startingDay: 0,
+  yearRange: 20,
+  minDate: null,
+  maxDate: null
+})
+
+.controller('DatepickerController', ['$scope', '$attrs', 'dateFilter', 'datepickerConfig', function($scope, $attrs, dateFilter, dtConfig) {
+  var format = {
+    day:        getValue($attrs.dayFormat,        dtConfig.dayFormat),
+    month:      getValue($attrs.monthFormat,      dtConfig.monthFormat),
+    year:       getValue($attrs.yearFormat,       dtConfig.yearFormat),
+    dayHeader:  getValue($attrs.dayHeaderFormat,  dtConfig.dayHeaderFormat),
+    dayTitle:   getValue($attrs.dayTitleFormat,   dtConfig.dayTitleFormat),
+    monthTitle: getValue($attrs.monthTitleFormat, dtConfig.monthTitleFormat)
+  },
+  startingDay = getValue($attrs.startingDay,      dtConfig.startingDay),
+  yearRange =   getValue($attrs.yearRange,        dtConfig.yearRange);
+
+  this.minDate = dtConfig.minDate ? new Date(dtConfig.minDate) : null;
+  this.maxDate = dtConfig.maxDate ? new Date(dtConfig.maxDate) : null;
+
+  function getValue(value, defaultValue) {
+    return angular.isDefined(value) ? $scope.$parent.$eval(value) : defaultValue;
+  }
+
+  function getDaysInMonth( year, month ) {
+    return new Date(year, month, 0).getDate();
+  }
+
+  function getDates(startDate, n) {
+    var dates = new Array(n);
+    var current = startDate, i = 0;
+    while (i < n) {
+      dates[i++] = new Date(current);
+      current.setDate( current.getDate() + 1 );
+    }
+    return dates;
+  }
+
+  function makeDate(date, format, isSelected, isSecondary) {
+    return { date: date, label: dateFilter(date, format), selected: !!isSelected, secondary: !!isSecondary };
+  }
+
+  this.modes = [
+    {
+      name: 'day',
+      getVisibleDates: function(date, selected) {
+        var year = date.getFullYear(), month = date.getMonth(), firstDayOfMonth = new Date(year, month, 1);
+        var difference = startingDay - firstDayOfMonth.getDay(),
+        numDisplayedFromPreviousMonth = (difference > 0) ? 7 - difference : - difference,
+        firstDate = new Date(firstDayOfMonth), numDates = 0;
+
+        if ( numDisplayedFromPreviousMonth > 0 ) {
+          firstDate.setDate( - numDisplayedFromPreviousMonth + 1 );
+          numDates += numDisplayedFromPreviousMonth; // Previous
+        }
+        numDates += getDaysInMonth(year, month + 1); // Current
+        numDates += (7 - numDates % 7) % 7; // Next
+
+        var days = getDates(firstDate, numDates), labels = new Array(7);
+        for (var i = 0; i < numDates; i ++) {
+          var dt = new Date(days[i]);
+          days[i] = makeDate(dt, format.day, (selected && selected.getDate() === dt.getDate() && selected.getMonth() === dt.getMonth() && selected.getFullYear() === dt.getFullYear()), dt.getMonth() !== month);
+        }
+        for (var j = 0; j < 7; j++) {
+          labels[j] = dateFilter(days[j].date, format.dayHeader);
+        }
+        return { objects: days, title: dateFilter(date, format.dayTitle), labels: labels };
+      },
+      compare: function(date1, date2) {
+        return (new Date( date1.getFullYear(), date1.getMonth(), date1.getDate() ) - new Date( date2.getFullYear(), date2.getMonth(), date2.getDate() ) );
+      },
+      split: 7,
+      step: { months: 1 }
+    },
+    {
+      name: 'month',
+      getVisibleDates: function(date, selected) {
+        var months = new Array(12), year = date.getFullYear();
+        for ( var i = 0; i < 12; i++ ) {
+          var dt = new Date(year, i, 1);
+          months[i] = makeDate(dt, format.month, (selected && selected.getMonth() === i && selected.getFullYear() === year));
+        }
+        return { objects: months, title: dateFilter(date, format.monthTitle) };
+      },
+      compare: function(date1, date2) {
+        return new Date( date1.getFullYear(), date1.getMonth() ) - new Date( date2.getFullYear(), date2.getMonth() );
+      },
+      split: 3,
+      step: { years: 1 }
+    },
+    {
+      name: 'year',
+      getVisibleDates: function(date, selected) {
+        var years = new Array(yearRange), year = date.getFullYear(), startYear = parseInt((year - 1) / yearRange, 10) * yearRange + 1;
+        for ( var i = 0; i < yearRange; i++ ) {
+          var dt = new Date(startYear + i, 0, 1);
+          years[i] = makeDate(dt, format.year, (selected && selected.getFullYear() === dt.getFullYear()));
+        }
+        return { objects: years, title: [years[0].label, years[yearRange - 1].label].join(' - ') };
+      },
+      compare: function(date1, date2) {
+        return date1.getFullYear() - date2.getFullYear();
+      },
+      split: 5,
+      step: { years: yearRange }
+    }
+  ];
+
+  this.isDisabled = function(date, mode) {
+    var currentMode = this.modes[mode || 0];
+    return ((this.minDate && currentMode.compare(date, this.minDate) < 0) || (this.maxDate && currentMode.compare(date, this.maxDate) > 0) || ($scope.dateDisabled && $scope.dateDisabled({date: date, mode: currentMode.name})));
+  };
+}])
+
+.directive( 'datepicker', ['dateFilter', '$parse', 'datepickerConfig', '$log', function (dateFilter, $parse, datepickerConfig, $log) {
+  return {
+    restrict: 'EA',
+    replace: true,
+    templateUrl: 'template/datepicker/datepicker.html',
+    scope: {
+      dateDisabled: '&'
+    },
+    require: ['datepicker', '?^ngModel'],
+    controller: 'DatepickerController',
+    link: function(scope, element, attrs, ctrls) {
+      var datepickerCtrl = ctrls[0], ngModel = ctrls[1];
+
+      if (!ngModel) {
+        return; // do nothing if no ng-model
+      }
+
+      // Configuration parameters
+      var mode = 0, selected = new Date(), showWeeks = datepickerConfig.showWeeks;
+
+      if (attrs.showWeeks) {
+        scope.$parent.$watch($parse(attrs.showWeeks), function(value) {
+          showWeeks = !! value;
+          updateShowWeekNumbers();
+        });
+      } else {
+        updateShowWeekNumbers();
+      }
+
+      if (attrs.min) {
+        scope.$parent.$watch($parse(attrs.min), function(value) {
+          datepickerCtrl.minDate = value ? new Date(value) : null;
+          refill();
+        });
+      }
+      if (attrs.max) {
+        scope.$parent.$watch($parse(attrs.max), function(value) {
+          datepickerCtrl.maxDate = value ? new Date(value) : null;
+          refill();
+        });
+      }
+
+      function updateShowWeekNumbers() {
+        scope.showWeekNumbers = mode === 0 && showWeeks;
+      }
+
+      // Split array into smaller arrays
+      function split(arr, size) {
+        var arrays = [];
+        while (arr.length > 0) {
+          arrays.push(arr.splice(0, size));
+        }
+        return arrays;
+      }
+
+      function refill( updateSelected ) {
+        var date = null, valid = true;
+
+        if ( ngModel.$modelValue ) {
+          date = new Date( ngModel.$modelValue );
+
+          if ( isNaN(date) ) {
+            valid = false;
+            $log.error('Datepicker directive: "ng-model" value must be a Date object, a number of milliseconds since 01.01.1970 or a string representing an RFC2822 or ISO 8601 date.');
+          } else if ( updateSelected ) {
+            selected = date;
+          }
+        }
+        ngModel.$setValidity('date', valid);
+
+        var currentMode = datepickerCtrl.modes[mode], data = currentMode.getVisibleDates(selected, date);
+        angular.forEach(data.objects, function(obj) {
+          obj.disabled = datepickerCtrl.isDisabled(obj.date, mode);
+        });
+
+        ngModel.$setValidity('date-disabled', (!date || !datepickerCtrl.isDisabled(date)));
+
+        scope.rows = split(data.objects, currentMode.split);
+        scope.labels = data.labels || [];
+        scope.title = data.title;
+      }
+
+      function setMode(value) {
+        mode = value;
+        updateShowWeekNumbers();
+        refill();
+      }
+
+      ngModel.$render = function() {
+        refill( true );
+      };
+
+      scope.select = function( date ) {
+        if ( mode === 0 ) {
+          var dt = new Date( ngModel.$modelValue );
+          dt.setFullYear( date.getFullYear(), date.getMonth(), date.getDate() );
+          ngModel.$setViewValue( dt );
+          refill( true );
+        } else {
+          selected = date;
+          setMode( mode - 1 );
+        }
+      };
+      scope.move = function(direction) {
+        var step = datepickerCtrl.modes[mode].step;
+        selected.setMonth( selected.getMonth() + direction * (step.months || 0) );
+        selected.setFullYear( selected.getFullYear() + direction * (step.years || 0) );
+        refill();
+      };
+      scope.toggleMode = function() {
+        setMode( (mode + 1) % datepickerCtrl.modes.length );
+      };
+      scope.getWeekNumber = function(row) {
+        return ( mode === 0 && scope.showWeekNumbers && row.length === 7 ) ? getISO8601WeekNumber(row[0].date) : null;
+      };
+
+      function getISO8601WeekNumber(date) {
+        var checkDate = new Date(date);
+        checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7)); // Thursday
+        var time = checkDate.getTime();
+        checkDate.setMonth(0); // Compare with Jan 1
+        checkDate.setDate(1);
+        return Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 1;
+      }
+    }
+  };
+}])
+
+.constant('datepickerPopupConfig', {
+  dateFormat: 'yyyy-MM-dd',
+  closeOnDateSelection: true
+})
+
+.directive('datepickerPopup', ['$compile', '$parse', '$document', '$position', 'dateFilter', 'datepickerPopupConfig',
+function ($compile, $parse, $document, $position, dateFilter, datepickerPopupConfig) {
+  return {
+    restrict: 'EA',
+    require: 'ngModel',
+    link: function(originalScope, element, attrs, ngModel) {
+
+      var closeOnDateSelection = angular.isDefined(attrs.closeOnDateSelection) ? scope.$eval(attrs.closeOnDateSelection) : datepickerPopupConfig.closeOnDateSelection;
+      var dateFormat = attrs.datepickerPopup || datepickerPopupConfig.dateFormat;
+
+     // create a child scope for the datepicker directive so we are not polluting original scope
+      var scope = originalScope.$new();
+      originalScope.$on('$destroy', function() {
+        scope.$destroy();
+      });
+
+      function formatDate(value) {
+        return (value) ? dateFilter(value, dateFormat) : null;
+      }
+      ngModel.$formatters.push(formatDate);
+
+      // TODO: reverse from dateFilter string to Date object
+      function parseDate(value) {
+        if ( value ) {
+          var date = new Date(value);
+          if (!isNaN(date)) {
+            return date;
+          }
+        }
+        return value;
+      }
+      ngModel.$parsers.push(parseDate);
+
+      var getIsOpen, setIsOpen;
+      if ( attrs.open ) {
+        getIsOpen = $parse(attrs.open);
+        setIsOpen = getIsOpen.assign;
+
+        originalScope.$watch(getIsOpen, function updateOpen(value) {
+          scope.isOpen = !! value;
+        });
+      }
+      scope.isOpen = getIsOpen ? getIsOpen(originalScope) : false; // Initial state
+
+      function setOpen( value ) {
+        if (setIsOpen) {
+          setIsOpen(originalScope, !!value);
+        } else {
+          scope.isOpen = !!value;
+        }
+      }
+
+      var documentClickBind = function(event) {
+        if (scope.isOpen && event.target !== element[0]) {
+          scope.$apply(function() {
+            setOpen(false);
+          });
+        }
+      };
+
+      var elementFocusBind = function() {
+        scope.$apply(function() {
+          setOpen( true );
+        });
+      };
+
+      // popup element used to display calendar
+      var popupEl = angular.element('<datepicker-popup-wrap><datepicker></datepicker></datepicker-popup-wrap>');
+      popupEl.attr({
+        'ng-model': 'date',
+        'ng-change': 'dateSelection()'
+      });
+      var datepickerEl = popupEl.find('datepicker');
+      if (attrs.datepickerOptions) {
+        datepickerEl.attr(angular.extend({}, originalScope.$eval(attrs.datepickerOptions)));
+      }
+
+      var $setModelValue = $parse(attrs.ngModel).assign;
+
+      // Inner change
+      scope.dateSelection = function() {
+        $setModelValue(originalScope, scope.date);
+        if (closeOnDateSelection) {
+          setOpen( false );
+        }
+      };
+
+      // Outter change
+      scope.$watch(function() {
+        return ngModel.$modelValue;
+      }, function(value) {
+        if (angular.isString(value)) {
+          var date = parseDate(value);
+
+          if (value && !date) {
+            $setModelValue(originalScope, null);
+            throw new Error(value + ' cannot be parsed to a date object.');
+          } else {
+            value = date;
+          }
+        }
+        scope.date = value;
+        updatePosition();
+      });
+
+      function addWatchableAttribute(attribute, scopeProperty, datepickerAttribute) {
+        if (attribute) {
+          originalScope.$watch($parse(attribute), function(value){
+            scope[scopeProperty] = value;
+          });
+          datepickerEl.attr(datepickerAttribute || scopeProperty, scopeProperty);
+        }
+      }
+      addWatchableAttribute(attrs.min, 'min');
+      addWatchableAttribute(attrs.max, 'max');
+      if (attrs.showWeeks) {
+        addWatchableAttribute(attrs.showWeeks, 'showWeeks', 'show-weeks');
+      } else {
+        scope.showWeeks = true;
+        datepickerEl.attr('show-weeks', 'showWeeks');
+      }
+      if (attrs.dateDisabled) {
+        datepickerEl.attr('date-disabled', attrs.dateDisabled);
+      }
+
+      function updatePosition() {
+        scope.position = $position.position(element);
+        scope.position.top = scope.position.top + element.prop('offsetHeight');
+      }
+
+      scope.$watch('isOpen', function(value) {
+        if (value) {
+          updatePosition();
+          $document.bind('click', documentClickBind);
+          element.unbind('focus', elementFocusBind);
+          element.focus();
+        } else {
+          $document.unbind('click', documentClickBind);
+          element.bind('focus', elementFocusBind);
+        }
+
+        if ( setIsOpen ) {
+          setIsOpen(originalScope, value);
+        }
+      });
+
+      scope.today = function() {
+        $setModelValue(originalScope, new Date());
+      };
+      scope.clear = function() {
+        $setModelValue(originalScope, null);
+      };
+
+      element.after($compile(popupEl)(scope));
+    }
+  };
+}])
+
+.directive('datepickerPopupWrap', [function() {
+  return {
+    restrict:'E',
+    replace: true,
+    transclude: true,
+    templateUrl: 'template/datepicker/popup.html',
+    link:function (scope, element, attrs) {
+      element.bind('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+    }
+  };
+}]);
+/*
+ * dropdownToggle - Provides dropdown menu functionality in place of bootstrap js
+ * @restrict class or attribute
+ * @example:
+   <li class="dropdown">
+     <a class="dropdown-toggle">My Dropdown Menu</a>
+     <ul class="dropdown-menu">
+       <li ng-repeat="choice in dropChoices">
+         <a ng-href="{{choice.href}}">{{choice.text}}</a>
+       </li>
+     </ul>
+   </li>
+ */
+
+angular.module('ui.bootstrap.dropdownToggle', []).directive('dropdownToggle', ['$document', '$location', function ($document, $location) {
+  var openElement = null,
+      closeMenu   = angular.noop;
+  return {
+    restrict: 'CA',
+    link: function(scope, element, attrs) {
+      scope.$watch('$location.path', function() { closeMenu(); });
+      element.parent().bind('click', function() { closeMenu(); });
+      element.bind('click', function (event) {
+
+        var elementWasOpen = (element === openElement);
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (!!openElement) {
+          closeMenu();
+        }
+
+        if (!elementWasOpen) {
+          element.parent().addClass('open');
+          openElement = element;
+          closeMenu = function (event) {
+            if (event) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            $document.unbind('click', closeMenu);
+            element.parent().removeClass('open');
+            closeMenu = angular.noop;
+            openElement = null;
+          };
+          $document.bind('click', closeMenu);
+        }
+      });
+    }
+  };
+}]);
+/**
+ * The following features are still outstanding: animation as a
+ * function, placement as a function, inside, support for more triggers than
+ * just mouse enter/leave, html tooltips, and selector delegation.
+ */
+angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position' ] )
+
+/**
+ * The $tooltip service creates tooltip- and popover-like directives as well as
+ * houses global options for them.
+ */
+.provider( '$tooltip', function () {
+  // The default options tooltip and popover.
+  var defaultOptions = {
+    placement: 'top',
+    animation: true,
+    popupDelay: 0
+  };
+
+  // Default hide triggers for each show trigger
+  var triggerMap = {
+    'mouseenter': 'mouseleave',
+    'click': 'click',
+    'focus': 'blur'
+  };
+
+  // The options specified to the provider globally.
+  var globalOptions = {};
+  
+  /**
+   * `options({})` allows global configuration of all tooltips in the
+   * application.
+   *
+   *   var app = angular.module( 'App', ['ui.bootstrap.tooltip'], function( $tooltipProvider ) {
+   *     // place tooltips left instead of top by default
+   *     $tooltipProvider.options( { placement: 'left' } );
+   *   });
+   */
+	this.options = function( value ) {
+		angular.extend( globalOptions, value );
+	};
+
+  /**
+   * This allows you to extend the set of trigger mappings available. E.g.:
+   *
+   *   $tooltipProvider.setTriggers( 'openTrigger': 'closeTrigger' );
+   */
+  this.setTriggers = function setTriggers ( triggers ) {
+    angular.extend( triggerMap, triggers );
+  };
+
+  /**
+   * This is a helper function for translating camel-case to snake-case.
+   */
+  function snake_case(name){
+    var regexp = /[A-Z]/g;
+    var separator = '-';
+    return name.replace(regexp, function(letter, pos) {
+      return (pos ? separator : '') + letter.toLowerCase();
+    });
+  }
+
+  /**
+   * Returns the actual instance of the $tooltip service.
+   * TODO support multiple triggers
+   */
+  this.$get = [ '$window', '$compile', '$timeout', '$parse', '$document', '$position', '$interpolate', function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
+    return function $tooltip ( type, prefix, defaultTriggerShow ) {
+      var options = angular.extend( {}, defaultOptions, globalOptions );
+
+      /**
+       * Returns an object of show and hide triggers.
+       *
+       * If a trigger is supplied,
+       * it is used to show the tooltip; otherwise, it will use the `trigger`
+       * option passed to the `$tooltipProvider.options` method; else it will
+       * default to the trigger supplied to this directive factory.
+       *
+       * The hide trigger is based on the show trigger. If the `trigger` option
+       * was passed to the `$tooltipProvider.options` method, it will use the
+       * mapped trigger from `triggerMap` or the passed trigger if the map is
+       * undefined; otherwise, it uses the `triggerMap` value of the show
+       * trigger; else it will just use the show trigger.
+       */
+      function getTriggers ( trigger ) {
+        var show = trigger || options.trigger || defaultTriggerShow;
+        var hide = triggerMap[show] || show;
+        return {
+          show: show,
+          hide: hide
+        };
+      }
+
+      var directiveName = snake_case( type );
+
+      var startSym = $interpolate.startSymbol();
+      var endSym = $interpolate.endSymbol();
+      var template = 
+        '<'+ directiveName +'-popup '+
+          'title="'+startSym+'tt_title'+endSym+'" '+
+          'content="'+startSym+'tt_content'+endSym+'" '+
+          'placement="'+startSym+'tt_placement'+endSym+'" '+
+          'animation="tt_animation()" '+
+          'is-open="tt_isOpen"'+
+          '>'+
+        '</'+ directiveName +'-popup>';
+
+      return {
+        restrict: 'EA',
+        scope: true,
+        link: function link ( scope, element, attrs ) {
+          var tooltip = $compile( template )( scope );
+          var transitionTimeout;
+          var popupTimeout;
+          var $body;
+          var appendToBody = angular.isDefined( options.appendToBody ) ? options.appendToBody : false;
+          var triggers = getTriggers( undefined );
+          var hasRegisteredTriggers = false;
+
+          // By default, the tooltip is not open.
+          // TODO add ability to start tooltip opened
+          scope.tt_isOpen = false;
+
+          function toggleTooltipBind () {
+            if ( ! scope.tt_isOpen ) {
+              showTooltipBind();
+            } else {
+              hideTooltipBind();
+            }
+          }
+          
+          // Show the tooltip with delay if specified, otherwise show it immediately
+          function showTooltipBind() {
+            if ( scope.tt_popupDelay ) {
+              popupTimeout = $timeout( show, scope.tt_popupDelay );
+            } else {
+              scope.$apply( show );
+            }
+          }
+
+          function hideTooltipBind () {
+            scope.$apply(function () {
+              hide();
+            });
+          }
+          
+          // Show the tooltip popup element.
+          function show() {
+            var position,
+                ttWidth,
+                ttHeight,
+                ttPosition;
+
+            // Don't show empty tooltips.
+            if ( ! scope.tt_content ) {
+              return;
+            }
+
+            // If there is a pending remove transition, we must cancel it, lest the
+            // tooltip be mysteriously removed.
+            if ( transitionTimeout ) {
+              $timeout.cancel( transitionTimeout );
+            }
+            
+            // Set the initial positioning.
+            tooltip.css({ top: 0, left: 0, display: 'block' });
+            
+            // Now we add it to the DOM because need some info about it. But it's not 
+            // visible yet anyway.
+            if ( appendToBody ) {
+                $body = $body || $document.find( 'body' );
+                $body.append( tooltip );
+            } else {
+              element.after( tooltip );
+            }
+
+            // Get the position of the directive element.
+            position = appendToBody ? $position.offset( element ) : $position.position( element );
+
+            // Get the height and width of the tooltip so we can center it.
+            ttWidth = tooltip.prop( 'offsetWidth' );
+            ttHeight = tooltip.prop( 'offsetHeight' );
+            
+            // Calculate the tooltip's top and left coordinates to center it with
+            // this directive.
+            switch ( scope.tt_placement ) {
+              case 'mouse':
+                var mousePos = $position.mouse();
+                ttPosition = {
+                  top: mousePos.y,
+                  left: mousePos.x
+                };
+                break;
+              case 'right':
+                ttPosition = {
+                  top: position.top + position.height / 2 - ttHeight / 2,
+                  left: position.left + position.width
+                };
+                break;
+              case 'bottom':
+                ttPosition = {
+                  top: position.top + position.height,
+                  left: position.left + position.width / 2 - ttWidth / 2
+                };
+                break;
+              case 'left':
+                ttPosition = {
+                  top: position.top + position.height / 2 - ttHeight / 2,
+                  left: position.left - ttWidth
+                };
+                break;
+              default:
+                ttPosition = {
+                  top: position.top - ttHeight,
+                  left: position.left + position.width / 2 - ttWidth / 2
+                };
+                break;
+            }
+
+            ttPosition.top += 'px';
+            ttPosition.left += 'px';
+
+            // Now set the calculated positioning.
+            tooltip.css( ttPosition );
+              
+            // And show the tooltip.
+            scope.tt_isOpen = true;
+          }
+          
+          // Hide the tooltip popup element.
+          function hide() {
+            // First things first: we don't show it anymore.
+            scope.tt_isOpen = false;
+
+            //if tooltip is going to be shown after delay, we must cancel this
+            $timeout.cancel( popupTimeout );
+            
+            // And now we remove it from the DOM. However, if we have animation, we 
+            // need to wait for it to expire beforehand.
+            // FIXME: this is a placeholder for a port of the transitions library.
+            if ( angular.isDefined( scope.tt_animation ) && scope.tt_animation() ) {
+              transitionTimeout = $timeout( function () { tooltip.remove(); }, 500 );
+            } else {
+              tooltip.remove();
+            }
+          }
+
+          /**
+           * Observe the relevant attributes.
+           */
+          attrs.$observe( type, function ( val ) {
+            scope.tt_content = val;
+          });
+
+          attrs.$observe( prefix+'Title', function ( val ) {
+            scope.tt_title = val;
+          });
+
+          attrs.$observe( prefix+'Placement', function ( val ) {
+            scope.tt_placement = angular.isDefined( val ) ? val : options.placement;
+          });
+
+          attrs.$observe( prefix+'Animation', function ( val ) {
+            scope.tt_animation = angular.isDefined( val ) ? $parse( val ) : function(){ return options.animation; };
+          });
+
+          attrs.$observe( prefix+'PopupDelay', function ( val ) {
+            var delay = parseInt( val, 10 );
+            scope.tt_popupDelay = ! isNaN(delay) ? delay : options.popupDelay;
+          });
+
+          attrs.$observe( prefix+'Trigger', function ( val ) {
+
+            if (hasRegisteredTriggers) {
+              element.unbind( triggers.show, showTooltipBind );
+              element.unbind( triggers.hide, hideTooltipBind );
+            }
+
+            triggers = getTriggers( val );
+
+            if ( triggers.show === triggers.hide ) {
+              element.bind( triggers.show, toggleTooltipBind );
+            } else {
+              element.bind( triggers.show, showTooltipBind );
+              element.bind( triggers.hide, hideTooltipBind );
+            }
+
+            hasRegisteredTriggers = true;
+          });
+
+          attrs.$observe( prefix+'AppendToBody', function ( val ) {
+            appendToBody = angular.isDefined( val ) ? $parse( val )( scope ) : appendToBody;
+          });
+
+          // if a tooltip is attached to <body> we need to remove it on
+          // location change as its parent scope will probably not be destroyed
+          // by the change.
+          if ( appendToBody ) {
+            scope.$on('$locationChangeSuccess', function closeTooltipOnLocationChangeSuccess () {
+            if ( scope.tt_isOpen ) {
+              hide();
+            }
+          });
+          }
+
+          // Make sure tooltip is destroyed and removed.
+          scope.$on('$destroy', function onDestroyTooltip() {
+            if ( scope.tt_isOpen ) {
+              hide();
+            } else {
+              tooltip.remove();
+            }
+          });
+        }
+      };
+    };
+  }];
+})
+
+.directive( 'tooltipPopup', function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: { content: '@', placement: '@', animation: '&', isOpen: '&' },
+    templateUrl: 'template/tooltip/tooltip-popup.html'
+  };
+})
+
+.directive( 'tooltip', [ '$tooltip', function ( $tooltip ) {
+  return $tooltip( 'tooltip', 'tooltip', 'mouseenter' );
+}])
+
+.directive( 'tooltipHtmlUnsafePopup', function () {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: { content: '@', placement: '@', animation: '&', isOpen: '&' },
+    templateUrl: 'template/tooltip/tooltip-html-unsafe-popup.html'
+  };
+})
+
+.directive( 'tooltipHtmlUnsafe', [ '$tooltip', function ( $tooltip ) {
+  return $tooltip( 'tooltipHtmlUnsafe', 'tooltip', 'mouseenter' );
+}]);
+
+/**
+ * The following features are still outstanding: popup delay, animation as a
+ * function, placement as a function, inside, support for more triggers than
+ * just mouse enter/leave, html popovers, and selector delegatation.
+ */
+angular.module( 'ui.bootstrap.popover', [ 'ui.bootstrap.tooltip' ] )
+.directive( 'popoverPopup', function () {
+  return {
+    restrict: 'EA',
+    replace: true,
+    scope: { title: '@', content: '@', placement: '@', animation: '&', isOpen: '&' },
+    templateUrl: 'template/popover/popover.html'
+  };
+})
+.directive( 'popover', [ '$compile', '$timeout', '$parse', '$window', '$tooltip', function ( $compile, $timeout, $parse, $window, $tooltip ) {
+  return $tooltip( 'popover', 'popover', 'click' );
+}]);
+
+
+angular.module('ui.bootstrap.timepicker', [])
+
+.filter('pad', function() {
+  return function(input) {
+    if ( angular.isDefined(input) && input.toString().length < 2 ) {
+      input = '0' + input;
+    }
+    return input;
+  };
+})
+
+.constant('timepickerConfig', {
+  hourStep: 1,
+  minuteStep: 1,
+  showMeridian: true,
+  meridians: ['AM', 'PM'],
+  readonlyInput: false,
+  mousewheel: true
+})
+
+.directive('timepicker', ['padFilter', '$parse', 'timepickerConfig', function (padFilter, $parse, timepickerConfig) {
+  return {
+    restrict: 'EA',
+    require:'ngModel',
+    replace: true,
+    templateUrl: 'template/timepicker/timepicker.html',
+    scope: {
+        model: '=ngModel'
+    },
+    link: function(scope, element, attrs, ngModelCtrl) {
+      var selected = new Date(), meridians = timepickerConfig.meridians;
+
+      var hourStep = timepickerConfig.hourStep;
+      if (attrs.hourStep) {
+        scope.$parent.$watch($parse(attrs.hourStep), function(value) {
+          hourStep = parseInt(value, 10);
+        });
+      }
+
+      var minuteStep = timepickerConfig.minuteStep;
+      if (attrs.minuteStep) {
+        scope.$parent.$watch($parse(attrs.minuteStep), function(value) {
+          minuteStep = parseInt(value, 10);
+        });
+      }
+
+      // 12H / 24H mode
+      scope.showMeridian = timepickerConfig.showMeridian;
+      if (attrs.showMeridian) {
+        scope.$parent.$watch($parse(attrs.showMeridian), function(value) {
+          scope.showMeridian = !! value;
+
+          if ( ! scope.model ) {
+            // Reset
+            var dt = new Date( selected );
+            var hours = getScopeHours();
+            if (angular.isDefined( hours )) {
+              dt.setHours( hours );
+            }
+            scope.model = new Date( dt );
+          } else {
+            refreshTemplate();
+          }
+        });
+      }
+
+      // Get scope.hours in 24H mode if valid
+      function getScopeHours ( ) {
+        var hours = parseInt( scope.hours, 10 );
+        var valid = ( scope.showMeridian ) ? (hours > 0 && hours < 13) : (hours >= 0 && hours < 24);
+        if ( !valid ) {
+          return;
+        }
+
+        if ( scope.showMeridian ) {
+          if ( hours === 12 ) {
+            hours = 0;
+          }
+          if ( scope.meridian === meridians[1] ) {
+            hours = hours + 12;
+          }
+        }
+        return hours;
+      }
+
+      // Input elements
+      var inputs = element.find('input');
+      var hoursInputEl = inputs.eq(0), minutesInputEl = inputs.eq(1);
+
+      // Respond on mousewheel spin
+      var mousewheel = (angular.isDefined(attrs.mousewheel)) ? scope.$eval(attrs.mousewheel) : timepickerConfig.mousewheel;
+      if ( mousewheel ) {
+        
+        var isScrollingUp = function(e) {
+          if (e.originalEvent) {
+            e = e.originalEvent;
+          }
+          //pick correct delta variable depending on event
+          var delta = (e.wheelDelta) ? e.wheelDelta : -e.deltaY;
+          return (e.detail || delta > 0);
+        };
+        
+        hoursInputEl.bind('mousewheel wheel', function(e) {
+          scope.$apply( (isScrollingUp(e)) ? scope.incrementHours() : scope.decrementHours() );
+          e.preventDefault();
+        });
+
+        minutesInputEl.bind('mousewheel wheel', function(e) {
+          scope.$apply( (isScrollingUp(e)) ? scope.incrementMinutes() : scope.decrementMinutes() );
+          e.preventDefault();
+        });
+      }
+
+      var keyboardChange = false;
+      scope.readonlyInput = (angular.isDefined(attrs.readonlyInput)) ? scope.$eval(attrs.readonlyInput) : timepickerConfig.readonlyInput;
+      if ( ! scope.readonlyInput ) {
+        scope.updateHours = function() {
+          var hours = getScopeHours();
+
+          if ( angular.isDefined(hours) ) {
+              keyboardChange = 'h';
+              if ( scope.model === null ) {
+                 scope.model = new Date( selected );
+              }
+              scope.model.setHours( hours );
+          } else {
+              scope.model = null;
+              scope.validHours = false;
+          }
+        };
+
+        hoursInputEl.bind('blur', function(e) {
+          if ( scope.validHours && scope.hours < 10) {
+            scope.$apply( function() {
+              scope.hours = padFilter( scope.hours );
+            });
+          }
+        });
+
+        scope.updateMinutes = function() {
+          var minutes = parseInt(scope.minutes, 10);
+          if ( minutes >= 0 && minutes < 60 ) {
+            keyboardChange = 'm';
+            if ( scope.model === null ) {
+              scope.model = new Date( selected );
+            }
+            scope.model.setMinutes( minutes );
+          } else {
+            scope.model = null;
+            scope.validMinutes = false;
+          }
+        };
+
+        minutesInputEl.bind('blur', function(e) {
+          if ( scope.validMinutes && scope.minutes < 10 ) {
+            scope.$apply( function() {
+              scope.minutes = padFilter( scope.minutes );
+            });
+          }
+        });
+      } else {
+        scope.updateHours = angular.noop;
+        scope.updateMinutes = angular.noop;
+      }
+
+      scope.$watch( function getModelTimestamp() {
+        return +scope.model;
+      }, function( timestamp ) {
+        if ( !isNaN( timestamp ) && timestamp > 0 ) {
+          selected = new Date( timestamp );
+          refreshTemplate();
+        }
+      });
+
+      function refreshTemplate() {
+        var hours = selected.getHours();
+        if ( scope.showMeridian ) {
+          // Convert 24 to 12 hour system
+          hours = ( hours === 0 || hours === 12 ) ? 12 : hours % 12;
+        }
+        scope.hours =  ( keyboardChange === 'h' ) ? hours : padFilter(hours);
+        scope.validHours = true;
+
+        var minutes = selected.getMinutes();
+        scope.minutes = ( keyboardChange === 'm' ) ? minutes : padFilter(minutes);
+        scope.validMinutes = true;
+
+        scope.meridian = ( scope.showMeridian ) ? (( selected.getHours() < 12 ) ? meridians[0] : meridians[1]) : '';
+
+        keyboardChange = false;
+      }
+
+      function addMinutes( minutes ) {
+        var dt = new Date( selected.getTime() + minutes * 60000 );
+        selected.setHours( dt.getHours() );
+        selected.setMinutes( dt.getMinutes() );
+        scope.model = new Date( selected );
+      }
+
+      scope.incrementHours = function() {
+        addMinutes( hourStep * 60 );
+      };
+      scope.decrementHours = function() {
+        addMinutes( - hourStep * 60 );
+      };
+      scope.incrementMinutes = function() {
+        addMinutes( minuteStep );
+      };
+      scope.decrementMinutes = function() {
+        addMinutes( - minuteStep );
+      };
+      scope.toggleMeridian = function() {
+        addMinutes( 12 * 60 * (( selected.getHours() < 12 ) ? 1 : -1) );
+      };
+    }
+  };
+}]);
+
+angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position'])
+
+/**
+ * A helper service that can parse typeahead's syntax (string provided by users)
+ * Extracted to a separate service for ease of unit testing
+ */
+  .factory('typeaheadParser', ['$parse', function ($parse) {
+
+  //                      00000111000000000000022200000000000000003333333333333330000000000044000
+  var TYPEAHEAD_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?\s+for\s+(?:([\$\w][\$\w\d]*))\s+in\s+(.*)$/;
+
+  return {
+    parse:function (input) {
+
+      var match = input.match(TYPEAHEAD_REGEXP), modelMapper, viewMapper, source;
+      if (!match) {
+        throw new Error(
+          "Expected typeahead specification in form of '_modelValue_ (as _label_)? for _item_ in _collection_'" +
+            " but got '" + input + "'.");
+      }
+
+      return {
+        itemName:match[3],
+        source:$parse(match[4]),
+        viewMapper:$parse(match[2] || match[1]),
+        modelMapper:$parse(match[1])
+      };
+    }
+  };
+}])
+
+  .directive('typeahead', ['$compile', '$parse', '$q', '$timeout', '$document', '$position', 'typeaheadParser', function ($compile, $parse, $q, $timeout, $document, $position, typeaheadParser) {
+
+  var HOT_KEYS = [9, 13, 27, 38, 40];
+
+  return {
+    require:'ngModel',
+    link:function (originalScope, element, attrs, modelCtrl) {
+
+      //SUPPORTED ATTRIBUTES (OPTIONS)
+
+      //minimal no of characters that needs to be entered before typeahead kicks-in
+      var minSearch = originalScope.$eval(attrs.typeaheadMinLength) || 1;
+
+      //minimal wait time after last character typed before typehead kicks-in
+      var waitTime = originalScope.$eval(attrs.typeaheadWaitMs) || 0;
+
+      //should it restrict model values to the ones selected from the popup only?
+      var isEditable = originalScope.$eval(attrs.typeaheadEditable) !== false;
+
+      //binding to a variable that indicates if matches are being retrieved asynchronously
+      var isLoadingSetter = $parse(attrs.typeaheadLoading).assign || angular.noop;
+
+      //a callback executed when a match is selected
+      var onSelectCallback = $parse(attrs.typeaheadOnSelect);
+
+      var inputFormatter = attrs.typeaheadInputFormatter ? $parse(attrs.typeaheadInputFormatter) : undefined;
+
+      //INTERNAL VARIABLES
+
+      //model setter executed upon match selection
+      var $setModelValue = $parse(attrs.ngModel).assign;
+
+      //expressions used by typeahead
+      var parserResult = typeaheadParser.parse(attrs.typeahead);
+
+
+      //pop-up element used to display matches
+      var popUpEl = angular.element('<typeahead-popup></typeahead-popup>');
+      popUpEl.attr({
+        matches: 'matches',
+        active: 'activeIdx',
+        select: 'select(activeIdx)',
+        query: 'query',
+        position: 'position'
+      });
+      //custom item template
+      if (angular.isDefined(attrs.typeaheadTemplateUrl)) {
+        popUpEl.attr('template-url', attrs.typeaheadTemplateUrl);
+      }
+
+      //create a child scope for the typeahead directive so we are not polluting original scope
+      //with typeahead-specific data (matches, query etc.)
+      var scope = originalScope.$new();
+      originalScope.$on('$destroy', function(){
+        scope.$destroy();
+      });
+
+      var resetMatches = function() {
+        scope.matches = [];
+        scope.activeIdx = -1;
+      };
+
+      var getMatchesAsync = function(inputValue) {
+
+        var locals = {$viewValue: inputValue};
+        isLoadingSetter(originalScope, true);
+        $q.when(parserResult.source(scope, locals)).then(function(matches) {
+
+          //it might happen that several async queries were in progress if a user were typing fast
+          //but we are interested only in responses that correspond to the current view value
+          if (inputValue === modelCtrl.$viewValue) {
+            if (matches.length > 0) {
+
+              scope.activeIdx = 0;
+              scope.matches.length = 0;
+
+              //transform labels
+              for(var i=0; i<matches.length; i++) {
+                locals[parserResult.itemName] = matches[i];
+                scope.matches.push({
+                  label: parserResult.viewMapper(scope, locals),
+                  model: matches[i]
+                });
+              }
+
+              scope.query = inputValue;
+              //position pop-up with matches - we need to re-calculate its position each time we are opening a window
+              //with matches as a pop-up might be absolute-positioned and position of an input might have changed on a page
+              //due to other elements being rendered
+              scope.position = $position.position(element);
+              scope.position.top = scope.position.top + element.prop('offsetHeight');
+
+            } else {
+              resetMatches();
+            }
+            isLoadingSetter(originalScope, false);
+          }
+        }, function(){
+          resetMatches();
+          isLoadingSetter(originalScope, false);
+        });
+      };
+
+      resetMatches();
+
+      //we need to propagate user's query so we can higlight matches
+      scope.query = undefined;
+
+      //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later 
+      var timeoutPromise;
+
+      //plug into $parsers pipeline to open a typeahead on view changes initiated from DOM
+      //$parsers kick-in on all the changes coming from the view as well as manually triggered by $setViewValue
+      modelCtrl.$parsers.push(function (inputValue) {
+
+        resetMatches();
+        if (inputValue && inputValue.length >= minSearch) {
+          if (waitTime > 0) {
+            if (timeoutPromise) {
+              $timeout.cancel(timeoutPromise);//cancel previous timeout
+            }
+            timeoutPromise = $timeout(function () {
+              getMatchesAsync(inputValue);
+            }, waitTime);
+          } else {
+            getMatchesAsync(inputValue);
+          }
+        }
+
+        return isEditable ? inputValue : undefined;
+      });
+
+      modelCtrl.$formatters.push(function (modelValue) {
+
+        var candidateViewValue, emptyViewValue;
+        var locals = {};
+
+        if (inputFormatter) {
+
+          locals['$model'] = modelValue;
+          return inputFormatter(originalScope, locals);
+
+        } else {
+          locals[parserResult.itemName] = modelValue;
+
+          //it might happen that we don't have enough info to properly render input value
+          //we need to check for this situation and simply return model value if we can't apply custom formatting
+          candidateViewValue = parserResult.viewMapper(originalScope, locals);
+          emptyViewValue = parserResult.viewMapper(originalScope, {});
+
+          return candidateViewValue!== emptyViewValue ? candidateViewValue : modelValue;
+        }
+      });
+
+      scope.select = function (activeIdx) {
+        //called from within the $digest() cycle
+        var locals = {};
+        var model, item;
+
+        locals[parserResult.itemName] = item = scope.matches[activeIdx].model;
+        model = parserResult.modelMapper(originalScope, locals);
+        $setModelValue(originalScope, model);
+
+        onSelectCallback(originalScope, {
+          $item: item,
+          $model: model,
+          $label: parserResult.viewMapper(originalScope, locals)
+        });
+
+        //return focus to the input element if a mach was selected via a mouse click event
+        resetMatches();
+        element[0].focus();
+      };
+
+      //bind keyboard events: arrows up(38) / down(40), enter(13) and tab(9), esc(27)
+      element.bind('keydown', function (evt) {
+
+        //typeahead is open and an "interesting" key was pressed
+        if (scope.matches.length === 0 || HOT_KEYS.indexOf(evt.which) === -1) {
+          return;
+        }
+
+        evt.preventDefault();
+
+        if (evt.which === 40) {
+          scope.activeIdx = (scope.activeIdx + 1) % scope.matches.length;
+          scope.$digest();
+
+        } else if (evt.which === 38) {
+          scope.activeIdx = (scope.activeIdx ? scope.activeIdx : scope.matches.length) - 1;
+          scope.$digest();
+
+        } else if (evt.which === 13 || evt.which === 9) {
+          scope.$apply(function () {
+            scope.select(scope.activeIdx);
+          });
+
+        } else if (evt.which === 27) {
+          evt.stopPropagation();
+
+          resetMatches();
+          scope.$digest();
+        }
+      });
+
+      $document.bind('click', function(){
+        resetMatches();
+        scope.$digest();
+      });
+
+      element.after($compile(popUpEl)(scope));
+    }
+  };
+
+}])
+
+  .directive('typeaheadPopup', function () {
+    return {
+      restrict:'E',
+      scope:{
+        matches:'=',
+        query:'=',
+        active:'=',
+        position:'=',
+        select:'&'
+      },
+      replace:true,
+      templateUrl:'template/typeahead/typeahead-popup.html',
+      link:function (scope, element, attrs) {
+
+        scope.templateUrl = attrs.templateUrl;
+
+        scope.isOpen = function () {
+          return scope.matches.length > 0;
+        };
+
+        scope.isActive = function (matchIdx) {
+          return scope.active == matchIdx;
+        };
+
+        scope.selectActive = function (matchIdx) {
+          scope.active = matchIdx;
+        };
+
+        scope.selectMatch = function (activeIdx) {
+          scope.select({activeIdx:activeIdx});
+        };
+      }
+    };
+  })
+
+  .directive('typeaheadMatch', ['$http', '$templateCache', '$compile', '$parse', function ($http, $templateCache, $compile, $parse) {
+    return {
+      restrict:'E',
+      scope:{
+        index:'=',
+        match:'=',
+        query:'='
+      },
+      link:function (scope, element, attrs) {
+        var tplUrl = $parse(attrs.templateUrl)(scope.$parent) || 'template/typeahead/typeahead-match.html';
+        $http.get(tplUrl, {cache: $templateCache}).success(function(tplContent){
+           element.replaceWith($compile(tplContent.trim())(scope));
+        });
+      }
+    };
+  }])
+
+  .filter('typeaheadHighlight', function() {
+
+    function escapeRegexp(queryToEscape) {
+      return queryToEscape.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+    }
+
+    return function(matchItem, query) {
+      return query ? matchItem.replace(new RegExp(escapeRegexp(query), 'gi'), '<strong>$&</strong>') : query;
+    };
+  });
+angular.module("template/datepicker/datepicker.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/datepicker/datepicker.html",
+    "<table>\n" +
+    "  <thead>\n" +
+    "    <tr class=\"text-center\">\n" +
+    "      <th><button type=\"button\" class=\"btn pull-left\" ng-click=\"move(-1)\"><i class=\"icon-chevron-left\"></i></button></th>\n" +
+    "      <th colspan=\"{{rows[0].length - 2 + showWeekNumbers}}\"><button type=\"button\" class=\"btn btn-block\" ng-click=\"toggleMode()\"><strong>{{title}}</strong></button></th>\n" +
+    "      <th><button type=\"button\" class=\"btn pull-right\" ng-click=\"move(1)\"><i class=\"icon-chevron-right\"></i></button></th>\n" +
+    "    </tr>\n" +
+    "    <tr class=\"text-center\" ng-show=\"labels.length > 0\">\n" +
+    "      <th ng-show=\"showWeekNumbers\">#</th>\n" +
+    "      <th ng-repeat=\"label in labels\">{{label}}</th>\n" +
+    "    </tr>\n" +
+    "  </thead>\n" +
+    "  <tbody>\n" +
+    "    <tr ng-repeat=\"row in rows\">\n" +
+    "      <td ng-show=\"showWeekNumbers\" class=\"text-center\"><em>{{ getWeekNumber(row) }}</em></td>\n" +
+    "      <td ng-repeat=\"dt in row\" class=\"text-center\">\n" +
+    "        <button type=\"button\" style=\"width:100%;\" class=\"btn\" ng-class=\"{'btn-info': dt.selected}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\"><span ng-class=\"{muted: dt.secondary}\">{{dt.label}}</span></button>\n" +
+    "      </td>\n" +
+    "    </tr>\n" +
+    "  </tbody>\n" +
+    "</table>\n" +
+    "");
+}]);
+
+angular.module("template/datepicker/popup.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/datepicker/popup.html",
+    "<ul class=\"dropdown-menu\" ng-style=\"{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}\" class=\"dropdown-menu\">\n" +
+    "	<li ng-transclude></li>\n" +
+    "	<li class=\"divider\"></li>\n" +
+    "	<li style=\"padding: 9px;\">\n" +
+    "		<span class=\"btn-group\">\n" +
+    "			<button class=\"btn btn-small btn-inverse\" ng-click=\"today()\">Today</button>\n" +
+    "			<button class=\"btn btn-small btn-info\" ng-click=\"showWeeks = ! showWeeks\" ng-class=\"{active: showWeeks}\">Weeks</button>\n" +
+    "			<button class=\"btn btn-small btn-danger\" ng-click=\"clear()\">Clear</button>\n" +
+    "		</span>\n" +
+    "		<button class=\"btn btn-small btn-success pull-right\" ng-click=\"isOpen = false\">Close</button>\n" +
+    "	</li>\n" +
+    "</ul>");
+}]);
+
+angular.module("template/tooltip/tooltip-html-unsafe-popup.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/tooltip/tooltip-html-unsafe-popup.html",
+    "<div class=\"tooltip {{placement}}\" ng-class=\"{ in: isOpen(), fade: animation() }\">\n" +
+    "  <div class=\"tooltip-arrow\"></div>\n" +
+    "  <div class=\"tooltip-inner\" ng-bind-html-unsafe=\"content\"></div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+angular.module("template/tooltip/tooltip-popup.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/tooltip/tooltip-popup.html",
+    "<div class=\"tooltip {{placement}}\" ng-class=\"{ in: isOpen(), fade: animation() }\">\n" +
+    "  <div class=\"tooltip-arrow\"></div>\n" +
+    "  <div class=\"tooltip-inner\" ng-bind=\"content\"></div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+angular.module("template/popover/popover.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/popover/popover.html",
+    "<div class=\"popover {{placement}}\" ng-class=\"{ in: isOpen(), fade: animation() }\">\n" +
+    "  <div class=\"arrow\"></div>\n" +
+    "\n" +
+    "  <div class=\"popover-inner\">\n" +
+    "      <h3 class=\"popover-title\" ng-bind=\"title\" ng-show=\"title\"></h3>\n" +
+    "      <div class=\"popover-content\" ng-bind=\"content\"></div>\n" +
+    "  </div>\n" +
+    "</div>\n" +
+    "");
+}]);
+
+angular.module("template/timepicker/timepicker.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/timepicker/timepicker.html",
+    "<table class=\"form-inline\">\n" +
+    "	<tr class=\"text-center\">\n" +
+    "		<td><a ng-click=\"incrementHours()\" class=\"btn btn-link\"><i class=\"icon-chevron-up\"></i></a></td>\n" +
+    "		<td>&nbsp;</td>\n" +
+    "		<td><a ng-click=\"incrementMinutes()\" class=\"btn btn-link\"><i class=\"icon-chevron-up\"></i></a></td>\n" +
+    "		<td ng-show=\"showMeridian\"></td>\n" +
+    "	</tr>\n" +
+    "	<tr>\n" +
+    "		<td class=\"control-group\" ng-class=\"{'error': !validHours}\"><input type=\"text\" ng-model=\"hours\" ng-change=\"updateHours()\" class=\"span1 text-center\" ng-mousewheel=\"incrementHours()\" ng-readonly=\"readonlyInput\" maxlength=\"2\" /></td>\n" +
+    "		<td>:</td>\n" +
+    "		<td class=\"control-group\" ng-class=\"{'error': !validMinutes}\"><input type=\"text\" ng-model=\"minutes\" ng-change=\"updateMinutes()\" class=\"span1 text-center\" ng-readonly=\"readonlyInput\" maxlength=\"2\"></td>\n" +
+    "		<td ng-show=\"showMeridian\"><button ng-click=\"toggleMeridian()\" class=\"btn text-center\">{{meridian}}</button></td>\n" +
+    "	</tr>\n" +
+    "	<tr class=\"text-center\">\n" +
+    "		<td><a ng-click=\"decrementHours()\" class=\"btn btn-link\"><i class=\"icon-chevron-down\"></i></a></td>\n" +
+    "		<td>&nbsp;</td>\n" +
+    "		<td><a ng-click=\"decrementMinutes()\" class=\"btn btn-link\"><i class=\"icon-chevron-down\"></i></a></td>\n" +
+    "		<td ng-show=\"showMeridian\"></td>\n" +
+    "	</tr>\n" +
+    "</table>");
+}]);
+
+angular.module("template/typeahead/typeahead-match.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/typeahead/typeahead-match.html",
+    "<a tabindex=\"-1\" ng-bind-html-unsafe=\"match.label | typeaheadHighlight:query\"></a>");
+}]);
+
+angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/typeahead/typeahead-popup.html",
+    "<ul class=\"typeahead dropdown-menu\" ng-style=\"{display: isOpen()&&'block' || 'none', top: position.top+'px', left: position.left+'px'}\">\n" +
+    "    <li ng-repeat=\"match in matches\" ng-class=\"{active: isActive($index) }\" ng-mouseenter=\"selectActive($index)\" ng-click=\"selectMatch($index)\">\n" +
+    "        <typeahead-match index=\"$index\" match=\"match\" query=\"query\" template-url=\"templateUrl\"></typeahead-match>\n" +
+    "    </li>\n" +
+    "</ul>");
+}]);
+
+angular.module("template/typeahead/typeahead.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("template/typeahead/typeahead.html",
+    "<ul class=\"typeahead dropdown-menu\" ng-style=\"{display: isOpen()&&'block' || 'none', top: position.top+'px', left: position.left+'px'}\">\n" +
+    "    <li ng-repeat=\"match in matches\" ng-class=\"{active: isActive($index) }\" ng-mouseenter=\"selectActive($index)\">\n" +
+    "        <a tabindex=\"-1\" ng-click=\"selectMatch($index)\" ng-bind-html-unsafe=\"match.label | typeaheadHighlight:query\"></a>\n" +
+    "    </li>\n" +
+    "</ul>");
+}]);
+
 ;window.Application = window.Application || {};
 //put specific application properties here
 Application.properties = {
@@ -32593,41 +35967,51 @@ Application.properties = {
     defaultMessage: 'Loading...'
 };
 
-var FormsApp = angular.module("FormsApp", ["ngResource", "ui"], ["$routeProvider", function ($routeProvider) {
+var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], ["$routeProvider", function ($routeProvider) {
     $routeProvider.
-        when('/Starter/Court/:userId', { controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
-        when('/Starter/Participant/:userId', { controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
-        when('/Starter/Children/:userId', { controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
-        when('/Domestic/Asset/:userId', { controller: AssetCtrl, templateUrl: '/app/Domestic/Asset/asset.html' }).
-        when('/Domestic/Debt/:userId', { controller: DebtCtrl, templateUrl: '/app/Domestic/Debt/debt.html' }).
-        when('/Domestic/HealthInsurance/:userId', { controller: HealthInsuranceCtrl, templateUrl: '/app/Domestic/HealthInsurance/healthInsurance.html' }).
-        when('/Domestic/House/:userId', { controller: HouseCtrl, templateUrl: '/app/Domestic/House/house.html' }).
-        when('/Domestic/Property/:userId', { controller: PropertyCtrl, templateUrl: '/app/Domestic/Property/Property.html' }).
-        when('/Domestic/Spousal/:userId', { controller: SpousalCtrl, templateUrl: '/app/Domestic/Spousal/Spousal.html' }).
-        when('/Domestic/Tax/:userId', { controller: TaxCtrl, templateUrl: '/app/Domestic/Tax/Tax.html' }).
-        when('/Domestic/Vehicle/:userId', { controller: VehicleCtrl, templateUrl: '/app/Domestic/Vehicle/Vehicle.html' }).
-        when('/Parenting/Supervision/:userId', { controller: PrivacyCtrl, templateUrl: '/app/Parenting/Privacy/Privacy.html' }).
-        when('/Parenting/Information/:userId', { controller: InformationCtrl, templateUrl: '/app/Parenting/Information/Information.html' }).
-        when('/Parenting/Decision/:userId/:childId', { controller: DecisionCtrl, templateUrl: '/app/Parenting/Decision/Decision.html' }).
-        when('/Parenting/Responsibility/:userId', { controller: ResponsibilityCtrl, templateUrl: '/app/Parenting/Responsibility/Responsibility.html' }).
-        when('/Parenting/Communication/:userId', { controller: CommunicationCtrl, templateUrl: '/app/Parenting/Communication/Communication.html' }).
-        when('/Parenting/Schedule/:userId', { controller: ScheduleCtrl, templateUrl: '/app/Parenting/Schedule/Schedule.html' }).
-        when('/Parenting/Holiday/:userId/:childId', { controller: HolidayCtrl, templateUrl: '/app/Parenting/Holiday/Holiday.html' }).
-        when('/Parenting/Addendum/:userId', { controller: AddendumCtrl, templateUrl: '/app/Parenting/Addendum/Addendum.html' }).
-        when('/Financial/ChildCare/:userId/:childId', { controller: ChildCareCtrl, templateUrl: '/app/Financial/ChildCare/ChildCare.html' }).
-        when('/Financial/Health/:userId', { controller: HealthInsuranceCtrl, templateUrl: '/app/Financial/Health/Health.html' }).
-        when('/Financial/ExtraExpense/:userId/:childId', { controller: ExtraExpenseCtrl, templateUrl: '/app/Financial/ExtraExpense/ExtraExpense.html' }).
-        when('/Financial/Income/:userId/:isOtherParent', { controller: IncomeCtrl, templateUrl: '/app/Financial/Income/Income.html' }).
-        when('/Financial/SocialSecurity/:userId/:isOtherParent', { controller: SocialSecurityCtrl, templateUrl: '/app/Financial/SocialSecurity/SocialSecurity.html' }).
-        when('/Financial/Support/:userId/:isOtherParent', { controller: SupportCtrl, templateUrl: '/app/Financial/Support/Support.html' }).
-        when('/Financial/OtherChild/:userId/:isOtherParent', { controller: OtherChildCtrl, templateUrl: '/app/Financial/OtherChild/OtherChild.html' }).
-        when('/Financial/Deviation/:userId', { controller: DeviationCtrl, templateUrl: '/app/Financial/Deviation/Deviation.html' }).
-        when('/Output/FormComplete/:formName/user/:userId', { controller: FormCompleteCtrl, templateUrl: '/app/Output/FormComplete/FormComplete.html' }).
-        when('/Output/Parenting/User/:userId', { controller: ParentingCtrl, templateUrl: '/app/Output/Parenting/Parenting.html' }).
-        when('/Output/DomesticMediation/User/:userId', { controller: DomesticMediationCtrl, templateUrl: '/app/Output/DomesticMediation/DomesticMediation.html' }).
-        when('/Account/Login/', { controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
-        when('/Account/Register/', { controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
-        when('/', { controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
+        when('/Starter/Court/user/:userId', { caseInsensitiveMatch: true, controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
+        when('/Starter/Participant/user/:userId', { caseInsensitiveMatch: true, controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
+        when('/Starter/Children/user/:userId', { caseInsensitiveMatch: true, controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
+        when('/Domestic/Asset/user/:userId', { caseInsensitiveMatch: true, controller: AssetCtrl, templateUrl: '/app/Domestic/Asset/asset.html' }).
+        when('/Domestic/Debt/user/:userId', { caseInsensitiveMatch: true, controller: DebtCtrl, templateUrl: '/app/Domestic/Debt/debt.html' }).
+        when('/Domestic/HealthInsurance/user/:userId', { caseInsensitiveMatch: true, controller: HealthInsuranceCtrl, templateUrl: '/app/Domestic/HealthInsurance/healthInsurance.html' }).
+        when('/Domestic/House/user/:userId', { caseInsensitiveMatch: true, controller: HouseCtrl, templateUrl: '/app/Domestic/House/house.html' }).
+        when('/Domestic/Property/user/:userId', { caseInsensitiveMatch: true, controller: PropertyCtrl, templateUrl: '/app/Domestic/Property/Property.html' }).
+        when('/Domestic/Spousal/user/:userId', { caseInsensitiveMatch: true, controller: SpousalCtrl, templateUrl: '/app/Domestic/Spousal/Spousal.html' }).
+        when('/Domestic/Tax/user/:userId', { caseInsensitiveMatch: true, controller: TaxCtrl, templateUrl: '/app/Domestic/Tax/Tax.html' }).
+        when('/Domestic/Vehicle/user/:userId', { caseInsensitiveMatch: true, controller: VehicleCtrl, templateUrl: '/app/Domestic/Vehicle/Vehicle.html' }).
+        when('/Parenting/Supervision/user/:userId', { caseInsensitiveMatch: true, controller: PrivacyCtrl, templateUrl: '/app/Parenting/Privacy/Privacy.html' }).
+        when('/Parenting/Information/user/:userId', { caseInsensitiveMatch: true, controller: InformationCtrl, templateUrl: '/app/Parenting/Information/Information.html' }).
+        when('/Parenting/Decision/user/:userId/child/:childId', { caseInsensitiveMatch: true, controller: DecisionCtrl, templateUrl: '/app/Parenting/Decision/Decision.html' }).
+        when('/Parenting/Responsibility/user/:userId', { caseInsensitiveMatch: true, controller: ResponsibilityCtrl, templateUrl: '/app/Parenting/Responsibility/Responsibility.html' }).
+        when('/Parenting/Communication/user/:userId', { caseInsensitiveMatch: true, controller: CommunicationCtrl, templateUrl: '/app/Parenting/Communication/Communication.html' }).
+        when('/Parenting/Schedule/user/:userId', { caseInsensitiveMatch: true, controller: ScheduleCtrl, templateUrl: '/app/Parenting/Schedule/Schedule.html' }).
+        when('/Parenting/Holiday/user/:userId/child/:childId', { caseInsensitiveMatch: true, controller: HolidayCtrl, templateUrl: '/app/Parenting/Holiday/Holiday.html' }).
+        when('/Parenting/Addendum/user/:userId', { caseInsensitiveMatch: true, controller: AddendumCtrl, templateUrl: '/app/Parenting/Addendum/Addendum.html' }).
+        when('/Financial/ChildCare/user/:userId/child/:childId', { caseInsensitiveMatch: true, controller: ChildCareCtrl, templateUrl: '/app/Financial/ChildCare/ChildCare.html' }).
+        when('/Financial/ChildSupport/user/:userId', { caseInsensitiveMatch: true, controller: ChildSupportCtrl, templateUrl: '/app/Financial/ChildSupport/ChildSupport.html' }).
+        when('/Financial/Health/user/:userId', { caseInsensitiveMatch: true, controller: HealthInsuranceCtrl, templateUrl: '/app/Financial/Health/Health.html' }).
+        when('/Financial/ExtraExpense/user/:userId/child/:childId', { caseInsensitiveMatch: true, controller: ExtraExpenseCtrl, templateUrl: '/app/Financial/ExtraExpense/ExtraExpense.html' }).
+        when('/Financial/Income/user/:userId/:isOtherParent', { caseInsensitiveMatch: true, controller: IncomeCtrl, templateUrl: '/app/Financial/Income/Income.html' }).
+        when('/Financial/SocialSecurity/user/:userId/:isOtherParent', { caseInsensitiveMatch: true, controller: SocialSecurityCtrl, templateUrl: '/app/Financial/SocialSecurity/SocialSecurity.html' }).
+        when('/Financial/Support/user/:userId/:isOtherParent', { caseInsensitiveMatch: true, controller: SupportCtrl, templateUrl: '/app/Financial/Support/Support.html' }).
+        when('/Financial/OtherChild/user/:userId/:isOtherParent', { caseInsensitiveMatch: true, controller: OtherChildCtrl, templateUrl: '/app/Financial/OtherChild/OtherChild.html' }).
+        when('/Financial/Deviation/user/:userId', { caseInsensitiveMatch: true, controller: DeviationCtrl, templateUrl: '/app/Financial/Deviation/Deviation.html' }).
+        when('/Output/FormComplete/:formName/user/:userId', { caseInsensitiveMatch: true, controller: FormCompleteCtrl, templateUrl: '/app/Output/FormComplete/FormComplete.html' }).
+        when('/Output/Parenting/User/:userId', { caseInsensitiveMatch: true, controller: ParentingCtrl, templateUrl: '/app/Output/Parenting/Parenting.html' }).
+        when('/Output/DomesticMediation/User/:userId', { caseInsensitiveMatch: true, controller: DomesticMediationCtrl, templateUrl: '/app/Output/DomesticMediation/DomesticMediation.html' }).
+        when('/Output/ScheduleA/User/:userId', { caseInsensitiveMatch: true, controller: ScheduleACtrl, templateUrl: '/app/Output/ScheduleA/ScheduleA.html' }).
+        when('/Output/ScheduleB/User/:userId', { caseInsensitiveMatch: true, controller: ScheduleBCtrl, templateUrl: '/app/Output/ScheduleB/ScheduleB.html' }).
+        when('/Output/ScheduleD/User/:userId', { caseInsensitiveMatch: true, controller: ScheduleDCtrl, templateUrl: '/app/Output/ScheduleD/ScheduleD.html' }).
+        when('/Output/ScheduleE/User/:userId', { caseInsensitiveMatch: true, controller: ScheduleECtrl, templateUrl: '/app/Output/ScheduleE/ScheduleE.html' }).
+        when('/Output/ChildSupport/User/:userId', { caseInsensitiveMatch: true, controller: ChildSupportOutputCtrl, templateUrl: '/app/Output/ChildSupport/ChildSupport.html' }).
+        when('/Output/CSA/User/:userId', { caseInsensitiveMatch: true, controller: CSACtrl, templateUrl: '/app/Output/CSA/CSA.html' }).
+        when('/Administrator/Register/', { caseInsensitiveMatch: true, controller: RegisterAdminCtrl, templateUrl: '/app/Administrator/Register/RegisterAdmin.html' }).
+        when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
+        when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
+        when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
+        when('/Account/Register/', { caseInsensitiveMatch: true, controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
+        when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
 FormsApp.value('ui.config', {
@@ -32645,6 +36029,11 @@ FormsApp.value('ui.config', {
     }
 });
 
+function integerFormatter(value) {
+    if (value) {
+        return parseInt(value);
+    }
+}
 var INTEGER_REGEXP = /^\-?\d*$/;
 FormsApp.directive('integer', function () {
     return {
@@ -32661,11 +36050,21 @@ FormsApp.directive('integer', function () {
                     return undefined;
                 }
             });
+            ctrl.$formatters.push(integerFormatter);
         }
     };
 });
-;FormsApp.factory('genericService', function () {
+
+
+;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', function (menuService, headerService, $location) {
     var service = {
+        calculateRemainingPercentage: function(val1, val2) {
+            if (val2 && val1)
+                return 100 - (val1 + val2);
+            if (val1)
+                return 100 - val1;
+            throw "Must provide value";
+        },
         iconSuccess: 'icon-green icon-ok',
         iconEdit: 'icon-blue icon-pencil',
         iconError: 'icon-red icon-pencil',
@@ -32680,9 +36079,15 @@ FormsApp.directive('integer', function () {
             });
             return model;
         },
+        refreshPage: function () {
+            if (!menuService.isActive($location.path())) {
+                menuService.setActive($location.path());
+            }
+            headerService.refresh();
+        },
     };
     return service;
-});
+}]);
 ;//Loading contoller
 var LoadingCtrl = function ($scope, loadingService) {
     $scope.message = Application.properties.defaultMessage;
@@ -32711,43 +36116,47 @@ LoadingCtrl.$inject = ['$scope', 'loadingService'];
     return service;
 });
 
-FormsApp.factory('onStartInterceptor', ['loadingService', function (loadingService) {
-    return function (data, headersGetter) {
-        loadingService.requestCount++;
-        return data;
-    };
-}]);
-
-FormsApp.factory('onCompleteInterceptor', ['loadingService', 'messageService', function (loadingService, messageService) {
-    return function (promise) {
-        //successful response
-        var decrementRequestCount = function (response) {
+//Code modified from http://docs.angularjs.org/api/ng.$http
+FormsApp.factory('myHttpInterceptor', ['$q', 'loadingService', 'messageService', function ($q, loadingService, messageService) {
+    return {
+        // optional method
+        'request': function(config) {
+            // do something on success
+            loadingService.requestCount++;
+            return config || $q.when(config);
+        },
+ 
+        // optional method
+        'response': function(response) {
+            // do something on success
             loadingService.requestCount--;
             //always return to default message
             loadingService.message = Application.properties.defaultMessage;
-            return response;
-        };
-        //Error
-        var decrementRequestCountError = function (response) {
+            return response || $q.when(response);
+        },
+ 
+        // optional method
+        'responseError': function(rejection) {
+            // do something on error
+            //For now, let's treat errors as errors and not recover   
             loadingService.requestCount--;
             //return to default message for next loading... call
             loadingService.message = Application.properties.defaultMessage;
             //show error message
-            messageService.handleError(response);
-            return response;
-        };
-        return promise.then(decrementRequestCount, decrementRequestCountError);
+            messageService.handleError(rejection);
+            return $q.reject(rejection);
+
+
+            //if (canRecover(rejection)) {
+            //    return responseOrNewPromise
+            //}
+        }
     };
 }]);
-
 FormsApp.config(['$httpProvider', function ($httpProvider) {
-    $httpProvider.responseInterceptors.push('onCompleteInterceptor');
+    $httpProvider.interceptors.push('myHttpInterceptor');
 }]);
-
-FormsApp.run(['$http', 'onStartInterceptor', function ($http, onStartInterceptor) {
-    $http.defaults.transformRequest.push(onStartInterceptor);
-}]);
-
+ 
 ;var MessageCtrl = function ($scope, messageService) {
     $scope.$watch(function () { return messageService.isShowing(); }, function (value) {
         $scope.Title = messageService.messageOptions.title;
@@ -32761,7 +36170,7 @@ FormsApp.run(['$http', 'onStartInterceptor', function ($http, onStartInterceptor
 };
 MessageCtrl.$inject = ['$scope', 'messageService'];
 ;////Message Service
-FormsApp.factory('messageService', function () {
+FormsApp.factory('messageService', ['$location', function ($location) {
     var service = {
         messageOptions: {
             title: '',
@@ -32787,7 +36196,9 @@ FormsApp.factory('messageService', function () {
                     service.showMessage("Not so fast", response.data.ResponseStatus.Message, Application.properties.messageType.Error);
                     return false;
                 case 401://unauthorized 
-                    service.showMessage("Unauthorized", "You must be logged in to complete this action. Log in <a href='/Account/LogOn/' title='Log In' >here</a>", Application.properties.messageType.Warning);
+                    //go to unauthorized page
+                    $location.path('/Account/Unauthorized');
+                    //service.showMessage("Unauthorized", "You must be logged in to complete this action. Log in <a href='/Account/LogOn/' title='Log In' >here</a>", Application.properties.messageType.Warning);
                     return false;
                 default:
                     service.showMessage("Uh oh!", "Sorry, we could not process your request.  The error has been logged and we will do our best to correct the error asap.", Application.properties.messageType.Error);
@@ -32796,14 +36207,20 @@ FormsApp.factory('messageService', function () {
         }
     };
     return service;
-});
+}]);
 ;var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.court = courtService.court.get({ UserId: $routeParams.userId }, function () {        
+    $scope.showErrors = false;
+    $scope.court = courtService.court.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
             //see if garlic has something stored            
             $scope.court = $.jStorage.get($scope.path);
+            if ($scope.court)
+                $scope.showErrors = true;
         }
+    });
+    courtService.counties.get({ }, function (data) {
+        $scope.counties = data.Counties;
     });
     $scope.submit = function (noNavigate) {
         if ($scope.courtForm.$invalid) {
@@ -32811,7 +36228,7 @@ FormsApp.factory('messageService', function () {
             var value = genericService.getFormInput('#courtForm');
             $.jStorage.set($scope.path, value);
             if(!noNavigate)
-                $location.path('/Starter/Participant/' + $scope.court.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -32820,82 +36237,133 @@ FormsApp.factory('messageService', function () {
             courtService.court.save(null, $scope.court, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Starter/Participant/' + $scope.court.UserId);
+                    menuService.nextMenu();
             });
         } else {
             courtService.court.update({ Id: $scope.court.Id }, $scope.court, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Starter/Participant/' + $scope.court.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService', '$rootScope'];
 ;//Todoservice
-FormsApp.factory('courtService', function ($resource) {
+FormsApp.factory('courtService', ['$resource', function ($resource) {
     var service = {
         court: $resource('/api/court/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
-    };
-    return service;
-});
-;var ParticipantCtrl = function($scope, $routeParams, $location, participantService, menuService, genericService, $rootScope) {
-    $scope.path = $location.path();
-    $scope.participant = participantService.participant.get({ UserId: $routeParams.userId }, function() {
-        if (typeof $scope.participant.Id == 'undefined' || $scope.participant.Id == 0) {
-            //see if garlic has something stored            
-            $scope.participant = $.jStorage.get($scope.path);
-        }
-    });
-    $scope.submit = function(noNavigate) {
-        if ($scope.participantForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#participantForm');
-            $.jStorage.set($scope.path, value);
-            if (!noNavigate)
-                $location.path('/Starter/Participant/' + $scope.participant.UserId);
-            return;
-        }
-        $.jStorage.deleteKey($scope.path);
-        $scope.participant.UserId = $routeParams.userId;
-        if (typeof $scope.participant.Id == 'undefined' || $scope.participant.Id == 0) {
-            participantService.participant.save(null, $scope.participant, function() {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Starter/Children/' + $scope.participant.UserId);
-            });
-        } else {
-            participantService.participant.update({ Id: $scope.participant.Id }, $scope.participant, function() {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Starter/Children/' + $scope.participant.UserId);
-            });
-        }
-    };
-    $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
-};
-ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('participantService', function($resource) {
-    var service = {
-        participant: $resource('/api/participant/:userId', { userId: '@userId' },
+        counties: $resource('/api/Counties', { },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
     };
     return service;
-});
+}]);
+;var ParticipantCtrl = function ($scope, $routeParams, $location, participantService, menuService, genericService, $rootScope) {
+    $scope.path = $location.path();
+    $scope.showErrors = false;
+    $scope.participant = participantService.participant.get({ UserId: $routeParams.userId }, function () {
+        if (typeof $scope.participant.Id == 'undefined' || $scope.participant.Id == 0) {
+            //see if garlic has something stored            
+            $scope.participant = $.jStorage.get($scope.path);
+            if ($scope.participant)
+                $scope.showErrors = true;
+        }
+    });
+    $scope.submit = function (noNavigate) {
+        if ($scope.participantForm.$invalid) {
+            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#participantForm');
+            $.jStorage.set($scope.path, value);
+            if (!noNavigate)
+                menuService.nextMenu();
+            return;
+        }
+        $.jStorage.deleteKey($scope.path);
+        $scope.participant.UserId = $routeParams.userId;
+        if (typeof $scope.participant.Id == 'undefined' || $scope.participant.Id == 0) {
+            participantService.participant.save(null, $scope.participant, function () {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                if (!noNavigate)
+                    menuService.nextMenu();
+            });
+        } else {
+            participantService.participant.update({ Id: $scope.participant.Id }, $scope.participant, function () {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                if (!noNavigate)
+                    menuService.nextMenu();
+            });
+        }
+    };
+    $scope.changeRelationship = function (type) {
+        if (type === 'Plaintiff') {
+            var value = parseInt($scope.participant.PlaintiffRelationship);
+            $scope.participant.DefendantRelationship = getOtherRelationshipValue(value);
+        }
+        else {
+            var value = parseInt($scope.participant.DefendantRelationship);
+            $scope.participant.PlaintiffRelationship = getOtherRelationshipValue(parseInt(value));
+        }
+    };
+    $scope.changeCustody = function (type) {
+        if (type === 'Plaintiff') {
+            var value = parseInt($scope.participant.PlaintiffCustodialParent);
+            $scope.participant.DefendantCustodialParent = getOtherCustodyValue(value);
+        }
+        else {
+            var value = parseInt($scope.participant.DefendantCustodialParent);
+            $scope.participant.PlaintiffCustodialParent = getOtherCustodyValue(parseInt(value));
+        }
+    };
+    function getOtherRelationshipValue(value) {
+        switch (value) {
+            case 1:
+                return 2;
+            case 2:
+                return 1;
+            case 3:
+                return 4;
+            case 4:
+                return 3;
+        }
+        return 1;
+    }
+    function getOtherCustodyValue(value) {
+        switch (value) {
+            case 1:
+                return 2;
+            case 2:
+                return 1;
+            case 3:
+                return 3;
+        }
+        return 1;
+    } $rootScope.currentScope = $scope;
+
+    genericService.refreshPage();
+
+};
+ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('participantService', ['$resource', function($resource) {
+    var service = {
+        participant: $resource('/api/participants/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+}]);
 ;var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, $rootScope) {    
     //#region properties
     $scope.continuePressed = false;
@@ -32904,16 +36372,16 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     
     //#region intialize
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    $scope.showErrors = false;
+    genericService.refreshPage();
 
-    childService.childForm.get({ UserId: $routeParams.userId }, function (data) {
-        if (typeof data.Id == 'undefined' || data.Id == 0) {
+
+    $scope.childForm = childService.childForm.get({ UserId: $routeParams.userId }, function () {
+        if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
             //see if garlic has something stored            
             $scope.childForm = $.jStorage.get($scope.path);
-        } else {
-            $scope.childForm = data;
+            if ($scope.childForm)
+                $scope.showErrors = true;
         }
     });
     childService.child.get({ UserId: $routeParams.userId }, function (data) {
@@ -32926,7 +36394,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     
     //#region event handlers
     $scope.submit = function () {
-        if ($scope.childForm.$invalid) {
+        if ($scope.childrenForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#childForm');
             $.jStorage.set($scope.path, value);
@@ -32950,6 +36418,8 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
         childService.child.save(null, $scope.child, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             $scope.children.push(data.Child);
+            $scope.addChildForm.$setPristine();
+            $scope.child = '';
         });
     };
     $scope.deleteChild = function (child) {
@@ -32963,12 +36433,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
         $scope.continuePressed = true;
     };
     $scope.nextForm = function () {
-        menuService.getMenu(function() {
-            if ($scope.children.length > 0)
-                $location.path('/Parenting/Privacy/' + $routeParams.userId);
-            else
-                $location.path('/Domestic/House/' + $routeParams.userId);
-        });
+        menuService.nextMenu();
     };
     //#endregion    
 };
@@ -32984,16 +36449,24 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
             {
                 update: { method: 'PUT' },
                 deleteAll: { method: 'DELETE' }
-            })
+            }),
+        formCompletes: $resource('/api/output/formComplete/', {},
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
     };
     return childrenService;
 }]);
 ;var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
     $scope.asset = assetService.assets.get({ UserId: $routeParams.userId }, function() {
         if (typeof $scope.asset.Id == 'undefined' || $scope.asset.Id == 0) {
             //see if garlic has something stored            
             $scope.asset = $.jStorage.get($scope.path);
+            if ($scope.asset)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33002,7 +36475,7 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
             var value = genericService.getFormInput('#assetForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33011,23 +36484,21 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
             assetService.assets.save(null, $scope.asset, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
+                    menuService.nextMenu();
             });
         } else {
             assetService.assets.update({ Id: $scope.asset.Id }, $scope.asset, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/HealthInsurance/' + $scope.asset.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    genericService.refreshPage();
 };
 AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('assetService', function($resource) {
+;FormsApp.factory('assetService', ['$resource',function($resource) {
     var service = {
         assets: $resource('/api/assets/:userId', { userId: '@userId' },
             {
@@ -33036,13 +36507,16 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
             }),
     };
     return service;
-});
+}]);
 ;var DebtCtrl = function($scope, $routeParams, $location, debtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
     $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function() {
         if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
             //see if garlic has something stored            
             $scope.debt = $.jStorage.get($scope.path);
+            if ($scope.debt)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33051,7 +36525,7 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
             var value = genericService.getFormInput('#debtForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33060,23 +36534,21 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
             debtService.debts.save(null, $scope.debt, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+                    menuService.nextMenu();
             });
         } else {
             debtService.debts.update({ Id: $scope.debt.Id }, $scope.debt, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    genericService.refreshPage();
 };
 DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('debtService', function($resource) {
+;FormsApp.factory('debtService', ['$resource',function($resource) {
     var service = {
         debts: $resource('/api/debts/:userId', { userId: '@userId' },
             {
@@ -33085,13 +36557,16 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
             }),
     };
     return service;
-});
+}]);
 ;var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.healthInsurance = healthInsuranceService.healthInsurances.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.healthInsurance = healthInsuranceService.healthInsurances.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.healthInsurance.Id == 'undefined' || $scope.healthInsurance.Id == 0) {
             //see if garlic has something stored            
             $scope.healthInsurance = $.jStorage.get($scope.path);
+            if ($scope.healthInsurance)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33100,7 +36575,7 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
             var value = genericService.getFormInput('#healthInsuranceForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33109,23 +36584,25 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
             healthInsuranceService.healthInsurances.save(null, $scope.healthInsurance, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
+                    menuService.nextMenu();
             });
         } else {
             healthInsuranceService.healthInsurances.update({ Id: $scope.healthInsurance.Id }, $scope.healthInsurance, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Spousal/' + $scope.healthInsurance.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    genericService.refreshPage();
+
+    genericService.refreshPage();
+
+
 };
 HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('healthInsuranceService', function($resource) {
+;FormsApp.factory('healthInsuranceService', ['$resource',function($resource) {
     var service = {
         healthInsurances: $resource('/api/healthInsurances/:userId', { userId: '@userId' },
             {
@@ -33134,13 +36611,16 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
             }),
     };
     return service;
-});
-;var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, $rootScope) {
+}]);
+;var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, limitToFilter, $http, $rootScope) {
     $scope.path = $location.path();
-    $scope.house = houseService.houses.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.house = houseService.houses.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
             //see if garlic has something stored            
             $scope.house = $.jStorage.get($scope.path);
+            if($scope.house)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33149,7 +36629,7 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
             var value = genericService.getFormInput('#houseForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Property/' + $scope.house.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33158,23 +36638,32 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
             houseService.houses.save(null, $scope.house, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Property/' + $scope.house.UserId);
+                    menuService.nextMenu();
             });
         } else {
             houseService.houses.update({ Id: $scope.house.Id }, $scope.house, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Property/' + $scope.house.UserId);
+                    menuService.nextMenu();
             });
         }
     };
+    $scope.cities = function(cityName) {
+        return $http.get('http://ws.geonames.org/searchJSON?country=US&name_startsWith=' + cityName).then(function (response) {
+            var names = _.map(response.data.geonames, function(geoName) {
+                return geoName.name + ', ' + geoName.adminCode1;
+            });
+            return limitToFilter(names, 8);
+        });
+    };
+
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
-HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('houseService', function($resource) {
+HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'limitToFilter', '$http', '$rootScope'];
+;FormsApp.factory('houseService', ['$resource', function($resource) {
     var service = {
         houses: $resource('/api/houses/:userId', { userId: '@userId' },
             {
@@ -33183,13 +36672,16 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
             }),
     };
     return service;
-});
+}]);
 ;var PropertyCtrl = function($scope, $routeParams, $location, propertyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.property = propertyService.properties.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.property = propertyService.properties.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.property.Id == 'undefined' || $scope.property.Id == 0) {
             //see if garlic has something stored            
             $scope.property = $.jStorage.get($scope.path);
+            if ($scope.property)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33198,7 +36690,7 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
             var value = genericService.getFormInput('#propertyForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33207,23 +36699,23 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
             propertyService.properties.save(null, $scope.property, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+                    menuService.nextMenu();
             });
         } else {
             propertyService.properties.update({ Id: $scope.property.Id }, $scope.property, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('propertyService', function($resource) {
+;FormsApp.factory('propertyService', ['$resource',function($resource) {
     var service = {
         properties: $resource('/api/properties/:userId', { userId: '@userId' },
             {
@@ -33232,13 +36724,16 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
             }),
     };
     return service;
-});
+}]);
 ;var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.spousal = spousalService.spousals.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.spousal = spousalService.spousals.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
             //see if garlic has something stored            
             $scope.spousal = $.jStorage.get($scope.path);
+            if ($scope.spousal)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33247,7 +36742,7 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
             var value = genericService.getFormInput('#spousalForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33256,23 +36751,23 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
             spousalService.spousals.save(null, $scope.spousal, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+                    menuService.nextMenu();
             });
         } else {
             spousalService.spousals.update({ Id: $scope.spousal.Id }, $scope.spousal, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('spousalService', function($resource) {
+;FormsApp.factory('spousalService', ['$resource', function($resource) {
     var service = {
         spousals: $resource('/api/spousals/:userId', { userId: '@userId' },
             {
@@ -33281,13 +36776,16 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
             }),
     };
     return service;
-});
+}]);
 ;var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.tax = taxService.taxes.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.tax = taxService.taxes.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.tax.Id == 'undefined' || $scope.tax.Id == 0) {
             //see if garlic has something stored            
             $scope.tax = $.jStorage.get($scope.path);
+            if ($scope.tax)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33296,7 +36794,7 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
             var value = genericService.getFormInput('#taxForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Output/FormComplete/DomesticMediation/user/' + $scope.tax.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33305,23 +36803,23 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
             taxService.taxes.save(null, $scope.tax, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/DomesticMediation/user/' + $scope.tax.UserId);
+                    menuService.nextMenu();
             });
         } else {
             taxService.taxes.update({ Id: $scope.tax.Id }, $scope.tax, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/DomesticMediation/user/' + $scope.tax.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('taxService', function($resource) {
+;FormsApp.factory('taxService', ['$resource', function($resource) {
     var service = {
         taxes: $resource('/api/taxes/:userId', { userId: '@userId' },
             {
@@ -33330,7 +36828,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
             }),
     };
     return service;
-});
+}]);
 ;var VehicleCtrl = function($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope) {
     //#region properties
     $scope.continuePressed = false;
@@ -33339,17 +36837,22 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
 
     //#region intialize
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+    $scope.showErrors = false;
+
 
     vehicleService.vehicleForm.get({ UserId: $routeParams.userId }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.vehicleForm = $.jStorage.get($scope.path);
+            $scope.showErrors = true;
         } else {
             $scope.vehicleForm = data;
         }
+    });
+    vehicleService.custody.get({ UserId: $routeParams.userId }, function (data) {
+        $scope.custodianNames = data.CustodyInformation.CustodianNames;
     });
     vehicleService.vehicles.get({ UserId: $routeParams.userId }, function (data) {
         if (data.Vehicles.length == 0)
@@ -33385,6 +36888,9 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
         vehicleService.vehicles.save(null, $scope.vehicle, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             $scope.vehicles.push(data.Vehicle);
+            $scope.addVehicleForm.$setPristine();
+            $scope.vehicle = '';
+
         });
     };
     $scope.deleteVehicle = function (vehicle) {
@@ -33395,12 +36901,17 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
         });
     };
     $scope.continue = function () {
-        $scope.submit();
+        if ($scope.vehicleForm.$invalid) {
+            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+        } else {
+            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+        }
+        menuService.nextMenu();
     };
     //#endregion    
 };
 VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('vehicleService', function($resource) {
+;FormsApp.factory('vehicleService', ['$resource', function ($resource) {
     var service = {
         vehicles: $resource('/api/vehicles/', {},
             {
@@ -33411,16 +36922,24 @@ VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 
             {
                 update: { method: 'PUT' },
                 deleteAll: { method: 'DELETE' }
-            })
+            }),
+        custody: $resource('/api/participants/CustodyInfomation/', { },
+        {
+            get: { method: 'GET', params: { format: 'json' } },
+            update: { method: 'PUT', params: { format: 'json' } }
+        }),
     };
     return service;
-});
+}]);
 ;var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.addendum = addendumService.addendums.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.addendum = addendumService.addendums.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
             //see if garlic has something stored            
             $scope.addendum = $.jStorage.get($scope.path);
+            if ($scope.addendum)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33429,7 +36948,7 @@ VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 
             var value = genericService.getFormInput('#addendumForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33438,23 +36957,23 @@ VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 
             addendumService.addendums.save(null, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
+                    menuService.nextMenu();
             });
         } else {
             addendumService.addendums.update({ Id: $scope.addendum.Id }, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('addendumService', function($resource) {
+;FormsApp.factory('addendumService', ['$resource', function($resource) {
     var service = {
         addendums: $resource('/api/addendums/:userId', { userId: '@userId' },
             {
@@ -33463,13 +36982,17 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
             }),
     };
     return service;
-});
+}]);
 ;var CommunicationCtrl = function($scope, $routeParams, $location, communicationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
+
     $scope.communication = communicationService.communications.get({ UserId: $routeParams.userId }, function() {
         if (typeof $scope.communication.Id == 'undefined' || $scope.communication.Id == 0) {
             //see if garlic has something stored            
             $scope.communication = $.jStorage.get($scope.path);
+            if ($scope.communication)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33478,7 +37001,7 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
             var value = genericService.getFormInput('#communicationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -33487,23 +37010,23 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
             communicationService.communications.save(null, $scope.communication, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
+                    menuService.nextMenu();
             });
         } else {
             communicationService.communications.update({ Id: $scope.communication.Id }, $scope.communication, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Schedule/' + $scope.communication.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('communicationService', function($resource) {
+;FormsApp.factory('communicationService', ['$resource',function($resource) {
     var service = {
         communications: $resource('/api/communication/:userId', { userId: '@userId' },
             {
@@ -33512,7 +37035,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
             }),
     };
     return service;
-});
+}]);
 ;var DecisionCtrl = function ($scope, $routeParams, $location, decisionService, menuService, genericService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
@@ -33523,7 +37046,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
         $scope.childName = $scope.children[$scope.childNdx].Name;
-        $scope.menuPath = '/Parenting/Decision/' + $routeParams.userId + '/' + $scope.children[0].Id;
+        $scope.menuPath = '/Parenting/Decision/user/' + $routeParams.userId + '/child/' + $scope.children[0].Id;
         if (!menuService.isActive($scope.menuPath)) {
             menuService.setActive($scope.menuPath);
         }
@@ -33598,11 +37121,12 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx < 0) {
                 //Navigate else where
+                menuService.previousMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx - 1;
             var childId = $scope.children[$scope.childNdx].Id;
-            $location.path('/Parenting/Decision/' + $routeParams.userId + '/' + childId);
+            $location.path('/Parenting/Decision/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.nextChild = function () {
@@ -33610,12 +37134,13 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx === ($scope.children.length - 1)) {
                 //Navigate to next item
+                menuService.nextMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx + 1;
             var childId = $scope.children[$scope.childNdx].Id;
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            $location.path('/Parenting/Decision/' + $routeParams.userId + '/' + childId);
+            $location.path('/Parenting/Decision/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.copyChild = function(childId) {
@@ -33685,7 +37210,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
 
 };
 DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('decisionService', function ($resource) {
+;FormsApp.factory('decisionService', ['$resource',function ($resource) {
     var service = {
         decisions: $resource('/api/decisions/:childId', { childId: '@childId' },
             {
@@ -33705,7 +37230,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
 
     };
     return service;
-});
+}]);
 ;var HolidayCtrl = function ($scope, $routeParams, $location, holidayService, menuService, genericService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
@@ -33716,7 +37241,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
         $scope.childName = $scope.children[$scope.childNdx].Name;
-        $scope.menuPath = '/Parenting/Holiday/' + $routeParams.userId + '/' + $scope.children[0].Id;
+        $scope.menuPath = '/Parenting/Holiday/user/' + $routeParams.userId + '/child/' + $scope.children[0].Id;
         if (!menuService.isActive($scope.menuPath)) {
             menuService.setActive($scope.menuPath);
         }
@@ -33729,6 +37254,8 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
             if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
                 //see if garlic has something stored            
                 $scope.holiday = $.jStorage.get($scope.path);
+                if($scope.holiday)
+                    $scope.showErrors = true;
             }
         });
         holidayService.extraHolidays.get({ ChildId: childId }, function (data) {
@@ -33794,11 +37321,12 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx < 0) {
                 //Navigate else where
+                menuService.previousMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx - 1;
             var childId = $scope.children[$scope.childNdx].Id;
-            $location.path('/Parenting/Holiday/' + $routeParams.userId + '/' + childId);
+            $location.path('/Parenting/Holiday/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.nextChild = function () {
@@ -33806,12 +37334,13 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx === ($scope.children.length - 1)) {
                 //Navigate to next item
+                menuService.nextMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx + 1;
             var childId = $scope.children[$scope.childNdx].Id;
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            $location.path('/Parenting/Holiday/' + $routeParams.userId + '/' + childId);
+            $location.path('/Parenting/Holiday/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.copyChild = function (childId) {
@@ -33961,7 +37490,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
 
 };
 HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('holidayService', function($resource) {
+;FormsApp.factory('holidayService', ['$resource', function($resource) {
     var service = {
         holidays: $resource('/api/holidays/:childId', { childId: '@childId' },
             {
@@ -33981,13 +37510,16 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
 
     };
     return service;
-});
+}]);
 ;var InformationCtrl = function($scope, $routeParams, $location, informationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.information = informationService.information.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.information = informationService.information.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.information.Id == 'undefined' || $scope.information.Id == 0) {
             //see if garlic has something stored            
             $scope.information = $.jStorage.get($scope.path);
+            if ($scope.information)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -33996,7 +37528,7 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
             var value = genericService.getFormInput('#informationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Decision/' + $scope.information.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34005,23 +37537,23 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
             informationService.information.save(null, $scope.information, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
+                    menuService.nextMenu();
             });
         } else {
             informationService.information.update({ Id: $scope.information.Id }, $scope.information, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('informationService', function($resource) {
+;FormsApp.factory('informationService', ['$resource',function($resource) {
     var service = {
         information: $resource('/api/information/:userId', { userId: '@userId' },
             {
@@ -34030,13 +37562,16 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
             }),
     };
     return service;
-});
+}]);
 ;var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.privacy = privacyService.privacies.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.privacy = privacyService.privacies.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
             //see if garlic has something stored            
             $scope.privacy = $.jStorage.get($scope.path);
+            if ($scope.privacy)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -34045,7 +37580,7 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
             var value = genericService.getFormInput('#privacyForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34054,23 +37589,23 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
             privacyService.privacies.save(null, $scope.privacy, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+                    menuService.nextMenu();
             });
         } else {
             privacyService.privacies.update({ Id: $scope.privacy.Id }, $scope.privacy, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('privacyService', function($resource) {
+;FormsApp.factory('privacyService', ['$resource',function($resource) {
     var service = {
         privacies: $resource('/api/privacies/:userId', { userId: '@userId' },
             {
@@ -34079,13 +37614,16 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
             }),
     };
     return service;
-});
+}]);
 ;var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.responsibility = responsibilityService.responsibilities.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.responsibility = responsibilityService.responsibilities.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
             //see if garlic has something stored            
             $scope.responsibility = $.jStorage.get($scope.path);
+            if ($scope.responsibility)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -34094,7 +37632,7 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
             var value = genericService.getFormInput('#responsibilityForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34103,23 +37641,30 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
             responsibilityService.responsibilities.save(null, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+                    menuService.nextMenu();
             });
         } else {
             responsibilityService.responsibilities.update({ Id: $scope.responsibility.Id }, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+                    menuService.nextMenu();
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
+    $scope.CalculatePercentage = function(parent) {
+        if (parent === 'Mother') {
+            $scope.responsibility.FatherPercentage = genericService.calculateRemainingPercentage($scope.responsibility.MotherPercentage);
+        } else {
+            $scope.responsibility.MotherPercentage = genericService.calculateRemainingPercentage($scope.responsibility.FatherPercentage);
+        }
     }
+    $rootScope.currentScope = $scope;
+
+    genericService.refreshPage();
+
 };
 ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('responsibilityService', function($resource) {
+;FormsApp.factory('responsibilityService', ['$resource', function($resource) {
     var service = {
         responsibilities: $resource('/api/responsibilities/:userId', { userId: '@userId' },
             {
@@ -34128,14 +37673,19 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
             }),
     };
     return service;
-});
+}]);
 ;var ScheduleCtrl = function($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
             //see if garlic has something stored            
             $scope.schedule = $.jStorage.get($scope.path);
-            
+            if ($scope.schedule)
+                $scope.showErrors = true;
+            //The default time for control makes it dirty. Undo this
+            $scope.scheduleForm.PickedUp.$dirty = false;
+            $scope.scheduleForm.DroppedOff.$dirty = false;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -34144,7 +37694,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
             var value = genericService.getFormInput('#scheduleForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34153,13 +37703,13 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
             scheduleService.schedules.save(null, $scope.schedule, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+                    menuService.nextMenu();
             });
         } else {
             scheduleService.schedules.update({ Id: $scope.schedule.Id }, $scope.schedule, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Holiday/' + $scope.schedule.UserId);
+                    menuService.nextMenu();
             });
         }
     };
@@ -34202,12 +37752,12 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('scheduleService', function($resource) {
+;FormsApp.factory('scheduleService', ['$resource', function($resource) {
     var service = {
         schedules: $resource('/api/schedules/:userId', { userId: '@userId' },
             {
@@ -34216,7 +37766,7 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
             }),
     };
     return service;
-});
+}]);
 ;var ChildCareCtrl = function ($scope, $routeParams, $location, childCareService, menuService, genericService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
@@ -34227,16 +37777,10 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
         $scope.childName = $scope.children[$scope.childNdx].Name;
-        $scope.menuPath = '/Financial/ChildCare/' + $routeParams.userId + '/' + $scope.children[0].Id;
-        if (!menuService.isActive($scope.menuPath)) {
-            menuService.setActive($scope.menuPath);
-        }
     });
     //#endregion
 
     //#region Event Handlers
-    
-
     $scope.getChildChildCare = function (childId) {
         $scope.childCare = childCareService.childCares.get({ ChildId: childId }, function () {
             if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
@@ -34256,11 +37800,8 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
     $scope.submit = function (noNavigate) {
         if ($scope.childCareForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#childCareForm');
-            $.jStorage.set($scope.path, value);
             return;
         }
-        $.jStorage.deleteKey($scope.path);
         $scope.childCareForm.UserId = $routeParams.userId;
         if (typeof $scope.childCareForm.Id == 'undefined' || $scope.childCareForm.Id == 0) {
             childCareService.childCareForms.save(null, $scope.childCareForm, function () {
@@ -34273,8 +37814,8 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
         }
     };
     $scope.submitChildCare = function(callback) {
-        if ($scope.childCareChildForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.menuPath, 'icon-pencil icon-red');
+        if ($scope.childCareChildForm.$invalid || $scope.childCare === null) {
+            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#childCareChildForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;
@@ -34294,41 +37835,48 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
                 callback();
             });
         }
-        menuService.setSubMenuIconClass($scope.menuPath, 'icon-ok icon-green');
+        menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
     };
     $scope.previousChild = function () {
         $scope.submitChildCare(function () {
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx < 0) {
                 //Navigate else where
+                menuService.previousMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx - 1;
             var childId = $scope.children[$scope.childNdx].Id;
-            $location.path('/Financial/ChildCare/' + $routeParams.userId + '/' + childId);
+            $location.path('/Financial/ChildCare/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.nextChild = function () {
         $scope.submitChildCare(function () {
+            //if radio button not selected or set to no, no need to cycle through children
+            if (!$scope.childCareForm.ChildrenInvolved || $scope.childCareForm.ChildrenInvolved == 2) {
+                menuService.nextMenu();
+                return;
+            }
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx === ($scope.children.length - 1)) {
                 //Navigate to next item
+                menuService.nextMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx + 1;
             var childId = $scope.children[$scope.childNdx].Id;
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            $location.path('/Financial/ChildCare/' + $routeParams.userId + '/' + childId);
+            $location.path('/Financial/ChildCare/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
 
     //#endregion
 
     $scope.getChildChildCare($routeParams.childId);
-
+    genericService.refreshPage();
 };
 ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('childCareService', function ($resource) {
+;FormsApp.factory('childCareService', ['$resource',function ($resource) {
     var service = {
         childCares: $resource('/api/childCares/:childId', { childId: '@childId' },
             {
@@ -34347,13 +37895,69 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
             }),
     };
     return service;
-});
+}]);
+;var ChildSupportCtrl = function($scope, $routeParams, $location, childSupportService, menuService, genericService, $rootScope) {
+    $scope.path = $location.path();
+    $scope.showErrors = false;
+
+    $scope.childSupport = childSupportService.childSupports.get({ UserId: $routeParams.userId }, function() {
+        if (typeof $scope.childSupport.Id == 'undefined' || $scope.childSupport.Id == 0) {
+            //see if garlic has something stored            
+            $scope.childSupport = $.jStorage.get($scope.path);
+            if ($scope.childSupport)
+                $scope.showErrors = true;
+        }
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.childSupportForm.$invalid) {
+            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            var value = genericService.getFormInput('#childSupportForm');
+            $.jStorage.set($scope.path, value);
+            if (!noNavigate)
+                menuService.nextMenu();
+            return;
+        }
+        $.jStorage.deleteKey($scope.path);
+        $scope.childSupport.UserId = $routeParams.userId;
+        if (typeof $scope.childSupport.Id == 'undefined' || $scope.childSupport.Id == 0) {
+            childSupportService.childSupports.save(null, $scope.childSupport, function() {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                if (!noNavigate)
+                    menuService.nextMenu();
+            });
+        } else {
+            childSupportService.childSupports.update({ Id: $scope.childSupport.Id }, $scope.childSupport, function() {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                if (!noNavigate)
+                    menuService.nextMenu();
+            });
+        }
+    };
+    $rootScope.currentScope = $scope;
+
+    genericService.refreshPage();
+
+};
+ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportService', 'menuService', 'genericService', '$rootScope'];
+;FormsApp.factory('childSupportService', ['$resource',function($resource) {
+    var service = {
+        childSupports: $resource('/api/childSupports/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+}]);
 ;var DeviationCtrl = function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
     $scope.deviation = deviationService.deviations.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
             //see if garlic has something stored            
             $scope.deviation = $.jStorage.get($scope.path);
+            if ($scope.deviation)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function (noNavigate) {
@@ -34362,7 +37966,7 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
             var value = genericService.getFormInput('#deviationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Output/FormComplete/Financial/user/' + $scope.deviation.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34371,23 +37975,23 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
             deviationService.deviations.save(null, $scope.deviation, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Financial/user/' + $scope.deviation.UserId);
+                    menuService.nextMenu();
             });
         } else {
             deviationService.deviations.update({ Id: $scope.deviation.Id }, $scope.deviation, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Financial/user/' + $scope.deviation.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('deviationService', function($resource) {
+;FormsApp.factory('deviationService', ['$resource',function($resource) {
     var service = {
         deviations: $resource('/api/deviations/:userId', { userId: '@userId' },
             {
@@ -34396,7 +38000,7 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
             }),
     };
     return service;
-});
+}]);
 ;var ExtraExpenseCtrl = function ($scope, $routeParams, $location, extraExpenseService, menuService, genericService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
@@ -34407,10 +38011,6 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
         $scope.childName = $scope.children[$scope.childNdx].Name;
-        $scope.menuPath = '/Financial/ExtraExpense/' + $routeParams.userId + '/' + $scope.children[0].Id;
-        if (!menuService.isActive($scope.menuPath)) {
-            menuService.setActive($scope.menuPath);
-        }
     });
     //#endregion
 
@@ -34423,22 +38023,17 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
             }
         });
     };
-    $scope.extraExpense = extraExpenseService.extraExpenseForms.get({ UserId: $routeParams.userId }, function (data) {
-        if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
-            //see if garlic has something stored            
-            $scope.extraExpenseForm = $.jStorage.get($scope.path);
+    $scope.extraExpenseForm = extraExpenseService.extraExpenseForms.get({ UserId: $routeParams.userId }, function () {
+        if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
+            $scope.showErrors = true;
         }
-        $scope.extraExpenseForm = data;
     });
     
     $scope.submit = function (noNavigate) {
-        if ($scope.extraExpenseForm.$invalid) {
+        if ($scope.extraExpensesForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#extraExpenseForm');
-            $.jStorage.set($scope.path, value);
             return;
         }
-        $.jStorage.deleteKey($scope.path);
         $scope.extraExpenseForm.UserId = $routeParams.userId;
         if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
             extraExpenseService.extraExpenseForms.save(null, $scope.extraExpenseForm, function () {
@@ -34452,10 +38047,9 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
     };
     $scope.submitExtraExpense = function (callback) {
         if ($scope.extraExpenseChildForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.menuPath, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#extraExpenseChildForm');
             $.jStorage.set($scope.path, value);
-            $scope.showErrors = true;
             if (callback)
                 callback();
             return;
@@ -34472,41 +38066,53 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
                 callback();
             });
         }
-        menuService.setSubMenuIconClass($scope.menuPath, 'icon-ok icon-green');
+        menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
     };
     $scope.previousChild = function () {
         $scope.submitExtraExpense(function () {
+            //if radio button not selected or set to no, no need to cycle through children
+            if (!$scope.extraExpenseForm || !$scope.extraExpenseForm.HasExtraExpenses || $scope.extraExpenseForm.HasExtraExpenses == 2) {
+                menuService.previousMenu();
+                return;
+            }
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx < 0) {
                 //Navigate to previous menu
+                menuService.previousMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx - 1;
             var childId = $scope.children[$scope.childNdx].Id;
-            $location.path('/Financial/ExtraExpense/' + $routeParams.userId + '/' + childId);
+            $location.path('/Financial/ExtraExpense/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.nextChild = function () {
         $scope.submitExtraExpense(function () {
+            //if radio button not selected or set to no, no need to cycle through children
+            if (!$scope.extraExpenseForm.HasExtraExpenses || $scope.extraExpenseForm.HasExtraExpenses == 2) {
+                menuService.nextMenu();
+                return;
+            }
+
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx === ($scope.children.length - 1)) {
                 //Navigate to next item
+                menuService.nextMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx + 1;
             var childId = $scope.children[$scope.childNdx].Id;
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            $location.path('/Financial/ExtraExpense/' + $routeParams.userId + '/' + childId);
+            $location.path('/Financial/ExtraExpense/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
 
     //#endregion
-
     $scope.getChildExtraExpense($routeParams.childId);
-
+    genericService.refreshPage();
 };
 ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('extraExpenseService', function($resource) {
+;FormsApp.factory('extraExpenseService', ['$resource', function($resource) {
     var service = {
         extraExpenses: $resource('/api/extraExpenses/:childId', { childId: '@childId' },
             {
@@ -34526,13 +38132,16 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
     };
     return service;
 
-});
+}]);
 ;var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.health = healthService.healths.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.health = healthService.healths.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
             //see if garlic has something stored            
             $scope.health = $.jStorage.get($scope.path);
+            if ($scope.health)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -34541,7 +38150,7 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
             var value = genericService.getFormInput('#healthForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34550,23 +38159,23 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
             healthService.healths.save(null, $scope.health, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
+                    menuService.nextMenu();
             });
         } else {
             healthService.healths.update({ Id: $scope.health.Id }, $scope.health, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Income/' + $scope.health.UserId + "/false");
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('healthService', function($resource) {
+;FormsApp.factory('healthService', ['$resource',function($resource) {
     var service = {
         healths: $resource('/api/healths/:userId', { userId: '@userId' },
             {
@@ -34575,13 +38184,16 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
             }),
     };
     return service;
-});
+}]);
 ;var IncomeCtrl = function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
     $scope.income = incomeService.incomes.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             //see if garlic has something stored            
             $scope.income = $.jStorage.get($scope.path);
+            if ($scope.income)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -34591,7 +38203,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
             var value = genericService.getFormInput('#incomeForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "/" + isOtherParent);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34601,23 +38213,21 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
             incomeService.incomes.save(null, $scope.income, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         } else {
             incomeService.incomes.update({ Id: $scope.income.Id }, $scope.income, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/SocialSecurity/' + $scope.income.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    genericService.refreshPage();
 };
 IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('incomeService', function($resource) {
+;FormsApp.factory('incomeService', ['$resource', function($resource) {
     var service = {
         incomes: $resource('/api/incomes/:userId', { userId: '@userId' },
             {
@@ -34626,27 +38236,25 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
             }),
     };
     return service;
-});
+}]);
 ;var OtherChildCtrl = function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope) {
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
+    $scope.showErrors = false;
     //#endregion
 
     //#region intialize
-    $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
-
     otherChildService.otherChildren.get({ UserId: $routeParams.userId }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.otherChildren = $.jStorage.get($scope.path);
+            if ($scope.otherChildren)
+                $scope.showErrors = true;
         } else {
             $scope.otherChildren = data;
         }
-        if (typeof $scope.otherChildren !== 'undefined' && $scope.otherChildren.Id > 0) {
+        if (typeof $scope.otherChildren !== 'undefined' && $scope.otherChildren !== null && $scope.otherChildren.Id > 0) {
             otherChildService.otherChild.get({ OtherChildrenId: $routeParams.userId }, function (data) {
                 if (data.OtherChildren.length == 0)
                     $scope.children = [];
@@ -34661,16 +38269,12 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
 
     //#region event handlers
     $scope.submit = function (noNavigate) {
-        var isOtherParent = $routeParams.isOtherParent;
-        if ($scope.otherChildren.$invalid) {
+        if ($scope.otherChildrenForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#otherChildren');
+            var value = genericService.getFormInput('#otherChildrenForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate) {
-                if (isOtherParent)
-                    $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
-                else
-                    $location.path('/Financial/Income/' + $scope.otherChild.UserId + "/" + !isOtherParent);
+                menuService.nextMenu();
             }
             return;
         }
@@ -34681,20 +38285,14 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
             otherChildService.otherChildren.save(null, $scope.otherChildren, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate) {
-                    if (isOtherParent)
-                        $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
-                    else
-                        $location.path('/Financial/Income/' + $scope.otherChild.UserId + "/" + !isOtherParent);
+                    menuService.nextMenu();
                 }
             });
         } else {
             otherChildService.otherChildren.update(null, $scope.otherChildren, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate) {
-                    if (isOtherParent)
-                        $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
-                    else
-                        $location.path('/Financial/Income/' + $scope.otherChild.UserId + "/" + !isOtherParent);
+                    menuService.nextMenu();
                 }
             });
         }
@@ -34705,6 +38303,8 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
         otherChildService.otherChild.save(null, $scope.otherChild, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             $scope.children.push(data.OtherChild);
+            $scope.otherChildForm.$setPristine();
+            $scope.otherChild = '';
         });
     };
     $scope.deleteOtherChild = function (otherChild) {
@@ -34718,10 +38318,13 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
         $scope.submit();
     };
     //#endregion    
+    $rootScope.currentScope = $scope;
+    genericService.refreshPage();
+
 };
 OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope'];
 
-;FormsApp.factory('otherChildService', function($resource) {
+;FormsApp.factory('otherChildService', ['$resource', function($resource) {
     var service = {
         otherChildren: $resource('/api/otherChildren/', {},
             {
@@ -34735,23 +38338,25 @@ OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildServ
             })
     };
     return service;
-});
+}]);
 ;var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.socialSecurity = socialSecurityService.socialSecurities.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.socialSecurity = socialSecurityService.socialSecurities.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
             //see if garlic has something stored            
             $scope.socialSecurity = $.jStorage.get($scope.path);
+            if ($scope.socialSecurity)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function (noNavigate) {
-        var isOtherParent = $routeParams.isOtherParent;
         if ($scope.socialSecurityForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#socialSecurityForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Financial/Support/' + $scope.socialSecurity.UserId + "/" + isOtherParent);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34761,23 +38366,23 @@ OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildServ
             socialSecurityService.socialSecurities.save(null, $scope.socialSecurity, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Support/' + $scope.socialSecurity.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         } else {
             socialSecurityService.socialSecurities.update({ Id: $scope.socialSecurity.Id }, $scope.socialSecurity, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Financial/Support/' + $scope.socialSecurity.UserId + "/" + isOtherParent);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('socialSecurityService', function($resource) {
+;FormsApp.factory('socialSecurityService', ['$resource',function($resource) {
     var service = {
         socialSecurities: $resource('/api/socialSecurities/:userId', { userId: '@userId' },
             {
@@ -34786,27 +38391,33 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             }),
     };
     return service;
-});
+}]);
 ;var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showAddChild = false;
-    $scope.support = supportService.supports.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function() {
+    $scope.showErrors = false;
+    $scope.support = supportService.supports.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             //see if garlic has something stored            
             $scope.support = $.jStorage.get($scope.path);
+            if ($scope.support)
+                $scope.showErrors = true;
+
         }
     });
     supportService.courts.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (result) {
         if (result.PreexistingSupports.length == 0)
             $scope.courts = [];
         else
-            $scope.courts = courts.PreexistingSupports;
+            $scope.courts = result.PreexistingSupports;
     });
     $scope.addCourt = function() {
         $scope.court.UserId = $routeParams.userId;
         $scope.court.IsOtherParent = $routeParams.isOtherParent;
         supportService.courts.save(null, $scope.court, function (data) {
             $scope.courts.push(data);
+            $scope.courtForm.$setPristine();
+            $scope.court = '';
         });
     };
     $scope.showChildren = function(court) {
@@ -34814,25 +38425,26 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             if (data.Children.length == 0)
                 $scope.children = [];
             else
-                $scope.children = courts.Children;
+                $scope.children = data.Children;
             $scope.showAddChild = true;
+            $scope.PreexistingSupportId = court.Id;
         });
     };
     $scope.addChild = function() {
         $scope.child.UserId = $routeParams.userId;
-        $scope.child.PreexistingSupportId = $scope.court.Id;
+        $scope.child.PreexistingSupportId = $scope.PreexistingSupportId;
         supportService.children.save(null, $scope.child, function (data) {
             $scope.children.push(data.Child);
+            $scope.childForm.$setPristine();
+            $scope.child = '';
         });
     };
-    $scope.submit = function (noNavigate) {
+    $scope.submit = function () {
         var isOtherParent = $routeParams.isOtherParent;
         if ($scope.supportForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#supportForm');
             $.jStorage.set($scope.path, value);
-            if (!noNavigate)
-                $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "/" + isOtherParent);
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -34841,24 +38453,23 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             supportService.supports.save(null, $scope.support, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "/" + isOtherParent);
             });
         } else {
             supportService.supports.update({ Id: $scope.support.Id }, $scope.support, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "/" + isOtherParent);
             });
         }
     };
+    $scope.continue = function() {
+        menuService.nextMenu();
+    };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('supportService', function($resource) {
+;FormsApp.factory('supportService', ['$resource', function($resource) {
     var service = {
         supports: $resource('/api/PreexistingSupportForms/:userId', { userId: '@userId' },
             {
@@ -34877,18 +38488,23 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
             }),
     };
     return service;
-});
-;FormsApp.factory('formCompleteService', function($resource) {
+}]);
+;FormsApp.factory('formCompleteService', ['$resource', function ($resource) {
     var service = {
-        formCompletes: $resource('/api/output/formComplete/', { },
+        formCompletes: $resource('/api/output/formComplete/', {},
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
+        child: $resource('/api/child/', {},
+        {
+            update: { method: 'PUT' },
+            deleteAll: { method: 'DELETE' }
+        }),
     };
     return service;
-});
-;var FormCompleteCtrl = function($scope, $routeParams, $location, formCompleteService, menuService, genericService, $rootScope) {
+}]);
+;var FormCompleteCtrl = function($scope, $routeParams, $location, formCompleteService, menuService, genericService, headerService, $rootScope) {
     //#region Initialize
     $scope.storageKey = $location.path();
     $scope.formName = $routeParams.formName;
@@ -34908,20 +38524,36 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
         });
     }
 
-    $scope.submit = function () {
-        switch ($routeParams.formName) {
-            case 'Parenting':
-                $location.path('/Output/Parenting/User/' + $routeParams.userId);
-            case 'DomesticMediation':
-                $location.path('/Output/DomesticMediation/User/' + $routeParams.userId);
-            case 'Financial':
-                $location.path('/Output/ScheduleA/User/' + $routeParams.userId);
+    $scope.submit = function (noNavigate) {
+        if (!noNavigate) {
+            switch ($routeParams.formName) {
+                case 'ParentingPlan':
+                    $location.path('/Output/Parenting/User/' + $routeParams.userId);
+                    break;
+                case 'MediationAgreement':
+                    $location.path('/Output/DomesticMediation/User/' + $routeParams.userId);
+                    break;
+                case 'FinancialForm':
+                    $location.path('/Output/ScheduleA/User/' + $routeParams.userId);
+                    break;
+                case 'Starter':
+                    menuService.getMenu(function () {
+                        formCompleteService.child.get({ UserId: $routeParams.userId }, function (data) {
+                            if (data.Children.length == 0)
+                                $location.path('/Domestic/House/user/' + $routeParams.userId);
+                            else
+                                $location.path('/Parenting/Supervision/user/' + $routeParams.userId);
+                        });
+                    });
+                    break;
+            }
         }
     };
     $rootScope.currentScope = $scope;
+    headerService.setTitle('Form Completed');
 };
-FormCompleteCtrl.$inject = ['$scope', '$routeParams', '$location', 'formCompleteService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('parentingService', function ($resource) {
+FormCompleteCtrl.$inject = ['$scope', '$routeParams', '$location', 'formCompleteService', 'menuService', 'genericService', 'headerService','$rootScope'];
+;FormsApp.factory('parentingService', ['$resource', function ($resource) {
     var service = {
         parentings: $resource('/api/output/parenting/', {},
             {
@@ -34930,16 +38562,19 @@ FormCompleteCtrl.$inject = ['$scope', '$routeParams', '$location', 'formComplete
             }),
     };
     return service;
-});
-;var ParentingCtrl = function($scope, $routeParams, $location, parentingService, menuService, genericService, $rootScope) {
+}]);
+;var ParentingCtrl = function($scope, $routeParams, $location, parentingService, menuService, genericService, headerService, $rootScope) {
     $scope.storageKey = $location.path();
     parentingService.parentings.get({ UserId: $routeParams.userId }, function(data) {
         $scope.parenting = data;
     });
+    $scope.submit = function () {
+    };
     $rootScope.currentScope = $scope;
+    headerService.hide();
 };
-ParentingCtrl.$inject = ['$scope', '$routeParams', '$location', 'parentingService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('domesticMediationService', function ($resource) {
+ParentingCtrl.$inject = ['$scope', '$routeParams', '$location', 'parentingService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+;FormsApp.factory('domesticMediationService', ['$resource',function ($resource) {
     var service = {
         domesticMediations: $resource('/api/output/domesticMediation/', {},
             {
@@ -34948,263 +38583,186 @@ ParentingCtrl.$inject = ['$scope', '$routeParams', '$location', 'parentingServic
             }),
     };
     return service;
-});
-;var DomesticMediationCtrl = function ($scope, $routeParams, $location, domesticMediationService, menuService, genericService, $rootScope) {
+}]);
+;var DomesticMediationCtrl = function ($scope, $routeParams, $location, domesticMediationService, menuService, genericService, headerService,$rootScope) {
     $scope.storageKey = $location.path();
     domesticMediationService.domesticMediations.get({ UserId: $routeParams.userId }, function (data) {
         $scope.domesticMediation = data;
     });
+    $scope.submit = function () {
+    };
     $rootScope.currentScope = $scope;
+    headerService.hide();
 };
-DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', 'domesticMediationService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('scheduleAService', function($resource) {
+DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', 'domesticMediationService', 'menuService', 'genericService', 'headerService','$rootScope'];
+;FormsApp.factory('scheduleAService', ['$resource', function($resource) {
     var service = {
-        scheduleAs: $resource('/api/scheduleAs/:userId', { userId: '@userId' },
+        scheduleAs: $resource('/api/output/scheduleA/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
     };
     return service;
-});
-;var ScheduleACtrl = function($scope, $routeParams, $location, scheduleAService, menuService, genericService, $rootScope) {
+}]);
+;var ScheduleACtrl = function($scope, $routeParams, $location, scheduleAService, menuService, genericService, headerService, $rootScope) {
     $scope.storageKey = $location.path();
-    $scope.scheduleA = scheduleAService.scheduleAs.get({ UserId: $routeParams.userId }, function() {
-        if (typeof $scope.scheduleA.Id == 'undefined' || $scope.scheduleA.Id == 0) {
-            //see if garlic has something stored            
-            $scope.scheduleA = $.jStorage.get($scope.storageKey);
-        }
+    scheduleAService.scheduleAs.get({ UserId: $routeParams.userId }, function (data) {
+        $scope.scheduleA = data;
     });
-    $scope.submit = function(noNavigate) {
-        if ($scope.scheduleAForm.$invalid) {
-            menuService.setSubMenuIconClass('Output', 'ScheduleA', 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#scheduleAForm');
-            $.jStorage.set($scope.storageKey, value);
-            if (!noNavigate)
-                $location.path('/Output/Participant/' + $scope.scheduleA.UserId);
-            return;
-        }
-        $.jStorage.deleteKey($scope.storageKey);
-        $scope.scheduleA.UserId = $routeParams.userId;
-        if (typeof $scope.scheduleA.Id == 'undefined' || $scope.scheduleA.Id == 0) {
-            scheduleAService.scheduleAs.save(null, $scope.scheduleA, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleA', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleA.UserId);
-            });
-        } else {
-            scheduleAService.scheduleAs.update({ Id: $scope.scheduleA.Id }, $scope.scheduleA, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleA', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleA.UserId);
-            });
-        }
+    $scope.submit = function () {
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive('Output', 'ScheduleA')) {
-        menuService.setActive('Output', 'ScheduleA');
-    }
+    headerService.hide();
+
 };
-ScheduleACtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleAService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('scheduleBService', function($resource) {
+ScheduleACtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleAService', 'menuService', 'genericService', 'headerService','$rootScope'];
+;FormsApp.factory('scheduleBService', ['$resource', function($resource) {
     var service = {
-        scheduleBs: $resource('/api/scheduleBs/:userId', { userId: '@userId' },
+        scheduleBs: $resource('/api/output/scheduleB/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
     };
     return service;
-});
-;var ScheduleBCtrl = function($scope, $routeParams, $location, scheduleBService, menuService, genericService, $rootScope) {
+}]);
+;var ScheduleBCtrl = function ($scope, $routeParams, $location, scheduleBService, menuService, genericService, headerService, $rootScope) {
     $scope.storageKey = $location.path();
-    $scope.scheduleB = scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function() {
-        if (typeof $scope.scheduleB.Id == 'undefined' || $scope.scheduleB.Id == 0) {
-            //see if garlic has something stored            
-            $scope.scheduleB = $.jStorage.get($scope.storageKey);
-        }
+    scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function(data) {
+        $scope.scheduleB = data;
     });
-    $scope.submit = function(noNavigate) {
-        if ($scope.scheduleBForm.$invalid) {
-            menuService.setSubMenuIconClass('Output', 'ScheduleB', 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#scheduleBForm');
-            $.jStorage.set($scope.storageKey, value);
-            if (!noNavigate)
-                $location.path('/Output/Participant/' + $scope.scheduleB.UserId);
-            return;
-        }
-        $.jStorage.deleteKey($scope.storageKey);
-        $scope.scheduleB.UserId = $routeParams.userId;
-        if (typeof $scope.scheduleB.Id == 'undefined' || $scope.scheduleB.Id == 0) {
-            scheduleBService.scheduleBs.save(null, $scope.scheduleB, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleB', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleB.UserId);
-            });
-        } else {
-            scheduleBService.scheduleBs.update({ Id: $scope.scheduleB.Id }, $scope.scheduleB, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleB', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleB.UserId);
-            });
-        }
+    $scope.submit = function() {
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive('Output', 'ScheduleB')) {
-        menuService.setActive('Output', 'ScheduleB');
-    }
+    headerService.hide();
 };
-ScheduleBCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleBService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('scheduleDService', function($resource) {
+ScheduleBCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleBService', 'menuService', 'genericService', 'headerService','$rootScope'];
+;FormsApp.factory('scheduleDService', ['$resource', function($resource) {
     var service = {
-        scheduleDs: $resource('/api/scheduleDs/:userId', { userId: '@userId' },
+        scheduleDs: $resource('/api/output/scheduleD/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
     };
     return service;
-});
-;var ScheduleDCtrl = function($scope, $routeParams, $location, scheduleDService, menuService, genericService, $rootScope) {
+}]);
+;var ScheduleDCtrl = function($scope, $routeParams, $location, scheduleDService, menuService, genericService, headerService, $rootScope) {
     $scope.storageKey = $location.path();
-    $scope.scheduleD = scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function() {
-        if (typeof $scope.scheduleD.Id == 'undefined' || $scope.scheduleD.Id == 0) {
-            //see if garlic has something stored            
-            $scope.scheduleD = $.jStorage.get($scope.storageKey);
-        }
+    scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function(data) {
+        $scope.scheduleD = data;
     });
-    $scope.submit = function(noNavigate) {
-        if ($scope.scheduleDForm.$invalid) {
-            menuService.setSubMenuIconClass('Output', 'ScheduleD', 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#scheduleDForm');
-            $.jStorage.set($scope.storageKey, value);
-            if (!noNavigate)
-                $location.path('/Output/Participant/' + $scope.scheduleD.UserId);
-            return;
-        }
-        $.jStorage.deleteKey($scope.storageKey);
-        $scope.scheduleD.UserId = $routeParams.userId;
-        if (typeof $scope.scheduleD.Id == 'undefined' || $scope.scheduleD.Id == 0) {
-            scheduleDService.scheduleDs.save(null, $scope.scheduleD, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleD', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleD.UserId);
-            });
-        } else {
-            scheduleDService.scheduleDs.update({ Id: $scope.scheduleD.Id }, $scope.scheduleD, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleD', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleD.UserId);
-            });
-        }
+    $scope.submit = function() {
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive('Output', 'ScheduleD')) {
-        menuService.setActive('Output', 'ScheduleD');
-    }
+    headerService.hide();
 };
-ScheduleDCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleDService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('scheduleEService', function($resource) {
+ScheduleDCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleDService', 'menuService', 'genericService', 'headerService','$rootScope'];
+;FormsApp.factory('scheduleEService', ['$resource', function($resource) {
     var service = {
-        scheduleEs: $resource('/api/scheduleEs/:userId', { userId: '@userId' },
+        scheduleEs: $resource('/api/output/scheduleE/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
     };
     return service;
-});
-;var ScheduleECtrl = function($scope, $routeParams, $location, scheduleEService, menuService, genericService, $rootScope) {
+}]);
+;var ScheduleECtrl = function($scope, $routeParams, $location, scheduleEService, menuService, genericService, headerService, $rootScope) {
     $scope.storageKey = $location.path();
-    $scope.scheduleE = scheduleEService.scheduleEs.get({ UserId: $routeParams.userId }, function() {
-        if (typeof $scope.scheduleE.Id == 'undefined' || $scope.scheduleE.Id == 0) {
-            //see if garlic has something stored            
-            $scope.scheduleE = $.jStorage.get($scope.storageKey);
-        }
+    scheduleEService.scheduleEs.get({ UserId: $routeParams.userId }, function(data) {
+        $scope.scheduleE = data;
     });
-    $scope.submit = function(noNavigate) {
-        if ($scope.scheduleEForm.$invalid) {
-            menuService.setSubMenuIconClass('Output', 'ScheduleE', 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#scheduleEForm');
-            $.jStorage.set($scope.storageKey, value);
-            if (!noNavigate)
-                $location.path('/Output/Participant/' + $scope.scheduleE.UserId);
-            return;
-        }
-        $.jStorage.deleteKey($scope.storageKey);
-        $scope.scheduleE.UserId = $routeParams.userId;
-        if (typeof $scope.scheduleE.Id == 'undefined' || $scope.scheduleE.Id == 0) {
-            scheduleEService.scheduleEs.save(null, $scope.scheduleE, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleE', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleE.UserId);
-            });
-        } else {
-            scheduleEService.scheduleEs.update({ Id: $scope.scheduleE.Id }, $scope.scheduleE, function() {
-                menuService.setSubMenuIconClass('Output', 'ScheduleE', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.scheduleE.UserId);
-            });
-        }
+    $scope.submit = function() {
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive('Output', 'ScheduleE')) {
-        menuService.setActive('Output', 'ScheduleE');
-    }
+    headerService.hide();
 };
-ScheduleECtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleEService', 'menuService', 'genericService', '$rootScope'];
-;FormsApp.factory('childSupportService', function($resource) {
+ScheduleECtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleEService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+;FormsApp.factory('childSupportOutputService', ['$resource',function($resource) {
     var service = {
-        childSupports: $resource('/api/childSupports/:userId', { userId: '@userId' },
+        childSupports: $resource('/api/output/childSupport/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
     };
     return service;
-});
-;var ChildSupportCtrl = function($scope, $routeParams, $location, childSupportService, menuService, genericService, $rootScope) {
+}]);
+;var ChildSupportOutputCtrl = function($scope, $routeParams, $location, childSupportOutputService, menuService, genericService, headerService, $rootScope) {
     $scope.storageKey = $location.path();
-    $scope.childSupport = childSupportService.childSupports.get({ UserId: $routeParams.userId }, function() {
-        if (typeof $scope.childSupport.Id == 'undefined' || $scope.childSupport.Id == 0) {
-            //see if garlic has something stored            
-            $scope.childSupport = $.jStorage.get($scope.storageKey);
-        }
+    childSupportOutputService.childSupports.get({ UserId: $routeParams.userId }, function (data) {
+        $scope.childSupport = data;
     });
-    $scope.submit = function(noNavigate) {
-        if ($scope.childSupportForm.$invalid) {
-            menuService.setSubMenuIconClass('Output', 'ChildSupport', 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#childSupportForm');
-            $.jStorage.set($scope.storageKey, value);
-            if (!noNavigate)
-                $location.path('/Output/Participant/' + $scope.childSupport.UserId);
-            return;
-        }
-        $.jStorage.deleteKey($scope.storageKey);
-        $scope.childSupport.UserId = $routeParams.userId;
-        if (typeof $scope.childSupport.Id == 'undefined' || $scope.childSupport.Id == 0) {
-            childSupportService.childSupports.save(null, $scope.childSupport, function() {
-                menuService.setSubMenuIconClass('Output', 'ChildSupport', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.childSupport.UserId);
-            });
-        } else {
-            childSupportService.childSupports.update({ Id: $scope.childSupport.Id }, $scope.childSupport, function() {
-                menuService.setSubMenuIconClass('Output', 'ChildSupport', 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Output/Participant/' + $scope.childSupport.UserId);
-            });
-        }
+    $scope.submit = function () {
+    };
+
+    $rootScope.currentScope = $scope;
+    headerService.hide();
+
+};
+ChildSupportOutputCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportOutputService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+;FormsApp.factory('csaService',['$resource', function($resource) {
+    var service = {
+        csas: $resource('/api/output/csa/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+}]);
+;var CSACtrl = function($scope, $routeParams, $location, csaService, menuService, genericService, headerService, $rootScope) {
+    $scope.storageKey = $location.path();
+    csaService.csas.get({ UserId: $routeParams.userId }, function (data) {
+        $scope.csa = data;
+    });
+    $scope.submit = function() {
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive('Output', 'ChildSupport')) {
-        menuService.setActive('Output', 'ChildSupport');
-    }
+    headerService.hide();
 };
-ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportService', 'menuService', 'genericService', '$rootScope'];
-;var HomeCtrl = function ($scope, $routeParams, $location,  menuService) {
+CSACtrl.$inject = ['$scope', '$routeParams', '$location', 'csaService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+;FormsApp.factory('registerAdminService', ['$resource',function($resource) {
+    var service = {
+        registerAdmins: $resource('/api/register/', { },
+            {
+            }),
+        roles: $resource('/api/userauths/addroles/', {},
+            {
+            }),
+    };
+    return service;
+}]);
+;var RegisterAdminCtrl = function ($scope, $routeParams, $location, registerAdminService, menuService, genericService, headerService, $rootScope) {
+    $scope.path = $location.path();
+    $scope.submit = function () {
+        if ($scope.registerAdminForm.$invalid) {
+            var value = genericService.getFormInput('#registerAdminForm');
+            $.jStorage.set($scope.path, value);
+            return;
+        }
+        $.jStorage.deleteKey($scope.path);
+        $scope.user.UserName = $scope.user.Email.replace("@", "_").replace(".", "_");
+        registerAdminService.registerAdmins.post(null, $scope.user, function () {
+            var role = {
+                UserName: $scope.Email,
+                Roles: ['FirmAdmin', 'Attorney']
+            };
+            registerAdminService.roles.save(null, role, function() {
+                $location.path('/');
+            });            
+        });
+    };
+    $rootScope.currentScope = $scope;
+    headerService.setTitle('Register Administrator');
 };
-HomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
+RegisterAdminCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerAdminService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+;var HomeCtrl = function ($scope, $routeParams, $route, $location, menuService, genericService) {
+    //genericService.refreshPage();
+};
+HomeCtrl.$inject = ['$scope', '$routeParams', '$route','$location', 'menuService', 'genericService'];
 ;var MenuCtrl = function ($scope, $routeParams, $location, menuService) {
     $scope.$watch(function () { return menuService.menuItems; }, function () {
         $scope.menuItems = menuService.menuItems;
@@ -35228,17 +38786,57 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
     };
 };
 MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
-;FormsApp.factory('menuService', function ($location, $rootScope, $resource) {
+;FormsApp.factory('menuService', ['$location', '$rootScope', '$resource', '$routeParams', function ($location, $rootScope, $resource, $routeParams) {
     var service = {
+        //#region Props
         menuItems: [],
+        userId: 0,
+        firstChildId: 0,
         isInitialized: false,
-        setItems: function (menuItems) {
-            service.menuItems = menuItems;            
+        //#endregion
+
+        //#region Events
+        //Get's the menu item from the menuList by the path
+        clearActive: function () {
+            angular.forEach(service.menuItems, function (item) {
+                for (var i = 0; i < item.subMenuItems.length; i++) {
+                    item.subMenuItems[i].itemClass = '';
+                }
+                item.itemClass = '';
+            });
         },
-        menu: $resource('/api/menus/:userId', { userId: '@userId' },
+        checkForm: function () {
+            //check to see if submenu/form is currently open.  If so, we need to save this form;
+            var subMenuItem;
+            for (var i = 0; i < service.menuItems.length; i++) {
+                var item = service.menuItems[i];
+                subMenuItem = _.find(item.subMenuItems, function (subItem) {
+                    return subItem.iconClass === 'icon-blue icon-pencil';
+                });
+                if (subMenuItem) {
+                    var currentFormScope = $rootScope.$root.currentScope;
+                    currentFormScope.submit(true); //true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
+                    break;
+                }
+            }
+        },
+        children: $resource('/api/child/:userId', { userId: '@userId' },
             {
-                getList: { method: 'GET', isArray:true, params: { format: 'json' } },
+                update: { method: 'PUT' },
             }),
+        getFirstChildId: function() {
+            for (var i = 0; i < service.menuItems.length; i++) {
+                var item = service.menuItems[i];
+                var subMenuItem = _.find(item.subMenuItems, function (subItem) {
+                    return subItem.path.toUpperCase().indexOf('/CHILD/') > -1;
+                });
+                if (subMenuItem) {
+                    var regex = /\/(child|Child)\/(\d*)/;
+                    var firstChildId = subMenuItem.path.match(regex)[2];
+                    service.firstChildId = firstChildId;
+                }
+            }
+        },
         getMenu: function (callback) {
             var userId = service.userId;
             if (typeof userId === 'undefined')
@@ -35251,10 +38849,17 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
             });
         },
         getMenuGroupByPath: function (path) {
+            //children don't have their own menu. Only the first child does.  So if path has child, replace childId with FirstChildId to get proper menu item
+            if (path.indexOf('/child/') > -1 || path.indexOf('/Child/') > -1) {
+                if (service.firstChildId == 0)
+                    service.getFirstChildId();
+                var regex = /\/(child|Child)\/(\d*)/;
+                path = path.replace(regex, "/$1/" + service.firstChildId);
+            }
             for (var i = 0; i < service.menuItems.length; i++) {
                 var item = service.menuItems[i];
                 //Return just menu item if match
-                if (item.path === path) {
+                if (item.path.toUpperCase() === path.toUpperCase()) {
                     return {
                         menuItem: item,
                         subMenuItem: null
@@ -35262,9 +38867,9 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 }
                 //else look for submenuItem
                 var subMenuItem = _.find(item.subMenuItems, function (subItem) {
-                    return subItem.path === path;
+                    return subItem.path.toUpperCase() === path.toUpperCase();
                 });
-                if (subMenuItem) {                    
+                if (subMenuItem) {
                     return {
                         menuItem: item,
                         subMenuItem: subMenuItem
@@ -35272,29 +38877,57 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 }
             }
         },
+        isActive: function (path) {
+            if (service.isInitialized) {
+                var menuGroup = service.getMenuGroupByPath(path);
+                if (menuGroup.subMenuItem)
+                    return menuGroup.subMenuItem.itemClass === 'active';
+            }
+            return false;
+        },
+        menu: $resource('/api/menus/:userId', { userId: '@userId' },
+            {
+                getList: { method: 'GET', isArray: true, params: { format: 'json' } },
+            }),
+        nextMenu: function () {
+            //Get current menu from the current path
+            var menuGroup = service.getMenuGroupByPath($location.path());
+            var ndx = _.indexOf(_.pluck(menuGroup.menuItem.subMenuItems, 'path'), menuGroup.subMenuItem.path);
+            //if we are at the last menu item, go to the form completion page
+            if (ndx == menuGroup.menuItem.subMenuItems.length - 1) {
+                //go to form complete page
+                var path = '/Output/FormComplete/' + menuGroup.menuItem.text.replace(' ', '') + '/user/' + $routeParams.userId;
+                $location.path(path);
+                return;
+            }
+            var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx + 1];
+            $location.path(nextSubMenu.path);
+        },
+        previousMenu: function () {
+            //Get current menu from the current path
+            var menuGroup = service.getMenuGroupByPath($location.path());
+            var ndx = _.indexOf(_.pluck(menuGroup.menuItem.subMenuItems, 'path'), menuGroup.subMenuItem.path);
+            var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx - 1];
+            $location.path(nextSubMenu.path);
+        },
+        setActive: function (path) {
+            if (!service.isInitialized) {
+                service.getMenu(service.setActiveCallback(path));
+            } else {
+                service.setActiveCallback(path)();
+            }
+        },
+        setItems: function (menuItems) {
+            service.menuItems = menuItems;
+        },
         setSubMenuIconClass: function (path, iconClass) {
             var menuGroup = service.getMenuGroupByPath(path);
             if (menuGroup.subMenuItem)
                 menuGroup.subMenuItem.iconClass = iconClass;
         },
-        isActive: function (path) {
-            if (service.isInitialized) {
-                var menuGroup = service.getMenuGroupByPath(path);
-                if(menuGroup.subMenuItem)
-                    return menuGroup.subMenuItem.itemClass === 'active';
-            }
-            return false;
-        },
-        setActive: function (path) {
-            if (!service.isInitialized) {
-                service.getMenu(service.setActiveCallback(path));                
-            } else {
-                service.setActiveCallback(path)();
-            }
-        },
         //Since Menu needs to load before we run this, we make this a callback function - made a closure so that we can pass args to the callback
         setActiveCallback: function (path) {
-            return function() {
+            return function () {
                 service.checkForm();
                 service.clearActive();
                 //Check to see if first menu level is the path
@@ -35303,65 +38936,106 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 });
                 if (menuItem) {
                     menuItem.itemClass = 'active';
+                    //$location.path(menuItem.path);                   
+                } else {
+                    //Must be subMenu Level
+                    var menuGroup = service.getMenuGroupByPath(path);
+                    menuGroup.menuItem.showSubMenu = true;
+                    menuGroup.menuItem.itemClass = 'submenu active';
+                    menuGroup.subMenuItem.itemClass = 'active';
+                    menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
+                    $location.path(menuGroup.subMenuItem.path);
                 }
-                //Must be subMenu Level
-                var menuGroup = service.getMenuGroupByPath(path);
-                menuGroup.menuItem.showSubMenu = true;
-                menuGroup.menuItem.itemClass = 'submenu active';
-                menuGroup.subMenuItem.itemClass = 'active';
-                menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
-                $location.path(menuGroup.subMenuItem.path);
             };
         },
-        clearActive: function() {
-            angular.forEach(service.menuItems, function (item) {
-                for (var i = 0; i < item.subMenuItems.length; i++) {
-                    item.subMenuItems[i].itemClass = '';
-                }
-                item.itemClass = '';
-            });
-        },
-        checkForm: function() {
-            //check to see if submenu/form is currently open.  If so, we need to save this form;
-            var subMenuItem;
-            for(var i=0; i<service.menuItems.length; i++) {
-                var item = service.menuItems[i];
-                subMenuItem = _.find(item.subMenuItems, function (subItem) {
-                    return subItem.iconClass === 'icon-blue icon-pencil';
-                });
-                if (subMenuItem) {
-                    var currentFormScope = $rootScope.$root.currentScope;
-                    currentFormScope.submit(true);//true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
-                    break;
-                }
-            }
-        },
-        userId: 0,
+        //#endregion
     };
+
     return service;
 
-});
+}]);
 
-;var LoginMenuCtrl = function ($scope, $routeParams, $location, loginMenuService, menuService) {
-    $scope.getAuthStatus = function() {
-        $scope.user = loginMenuService.userAuth.get({}, function (data) {
-            if (data.UserSession != null) {
-                loginMenuService.authUser = data.UserSession;
-                menuService.userId = loginMenuService.authUser.CustomId;
-                menuService.getMenu();
-            }
-        });
-    };     
-    $scope.logOff = function () {
-        loginMenuService.auth.logout({}, function () {
-            $scope.getAuthStatus();
-            $location.path('/');
+;var HeaderCtrl = function($scope, $routeParams, $location, headerService, messageService, $rootScope) {
+    headerService.initialize();
+    $scope.$watch(function () { return headerService.Title; }, function () {
+        $scope.PageTitle = headerService.Title;
+    }, true);
+    $scope.$watch(function () { return headerService.levels; }, function () {
+        $scope.levels = headerService.levels;
+    }, true);
+    $scope.$watch(function () { return headerService.showHeader; }, function () {
+        $scope.showHeader = headerService.showHeader;
+    }, true);
+    $scope.showIssue = false;
+    $scope.showIssueForm = function() {
+        $scope.showIssue = !$scope.showIssue;
+    };
+    $scope.submitIssues = function () {
+        $scope.feedback.Path = $location.path();
+        headerService.emails.save(null, $scope.feedback, function() {
+            $scope.feedbackForm.$setPristine();
+            $scope.feedback = '';
+            $scope.showIssue = false;
+            messageService.showMessage("Feedback Sent!", "Your feedback has been sent and is appreciated! You should hear from us within 48 hours.", Application.properties.messageType.Success);
         });
     };
-    $scope.getAuthStatus();
 };
-LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuService', 'menuService'];
-;FormsApp.factory('loginMenuService', function ($resource) {
+HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'messageService', '$rootScope'];
+;FormsApp.factory('headerService', ['menuService', '$location', '$resource', function (menuService, $location, $resource) {
+    var service = {
+        menuGroup: null,
+        hide: function() {
+            service.showHeader = false;
+        },        
+        show: function () {
+            service.showHeader = true;
+        }, emails: $resource('/api/emails/feedback', {},
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+        initialize: function (path) {
+            if (!path)
+                service.path = $location.path();
+            else
+                service.path = path;
+            service.menuGroup = menuService.getMenuGroupByPath(service.path);
+            service.showHeader = true;
+        },
+        setTitle: function(title) {
+            if (title)
+                service.Title = title;
+            else if(service.menuGroup){
+                service.Title = service.menuGroup.subMenuItem ? service.menuGroup.subMenuItem.text : service.menuGroup.menuItem.text;
+            }
+            service.showHeader = true;
+        },
+        setBreadCrumbs: function() {
+            service.levels = [];
+            if (service.menuGroup && service.menuGroup.menuItem) {
+                service.levels.push(service.menuGroup.menuItem);
+                if (service.menuGroup.subMenuItem)
+                    service.levels.push(service.menuGroup.subMenuItem);
+            }
+            service.showHeader = true;
+        },
+        path: null,
+        refresh: function(path) {
+            service.initialize(path);
+            service.setTitle();
+            service.setBreadCrumbs();
+        }
+    };
+    return service;
+}]);
+;var LoginMenuCtrl = function ($scope, $routeParams, $location, loginMenuService) {
+    $scope.$watch(function () { return loginMenuService.authUser; }, function () {
+        $scope.user = loginMenuService.authUser;
+    }, true);
+    loginMenuService.refresh();    
+};
+LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuService'];
+;FormsApp.factory('loginMenuService', ['$resource','menuService',function ($resource, menuService) {
     var service = {
         userAuth: $resource('/api/userauths/', {},
             {
@@ -35371,16 +39045,25 @@ LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuServic
             {
                 logout: { method: 'GET', params: { format: 'json' } },
             }),
+        refresh: function() {
+            service.userAuth.get({}, function(data) {
+                if (data.UserSession != null) {
+                    service.authUser = data.UserSession;
+                    menuService.userId = service.authUser.CustomId;
+                    menuService.getMenu();
+                }
+            });
+        }
     };
     return service;
-});
+}]);
 ;var LoginCtrl = function ($scope, $routeParams, $location, loginService) {
     $scope.login = function() {
         loginService.login.post();
     };
 };
 LoginCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService'];
-;FormsApp.factory('loginService', function ($resource) {
+;FormsApp.factory('loginService', ['$resource',function ($resource) {
     var service = {
         login: $resource('/api/auth/credentials/', {},
             {
@@ -35389,23 +39072,55 @@ LoginCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService'];
         authUser: null,
     };
     return service;
-});
-;var RegisterCtrl = function ($scope, $routeParams, $location, registerService) {
-    $scope.submit = function() {
-        registerService.register.post();
-    };
+}]);
+;var LogoffCtrl = function($scope, $routeParams, $location, logoffService, headerService) {
+    headerService.hide();
+    logoffService.logout();
 };
-RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'];
-;FormsApp.factory('registerService', function ($resource) {
+LogoffCtrl.$inject = ['$scope', '$routeParams', '$location', 'logoffService', 'headerService'];
+;FormsApp.factory('logoffService', ['loginMenuService', '$location', function (loginMenuService, $location) {
+    var service = {
+        logout: function () {
+            loginMenuService.auth.logout({}, function () {
+                loginMenuService.refresh();
+                $location.path('/');
+            });
+        }
+    };
+    return service;
+}]);
+;var UnauthorizedCtrl = function($scope, $routeParams, $location, unauthorizedService, menuService, headerService) {
+    headerService.hide();
+};
+UnauthorizedCtrl.$inject = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'menuService', 'headerService'];
+;FormsApp.factory('unauthorizedService', function($resource) {
+    var service = {
+    };
+    return service;
+});
+;var RegisterCtrl = function ($scope, $routeParams, $location, registerService, headerService, loginMenuService) {
+    $scope.submit = function () {
+        $scope.user.AutoLogin = true;
+
+        $scope.user.UserName = $scope.user.Email;//.replace("@","_").replace(".","_");
+        registerService.register.save(null, $scope.user, function () {
+            loginMenuService.refresh();
+            $location.path('/');
+        });
+    };
+    headerService.setTitle('Register');
+};
+RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService', 'headerService', 'loginMenuService'];
+;FormsApp.factory('registerService', ['$resource',function ($resource) {
     var service = {
         register: $resource('/api/register/', {},
             {
-                post: { method: 'POST', params: { format: 'json' } },
+                post: { method: 'POST', params: {  } },
             }),
         authUser: null,
     };
     return service;
-});
+}]);
 ;/* File Created: August 18, 2012 */
 window.Friendly = window.Friendly || {};
 

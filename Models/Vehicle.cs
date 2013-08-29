@@ -1,6 +1,5 @@
 ﻿using System;
 using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.DataAnnotations;
 
 
@@ -25,22 +24,6 @@ namespace Models
         public int VehicleFormId { get; set; }
         [Ignore]
         public virtual VehicleForm VehicleForm { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return new VehicleViewModel
-                {
-                    Make = Make,
-                    VehicleModel = Model,
-                    Owner = Owner,
-                    UserId = UserId,
-                    RefinanceDate = RefinanceDate.HasValue ? RefinanceDate.Value.ToString("MM/dd/yyyy") : "Not Provided",
-                    Name = Name,
-                    Refinanced = Refinanced,
-                    Year = Year.ToString(),
-                    VehicleFormId = VehicleFormId
-                };
-        }
 
         public bool IsValid()
         {

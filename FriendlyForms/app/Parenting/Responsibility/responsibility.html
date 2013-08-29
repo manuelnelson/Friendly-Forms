@@ -21,7 +21,7 @@
                             <label class="radio inline">
                                 Mother
                                 <input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="2"></label>
-                            <div ng-show="responsibilityForm.BeginningVisitation.$dirty && responsibilityForm.BeginningVisitation.$invalid">
+                            <div ng-show="responsibilityForm.BeginningVisitation.$dirty && responsibilityForm.BeginningVisitation.$invalid  || (showErrors && responsibilityForm.SupervisionCost.$invalid)">
                                 <span class="form-error" ng-show="responsibilityForm.BeginningVisitation.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             <label class="radio inline">
                                 Mother
                                 <input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="2"></label>
-                            <div ng-show="responsibilityForm.EndVisitation.$dirty && responsibilityForm.EndVisitation.$invalid">
+                            <div ng-show="responsibilityForm.EndVisitation.$dirty && responsibilityForm.EndVisitation.$invalid || (showErrors && responsibilityForm.EndVisitation.$invalid)">
                                 <span class="form-error" ng-show="responsibilityForm.EndVisitation.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                             <label class="radio">
                                 Other
                                 <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="4"></label>
-                            <div ng-show="responsibilityForm.TransportationCosts.$dirty && responsibilityForm.TransportationCosts.$invalid">
+                            <div ng-show="responsibilityForm.TransportationCosts.$dirty && responsibilityForm.TransportationCosts.$invalid || (showErrors && responsibilityForm.TransportationCosts.$invalid)">
                                 <span class="form-error" ng-show="responsibilityForm.TransportationCosts.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -61,17 +61,17 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     Father's percentage</label>
-                                <input ng-model="responsibility.FatherPercentage" class="input-mini" number name="FatherPercentage" placeholder="%" type="text" value="0">
-                                <div ng-show="responsibilityForm.FatherPercentage.$dirty && responsibilityForm.FatherPercentage.$invalid">
-                                    <span class="form-error" ng-show="responsibilityForm.FatherPercentage.$error.number">This field must be a number</span>
+                                <input ng-model="responsibility.FatherPercentage" ng-change="CalculatePercentage('Father')" class="input-mini" ng-pattern="/^[0-9]*$/" name="FatherPercentage" placeholder="%" type="text" value="0">
+                                <div ng-show="responsibilityForm.FatherPercentage.$dirty && responsibilityForm.FatherPercentage.$invalid || (showErrors && responsibilityForm.FatherPercentage.$invalid)">
+                                    <span class="form-error" ng-show="responsibilityForm.FatherPercentage.$error.pattern">This field must be a number</span>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="form-question">
                                     Mother's percentage</label>
-                                <input ng-model="responsibility.MotherPercentage" class="input-mini" number name="MotherPercentage" placeholder="%" type="text" value="0">
-                                <div ng-show="responsibilityForm.MotherPercentage.$dirty && responsibilityForm.MotherPercentage.$invalid">
-                                    <span class="form-error" ng-show="responsibilityForm.MotherPercentage.$error.number">This field must be a number</span>
+                                <input ng-model="responsibility.MotherPercentage" ng-change="CalculatePercentage('Mother')" class="input-mini" ng-pattern="/^[0-9]*$/" name="MotherPercentage" placeholder="%" type="text" value="0">
+                                <div ng-show="responsibilityForm.MotherPercentage.$dirty && responsibilityForm.MotherPercentage.$invalid || (showErrors && responsibilityForm.MotherPercentage.$invalid)">
+                                    <span class="form-error" ng-show="responsibilityForm.MotherPercentage.$error.pattern">This field must be a number</span>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                             <label class="form-question">
                                 The parties agree that visitation-related expenses will be paid as follows:</label>
                             <textarea ng-model="responsibility.OtherDetails" class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="OtherDetails" placeholder="Description" rows="2"></textarea>
-                            <div ng-show="responsibilityForm.OtherDetails.$dirty && responsibilityForm.OtherDetails.$invalid">
+                            <div ng-show="responsibilityForm.OtherDetails.$dirty && responsibilityForm.OtherDetails.$invalid || (showErrors && responsibilityForm.OtherDetails.$invalid)">
                                 <span class="form-error" ng-show="responsibilityForm.OtherDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>

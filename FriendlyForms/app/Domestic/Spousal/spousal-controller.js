@@ -1,9 +1,12 @@
 ﻿var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.spousal = spousalService.spousals.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.spousal = spousalService.spousals.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
             //see if garlic has something stored            
             $scope.spousal = $.jStorage.get($scope.path);
+            if ($scope.spousal)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#spousalForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,19 @@
             spousalService.spousals.save(null, $scope.spousal, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+                    menuService.nextMenu();
             });
         } else {
             spousalService.spousals.update({ Id: $scope.spousal.Id }, $scope.spousal, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Tax/' + $scope.spousal.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', '$rootScope'];

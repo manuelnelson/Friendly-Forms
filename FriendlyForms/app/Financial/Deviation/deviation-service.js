@@ -1,4 +1,4 @@
-﻿FormsApp.factory('deviationService', function($resource) {
+﻿FormsApp.factory('deviationService', ['$resource',function($resource) {
     var service = {
         deviations: $resource('/api/deviations/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

@@ -15,7 +15,7 @@ namespace DataLayerContext.OrmLiteRepositories
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.Select<County>();
+                return db.Select<County>("Select * from Counties Order by CountyName");
             }    
         }
     }

@@ -1,7 +1,5 @@
 ﻿using System;
 using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -44,11 +42,6 @@ namespace Models
         public int? Other { get; set; }
         public string OtherDetails { get; set; }
         
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<IncomeViewModel>();
-        }
-
         public bool IsValid()
         {
             return UserId > 0;

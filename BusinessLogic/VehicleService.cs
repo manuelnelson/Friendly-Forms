@@ -4,7 +4,6 @@ using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
@@ -13,30 +12,6 @@ namespace BusinessLogic
         public VehicleService(IVehicleRepository formRepository)
             : base(formRepository)
         {
-        }
-
-        public Vehicle AddOrUpdate(VehicleViewModel model)
-        {
-            try
-            {
-                //Check if entity already exists and we need to update record
-                var entity = model.ConvertToEntity();
-                var existEntity = FormRepository.Get(model.Id);
-                if (existEntity != null)
-                {
-                    existEntity.Update(entity);
-                    FormRepository.Update(existEntity);
-                    return existEntity;
-                }
-                //Add entity to database
-                FormRepository.Add((Vehicle) entity);
-                return (Vehicle) entity;
-            }
-            catch (Exception ex)
-            {
-                ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to save", ex);
-            }
         }
 
         public new IEnumerable<Vehicle> GetByUserId(long userId)

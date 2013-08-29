@@ -6,16 +6,16 @@
     
     //#region intialize
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    $scope.showErrors = false;
+    genericService.refreshPage();
 
-    childService.childForm.get({ UserId: $routeParams.userId }, function (data) {
-        if (typeof data.Id == 'undefined' || data.Id == 0) {
+
+    $scope.childForm = childService.childForm.get({ UserId: $routeParams.userId }, function () {
+        if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
             //see if garlic has something stored            
             $scope.childForm = $.jStorage.get($scope.path);
-        } else {
-            $scope.childForm = data;
+            if ($scope.childForm)
+                $scope.showErrors = true;
         }
     });
     childService.child.get({ UserId: $routeParams.userId }, function (data) {
@@ -28,7 +28,7 @@
     
     //#region event handlers
     $scope.submit = function () {
-        if ($scope.childForm.$invalid) {
+        if ($scope.childrenForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#childForm');
             $.jStorage.set($scope.path, value);
@@ -52,6 +52,8 @@
         childService.child.save(null, $scope.child, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             $scope.children.push(data.Child);
+            $scope.addChildForm.$setPristine();
+            $scope.child = '';
         });
     };
     $scope.deleteChild = function (child) {
@@ -65,12 +67,7 @@
         $scope.continuePressed = true;
     };
     $scope.nextForm = function () {
-        menuService.getMenu(function() {
-            if ($scope.children.length > 0)
-                $location.path('/Parenting/Privacy/' + $routeParams.userId);
-            else
-                $location.path('/Domestic/House/' + $routeParams.userId);
-        });
+        menuService.nextMenu();
     };
     //#endregion    
 };

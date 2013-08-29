@@ -19,7 +19,7 @@
                             <label class="radio">
                                 No
                                 <input required ng-model="healthInsurance.Health" name="Health" type="radio" value="2"></label>
-                            <div ng-show="healthInsuranceForm.Health.$dirty && healthInsuranceForm.Health.$invalid">
+                            <div ng-show="healthInsuranceForm.Health.$dirty && healthInsuranceForm.Health.$invalid || (showErrors && healthInsuranceForm.Health.$invalid)">
                                 <span class="form-error" ng-show="healthInsuranceForm.Health.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                             <label class="form-question">
                                 How will health insurance be funded?</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="healthInsurance.HealthDescription" name="HealthDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="healthInsuranceForm.HealthDescription.$dirty && healthInsuranceForm.HealthDescription.$invalid">
+                            <div ng-show="healthInsuranceForm.HealthDescription.$dirty && healthInsuranceForm.HealthDescription.$invalid || (showErrors && healthInsuranceForm.HealthDescription.$invalid)">
                                 <span class="form-error" ng-show="healthInsuranceForm.HealthDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>

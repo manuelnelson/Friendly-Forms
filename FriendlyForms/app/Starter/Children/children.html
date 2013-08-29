@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper" ng-model="childWrapper">
+﻿<div class="form-vertical wrapper">
     <div class="row-fluid">
         <div class="span12">
             <div class="widget-box">
@@ -7,7 +7,7 @@
                     <h5>Add Children</h5>
                 </div>
                 <div class="widget-content" ng-controller="ChildrenCtrl">
-                    <div class="row-fluid child-table" ng-show="children.length > 0">
+                    <div class="row-fluid" ng-show="children.length > 0">
                         <table class="table table-bordered table-striped" style="width: 50%;">
                             <thead>
                                 <tr>
@@ -29,24 +29,24 @@
                             </tbody>
                         </table>
                     </div>
-                    <form id="childForm" name="childForm" novalidate>
+                    <form id="childrenForm" name="childrenForm" novalidate>
                         <div class="control-group">
                             <label class="form-question">Are there children involved in this case?</label>
                             <label class="radio inline">
                                 Yes
-                                <input class="inline" ng-change="submit()" required ng-model="childForm.ChildrenInvolved" type="radio" value="1"></label>
+                                <input class="inline" ng-change="submit()" required ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="1"></label>
                             <label class="radio inline">
                                 No
-                                <input class="inline" ng-change="submit()" ng-model="childForm.ChildrenInvolved" type="radio" value="2"></label>
-                            <div ng-show="childForm.ChildrenInvolved.$dirty && childForm.ChildrenInvolved.$invalid">
-                                <span class="form-error" ng-show="childForm.ChildrenInvolved.$error.required">Please select an option</span>
+                                <input class="inline" ng-change="submit()" ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="2"></label>
+                            <div ng-show="childrenForm.ChildrenInvolved.$dirty && childrenForm.ChildrenInvolved.$invalid || (showErrors && childrenForm.ChildrenInvolved.$invalid)">
+                                <span class="form-error" ng-show="childrenForm.ChildrenInvolved.$error.required">Please select an option</span>
                             </div>
                         </div>
                     </form>
                     <form ng-submit="addChild()" id="addChildForm" ng-show="childForm.ChildrenInvolved == 1" name="addChildForm" novalidate>
                         <div class="control-group row-fluid">
                             <label class="span2">Name</label>
-                            <input ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="//^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$//" ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
+                            <input ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="child.Name" name="Name" placeholder="Name" type="text" value="" data-original-title="">
                             <div ng-show="addChildForm.Name.$dirty && addChildForm.Name.$invalid">
                                 <span class="form-error" ng-show="addChildForm.Name.$error.required">The Name field is required</span>
                                 <span class="form-error" ng-show="addChildForm.Name.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="control-group row-fluid">
                             <label class="span2">Date of Birth</label>
-                            <input ui-jq="datepicker" data-date="06/05/2013" required ng-pattern="//^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$//" ng-model="child.DateOfBirth" name="child.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
+                            <input ui-jq="datepicker" data-date="06/05/2013" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
                             <div ng-show="addChildForm.DateOfBirth.$dirty && addChildForm.DateOfBirth.$invalid">
                                 <span class="form-error" ng-show="addChildForm.DateOfBirth.$error.required">The Date of Birth field is required</span>
                                 <span class="form-error" ng-show="addChildForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>

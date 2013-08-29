@@ -2,6 +2,7 @@
 using FriendlyForms.Models;
 using ServiceStack.OrmLite;
 using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 
 namespace FriendlyForms.RestService
@@ -11,6 +12,13 @@ namespace FriendlyForms.RestService
     {
         public int[] Ids { get; set; }
     }
+    [Route("/userauths/addroles")]
+    public class UserRoles
+    {
+        public string[] Roles { get; set; }
+        public string UserName { get; set; }
+    }
+
     public class UserAuthRequest
     {
         public int Id { get; set; }
@@ -32,6 +40,8 @@ namespace FriendlyForms.RestService
     //Implementation. Can be called via any endpoint or format, see: http://servicestack.net/ServiceStack.Hello/
     public class UserAuthsService : ServiceBase
     {
+        public AssignRolesService AssignRolesService { get; set; }
+
         public object Get(UserAuths request)
         {
             return new UserAuthsResponse
@@ -39,7 +49,18 @@ namespace FriendlyForms.RestService
                     UserSession = UserSession
                 };
         }
-        
+        #region Post
+        [Authenticate]
+        public object Post(UserRoles request)
+        {            
+            AssignRolesService.Post(new AssignRoles
+            {
+                UserName = request.UserName,
+                Roles = new List<string>(request.Roles)
+            });
+            return null;
+        }
+        #endregion
         public object Any(UserAuths request)
         {
             var response = new UserAuthsResponse
@@ -54,6 +75,8 @@ namespace FriendlyForms.RestService
 
             return response;
         }
+
+
     }
 
 }

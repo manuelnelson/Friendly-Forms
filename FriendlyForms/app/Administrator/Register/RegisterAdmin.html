@@ -1,0 +1,45 @@
+﻿<div class="form-vertical wrapper" ng-controller="RegisterAdminCtrl">
+    <div class="row-fluid well form-vertical">
+        <form class="span5" ng-submit="submit()" >
+            <fieldset>
+                <legend>Law Firm Information</legend>
+                <label>
+                    Please enter your user name and password. 
+                </label>
+                <div class="control-group">
+                    <input id="DisplayName" name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
+                </div>
+                <div class="control-group">
+                    <input id="Email" name="Email" ng-model="user.Email" placeholder="Email*" type="text" value="">
+                </div>
+                <div class="control-group">
+                    <input id="Password" name="Password" ng-model="user.Password" placeholder="Password*" type="password">
+                </div>
+                <div class="control-group">
+                    <input id="ConfirmPassword" name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
+                </div>
+                <button id="Button1" class="btn btn-primary">Sign Up</button>
+            </fieldset>
+        </form>
+        <form class="span5" ng-submit="submit()">
+            <fieldset>
+                <legend>Administrator Information</legend>
+                <label>
+                    Please enter your user name and password. 
+                </label>
+                <div class="control-group">
+                    <input id="Text1" name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
+                </div>
+                <div class="control-group">
+                    <input id="Text2" name="Email" ng-model="user.Email" placeholder="Email*" type="text" value="">
+                </div>
+                <div class="control-group">
+                    <input id="Password1" name="Password" ng-model="user.Password" placeholder="Password*" type="password">
+                </div>
+                <div class="control-group">
+                    <input id="Password2" name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

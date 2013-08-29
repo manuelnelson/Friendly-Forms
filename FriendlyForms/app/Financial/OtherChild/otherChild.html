@@ -18,7 +18,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.LegallyResponsible.$dirty && otherChildrenForm.LegallyResponsible.$invalid">
+                            <div ng-show="otherChildrenForm.LegallyResponsible.$dirty && otherChildrenForm.LegallyResponsible.$invalid  || (showErrors && otherChildrenForm.LegallyResponsible.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.LegallyResponsible.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.AtHome.$dirty && otherChildrenForm.AtHome.$invalid">
+                            <div ng-show="otherChildrenForm.AtHome.$dirty && otherChildrenForm.AtHome.$invalid  || (showErrors && otherChildrenForm.AtHome.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.AtHome.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.Support.$dirty && otherChildrenForm.Support.$invalid">
+                            <div ng-show="otherChildrenForm.Support.$dirty && otherChildrenForm.Support.$invalid  || (showErrors && otherChildrenForm.Support.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.Support.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.Preexisting.$dirty && otherChildrenForm.Preexisting.$invalid">
+                            <div ng-show="otherChildrenForm.Preexisting.$dirty && otherChildrenForm.Preexisting.$invalid  || (showErrors && otherChildrenForm.Preexisting.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.Preexisting.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.InCourt.$dirty && otherChildrenForm.InCourt.$invalid">
+                            <div ng-show="otherChildrenForm.InCourt.$dirty && otherChildrenForm.InCourt.$invalid  || (showErrors && otherChildrenForm.InCourt.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.InCourt.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                             <label class="span4 form-question">
                                 Enter a comment here explaining why you have included an other qualified child in the current court case.</label>
                             <textarea class="inline" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="otherChildren.Details" name="Details" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="otherChildrenForm.Details.$dirty && otherChildrenForm.Details.$invalid">
+                            <div ng-show="otherChildrenForm.Details.$dirty && otherChildrenForm.Details.$invalid  || (showErrors && otherChildrenForm.Details.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.Details.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
@@ -144,6 +144,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

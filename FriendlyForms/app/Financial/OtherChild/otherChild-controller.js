@@ -2,22 +2,20 @@
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
+    $scope.showErrors = false;
     //#endregion
 
     //#region intialize
-    $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
-
     otherChildService.otherChildren.get({ UserId: $routeParams.userId }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.otherChildren = $.jStorage.get($scope.path);
+            if ($scope.otherChildren)
+                $scope.showErrors = true;
         } else {
             $scope.otherChildren = data;
         }
-        if (typeof $scope.otherChildren !== 'undefined' && $scope.otherChildren.Id > 0) {
+        if (typeof $scope.otherChildren !== 'undefined' && $scope.otherChildren !== null && $scope.otherChildren.Id > 0) {
             otherChildService.otherChild.get({ OtherChildrenId: $routeParams.userId }, function (data) {
                 if (data.OtherChildren.length == 0)
                     $scope.children = [];
@@ -32,16 +30,12 @@
 
     //#region event handlers
     $scope.submit = function (noNavigate) {
-        var isOtherParent = $routeParams.isOtherParent;
-        if ($scope.otherChildren.$invalid) {
+        if ($scope.otherChildrenForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#otherChildren');
+            var value = genericService.getFormInput('#otherChildrenForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate) {
-                if (isOtherParent)
-                    $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
-                else
-                    $location.path('/Financial/Income/' + $scope.otherChild.UserId + "/" + !isOtherParent);
+                menuService.nextMenu();
             }
             return;
         }
@@ -52,20 +46,14 @@
             otherChildService.otherChildren.save(null, $scope.otherChildren, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate) {
-                    if (isOtherParent)
-                        $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
-                    else
-                        $location.path('/Financial/Income/' + $scope.otherChild.UserId + "/" + !isOtherParent);
+                    menuService.nextMenu();
                 }
             });
         } else {
             otherChildService.otherChildren.update(null, $scope.otherChildren, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate) {
-                    if (isOtherParent)
-                        $location.path('/Financial/Deviation/' + $scope.otherChild.UserId);
-                    else
-                        $location.path('/Financial/Income/' + $scope.otherChild.UserId + "/" + !isOtherParent);
+                    menuService.nextMenu();
                 }
             });
         }
@@ -76,6 +64,8 @@
         otherChildService.otherChild.save(null, $scope.otherChild, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             $scope.children.push(data.OtherChild);
+            $scope.otherChildForm.$setPristine();
+            $scope.otherChild = '';
         });
     };
     $scope.deleteOtherChild = function (otherChild) {
@@ -89,5 +79,8 @@
         $scope.submit();
     };
     //#endregion    
+    $rootScope.currentScope = $scope;
+    genericService.refreshPage();
+
 };
 OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope'];

@@ -10,5 +10,6 @@ namespace Models
         public long Id { get; set; }
         public int UserAuthId { get; set; }
         public bool Verified { get; set; }
+        public int? LawFirmId { get; set; }
     }
 }

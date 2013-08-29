@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -20,11 +18,6 @@ namespace Models
         public string SupervisionWhere { get; set; }
         public string SupervisionWho { get; set; }
         public int? SupervisionCost { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<PrivacyViewModel>();
-        }
 
         public bool IsValid()
         {

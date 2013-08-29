@@ -8,16 +8,10 @@
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
         $scope.childName = $scope.children[$scope.childNdx].Name;
-        $scope.menuPath = '/Financial/ChildCare/' + $routeParams.userId + '/' + $scope.children[0].Id;
-        if (!menuService.isActive($scope.menuPath)) {
-            menuService.setActive($scope.menuPath);
-        }
     });
     //#endregion
 
     //#region Event Handlers
-    
-
     $scope.getChildChildCare = function (childId) {
         $scope.childCare = childCareService.childCares.get({ ChildId: childId }, function () {
             if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
@@ -37,11 +31,8 @@
     $scope.submit = function (noNavigate) {
         if ($scope.childCareForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#childCareForm');
-            $.jStorage.set($scope.path, value);
             return;
         }
-        $.jStorage.deleteKey($scope.path);
         $scope.childCareForm.UserId = $routeParams.userId;
         if (typeof $scope.childCareForm.Id == 'undefined' || $scope.childCareForm.Id == 0) {
             childCareService.childCareForms.save(null, $scope.childCareForm, function () {
@@ -54,8 +45,8 @@
         }
     };
     $scope.submitChildCare = function(callback) {
-        if ($scope.childCareChildForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.menuPath, 'icon-pencil icon-red');
+        if ($scope.childCareChildForm.$invalid || $scope.childCare === null) {
+            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#childCareChildForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;
@@ -75,37 +66,44 @@
                 callback();
             });
         }
-        menuService.setSubMenuIconClass($scope.menuPath, 'icon-ok icon-green');
+        menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
     };
     $scope.previousChild = function () {
         $scope.submitChildCare(function () {
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx < 0) {
                 //Navigate else where
+                menuService.previousMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx - 1;
             var childId = $scope.children[$scope.childNdx].Id;
-            $location.path('/Financial/ChildCare/' + $routeParams.userId + '/' + childId);
+            $location.path('/Financial/ChildCare/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.nextChild = function () {
         $scope.submitChildCare(function () {
+            //if radio button not selected or set to no, no need to cycle through children
+            if (!$scope.childCareForm.ChildrenInvolved || $scope.childCareForm.ChildrenInvolved == 2) {
+                menuService.nextMenu();
+                return;
+            }
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx === ($scope.children.length - 1)) {
                 //Navigate to next item
+                menuService.nextMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx + 1;
             var childId = $scope.children[$scope.childNdx].Id;
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            $location.path('/Financial/ChildCare/' + $routeParams.userId + '/' + childId);
+            $location.path('/Financial/ChildCare/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
 
     //#endregion
 
     $scope.getChildChildCare($routeParams.childId);
-
+    genericService.refreshPage();
 };
 ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareService', 'menuService', 'genericService', '$rootScope'];

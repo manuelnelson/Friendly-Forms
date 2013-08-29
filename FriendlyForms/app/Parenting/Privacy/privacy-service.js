@@ -1,4 +1,4 @@
-﻿FormsApp.factory('privacyService', function($resource) {
+﻿FormsApp.factory('privacyService', ['$resource',function($resource) {
     var service = {
         privacies: $resource('/api/privacies/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

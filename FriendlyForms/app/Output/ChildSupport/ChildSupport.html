@@ -1,144 +1,136 @@
-﻿<script id="friendly-childSupportWorksheet-template" type="text/x-jquery-tmpl">
-    <div class="row-fluid" style="text-align: center;">
-        <h2>CHILD SUPPORT WORKSHEET</h2>
-        <h2>{{childSupport.County}} County Superior Court</h2>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Child Name</th>
-                <th>Date of Birth</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="child in childSupport.Children">
-                <td>{{child.Name}}</td>
-                <td>{{child.DateOfBirthString}}</td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>{{childSupport.Father}}</th>
-                <th>{{childSupport.Mother}}</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1. Parent's Monthly Gross Income</td>
-                <td class="currency">${{childSupport.FatherCsw.GrossIncome}}</td>
-                <td class="currency">${{childSupport.MotherCsw.GrossIncome}}</td>
-                <td class="currency">${{childSupport.TotalCsw.GrossIncome}}</td>
-            </tr>
-            <tr>
-                <td>2. Monthly Adjusted Income</td>
-                <td class="currency">${{childSupport.FatherCsw.AdjustedIncome}}</td>
-                <td class="currency">${{childSupport.MotherCsw.AdjustedIncome}}</td>
-                <td class="currency">${{childSupport.TotalCsw.AdjustedIncome}}</td>
-            </tr>
-            <tr>
-                <td>3. Pro Rata Shares of Combined Income</td>
-                <td class="currency">{{childSupport.FatherCsw.CombinedIncome}}%</td>
-                <td class="currency">{{childSupport.MotherCsw.CombinedIncome}}%</td>
-                <td class="currency">{{childSupport.TotalCsw.CombinedIncome}}%</td>
-            </tr>
-            <tr>
-                <td>4. Basic Child Support Obligation</td>
-                <td class="currency">${{childSupport.FatherCsw.SupportObligation}}</td>
-                <td class="currency">${{childSupport.MotherCsw.SupportObligation}}</td>
-                <td class="currency">${{childSupport.TotalCsw.SupportObligation}}</td>
-            </tr>
-            <tr>
-                <td>5. Pro rata shares of Basic Child Support Obligation</td>
-                <td class="currency">${{childSupport.FatherCsw.ProRataObligation}}</td>
-                <td class="currency">${{childSupport.MotherCsw.ProRataObligation}}</td>
-                <td class="currency"></td>
-            </tr>
-            <tr>
-                <td>6. Adjustment for Work Related Child Care and Health Insurance Expenses</td>
-                <td class="currency">${{childSupport.FatherCsw.WorkRelatedExpenses}}</td>
-                <td class="currency">${{childSupport.MotherCsw.WorkRelatedExpenses}}</td>
-                <td class="currency"></td>
-            </tr>
-            <tr>
-                <td>7. Adjusted Child Support Obligation</td>
-                <td class="currency">${{childSupport.FatherCsw.AdjustedObligation}}</td>
-                <td class="currency">${{childSupport.MotherCsw.AdjustedObligation}}</td>
-                <td class="currency"></td>
-            </tr>
-            <tr>
-                <td>8. Adjustment for Additional Expenses Paid</td>
-                <td class="currency">${{childSupport.FatherCsw.AdjustedExpensesPaid}}</td>
-                <td class="currency">${{childSupport.MotherCsw.AdjustedExpensesPaid}}</td>
-                <td class="currency"></td>
-            </tr>
-            <tr>
-                <td>9. Presumptive Amount of Child Support</td>
-                <td class="currency">${{childSupport.FatherCsw.PresumptiveAmount}}</td>
-                <td class="currency">${{childSupport.MotherCsw.PresumptiveAmount}}</td>
-                <td class="currency"></td>
-            </tr>
-        </tbody>
-    </table>
-    <br />
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>{{childSupport.Father}}</th>
-                <th>{{childSupport.Mother}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>10. Deviations from Presumptive Child Support Amount</td>
-                <td class="currency">${{childSupport.FatherCsw.DeviationsAmount}}</td>
-                <td class="currency">${{childSupport.MotherCsw.DeviationsAmount}}</td>
-            </tr>
-            <tr>
-                <td>11. Subtotal after Deviations</td>
-                <td class="currency">${{childSupport.FatherCsw.Subtotal}}</td>
-                <td class="currency">${{childSupport.MotherCsw.Subtotal}}</td>
-            </tr>
-            <tr>
-                <td>12. Social Security Payments</td>
-                <td class="currency">${{childSupport.FatherCsw.SocialSecurity}}</td>
-                <td class="currency">${{childSupport.MotherCsw.SocialSecurity}}</td>
-            </tr>
-            <tr>
-                <td>13. Final Child Support Amount</td>
-                <td class="currency">${{childSupport.FatherCsw.FinalAmount}}</td>
-                <td class="currency">${{childSupport.MotherCsw.FinalAmount}}</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td class="currency"></td>
-                <td class="currency"></td>
-            </tr>
-            <tr>
-                <td>14. Uninsured Health Expenses</td>
-                <td class="currency">${{childSupport.FatherCsw.UninsuredExpenses}}</td>
-                <td class="currency">${{childSupport.MotherCsw.UninsuredExpenses}}</td>
-            </tr>
-        </tbody>
-    </table>
-    <p>
-        The following schedules are attached to this worksheet: {{childSupport.ValidSchedules}}<br />
-        The following schedules are NOT attached to this worksheet: {{childSupport.InvalidSchedules}}
-    </p>
-    <label class="checkbox inline">
-        State of Georgia, ex rel., Department of Human Services, o/b/o (Check box only if action involves the Office of Child Support Services)
+﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
+<div class="row-fluid" style="text-align: center;">
+    <h2>CHILD SUPPORT WORKSHEET</h2>
+    <h2>{{childSupport.County}} County Superior Court</h2>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Child Name</th>
+            <th>Date of Birth</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="child in childSupport.Children">
+            <td>{{child.Name}}</td>
+            <td>{{child.DateOfBirthString}}</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{{childSupport.Father}}</th>
+            <th>{{childSupport.Mother}}</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1. Parent's Monthly Gross Income</td>
+            <td class="currency">${{childSupport.FatherCsw.GrossIncome}}</td>
+            <td class="currency">${{childSupport.MotherCsw.GrossIncome}}</td>
+            <td class="currency">${{childSupport.TotalCsw.GrossIncome}}</td>
+        </tr>
+        <tr>
+            <td>2. Monthly Adjusted Income</td>
+            <td class="currency">${{childSupport.FatherCsw.AdjustedIncome}}</td>
+            <td class="currency">${{childSupport.MotherCsw.AdjustedIncome}}</td>
+            <td class="currency">${{childSupport.TotalCsw.AdjustedIncome}}</td>
+        </tr>
+        <tr>
+            <td>3. Pro Rata Shares of Combined Income</td>
+            <td class="currency">{{childSupport.FatherCsw.CombinedIncome}}%</td>
+            <td class="currency">{{childSupport.MotherCsw.CombinedIncome}}%</td>
+            <td class="currency">{{childSupport.TotalCsw.CombinedIncome}}%</td>
+        </tr>
+        <tr>
+            <td>4. Basic Child Support Obligation</td>
+            <td class="currency">${{childSupport.FatherCsw.SupportObligation}}</td>
+            <td class="currency">${{childSupport.MotherCsw.SupportObligation}}</td>
+            <td class="currency">${{childSupport.TotalCsw.SupportObligation}}</td>
+        </tr>
+        <tr>
+            <td>5. Pro rata shares of Basic Child Support Obligation</td>
+            <td class="currency">${{childSupport.FatherCsw.ProRataObligation}}</td>
+            <td class="currency">${{childSupport.MotherCsw.ProRataObligation}}</td>
+            <td class="currency"></td>
+        </tr>
+        <tr>
+            <td>6. Adjustment for Work Related Child Care and Health Insurance Expenses</td>
+            <td class="currency">${{childSupport.FatherCsw.WorkRelatedExpenses}}</td>
+            <td class="currency">${{childSupport.MotherCsw.WorkRelatedExpenses}}</td>
+            <td class="currency"></td>
+        </tr>
+        <tr>
+            <td>7. Adjusted Child Support Obligation</td>
+            <td class="currency">${{childSupport.FatherCsw.AdjustedObligation}}</td>
+            <td class="currency">${{childSupport.MotherCsw.AdjustedObligation}}</td>
+            <td class="currency"></td>
+        </tr>
+        <tr>
+            <td>8. Adjustment for Additional Expenses Paid</td>
+            <td class="currency">${{childSupport.FatherCsw.AdjustedExpensesPaid}}</td>
+            <td class="currency">${{childSupport.MotherCsw.AdjustedExpensesPaid}}</td>
+            <td class="currency"></td>
+        </tr>
+        <tr>
+            <td>9. Presumptive Amount of Child Support</td>
+            <td class="currency">${{childSupport.FatherCsw.PresumptiveAmount}}</td>
+            <td class="currency">${{childSupport.MotherCsw.PresumptiveAmount}}</td>
+            <td class="currency"></td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>{{childSupport.Father}}</th>
+            <th>{{childSupport.Mother}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>10. Deviations from Presumptive Child Support Amount</td>
+            <td class="currency">${{childSupport.FatherCsw.DeviationsAmount}}</td>
+            <td class="currency">${{childSupport.MotherCsw.DeviationsAmount}}</td>
+        </tr>
+        <tr>
+            <td>11. Subtotal after Deviations</td>
+            <td class="currency">${{childSupport.FatherCsw.Subtotal}}</td>
+            <td class="currency">${{childSupport.MotherCsw.Subtotal}}</td>
+        </tr>
+        <tr>
+            <td>12. Social Security Payments</td>
+            <td class="currency">${{childSupport.FatherCsw.SocialSecurity}}</td>
+            <td class="currency">${{childSupport.MotherCsw.SocialSecurity}}</td>
+        </tr>
+        <tr>
+            <td>13. Final Child Support Amount</td>
+            <td class="currency">${{childSupport.FatherCsw.FinalAmount}}</td>
+            <td class="currency">${{childSupport.MotherCsw.FinalAmount}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="currency"></td>
+            <td class="currency"></td>
+        </tr>
+        <tr>
+            <td>14. Uninsured Health Expenses</td>
+            <td class="currency">${{childSupport.FatherCsw.UninsuredExpenses}}</td>
+            <td class="currency">${{childSupport.MotherCsw.UninsuredExpenses}}</td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    The following schedules are attached to this worksheet: {{childSupport.ValidSchedules}}<br />
+    The following schedules are NOT attached to this worksheet: {{childSupport.InvalidSchedules}}
+</p>
+<label class="checkbox inline">
+    State of Georgia, ex rel., Department of Human Services, o/b/o (Check box only if action involves the Office of Child Support Services)
         <input class="inline valid" type="checkbox" /></label>
 
-</script>
-<script id="friendly-CSWChildren-template" type="text/x-jquery-tmpl">
-    {{childSupport.each Children}}}}
-    <tr>
-        <td>{{childSupport.$value.Name}}</td>
-        <td>{{childSupport.$value.DateOfBirthString}}</td>
-    </tr>
-    {{childSupport./each}}}}
-</script>
+

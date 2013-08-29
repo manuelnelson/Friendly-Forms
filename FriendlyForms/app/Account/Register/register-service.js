@@ -1,10 +1,10 @@
-﻿FormsApp.factory('registerService', function ($resource) {
+﻿FormsApp.factory('registerService', ['$resource',function ($resource) {
     var service = {
         register: $resource('/api/register/', {},
             {
-                post: { method: 'POST', params: { format: 'json' } },
+                post: { method: 'POST', params: {  } },
             }),
         authUser: null,
     };
     return service;
-});
+}]);

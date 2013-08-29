@@ -1,5 +1,5 @@
 ﻿////Message Service
-FormsApp.factory('messageService', function () {
+FormsApp.factory('messageService', ['$location', function ($location) {
     var service = {
         messageOptions: {
             title: '',
@@ -25,7 +25,9 @@ FormsApp.factory('messageService', function () {
                     service.showMessage("Not so fast", response.data.ResponseStatus.Message, Application.properties.messageType.Error);
                     return false;
                 case 401://unauthorized 
-                    service.showMessage("Unauthorized", "You must be logged in to complete this action. Log in <a href='/Account/LogOn/' title='Log In' >here</a>", Application.properties.messageType.Warning);
+                    //go to unauthorized page
+                    $location.path('/Account/Unauthorized');
+                    //service.showMessage("Unauthorized", "You must be logged in to complete this action. Log in <a href='/Account/LogOn/' title='Log In' >here</a>", Application.properties.messageType.Warning);
                     return false;
                 default:
                     service.showMessage("Uh oh!", "Sorry, we could not process your request.  The error has been logged and we will do our best to correct the error asap.", Application.properties.messageType.Error);
@@ -34,4 +36,4 @@ FormsApp.factory('messageService', function () {
         }
     };
     return service;
-});
+}]);

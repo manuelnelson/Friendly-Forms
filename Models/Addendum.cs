@@ -1,7 +1,5 @@
 ﻿using System;
 using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -18,10 +16,6 @@ namespace Models
         public int HasAddendum { get; set; }
         public string AddendumDetails { get; set; }
 
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<AddendumViewModel>();
-        }
 
         public bool IsValid()
         {

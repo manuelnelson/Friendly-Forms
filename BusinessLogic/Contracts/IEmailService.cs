@@ -1,8 +1,10 @@
-﻿namespace BusinessLogic.Contracts
+﻿using System.Collections.Generic;
+
+namespace BusinessLogic.Contracts
 {
     public interface IEmailService
     {
         void SendVerificationEmail(string email);
-        void SendEmail(string email, string subject, string body);
+        void SendEmail(List<string> toEmails, string subject, string body);
     }
 }

@@ -1,4 +1,4 @@
-﻿FormsApp.factory('decisionService', function ($resource) {
+﻿FormsApp.factory('decisionService', ['$resource',function ($resource) {
     var service = {
         decisions: $resource('/api/decisions/:childId', { childId: '@childId' },
             {
@@ -18,4 +18,4 @@
 
     };
     return service;
-});
+}]);

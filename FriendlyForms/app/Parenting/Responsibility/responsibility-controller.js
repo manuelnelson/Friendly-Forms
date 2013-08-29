@@ -1,9 +1,12 @@
 ﻿var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.responsibility = responsibilityService.responsibilities.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.responsibility = responsibilityService.responsibilities.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
             //see if garlic has something stored            
             $scope.responsibility = $.jStorage.get($scope.path);
+            if ($scope.responsibility)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#responsibilityForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,26 @@
             responsibilityService.responsibilities.save(null, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+                    menuService.nextMenu();
             });
         } else {
             responsibilityService.responsibilities.update({ Id: $scope.responsibility.Id }, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Communication/' + $scope.responsibility.UserId);
+                    menuService.nextMenu();
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
+    $scope.CalculatePercentage = function(parent) {
+        if (parent === 'Mother') {
+            $scope.responsibility.FatherPercentage = genericService.calculateRemainingPercentage($scope.responsibility.MotherPercentage);
+        } else {
+            $scope.responsibility.MotherPercentage = genericService.calculateRemainingPercentage($scope.responsibility.FatherPercentage);
+        }
     }
+    $rootScope.currentScope = $scope;
+
+    genericService.refreshPage();
+
 };
 ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];

@@ -1,5 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.DataAnnotations;
 
 namespace Models
@@ -19,22 +18,6 @@ namespace Models
         public virtual int Preexisting { get; set; }
         public virtual int InCourt { get; set; }
         public virtual string Details { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return new OtherChildrenViewModel
-                {
-                    IsOtherParent = IsOtherParent,
-                    AtHome = AtHome,
-                    Details = Details,
-                    Id = Id,
-                    InCourt = InCourt,
-                    LegallyResponsible = LegallyResponsible,
-                    Preexisting = Preexisting,
-                    Support = Support,
-                    UserId = UserId
-                };
-        }
 
         public bool IsValid()
         {

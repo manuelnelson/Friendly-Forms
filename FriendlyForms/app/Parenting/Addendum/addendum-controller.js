@@ -1,9 +1,12 @@
 ﻿var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.addendum = addendumService.addendums.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.addendum = addendumService.addendums.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
             //see if garlic has something stored            
             $scope.addendum = $.jStorage.get($scope.path);
+            if ($scope.addendum)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#addendumForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,19 @@
             addendumService.addendums.save(null, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
+                    menuService.nextMenu();
             });
         } else {
             addendumService.addendums.update({ Id: $scope.addendum.Id }, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Parenting/user/' + $scope.addendum.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', '$rootScope'];

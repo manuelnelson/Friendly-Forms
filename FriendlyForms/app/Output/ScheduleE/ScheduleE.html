@@ -1,4 +1,5 @@
-﻿<div class="row-fluid" style="text-align: center;">
+﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
+<div class="row-fluid" style="text-align: center;">
     <h2>CHILD SUPPORT SCHEDULE E</h2>
     <h2>Deviation (Special Circumstances)</h2>
 </div>
@@ -324,9 +325,9 @@
             <td>TOTAL</td>
             <td colspan="2"></td>
         </tr>
-        <tr>
-            <td>{{scheduleE.Extraordinaries.YearlyEducation.Name}}</td>
-            <td>${{scheduleE.Extraordinaries.YearlyEducation.Total}}</td>
+        <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyEducation">
+            <td>{{item.Name}}</td>
+            <td>${{item.Total}}</td>
             <td colspan="2"></td>
         </tr>
         <tr>
@@ -339,9 +340,9 @@
             <td>TOTAL</td>
             <td colspan="2"></td>
         </tr>
-        <tr>
-            <td>{{scheduleE.Extraordinaries.MonthlyEducation.Name}}</td>
-            <td>${{scheduleE.Extraordinaries.MonthlyEducation.Total}}</td>
+        <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyEducation">
+            <td>{{item.Name}}</td>
+            <td>${{item.Total}}</td>
             <td colspan="2"></td>
         </tr>
         <tr>
@@ -375,9 +376,9 @@
             <td>TOTAL</td>
             <td colspan="2"></td>
         </tr>
-        <tr>
-            <td>{{scheduleE.Extraordinaries.YearlyMedical.Name}}</td>
-            <td>${{scheduleE.Extraordinaries.YearlyMedical.Total}}</td>
+        <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyMedical">
+            <td>{{item.Name}}</td>
+            <td>${{item.Total}}</td>
             <td colspan="2"></td>
         </tr>
         <tr>
@@ -390,9 +391,9 @@
             <td>TOTAL</td>
             <td colspan="2"></td>
         </tr>
-        <tr>
-            <td>{{scheduleE.Extraordinaries.MonthlyMedical.Name}}</td>
-            <td>${{scheduleE.Extraordinaries.MonthlyMedical.Total}}</td>
+        <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyMedical">
+            <td>{{item.Name}}</td>
+            <td>${{item.Total}}</td>
             <td colspan="2"></td>
         </tr>
         <tr>
@@ -426,9 +427,9 @@
             <td>TOTAL</td>
             <td colspan="2"></td>
         </tr>
-        <tr>
-            <td>{{scheduleE.Extraordinaries.YearlyRearing.Name}}</td>
-            <td>${{scheduleE.Extraordinaries.YearlyRearing.Total}}</td>
+        <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyRearing">
+            <td>{{item.Name}}</td>
+            <td>${{item.Total}}</td>
             <td colspan="2"></td>
         </tr>
         <tr>
@@ -441,9 +442,9 @@
             <td>TOTAL</td>
             <td colspan="2"></td>
         </tr>
-        <tr>
-            <td>{{scheduleE.Extraordinaries.MonthlyRearing.Name}}</td>
-            <td>${{scheduleE.Extraordinaries.MonthlyRearing.Total}}</td>
+        <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyRearing">
+            <td>{{item.Name}}</td>
+            <td>${{item.Total}}</td>
             <td colspan="2"></td>
         </tr>
         <tr>
@@ -468,15 +469,15 @@
         </tr>
         <tr>
             <td>11. Yearly Expenditure for Extraordinary Educational Expenses</td>
-            <td class="currency">${{scheduleE.Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father}}</td>
-            <td class="currency">${{scheduleE.Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother}}</td>
-            <td class="currency">${{scheduleE.Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.AllEducationTotal.Father}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.AllEducationTotal.Mother}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.AllEducationTotal.NonParent}}</td>
         </tr>
         <tr>
             <td>12. Monthly Expenditure for Extraordinary Educational Expenses</td>
-            <td class="currency">${{scheduleE.parseInt(parseInt(Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father)/12)}}</td>
-            <td class="currency">${{scheduleE.parseInt(parseInt(Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother)/12)}}</td>
-            <td class="currency">${{scheduleE.parseInt(parseInt(Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent)/12)}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.AllEducationTotalMonthly.Father}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.AllEducationTotalMonthly.Mother}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.AllEducationTotalMonthly.NonParent}}</td>
         </tr>
         <tr>
             <td>13. Yearly Expenditure for Extraordinary Medical Expenses</td>
@@ -486,9 +487,9 @@
         </tr>
         <tr>
             <td>14. Monthly Expenditure for Extraordinary Medical Expenses</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.MedicalTotal.Father/12)}}</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.MedicalTotal.Mother/12)}}</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.MedicalTotal.NonParent/12)}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.MedicalTotalMonthly.Father}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.MedicalTotalMonthly.Mother}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.MedicalTotalMonthly.NonParent}}</td>
         </tr>
         <tr>
             <td>15. Yearly Expenditure for Special Child Rearing Expenses</td>
@@ -498,15 +499,15 @@
         </tr>
         <tr>
             <td>16. Monthly Expenditure for Special Child Rearing Expenses</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.RearingTotal.Father/12)}}</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.RearingTotal.Mother/12)}}</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.RearingTotal.NonParent/12)}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.RearingTotalMonthly.Father}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.RearingTotalMonthly.Mother}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.RearingTotalMonthly.NonParent}}</td>
         </tr>
         <tr>
             <td>TOTAL EXPENSE PAID BY PARTY</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father + Extraordinaries.MedicalTotal.Father + Extraordinaries.RearingTotal.Father)}}</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother + Extraordinaries.MedicalTotal.Mother + Extraordinaries.RearingTotal.Mother)}}</td>
-            <td class="currency">${{scheduleE.parseInt(Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent + Extraordinaries.MedicalTotal.NonParent + Extraordinaries.RearingTotal.NonParent)}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father + Extraordinaries.MedicalTotal.Father + Extraordinaries.RearingTotal.Father}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother + Extraordinaries.MedicalTotal.Mother + Extraordinaries.RearingTotal.Mother}}</td>
+            <td class="currency">${{scheduleE.Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent + Extraordinaries.MedicalTotal.NonParent + Extraordinaries.RearingTotal.NonParent}}</td>
         </tr>
     </tbody>
 </table>

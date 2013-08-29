@@ -19,15 +19,15 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="2"></label>
-                            <div ng-show="socialSecurityForm.ReceiveSocial.$dirty && socialSecurityForm.ReceiveSocial.$invalid">
+                            <div ng-show="socialSecurityForm.ReceiveSocial.$dirty && socialSecurityForm.ReceiveSocial.$invalid || (showErrors && socialSecurityForm.ReceiveSocial.$invalid)">
                                 <span class="form-error" ng-show="socialSecurityForm.ReceiveSocial.$error.required">This field is required</span>
                             </div>
                         </div>
                         <div class="control-group row-fluid" ng-show="socialSecurity.ReceiveSocial == 1">
                             <label class="span4 form-question">Amount per month</label>
-                            <input required number ng-model="socialSecurity.Amount" name="Amount" placeholder="Monthly Amount" type="text" value="">
-                            <div ng-show="socialSecurityForm.Amount.$dirty && socialSecurityForm.Amount.$invalid">
-								<span class="form-error" ng-show="socialSecurityForm.Amount.$error.number">This field must be a number.</span>
+                            <input ng-pattern="/^[0-9]*$/" ng-model="socialSecurity.Amount" name="Amount" placeholder="Monthly Amount" type="text" value="">
+                            <div ng-show="socialSecurityForm.Amount.$dirty && socialSecurityForm.Amount.$invalid || (showErrors && socialSecurityForm.Amount.$invalid)">
+								<span class="form-error" ng-show="socialSecurityForm.Amount.$error.pattern">This field must be a number.</span>
                             </div>
                         </div>
                     </div>

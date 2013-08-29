@@ -17,39 +17,44 @@
     return service;
 });
 
-FormsApp.factory('onStartInterceptor', ['loadingService', function (loadingService) {
-    return function (data, headersGetter) {
-        loadingService.requestCount++;
-        return data;
-    };
-}]);
-
-FormsApp.factory('onCompleteInterceptor', ['loadingService', 'messageService', function (loadingService, messageService) {
-    return function (promise) {
-        //successful response
-        var decrementRequestCount = function (response) {
+//Code modified from http://docs.angularjs.org/api/ng.$http
+FormsApp.factory('myHttpInterceptor', ['$q', 'loadingService', 'messageService', function ($q, loadingService, messageService) {
+    return {
+        // optional method
+        'request': function(config) {
+            // do something on success
+            loadingService.requestCount++;
+            return config || $q.when(config);
+        },
+ 
+        // optional method
+        'response': function(response) {
+            // do something on success
             loadingService.requestCount--;
             //always return to default message
             loadingService.message = Application.properties.defaultMessage;
-            return response;
-        };
-        //Error
-        var decrementRequestCountError = function (response) {
+            return response || $q.when(response);
+        },
+ 
+        // optional method
+        'responseError': function(rejection) {
+            // do something on error
+            //For now, let's treat errors as errors and not recover   
             loadingService.requestCount--;
             //return to default message for next loading... call
             loadingService.message = Application.properties.defaultMessage;
             //show error message
-            messageService.handleError(response);
-            return response;
-        };
-        return promise.then(decrementRequestCount, decrementRequestCountError);
+            messageService.handleError(rejection);
+            return $q.reject(rejection);
+
+
+            //if (canRecover(rejection)) {
+            //    return responseOrNewPromise
+            //}
+        }
     };
 }]);
-
 FormsApp.config(['$httpProvider', function ($httpProvider) {
-    $httpProvider.responseInterceptors.push('onCompleteInterceptor');
+    $httpProvider.interceptors.push('myHttpInterceptor');
 }]);
-
-FormsApp.run(['$http', 'onStartInterceptor', function ($http, onStartInterceptor) {
-    $http.defaults.transformRequest.push(onStartInterceptor);
-}]);
+ 

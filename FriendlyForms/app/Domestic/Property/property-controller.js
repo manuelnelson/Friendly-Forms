@@ -1,9 +1,12 @@
 ﻿var PropertyCtrl = function($scope, $routeParams, $location, propertyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.property = propertyService.properties.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.property = propertyService.properties.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.property.Id == 'undefined' || $scope.property.Id == 0) {
             //see if garlic has something stored            
             $scope.property = $.jStorage.get($scope.path);
+            if ($scope.property)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#propertyForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,19 @@
             propertyService.properties.save(null, $scope.property, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+                    menuService.nextMenu();
             });
         } else {
             propertyService.properties.update({ Id: $scope.property.Id }, $scope.property, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Vehicle/' + $scope.property.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService', 'menuService', 'genericService', '$rootScope'];

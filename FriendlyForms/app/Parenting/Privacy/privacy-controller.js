@@ -1,9 +1,12 @@
 ﻿var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.privacy = privacyService.privacies.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.privacy = privacyService.privacies.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
             //see if garlic has something stored            
             $scope.privacy = $.jStorage.get($scope.path);
+            if ($scope.privacy)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#privacyForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,19 @@
             privacyService.privacies.save(null, $scope.privacy, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+                    menuService.nextMenu();
             });
         } else {
             privacyService.privacies.update({ Id: $scope.privacy.Id }, $scope.privacy, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Information/' + $scope.privacy.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', '$rootScope'];

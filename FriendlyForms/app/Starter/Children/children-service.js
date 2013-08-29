@@ -9,7 +9,12 @@
             {
                 update: { method: 'PUT' },
                 deleteAll: { method: 'DELETE' }
-            })
+            }),
+        formCompletes: $resource('/api/output/formComplete/', {},
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
     };
     return childrenService;
 }]);

@@ -13,11 +13,11 @@
                                 Do you make Current Court Ordered Child Support Payments for other children?</label>
                             <label class="radio inline">
                                 Yes
-                                <input checked="checked" class="inline" required ng-model="support.Support" name="support.Support" type="radio" value="1"></label>
+                                <input class="inline" required ng-change="submit()" ng-model="support.Support" name="Support" type="radio" value="1"></label>
                             <label class="radio inline">
                                 No
-                                <input class="inline valid" ng-model="support.Support" name="support.Support" type="radio" value="2"></label>
-                            <div ng-show="supportForm.Support.$dirty && supportForm.Support.$invalid">
+                                <input class="inline" required ng-model="support.Support" ng-change="submit()" name="Support" type="radio" value="2"></label>
+                            <div ng-show="supportForm.Support.$dirty && supportForm.Support.$invalid || (showErrors && supportForm.Support.$invalid)">
                                 <span class="form-error" ng-show="supportForm.Support.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
             </div>
         </div>
     </form>
-    <div class="form-vertical" ng-show="preexistingSupport.Support == 1">
+    <div class="form-vertical" ng-show="support.Support == 1">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -50,9 +50,9 @@
                                     <tr ng-repeat="courtAdded in courts">
                                         <td>{{courtAdded.CourtName}}</td>
                                         <td>{{courtAdded.CaseNumber}}</td>
-                                        <td>{{courtAdded.OrderDate}}</td>
+                                        <td>{{courtAdded.OrderDateString}}</td>
                                         <td>${{courtAdded.Monthly}}</td>
-                                        <td><button ng-click="showChildren(courtAdded)">Children</button></td>
+                                        <td><button class="btn btn-primary" ng-click="showChildren(courtAdded)">Children</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -61,30 +61,30 @@
                         <form ng-submit="addCourt()" id="courtForm" name="courtForm" novalidate>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question form-question">Court Name</label>
-                                <input  ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="court.CourtName" name="court.CourtName" placeholder="Court Name" type="text" value="">
+                                <input ng-model="court.CourtName" name="court.CourtName" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Court Name" type="text" value="">
                                 <div ng-show="courtForm.CourtName.$dirty && courtForm.CourtName.$invalid">
                                     <span class="form-error" ng-show="courtForm.CourtName.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Civil Action Case Number</label>
-                                <input ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" ng-model="court.CaseNumber" name="court.CaseNumber" placeholder="Case Number" type="text" value="">
+                                <input ng-model="court.CaseNumber" name="court.CaseNumber" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Case Number" type="text" value="">
                                 <div ng-show="courtForm.CaseNumber.$dirty && courtForm.CaseNumber.$invalid">
                                     <span class="form-error" ng-show="courtForm.CaseNumber.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Date of initial child support order</label>
-                                <input class="datepicker" data-date="08/17/2013"  data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$" ng-model="court.OrderDate" name="court.OrderDate" placeholder="Date" type="text" value="">
+                                <input ng-model="court.OrderDate" name="court.OrderDate" ui-jq="datepicker" data-date="08/17/2013"  data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" placeholder="Date" type="text" value="">
                                 <div ng-show="courtForm.OrderDate.$dirty && courtForm.OrderDate.$invalid">
                                     <span class="form-error" ng-show="courtForm.OrderDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Actual amount paid monthly for this order (do not include past due payment)</label>
-                                <input  number ng-model="court.Monthly" name="court.Monthly" placeholder="Per Month" type="text" value="">
+                                <input ng-pattern="/^[0-9]*$/" ng-model="court.Monthly" name="court.Monthly" placeholder="Per Month" type="text" value="">
                                 <div ng-show="courtForm.Monthly.$dirty && courtForm.Monthly.$invalid">
-                                    <span class="form-error" ng-show="courtForm.Monthly.$error.number">This field must be a number.</span>
+                                    <span class="form-error" ng-show="courtForm.Monthly.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <button class="btn btn-primary" value="Add">Add </button>
@@ -119,19 +119,17 @@
                                 </tbody>
                             </table>
                         </div>
-                        <br>
-                        <br>
                         <form ng-submit="addChild()" id="childForm" name="childForm" novalidate>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Name</label>
-                                <input class="hoverHelp" data-content="Enter the child's full name here."  data-val-regex="Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed." data-val-regex-pattern="^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$" required ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
+                                <input class="hoverHelp" data-content="Enter the child's full name here."  ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
                                 <div ng-show="childForm.Name.$dirty && childForm.Name.$invalid">
                                     <span class="form-error" ng-show="childForm.Name.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Date of Birth</label>
-                                <input class="datepicker" data-date="08/17/2013"  data-val-regex="Date must be in mm/dd/yyyy format" data-val-regex-pattern="^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$" ng-model="child.DateOfBirth" name="child.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
+                                <input ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="child.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
                                 <div ng-show="childForm.DateOfBirth.$dirty && childForm.DateOfBirth.$invalid">
                                     <span class="form-error" ng-show="childForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                 </div>
@@ -143,5 +141,5 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" ng-click="submit()">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <button class="btn btn-primary" ng-click="continue()">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>

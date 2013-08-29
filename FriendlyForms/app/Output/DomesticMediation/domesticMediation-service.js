@@ -1,4 +1,4 @@
-﻿FormsApp.factory('domesticMediationService', function ($resource) {
+﻿FormsApp.factory('domesticMediationService', ['$resource',function ($resource) {
     var service = {
         domesticMediations: $resource('/api/output/domesticMediation/', {},
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

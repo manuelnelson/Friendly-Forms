@@ -1,7 +1,5 @@
 ﻿using System;
 using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -35,10 +33,6 @@ namespace Models
         public string SpecialDescriptionNonParent { get; set; }
         public int ExtraSpent { get; set; }
 
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<ExtraExpenseViewModel>();
-        }
 
         public bool IsValid()
         {

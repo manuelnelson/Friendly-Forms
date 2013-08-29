@@ -1,9 +1,12 @@
 ﻿var DeviationCtrl = function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
     $scope.deviation = deviationService.deviations.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
             //see if garlic has something stored            
             $scope.deviation = $.jStorage.get($scope.path);
+            if ($scope.deviation)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function (noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#deviationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Output/FormComplete/Financial/user/' + $scope.deviation.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,19 @@
             deviationService.deviations.save(null, $scope.deviation, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Financial/user/' + $scope.deviation.UserId);
+                    menuService.nextMenu();
             });
         } else {
             deviationService.deviations.update({ Id: $scope.deviation.Id }, $scope.deviation, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Output/FormComplete/Financial/user/' + $scope.deviation.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];

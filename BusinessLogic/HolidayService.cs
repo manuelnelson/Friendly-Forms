@@ -4,7 +4,6 @@ using BusinessLogic.Contracts;
 using DataInterface;
 using Elmah;
 using Models;
-using Models.ViewModels;
 
 namespace BusinessLogic
 {
@@ -29,33 +28,6 @@ namespace BusinessLogic
             {
                 ErrorSignal.FromCurrentContext().Raise(ex);
                 throw new Exception("Unable to retrieve holiday information", ex);
-            }
-        }
-
-        /// <summary>
-        /// Add the holiday information to the database.
-        /// </summary>
-        /// <param name="holiday"></param>
-        public Holiday AddOrUpdate(HolidayViewModel holiday)
-        {
-            try
-            {
-                var entity = holiday.ConvertToEntity();
-                //Check if court already exists and we need to update record
-                var existDecisions = FormRepository.GetByChildId(holiday.ChildId);
-                if (existDecisions != null)
-                {
-                    existDecisions.Update(entity);
-                    FormRepository.Update(existDecisions);
-                    return existDecisions;
-                }
-                FormRepository.Add((Holiday) entity);
-                return (Holiday) entity;
-            }
-            catch (Exception ex)
-            {
-                ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to add holiday information", ex);
             }
         }
 

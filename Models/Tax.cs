@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -17,11 +15,6 @@ namespace Models
         public int Taxes { get; set; }
         public string TaxDescription { get; set; }
         
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<TaxViewModel>();
-        }
-
         public bool IsValid()
         {
             return UserId > 0;

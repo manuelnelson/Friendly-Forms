@@ -1,4 +1,4 @@
-﻿FormsApp.factory('socialSecurityService', function($resource) {
+﻿FormsApp.factory('socialSecurityService', ['$resource',function($resource) {
     var service = {
         socialSecurities: $resource('/api/socialSecurities/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

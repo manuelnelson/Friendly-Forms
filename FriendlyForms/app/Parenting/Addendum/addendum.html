@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper" ng-model="addendum.addendumWrapper">
     <form ng-submit="submit()" ng-controller="AddendumCtrl" id="addendumForm" name="addendumForm" novalidate>
-        <input type="hidden" name="Id" ng-model="addendum.Id">
-        <input type="hidden" name="UserId" ng-model="addendum.UserId">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -19,13 +17,13 @@
                             <label class="radio">
                                 No
                                 <input required ng-model="addendum.HasAddendum" name="HasAddendum" type="radio" value="2"></label>
-                            <div ng-show="addendumForm.HasAddendum.$dirty && addendumForm.HasAddendum.$invalid">
+                            <div ng-show="addendumForm.HasAddendum.$dirty && addendumForm.HasAddendum.$invalid || (showErrors && addendumForm.HasAddendum.$invalid)">
                                 <span class="form-error" ng-show="addendumForm.HasAddendum.$error.required">This field is required</span>
                             </div>
                         </div>
                         <div class="control-group" ng-show="addendum.HasAddendum == 1">
-                            <textarea class="input-xxlarge" cols="20" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="addendum.AddendumDetails" name="AddendumDetails" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="addendumForm.AddendumDetails.$dirty && addendumForm.AddendumDetails.$invalid">
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="addendum.AddendumDetails" name="AddendumDetails" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="addendumForm.AddendumDetails.$dirty && addendumForm.AddendumDetails.$invalid || (showErrors && addendumForm.HasAddendum.$invalid)">
                                 <span class="form-error" ng-show="addendumForm.AddendumDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>

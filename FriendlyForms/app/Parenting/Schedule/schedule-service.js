@@ -1,4 +1,4 @@
-﻿FormsApp.factory('scheduleService', function($resource) {
+﻿FormsApp.factory('scheduleService', ['$resource', function($resource) {
     var service = {
         schedules: $resource('/api/schedules/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

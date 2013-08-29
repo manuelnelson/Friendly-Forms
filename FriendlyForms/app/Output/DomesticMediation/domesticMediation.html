@@ -1,4 +1,5 @@
-﻿<div class="row-fluid" style="text-align: center;">
+﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
+<div class="row-fluid" style="text-align: center;">
     <h2>DOMESTIC MEDIATION AGREEMENT</h2>
 </div>
 <p>This case is a Divorce.</p>
@@ -87,7 +88,7 @@
     {{domesticMediation.SpousalViewModel.SpousalDescription}}</p>
 <!-- Taxes -->
 <h2>Tax Returns, Allowances, Deductions and Refunds</h2>
-    <!--<p ng-show="domesticMediation.TaxViewModel.Taxes==2" class="indented">The parties agree that tax returns, allowances, deductions and refunds will occur as follows: <br> {{domesticMediation.TaxViewModel.TaxDescription}}</p>-->
+    <p ng-show="domesticMediation.TaxViewModel.Taxes==2" class="indented">The parties agree that tax returns, allowances, deductions and refunds will occur as follows: <br> {{domesticMediation.TaxViewModel.TaxDescription}}</p>
     <p ng-show="domesticMediation.TaxViewModel.Taxes!=2" class="indented">Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
 
 

@@ -1,4 +1,4 @@
-﻿FormsApp.factory('addendumService', function($resource) {
+﻿FormsApp.factory('addendumService', ['$resource', function($resource) {
     var service = {
         addendums: $resource('/api/addendums/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

@@ -1,7 +1,9 @@
 ﻿using Models.Contract;
+using ServiceStack.DataAnnotations;
 
 namespace Models
 {
+    [Alias("Bcsoes")]
     public class Bcso : IEntity
     {
         public long Id { get; set; }

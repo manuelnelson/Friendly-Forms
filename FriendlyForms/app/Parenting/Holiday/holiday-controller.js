@@ -8,7 +8,7 @@
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
         $scope.childName = $scope.children[$scope.childNdx].Name;
-        $scope.menuPath = '/Parenting/Holiday/' + $routeParams.userId + '/' + $scope.children[0].Id;
+        $scope.menuPath = '/Parenting/Holiday/user/' + $routeParams.userId + '/child/' + $scope.children[0].Id;
         if (!menuService.isActive($scope.menuPath)) {
             menuService.setActive($scope.menuPath);
         }
@@ -21,6 +21,8 @@
             if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
                 //see if garlic has something stored            
                 $scope.holiday = $.jStorage.get($scope.path);
+                if($scope.holiday)
+                    $scope.showErrors = true;
             }
         });
         holidayService.extraHolidays.get({ ChildId: childId }, function (data) {
@@ -86,11 +88,12 @@
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx < 0) {
                 //Navigate else where
+                menuService.previousMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx - 1;
             var childId = $scope.children[$scope.childNdx].Id;
-            $location.path('/Parenting/Holiday/' + $routeParams.userId + '/' + childId);
+            $location.path('/Parenting/Holiday/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.nextChild = function () {
@@ -98,12 +101,13 @@
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx === ($scope.children.length - 1)) {
                 //Navigate to next item
+                menuService.nextMenu();
                 return;
             }
             $scope.childNdx = $scope.childNdx + 1;
             var childId = $scope.children[$scope.childNdx].Id;
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            $location.path('/Parenting/Holiday/' + $routeParams.userId + '/' + childId);
+            $location.path('/Parenting/Holiday/user/' + $routeParams.userId + '/child/' + childId);
         });
     };
     $scope.copyChild = function (childId) {

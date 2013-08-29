@@ -1,9 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Configuration;
+using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using DataLayerContext.Migrations;
 using ServiceStack.MiniProfiler;
+using Configuration = DataLayerContext.Migrations.Configuration;
 
 namespace FriendlyForms
 {
@@ -31,19 +33,21 @@ namespace FriendlyForms
 
         }
 
+        private bool _disableMiniProfiler;
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataLayerContext.SplitContext, Configuration>());
+
+            _disableMiniProfiler = Convert.ToBoolean(ConfigurationManager.AppSettings["DisableMiniProfiler"]);
         }
 
         protected void Application_BeginRequest()
         {
-            if (Request.IsLocal)
+            if (Request.IsLocal && !_disableMiniProfiler)
                 Profiler.Start();
         }
 

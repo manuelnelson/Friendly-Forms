@@ -1,6 +1,5 @@
 ﻿using System;
 using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.DataAnnotations;
 
 
@@ -40,36 +39,6 @@ namespace Models
         public bool SaturdayParent { get; set; }
         public bool SundayParent { get; set; }
         public string AdditionalProvisions { get; set; }
-        public IViewModel ConvertToModel()
-        {
-            return new ScheduleViewModel
-                {
-                BeginDate = BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "",                
-                DetermineBeginDate = DetermineBeginDate,
-                DropOffLocation = DropOffLocation,
-                DroppedOff = DroppedOff,
-                CustodianWeekend = CustodianWeekend,
-                NonCustodianWeekend = NonCustodianWeekend,
-                PickedUp = PickedUp,
-                PickupLocation = PickupLocation,
-                UserId = UserId,
-                Weekdays = Weekdays,
-                CustodianWeekendOther = CustodianWeekendOther,
-                NonCustodianWeekendOther = NonCustodianWeekendOther,
-                WeekendDayStart = WeekendDayStart,
-                WeekendDayEnd = WeekendDayEnd,
-                WeekdayDropoff = WeekdayDropoff,
-                WeekdayDropoffLocation = WeekdayDropoffLocation,
-                WeekdayPickup = WeekdayPickup,                
-                WeekdayPickupLocation = WeekdayPickupLocation,
-                MondayParent = MondayParent,
-                TuesdayParent = TuesdayParent,
-                WednesdayParent = WednesdayParent,
-                ThursdayParent = ThursdayParent,
-                AdditionalProvisions = AdditionalProvisions,
-                FridayParent = FridayParent
-            };
-        }
 
         public bool IsValid()
         {

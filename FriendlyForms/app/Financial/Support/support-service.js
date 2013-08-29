@@ -1,4 +1,4 @@
-﻿FormsApp.factory('supportService', function($resource) {
+﻿FormsApp.factory('supportService', ['$resource', function($resource) {
     var service = {
         supports: $resource('/api/PreexistingSupportForms/:userId', { userId: '@userId' },
             {
@@ -17,4 +17,4 @@
             }),
     };
     return service;
-});
+}]);

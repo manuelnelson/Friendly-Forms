@@ -1,11 +1,11 @@
 ﻿<div class="form-vertical wrapper">
-    <p>
-        Please enter your user name and password. 
-    </p>
     <div class="row-fluid">
         <form class="well form-vertical" ng-submit="submit()" ng-controller="LoginCtrl" action="/api/auth/credentials" data-continue="/">
             <fieldset>
                 <legend>Account Information</legend>
+                <p>
+                    Please enter your user name and password. 
+                </p>
                 <div class="control-group">
                     <input id="UserName" name="UserName" ng-model="login.UserName" placeholder="Email" type="text" value="">
                 </div>

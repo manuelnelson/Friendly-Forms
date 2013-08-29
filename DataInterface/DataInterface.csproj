@@ -63,6 +63,7 @@
     <Compile Include="IHouseRepository.cs" />
     <Compile Include="IIncomeRepository.cs" />
     <Compile Include="IInformationRepository.cs" />
+    <Compile Include="ILawFirmRepository.cs" />
     <Compile Include="IOrmLiteRepository.cs" />
     <Compile Include="IOtherChildrenRepository.cs" />
     <Compile Include="IOtherChildRepository.cs" />

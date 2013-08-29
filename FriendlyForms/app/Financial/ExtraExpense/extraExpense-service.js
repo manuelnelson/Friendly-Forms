@@ -1,4 +1,4 @@
-﻿FormsApp.factory('extraExpenseService', function($resource) {
+﻿FormsApp.factory('extraExpenseService', ['$resource', function($resource) {
     var service = {
         extraExpenses: $resource('/api/extraExpenses/:childId', { childId: '@childId' },
             {
@@ -18,4 +18,4 @@
     };
     return service;
 
-});
+}]);

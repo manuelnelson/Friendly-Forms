@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using Models;
@@ -10,11 +11,13 @@ namespace BusinessLogic
         private IChildService ChildService { get; set; }
         private IChildFormService ChildFormService { get; set; }
         private ICourtService CourtService { get; set; }
-        public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService)
+        private IOutputService OutputService { get; set; }
+        public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService, IOutputService outputService)
         {
             ChildService = childService;
             ChildFormService = childFormService;
             CourtService = courtService;
+            OutputService = outputService;
         }
 
         public List<MenuItem> Get(string route, long userId, bool isAuthenticated = false)
@@ -25,7 +28,7 @@ namespace BusinessLogic
                     new MenuItem
                         {
                             itemClass = "active",
-                            path = "#/",
+                            path = "/",
                             iconClass = "icon icon-home",
                             text = "Home",
                         }
@@ -54,7 +57,7 @@ namespace BusinessLogic
             menuList.Add(new MenuItem
                 {
                     itemClass = "",
-                    path = "/Account/LogOff",
+                    path = "#/Account/Logoff",
                     iconClass = "icon icon-share-alt",
                     text = "Log out",
                 });
@@ -64,20 +67,22 @@ namespace BusinessLogic
         #region Menu Logic Helpers
         private bool UserIsAtStarterStage(long userId)
         {
-            var childForm = ChildFormService.GetByUserId(userId);
-            if (childForm.UserId == userId)
-                return false;
-            return true;
+            var incompleteForms = OutputService.GetStarterIncompleteForms(userId);
+            return incompleteForms.Count != 0;
         }
+        
+        private static List<FormMenuItem> AdjustItemClass(IEnumerable<IncompleteForm> incompleteForms, List<FormMenuItem> menuList)
+        {
+            //if menuitem is not in incomplete forms list, add the green check mark to it. 
+            foreach (var formMenuItem in menuList.Where(formMenuItem => incompleteForms.All(x => x.Path.ToUpper() != formMenuItem.path.ToUpper())))
+            {
+                formMenuItem.iconClass = "icon-ok icon-green";
+            }
+            return menuList;
+        }
+
         #endregion
 
-        private enum MenuType
-        {
-            Starter,
-            DomesticMediation,
-            Parenting,
-            Financial
-        };
         #region GetMenus
         private MenuItem GetStarterMenu(long userId)
         {
@@ -88,7 +93,7 @@ namespace BusinessLogic
                         formName = "Court",
                         text = "Court",
                         iconClass = "",
-                        path = "/Starter/Court/" + userId,     
+                        path = "/Starter/Court/User/" + userId,     
                         pathIdentifier = "Court",
                         itemClass = ""
                     },
@@ -97,7 +102,7 @@ namespace BusinessLogic
                             formName = "Participant",
                             text = "Participants",
                             iconClass = "",
-                            path = "/Starter/Participant/" + userId,
+                            path = "/Starter/Participant/User/" + userId,
                             pathIdentifier = "Participant",
                             itemClass = ""
                         },
@@ -106,11 +111,12 @@ namespace BusinessLogic
                             formName = "Children",
                             text = "Children",
                             iconClass = "",
-                            path = "/Starter/Children/" + userId,
+                            path = "/Starter/Children/User/" + userId,
                             pathIdentifier = "Children",
                             itemClass = ""
                         }
                 };
+            menuList = AdjustItemClass(OutputService.GetStarterIncompleteForms(userId), menuList);
             return new MenuItem
                 {
                     itemClass = "submenu",
@@ -131,7 +137,7 @@ namespace BusinessLogic
                             formName = "House",
                             text = "Marital House",
                             iconClass = "",
-                            path = "/Domestic/House/" + userId,
+                            path = "/Domestic/House/User/" + userId,
                             pathIdentifier = "House",
                             itemClass = ""
                         },
@@ -140,7 +146,7 @@ namespace BusinessLogic
                             formName = "Property",
                             text = "Personal Property",
                             iconClass = "",
-                            path = "/Domestic/Property/" + userId,
+                            path = "/Domestic/Property/User/" + userId,
                             pathIdentifier = "Property",
                             itemClass = ""
                         },
@@ -149,7 +155,7 @@ namespace BusinessLogic
                             formName = "Vehicle",
                             text = "Vehicles",
                             iconClass = "",
-                            path = "/Domestic/Vehicle/" + userId,
+                            path = "/Domestic/Vehicle/User/" + userId,
                             pathIdentifier = "Vehicle",
                             itemClass = ""
                         },
@@ -158,7 +164,7 @@ namespace BusinessLogic
                             formName = "Debt",
                             text = "Debt",
                             iconClass = "",
-                            path = "/Domestic/Debt/" + userId,
+                            path = "/Domestic/Debt/User/" + userId,
                             pathIdentifier = "Debt",
                             itemClass = ""
                         },
@@ -167,7 +173,7 @@ namespace BusinessLogic
                             formName = "Asset",
                             text = "Assets",
                             iconClass = "",
-                            path = "/Domestic/Asset/" + userId,
+                            path = "/Domestic/Asset/User/" + userId,
                             pathIdentifier = "Asset",
                             itemClass = ""
                         },
@@ -176,7 +182,7 @@ namespace BusinessLogic
                             formName = "HealthInsurance",
                             text = "Health Insurance",
                             iconClass = "",
-                            path = "/Domestic/HealthInsurance/" + userId,
+                            path = "/Domestic/HealthInsurance/User/" + userId,
                             pathIdentifier = "HealthInsurance",
                             itemClass = ""
                         },
@@ -185,7 +191,7 @@ namespace BusinessLogic
                             formName = "Spousal",
                             text = "Spousal Support",
                             iconClass = "",
-                            path = "/Domestic/Spousal/" + userId,
+                            path = "/Domestic/Spousal/User/" + userId,
                             pathIdentifier = "Spousal",
                             itemClass = ""
                         },
@@ -194,11 +200,13 @@ namespace BusinessLogic
                             formName = "Tax",
                             text = "Taxes",
                             iconClass = "",
-                            path = "/Domestic/Tax/" + userId,
+                            path = "/Domestic/Tax/User/" + userId,
                             pathIdentifier = "Tax",
                             itemClass = ""
                         },
                 };
+            menuList = AdjustItemClass(OutputService.GetDomesticIncompleteForms(userId), menuList);
+
             return new MenuItem
             {
                 itemClass = "submenu",
@@ -219,7 +227,7 @@ namespace BusinessLogic
                             formName = "Privacy",
                             text = "Supervision",
                             iconClass = "",
-                            path = "/Parenting/Supervision/" + userId,
+                            path = "/Parenting/Supervision/User/" + userId,
                             pathIdentifier = "Supervision",
                             itemClass = ""
                         },
@@ -228,7 +236,7 @@ namespace BusinessLogic
                             formName = "Information",
                             text = "Information",
                             iconClass = "",
-                            path = "/Parenting/Information/" + userId,
+                            path = "/Parenting/Information/User/" + userId,
                             pathIdentifier = "Information",
                             itemClass = ""
                         },
@@ -237,7 +245,7 @@ namespace BusinessLogic
                             formName = "Decisions",
                             text = "Decisions",
                             iconClass = "",
-                            path = "/Parenting/Decision/" + userId + "/" + firstChild.Id,
+                            path = "/Parenting/Decision/User/" + userId + "/Child/" + firstChild.Id,
                             pathIdentifier = "Decision",
                             itemClass = ""
                         },
@@ -246,7 +254,7 @@ namespace BusinessLogic
                             formName = "Responsibility",
                             text = "Responsibility",
                             iconClass = "",
-                            path = "/Parenting/Responsibility/" + userId,
+                            path = "/Parenting/Responsibility/User/" + userId,
                             pathIdentifier = "Responsibility",
                             itemClass = ""
                         },
@@ -255,7 +263,7 @@ namespace BusinessLogic
                             formName = "Communication",
                             text = "Communication",
                             iconClass = "",
-                            path = "/Parenting/Communication/" + userId,
+                            path = "/Parenting/Communication/User/" + userId,
                             pathIdentifier = "Communication",
                             itemClass = ""
                         },
@@ -264,7 +272,7 @@ namespace BusinessLogic
                             formName = "Schedule",
                             text = "Schedule",
                             iconClass = "",
-                            path = "/Parenting/Schedule/" + userId,
+                            path = "/Parenting/Schedule/User/" + userId,
                             pathIdentifier = "Schedule",
                             itemClass = ""
                         },
@@ -273,7 +281,7 @@ namespace BusinessLogic
                             formName = "Holidays",
                             text = "Holidays",
                             iconClass = "",
-                            path = "/Parenting/Holiday/" + userId + "/" + firstChild.Id,
+                            path = "/Parenting/Holiday/User/" + userId + "/Child/" + firstChild.Id,
                             pathIdentifier = "Holiday",
                             itemClass = ""
                         },
@@ -282,11 +290,12 @@ namespace BusinessLogic
                             formName = "Addendum",
                             text = "Special Considerations",
                             iconClass = "",
-                            path = "/Parenting/Addendum/" + userId,
+                            path = "/Parenting/Addendum/User/" + userId,
                             pathIdentifier = "Addendum",
                             itemClass = ""
                         },
                 };
+            menuList = AdjustItemClass(OutputService.GetParentingIncompleteForms(userId), menuList);
             return new MenuItem
             {
                 itemClass = "submenu",
@@ -309,8 +318,17 @@ namespace BusinessLogic
                             formName = "ChildCare",
                             text = "Child Care",
                             iconClass = "",
-                            path = "/Financial/ChildCare/" + userId + "/" + firstChild.Id,
+                            path = "/Financial/ChildCare/User/" + userId + "/Child/" + firstChild.Id,
                             pathIdentifier = "ChildCare",
+                            itemClass = ""
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "ChildSupport",
+                            text = "Child Support",
+                            iconClass = "",
+                            path = "/Financial/ChildSupport/User/" + userId,
+                            pathIdentifier = "ChildSupport",
                             itemClass = ""
                         },
                     new FormMenuItem
@@ -318,7 +336,7 @@ namespace BusinessLogic
                             formName = "ExtraExpenses",
                             text = "Extra Expenses",
                             iconClass = "",
-                            path = "/Financial/ExtraExpense/" + userId + "/" + firstChild.Id,
+                            path = "/Financial/ExtraExpense/User/" + userId + "/Child/" + firstChild.Id,
                             pathIdentifier = "ExtraExpense",
                             itemClass = ""
                         },
@@ -327,7 +345,7 @@ namespace BusinessLogic
                             formName = "Health",
                             text = "Health Insurance",
                             iconClass = "",
-                            path = "/Financial/Health/" + userId,
+                            path = "/Financial/Health/User/" + userId,
                             pathIdentifier = "Health",
                             itemClass = ""
                         },
@@ -336,7 +354,7 @@ namespace BusinessLogic
                             formName = "Income",
                             text = "Income (Father)",
                             iconClass = "",
-                            path = "/Financial/Income/" + userId + "/false",
+                            path = "/Financial/Income/User/" + userId + "/false",
                             pathIdentifier = "Income",
                             itemClass = ""
                         },
@@ -345,7 +363,7 @@ namespace BusinessLogic
                             formName = "SocialSecurity",
                             text = "Social Security (Father)",
                             iconClass = "",
-                            path = "/Financial/SocialSecurity/" + userId + "/false",
+                            path = "/Financial/SocialSecurity/User/" + userId + "/false",
                             pathIdentifier = "SocialSecurity",
                             itemClass = ""
                         },
@@ -354,7 +372,7 @@ namespace BusinessLogic
                             formName = "Support",
                             text = "Preexisting Support (Father)",
                             iconClass = "",
-                            path = "/Financial/Support/" + userId + "/false",
+                            path = "/Financial/Support/User/" + userId + "/false",
                             pathIdentifier = "Support",
                             itemClass = ""
                         },
@@ -363,7 +381,7 @@ namespace BusinessLogic
                             formName = "OtherChildren",
                             text = "Other Children (Father)",
                             iconClass = "",
-                            path = "/Financial/OtherChild/" + userId + "/false",
+                            path = "/Financial/OtherChild/User/" + userId + "/false",
                             pathIdentifier = "OtherChild",
                             itemClass = ""
                         },
@@ -372,7 +390,7 @@ namespace BusinessLogic
                             formName = "Income",
                             text = "Income (Mother)",
                             iconClass = "",
-                            path = "/Financial/Income/" + userId + "/true",
+                            path = "/Financial/Income/User/" + userId + "/true",
                             pathIdentifier = "Income",
                             itemClass = ""
                         },
@@ -381,7 +399,7 @@ namespace BusinessLogic
                             formName = "SocialSecurity",
                             text = "Social Security (Mother)",
                             iconClass = "",
-                            path = "/Financial/SocialSecurity/" + userId+ "/true",
+                            path = "/Financial/SocialSecurity/User/" + userId+ "/true",
                             pathIdentifier = "SocialSecurity",
                             itemClass = ""
                         },
@@ -390,7 +408,7 @@ namespace BusinessLogic
                             formName = "Support",
                             text = "Preexisting Support (Mother)",
                             iconClass = "",
-                            path = "/Financial/Support/" + userId + "/true",
+                            path = "/Financial/Support/User/" + userId + "/true",
                             pathIdentifier = "Support",
                             itemClass = ""
                         },
@@ -399,7 +417,7 @@ namespace BusinessLogic
                             formName = "OtherChildren",
                             text = "Other Children (Mother)",
                             iconClass = "",
-                            path = "/Financial/OtherChild/" + userId + "/true",
+                            path = "/Financial/OtherChild/User/" + userId + "/true",
                             pathIdentifier = "OtherChild",
                             itemClass = ""
                         },
@@ -408,11 +426,13 @@ namespace BusinessLogic
                             formName = "Deviations",
                             text = "Deviations",
                             iconClass = "",
-                            path = "/Financial/Deviation/" + userId,
+                            path = "/Financial/Deviation/User/" + userId,
                             pathIdentifier = "Deviation",
                             itemClass = ""
                         },
                 };
+            menuList = AdjustItemClass(OutputService.GetFinancialIncompleteForms(userId), menuList);
+
             return new MenuItem
             {
                 itemClass = "submenu",
@@ -424,24 +444,6 @@ namespace BusinessLogic
                 subMenuItems = menuList
             };
 
-        }
-        #endregion
-
-        #region GetCompletedStatus
-        private List<MenuItem> GetCompletedFormStatus(MenuType menuType, List<MenuItem> menuItems)
-        {
-            switch (menuType)
-            {
-                case MenuType.Starter:
-                    return GetStarterStatus(menuItems);
-                default:
-                    break;
-            }
-            return menuItems;
-        }
-        private List<MenuItem> GetStarterStatus(List<MenuItem> menuItems)
-        {
-            return menuItems;
         }
         #endregion
     }

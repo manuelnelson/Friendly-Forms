@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -24,11 +22,6 @@ namespace Models
         [Ignore]
         public virtual Child Child { get; set; }
         
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<DecisionsViewModel>();
-        }
-
         public bool IsValid()
         {
             return UserId > 0;

@@ -1,24 +1,21 @@
-﻿using BusinessLogic.Models;
-using Models.ViewModels;
-
-namespace FriendlyForms.Models
+﻿namespace FriendlyForms.Models
 {
     public class FinancialViewModel
     {
-        public IncomeViewModel IncomeViewModel { get; set; }
-        public SocialSecurityViewModel SocialSecurityViewModel { get; set; }
-        public AllPreexistingViewModel PreexistingSupportViewModel { get; set; }
-        public OtherChildrenViewModel OtherChildrenViewModel { get; set; }
-        public DeviationsViewModel DeviationsViewModel { get; set; }
-        public IncomeViewModel IncomeOtherViewModel { get; set; }
-        public SocialSecurityViewModel SocialSecurityOtherViewModel { get; set; }
-        public AllPreexistingViewModel PreexistingSupportOtherViewModel { get; set; }
-        public OtherChildrenViewModel OtherChildrenOtherViewModel { get; set; }
-        public HealthViewModel HealthViewModel { get; set; }
-        public HealthViewModel HealthOtherViewModel { get; set; }
-        public ChildCareFormViewModel ChildCareFormViewModel { get; set; }
+        //public IncomeViewModel IncomeViewModel { get; set; }
+        //public SocialSecurityViewModel SocialSecurityViewModel { get; set; }
+        //public AllPreexistingViewModel PreexistingSupportViewModel { get; set; }
+        //public OtherChildrenViewModel OtherChildrenViewModel { get; set; }
+        //public DeviationsViewModel DeviationsViewModel { get; set; }
+        //public IncomeViewModel IncomeOtherViewModel { get; set; }
+        //public SocialSecurityViewModel SocialSecurityOtherViewModel { get; set; }
+        //public AllPreexistingViewModel PreexistingSupportOtherViewModel { get; set; }
+        //public OtherChildrenViewModel OtherChildrenOtherViewModel { get; set; }
+        //public HealthViewModel HealthViewModel { get; set; }
+        //public HealthViewModel HealthOtherViewModel { get; set; }
+        //public ChildCareFormViewModel ChildCareFormViewModel { get; set; }
         public FinancialFormsCompleted FinancialFormsCompleted { get; set; }
-        public ChildAllViewModel ChildAllViewModel { get; set; }
+        //public ChildAllViewModel ChildAllViewModel { get; set; }
         public int FormUserId { get; set; }
     }
 

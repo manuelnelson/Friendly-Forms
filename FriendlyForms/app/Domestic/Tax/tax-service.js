@@ -1,4 +1,4 @@
-﻿FormsApp.factory('taxService', function($resource) {
+﻿FormsApp.factory('taxService', ['$resource', function($resource) {
     var service = {
         taxes: $resource('/api/taxes/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

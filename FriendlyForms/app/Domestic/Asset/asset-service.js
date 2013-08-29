@@ -1,4 +1,4 @@
-﻿FormsApp.factory('assetService', function($resource) {
+﻿FormsApp.factory('assetService', ['$resource',function($resource) {
     var service = {
         assets: $resource('/api/assets/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

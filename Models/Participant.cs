@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -20,11 +18,6 @@ namespace Models
         public string DefendantsName { get; set; }
         public int DefendantRelationship { get; set; }
         public int DefendantCustodialParent { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<ParticipantViewModel>();
-        }
 
         public bool IsValid()
         {

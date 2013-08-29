@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -24,10 +22,6 @@ namespace Models
         public string MortgageOwner { get; set; }
         public string Divide { get; set; }
 
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<HouseViewModel>(); 
-        }
 
         public bool IsValid()
         {

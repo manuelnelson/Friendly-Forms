@@ -1,10 +1,10 @@
-﻿FormsApp.factory('scheduleDService', function($resource) {
+﻿FormsApp.factory('scheduleDService', ['$resource', function($resource) {
     var service = {
-        scheduleDs: $resource('/api/scheduleDs/:userId', { userId: '@userId' },
+        scheduleDs: $resource('/api/output/scheduleD/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
     };
     return service;
-});
+}]);

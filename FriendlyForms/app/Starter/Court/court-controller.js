@@ -1,10 +1,16 @@
 ﻿var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.court = courtService.court.get({ UserId: $routeParams.userId }, function () {        
+    $scope.showErrors = false;
+    $scope.court = courtService.court.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
             //see if garlic has something stored            
             $scope.court = $.jStorage.get($scope.path);
+            if ($scope.court)
+                $scope.showErrors = true;
         }
+    });
+    courtService.counties.get({ }, function (data) {
+        $scope.counties = data.Counties;
     });
     $scope.submit = function (noNavigate) {
         if ($scope.courtForm.$invalid) {
@@ -12,7 +18,7 @@
             var value = genericService.getFormInput('#courtForm');
             $.jStorage.set($scope.path, value);
             if(!noNavigate)
-                $location.path('/Starter/Participant/' + $scope.court.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +27,19 @@
             courtService.court.save(null, $scope.court, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Starter/Participant/' + $scope.court.UserId);
+                    menuService.nextMenu();
             });
         } else {
             courtService.court.update({ Id: $scope.court.Id }, $scope.court, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Starter/Participant/' + $scope.court.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService', '$rootScope'];

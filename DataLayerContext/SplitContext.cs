@@ -50,6 +50,7 @@ namespace DataLayerContext
         public DbSet<ExtraExpenseForm> ExtraExpenseForms { get; set; }
         public DbSet<ExtraExpense> ExtraExpenses { get; set; }
         public DbSet<Bcso> Bcsos { get; set; }
+        public DbSet<LawFirm> LawFirms { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             SetupCourtMapping(modelBuilder);
@@ -93,9 +94,18 @@ namespace DataLayerContext
             SetupExtraExpenseFormEntity(modelBuilder);
             SetupExtraExpenseEntity(modelBuilder);
             SetupBcsoEntity(modelBuilder);
+            SetupLawFirmEntity(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
+
+        private void SetupLawFirmEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<LawFirm>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<LawFirm>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+        }
+
         private void SetupBcsoEntity(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Bcso>().HasKey(t => new { t.Id });
@@ -235,8 +245,6 @@ namespace DataLayerContext
             modelBuilder.Entity<ChildSupport>().HasKey(t => new { t.Id });
             modelBuilder.Entity<ChildSupport>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            modelBuilder.Entity<ChildSupport>().Property(t => t.PaidBy).HasMaxLength(100);
-            modelBuilder.Entity<ChildSupport>().Property(t => t.PaidBy).HasMaxLength(100);
         }
 
         private void SetupTaxEntity(DbModelBuilder modelBuilder)

@@ -1,4 +1,4 @@
-﻿FormsApp.factory('loginService', function ($resource) {
+﻿FormsApp.factory('loginService', ['$resource',function ($resource) {
     var service = {
         login: $resource('/api/auth/credentials/', {},
             {
@@ -7,4 +7,4 @@
         authUser: null,
     };
     return service;
-});
+}]);

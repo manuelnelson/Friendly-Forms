@@ -1,5 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
@@ -21,11 +20,6 @@ namespace Models
         public long ChildId { get; set; }
         [Ignore]
         public virtual Child Child { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<ExtraHolidayViewModel>();
-        }
 
         public bool IsValid()
         {

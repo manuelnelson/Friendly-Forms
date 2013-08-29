@@ -22,7 +22,7 @@
                             <label class="radio">
                                 Both
                                 <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="3"></label>
-                            <div ng-show="informationForm.InformationAccess.$dirty && informationForm.InformationAccess.$invalid">
+                            <div ng-show="informationForm.InformationAccess.$dirty && informationForm.InformationAccess.$invalid || (showErrors && informationForm.InformationAccess.$invalid)">
                                 <span class="form-error" ng-show="informationForm.InformationAccess.$error.required">This field is required</span>
                             </div>
                         </div>

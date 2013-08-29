@@ -1,23 +1,29 @@
 ﻿var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showAddChild = false;
-    $scope.support = supportService.supports.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function() {
+    $scope.showErrors = false;
+    $scope.support = supportService.supports.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             //see if garlic has something stored            
             $scope.support = $.jStorage.get($scope.path);
+            if ($scope.support)
+                $scope.showErrors = true;
+
         }
     });
     supportService.courts.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (result) {
         if (result.PreexistingSupports.length == 0)
             $scope.courts = [];
         else
-            $scope.courts = courts.PreexistingSupports;
+            $scope.courts = result.PreexistingSupports;
     });
     $scope.addCourt = function() {
         $scope.court.UserId = $routeParams.userId;
         $scope.court.IsOtherParent = $routeParams.isOtherParent;
         supportService.courts.save(null, $scope.court, function (data) {
             $scope.courts.push(data);
+            $scope.courtForm.$setPristine();
+            $scope.court = '';
         });
     };
     $scope.showChildren = function(court) {
@@ -25,25 +31,26 @@
             if (data.Children.length == 0)
                 $scope.children = [];
             else
-                $scope.children = courts.Children;
+                $scope.children = data.Children;
             $scope.showAddChild = true;
+            $scope.PreexistingSupportId = court.Id;
         });
     };
     $scope.addChild = function() {
         $scope.child.UserId = $routeParams.userId;
-        $scope.child.PreexistingSupportId = $scope.court.Id;
+        $scope.child.PreexistingSupportId = $scope.PreexistingSupportId;
         supportService.children.save(null, $scope.child, function (data) {
             $scope.children.push(data.Child);
+            $scope.childForm.$setPristine();
+            $scope.child = '';
         });
     };
-    $scope.submit = function (noNavigate) {
+    $scope.submit = function () {
         var isOtherParent = $routeParams.isOtherParent;
         if ($scope.supportForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#supportForm');
             $.jStorage.set($scope.path, value);
-            if (!noNavigate)
-                $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "/" + isOtherParent);
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -52,20 +59,19 @@
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             supportService.supports.save(null, $scope.support, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "/" + isOtherParent);
             });
         } else {
             supportService.supports.update({ Id: $scope.support.Id }, $scope.support, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    $location.path('/Financial/OtherChildren/' + $scope.support.UserId + "/" + isOtherParent);
             });
         }
     };
+    $scope.continue = function() {
+        menuService.nextMenu();
+    };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope'];

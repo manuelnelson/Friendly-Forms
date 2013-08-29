@@ -20,7 +20,7 @@
                             <h4>Needs Attention</h4>
                             <p>The following forms still need attention: </p>
                             <ul>
-                                <li ng-repeat="formName in IncompleteForms">{{formName}}</li>
+                                <li ng-repeat="form in IncompleteForms"><a href="#{{form.Path}}">{{form.Name}}</a></li>
                             </ul>
                         </div>
                     </div>

@@ -1,6 +1,4 @@
 ﻿using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
@@ -18,11 +16,6 @@ namespace Models
         public string RealEstateDescription { get; set; }
         public int PersonalProperty { get; set; }
         public string DividingProperty { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<PropertyViewModel>();
-        }
 
         public bool IsValid()
         {

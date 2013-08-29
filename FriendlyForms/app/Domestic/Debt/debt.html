@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper">
     <form ng-submit="submit()" ng-controller="DebtCtrl" id="debtForm" name="debtForm" novalidate>
-        <input type="hidden" name="Id" ng-model="debt.Id">
-        <input type="hidden" name="UserId" ng-model="debt.UserId">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -19,13 +17,13 @@
                             <label class="radio">
                                 Division of debt will be divided in the following manner:
                                 <input required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="1"></label>
-                            <div ng-show="debtForm.MaritalDebt.$dirty && debtForm.MaritalDebt.$invalid">
+                            <div ng-show="debtForm.MaritalDebt.$dirty && debtForm.MaritalDebt.$invalid || (showErrors && debtForm.MaritalDebt.$invalid)">
                                 <span class="form-error" ng-show="debtForm.MaritalDebt.$error.required">This field is required</span>
                             </div>
                         </div>
                         <div class="control-group" ng-show="debt.MaritalDebt == 1">
-                            <textarea class="input-xxlarge" cols="20" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="debtForm.DebtDivision.$dirty && debtForm.DebtDivision.$invalid">
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="debtForm.DebtDivision.$dirty && debtForm.DebtDivision.$invalid || (showErrors && debtForm.DebtDivision.$invalid)">
                                 <span class="form-error" ng-show="debtForm.DebtDivision.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>

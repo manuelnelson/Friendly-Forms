@@ -1,9 +1,12 @@
 ﻿var InformationCtrl = function($scope, $routeParams, $location, informationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.information = informationService.information.get({ UserId: $routeParams.userId }, function() {
+    $scope.showErrors = false;
+    $scope.information = informationService.information.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.information.Id == 'undefined' || $scope.information.Id == 0) {
             //see if garlic has something stored            
             $scope.information = $.jStorage.get($scope.path);
+            if ($scope.information)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#informationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Parenting/Decision/' + $scope.information.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,19 @@
             informationService.information.save(null, $scope.information, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
+                    menuService.nextMenu();
             });
         } else {
             informationService.information.update({ Id: $scope.information.Id }, $scope.information, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Parenting/Decision/' + $scope.information.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+
+    genericService.refreshPage();
+
 };
 InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationService', 'menuService', 'genericService', '$rootScope'];

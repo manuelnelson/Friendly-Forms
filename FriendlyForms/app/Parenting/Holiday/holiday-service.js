@@ -1,4 +1,4 @@
-﻿FormsApp.factory('holidayService', function($resource) {
+﻿FormsApp.factory('holidayService', ['$resource', function($resource) {
     var service = {
         holidays: $resource('/api/holidays/:childId', { childId: '@childId' },
             {
@@ -18,4 +18,4 @@
 
     };
     return service;
-});
+}]);

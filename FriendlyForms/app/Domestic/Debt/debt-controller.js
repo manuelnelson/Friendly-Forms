@@ -1,9 +1,12 @@
 ﻿var DebtCtrl = function($scope, $routeParams, $location, debtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
+    $scope.showErrors = false;
     $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function() {
         if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
             //see if garlic has something stored            
             $scope.debt = $.jStorage.get($scope.path);
+            if ($scope.debt)
+                $scope.showErrors = true;
         }
     });
     $scope.submit = function(noNavigate) {
@@ -12,7 +15,7 @@
             var value = genericService.getFormInput('#debtForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
-                $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+                menuService.nextMenu();
             return;
         }
         $.jStorage.deleteKey($scope.path);
@@ -21,19 +24,17 @@
             debtService.debts.save(null, $scope.debt, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+                    menuService.nextMenu();
             });
         } else {
             debtService.debts.update({ Id: $scope.debt.Id }, $scope.debt, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
-                    $location.path('/Domestic/Asset/' + $scope.debt.UserId);
+                    menuService.nextMenu();
             });
         }
     };
     $rootScope.currentScope = $scope;
-    if (!menuService.isActive($scope.path)) {
-        menuService.setActive($scope.path);
-    }
+    genericService.refreshPage();
 };
 DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope'];

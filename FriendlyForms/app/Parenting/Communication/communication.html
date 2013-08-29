@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper" ng-model="communication.communicationWrapper">
-    <form ng-submit="submit()" ng-controller="CommunicationCtrl" ng-model="communication.communicationForm" name="communicationForm" novalidate>
-        <input type="hidden" name="Id" ng-model="communication.Id">
-        <input type="hidden" name="UserId" ng-model="communication.UserId">
+    <form ng-submit="submit()" ng-controller="CommunicationCtrl" id="communicationForm" name="communicationForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -21,7 +19,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="2"></label>
-                            <div ng-show="communicationForm.AllowCommunication.$dirty && communicationForm.AllowCommunication.$invalid">
+                            <div ng-show="communicationForm.AllowCommunication.$dirty && communicationForm.AllowCommunication.$invalid || (showErrors && communicationForm.AllowCommunication.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.AllowCommunication.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -31,17 +29,17 @@
 
                             <label class="checkbox inline ">
                                 Telephone
-                                <input class="inline" required ng-model="communication.Telephone" name="Telephone" type="checkbox" value="False"></label>
+                                <input class="inline" ng-model="communication.Telephone" name="Telephone" type="checkbox" value="False"></label>
                             <label class="checkbox inline">
                                 Email
-                                <input class="inline" required ng-model="communication.Email" name="Email" type="checkbox" value="False"></label>
+                                <input class="inline" ng-model="communication.Email" name="Email" type="checkbox" value="False"></label>
                             <label class="checkbox inline">
                                 Other
-                                <input class="inline" required ng-model="communication.Other" name="Other" type="checkbox" value="False"></label>
+                                <input class="inline" ng-model="communication.Other" name="Other" type="checkbox" value="False"></label>
                         </div>
                         <div class="control-group" ng-show="communication.Other">
                             <input ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.OtherMethod" name="OtherMethod" placeholder="Other method" type="text" value="">
-                            <div ng-show="communicationForm.OtherMethod.$dirty && communicationForm.OtherMethod.$invalid">
+                            <div ng-show="communicationForm.OtherMethod.$dirty && communicationForm.OtherMethod.$invalid  || (showErrors && communicationForm.OtherMethod.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.OtherMethod.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
@@ -54,7 +52,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="2"></label>
-                            <div ng-show="communicationForm.Limitations.$dirty && communicationForm.Limitations.$invalid">
+                            <div ng-show="communicationForm.Limitations.$dirty && communicationForm.Limitations.$invalid  || (showErrors && communicationForm.Limitations.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.Limitations.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -62,7 +60,7 @@
                             <label class="form-question">
                                 Define any limitations on communication</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="communicationForm.LimitationDetails.$dirty && communicationForm.LimitationDetails.$invalid">
+                            <div ng-show="communicationForm.LimitationDetails.$dirty && communicationForm.LimitationDetails.$invalid  || (showErrors && communicationForm.LimitationDetails.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.LimitationDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
@@ -75,7 +73,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="2"></label>
-                            <div ng-show="communicationForm.Notification.$dirty && communicationForm.Notification.$invalid">
+                            <div ng-show="communicationForm.Notification.$dirty && communicationForm.Notification.$invalid  || (showErrors && communicationForm.Notification.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.Notification.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -88,7 +86,7 @@
                             <label class="radio inline">
                                 No
                                 <input class="inline" required ng-model="communication.AccessOfRights" name="AccessOfRights" type="radio" value="2"></label>
-                            <div ng-show="communicationForm.AccessOfRights.$dirty && communicationForm.AccessOfRights.$invalid">
+                            <div ng-show="communicationForm.AccessOfRights.$dirty && communicationForm.AccessOfRights.$invalid  || (showErrors && communicationForm.AccessOfRights.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.AccessOfRights.$error.required">This field is required</span>
                             </div>
                         </div>
@@ -96,7 +94,7 @@
                             <label class="form-question">
                                 How should the rights of either parent be limited?</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain Here" rows="2"></textarea>
-                            <div ng-show="communicationForm.AccessOfRightsDetails.$dirty && communicationForm.AccessOfRightsDetails.$invalid">
+                            <div ng-show="communicationForm.AccessOfRightsDetails.$dirty && communicationForm.AccessOfRightsDetails.$invalid  || (showErrors && communicationForm.AccessOfRightsDetails.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>

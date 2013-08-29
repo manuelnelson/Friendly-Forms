@@ -38,6 +38,12 @@ namespace FriendlyForms.RestService
             [DataMember]
             public int ProvideHealth { get; set; }
             [DataMember]
+            public bool HealthInsurance { get; set; }
+            [DataMember]
+            public bool DentalInsurance { get; set; }
+            [DataMember]
+            public bool VisionInsurance { get; set; }
+            [DataMember]
             public bool Prorate { get; set; }
             [DataMember]
             public bool FathersHealth { get; set; }
@@ -57,6 +63,9 @@ namespace FriendlyForms.RestService
             public int? MothersHealthPercentage { get; set; }
             [DataMember]
             public int? NonCustodialHealthPercentage { get; set; }
+            [DataMember]
+            public int? MaximumDays { get; set; }
+
         }
         [Authenticate]
         public class HealthsService : ServiceBase
@@ -97,8 +106,8 @@ namespace FriendlyForms.RestService
 
             public void Delete(HealthDto request)
             {
-                var HealthEntity = request.TranslateTo<Health>();
-                HealthService.Delete(HealthEntity);
+                var healthEntity = request.TranslateTo<Health>();
+                HealthService.Delete(healthEntity);
             }
         }
 

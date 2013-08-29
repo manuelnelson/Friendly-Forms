@@ -1,4 +1,4 @@
-﻿FormsApp.factory('responsibilityService', function($resource) {
+﻿FormsApp.factory('responsibilityService', ['$resource', function($resource) {
     var service = {
         responsibilities: $resource('/api/responsibilities/:userId', { userId: '@userId' },
             {
@@ -7,4 +7,4 @@
             }),
     };
     return service;
-});
+}]);

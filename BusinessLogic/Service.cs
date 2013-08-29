@@ -16,7 +16,7 @@ namespace BusinessLogic
     {
         public TRepository Repository { get; set; }
 
-        public Service(TRepository repository)
+        public Service(TRepository repository)            
         {
             Repository = repository;
         }

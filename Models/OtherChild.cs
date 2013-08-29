@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.DataAnnotations;
 
 
@@ -27,18 +26,6 @@ namespace Models
         [Ignore]
         public virtual OtherChildren OtherChildren { get; set; }
         
-        public IViewModel ConvertToModel()
-        {
-            return new OtherChildViewModel
-                {
-                    DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not provided",
-                    Name = Name,
-                    UserId = UserId,
-                    Id = Id,
-                    OtherChildrenId = OtherChildrenId
-                };
-        }
-
         public bool IsValid()
         {
             return UserId > 0;

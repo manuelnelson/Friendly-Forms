@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
-using Models.ViewModels;
 using ServiceStack.DataAnnotations;
 
 
@@ -28,19 +27,6 @@ namespace Models
         public virtual int PreexistingSupportId { get; set; }
         [Ignore]
         public virtual PreexistingSupport PreexistingSupport { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return new PreexistingSupportChildViewModel
-                {
-                    Id = Id,
-                    DateOfBirth = DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided",
-                    Gender = Gender,
-                    Name = Name,
-                    UserId = UserId,
-                    PreexistingSupportId = PreexistingSupportId
-                };
-        }
 
         public bool IsValid()
         {

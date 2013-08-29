@@ -13,21 +13,18 @@
                         <label class="informative">Fill in the information regarding your circumstances below.</label>
                         <div class="control-group">
                             <label class="form-question">County</label>
-                            <select ng-model="court.CountyId" name="CountyId" required>
-                                <option value="-1">-- Select County --</option>
-                                <option value="1">Cobb</option>
-                                <option value="2">Dekalb</option>
-                                <option value="3">Fulton</option>
-                                <option value="4">Gwinnett</option>
+                            <select ng-model="court.CountyId" name="CountyId" ng-options="county.Id as county.CountyName for county in counties" required>
+                                <option ng-show="!court.CountyId > 0" disabled selected value="">-- Select County --</option>
+<!--                                <option ng-repeat="county in counties" value="{{county.Id}}">{{county.CountyName}}</option>-->
                             </select>
-                            <div ng-show="courtForm.CountyId.$dirty && courtForm.CountyId.$invalid">
+                            <div ng-show="courtForm.CountyId.$dirty && courtForm.CountyId.$invalid || (showErrors && courtForm.CountyId.$invalid)">
                                 <span class="form-error" ng-show="courtForm.CountyId.$error.required">Please select a county</span>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="form-question">Case Number</label>
                             <input ui-jq="popover" data-content="Your case number can be found XXXX." name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number" type="text" value="" required>
-                            <div ng-show="courtForm.CaseNumber.$dirty && courtForm.CaseNumber.$invalid">
+                            <div ng-show="courtForm.CaseNumber.$dirty && courtForm.CaseNumber.$invalid || (showErrors && courtForm.CaseNumber.$invalid)">
                                 <span class="form-error" ng-show="courtForm.CaseNumber.$error.required">Case Number is required</span>
                                 <span class="form-error" ng-show="courtForm.CaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
                             </div>
@@ -42,7 +39,7 @@
                             <label class="radio">
                                 Plan Prepared by a judge
                                 <input id="Radio1" ng-model="court.AuthorOfPlan" type="radio" value="2" required></label>
-                            <div ng-show="court.AuthorOfPlan.$dirty && court.AuthorOfPlan.$invalid">
+                            <div ng-show="court.AuthorOfPlan.$dirty && court.AuthorOfPlan.$invalid || (showErrors && courtForm.AuthorOfPlan.$invalid)">
                                 <span class="form-error" ng-show="court.AuthorOfPlan.$error.required">Author is required</span>
                             </div>
                         </div>
@@ -59,14 +56,14 @@
                             <label class="radio">
                                 A modification of an existing order
                                 <input ng-model="court.PlanType" type="radio" value="3"></label>
-                            <div ng-show="court.PlanType.$dirty && court.PlanType.$invalid">
+                            <div ng-show="court.PlanType.$dirty && court.PlanType.$invalid || (showErrors && courtForm.PlanType.$invalid)">
                                 <span class="form-error" ng-show="court.PlanType.$error.required">Author is required</span>
                             </div>
                         </div>
                         <div class="control-group" ng-show="court.PlanType==2 || court.PlanType==3">
                             <label class="form-question">Case Number</label>
                             <input ng-model="court.ExistCaseNumber" ui-jq="popover" data-content="Your case number can be found XXXX." placeholder="Case Number" type="text" ng-pattern="/^[0-9a-zA-Z\s-]*$/">
-                            <div ng-show="court.ExistCaseNumber.$dirty && court.ExistCaseNumber.$invalid">
+                            <div ng-show="court.ExistCaseNumber.$dirty && court.ExistCaseNumber.$invalid || (showErrors && courtForm.ExistCaseNumber.$invalid)">
                                 <span class="form-error" ng-show="court.ExistCaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>

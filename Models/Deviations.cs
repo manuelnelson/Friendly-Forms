@@ -1,13 +1,11 @@
 ﻿using System;
 using Models.Contract;
-using Models.ViewModels;
-using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
-    public class Deviations : IEntity, IFormEntity
+    public class Deviations : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -42,11 +40,6 @@ namespace Models
         public int? HighIncome { get; set; }
         public int? HighDeviation { get; set; }
         public int? SpecificDeviations { get; set; }
-
-        public IViewModel ConvertToModel()
-        {
-            return this.TranslateTo<DeviationsViewModel>();
-        }
 
         public bool IsValid()
         {
