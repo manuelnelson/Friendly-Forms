@@ -2,6 +2,6 @@
     $scope.login = function() {
         loginService.login.post();
     };
-    headerService.setTitle('Login')
+    headerService.setTitle('Login');
 };
 LoginCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService', 'headerService'];

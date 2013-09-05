@@ -13,7 +13,7 @@
 <div ng-show="domesticMediation.HouseViewModel.MaritalHouse==1">
     <p class="indented">
         The marital house is located at {{domesticMediation.HouseViewModel.Address}}, {{domesticMediation.HouseViewModel.CityState}} {{domesticMediation.HouseViewModel.ZipCode}}. {{domesticMediation.HouseViewModel.MortgageOwner}} is the mortgage owner. The home has an estimated value of $<span class="currencyText">{{domesticMediation.HouseViewModel.RetailValue}}</span>, with $<span class="currencyText">{{domesticMediation.HouseViewModel.MoneyOwed}}</span> still outstanding.  After subtracting estimated real estate commissions and other sale related expenses, 
-        the value of the equity in the property is approximately $<span class="currencyText">{{domesticMediation.HouseViewModel.Equity}}</span>.        
+        the value of the equity in the property is approximately <span ng-show="domesticMediation.HouseViewModel.Equity >= 0" class="currencyText">${{domesticMediation.HouseViewModel.Equity}}</span><span ng-show="domesticMediation.HouseViewModel.Equity < 0" class="currencyText">-${{domesticMediation.HouseViewModel.Equity*-1}}</span>.        
     </p>
     <p class="indented">The parties have agreed that issues related to the marital home will be handled in the following manner: {{domesticMediation.HouseViewModel.Divide}}</p>
 </div>
@@ -36,7 +36,7 @@
             {{vehicle.Owner}} will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering said vehicle.
     </p>
     <p ng-show="vehicle.Refinanced == 1" class="indented">
-        {{vehicle.Name}} will refinance this vehicle by {{vehicle.RefinanceDateString}}
+        {{vehicle.Name}} will refinance this vehicle by {{vehicle.RefinanceDateString}}.
     </p>
 </div>
 <!-- Debt -->
@@ -79,7 +79,7 @@
 <p ng-show="domesticMediation.HealthInsuranceViewModel.Health == 1" class="indented">Each party is responsible for their own health insurance.</p>
 <p ng-show="domesticMediation.HealthInsuranceViewModel.Health != 1" class="indented">Health insurance/COBRA will occur as follows:
     <br />
-    {{domesticMediation.HealthInsuranceViewModel.HealthDescription</p>
+    {{domesticMediation.HealthInsuranceViewModel.HealthDescription}}</p>
 <!-- Spousal Support -->
 <h2>Spousal Support</h2>
 <p ng-show="domesticMediation.SpousalViewModel.Spousal==2" class="indented">The parties agree that there will be no provision of spousal support in this case.</p>
@@ -90,7 +90,9 @@
 <h2>Tax Returns, Allowances, Deductions and Refunds</h2>
     <p ng-show="domesticMediation.TaxViewModel.Taxes==2" class="indented">The parties agree that tax returns, allowances, deductions and refunds will occur as follows: <br> {{domesticMediation.TaxViewModel.TaxDescription}}</p>
     <p ng-show="domesticMediation.TaxViewModel.Taxes!=2" class="indented">Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
-
-
+<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+    <input type="hidden" class="html" name="html" />
+    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+</form>
 
 

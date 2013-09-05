@@ -49,10 +49,22 @@ namespace FriendlyForms.RestService
                     UserSession = UserSession
                 };
         }
+        #region Put
+        [Authenticate]
+        public object Put(UserRoles request)
+        {
+            AssignRolesService.Post(new AssignRoles
+            {
+                UserName = request.UserName,
+                Roles = new List<string>(request.Roles)
+            });
+            return null;
+        }
+        #endregion
         #region Post
         [Authenticate]
         public object Post(UserRoles request)
-        {            
+        {
             AssignRolesService.Post(new AssignRoles
             {
                 UserName = request.UserName,

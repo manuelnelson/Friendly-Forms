@@ -2,11 +2,21 @@
     var service = {
         menuGroup: null,
         hide: function() {
-            service.showHeader = false;
+            service.showFeedbackHeader = false;
+            service.showOutput = false;
         },        
         show: function () {
-            service.showHeader = true;
-        }, emails: $resource('/api/emails/feedback', {},
+            service.showFeedbackHeader = true;
+            service.showOutput = false;
+        },
+        showOutputHeader: function() {
+            service.showFeedbackHeader = false;
+            service.showOutput = true;
+        },
+        hideOutputHeader: function () {
+            service.showOutput = false;
+        },
+        emails: $resource('/api/emails/feedback', {},
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
@@ -17,7 +27,7 @@
             else
                 service.path = path;
             service.menuGroup = menuService.getMenuGroupByPath(service.path);
-            service.showHeader = true;
+            service.showFeedbackHeader = true;
         },
         setTitle: function(title) {
             if (title)
@@ -25,7 +35,7 @@
             else if(service.menuGroup){
                 service.Title = service.menuGroup.subMenuItem ? service.menuGroup.subMenuItem.text : service.menuGroup.menuItem.text;
             }
-            service.showHeader = true;
+            service.showFeedbackHeader = true;
         },
         setBreadCrumbs: function() {
             service.levels = [];
@@ -34,7 +44,7 @@
                 if (service.menuGroup.subMenuItem)
                     service.levels.push(service.menuGroup.subMenuItem);
             }
-            service.showHeader = true;
+            service.showFeedbackHeader = true;
         },
         path: null,
         refresh: function(path) {

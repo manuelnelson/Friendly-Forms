@@ -1,18 +1,18 @@
-﻿FormsApp.factory('loginMenuService', ['$resource','menuService',function ($resource, menuService) {
+﻿FormsApp.factory('loginMenuService', ['$resource', 'menuService', 'userService', function ($resource, menuService, userService) {
     var service = {
-        userAuth: $resource('/api/userauths/', {},
-            {
-                get: { method: 'GET', params: { format: 'json' } },
-            }),
         auth: $resource('/api/auth/logout', {},
             {
                 logout: { method: 'GET', params: { format: 'json' } },
             }),
-        refresh: function() {
-            service.userAuth.get({}, function(data) {
-                if (data.UserSession != null) {
-                    service.authUser = data.UserSession;
+        refresh: function () {
+            userService.getUserData().then(function (userData) {
+                if (userData != null && userData.IsAuthenticated) {
+                    service.authUser = userData;
                     menuService.userId = service.authUser.CustomId;
+                    menuService.getMenu();
+                } else {
+                    service.authUser = null;
+                    menuService.userId = 0;
                     menuService.getMenu();
                 }
             });

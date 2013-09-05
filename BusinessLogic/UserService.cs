@@ -6,11 +6,11 @@ using Models;
 
 namespace BusinessLogic
 {
-    public class UserService : IUserService
+    public class UserService :  Service<IUserRepository, User>, IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
-        public UserService(IUserRepository userRepository, IEmailService emailService)
+        public UserService(IUserRepository userRepository, IEmailService emailService) : base(userRepository)
         {          
             _userRepository = userRepository;
             _emailService = emailService;

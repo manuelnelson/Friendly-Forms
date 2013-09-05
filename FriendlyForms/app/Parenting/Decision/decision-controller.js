@@ -3,6 +3,7 @@
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
+    $scope.showExtraErrors = false;
     $rootScope.currentScope = $scope;
     decisionService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
@@ -32,13 +33,16 @@
     };
     $scope.addExtraDecision = function() {
         if ($scope.addDecisionForm.$invalid) {
+            $scope.showExtraErrors = true;
             return;
         }
+        $scope.showExtraErrors = false;
         $scope.extraDecision.ChildId = $routeParams.childId;
         decisionService.extraDecisions.save(null, $scope.extraDecision, function(data) {
             $scope.extraDecisions.push(data);
             $scope.extraDecision.DecisionMaker = -1;
             $scope.extraDecision.Description = '';
+            $scope.addDecisionForm.$setPristine();
         });
         
     };
@@ -81,7 +85,7 @@
     $scope.previousChild = function () {
         $scope.submit(false, function() {
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
-            if ($scope.childNdx < 0) {
+            if ($scope.childNdx === 0) {
                 //Navigate else where
                 menuService.previousMenu();
                 return;
@@ -169,6 +173,7 @@
     //#endregion
     
     $scope.getChildDecision($routeParams.childId);
+    genericService.refreshPage();
 
 };
 DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', '$rootScope'];

@@ -91,11 +91,11 @@ namespace FriendlyForms.App_Start
 			//container.Register(new TodoRepository());
             LogManager.LogFactory = new ElmahLogFactory(new NullLogFactory());
 
-            SetupOrmLiteRepositories(container);
-            //SetupEFRepositories(container);
+            //SetupOrmLiteRepositories(container);
+            SetupEFRepositories(container);
             SetupServices(container);
             //SetupEFServices(container);
-
+            
             //Register In-Memory Cache provider. 
             //For Distributed Cache Providers Use: PooledRedisClientManager, BasicRedisClientManager or see: https://github.com/ServiceStack/ServiceStack/wiki/Caching
 #if DEBUG

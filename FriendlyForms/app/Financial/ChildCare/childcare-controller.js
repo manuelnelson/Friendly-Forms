@@ -71,7 +71,7 @@
     $scope.previousChild = function () {
         $scope.submitChildCare(function () {
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
-            if ($scope.childNdx < 0) {
+            if ($scope.childNdx === 0) {
                 //Navigate else where
                 menuService.previousMenu();
                 return;

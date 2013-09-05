@@ -2,7 +2,7 @@
     $scope.submit = function () {
         $scope.user.AutoLogin = true;
 
-        $scope.user.UserName = $scope.user.Email;//.replace("@","_").replace(".","_");
+        $scope.user.UserName = $scope.user.Email;
         registerService.register.save(null, $scope.user, function () {
             loginMenuService.refresh();
             $location.path('/');

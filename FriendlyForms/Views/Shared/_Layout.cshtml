@@ -19,11 +19,14 @@
         <h1><a href="/">Split Solutions</a></h1>
     </div>
     <div id="user-nav" class="navbar" ng-controller="LoginMenuCtrl">
-        <ul class="nav btn-group">
-            <li class="btn btn-mini btn-inverse" ng-show="user.IsAuthenticated" style="display: none"><a title="" href="/"><i class="icon icon-home"></i><span class="text">Home</span></a></li>
-            <li class="btn btn-mini btn-inverse" ng-show="user.IsAuthenticated" style="display: none"><a title="Log off" href="/#/Account/Logoff"><i class="icon icon-share-alt"></i><span class="text">Logout</span></a></li>
-            <li class="btn btn-mini btn-inverse" ng-show="!user.IsAuthenticated" style="display: none"><a title="" href="/#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a></li>
-        </ul>
+        <div id="nav-menu" class="nav btn-group">
+            <a class="btn btn-mini btn-inverse" ng-show="user.IsAuthenticated" href="/" style="display: none"><i class="icon icon-home"></i><span class="text">Home</span></a>
+            <a class="btn btn-mini btn-inverse dropdown-toggle" ng-show="user.IsAuthenticated" data-toggle="dropdown" href="#"><span class="icon-user icon"></span>{{user.DisplayName}}</a>
+            <ul class="dropdown-menu">
+                <li><a title="Log off" href="/#/Account/Logoff">Logout</a></li>
+            </ul>            
+            <a class="btn btn-mini btn-inverse" ng-show="!user.IsAuthenticated" style="display: none" href="/#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a>
+        </div>
     </div>
     @RenderBody()
     <div id="sidebar" ng-controller="MenuCtrl">
@@ -38,14 +41,23 @@
     <div id="content">
         <div ng-controller="HeaderCtrl" class="ng-cloak">
             <div id="content-header">
-                <div ng-show="showHeader">
+                <div ng-show="showFeedbackHeader">
                     <h1>{{PageTitle}}</h1>
                     <div class="btn-group">
                         <btn class="pull-right btn" ng-click="showIssueForm()">Feedback <i class="icon icon-comment"></i></btn>
                     </div>
                 </div>
+                <div ng-show="showOutput">
+@*                    <h1>{{PageTitle}}</h1>*@
+                    <div class="btn-group">
+                        <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+                            <input type="hidden" class="html" name="html" />
+                            <button class="btn btn-large tip-bottom printForm" value="Print to PDF"><i class="icon-print"></i></button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="container-fluid" ng-show="showHeader">
+            <div class="container-fluid" ng-show="showFeedbackHeader">
                 <div class="row-fluid" ng-show="showIssue">
                     <form ng-submit="submitIssues()" name="feedbackForm" class="form-inline pull-right">
                         <input type="text" ng-model="feedback.Email" name="feedback.Email" class="input" placeholder="Your Email">
@@ -54,7 +66,7 @@
                     </form>
                 </div>
             </div>
-            <div class="row-fluid" id="breadcrumb" ng-show="showHeader" style="margin-top: 10px;">
+            <div class="row-fluid" id="breadcrumb" ng-show="showFeedbackHeader" style="margin-top: 10px;">
                 <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
                 <a ng-repeat="level in levels" class="tip-bottom" href="/#/{{level.path}}">{{level.text}}</a>
             </div>
@@ -83,6 +95,7 @@
     }
     <div ng-controller="LoadingCtrl" id="loading" ng-show="loading"><span>{{message}}</span></div>
     @Html.Partial("_templateErrorMessage")
-    @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))
+    @*    @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))*@
+    @Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal)
 </body>
 </html>

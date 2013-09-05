@@ -14,7 +14,7 @@ namespace FriendlyForms.RestService
     [Route("/Child/")]
     [Route("/Child/", "PUT")]
     [Route("/Child/", "DELETE")]
-    public class ReqChild
+    public class ReqChild : IReturn<RespChild>
     {
         [DataMember]
         public long Id { get; set; }
@@ -29,14 +29,12 @@ namespace FriendlyForms.RestService
     }
 
     [DataContract]
-    public class RespChild : IHasResponseStatus
+    public class RespChild
     {
         [DataMember]
         public object Child { get; set; }
         [DataMember]
         public List<Child> Children { get; set; }
-        [DataMember]
-        public ResponseStatus ResponseStatus { get; set; }
     }
     [Authenticate]
     public class ChildRestService : ServiceBase

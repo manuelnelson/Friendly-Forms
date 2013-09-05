@@ -147,3 +147,7 @@
     <p><span style="font-weight: bold">Other income for {{scheduleB.Father}} is based upon:</span> {{scheduleB.ScheduleB.OtherDetails}}</p>
     <p><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.OtherDetails}}</p>
 </div>
+<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+    <input type="hidden" class="html" name="html" />
+    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+</form>

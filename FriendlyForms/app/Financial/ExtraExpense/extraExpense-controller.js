@@ -73,7 +73,7 @@
                 return;
             }
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
-            if ($scope.childNdx < 0) {
+            if ($scope.childNdx === 0) {
                 //Navigate to previous menu
                 menuService.previousMenu();
                 return;

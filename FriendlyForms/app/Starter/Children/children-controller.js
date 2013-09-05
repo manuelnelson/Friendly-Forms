@@ -56,6 +56,18 @@
             $scope.child = '';
         });
     };
+    $scope.editing = false;
+    $scope.editChild = function (child) {
+        $scope.editing = true;
+        $scope.editChildId = child.Id;
+    };
+    $scope.doneEdit = function (child) {
+        $scope.editing = false;
+        $scope.editChildId = 0;
+        child.DateOfBirth = child.DateOfBirthString;
+        childService.child.update({ }, child, function () {
+        });
+    };
     $scope.deleteChild = function (child) {
         childService.child.delete({Id: child.Id}, function () {
             $scope.children = _.reject($scope.children, function(item) {

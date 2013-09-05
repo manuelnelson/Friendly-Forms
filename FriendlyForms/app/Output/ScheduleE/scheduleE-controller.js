@@ -7,5 +7,6 @@
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
+    headerService.showOutputHeader();
 };
 ScheduleECtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleEService', 'menuService', 'genericService', 'headerService', '$rootScope'];

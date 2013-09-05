@@ -5,6 +5,7 @@
     $scope.CheckingFormProgress = true;
     $scope.NoErrors = true;
     checkProgress();
+    $scope.isStarter = $routeParams.formName == 'Starter';
     //#endregion
     function checkProgress() {
         formCompleteService.formCompletes.get({ FormName: $routeParams.formName, UserId: $routeParams.userId }, function (result) {
@@ -33,10 +34,7 @@
                 case 'Starter':
                     menuService.getMenu(function () {
                         formCompleteService.child.get({ UserId: $routeParams.userId }, function (data) {
-                            if (data.Children.length == 0)
                                 $location.path('/Domestic/House/user/' + $routeParams.userId);
-                            else
-                                $location.path('/Parenting/Supervision/user/' + $routeParams.userId);
                         });
                     });
                     break;

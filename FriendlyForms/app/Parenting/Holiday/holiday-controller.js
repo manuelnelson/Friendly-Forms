@@ -3,6 +3,7 @@
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
+    $scope.showExtraErrors = false;
     $rootScope.currentScope = $scope;
     holidayService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
@@ -34,14 +35,17 @@
     };
     $scope.addExtraHoliday = function () {
         if ($scope.extraHolidayForm.$invalid) {
+            $scope.showExtraErrors = true;
             return;
         }
+        $scope.showExtraErrors = false;
         $scope.extraHoliday.ChildId = $routeParams.childId;
         holidayService.extraHolidays.save(null, $scope.extraHoliday, function (data) {
             $scope.extraHolidays.push(data);
             $scope.extraHoliday.HolidayName = '';
             $scope.extraHoliday.HolidayFather = -1;
             $scope.extraHoliday.HolidayMother = -1;
+            $scope.extraHolidayForm.$setPristine();
         });
 
     };
@@ -86,7 +90,7 @@
     $scope.previousChild = function () {
         $scope.submit(false, function () {
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
-            if ($scope.childNdx < 0) {
+            if ($scope.childNdx === 0) {
                 //Navigate else where
                 menuService.previousMenu();
                 return;
@@ -187,6 +191,31 @@
     };
     $scope.changeHoliday = function (modelName) {
         var value = $scope.holiday[modelName];
+        var otherModelName = getOtherFieldName(modelName);
+        var newValue = otherValue(value);
+        $scope.holiday[otherModelName] = newValue;
+    };
+    $scope.changeExtraHoliday = function ($index, parentType) {
+        if (parentType == 'Father') {
+            var value = $scope.extraHolidays[$index].HolidayFather;
+            $scope.extraHolidays[$index].HolidayMother = otherValue(value);
+        } else {
+            var value = $scope.extraHolidays[$index].HolidayMother;
+            $scope.extraHolidays[$index].HolidayFather = otherValue(value);
+        }
+    };
+    $scope.changeAdditionalHoliday = function ($event) {
+        var name = $event.target.name;
+        if (name.indexOf('Father') > 0) {
+            var value = $scope.extraHoliday.HolidayFather;
+            $scope.extraHoliday.HolidayMother = otherValue(value);
+        } else {
+            var value = $scope.extraHoliday.HolidayMother;
+            $scope.extraHoliday.HolidayFather = otherValue(value);
+        }
+    };
+    //Get's the father model name if mother model name clicked, and vice versa
+    function getOtherFieldName(modelName) {
         var otherModelName;
         if (modelName.lastIndexOf("Mother") >= 0 && modelName.lastIndexOf("Mother") > modelName.lastIndexOf("Father")) {
             //some names have mother twice, always appearing first (example MothersDayMother). To get the last mother, just ignore the first
@@ -198,10 +227,8 @@
             otherModelName = hackedName.replace("Father", "Mother");
             otherModelName = modelName.substr(0, 1) + otherModelName;
         }
-        var newValue = otherValue(value);
-        $scope.holiday[otherModelName] = newValue;
-
-    };
+        return otherModelName;
+    }
     function setFatherValues(value) {
         $scope.holiday.ChristmasFather = value;
         $scope.holiday.MlkFather = value;
@@ -219,6 +246,9 @@
         $scope.holiday.MothersBdayFather = value;
         $scope.holiday.FathersBdayFather = value;
         $scope.holiday.ReligiousFather = value;
+        _.each($scope.extraHolidays, function(item) {
+            item.HolidayFather = value;
+        });
     };
     function setMotherValues(value) {
         $scope.holiday.ChristmasMother = value;
@@ -237,6 +267,9 @@
         $scope.holiday.ChildrensMother = value;
         $scope.holiday.FathersBdayMother = value;
         $scope.holiday.ReligiousMother = value;
+        _.each($scope.extraHolidays, function (item) {
+            item.HolidayMother = value;
+        });
     };
     function otherValue(value) {
         switch (parseInt(value)) {
@@ -254,6 +287,6 @@
     //#endregion
 
     $scope.getChildHoliday($routeParams.childId);
-
+    genericService.refreshPage();
 };
 HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', '$rootScope'];

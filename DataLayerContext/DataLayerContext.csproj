@@ -79,6 +79,10 @@
     <Compile Include="Migrations\201308292058372_AddLawFirmModel.Designer.cs">
       <DependentUpon>201308292058372_AddLawFirmModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201309051509596_AddPaidSubscriptionField.cs" />
+    <Compile Include="Migrations\201309051509596_AddPaidSubscriptionField.Designer.cs">
+      <DependentUpon>201309051509596_AddPaidSubscriptionField.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\BcsoOrmLiteRepository.cs" />
@@ -192,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201308292058372_AddLawFirmModel.resx">
       <DependentUpon>201308292058372_AddLawFirmModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309051509596_AddPaidSubscriptionField.resx">
+      <DependentUpon>201309051509596_AddPaidSubscriptionField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

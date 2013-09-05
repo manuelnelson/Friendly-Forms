@@ -3,9 +3,6 @@
         registerAdmins: $resource('/api/register/', { },
             {
             }),
-        roles: $resource('/api/userauths/addroles/', {},
-            {
-            }),
     };
     return service;
 }]);

@@ -6,8 +6,11 @@
     $scope.$watch(function () { return headerService.levels; }, function () {
         $scope.levels = headerService.levels;
     }, true);
-    $scope.$watch(function () { return headerService.showHeader; }, function () {
-        $scope.showHeader = headerService.showHeader;
+    $scope.$watch(function () { return headerService.showFeedbackHeader; }, function () {
+        $scope.showFeedbackHeader = headerService.showFeedbackHeader;
+    }, true);
+    $scope.$watch(function () { return headerService.showOutput; }, function () {
+        $scope.showOutput = headerService.showOutput;
     }, true);
     $scope.showIssue = false;
     $scope.showIssueForm = function() {

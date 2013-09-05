@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using BusinessLogic;
 using BusinessLogic.Contracts;
@@ -8,7 +12,12 @@ using BusinessLogic.Models;
 using BusinessLogic.Helpers;
 using FriendlyForms.Models;
 using Models;
+using Pechkin;
+using Pechkin.Synchronized;
 using ServiceStack.Common;
+using ServiceStack.Common.Utils;
+using ServiceStack.Common.Web;
+using ServiceStack.Messaging.Rcon;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
@@ -93,6 +102,15 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string FormName { get; set; }
     }
+
+    [DataContract]
+    [Route("/Output/Pdf")]
+    public class PdfDto : IReturn<PdfDtoResp>
+    {
+        [DataMember]
+        public string Html { get; set; }
+    }
+
 
     #region CheckOutput
     [DataContract]
@@ -651,6 +669,12 @@ namespace FriendlyForms.RestService
 
     #endregion
 
+    #region PDF
+    public class PdfDtoResp
+    {
+    }
+    #endregion
+
     [Authenticate]
     public class OutputsService : ServiceBase
     {
@@ -695,7 +719,6 @@ namespace FriendlyForms.RestService
 
 
         #endregion
-
         public object Get(ParentingPlanDto request)
         {
             var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
@@ -929,6 +952,46 @@ namespace FriendlyForms.RestService
             var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
             var csaDto = GetCsa(userId);
             return csaDto;
+        }
+
+        [AddHeader(ContentType = "application/pdf")]
+        [AddHeader(ContentDisposition = "attachment; filename=form.pdf")]     
+        public Stream Post(PdfDto request)
+        {
+            var globalConfig = new GlobalConfig();
+            globalConfig.SetPaperSize(PaperKind.Letter);
+            var margins = new Margins(100, 100, 100, 100);
+            globalConfig.SetMargins(margins);
+            var synchronizedPechkin = new SynchronizedPechkin(globalConfig);
+
+            var contentPath = "~/Content/".MapAbsolutePath();
+            //TODO fix this
+            contentPath = contentPath.Replace(@"\bin","");
+            //Server.MapPath("~/Content/");
+            var css = File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
+            var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style></head><body><div id=""main-content"">{1}</div></body></html>", css, request.Html);
+            var config = new ObjectConfig();
+            config.SetAllowLocalContent(true);
+            config.SetPrintBackground(true);
+
+            var userId = Convert.ToInt32(UserSession.CustomId);
+            var participants = ParticipantService.GetByUserId(userId) as Participant;
+
+            //if (Request.Url != null)
+            //{
+            //    var headerUrl = Request.Url.AbsoluteUri.Replace(Request.Url.LocalPath, "") + "/Headers/Header/" + userId;
+            //    config.Header.SetHtmlContent(headerUrl);
+            //}
+            //config.Header.SetFont(new Font("Times New Roman", 9F, FontStyle.Underline));
+            //config.Header.SetContentSpacing(40.0);
+            //config.Header.SetLeftText("        " + participants.PlaintiffsName + "  v.  " + participants.DefendantsName + "        \r\n");
+            //config.Header.SetRightText("CAF #" + court.CaseNumber);
+            //config.Header.SetLineSeparator(true);            
+            config.Footer.SetFont(new Font("Times New Roman", 8F, FontStyle.Regular));
+            config.Footer.SetTexts(participants.PlaintiffsName + " Initials_______", @"[page] of [topage]", participants.DefendantsName + " Initials________");
+            var pdfBuf = synchronizedPechkin.Convert(config, fullHtml);
+            base.Response.AddHeader("Content-Length", pdfBuf.Length.ToString());
+            return new MemoryStream(pdfBuf);
         }
 
         #region Private Helper Functions

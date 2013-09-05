@@ -17,7 +17,7 @@
                 item.itemClass = '';
             });
         },
-        checkForm: function () {
+        saveCurrentForm: function () {
             //check to see if submenu/form is currently open.  If so, we need to save this form;
             var subMenuItem;
             for (var i = 0; i < service.menuItems.length; i++) {
@@ -122,11 +122,14 @@
             var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx - 1];
             $location.path(nextSubMenu.path);
         },
-        setActive: function (path) {
+        setActive: function (path, saveForm) {
+            if (typeof saveForm === 'undefined') {
+                saveForm = true;
+            }
             if (!service.isInitialized) {
-                service.getMenu(service.setActiveCallback(path));
+                service.getMenu(service.setActiveCallback(path, saveForm));
             } else {
-                service.setActiveCallback(path)();
+                service.setActiveCallback(path, saveForm)();
             }
         },
         setItems: function (menuItems) {
@@ -138,9 +141,10 @@
                 menuGroup.subMenuItem.iconClass = iconClass;
         },
         //Since Menu needs to load before we run this, we make this a callback function - made a closure so that we can pass args to the callback
-        setActiveCallback: function (path) {
+        setActiveCallback: function (path, saveForm) {
             return function () {
-                service.checkForm();
+                if(saveForm)
+                    service.saveCurrentForm();
                 service.clearActive();
                 //Check to see if first menu level is the path
                 var menuItem = _.find(service.menuItems, function (item) {
@@ -148,7 +152,6 @@
                 });
                 if (menuItem) {
                     menuItem.itemClass = 'active';
-                    //$location.path(menuItem.path);                   
                 } else {
                     //Must be subMenu Level
                     var menuGroup = service.getMenuGroupByPath(path);
@@ -156,7 +159,9 @@
                     menuGroup.menuItem.itemClass = 'submenu active';
                     menuGroup.subMenuItem.itemClass = 'active';
                     menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
-                    $location.path(menuGroup.subMenuItem.path);
+                    //Navigate to new path if we are not already there.
+                    if($location.path() !== menuGroup.subMenuItem.path)
+                        $location.path(menuGroup.subMenuItem.path);
                 }
             };
         },

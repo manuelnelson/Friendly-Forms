@@ -18,12 +18,17 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="childAdded in children">
-                                    <td>{{childAdded.Name}}</td>
-                                    <td>{{childAdded.DateOfBirthString}}</td>
+                                    <td ng-show="!(editing && editChildId==childAdded.Id)">{{childAdded.Name}}</td>
+                                    <td ng-show="!(editing  && editChildId==childAdded.Id)">{{childAdded.DateOfBirthString}}</td>
+                                    <td ng-show="editing  && editChildId==childAdded.Id">
+                                        <input type="text" ng-model="childAdded.Name" /></td>
+                                    <td ng-show="editing && editChildId==childAdded.Id">
+                                        <input ui-jq="datepicker" data-date="{{childAdded.DateOfBirthString}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirthString" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">                                        
+                                    </td>
                                     <td>
-                                        <!--                                        <button class="btn-small btn-primary btn childEdit" title="Edit"><i class="icon-white icon-edit"></i></button>-->
-                                        <button class="btn-small btn-primary btn" title="Delete" ng-click="deleteChild(childAdded)"><i class="icon-white icon-trash"></i></button>
-                                        <!--                                        <button class="btn-small btn-primary btn childDone hide" data-id="1" title="Done"><i class="icon-white icon-ok"></i>Done</button>-->
+                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="icon-white icon-edit"></i></button>
+                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Delete" ng-click="deleteChild(childAdded)"><i class="icon-white icon-trash"></i></button>
+                                        <button class="btn-small btn-primary btn" ng-show="editing && editChildId==childAdded.Id" title="Done" ng-click="doneEdit(childAdded)"><i class="icon-white icon-ok"></i>Done</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -70,9 +75,9 @@
     <!-- User Message -->
     <div class="row-fluid" ng-show="continuePressed">
         <div class="span12">
-            <div class="alert alert-success">
+            <div class="alert alert-error">
                 <a class="close">×</a>
-                <strong>Please note</strong> Before proceeding, please review the data you entered as you will not be able to edit this data past this point. 
+                <strong>IMPORTANT!</strong> You will not be able to edit the previous answers to questions you've given beyond this point. Please review your responses before proceeding. 
             </div>
         </div>
     </div>

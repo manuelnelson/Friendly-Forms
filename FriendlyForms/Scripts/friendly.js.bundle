@@ -98,11 +98,20 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Output/CSA/CSA-controller.js
 ../app/Administrator/Register/registerAdmin-service.js
 ../app/Administrator/Register/registerAdmin-controller.js
+../app/Administrator/RegisterFirm/RegisterFirm-service.js
+../app/Administrator/RegisterFirm/RegisterFirm-controller.js
+../app/Administrator/Pricing/Pricing-service.js
+../app/Administrator/Pricing/Pricing-controller.js
+../app/Administrator/Payment/Payment-service.js
+../app/Administrator/Payment/Payment-controller.js
+../app/Administrator/Agreement/Agreement-service.js
+../app/Administrator/Agreement/Agreement-controller.js
 ../app/Home/home-controller.js
 ../app/menu-controller.js
 ../app/menu-service.js
 ../app/header-controller.js
 ../app/header-service.js
+../app/user-service.js
 ../app/loginMenu-controller.js
 ../app/loginMenu-service.js
 ../app/Account/Login/login-controller.js
@@ -113,5 +122,4 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Account/Unauthorized/Unauthorized-service.js
 ../app/Account/Register/register-controller.js
 ../app/Account/Register/register-service.js
-app/friendly-global.js 
 

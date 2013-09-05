@@ -233,6 +233,10 @@ input.ng-invalid.ng-dirty {
 #main-content hr {
   border-color: black;
 }
+#nav-menu a.btn {
+  float: left;
+  padding: 4px 10px;
+}
 /*List changes*/
 ul.no-style li,
 ol.no-style li {

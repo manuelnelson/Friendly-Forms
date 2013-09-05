@@ -101,10 +101,12 @@
     <Reference Include="Microsoft.WindowsFabric.Data.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Caching.1.7.0.0\lib\net35-full\Microsoft.WindowsFabric.Data.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Pechkin">
+    <Reference Include="Pechkin, Version=0.5.8.1, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Pechkin.0.5.8.1\lib\net40\Pechkin.dll</HintPath>
     </Reference>
-    <Reference Include="Pechkin.Synchronized">
+    <Reference Include="Pechkin.Synchronized, Version=0.5.8.1, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Pechkin.Synchronized.0.5.8.1\lib\net40\Pechkin.Synchronized.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
@@ -200,7 +202,9 @@
   <ItemGroup>
     <Compile Include="App_Start\AppHost.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\HeadersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OutputController.cs" />
     <Compile Include="ErrorEntity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -238,6 +242,7 @@
     <Compile Include="RestService\HouseRestService.cs" />
     <Compile Include="RestService\IncomeRestService.cs" />
     <Compile Include="RestService\InformationRestService.cs" />
+    <Compile Include="RestService\LawFirmRestService.cs" />
     <Compile Include="RestService\MenuRestService.cs" />
     <Compile Include="RestService\OtherChildrenRestService.cs" />
     <Compile Include="RestService\OtherChildRestService.cs" />
@@ -257,6 +262,7 @@
     <Compile Include="RestService\SpousalRestService.cs" />
     <Compile Include="RestService\TaxRestService.cs" />
     <Compile Include="RestService\UserAuthRestService.cs" />
+    <Compile Include="RestService\UserRestService.cs" />
     <Compile Include="RestService\VehicleFormRestService.cs" />
     <Compile Include="RestService\VehicleRestService.cs" />
     <Compile Include="WebRole.cs" />
@@ -275,15 +281,21 @@
     <Content Include="app\Account\Unauthorized\unauthorized-controller.js" />
     <Content Include="app\Account\Unauthorized\unauthorized-service.js" />
     <Content Include="app\Account\Unauthorized\Unauthorized.html" />
+    <Content Include="app\Administrator\Agreement\agreement-controller.js" />
+    <Content Include="app\Administrator\Agreement\agreement-service.js" />
     <Content Include="app\Administrator\Payment\payment-controller.js" />
     <Content Include="app\Administrator\Payment\payment-service.js" />
     <Content Include="app\Administrator\Payment\Payment.html" />
+    <Content Include="app\Administrator\Pricing\pricing-controller.js" />
+    <Content Include="app\Administrator\Pricing\pricing-service.js" />
+    <Content Include="app\Administrator\Pricing\Pricing.html" />
+    <Content Include="app\Administrator\RegisterFirm\registerFirm-controller.js" />
+    <Content Include="app\Administrator\RegisterFirm\registerFirm-service.js" />
+    <Content Include="app\Administrator\RegisterFirm\RegisterFirm.html" />
     <Content Include="app\Administrator\Register\registerAdmin-controller.js" />
     <Content Include="app\Administrator\Register\registerAdmin-service.js" />
     <Content Include="app\Administrator\Register\RegisterAdmin.html" />
-    <Content Include="app\Administrator\WebSubscription\webSubscription-controller.js" />
-    <Content Include="app\Administrator\WebSubscription\webSubscription-service.js" />
-    <Content Include="app\Administrator\WebSubscription\WebSubscription.html" />
+    <Content Include="app\Administrator\Agreement\Agreement.html" />
     <Content Include="app\Domestic\Asset\asset-controller.js" />
     <Content Include="app\Domestic\Asset\asset-service.js" />
     <Content Include="app\Domestic\Asset\asset.html" />
@@ -409,6 +421,7 @@
     <Content Include="app\Starter\Participant\participant-controller.js" />
     <Content Include="app\Starter\Participant\participant-service.js" />
     <Content Include="app\Starter\Participant\participant.html" />
+    <Content Include="app\user-service.js" />
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="bundler\bundler.js" />
     <Content Include="bundler\node.exe" />
@@ -547,13 +560,6 @@
     <Content Include="bundler\node_modules\coffee-script\package.json" />
     <Content Include="bundler\coffee.cmd" />
     <Content Include="bundler\bundler.cmd" />
-    <None Include="Content\less\friendly-uniform.less" />
-    <Content Include="Content\pdf.css" />
-    <Content Include="Content\unicorn.main.css" />
-    <Content Include="Content\unicorn.red.css" />
-    <Content Include="Content\uniform.css" />
-    <Content Include="Global.asax" />
-    <Content Include="jqunback-1.51.min.js" />
     <Content Include="libeay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -563,6 +569,19 @@
     <Content Include="mingwm10.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ssleay32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wkhtmltox0.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Content\less\friendly-uniform.less" />
+    <Content Include="Content\pdf.css" />
+    <Content Include="Content\unicorn.main.css" />
+    <Content Include="Content\unicorn.red.css" />
+    <Content Include="Content\uniform.css" />
+    <Content Include="Global.asax" />
+    <Content Include="jqunback-1.51.min.js" />
     <Content Include="README.txt" />
     <Content Include="Scripts\angular-cookies.js" />
     <Content Include="Scripts\angular-cookies.min.js" />
@@ -579,15 +598,6 @@
     <Content Include="Scripts\angular-ui.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
-    <Content Include="Scripts\app\friendly-admin.js" />
-    <Content Include="Scripts\app\friendly-domestic.js" />
-    <Content Include="Scripts\app\friendly-financial-global.js" />
-    <Content Include="Scripts\app\friendly-financial.js" />
-    <Content Include="Scripts\app\friendly-global.js" />
-    <Content Include="Scripts\app\friendly-output.js" />
-    <Content Include="Scripts\app\friendly-parenting-global.js" />
-    <Content Include="Scripts\app\friendly-starter.js" />
-    <Content Include="Scripts\app\friendly-parenting.js" />
     <Content Include="Scripts\bootstrap-alert.js" />
     <Content Include="Scripts\bootstrap-button.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
@@ -903,9 +913,6 @@
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="ssleay32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -919,15 +926,16 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="wkhtmltox0.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Views\Shared\NotAuthorized.cshtml" />
     <Content Include="Scripts\underscore.min.map" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Headers\Header.cshtml" />
+    <Content Include="Views\Headers\_BlankLayout.cshtml" />
+    <Content Include="Views\Headers\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Output\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

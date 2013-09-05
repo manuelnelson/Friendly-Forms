@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using ServiceStack.DataAnnotations;
 
@@ -20,6 +21,12 @@ namespace Models
         public int Refinanced { get; set; }
         public string Name { get; set; }
         public DateTime? RefinanceDate { get; set; }
+        [NotMapped]
+        [Ignore]
+        public virtual string RefinanceDateString
+        {
+            get { return RefinanceDate.HasValue ? RefinanceDate.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
+        }
 
         public int VehicleFormId { get; set; }
         [Ignore]

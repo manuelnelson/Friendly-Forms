@@ -129,8 +129,8 @@
                 <div class="widget-content">
                     <form ng-submit="addExtraDecision()" id="addDecisionForm" name="addDecisionForm" novalidate>
                         <div class="control-group">
-                            <input ng-model="extraDecision.Description" required name="extraDecision.Description" placeholder="Description" type="text" value="">
-                            <div ng-show="addDecisionForm.Description.$dirty && addDecisionForm.Description.$invalid">
+                            <input ng-model="extraDecision.Description" required name="Description" placeholder="Description" type="text" value="">
+                            <div ng-show="addDecisionForm.Description.$dirty && addDecisionForm.Description.$invalid || (showExtraErrors && addDecisionForm.Description.$invalid)">
                                 <span class="form-error" ng-show="addDecisionForm.Description.$error.required">The field is required</span>
                             </div>
                         </div>
@@ -139,17 +139,17 @@
                                 Other Decisions</label>
                             <label class="radio inline">
                                 Father
-                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="1"></label>
+                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="1"></label>
                             <label class="radio inline">
                                 Mother
-                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="2"></label>
+                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="2"></label>
                             <label class="radio inline">
                                 Both
-                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="3"></label>
+                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="3"></label>
                             <label class="radio inline">
                                 Not Applicable
-                                <input class="inline" ng-model="extraDecision.DecisionMaker" name="extraDecision.DecisionMaker" type="radio" value="4"></label>
-                            <div ng-show="addDecisionForm.DecisionMaker.$dirty && addDecisionForm.DecisionMaker.$invalid">
+                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="4"></label>
+                            <div ng-show="addDecisionForm.DecisionMaker.$dirty && addDecisionForm.DecisionMaker.$invalid  || (showExtraErrors && addDecisionForm.DecisionMaker.$invalid)">
                                 <span class="form-error" ng-show="addDecisionForm.DecisionMaker.$error.required">The field is required</span>
                             </div>
                         </div>

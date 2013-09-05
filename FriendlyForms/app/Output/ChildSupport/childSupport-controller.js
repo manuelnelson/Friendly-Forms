@@ -8,6 +8,6 @@
 
     $rootScope.currentScope = $scope;
     headerService.hide();
-
+    headerService.showOutputHeader();
 };
 ChildSupportOutputCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportOutputService', 'menuService', 'genericService', 'headerService', '$rootScope'];

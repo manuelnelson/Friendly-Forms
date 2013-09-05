@@ -14,7 +14,8 @@
                         </div>
                         <div ng-show="!CheckingFormProgress && NoErrors">
                             <h4>Complete!</h4>
-                            <p>You have successfully completed the {{FormName}} form.  Click continue to preview the output</p>
+                            <p ng-show="!isStarter">You have successfully completed the {{FormName}} form.  Click continue to preview the output</p>
+                            <p ng-show="isStarter">You have successfully completed the {{FormName}} form.  Click continue to move on to the next form.</p>
                         </div>
                         <div ng-show="!CheckingFormProgress && !NoErrors">
                             <h4>Needs Attention</h4>

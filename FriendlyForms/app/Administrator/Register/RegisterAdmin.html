@@ -1,44 +1,40 @@
 ﻿<div class="form-vertical wrapper" ng-controller="RegisterAdminCtrl">
     <div class="row-fluid well form-vertical">
-        <form class="span5" ng-submit="submit()" >
-            <fieldset>
-                <legend>Law Firm Information</legend>
-                <label>
-                    Please enter your user name and password. 
-                </label>
-                <div class="control-group">
-                    <input id="DisplayName" name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
-                </div>
-                <div class="control-group">
-                    <input id="Email" name="Email" ng-model="user.Email" placeholder="Email*" type="text" value="">
-                </div>
-                <div class="control-group">
-                    <input id="Password" name="Password" ng-model="user.Password" placeholder="Password*" type="password">
-                </div>
-                <div class="control-group">
-                    <input id="ConfirmPassword" name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
-                </div>
-                <button id="Button1" class="btn btn-primary">Sign Up</button>
-            </fieldset>
-        </form>
-        <form class="span5" ng-submit="submit()">
+        <form class="span5" ng-submit="submit()" name="registerAdminForm">
             <fieldset>
                 <legend>Administrator Information</legend>
                 <label>
-                    Please enter your user name and password. 
+                    Please create the administrators login credentials 
                 </label>
                 <div class="control-group">
-                    <input id="Text1" name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
+                    <input name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
+                    <div ng-show="registerAdminForm.DisplayName.$dirty && registerAdminForm.DisplayName.$invalid">
+                        <span class="form-error" ng-show="registerAdminForm.DisplayName.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                        <span class="form-error" ng-show="registerAdminForm.DisplayName.$error.required">This field is required.</span>
+                    </div>
                 </div>
                 <div class="control-group">
-                    <input id="Text2" name="Email" ng-model="user.Email" placeholder="Email*" type="text" value="">
+                    <input name="Email" ng-model="user.Email" placeholder="Email*" type="email" value="">
+                    <div ng-show="registerAdminForm.Email.$dirty && registerAdminForm.Email.$invalid">
+                        <span class="form-error" ng-show="registerAdminForm.Email.$error.email">Not a valid e-mail address.</span>
+                        <span class="form-error" ng-show="registerAdminForm.Email.$error.required">This field is required.</span>
+                    </div>
                 </div>
                 <div class="control-group">
-                    <input id="Password1" name="Password" ng-model="user.Password" placeholder="Password*" type="password">
+                    <input name="Password" ng-model="user.Password" ng-minlength="6" placeholder="Password*" type="password">
+                    <div ng-show="registerAdminForm.Password.$dirty && registerAdminForm.Password.$invalid">
+                        <span class="form-error" ng-show="registerAdminForm.Password.$error.minlength">Password must be at least than 6 characters.</span>
+                        <span class="form-error" ng-show="registerAdminForm.Password.$error.required">This field is required.</span>
+                    </div>
                 </div>
                 <div class="control-group">
-                    <input id="Password2" name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
+                    <input name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
+                    <div ng-show="registerAdminForm.ConfirmPassword.$dirty && registerAdminForm.ConfirmPassword.$invalid">
+                        <span class="form-error" ng-show="registerAdminForm.ConfirmPassword.$error.minlength">Password must be at least than 6 characters.</span>
+                        <span class="form-error" ng-show="registerAdminForm.ConfirmPassword.$error.required">This field is required.</span>
+                    </div>
                 </div>
+                <button class="btn btn-primary">Register</button>
             </fieldset>
         </form>
     </div>

@@ -151,14 +151,7 @@
         </tr>
     </tbody>
 </table>
-<!--<script id="friendly-supplementalTableTotal-template" type="text/x-jquery-tmpl">
-    <tr>
-        <td>{{scheduleD.Name}}</td>
-        <td>${{scheduleD.TotalSchool}}</td>
-        <td>${{scheduleD.TotalSummer}}</td>
-        <td>${{scheduleD.TotalBreaks}}</td>
-        <td>${{scheduleD.TotalOther}}</td>
-        <td>${{scheduleD.TotalYearly}}</td>
-        <td>${{scheduleD.TotalMonthly}}</td>
-    </tr>
-</script>-->
+<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+    <input type="hidden" class="html" name="html" />
+    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+</form>

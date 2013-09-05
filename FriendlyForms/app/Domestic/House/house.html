@@ -61,7 +61,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
-                                <input class="currency"ng-pattern="/^[0-9]*$/"ng-model="house.Equity" name="Equity" placeholder="Equity in Dollars" type="text" value="" maxlength="19" autocomplete="off">
+                                <input class="currency" ng-pattern="/^-?[0-9]*$/"ng-model="house.Equity" name="Equity" placeholder="Equity in Dollars" type="text" value="" maxlength="19" autocomplete="off">
                                 <div ng-show="houseForm.Equity.$dirty && houseForm.Equity.$invalid || (showErrors && houseForm.Equity.$invalid)">
                                     <span class="form-error" ng-show="houseForm.Equity.$error.maxLength">This field cannot be longer than 19 characters.</span>
                                     <span class="form-error" ng-show="houseForm.Equity.$error.pattern">This field must be a valid number.</span>

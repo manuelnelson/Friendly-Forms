@@ -7,5 +7,6 @@
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
+    headerService.showOutputHeader();
 };
 CSACtrl.$inject = ['$scope', '$routeParams', '$location', 'csaService', 'menuService', 'genericService', 'headerService', '$rootScope'];
