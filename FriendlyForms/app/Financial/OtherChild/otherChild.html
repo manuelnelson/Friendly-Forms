@@ -14,10 +14,10 @@
                                 Are you legally responsible for the qualified child? (Step children do not qualify)</label>
                             <label class="radio inline">
                                 Yes
-                                <input class="inline" required ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="1"></label>
+                                <input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="1"></label>
                             <label class="radio inline">
                                 No
-                                <input class="inline" required ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
+                                <input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
                             <div ng-show="otherChildrenForm.LegallyResponsible.$dirty && otherChildrenForm.LegallyResponsible.$invalid  || (showErrors && otherChildrenForm.LegallyResponsible.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.LegallyResponsible.$error.required">This field is required</span>
                             </div>
@@ -74,19 +74,21 @@
                                 <span class="form-error" ng-show="otherChildrenForm.InCourt.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group row-fluid">
+                        <div class="control-group row-fluid" ng-show="otherChildren.LegallyResponsible == 1 && otherChildren.AtHome == 1 && otherChildren.Support == 1 && otherChildren.Preexisting == 2 && otherChildren.InCourt == 2">
                             <label class="span4 form-question">
-                                Enter a comment here explaining why you have included an other qualified child in the current court case.</label>
+                                Enter a comment here explaining why you have included another qualified child in the current court case.</label>
                             <textarea class="inline" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="otherChildren.Details" name="Details" placeholder="Details" rows="2"></textarea>
                             <div ng-show="otherChildrenForm.Details.$dirty && otherChildrenForm.Details.$invalid  || (showErrors && otherChildrenForm.Details.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.Details.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
+                        <label class="informative" ng-show="showMessage">
+                            Based upon your answers to the questions above, you do not qualify for an adjustment for other qualified children.
+                        </label>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
     <div ng-show="otherChildren.LegallyResponsible == 1 && otherChildren.AtHome == 1 && otherChildren.Support == 1 && otherChildren.Preexisting == 2 && otherChildren.InCourt == 2">
         <div class="row-fluid">
@@ -145,4 +147,7 @@
             </div>
         </div>
     </div>
+
+    <button class="btn btn-primary" ng-click="submit()" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+
 </div>

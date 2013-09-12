@@ -1,11 +1,12 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
     [Alias("Participants")]
-    public class Participant : IEntity, IFormEntity
+    public class Participant : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -18,6 +19,7 @@ namespace Models
         public string DefendantsName { get; set; }
         public int DefendantRelationship { get; set; }
         public int DefendantCustodialParent { get; set; }
+        public int IsJointCustody { get; set; }
 
         public bool IsValid()
         {
@@ -26,14 +28,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var update = (Participant)entity;
-            DefendantRelationship = update.DefendantRelationship;
-            DefendantCustodialParent = update.DefendantCustodialParent;
-            DefendantsName = update.DefendantsName;
-            PlaintiffCustodialParent = update.PlaintiffCustodialParent;
-            PlaintiffRelationship = update.PlaintiffRelationship;
-            PlaintiffsName = update.PlaintiffsName;
-            UserId = update.UserId;
+          throw new NotImplementedException();
         }
 
     }

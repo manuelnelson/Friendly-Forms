@@ -5,6 +5,11 @@
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
+        custody: $resource('/api/participants/CustodyInfomation/', {},
+        {
+            get: { method: 'GET', params: { format: 'json' } },
+            update: { method: 'PUT', params: { format: 'json' } }
+        }),
     };
     return service;
 }]);

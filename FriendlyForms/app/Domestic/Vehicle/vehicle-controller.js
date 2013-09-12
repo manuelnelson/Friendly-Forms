@@ -1,15 +1,15 @@
-﻿var VehicleCtrl = function($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope) {
+﻿var VehicleCtrl = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope', 'participantService',
+    function($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope, participantService) {
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
     //#endregion
 
     //#region intialize
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
     $scope.showErrors = false;
-
 
     vehicleService.vehicleForm.get({ UserId: $routeParams.userId }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
@@ -20,7 +20,7 @@
             $scope.vehicleForm = data;
         }
     });
-    vehicleService.custody.get({ UserId: $routeParams.userId }, function (data) {
+    participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
         $scope.custodianNames = data.CustodyInformation.CustodianNames;
     });
     vehicleService.vehicles.get({ UserId: $routeParams.userId }, function (data) {
@@ -78,5 +78,4 @@
         menuService.nextMenu();
     };
     //#endregion    
-};
-VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope'];
+}];

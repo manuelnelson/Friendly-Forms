@@ -77,9 +77,10 @@
                 return 3;
         }
         return 1;
-    } $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    }
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', '$rootScope'];

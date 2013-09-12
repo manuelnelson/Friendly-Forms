@@ -34,9 +34,9 @@
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];

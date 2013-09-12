@@ -23,7 +23,7 @@
                                 <span class="form-error" ng-show="communicationForm.AllowCommunication.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group">
+                        <div class="control-group" ng-show="communication.AllowCommunication == 1">
                             <label class="form-question">
                                 What method(s) will the parents use to communicate? (check all that apply)</label>
 

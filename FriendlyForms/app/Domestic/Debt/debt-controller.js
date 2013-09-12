@@ -34,7 +34,8 @@
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope'];

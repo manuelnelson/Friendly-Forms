@@ -41,9 +41,9 @@
             $scope.responsibility.MotherPercentage = genericService.calculateRemainingPercentage($scope.responsibility.FatherPercentage);
         }
     }
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];

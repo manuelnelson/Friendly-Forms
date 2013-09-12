@@ -65,6 +65,8 @@
                                     The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
                                     <input ng-model="health.NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="False"></label>
                             </div>
+                            <label class="informative">
+                                Please enter the amount each parent, or the non-parent custodian, contributes toward the total monthly cost for health insurance.</label>
                             <div class="control-group">
                                 <label class="form-question span3">Father</label>
                                 <input ng-pattern="/^[0-9]*$/" ng-model="health.FathersHealthAmount" name="FathersHealthAmount" placeholder="Amount" type="text" value="">
@@ -87,7 +89,7 @@
                                 </div>
                             </div>
                             <label class="informative">
-                                What percentage will each part pay of healthcare expenses not covered by inurance (eg. deductibles, copays, perscriptions, ER)?</label>
+                                What percentage will each party pay of healthcare expenses not covered by insurance (eg. deductibles, co-pays, prescriptions, Emergency Room)? The total percentage must equal 100%.</label>
                             <div class="control-group">
                                 <label class="form-question span3">Father</label>
                                 <input class="percent" ng-pattern="/^[0-9]*$/" min="0" max="100" ng-change="CalculatePercentage('Father')" ng-model="health.FathersHealthPercentage" name="FathersHealthPercentage" placeholder="Percent" type="text" value="">
@@ -113,7 +115,7 @@
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="form-question span3">After receiving verification of a particular uninsured health care expense, what is the maximum ng-pattern="/^[0-9]*$/" of days the other party might expect to wait for reimbursement?</label>
+                                <label class="form-question span3">After receiving verification of a particular uninsured health care expense, what is the maximum number of days the other party might expect to wait for reimbursement?</label>
                                 <input class="percent" ng-pattern="/^[0-9]*$/" ng-model="health.MaximumDays" name="MaximumDays" placeholder="Days" type="text" value="">
                                 <div ng-show="healthForm.MaximumDays.$dirty && healthForm.MaximumDays.$invalid  || (showErrors && healthForm.MaximumDays.$invalid)">
                                     <span class="form-error" ng-show="healthForm.NonCustodialHealthPercentage.$error.pattern">This field must be a number.</span>

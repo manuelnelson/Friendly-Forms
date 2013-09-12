@@ -28,6 +28,7 @@
                 service.path = path;
             service.menuGroup = menuService.getMenuGroupByPath(service.path);
             service.showFeedbackHeader = true;
+            service.showOutput = false;
         },
         setTitle: function(title) {
             if (title)
@@ -36,6 +37,7 @@
                 service.Title = service.menuGroup.subMenuItem ? service.menuGroup.subMenuItem.text : service.menuGroup.menuItem.text;
             }
             service.showFeedbackHeader = true;
+            service.showOutput = false;
         },
         setBreadCrumbs: function() {
             service.levels = [];

@@ -32,6 +32,7 @@ namespace FriendlyForms.RestService
             public int UserAuthId { get; set; }
             public bool Verified { get; set; }
             public int? LawFirmId { get; set; }
+            public string Position { get; set; }
         }
 
         public class UsersService : Service
@@ -40,7 +41,8 @@ namespace FriendlyForms.RestService
 
             public object Get(UserDto request)
             {
-                return UserService.Get(request.Id);
+                var user = UserService.Get(request.Id);
+                return user;
             }
 
             public object Get(UserListDto request)

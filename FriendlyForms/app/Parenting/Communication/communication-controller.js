@@ -35,9 +35,9 @@
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', '$rootScope'];

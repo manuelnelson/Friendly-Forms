@@ -68,9 +68,20 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Are there any other assets or liabilities to be divided?</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.AdditionalAssets" name="AdditionalAssets" placeholder="Details" rows="2"></textarea>
+                            <label class="radio">
+                               Yes
+                                <input required ng-model="asset.AdditionalAssets" name="AdditionalAssets" type="radio" value="1"></label>
+                            <label class="radio">
+                                No
+                                <input required ng-model="asset.AdditionalAssets" name="AdditionalAssets" type="radio" value="2"></label>
                             <div ng-show="assetForm.AdditionalAssets.$dirty && assetForm.AdditionalAssets.$invalid || (showErrors && assetForm.AdditionalAssets.$invalid)">
-                                <span class="form-error" ng-show="assetForm.AdditionalAssets.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <span class="form-error" ng-show="assetForm.AdditionalAssets.$error.required">This field is required</span>
+                            </div>
+                        </div>
+                        <div class="control-group" ng-show="asset.AdditionalAssets == 1">
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.AdditionalAssetsDescription" name="AdditionalAssetsDescription" placeholder="Details" rows="2"></textarea>
+                            <div ng-show="assetForm.AdditionalAssetsDescription.$dirty && assetForm.AdditionalAssetsDescription.$invalid || (showErrors && assetForm.AdditionalAssetsDescription.$invalid)">
+                                <span class="form-error" ng-show="assetForm.AdditionalAssetsDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
                     </div>

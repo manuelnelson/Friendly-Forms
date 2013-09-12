@@ -31,7 +31,7 @@
                         </div>
                         <div class="control-group" ng-show="holiday.Thanksgiving == 3">
                             <label class="form-question">
-                                Input your holiday schedule</label>
+                                Define your Thanksgiving Holiday schedule</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ThanksgivingOther" name="ThanksgivingOther" rows="2"></textarea>
                             <div ng-show="showErrors && holidayForm.ThanksgivingOther.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ThanksgivingOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -80,7 +80,7 @@
                         </div>
                         <div class="control-group" ng-show="holiday.Christmas == 5">
                             <label class="form-question">
-                                Define Winter Break time</label>
+                                Define your Winter Break schedule</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ChristmasOther" name="ChristmasOther" rows="2"></textarea>
                             <div ng-show="showErrors && holidayForm.ChristmasOther.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ChristmasOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -102,7 +102,7 @@
                         </div>
                         <div class="control-group" ng-show="holiday.SpringBreak == 2">
                             <label class="form-question">
-                                Define Spring Break time</label>
+                                Define your Spring Break schedule</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SpringOther" name="SpringOther" rows="2"></textarea>
                             <div ng-show="showErrors && holidayForm.SpringOther.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SpringOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -163,7 +163,7 @@
                         </div>
                         <div class="control-group" ng-show="holiday.FallBreak == 2">
                             <label class="form-question">
-                                Define Fall Break time</label>
+                                Define your Fall Break schedule</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.FallOther" name="FallOther" rows="2"></textarea>
                             <div ng-show="showErrors && holidayForm.FallOther.$invalid">
                                 <span class="form-error" ng-show="holidayForm.FallOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>

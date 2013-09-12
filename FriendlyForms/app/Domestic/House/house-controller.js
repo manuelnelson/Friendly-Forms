@@ -43,9 +43,9 @@
         });
     };
 
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'limitToFilter', '$http', '$rootScope'];

@@ -51,6 +51,8 @@ namespace DataLayerContext
         public DbSet<ExtraExpense> ExtraExpenses { get; set; }
         public DbSet<Bcso> Bcsos { get; set; }
         public DbSet<LawFirm> LawFirms { get; set; }
+        public DbSet<AttorneyPage> AttorneyPages { get; set; }
+        public DbSet<AttorneyPageUser> AttorneyPageUsers { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             SetupCourtMapping(modelBuilder);
@@ -95,8 +97,26 @@ namespace DataLayerContext
             SetupExtraExpenseEntity(modelBuilder);
             SetupBcsoEntity(modelBuilder);
             SetupLawFirmEntity(modelBuilder);
+            SetupAttorneyPageEntity(modelBuilder);
+            SetupAttorneyPageUsersEntity(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupAttorneyPageUsersEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AttorneyPageUser>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<AttorneyPageUser>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<AttorneyPageUser>().HasRequired(t => t.User).WithMany();
+            modelBuilder.Entity<AttorneyPageUser>().HasRequired(t => t.AttorneyPage).WithMany();
+        }
+
+        private void SetupAttorneyPageEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AttorneyPage>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<AttorneyPage>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupLawFirmEntity(DbModelBuilder modelBuilder)

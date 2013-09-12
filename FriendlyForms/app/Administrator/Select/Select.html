@@ -1,0 +1,30 @@
+﻿<div class="form-vertical wrapper" ng-controller="SelectCtrl">
+    <div class="row-fluid">
+        <form class="well form-vertical" ng-submit="submit()" name="selectForm" id="selectForm">
+            <fieldset>
+                <legend>Manage</legend>
+                <label class="informative">
+                    Here you have access to all aspects of your subscription. Whether viewing, editing, archiving or deleting cases either in process or completed, or creating, editing or deleting Attorney Pages               
+                </label>
+                <div class="control-group">
+                    <label class="radio">
+                        I would like to manage Client Cases                       
+                        <input required ng-model="select.Direction" name="Direction" type="radio" value="1"></label>
+                    <label class="radio">
+                        I would like to manage Attorney Pages                       
+                        <input required ng-model="select.Direction" name="Direction" type="radio" value="2"></label>
+                    <label class="radio">
+                        I would like to edit my account data                       
+                        <input required ng-model="select.Direction" name="Direction" type="radio" value="3"></label>
+                    <label class="radio">
+                        I would like to go back to the home page                       
+                        <input required ng-model="select.Direction" name="Direction" type="radio" value="4"></label>
+                    <div ng-show="showErrors && selectForm.Direction.$invalid">
+                        <span class="form-error" ng-show="selectForm.Direction.$error.required">The field is required</span>
+                    </div>
+                </div>
+                <intput class="btn btn-primary">Go</intput>
+            </fieldset>
+        </form>
+    </div>
+</div>

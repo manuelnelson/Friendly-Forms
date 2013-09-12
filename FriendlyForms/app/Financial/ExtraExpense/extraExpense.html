@@ -18,12 +18,12 @@
                             <label class="form-question">Do any individuals pay extraordinary expenses for the child(ren)?</label>
                             <label class="radio inline">
                                 Yes
-                                    <input class="inline" required ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
+                                    <input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
                             <label class="radio inline">
                                 No
-                                    <input class="inline" required ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
-                            <div ng-show="extraExpensesForm.HasExtraExpenses.$dirty && extraExpensesForm.HasExtraExpenses.$invalid || (showErrors && extraExpensesForm.HasExtraExpenses.$invalid)">
-                                <span class="form-error" ng-show="extraExpensesForm.HasExtraExpenses.$error.required">Please select an option</span>
+                                    <input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
+                            <div ng-show="showErrors">
+                                <span class="form-error" ng-show="showErrors">Please select an option</span>
                             </div>
                         </div>
                     </form>

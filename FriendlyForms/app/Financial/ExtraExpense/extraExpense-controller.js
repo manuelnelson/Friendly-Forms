@@ -3,7 +3,7 @@
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
-    $rootScope.currentScope = $scope;
+//    $rootScope.currentScope = $scope;
     extraExpenseService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -27,13 +27,15 @@
     });
     
     $scope.submit = function (noNavigate) {
-        if ($scope.extraExpensesForm.$invalid) {
+        if (!$scope.extraExpenseForm || ($scope.extraExpenseForm.HasExtraExpenses != "1" && $scope.extraExpenseForm.HasExtraExpenses != "2")) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             return;
         }
+        $scope.showErrors = false;
         $scope.extraExpenseForm.UserId = $routeParams.userId;
         if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
-            extraExpenseService.extraExpenseForms.save(null, $scope.extraExpenseForm, function () {
+            extraExpenseService.extraExpenseForms.save(null, $scope.extraExpenseForm, function (data) {
+                $scope.extraExpenseForm.Id = data.Id;
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             });
         } else {
@@ -44,7 +46,7 @@
     };
     $scope.submitExtraExpense = function (callback) {
         if ($scope.extraExpenseChildForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            //menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#extraExpenseChildForm');
             $.jStorage.set($scope.path, value);
             if (callback)
@@ -52,6 +54,8 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
+        if (!$scope.extraExpense)
+            $scope.extraExpense = {};
         $scope.extraExpense.UserId = $routeParams.userId;
         $scope.extraExpense.ChildId = $routeParams.childId;
         if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
@@ -63,7 +67,6 @@
                 callback();
             });
         }
-        menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
     };
     $scope.previousChild = function () {
         $scope.submitExtraExpense(function () {
@@ -106,6 +109,8 @@
 
     //#endregion
     $scope.getChildExtraExpense($routeParams.childId);
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', '$rootScope'];

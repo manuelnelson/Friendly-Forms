@@ -39,5 +39,18 @@ namespace BusinessLogic
                 throw new Exception("Unable to retrieve information", ex);
             }
         }
+
+        public User GetByUserAuthId(int userAuthId)
+        {
+            try
+            {
+                return _userRepository.GetByUserAuthId(userAuthId);
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new Exception("Unable to retrieve information", ex);
+            }
+        }
     }
 }

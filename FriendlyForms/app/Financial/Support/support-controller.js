@@ -1,4 +1,4 @@
-﻿var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope) {
+﻿var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope, $q) {
     $scope.path = $location.path();
     $scope.showAddChild = false;
     $scope.showErrors = false;
@@ -6,9 +6,12 @@
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             //see if garlic has something stored            
             $scope.support = $.jStorage.get($scope.path);
-            if ($scope.support)
+            if (typeof $scope.support === 'undefined' || $scope.support === null) {
                 $scope.showErrors = true;
-
+                $scope.support = {
+                    Support: 0
+                };
+            }
         }
     });
     supportService.courts.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (result) {
@@ -36,6 +39,9 @@
             $scope.PreexistingSupportId = court.Id;
         });
     };
+    $scope.hideAddChild = function () {
+        $scope.showAddChild = false;
+    };    
     $scope.addChild = function() {
         $scope.child.UserId = $routeParams.userId;
         $scope.child.PreexistingSupportId = $scope.PreexistingSupportId;
@@ -45,17 +51,39 @@
             $scope.child = '';
         });
     };
-    $scope.submit = function () {
-        var isOtherParent = $routeParams.isOtherParent;
-        if ($scope.supportForm.$invalid) {
+    
+
+    $scope.editing = false;
+    $scope.editChild = function (child) {
+        $scope.editing = true;
+        $scope.editChildId = child.Id;
+    };
+    $scope.doneEdit = function (child) {
+        $scope.editing = false;
+        $scope.editChildId = 0;
+        child.DateOfBirth = child.DateOfBirthString;
+        supportService.children.update({}, child, function () {
+        });
+    };
+    $scope.deleteChild = function (child) {
+        supportService.children.delete({ Id: child.Id }, function () {
+            $scope.children = _.reject($scope.children, function (item) {
+                return item.Id == child.Id;
+            });
+        });
+    };
+
+
+
+
+    $scope.submit = function (noNavigate) {
+        if (!$scope.support || ($scope.support.Support != "1" && $scope.support.Support != "2")) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#supportForm');
-            $.jStorage.set($scope.path, value);
             return;
         }
-        $.jStorage.deleteKey($scope.path);
+        $scope.showErrors = false;
         $scope.support.UserId = $routeParams.userId;
-        $scope.support.IsOtherParent = isOtherParent;
+        $scope.support.IsOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             supportService.supports.save(null, $scope.support, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -69,9 +97,9 @@
     $scope.continue = function() {
         menuService.nextMenu();
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function() {
+        $rootScope.currentScope = $scope;
+    });
 
 };
-SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope'];
+SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope', '$q'];

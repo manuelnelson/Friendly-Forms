@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper">
-    <form ng-submit="submit()" ng-controller="SocialSecurityCtrl" ng-model="socialSecurity.socialSecurityForm" name="socialSecurityForm" novalidate>
-        <input type="hidden" name="Id" ng-model="socialSecurity.Id">
-        <input type="hidden" name="UserId" ng-model="socialSecurity.UserId">
+    <form ng-submit="submit()" ng-controller="SocialSecurityCtrl" id="socialSecurity.socialSecurityForm" name="socialSecurityForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -34,6 +32,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" ng-click="">Continue <i class="icon-arrow-right icon-white"></i></button>
+        <button class="btn btn-primary">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

@@ -5,7 +5,7 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("Assets")]
-    public class Assets : IEntity, IFormEntity
+    public class Assets : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -18,7 +18,8 @@ namespace Models
         public string NonRetirementDescription { get; set; }
         public int Business { get; set; }
         public string BusinessDescription { get; set; }
-        public string AdditionalAssets { get; set; }
+        public int AdditionalAssets { get; set; }
+        public string AdditionalAssetsDescription { get; set; }
 
 
         public bool IsValid()

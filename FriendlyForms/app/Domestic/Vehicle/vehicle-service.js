@@ -10,11 +10,6 @@
                 update: { method: 'PUT' },
                 deleteAll: { method: 'DELETE' }
             }),
-        custody: $resource('/api/participants/CustodyInfomation/', { },
-        {
-            get: { method: 'GET', params: { format: 'json' } },
-            update: { method: 'PUT', params: { format: 'json' } }
-        }),
     };
     return service;
 }]);

@@ -1,4 +1,5 @@
-﻿var OtherChildCtrl = function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope) {
+﻿var OtherChildCtrl = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope',
+    function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope) {
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
@@ -6,7 +7,7 @@
     //#endregion
 
     //#region intialize
-    otherChildService.otherChildren.get({ UserId: $routeParams.userId }, function (data) {
+    otherChildService.otherChildren.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.otherChildren = $.jStorage.get($scope.path);
@@ -29,7 +30,14 @@
     //#endregion
 
     //#region event handlers
-    $scope.submit = function (noNavigate) {
+    $scope.showMessage = false;
+    $scope.checkToShowMessage = function () {
+        if (!($scope.otherChildren.LegallyResponsible == 1 && $scope.otherChildren.AtHome == 1 && $scope.otherChildren.Support == 1 && $scope.otherChildren.Preexisting == 2 && $scope.otherChildren.InCourt == 2) &&
+            ($scope.otherChildrenForm.LegallyResponsible.$dirty && $scope.otherChildrenForm.AtHome.$dirty && $scope.otherChildrenForm.Support.$dirty && $scope.otherChildrenForm.Preexisting.$dirty && $scope.otherChildrenForm.InCourt.$dirty)) {
+            $scope.showMessage = true;
+        }        
+    };
+    $scope.submit = function (noNavigate) {        
         if ($scope.otherChildrenForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#otherChildrenForm');
@@ -75,12 +83,10 @@
             });
         });
     };
-    $scope.continue = function () {
-        $scope.submit();
-    };
     //#endregion    
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    
+    genericService.refreshPage(function() {
+        $rootScope.currentScope = $scope;
+    });
 
-};
-OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope'];
+}];

@@ -4,7 +4,7 @@
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-    $rootScope.currentScope = $scope;
+//    $rootScope.currentScope = $scope;
     decisionService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -173,7 +173,9 @@
     //#endregion
     
     $scope.getChildDecision($routeParams.childId);
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', '$rootScope'];

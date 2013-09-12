@@ -29,7 +29,8 @@ namespace DataLayerContext.OrmLiteRepositories
 
         public void CreateMissingTables()
         {
-            dbFactory.Run(db => {
+            ; dbFactory.Run(db =>
+            {
                 db.CreateTable<UserAuth>(false);
                 db.CreateTable<UserOAuthProvider>(false);
             });

@@ -46,7 +46,7 @@
                         <div ng-show="deviation.Deviation == 1">
                             <div class="control-group row-fluid">
                                 <label class="form-question">Would the amount of Child Support payable before you apply the deviation be unjust or inappropriate?</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Unjust" name="Unjust" placeholder="Explain Why" rows="2"></textarea>
+                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Unjust" name="Unjust" placeholder="Describe to the Court why this is so" rows="2"></textarea>
                                 <div ng-show="deviationForm.Unjust.$dirty && deviationForm.Unjust.$invalid || (showErrors && deviationForm.Unjust.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.Unjust.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="deviationForm.Unjust.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -54,7 +54,7 @@
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="form-question">Would the deviation serve the best interests of the child(ren) for whom support is being determined?</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.BestInterest" name="BestInterest" placeholder="Explain Why" rows="2"></textarea>
+                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.BestInterest" name="BestInterest" placeholder="Describe to the Court why this is so" rows="2"></textarea>
                                 <div ng-show="deviationForm.BestInterest.$dirty && deviationForm.BestInterest.$invalid || (showErrors && deviationForm.BestInterest.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.BestInterest.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="deviationForm.BestInterest.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -65,7 +65,7 @@
                                     Would the deviation seriously impair the ability of the custodial parent or non-parent custodian to 
                                     maintain minimally adequate housing, food and clothing for the children being supported by the order and 
                                     to provide other basic necessities?</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Impair" name="Impair" placeholder="Explain Why" rows="2"></textarea>
+                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Impair" name="Impair" placeholder="Describe to the Court why this is so" rows="2"></textarea>
                                 <div ng-show="deviationForm.Impair.$dirty && deviationForm.Impair.$invalid || (showErrors && deviationForm.Impair.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.Impair.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="deviationForm.Impair.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>

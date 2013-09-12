@@ -1,13 +1,13 @@
 ﻿<div class="form-vertical wrapper" ng-controller="RegisterAdminCtrl">
-    <div class="row-fluid well form-vertical">
-        <form class="span5" ng-submit="submit()" name="registerAdminForm">
+    <div class="row-fluid">
+        <form class="well form-vertical" ng-submit="submit()" name="registerAdminForm">
             <fieldset>
                 <legend>Administrator Information</legend>
                 <label>
                     Please create the administrators login credentials 
                 </label>
                 <div class="control-group">
-                    <input name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
+                    <input name="DisplayName" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
                     <div ng-show="registerAdminForm.DisplayName.$dirty && registerAdminForm.DisplayName.$invalid">
                         <span class="form-error" ng-show="registerAdminForm.DisplayName.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                         <span class="form-error" ng-show="registerAdminForm.DisplayName.$error.required">This field is required.</span>

@@ -5,12 +5,13 @@
         $scope.user.UserName = $scope.user.Email;
         registerService.register.save(null, $scope.user, function () {
             loginMenuService.refresh();
-            userService.getUserData().then(function(userData) {
+            userService.getCurrentUserSession().then(function(userData) {
                 //Tie law firm Id
                 registerService.users.update(null, {
                     Id: userData.CustomId,
                     UserAuthId: userData.UserAuthId,
-                    LawFirmId: $routeParams.lawFirmId
+                    LawFirmId: $routeParams.lawFirmId,
+                    Position: 'Administrator'
                 }, function() {
                     $location.path('/Administrator/Agreement/User/' + userData.CustomId);
                 });

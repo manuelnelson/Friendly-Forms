@@ -53,6 +53,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Administrator/Pricing', { caseInsensitiveMatch: true, controller: PricingCtrl, templateUrl: '/app/Administrator/Pricing/Pricing.html' }).
         when('/Administrator/Payment/User/:userId', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
         when('/Administrator/Agreement/User/:userId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
+        when('/Administrator/CreateAttorney/User/:userId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
+        when('/Administrator/ClientCases/User/:userId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
         when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).

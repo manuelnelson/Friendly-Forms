@@ -34,6 +34,23 @@
                                     <span class="form-error" ng-show="participantForm.DefendantsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
+                            <div class="control-group span8">
+                                <label class="form-question">
+                                    Are the parents filing for Joint Custody?
+                                </label>
+                                <label class="radio">
+                                    Yes
+                                <input required ng-model="participant.IsJointCustody" name="IsJointCustody" type="radio" value="1"></label>
+                                <label class="radio">
+                                    No
+                                <input required ng-model="participant.IsJointCustody" name="IsJointCustody" type="radio" value="2"></label>
+                                <div ng-show="participantForm.IsJointCustody.$dirty && participantForm.IsJointCustody.$invalid || (showErrors && participantForm.IsJointCustody.$invalid)">
+                                    <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
+                                </div>
+                                <label ng-show="participant.IsJointCustody==1" class="informative">
+                                    One of the parents must be designated as Primary Custodian for purposes of the 
+court. In the section below, please designate which parent is the Custodial Parent.</label>
+                            </div>
                             <div class="control-group span4">
                                 <label class="form-question">
                                     The Plaintiff is the: 
@@ -74,13 +91,10 @@
                                 </label>
                                 <label class="radio">
                                     Primary Custodial Parent
-                                <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="1"></label>
+                                    <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="1"></label>
                                 <label class="radio">
                                     Non Custodial Parent
-                                <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="2"></label>
-                                <label class="radio">
-                                    Joint Custodial Parent
-                                <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="3"></label>
+                                    <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="2"></label>
                                 <div ng-show="participantForm.PlaintiffCustodialParent.$dirty && participantForm.PlaintiffCustodialParent.$invalid || (showErrors && participantForm.PlaintiffCustodialParent.$invalid)">
                                     <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
                                 </div>
@@ -95,9 +109,6 @@
                                 <label class="radio">
                                     Non Custodial Parent
                                     <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="2"></label>
-                                <label class="radio">
-                                    Joint Custodial Parent
-                                    <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="3"></label>
                                 <div ng-show="participantForm.DefendantCustodialParent.$dirty && participantForm.DefendantCustodialParent.$invalid || (showErrors && participantForm.DefendantCustodialParent.$invalid)">
                                     <span class="form-error" ng-show="participantForm.DefendantCustodialParent.$error.required">This field is required</span>
                                 </div>

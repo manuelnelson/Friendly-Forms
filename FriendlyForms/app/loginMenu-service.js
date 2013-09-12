@@ -5,7 +5,7 @@
                 logout: { method: 'GET', params: { format: 'json' } },
             }),
         refresh: function () {
-            userService.getUserData().then(function (userData) {
+            userService.getCurrentUserSession().then(function (userData) {
                 if (userData != null && userData.IsAuthenticated) {
                     service.authUser = userData;
                     menuService.userId = service.authUser.CustomId;

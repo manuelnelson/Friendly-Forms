@@ -163,7 +163,7 @@ any change in contact information necessary to conduct visitation.
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==3">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the first, third and fifth weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the second and fourth weekend of each month.</span>
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==4">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the second and fourth weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the first, third and fifth weekend of each month.</span>
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">parents will alternate weekends for visitation.</span>
-    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have {{parenting.ScheduleViewModel.NonCustodianWeekendOther}} for visitation.</span>
+    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">For purposes of this parenting plan, the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
 
     A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.PickupLocation}} The weekend ends on 
     {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}
@@ -538,5 +538,6 @@ emergency decisions while the child is residing with such parent. </p>
 </div>
 <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
     <input type="hidden" class="html" name="html" />
+    <input type="hidden" class="name" name="name" />
     <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
 </form>

@@ -5,9 +5,10 @@
     //#endregion
     
     //#region intialize
-    $rootScope.currentScope = $scope;
     $scope.showErrors = false;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 
     $scope.childForm = childService.childForm.get({ UserId: $routeParams.userId }, function () {
@@ -28,7 +29,7 @@
     
     //#region event handlers
     $scope.submit = function () {
-        if ($scope.childrenForm.$invalid) {
+        if (!$scope.childForm || ($scope.childForm.ChildrenInvolved != 1 && $scope.childForm.ChildrenInvolved != 2)) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#childForm');
             $.jStorage.set($scope.path, value);
@@ -37,8 +38,9 @@
         $.jStorage.deleteKey($scope.path);
         $scope.childForm.UserId = $routeParams.userId;
         if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
-            childService.childForm.save(null, $scope.childForm, function () {
+            childService.childForm.save(null, $scope.childForm, function (data) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                $scope.childForm = data.ChildForm;
             });
         } else {
             childService.childForm.update(null, $scope.childForm, function () {

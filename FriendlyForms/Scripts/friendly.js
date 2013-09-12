@@ -1,4 +1,4 @@
-;/*!
+﻿;/*!
  * jQuery JavaScript Library v1.7.2
  * http://jquery.com/
  *
@@ -36011,6 +36011,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Administrator/Pricing', { caseInsensitiveMatch: true, controller: PricingCtrl, templateUrl: '/app/Administrator/Pricing/Pricing.html' }).
         when('/Administrator/Payment/User/:userId', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
         when('/Administrator/Agreement/User/:userId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
+        when('/Administrator/CreateAttorney/User/:userId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
+        when('/Administrator/ClientCases/User/:userId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
         when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
@@ -36060,7 +36062,7 @@ FormsApp.directive('integer', function () {
 });
 
 
-;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', function (menuService, headerService, $location) {
+;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', '$q', function (menuService, headerService, $location, $q) {
     var service = {
         calculateRemainingPercentage: function(val1, val2) {
             if (val2 && val1)
@@ -36083,11 +36085,13 @@ FormsApp.directive('integer', function () {
             });
             return model;
         },
-        refreshPage: function () {
+        refreshPage: function (callback) {
             if (!menuService.isActive($location.path())) {
                 menuService.setActive($location.path());
             }
             headerService.refresh();
+            if (callback)
+                callback();
         },
     };
     return service;
@@ -36201,6 +36205,10 @@ FormsApp.factory('messageService', ['$location', function ($location) {
                     return false;
                 case 401://unauthorized 
                     //go to unauthorized page
+                    if ($location.path() === '/Account/Login/') {
+                        service.showMessage("Invalid Credentials", "Either the e-mail or password you entered is incorrect.");
+                        return false;
+                    }
                     $location.path('/Account/Unauthorized');
                     //service.showMessage("Unauthorized", "You must be logged in to complete this action. Log in <a href='/Account/LogOn/' title='Log In' >here</a>", Application.properties.messageType.Warning);
                     return false;
@@ -36251,9 +36259,9 @@ FormsApp.factory('messageService', ['$location', function ($location) {
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService', '$rootScope'];
@@ -36352,9 +36360,10 @@ FormsApp.factory('courtService', ['$resource', function ($resource) {
                 return 3;
         }
         return 1;
-    } $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    }
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', '$rootScope'];
@@ -36365,6 +36374,11 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
+        custody: $resource('/api/participants/CustodyInfomation/', {},
+        {
+            get: { method: 'GET', params: { format: 'json' } },
+            update: { method: 'PUT', params: { format: 'json' } }
+        }),
     };
     return service;
 }]);
@@ -36375,9 +36389,10 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     //#endregion
     
     //#region intialize
-    $rootScope.currentScope = $scope;
     $scope.showErrors = false;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 
     $scope.childForm = childService.childForm.get({ UserId: $routeParams.userId }, function () {
@@ -36398,7 +36413,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     
     //#region event handlers
     $scope.submit = function () {
-        if ($scope.childrenForm.$invalid) {
+        if (!$scope.childForm || ($scope.childForm.ChildrenInvolved != 1 && $scope.childForm.ChildrenInvolved != 2)) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#childForm');
             $.jStorage.set($scope.path, value);
@@ -36407,8 +36422,9 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
         $.jStorage.deleteKey($scope.path);
         $scope.childForm.UserId = $routeParams.userId;
         if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
-            childService.childForm.save(null, $scope.childForm, function () {
+            childService.childForm.save(null, $scope.childForm, function (data) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                $scope.childForm = data.ChildForm;
             });
         } else {
             childService.childForm.update(null, $scope.childForm, function () {
@@ -36510,8 +36526,9 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('assetService', ['$resource',function($resource) {
@@ -36560,8 +36577,9 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('debtService', ['$resource',function($resource) {
@@ -36610,12 +36628,9 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
-
-    genericService.refreshPage();
-
-
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('healthInsuranceService', ['$resource',function($resource) {
@@ -36673,9 +36688,9 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
         });
     };
 
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'limitToFilter', '$http', '$rootScope'];
@@ -36725,9 +36740,9 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService', 'menuService', 'genericService', '$rootScope'];
@@ -36777,9 +36792,9 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', '$rootScope'];
@@ -36829,9 +36844,9 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', '$rootScope'];
@@ -36845,18 +36860,18 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
     };
     return service;
 }]);
-;var VehicleCtrl = function($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope) {
+;var VehicleCtrl = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope', 'participantService',
+    function($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope, participantService) {
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
     //#endregion
 
     //#region intialize
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
     $scope.showErrors = false;
-
 
     vehicleService.vehicleForm.get({ UserId: $routeParams.userId }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
@@ -36867,7 +36882,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
             $scope.vehicleForm = data;
         }
     });
-    vehicleService.custody.get({ UserId: $routeParams.userId }, function (data) {
+    participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
         $scope.custodianNames = data.CustodyInformation.CustodianNames;
     });
     vehicleService.vehicles.get({ UserId: $routeParams.userId }, function (data) {
@@ -36925,8 +36940,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
         menuService.nextMenu();
     };
     //#endregion    
-};
-VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope'];
+}];
 ;FormsApp.factory('vehicleService', ['$resource', function ($resource) {
     var service = {
         vehicles: $resource('/api/vehicles/', {},
@@ -36939,11 +36953,6 @@ VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 
                 update: { method: 'PUT' },
                 deleteAll: { method: 'DELETE' }
             }),
-        custody: $resource('/api/participants/CustodyInfomation/', { },
-        {
-            get: { method: 'GET', params: { format: 'json' } },
-            update: { method: 'PUT', params: { format: 'json' } }
-        }),
     };
     return service;
 }]);
@@ -36983,9 +36992,9 @@ VehicleCtrl.$inject = ['$scope', '$routeParams', '$location', 'vehicleService', 
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', '$rootScope'];
@@ -37036,9 +37045,9 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', '$rootScope'];
@@ -37058,7 +37067,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-    $rootScope.currentScope = $scope;
+//    $rootScope.currentScope = $scope;
     decisionService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -37227,7 +37236,9 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
     //#endregion
     
     $scope.getChildDecision($routeParams.childId);
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', '$rootScope'];
@@ -37258,7 +37269,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-    $rootScope.currentScope = $scope;
+//    $rootScope.currentScope = $scope;
     holidayService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -37541,7 +37552,9 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
     //#endregion
 
     $scope.getChildHoliday($routeParams.childId);
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('holidayService', ['$resource', function($resource) {
@@ -37601,9 +37614,9 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationService', 'menuService', 'genericService', '$rootScope'];
@@ -37653,9 +37666,9 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', '$rootScope'];
@@ -37712,9 +37725,9 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
             $scope.responsibility.MotherPercentage = genericService.calculateRemainingPercentage($scope.responsibility.FatherPercentage);
         }
     }
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];
@@ -37728,8 +37741,12 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     };
     return service;
 }]);
-;var ScheduleCtrl = function($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope) {
+;var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope', 'participantService',
+    function ($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope, participantService) {
     $scope.path = $location.path();
+    participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
+        $scope.nonCustodialParent = data.CustodyInformation.NonCustodyParentName;
+    });
     $scope.showErrors = false;
     $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
@@ -37805,19 +37822,19 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
                 break;
         }
     };
-    $rootScope.currentScope = $scope;
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
-    genericService.refreshPage();
+}];
 
-};
-ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('scheduleService', ['$resource', function($resource) {
     var service = {
         schedules: $resource('/api/schedules/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
-            }),
+            }),        
     };
     return service;
 }]);
@@ -37826,7 +37843,7 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
-    $rootScope.currentScope = $scope;
+//    $rootScope.currentScope = $scope;
     childCareService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -37843,22 +37860,21 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
             }
         });
     };
-    childCareService.childCareForms.get({ UserId: $routeParams.userId }, function (data) {
-        if (typeof data.Id == 'undefined' || data.Id == 0) {
-            //see if garlic has something stored            
-            $scope.childCareForm = $.jStorage.get($scope.path);
-        } else {
-            $scope.childCareForm = data;
-        }
+    $scope.childCareForm = childCareService.childCareForms.get({ UserId: $routeParams.userId }, function () {
+        if (typeof $scope.childCareForm.Id == 'undefined' || $scope.childCareForm.Id == 0) {
+            $scope.showErrors = true;
+        } 
     });
-    $scope.submit = function (noNavigate) {
-        if ($scope.childCareForm.$invalid) {
+    $scope.submit = function () {
+        if (!$scope.childCareForm || ($scope.childCareForm.ChildrenInvolved != "1" && $scope.childCareForm.ChildrenInvolved != "2")) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             return;
         }
+        $scope.showErrors = false;
         $scope.childCareForm.UserId = $routeParams.userId;
         if (typeof $scope.childCareForm.Id == 'undefined' || $scope.childCareForm.Id == 0) {
-            childCareService.childCareForms.save(null, $scope.childCareForm, function () {
+            childCareService.childCareForms.save(null, $scope.childCareForm, function (data) {
+                $scope.childCareForm.Id = data.Id;
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             });
         } else {
@@ -37882,21 +37898,21 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
         $scope.childCare.ChildId = $routeParams.childId;
         if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
             childCareService.childCares.save(null, $scope.childCare, function () {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 callback();
             });
         } else {
             childCareService.childCares.update({ Id: $scope.childCare.Id }, $scope.childCare, function () {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 callback();
             });
         }
-        menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
     };
     $scope.previousChild = function () {
         $scope.submitChildCare(function () {
             $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
             if ($scope.childNdx === 0) {
-                //Navigate else where
-                menuService.previousMenu();
+                //Navigate else where                
                 return;
             }
             $scope.childNdx = $scope.childNdx - 1;
@@ -37907,7 +37923,7 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
     $scope.nextChild = function () {
         $scope.submitChildCare(function () {
             //if radio button not selected or set to no, no need to cycle through children
-            if (!$scope.childCareForm.ChildrenInvolved || $scope.childCareForm.ChildrenInvolved == 2) {
+            if ((!$scope.childCareForm.ChildrenInvolved || $scope.childCareForm.ChildrenInvolved == 2)) {
                 menuService.nextMenu();
                 return;
             }
@@ -37927,7 +37943,9 @@ ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService'
     //#endregion
 
     $scope.getChildChildCare($routeParams.childId);
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('childCareService', ['$resource',function ($resource) {
@@ -37987,9 +38005,9 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportService', 'menuService', 'genericService', '$rootScope'];
@@ -38039,9 +38057,9 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];
@@ -38060,7 +38078,7 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
-    $rootScope.currentScope = $scope;
+//    $rootScope.currentScope = $scope;
     extraExpenseService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -38084,13 +38102,15 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
     });
     
     $scope.submit = function (noNavigate) {
-        if ($scope.extraExpensesForm.$invalid) {
+        if (!$scope.extraExpenseForm || ($scope.extraExpenseForm.HasExtraExpenses != "1" && $scope.extraExpenseForm.HasExtraExpenses != "2")) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             return;
         }
+        $scope.showErrors = false;
         $scope.extraExpenseForm.UserId = $routeParams.userId;
         if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
-            extraExpenseService.extraExpenseForms.save(null, $scope.extraExpenseForm, function () {
+            extraExpenseService.extraExpenseForms.save(null, $scope.extraExpenseForm, function (data) {
+                $scope.extraExpenseForm.Id = data.Id;
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             });
         } else {
@@ -38101,7 +38121,7 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
     };
     $scope.submitExtraExpense = function (callback) {
         if ($scope.extraExpenseChildForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            //menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#extraExpenseChildForm');
             $.jStorage.set($scope.path, value);
             if (callback)
@@ -38109,6 +38129,8 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
             return;
         }
         $.jStorage.deleteKey($scope.path);
+        if (!$scope.extraExpense)
+            $scope.extraExpense = {};
         $scope.extraExpense.UserId = $routeParams.userId;
         $scope.extraExpense.ChildId = $routeParams.childId;
         if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
@@ -38120,7 +38142,6 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
                 callback();
             });
         }
-        menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
     };
     $scope.previousChild = function () {
         $scope.submitExtraExpense(function () {
@@ -38163,7 +38184,9 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
 
     //#endregion
     $scope.getChildExtraExpense($routeParams.childId);
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('extraExpenseService', ['$resource', function($resource) {
@@ -38223,9 +38246,9 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', '$rootScope'];
@@ -38251,8 +38274,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
         }
     });
     $scope.submit = function(noNavigate) {
-        var isOtherParent = $routeParams.isOtherParent;
-        if ($scope.incomeForm.$invalid) {
+        if (!$scope.income || ($scope.income.HaveSalary != "1" && $scope.income.HaveSalary != "2")) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#incomeForm');
             $.jStorage.set($scope.path, value);
@@ -38262,7 +38284,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
         }
         $.jStorage.deleteKey($scope.path);
         $scope.income.UserId = $routeParams.userId;
-        $scope.income.isOtherParent = isOtherParent;
+        $scope.income.isOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             incomeService.incomes.save(null, $scope.income, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38277,8 +38299,9 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('incomeService', ['$resource', function($resource) {
@@ -38291,7 +38314,8 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
     };
     return service;
 }]);
-;var OtherChildCtrl = function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope) {
+;var OtherChildCtrl = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope',
+    function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope) {
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
@@ -38299,7 +38323,7 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
     //#endregion
 
     //#region intialize
-    otherChildService.otherChildren.get({ UserId: $routeParams.userId }, function (data) {
+    otherChildService.otherChildren.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (data) {
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.otherChildren = $.jStorage.get($scope.path);
@@ -38322,7 +38346,14 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
     //#endregion
 
     //#region event handlers
-    $scope.submit = function (noNavigate) {
+    $scope.showMessage = false;
+    $scope.checkToShowMessage = function () {
+        if (!($scope.otherChildren.LegallyResponsible == 1 && $scope.otherChildren.AtHome == 1 && $scope.otherChildren.Support == 1 && $scope.otherChildren.Preexisting == 2 && $scope.otherChildren.InCourt == 2) &&
+            ($scope.otherChildrenForm.LegallyResponsible.$dirty && $scope.otherChildrenForm.AtHome.$dirty && $scope.otherChildrenForm.Support.$dirty && $scope.otherChildrenForm.Preexisting.$dirty && $scope.otherChildrenForm.InCourt.$dirty)) {
+            $scope.showMessage = true;
+        }        
+    };
+    $scope.submit = function (noNavigate) {        
         if ($scope.otherChildrenForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#otherChildrenForm');
@@ -38368,15 +38399,13 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
             });
         });
     };
-    $scope.continue = function () {
-        $scope.submit();
-    };
     //#endregion    
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    
+    genericService.refreshPage(function() {
+        $rootScope.currentScope = $scope;
+    });
 
-};
-OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope'];
+}];
 
 ;FormsApp.factory('otherChildService', ['$resource', function($resource) {
     var service = {
@@ -38405,7 +38434,7 @@ OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildServ
         }
     });
     $scope.submit = function (noNavigate) {
-        if ($scope.socialSecurityForm.$invalid) {
+        if (!$scope.socialSecurity || ($scope.socialSecurity.ReceiveSocial != 1 && $scope.socialSecurity.ReceiveSocial != 2)) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#socialSecurityForm');
             $.jStorage.set($scope.path, value);
@@ -38430,9 +38459,9 @@ OtherChildCtrl.$inject = ['$scope', '$routeParams', '$location', 'otherChildServ
             });
         }
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
 };
 SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', '$rootScope'];
@@ -38446,7 +38475,7 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
     };
     return service;
 }]);
-;var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope) {
+;var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope, $q) {
     $scope.path = $location.path();
     $scope.showAddChild = false;
     $scope.showErrors = false;
@@ -38454,9 +38483,12 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             //see if garlic has something stored            
             $scope.support = $.jStorage.get($scope.path);
-            if ($scope.support)
+            if (typeof $scope.support === 'undefined' || $scope.support === null) {
                 $scope.showErrors = true;
-
+                $scope.support = {
+                    Support: 0
+                };
+            }
         }
     });
     supportService.courts.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (result) {
@@ -38484,6 +38516,9 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             $scope.PreexistingSupportId = court.Id;
         });
     };
+    $scope.hideAddChild = function () {
+        $scope.showAddChild = false;
+    };    
     $scope.addChild = function() {
         $scope.child.UserId = $routeParams.userId;
         $scope.child.PreexistingSupportId = $scope.PreexistingSupportId;
@@ -38493,17 +38528,39 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             $scope.child = '';
         });
     };
-    $scope.submit = function () {
-        var isOtherParent = $routeParams.isOtherParent;
-        if ($scope.supportForm.$invalid) {
+    
+
+    $scope.editing = false;
+    $scope.editChild = function (child) {
+        $scope.editing = true;
+        $scope.editChildId = child.Id;
+    };
+    $scope.doneEdit = function (child) {
+        $scope.editing = false;
+        $scope.editChildId = 0;
+        child.DateOfBirth = child.DateOfBirthString;
+        supportService.children.update({}, child, function () {
+        });
+    };
+    $scope.deleteChild = function (child) {
+        supportService.children.delete({ Id: child.Id }, function () {
+            $scope.children = _.reject($scope.children, function (item) {
+                return item.Id == child.Id;
+            });
+        });
+    };
+
+
+
+
+    $scope.submit = function (noNavigate) {
+        if (!$scope.support || ($scope.support.Support != "1" && $scope.support.Support != "2")) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#supportForm');
-            $.jStorage.set($scope.path, value);
             return;
         }
-        $.jStorage.deleteKey($scope.path);
+        $scope.showErrors = false;
         $scope.support.UserId = $routeParams.userId;
-        $scope.support.IsOtherParent = isOtherParent;
+        $scope.support.IsOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             supportService.supports.save(null, $scope.support, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38517,12 +38574,12 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
     $scope.continue = function() {
         menuService.nextMenu();
     };
-    $rootScope.currentScope = $scope;
-
-    genericService.refreshPage();
+    genericService.refreshPage(function() {
+        $rootScope.currentScope = $scope;
+    });
 
 };
-SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope'];
+SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope', '$q'];
 ;FormsApp.factory('supportService', ['$resource', function($resource) {
     var service = {
         supports: $resource('/api/PreexistingSupportForms/:userId', { userId: '@userId' },
@@ -38543,7 +38600,7 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
     };
     return service;
 }]);
-;FormsApp.factory('formCompleteService', ['$resource', function ($resource) {
+;FormsApp.factory('formCompleteService', ['$resource', 'menuService', function ($resource, menuService) {
     var service = {
         formCompletes: $resource('/api/output/formComplete/', {},
             {
@@ -38555,6 +38612,23 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
             update: { method: 'PUT' },
             deleteAll: { method: 'DELETE' }
         }),
+        getOutputPaths: function(formName, userId) {
+            switch (formName) {
+                case 'ParentingPlan':
+                    return ['/Output/Parenting/User/' + userId];
+                case 'MediationAgreement':
+                    return ['/Output/DomesticMediation/User/' + userId];
+                case 'FinancialForm':
+                    return ['/Output/ScheduleA/User/' + userId,
+                    '/Output/ScheduleB/User/' + userId,
+                    '/Output/ScheduleD/User/' + userId,
+                    '/Output/ScheduleE/User/' + userId,
+                    '/Output/CSA/User/' + userId,
+                    '/Output/ChildSupport/User/' + userId];
+                default:
+                    return [];
+            }
+        },
     };
     return service;
 }]);
@@ -38571,6 +38645,10 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
         formCompleteService.formCompletes.get({ FormName: $routeParams.formName, UserId: $routeParams.userId }, function (result) {
             if (result.IncompleteForms.length === 0) {
                 $scope.NoErrors = true;
+                var outputPaths = formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId);
+                for (var i = 0; i < outputPaths.length; i++) {
+                    menuService.enableMenu(outputPaths[i]);
+                }
             } else {
                 $scope.IncompleteForms = result.IncompleteForms;//.join(", ");
                 $scope.NoErrors = false;
@@ -38580,25 +38658,15 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
     }
 
     $scope.submit = function (noNavigate) {
-        if (!noNavigate) {
-            switch ($routeParams.formName) {
-                case 'ParentingPlan':
-                    $location.path('/Output/Parenting/User/' + $routeParams.userId);
-                    break;
-                case 'MediationAgreement':
-                    $location.path('/Output/DomesticMediation/User/' + $routeParams.userId);
-                    break;
-                case 'FinancialForm':
-                    $location.path('/Output/ScheduleA/User/' + $routeParams.userId);
-                    break;
-                case 'Starter':
-                    menuService.getMenu(function () {
-                        formCompleteService.child.get({ UserId: $routeParams.userId }, function (data) {
-                                $location.path('/Domestic/House/user/' + $routeParams.userId);
-                        });
-                    });
-                    break;
-            }
+        if (noNavigate)
+            return;
+        //special case for starter since we need to reload menu
+        if ($routeParams.formName === 'Starter') {
+            menuService.getMenu().then(function() {
+                $location.path('/Domestic/House/user/' + $routeParams.userId);
+            });
+        } else {
+            $location.path(formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId)[0]);
         }
     };
     $rootScope.currentScope = $scope;
@@ -38615,18 +38683,29 @@ FormCompleteCtrl.$inject = ['$scope', '$routeParams', '$location', 'formComplete
     };
     return service;
 }]);
-;var ParentingCtrl = function($scope, $routeParams, $location, parentingService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
-    parentingService.parentings.get({ UserId: $routeParams.userId }, function(data) {
+;var ParentingCtrl = ['$scope', '$routeParams', '$rootScope', 'parentingService', 'menuService', 'genericService', 'headerService', '$timeout',
+    function ($scope, $routeParams, $rootScope, parentingService, menuService, genericService, headerService, $timeout) {
+    $scope.showPrintButton = false;
+    parentingService.parentings.get({ UserId: $routeParams.userId }, function (data) {
         $scope.parenting = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('Parenting');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function () {
+    $scope.submit = function (noNavigate) {
     };
     $rootScope.currentScope = $scope;
+
     headerService.hide();
-    headerService.showOutputHeader();
-};
-ParentingCtrl.$inject = ['$scope', '$routeParams', '$location', 'parentingService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+}];
+
 ;FormsApp.factory('domesticMediationService', ['$resource',function ($resource) {
     var service = {
         domesticMediations: $resource('/api/output/domesticMediation/', {},
@@ -38642,23 +38721,27 @@ ParentingCtrl.$inject = ['$scope', '$routeParams', '$location', 'parentingServic
     return service;
 }]);
 ;var DomesticMediationCtrl = function ($scope, $routeParams, $location, $timeout, domesticMediationService, menuService, genericService, headerService,$rootScope) {
-    $scope.storageKey = $location.path();
+    $scope.showPrintButton = false;
     domesticMediationService.domesticMediations.get({ UserId: $routeParams.userId }, function (data) {
         $scope.domesticMediation = data;
+        //TODO: Find a non-jquery dependency way of doing this - angulars jqLite seems to be able to handle this
         $timeout(function () {
             var html = $('#main-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
-        }, 2000);
-        //TODO: Find a non-jquery dependency way of doing this - angulars jqLite seems to be able to handle this
+            $('.name').val('MediationAgreement');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function () {
+    $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
 };
 DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'domesticMediationService', 'menuService', 'genericService', 'headerService','$rootScope'];
 ;FormsApp.factory('scheduleAService', ['$resource', function($resource) {
@@ -38671,18 +38754,28 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 }]);
-;var ScheduleACtrl = function($scope, $routeParams, $location, scheduleAService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
+;var ScheduleACtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleAService', 'menuService', 'genericService', 'headerService', '$timeout', 
+    function ($scope, $routeParams, $rootScope, scheduleAService, menuService, genericService, headerService, $timeout) {
+    $scope.showPrintButton = false;
     scheduleAService.scheduleAs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleA = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('ScheduleA');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function () {
+    $scope.submit = function (noNavigate) {
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
-};
-ScheduleACtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleAService', 'menuService', 'genericService', 'headerService','$rootScope'];
+}];
+
 ;FormsApp.factory('scheduleBService', ['$resource', function($resource) {
     var service = {
         scheduleBs: $resource('/api/output/scheduleB/:userId', { userId: '@userId' },
@@ -38693,18 +38786,28 @@ ScheduleACtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleAServic
     };
     return service;
 }]);
-;var ScheduleBCtrl = function ($scope, $routeParams, $location, scheduleBService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
-    scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function(data) {
+;var ScheduleBCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleBService', 'menuService', 'genericService', 'headerService', '$timeout',
+    function ($scope, $routeParams, $rootScope, scheduleBService, menuService, genericService, headerService, $timeout) {
+    $scope.showPrintButton = false;
+    scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleB = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('ScheduleB');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function() {
+    $scope.submit = function (noNavigate) {
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
-};
-ScheduleBCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleBService', 'menuService', 'genericService', 'headerService','$rootScope'];
+}];
+
 ;FormsApp.factory('scheduleDService', ['$resource', function($resource) {
     var service = {
         scheduleDs: $resource('/api/output/scheduleD/:userId', { userId: '@userId' },
@@ -38715,18 +38818,28 @@ ScheduleBCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleBServic
     };
     return service;
 }]);
-;var ScheduleDCtrl = function($scope, $routeParams, $location, scheduleDService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
-    scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function(data) {
+;var ScheduleDCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleDService', 'menuService', 'genericService', 'headerService', '$timeout',
+    function ($scope, $routeParams, $rootScope, scheduleDService, menuService, genericService, headerService, $timeout) {
+    $scope.showPrintButton = false;
+    scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleD = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('ScheduleD');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function() {
+    $scope.submit = function (noNavigate) {
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
-};
-ScheduleDCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleDService', 'menuService', 'genericService', 'headerService','$rootScope'];
+}];
+
 ;FormsApp.factory('scheduleEService', ['$resource', function($resource) {
     var service = {
         scheduleEs: $resource('/api/output/scheduleE/:userId', { userId: '@userId' },
@@ -38737,18 +38850,28 @@ ScheduleDCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleDServic
     };
     return service;
 }]);
-;var ScheduleECtrl = function($scope, $routeParams, $location, scheduleEService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
-    scheduleEService.scheduleEs.get({ UserId: $routeParams.userId }, function(data) {
+;var ScheduleECtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleEService', 'menuService', 'genericService', 'headerService', '$timeout',
+    function ($scope, $routeParams, $rootScope, scheduleEService, menuService, genericService, headerService, $timeout) {
+    $scope.showPrintButton = false;
+    scheduleEService.scheduleEs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleE = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('ScheduleE');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function() {
+    $scope.submit = function (noNavigate) {
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
-};
-ScheduleECtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleEService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+}];
+
 ;FormsApp.factory('childSupportOutputService', ['$resource',function($resource) {
     var service = {
         childSupports: $resource('/api/output/childSupport/:userId', { userId: '@userId' },
@@ -38759,19 +38882,27 @@ ScheduleECtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleEServic
     };
     return service;
 }]);
-;var ChildSupportOutputCtrl = function($scope, $routeParams, $location, childSupportOutputService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
+;var ChildSupportOutputCtrl = ['$scope', '$routeParams', '$rootScope', 'childSupportOutputService', 'menuService', 'headerService', '$timeout',
+    function ($scope, $routeParams, $rootScope, childSupportOutputService, menuService, headerService, $timeout) {
+    $scope.showPrintButton = false;
     childSupportOutputService.childSupports.get({ UserId: $routeParams.userId }, function (data) {
         $scope.childSupport = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('ChildSupport');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function () {
+    $scope.submit = function (noNavigate) {
     };
-
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
-};
-ChildSupportOutputCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportOutputService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+}];
 ;FormsApp.factory('csaService',['$resource', function($resource) {
     var service = {
         csas: $resource('/api/output/csa/:userId', { userId: '@userId' },
@@ -38782,18 +38913,27 @@ ChildSupportOutputCtrl.$inject = ['$scope', '$routeParams', '$location', 'childS
     };
     return service;
 }]);
-;var CSACtrl = function($scope, $routeParams, $location, csaService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
+;var CSACtrl = function ($scope, $routeParams, $rootScope, csaService, menuService, genericService, headerService, $timeout) {
+    $scope.showPrintButton = false;
     csaService.csas.get({ UserId: $routeParams.userId }, function (data) {
         $scope.csa = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('ChildSupportAgreement');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function() {
+    $scope.submit = function (noNavigate) {
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
 };
-CSACtrl.$inject = ['$scope', '$routeParams', '$location', 'csaService', 'menuService', 'genericService', 'headerService', '$rootScope'];
+CSACtrl.$inject = ['$scope', '$routeParams', '$rootScope', 'csaService', 'menuService', 'genericService', 'headerService', '$timeout'];
 ;FormsApp.factory('registerAdminService', ['$resource',function($resource) {
     var service = {
         registerAdmins: $resource('/api/register/', { },
@@ -38809,7 +38949,7 @@ CSACtrl.$inject = ['$scope', '$routeParams', '$location', 'csaService', 'menuSer
         $scope.user.UserName = $scope.user.Email;
         registerService.register.save(null, $scope.user, function () {
             loginMenuService.refresh();
-            userService.getUserData().then(function(userData) {
+            userService.getCurrentUserSession().then(function(userData) {
                 //Tie law firm Id
                 registerService.users.update(null, {
                     Id: userData.CustomId,
@@ -38891,12 +39031,12 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                 return;
             }
             var userId = $routeParams.userId;
-            userService.getUserData().then(function (userData) {
+            userService.getCurrentUserSession().then(function (userData) {
                 userService.roles.save(null, {
                     UserName: userData.UserName,
                     Roles: ['FirmAdmin', 'Lawyer'],
                 }, function () {
-                    $location.path('/Administration/Admin' + userId);
+                    $location.path('/Administration/ClientCases/' + userId);
                 });
             });
         };
@@ -38916,35 +39056,114 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     headerService.setTitle('Agreement')
 }];
+;var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'createAttorneyService', 'menuService', 'headerService', 'registerService', 'userService',
+    function ($scope, $routeParams, $location, createAttorneyService, menuService, headerService, registerService, userService) {
+    $scope.submit = function () {
+        $scope.user.UserName = $scope.user.Email;
+        registerService.register.save(null, $scope.user, function () {            
+            userService.getCurrentUserSession().then(function (userData) {
+                //Tie law firm Id
+                registerService.users.update(null, {
+                    Id: userData.CustomId,
+                    UserAuthId: userData.UserAuthId,
+                    LawFirmId: $routeParams.lawFirmId,
+                    Position: $scope.user.Position,
+                }, function () {
+                    //Add attorney role to user
+                    userService.roles.save(null, {
+                        UserName: userData.UserName,
+                        Roles: ['Lawyer'],
+                    }, function () {
+                        $location.path('/Administrator/Agreement/User/' + userData.CustomId);
+                    });
+
+                });
+            });
+        });
+    };
+    headerService.setTitle('Register Administrator');
+}];
+;FormsApp.factory('clientCasesService', ['$resource', function($resource) {
+    var service = {
+        clientCases: $resource('/api/clientCases/:userId', { userId: '@userId' },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+}]);
+;var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'genericService', '$rootScope',
+    function ($scope, $routeParams, $location, clientCasesService, menuService, genericService, $rootScope) {
+        $scope.path = $location.path();
+        $scope.clientCases = clientCasesService.clientCases.get({ UserId: $routeParams.userId }, function () {
+            if (typeof $scope.clientCases.Id == 'undefined' || $scope.clientCases.Id == 0) {
+                //see if garlic has something stored            
+                $scope.clientCases = $.jStorage.get($scope.path);
+            }
+        });
+        $scope.submit = function (noNavigate) {
+            if ($scope.clientCasesForm.$invalid) {
+                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                var value = genericService.getFormInput('#clientCasesForm');
+                $.jStorage.set($scope.path, value);
+                if (!noNavigate)
+                    menuService.nextMenu();
+                return;
+            }
+            $.jStorage.deleteKey($scope.storageKey);
+            $scope.clientCases.UserId = $routeParams.userId;
+            if (typeof $scope.clientCases.Id == 'undefined' || $scope.clientCases.Id == 0) {
+                clientCasesService.clientCases.save(null, $scope.clientCases, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                    if (!noNavigate)
+                        menuService.nextMenu();
+                });
+            } else {
+                clientCasesService.clientCases.update({ Id: $scope.clientCases.Id }, $scope.clientCases, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                    if (!noNavigate)
+                        menuService.nextMenu();
+                });
+            }
+        };
+        genericService.refreshPage();
+    }];
 ;var HomeCtrl = function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
     menuService.setActive($location.path(), false);
     headerService.refresh();
 };
 HomeCtrl.$inject = ['$scope', '$routeParams', '$route','$location', 'menuService', 'genericService', 'headerService'];
-;var MenuCtrl = function ($scope, $routeParams, $location, menuService) {
-    $scope.$watch(function () { return menuService.menuItems; }, function () {
-        $scope.menuItems = menuService.menuItems;
-    }, true);
-    $scope.menuClick = function () {
-        if ($scope.isSubMenuClick) {
-            $scope.isSubMenuClick = false;
-            return;
-        }
-        var $curItem = $scope.menuItems[this.$index];
-        if ($curItem.subMenuItems.length > 0) {
-            //show/collapse menu
-            $curItem.showSubMenu = !$curItem.showSubMenu;
-        } else {
-            menuService.setActive($curItem.path);
-        }            
-    };
-    $scope.subMenuClick = function (path) {
-        $scope.isSubMenuClick = true;
-        menuService.setActive(path);
-    };
-};
-MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
-;FormsApp.factory('menuService', ['$location', '$rootScope', '$resource', '$routeParams', function ($location, $rootScope, $resource, $routeParams) {
+;var MenuCtrl = ['$scope', '$routeParams', '$location', 'menuService', '$filter',
+    function ($scope, $routeParams, $location, menuService, $filter) {
+        $scope.$watch(function () { return menuService.menuItems; }, function () {
+            $scope.menuItems = menuService.menuItems;
+        }, true);
+        $scope.menuClick = function () {
+            if ($scope.isSubMenuClick) {
+                $scope.isSubMenuClick = false;
+                return;
+            }
+            var $curItem = $scope.menuItems[this.$index];
+            if ($curItem.subMenuItems.length > 0) {
+                //show/collapse menu
+                $curItem.showSubMenu = !$curItem.showSubMenu;
+            } else {
+                menuService.setActive($curItem.path);
+            }
+        };
+        $scope.subMenuClick = function (subMenuItem) {
+            if (subMenuItem.disabled)
+                return;
+            $scope.isSubMenuClick = true;
+            menuService.setActive(subMenuItem.path);
+        };
+        $scope.enableFilter = function (item) {
+            return item.disabled === false;
+        };
+    }];
+
+;FormsApp.factory('menuService', ['$location', '$rootScope', '$resource', '$routeParams', '$q', function ($location, $rootScope, $resource, $routeParams, $q) {
     var service = {
         //#region Props
         menuItems: [],
@@ -38963,26 +39182,11 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 item.itemClass = '';
             });
         },
-        saveCurrentForm: function () {
-            //check to see if submenu/form is currently open.  If so, we need to save this form;
-            var subMenuItem;
-            for (var i = 0; i < service.menuItems.length; i++) {
-                var item = service.menuItems[i];
-                subMenuItem = _.find(item.subMenuItems, function (subItem) {
-                    return subItem.iconClass === 'icon-blue icon-pencil';
-                });
-                if (subMenuItem) {
-                    var currentFormScope = $rootScope.$root.currentScope;
-                    currentFormScope.submit(true); //true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
-                    break;
-                }
-            }
-        },
         children: $resource('/api/child/:userId', { userId: '@userId' },
             {
                 update: { method: 'PUT' },
             }),
-        getFirstChildId: function() {
+        getFirstChildId: function () {
             for (var i = 0; i < service.menuItems.length; i++) {
                 var item = service.menuItems[i];
                 var subMenuItem = _.find(item.subMenuItems, function (subItem) {
@@ -38995,16 +39199,17 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 }
             }
         },
-        getMenu: function (callback) {
+        getMenu: function () {
+            var deferred = $q.defer();
             var userId = service.userId;
             if (typeof userId === 'undefined')
                 userId = 0;
             service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {
                 service.setItems(menuItems);
                 service.isInitialized = true;
-                if (callback)
-                    callback();
+                deferred.resolve();
             });
+            return deferred.promise;
         },
         getMenuGroupByPath: function (path) {
             //children don't have their own menu. Only the first child does.  So if path has child, replace childId with FirstChildId to get proper menu item
@@ -39035,6 +39240,10 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 }
             }
         },
+        enableMenu: function(path) {
+            var menuGroup = service.getMenuGroupByPath(path);
+            menuGroup.subMenuItem.disabled = false;
+        },
         isActive: function (path) {
             if (service.isInitialized) {
                 var menuGroup = service.getMenuGroupByPath(path);
@@ -39059,6 +39268,8 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
                 return;
             }
             var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx + 1];
+            ////whenever nextMenu is called, the form is already saved.  Let's set next menu active without saving form.
+            //service.setActive(nextSubMenu.path, false);
             $location.path(nextSubMenu.path);
         },
         previousMenu: function () {
@@ -39066,16 +39277,37 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
             var menuGroup = service.getMenuGroupByPath($location.path());
             var ndx = _.indexOf(_.pluck(menuGroup.menuItem.subMenuItems, 'path'), menuGroup.subMenuItem.path);
             var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx - 1];
+            ////whenever previousMenu is called, the form is already saved.  Let's set next menu active without saving form.
+            //service.setActive(nextSubMenu.path, false);
             $location.path(nextSubMenu.path);
+        },
+        saveCurrentForm: function () {
+            //check to see if submenu/form is currently open.  If so, we need to save this form;
+            var subMenuItem;
+            for (var i = 0; i < service.menuItems.length; i++) {
+                var item = service.menuItems[i];
+                subMenuItem = _.find(item.subMenuItems, function (subItem) {
+                    //return subItem.itemClass === 'active';
+                    return subItem.iconClass === 'icon-blue icon-pencil';
+                });
+                if (subMenuItem) {
+                    var currentFormScope = $rootScope.$root.currentScope;
+                    currentFormScope.submit(true); //true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
+                    break;
+                }
+            }
         },
         setActive: function (path, saveForm) {
             if (typeof saveForm === 'undefined') {
                 saveForm = true;
             }
             if (!service.isInitialized) {
-                service.getMenu(service.setActiveCallback(path, saveForm));
+                service.getMenu().then(function () {
+                    //never save the form if menu isn't initialized...doesn't make sense
+                    service.setActiveCallback(path, false);
+                });
             } else {
-                service.setActiveCallback(path, saveForm)();
+                service.setActiveCallback(path, saveForm);
             }
         },
         setItems: function (menuItems) {
@@ -39086,30 +39318,27 @@ MenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'menuService'];
             if (menuGroup.subMenuItem)
                 menuGroup.subMenuItem.iconClass = iconClass;
         },
-        //Since Menu needs to load before we run this, we make this a callback function - made a closure so that we can pass args to the callback
         setActiveCallback: function (path, saveForm) {
-            return function () {
-                if(saveForm)
-                    service.saveCurrentForm();
-                service.clearActive();
-                //Check to see if first menu level is the path
-                var menuItem = _.find(service.menuItems, function (item) {
-                    return item.path === path;
-                });
-                if (menuItem) {
-                    menuItem.itemClass = 'active';
-                } else {
-                    //Must be subMenu Level
-                    var menuGroup = service.getMenuGroupByPath(path);
-                    menuGroup.menuItem.showSubMenu = true;
-                    menuGroup.menuItem.itemClass = 'submenu active';
-                    menuGroup.subMenuItem.itemClass = 'active';
-                    menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
-                    //Navigate to new path if we are not already there.
-                    if($location.path() !== menuGroup.subMenuItem.path)
-                        $location.path(menuGroup.subMenuItem.path);
-                }
-            };
+            if (saveForm)
+                service.saveCurrentForm();
+            service.clearActive();
+            //Check to see if first menu level is the path
+            var menuItem = _.find(service.menuItems, function (item) {
+                return item.path === path;
+            });
+            if (menuItem) {
+                menuItem.itemClass = 'active';
+            } else {
+                //Must be subMenu Level
+                var menuGroup = service.getMenuGroupByPath(path);
+                menuGroup.menuItem.showSubMenu = true;
+                menuGroup.menuItem.itemClass = 'submenu active';
+                menuGroup.subMenuItem.itemClass = 'active';
+                menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
+                //Navigate to new path if we are not already there.
+                if ($location.path() !== menuGroup.subMenuItem.path)
+                    $location.path(menuGroup.subMenuItem.path);
+            }
         },
         //#endregion
     };
@@ -39177,6 +39406,7 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
                 service.path = path;
             service.menuGroup = menuService.getMenuGroupByPath(service.path);
             service.showFeedbackHeader = true;
+            service.showOutput = false;
         },
         setTitle: function(title) {
             if (title)
@@ -39185,6 +39415,7 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
                 service.Title = service.menuGroup.subMenuItem ? service.menuGroup.subMenuItem.text : service.menuGroup.menuItem.text;
             }
             service.showFeedbackHeader = true;
+            service.showOutput = false;
         },
         setBreadCrumbs: function() {
             service.levels = [];
@@ -39219,7 +39450,7 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
         roles: $resource('/api/userauths/addroles/', {},
             {
             }),
-        getUserData: function () {
+        getCurrentUserSession: function () {
             var deferred = $q.defer();
             service.userAuth.get({}, function(data) {
                 service.userData = data.UserSession;
@@ -39244,7 +39475,7 @@ LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuServic
                 logout: { method: 'GET', params: { format: 'json' } },
             }),
         refresh: function () {
-            userService.getUserData().then(function (userData) {
+            userService.getCurrentUserSession().then(function (userData) {
                 if (userData != null && userData.IsAuthenticated) {
                     service.authUser = userData;
                     menuService.userId = service.authUser.CustomId;
@@ -39259,18 +39490,24 @@ LoginMenuCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginMenuServic
     };
     return service;
 }]);
-;var LoginCtrl = function ($scope, $routeParams, $location, loginService, headerService) {
-    $scope.login = function() {
-        loginService.login.post();
-    };
-    headerService.setTitle('Login');
-};
-LoginCtrl.$inject = ['$scope', '$routeParams', '$location', 'loginService', 'headerService'];
+;var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService', 'loginMenuService',
+    function ($scope, $routeParams, $location, loginService, headerService, loginMenuService) {
+        $scope.submit = function () {
+            loginService.login.post(null, $scope.login, function () {
+                loginMenuService.refresh();
+                $location.path('/');
+            }, function() {
+                $scope.loginForm.$setPristine();
+                $scope.login = '';
+            });
+        };
+        headerService.setTitle('Login');
+    }];
 ;FormsApp.factory('loginService', ['$resource',function ($resource) {
     var service = {
         login: $resource('/api/auth/credentials/', {},
             {
-                post: { method: 'GET', params: { format: 'json' } },
+                post: { method: 'POST', params: { format: 'json' } },
             }),
         authUser: null,
     };

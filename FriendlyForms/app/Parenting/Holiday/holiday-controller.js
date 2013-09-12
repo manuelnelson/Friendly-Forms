@@ -4,7 +4,7 @@
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-    $rootScope.currentScope = $scope;
+//    $rootScope.currentScope = $scope;
     holidayService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -287,6 +287,8 @@
     //#endregion
 
     $scope.getChildHoliday($routeParams.childId);
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', '$rootScope'];

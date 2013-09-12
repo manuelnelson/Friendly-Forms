@@ -34,7 +34,8 @@
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', '$rootScope'];

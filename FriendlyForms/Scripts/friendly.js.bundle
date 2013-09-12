@@ -106,6 +106,10 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Administrator/Payment/Payment-controller.js
 ../app/Administrator/Agreement/Agreement-service.js
 ../app/Administrator/Agreement/Agreement-controller.js
+../app/Administrator/CreateAttorney/CreateAttorney-controller.js
+../app/Administrator/CreateAttorney/CreateAttorney-service.js
+../app/Administrator/ClientCases/ClientCases-service.js
+../app/Administrator/ClientCases/ClientCases-controller.js
 ../app/Home/home-controller.js
 ../app/menu-controller.js
 ../app/menu-service.js

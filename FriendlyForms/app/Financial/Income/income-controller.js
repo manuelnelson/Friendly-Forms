@@ -10,8 +10,7 @@
         }
     });
     $scope.submit = function(noNavigate) {
-        var isOtherParent = $routeParams.isOtherParent;
-        if ($scope.incomeForm.$invalid) {
+        if (!$scope.income || ($scope.income.HaveSalary != "1" && $scope.income.HaveSalary != "2")) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#incomeForm');
             $.jStorage.set($scope.path, value);
@@ -21,7 +20,7 @@
         }
         $.jStorage.deleteKey($scope.path);
         $scope.income.UserId = $routeParams.userId;
-        $scope.income.isOtherParent = isOtherParent;
+        $scope.income.isOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             incomeService.incomes.save(null, $scope.income, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -36,7 +35,8 @@
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope'];

@@ -31,7 +31,9 @@ namespace FriendlyForms.RestService
             [DataMember]
             public string BusinessDescription { get; set; }
             [DataMember]
-            public string AdditionalAssets { get; set; }
+            public int AdditionalAssets { get; set; }
+            [DataMember]
+            public string AdditionalAssetsDescription { get; set; }
         }
 
         [DataContract]

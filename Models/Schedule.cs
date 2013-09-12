@@ -38,6 +38,7 @@ namespace Models
         public bool FridayParent { get; set; }
         public bool SaturdayParent { get; set; }
         public bool SundayParent { get; set; }
+        public bool AnyAdditionalProvisions { get; set; }
         public string AdditionalProvisions { get; set; }
 
         public bool IsValid()

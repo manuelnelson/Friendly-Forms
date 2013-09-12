@@ -17,7 +17,7 @@ namespace Models
         public virtual User User { get; set; }
         public virtual int Support { get; set; }
         public virtual string CourtName { get; set; }
-        public virtual int CaseNumber { get; set; }
+        public virtual string CaseNumber { get; set; }
         public virtual DateTime OrderDate { get; set; }
         [NotMapped]
         [Ignore]

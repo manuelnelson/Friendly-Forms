@@ -6,7 +6,7 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("ChildCares")]
-    public class ChildCare : IEntity, IFormEntity
+    public class ChildCare : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }

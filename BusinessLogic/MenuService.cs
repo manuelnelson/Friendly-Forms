@@ -12,6 +12,10 @@ namespace BusinessLogic
         private IChildFormService ChildFormService { get; set; }
         private ICourtService CourtService { get; set; }
         private IOutputService OutputService { get; set; }
+        private const string ParentingText = "Parenting Plan";
+        private const string SuccessIcon = "icon-ok icon-green";
+        private const string FinancialText = "Financial Form";
+        private const string DomesticText = "Mediation Agreement";
         public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService, IOutputService outputService)
         {
             ChildService = childService;
@@ -52,6 +56,7 @@ namespace BusinessLogic
                     menuList.Add(GetParentingPlanMenu(userId, children[0]));
                     menuList.Add(GetFinancialFormMenu(userId, children[0]));
                 }
+                menuList.Add(GetOutputMenu(userId, menuList));
             }
 
             menuList.Add(new MenuItem
@@ -62,6 +67,120 @@ namespace BusinessLogic
                     text = "Log out",
                 });
             return menuList;
+        }
+
+        private MenuItem GetOutputMenu(long userId, List<MenuItem> mainList)
+        {
+            var parentDisabled = IsOutputDisabled(ParentingText, mainList);
+            var domesticDisabled = IsOutputDisabled(DomesticText, mainList);
+            var financialDisabled = IsOutputDisabled(FinancialText, mainList);
+            var menuList = new List<FormMenuItem>
+                {
+                    new FormMenuItem
+                        {
+                            formName = "Parenting",
+                            text = "Parenting",
+                            iconClass = "",
+                            path = "/Output/Parenting/User/" + userId,
+                            pathIdentifier = "Parenting",
+                            itemClass = "",
+                            disabled = parentDisabled                            
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "Domestic",
+                            text = "Mediation Agreement",
+                            iconClass = "",
+                            path = "/Output/DomesticMediation/User/" + userId,
+                            pathIdentifier = "Property",
+                            itemClass = "",
+                            disabled = domesticDisabled
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "ScheduleA",
+                            text = "Schedule A",
+                            iconClass = "",
+                            path = "/Output/ScheduleA/User/" + userId,
+                            pathIdentifier = "ScheduleA",
+                            itemClass = "",
+                            disabled = financialDisabled
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "ScheduleB",
+                            text = "Schedule B",
+                            iconClass = "",
+                            path = "/Output/ScheduleB/User/" + userId,
+                            pathIdentifier = "ScheduleB",
+                            itemClass = "",
+                            disabled = financialDisabled
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "ScheduleD",
+                            text = "Schedule D",
+                            iconClass = "",
+                            path = "/Output/ScheduleD/User/" + userId,
+                            pathIdentifier = "ScheduleD",
+                            itemClass = "",
+                            disabled = financialDisabled
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "ScheduleE",
+                            text = "Schedule E",
+                            iconClass = "",
+                            path = "/Output/ScheduleE/User/" + userId,
+                            pathIdentifier = "ScheduleE",
+                            itemClass = "",
+                            disabled = financialDisabled
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "ChildSupport",
+                            text = "Child Support",
+                            iconClass = "",
+                            path = "/Output/ChildSupport/User/" + userId,
+                            pathIdentifier = "ChildSupport",
+                            itemClass = "",
+                            disabled = financialDisabled
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "CSA",
+                            text = "CSA",
+                            iconClass = "",
+                            path = "/Output/CSA/User/" + userId,
+                            pathIdentifier = "CSA",
+                            itemClass = "",
+                            disabled = financialDisabled
+                        },
+                };
+            return new MenuItem
+            {
+                itemClass = "submenu",
+                path = "",
+                pathIdentifier = "Output",
+                iconClass = "icon icon-th-list",
+                text = "Output",
+                showSubMenu = false,
+                subMenuItems = menuList
+            };
+        }
+
+        /// <summary>
+        /// Check to see if output should be disabled
+        /// </summary>
+        /// <param name="menuText"></param>
+        /// <param name="mainList"></param>
+        /// <returns></returns>
+        private bool IsOutputDisabled(string menuText, IEnumerable<MenuItem> mainList)
+        {
+            var menuItem = mainList.FirstOrDefault(x => x.text == menuText);
+            if (menuItem != null && menuItem.subMenuItems.All(x => x.iconClass == SuccessIcon))
+                return false;
+            return true;
         }
 
         #region Menu Logic Helpers
@@ -76,7 +195,7 @@ namespace BusinessLogic
             //if menuitem is not in incomplete forms list, add the green check mark to it. 
             foreach (var formMenuItem in menuList.Where(formMenuItem => incompleteForms.All(x => x.Path.ToUpper() != formMenuItem.path.ToUpper())))
             {
-                formMenuItem.iconClass = "icon-ok icon-green";
+                formMenuItem.iconClass = SuccessIcon;
             }
             return menuList;
         }
@@ -213,7 +332,7 @@ namespace BusinessLogic
                 path = "",
                 pathIdentifier = "Domestic",
                 iconClass = "icon icon-th-list",
-                text = "Mediation Agreement",
+                text = DomesticText,
                 showSubMenu = false,
                 subMenuItems = menuList
             };
@@ -302,7 +421,7 @@ namespace BusinessLogic
                 path = "",
                 pathIdentifier = "Parenting",
                 iconClass = "icon icon-th-list",
-                text = "Parenting Plan",
+                text = ParentingText,
                 showSubMenu = false,
                 subMenuItems = menuList
             };
@@ -439,7 +558,7 @@ namespace BusinessLogic
                 path = "",
                 pathIdentifier = "Financial",
                 iconClass = "icon icon-th-list",
-                text = "Financial Form",
+                text = FinancialText,
                 showSubMenu = false,
                 subMenuItems = menuList
             };

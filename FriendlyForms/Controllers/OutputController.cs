@@ -30,7 +30,7 @@ namespace FriendlyForms.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [Authenticate]
-        public ActionResult Pdf(string html)
+        public ActionResult Pdf(string html, string name = "form")
         {
             var contentPath = Server.MapPath("~/Content/");
             var css = System.IO.File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
@@ -50,7 +50,11 @@ namespace FriendlyForms.Controllers
             config.Footer.SetFont(new Font("Times New Roman", 8F, FontStyle.Regular));
             config.Footer.SetTexts(participants.PlaintiffsName + " Initials_______", @"[page] of [topage]", participants.DefendantsName + " Initials________");
             var pdfBuf = _synchronizedPechkin.Convert(config, fullHtml);
-            return File(pdfBuf, "application/pdf", "form.pdf");
+            if (!name.Contains(".pdf"))
+            {
+                name = name + ".pdf";    
+            }            
+            return File(pdfBuf, "application/pdf", name);
         }
     }
 }

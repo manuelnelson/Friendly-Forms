@@ -1,4 +1,5 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using ServiceStack.DataAnnotations;
 
 
@@ -17,7 +18,6 @@ namespace Models
         public int AuthorOfPlan { get; set; }
         public int PlanType { get; set; }
         public string ExistCaseNumber { get; set; }
-
         public bool IsValid()
         {
             return UserId > 0;
@@ -25,13 +25,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var update = (Court) entity;
-            AuthorOfPlan = update.AuthorOfPlan;
-            CaseNumber = update.CaseNumber;
-            CountyId = update.CountyId;
-            PlanType = update.PlanType;
-            ExistCaseNumber = update.ExistCaseNumber;            
-            UserId = update.UserId;
+            throw new NotImplementedException();
         }
 
    

@@ -2,7 +2,7 @@
     var service = {
         login: $resource('/api/auth/credentials/', {},
             {
-                post: { method: 'GET', params: { format: 'json' } },
+                post: { method: 'POST', params: { format: 'json' } },
             }),
         authUser: null,
     };

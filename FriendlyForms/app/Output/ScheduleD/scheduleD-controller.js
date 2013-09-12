@@ -1,12 +1,21 @@
-﻿var ScheduleDCtrl = function($scope, $routeParams, $location, scheduleDService, menuService, genericService, headerService, $rootScope) {
-    $scope.storageKey = $location.path();
-    scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function(data) {
+﻿var ScheduleDCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleDService', 'menuService', 'genericService', 'headerService', '$timeout',
+    function ($scope, $routeParams, $rootScope, scheduleDService, menuService, genericService, headerService, $timeout) {
+    $scope.showPrintButton = false;
+    scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleD = data;
+        $timeout(function () {
+            var html = $('#main-content').html();
+            html = html.replace(/<form.*>/, "");
+            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
+            $('.html').val(html);
+            $('.name').val('ScheduleD');
+            headerService.showOutputHeader();
+            $scope.showPrintButton = true;
+        }, 2500);
     });
-    $scope.submit = function() {
+    $scope.submit = function (noNavigate) {
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-    headerService.showOutputHeader();
-};
-ScheduleDCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleDService', 'menuService', 'genericService', 'headerService','$rootScope'];
+}];

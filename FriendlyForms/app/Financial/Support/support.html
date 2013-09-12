@@ -13,12 +13,12 @@
                                 Do you make Current Court Ordered Child Support Payments for other children?</label>
                             <label class="radio inline">
                                 Yes
-                                <input class="inline" required ng-change="submit()" ng-model="support.Support" name="Support" type="radio" value="1"></label>
+                                <input class="inline" ng-change="submit()" ng-model="support.Support" name="Support" type="radio" value="1"></label>
                             <label class="radio inline">
                                 No
-                                <input class="inline" required ng-model="support.Support" ng-change="submit()" name="Support" type="radio" value="2"></label>
-                            <div ng-show="supportForm.Support.$dirty && supportForm.Support.$invalid || (showErrors && supportForm.Support.$invalid)">
-                                <span class="form-error" ng-show="supportForm.Support.$error.required">This field is required</span>
+                                <input class="inline" ng-model="support.Support" ng-change="submit()" name="Support" type="radio" value="2"></label>
+                            <div ng-show="supportForm.Support.$dirty && supportForm.Support.$invalid || showErrors">
+                                <span class="form-error" ng-show="showErrors">This field is required</span>
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                         <h5>Preexisting Child Support</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="row-fluid" ng-show="courts.length > 0">
+                        <div class="row-fluid" ng-show="courts.length > 0 && !showAddChild">
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -52,13 +52,41 @@
                                         <td>{{courtAdded.CaseNumber}}</td>
                                         <td>{{courtAdded.OrderDateString}}</td>
                                         <td>${{courtAdded.Monthly}}</td>
-                                        <td><button class="btn btn-primary" ng-click="showChildren(courtAdded)">Children</button></td>
+                                        <td>
+                                            <button class="btn btn-primary" ng-click="showChildren(courtAdded)">Children</button></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                        <div class="row-fluid" ng-show="children.length > 0 && showAddChild">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date of Birth</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="childAdded in children">
+                                    <td ng-show="!(editing && editChildId==childAdded.Id)">{{childAdded.Name}}</td>
+                                    <td ng-show="!(editing  && editChildId==childAdded.Id)">{{childAdded.DateOfBirthString}}</td>
+                                    <td ng-show="editing  && editChildId==childAdded.Id">
+                                        <input type="text" ng-model="childAdded.Name" /></td>
+                                    <td ng-show="editing && editChildId==childAdded.Id">
+                                        <input ui-jq="datepicker" data-date="{{childAdded.DateOfBirthString}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirthString" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">                                        
+                                    </td>
+                                    <td>
+                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="icon-white icon-edit"></i></button>
+                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Delete" ng-click="deleteChild(childAdded)"><i class="icon-white icon-trash"></i></button>
+                                        <button class="btn-small btn-primary btn" ng-show="editing && editChildId==childAdded.Id" title="Done" ng-click="doneEdit(childAdded)"><i class="icon-white icon-ok"></i>Done</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <br />
-                        <form ng-submit="addCourt()" id="courtForm" name="courtForm" novalidate>
+                        <form ng-submit="addCourt()" ng-show="!showAddChild" id="courtForm" name="courtForm" novalidate>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question form-question">Court Name</label>
                                 <input ng-model="court.CourtName" name="court.CourtName" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Court Name" type="text" value="">
@@ -75,7 +103,7 @@
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">Date of initial child support order</label>
-                                <input ng-model="court.OrderDate" name="court.OrderDate" ui-jq="datepicker" data-date="08/17/2013"  data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" placeholder="Date" type="text" value="">
+                                <input ng-model="court.OrderDate" name="court.OrderDate" ui-jq="datepicker" data-date="08/17/2013" data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" placeholder="Date" type="text" value="">
                                 <div ng-show="courtForm.OrderDate.$dirty && courtForm.OrderDate.$invalid">
                                     <span class="form-error" ng-show="courtForm.OrderDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                 </div>
@@ -89,53 +117,28 @@
                             </div>
                             <button class="btn btn-primary" value="Add">Add </button>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="form-vertical" ng-show="showAddChild">
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="widget-box">
-                    <div class="widget-title">
-                        <span class="icon"><i class="icon-signal"></i></span>
-                        <h5>Add Children</h5>
-                    </div>
-                    <div class="widget-content">
-                        <div class="row-fluid" ng-show="children.length > 0">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Date of Birth</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="addedChild in children">
-                                        <td>{{addedChild.Name}}</td>
-                                        <td>{{addedChild.DateOfBirthString}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div ng-show="showAddChild">
+                            <form ng-submit="addChild()" id="childForm" name="childForm" novalidate>
+                                <h5>Add children to Child Support</h5>
+                                <br />
+                                <div class="control-group row-fluid">
+                                    <label class="span4 form-question">Name</label>
+                                    <input class="hoverHelp" data-content="Enter the child's full name here." ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
+                                    <div ng-show="childForm.Name.$dirty && childForm.Name.$invalid">
+                                        <span class="form-error" ng-show="childForm.Name.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                    </div>
+                                </div>
+                                <div class="control-group row-fluid">
+                                    <label class="span4 form-question">Date of Birth</label>
+                                    <input ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="child.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
+                                    <div ng-show="childForm.DateOfBirth.$dirty && childForm.DateOfBirth.$invalid">
+                                        <span class="form-error" ng-show="childForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
+                                    </div>
+                                </div>
+                            </form>
+                            <button class="btn btn-primary" ng-click="addChild()" value="Add">Add </button>
+                            <button class="btn btn-primary" ng-click="hideAddChild()" value="Done">Done </button>
                         </div>
-                        <form ng-submit="addChild()" id="childForm" name="childForm" novalidate>
-                            <div class="control-group row-fluid">
-                                <label class="span4 form-question">Name</label>
-                                <input class="hoverHelp" data-content="Enter the child's full name here."  ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
-                                <div ng-show="childForm.Name.$dirty && childForm.Name.$invalid">
-                                    <span class="form-error" ng-show="childForm.Name.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                </div>
-                            </div>
-                            <div class="control-group row-fluid">
-                                <label class="span4 form-question">Date of Birth</label>
-                                <input ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="child.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
-                                <div ng-show="childForm.DateOfBirth.$dirty && childForm.DateOfBirth.$invalid">
-                                    <span class="form-error" ng-show="childForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" id="addChildSupport" value="Add">Add </button>
-                        </form>
                     </div>
                 </div>
             </div>

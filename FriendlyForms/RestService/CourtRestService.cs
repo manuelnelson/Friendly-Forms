@@ -37,7 +37,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-    [Authenticate]
+    //[Authenticate]
     public class CourtRestService : ServiceBase
     {
         public ICourtService CourtService { get; set; }

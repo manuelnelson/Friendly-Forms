@@ -38,29 +38,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.3.9.56\lib\net35\ServiceStack.Common.dll</HintPath>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\packages\ServiceStack.Common.3.9.59\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.3.9.56\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\packages\ServiceStack.Common.3.9.59\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.OrmLite, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.56\lib\ServiceStack.OrmLite.dll</HintPath>
+    <Reference Include="ServiceStack.OrmLite">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.59\lib\ServiceStack.OrmLite.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.OrmLite.SqlServer, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.56\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+    <Reference Include="ServiceStack.OrmLite.SqlServer">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.59\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.ServiceInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\FriendlyForms\bin\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.3.9.56\lib\net35\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\packages\ServiceStack.Text.3.9.59\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -83,8 +79,38 @@
     <Compile Include="Migrations\201309051509596_AddPaidSubscriptionField.Designer.cs">
       <DependentUpon>201309051509596_AddPaidSubscriptionField.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201309052303156_AttorneyPages.cs" />
+    <Compile Include="Migrations\201309052303156_AttorneyPages.Designer.cs">
+      <DependentUpon>201309052303156_AttorneyPages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201309061612343_AssetsFieldAdded.cs" />
+    <Compile Include="Migrations\201309061612343_AssetsFieldAdded.Designer.cs">
+      <DependentUpon>201309061612343_AssetsFieldAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201309101855340_AddAdditionalProvisionsToSchedule.cs" />
+    <Compile Include="Migrations\201309101855340_AddAdditionalProvisionsToSchedule.Designer.cs">
+      <DependentUpon>201309101855340_AddAdditionalProvisionsToSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201309102125301_AddIsJointCustody.cs" />
+    <Compile Include="Migrations\201309102125301_AddIsJointCustody.Designer.cs">
+      <DependentUpon>201309102125301_AddIsJointCustody.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201309102336295_BogusField.cs" />
+    <Compile Include="Migrations\201309102336295_BogusField.Designer.cs">
+      <DependentUpon>201309102336295_BogusField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201309102338265_RemoveBogusField.cs" />
+    <Compile Include="Migrations\201309102338265_RemoveBogusField.Designer.cs">
+      <DependentUpon>201309102338265_RemoveBogusField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201309111800382_CaseNumberToString.cs" />
+    <Compile Include="Migrations\201309111800382_CaseNumberToString.Designer.cs">
+      <DependentUpon>201309111800382_CaseNumberToString.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\AttorneyPageOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\AttorneyPageUserOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\BcsoOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\ChildCareFormOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\ChildCareOrmLiteRepository.cs" />
@@ -128,6 +154,8 @@
     <Compile Include="OrmLiteRepositories\UserOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\VehicleFormOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\VehicleOrmLiteRepository.cs" />
+    <Compile Include="Repositories\AttorneyPageRepository.cs" />
+    <Compile Include="Repositories\AttorneyPageUserRepository.cs" />
     <Compile Include="Repositories\BcsoRepository.cs" />
     <Compile Include="Repositories\ChildCareFormRepository.cs" />
     <Compile Include="Repositories\ChildCareRepository.cs" />
@@ -178,7 +206,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataInterface\DataInterface.csproj">
@@ -199,6 +229,27 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201309051509596_AddPaidSubscriptionField.resx">
       <DependentUpon>201309051509596_AddPaidSubscriptionField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309052303156_AttorneyPages.resx">
+      <DependentUpon>201309052303156_AttorneyPages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309061612343_AssetsFieldAdded.resx">
+      <DependentUpon>201309061612343_AssetsFieldAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309101855340_AddAdditionalProvisionsToSchedule.resx">
+      <DependentUpon>201309101855340_AddAdditionalProvisionsToSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309102125301_AddIsJointCustody.resx">
+      <DependentUpon>201309102125301_AddIsJointCustody.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309102336295_BogusField.resx">
+      <DependentUpon>201309102336295_BogusField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309102338265_RemoveBogusField.resx">
+      <DependentUpon>201309102338265_RemoveBogusField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309111800382_CaseNumberToString.resx">
+      <DependentUpon>201309111800382_CaseNumberToString.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

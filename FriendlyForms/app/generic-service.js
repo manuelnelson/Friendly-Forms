@@ -1,4 +1,4 @@
-﻿FormsApp.factory('genericService', ['menuService', 'headerService', '$location', function (menuService, headerService, $location) {
+﻿FormsApp.factory('genericService', ['menuService', 'headerService', '$location', '$q', function (menuService, headerService, $location, $q) {
     var service = {
         calculateRemainingPercentage: function(val1, val2) {
             if (val2 && val1)
@@ -21,11 +21,13 @@
             });
             return model;
         },
-        refreshPage: function () {
+        refreshPage: function (callback) {
             if (!menuService.isActive($location.path())) {
                 menuService.setActive($location.path());
             }
             headerService.refresh();
+            if (callback)
+                callback();
         },
     };
     return service;

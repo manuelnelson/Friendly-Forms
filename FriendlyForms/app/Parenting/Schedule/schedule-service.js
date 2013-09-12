@@ -4,7 +4,7 @@
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
-            }),
+            }),        
     };
     return service;
 }]);

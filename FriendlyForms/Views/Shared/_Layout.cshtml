@@ -24,7 +24,7 @@
             <a class="btn btn-mini btn-inverse dropdown-toggle" ng-show="user.IsAuthenticated" data-toggle="dropdown" href="#"><span class="icon-user icon"></span>{{user.DisplayName}}</a>
             <ul class="dropdown-menu">
                 <li><a title="Log off" href="/#/Account/Logoff">Logout</a></li>
-            </ul>            
+            </ul>
             <a class="btn btn-mini btn-inverse" ng-show="!user.IsAuthenticated" style="display: none" href="/#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a>
         </div>
     </div>
@@ -33,7 +33,7 @@
         <ul class="ng-cloak">
             <li ng-repeat="menuItem in menuItems" ng-click="menuClick()" class="{{menuItem.itemClass}}"><a href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>
                 <ul ng-show="menuItem.showSubMenu">
-                    <li ng-repeat="subMenuItem in menuItem.subMenuItems" class="{{subMenuItem.itemClass}}" ng-click="subMenuClick(subMenuItem.path)" data-path="{{subMenuItem.path}}"><a href="javascript:"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
+                    <li ng-repeat="subMenuItem in menuItem.subMenuItems | filter:enableFilter" class="{{subMenuItem.itemClass}}" ng-click="subMenuClick(subMenuItem)" data-path="{{subMenuItem.path}}"><a href="javascript:"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
                 </ul>
             </li>
         </ul>
@@ -48,10 +48,10 @@
                     </div>
                 </div>
                 <div ng-show="showOutput">
-@*                    <h1>{{PageTitle}}</h1>*@
                     <div class="btn-group">
                         <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
                             <input type="hidden" class="html" name="html" />
+                            <input type="hidden" class="name" name="name" />
                             <button class="btn btn-large tip-bottom printForm" value="Print to PDF"><i class="icon-print"></i></button>
                         </form>
                     </div>

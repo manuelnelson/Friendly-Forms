@@ -77,21 +77,68 @@
 <!-- Health Insurance -->
 <h2>Health Insurance/COBRA</h2>
 <p ng-show="domesticMediation.HealthInsuranceViewModel.Health == 1" class="indented">Each party is responsible for their own health insurance.</p>
-<p ng-show="domesticMediation.HealthInsuranceViewModel.Health != 1" class="indented">Health insurance/COBRA will occur as follows:
+<p ng-show="domesticMediation.HealthInsuranceViewModel.Health != 1" class="indented">
+    Health insurance/COBRA will occur as follows:
     <br />
-    {{domesticMediation.HealthInsuranceViewModel.HealthDescription}}</p>
+    {{domesticMediation.HealthInsuranceViewModel.HealthDescription}}
+</p>
 <!-- Spousal Support -->
 <h2>Spousal Support</h2>
 <p ng-show="domesticMediation.SpousalViewModel.Spousal==2" class="indented">The parties agree that there will be no provision of spousal support in this case.</p>
-<p ng-show="domesticMediation.SpousalViewModel.Spousal!=2" class="indented">Provision of spousal support will occur as follows:
+<p ng-show="domesticMediation.SpousalViewModel.Spousal!=2" class="indented">
+    Provision of spousal support will occur as follows:
     <br />
-    {{domesticMediation.SpousalViewModel.SpousalDescription}}</p>
+    {{domesticMediation.SpousalViewModel.SpousalDescription}}
+</p>
 <!-- Taxes -->
 <h2>Tax Returns, Allowances, Deductions and Refunds</h2>
-    <p ng-show="domesticMediation.TaxViewModel.Taxes==2" class="indented">The parties agree that tax returns, allowances, deductions and refunds will occur as follows: <br> {{domesticMediation.TaxViewModel.TaxDescription}}</p>
-    <p ng-show="domesticMediation.TaxViewModel.Taxes!=2" class="indented">Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
-<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+<p ng-show="domesticMediation.TaxViewModel.Taxes==2" class="indented">The parties agree that tax returns, allowances, deductions and refunds will occur as follows:
+    <br>
+    {{domesticMediation.TaxViewModel.TaxDescription}}</p>
+<p ng-show="domesticMediation.TaxViewModel.Taxes!=2" class="indented">Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
+
+<div class="row-fluid" style="text-align: center;">
+    <h2>Affirmation of Agreement</h2>
+</div>
+
+<p>
+    I understand that a typed settlement agreement document, incorporating the terms of this 
+    agreement, must be prepared and presented to the Court for approval, incorporating any required 
+    worksheets, schedules, affidavits, orders or addenda.
+</p>
+<p>
+    By signing below I certify that I have read this agreement and all attachments, if applicable; that 
+    I understand and agree to each of its provisions, and that I have reached this agreement freely and 
+    voluntarily.
+</p>
+<p>So agreed, this __________ day of _________________, 20___</p>
+<br />
+<br />
+<div class="row-fluid">
+    <div class="span5">
+        <hr />
+        <span>Plaintiff: {{domesticMediation.ParticipantsViewModel.PlaintiffsName}}</span>
+    </div>
+    <div class="span5 offset1">
+        <hr />
+        <span>Defendant: {{domesticMediation.ParticipantsViewModel.DefendantsName}}</span>
+    </div>
+</div>
+<br />
+<br />
+<div class="row-fluid">
+    <div class="span5">
+        <hr />
+        <span>Attorney for Plaintiff</span>
+    </div>
+    <div class="span5 offset1">
+        <hr />
+        <span>Attorney for Defendant</span>
+    </div>
+</div>
+<form action="/output/pdf" id="bottomPrintButton" ng-show="showPrintButton" method="post" target="_blank">
     <input type="hidden" class="html" name="html" />
+    <input type="hidden" class="name" name="name" />
     <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
 </form>
 

@@ -31,6 +31,8 @@ namespace FriendlyForms.RestService
         public int DefendantRelationship { get; set; }
         [DataMember]
         public int DefendantCustodialParent { get; set; }
+        [DataMember]
+        public int IsJointCustody { get; set; }
     }
     
     [DataContract]

@@ -67,6 +67,8 @@ namespace FriendlyForms.RestService
         public bool SundayParent { get; set; }
         [DataMember]
         public string AdditionalProvisions { get; set; }
+        [DataMember]
+        public bool AnyAdditionalProvisions { get; set; }
     }
 
     [DataContract]

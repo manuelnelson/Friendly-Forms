@@ -15,6 +15,7 @@ namespace BusinessLogic
         private IIncomeService IncomeService { get; set; }
         private IPreexistingSupportFormService PreexistingSupportFormService { get; set; }
         private IPreexistingSupportChildService PreexistingSupportChildService { get; set; }
+        private IPreexistingSupportService PreexistingSupportService { get; set; }
         private IOtherChildrenService OtherChildrenService { get; set; }
         private IOtherChildService OtherChildService { get; set; }
         private ICourtService CourtService { get; set; }
@@ -51,7 +52,7 @@ namespace BusinessLogic
             IHolidayService holidayService, IExtraHolidayService extraHolidayService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ITaxService taxService, ISpousalService spousalService,
             IChildSupportService childSupportService, IVehicleFormService vehicleFormService, IChildCareFormService childCareFormService, IExtraExpenseFormService extraExpenseFormService,
-            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService, IChildFormService childFormService, IAddendumService addendumService)
+            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService, IChildFormService childFormService, IAddendumService addendumService, IPreexistingSupportService preexistingSupportService)
         {
             DeviationsService = deviationsService;
             ExtraExpenseFormService = extraExpenseFormService;
@@ -87,6 +88,7 @@ namespace BusinessLogic
             VehicleFormService = vehicleFormService;
             ChildFormService = childFormService;
             AddendumService = addendumService;
+            PreexistingSupportService = preexistingSupportService;
         }
 
         public ScheduleB GetScheduleB(long userId, string parentName, bool isOtherParent = false)
@@ -108,7 +110,7 @@ namespace BusinessLogic
             {
                 var preexistingSupportChildren = PreexistingSupportChildService.GetChildrenBySupportId(preexistingSupport.Id).ToList();
                 schedule.PreexistingSupportChild = preexistingSupportChildren.ToList();
-                schedule.PreexistingSupport = preexistingSupportChildren.Select(x => x.PreexistingSupport).ToList();
+                schedule.PreexistingSupport = preexistingSupportChildren.Select(preexistingSupportChild => PreexistingSupportService.Get(preexistingSupportChild.PreexistingSupportId)).ToList();                 
                 schedule.TotalSupport = schedule.PreexistingSupport.Sum(c => c.Monthly);
             }
             schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;

@@ -109,48 +109,43 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Pechkin.Synchronized.0.5.8.1\lib\net40\Pechkin.Synchronized.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.3.9.56\lib\net35\ServiceStack.dll</HintPath>
+    <Reference Include="ServiceStack">
+      <HintPath>..\packages\ServiceStack.3.9.59\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Authentication.OpenId">
       <HintPath>Lib\ServiceStack.Authentication.OpenId.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Common, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.3.9.56\lib\net35\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.3.9.59\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.FluentValidation.Mvc3, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Mvc.3.9.56\lib\net40\ServiceStack.FluentValidation.Mvc3.dll</HintPath>
+    <Reference Include="ServiceStack.FluentValidation.Mvc3">
+      <HintPath>..\packages\ServiceStack.Mvc.3.9.59\lib\net40\ServiceStack.FluentValidation.Mvc3.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Interfaces, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.3.9.56\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Common.3.9.59\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Logging.Elmah, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Logging.Elmah.1.0.10.0\lib\net35\ServiceStack.Logging.Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.OrmLite, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.OrmLite, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.56\lib\ServiceStack.OrmLite.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.59\lib\ServiceStack.OrmLite.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.OrmLite.SqlServer, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.56\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+    <Reference Include="ServiceStack.OrmLite.SqlServer">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.59\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Redis, Version=3.9.57.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Redis.3.9.57\lib\net35\ServiceStack.Redis.dll</HintPath>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\packages\ServiceStack.Redis.3.9.59\lib\net35\ServiceStack.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.ServiceInterface, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.3.9.56\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\packages\ServiceStack.3.9.59\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.56.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.Text, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.3.9.56\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Text.3.9.59\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Services.Client" />
@@ -221,6 +216,7 @@
     <Compile Include="Mvc.Bundler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestService\AssetRestService.cs" />
+    <Compile Include="RestService\AttorneyPagRestService.cs" />
     <Compile Include="RestService\ChildCareFormRestService.cs" />
     <Compile Include="RestService\ChildCareRestService.cs" />
     <Compile Include="RestService\ChildFormRestService.cs" />
@@ -266,7 +262,6 @@
     <Compile Include="RestService\VehicleFormRestService.cs" />
     <Compile Include="RestService\VehicleRestService.cs" />
     <Compile Include="WebRole.cs" />
-    <Compile Include="WebServiceExamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\Account\Login\login-controller.js" />
@@ -283,6 +278,12 @@
     <Content Include="app\Account\Unauthorized\Unauthorized.html" />
     <Content Include="app\Administrator\Agreement\agreement-controller.js" />
     <Content Include="app\Administrator\Agreement\agreement-service.js" />
+    <Content Include="app\Administrator\ClientCases\clientCases-controller.js" />
+    <Content Include="app\Administrator\ClientCases\clientCases-service.js" />
+    <Content Include="app\Administrator\ClientCases\ClientCases.html" />
+    <Content Include="app\Administrator\CreateAttorney\createAttorney-controller.js" />
+    <Content Include="app\Administrator\CreateAttorney\createAttorney-service.js" />
+    <Content Include="app\Administrator\CreateAttorney\CreateAttorney.html" />
     <Content Include="app\Administrator\Payment\payment-controller.js" />
     <Content Include="app\Administrator\Payment\payment-service.js" />
     <Content Include="app\Administrator\Payment\Payment.html" />
@@ -296,6 +297,8 @@
     <Content Include="app\Administrator\Register\registerAdmin-service.js" />
     <Content Include="app\Administrator\Register\RegisterAdmin.html" />
     <Content Include="app\Administrator\Agreement\Agreement.html" />
+    <Content Include="app\Administrator\Select\select-controller.js" />
+    <Content Include="app\Administrator\Select\Select.html" />
     <Content Include="app\Domestic\Asset\asset-controller.js" />
     <Content Include="app\Domestic\Asset\asset-service.js" />
     <Content Include="app\Domestic\Asset\asset.html" />
@@ -552,14 +555,7 @@
     <Content Include="Content\images\sprite.png" />
     <Content Include="Content\js\ss-validation.js" />
     <Content Include="Content\less\friendly-custom.less" />
-    <Content Include="bundler\vs2010-extension\BundlerRunOnSave.vsix" />
-    <Content Include="bundler\vs2010-extension\BundlerRunOnSave.dll.lastcodeanalysissucceeded" />
-    <Content Include="bundler\node_modules\step\package.json" />
-    <Content Include="bundler\node_modules\sass\package.json" />
-    <Content Include="bundler\node_modules\less\package.json" />
-    <Content Include="bundler\node_modules\coffee-script\package.json" />
-    <Content Include="bundler\coffee.cmd" />
-    <Content Include="bundler\bundler.cmd" />
+    <Content Include="jqunback-1.51.min.js" />
     <Content Include="libeay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -575,13 +571,20 @@
     <Content Include="wkhtmltox0.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="bundler\vs2010-extension\BundlerRunOnSave.vsix" />
+    <Content Include="bundler\vs2010-extension\BundlerRunOnSave.dll.lastcodeanalysissucceeded" />
+    <Content Include="bundler\node_modules\step\package.json" />
+    <Content Include="bundler\node_modules\sass\package.json" />
+    <Content Include="bundler\node_modules\less\package.json" />
+    <Content Include="bundler\node_modules\coffee-script\package.json" />
+    <Content Include="bundler\coffee.cmd" />
+    <Content Include="bundler\bundler.cmd" />
     <None Include="Content\less\friendly-uniform.less" />
     <Content Include="Content\pdf.css" />
     <Content Include="Content\unicorn.main.css" />
     <Content Include="Content\unicorn.red.css" />
     <Content Include="Content\uniform.css" />
     <Content Include="Global.asax" />
-    <Content Include="jqunback-1.51.min.js" />
     <Content Include="README.txt" />
     <Content Include="Scripts\angular-cookies.js" />
     <Content Include="Scripts\angular-cookies.min.js" />
@@ -1037,7 +1040,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52278</DevelopmentServerPort>
+          <DevelopmentServerPort>57986</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -6,12 +6,12 @@
                 return;
             }
             var userId = $routeParams.userId;
-            userService.getUserData().then(function (userData) {
+            userService.getCurrentUserSession().then(function (userData) {
                 userService.roles.save(null, {
                     UserName: userData.UserName,
                     Roles: ['FirmAdmin', 'Lawyer'],
                 }, function () {
-                    $location.path('/Administration/Admin' + userId);
+                    $location.path('/Administration/ClientCases/' + userId);
                 });
             });
         };

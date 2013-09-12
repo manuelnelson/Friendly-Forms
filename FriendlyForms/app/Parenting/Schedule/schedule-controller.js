@@ -1,5 +1,9 @@
-﻿var ScheduleCtrl = function($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope) {
+﻿var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope', 'participantService',
+    function ($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope, participantService) {
     $scope.path = $location.path();
+    participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
+        $scope.nonCustodialParent = data.CustodyInformation.NonCustodyParentName;
+    });
     $scope.showErrors = false;
     $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
@@ -75,9 +79,8 @@
                 break;
         }
     };
-    $rootScope.currentScope = $scope;
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 
-    genericService.refreshPage();
-
-};
-ScheduleCtrl.$inject = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope'];
+}];

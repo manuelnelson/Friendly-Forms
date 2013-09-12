@@ -34,11 +34,8 @@
             });
         }
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
-
-    genericService.refreshPage();
-
-
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 };
 HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', '$rootScope'];
