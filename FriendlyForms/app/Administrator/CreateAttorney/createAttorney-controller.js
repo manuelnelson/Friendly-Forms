@@ -1,5 +1,5 @@
-﻿var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'registerService', 'userService', 'createAttorneyService',
-    function ($scope, $routeParams, $location, menuService, headerService, registerService, userService, createAttorneyService) {
+﻿var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'registerService', 'userService', 'attorneyPageService',
+    function ($scope, $routeParams, $location, menuService, headerService, registerService, userService, attorneyPageService) {
         $scope.submit = function () {
             if ($scope.registerAttorneyForm.$invalid) {
                 return;
@@ -8,11 +8,11 @@
             userService.register.save(null, $scope.user, function (userAuth) {
                 userService.getUserData($routeParams.userId).then(function (userData) {
                     //Create Attorney Page
-                    createAttorneyService.attorneyPages.save(null, {
+                    attorneyPageService.attorneyPages.save(null, {
                         UserId: userAuth.UserId,
                         LawFirmId: userData.LawFirmId,
                         PageName: $scope.attorney.PageName
-                    }, function () {
+                    }, function (attorneyPage) {
                         //Tie law firm Id
                         registerService.users.update(null, {
                             Id: userAuth.UserId,
@@ -25,6 +25,7 @@
                                 UserName: userAuth.UserName,
                                 Roles: ['Lawyer'],
                             }, function () {
+                                $location.path('/Attorney/AttorneyPage/Attorney/' + userAuth.UserId);
                             });
                         });
                     });

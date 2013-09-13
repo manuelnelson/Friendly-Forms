@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using ServiceStack.DataAnnotations;
 
@@ -6,7 +7,7 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("Schedules")]
-    public class Schedule : IEntity, IFormEntity
+    public class Schedule : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -40,6 +41,13 @@ namespace Models
         public bool SundayParent { get; set; }
         public bool AnyAdditionalProvisions { get; set; }
         public string AdditionalProvisions { get; set; }
+
+        [NotMapped]
+        [Ignore]
+        public virtual string BeginDateString
+        {
+            get { return BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
+        }
 
         public bool IsValid()
         {

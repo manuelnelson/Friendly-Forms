@@ -205,6 +205,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AzureCacheClient.cs" />
+    <Compile Include="Helpers\ExtensionMethods.cs" />
     <Compile Include="Helpers\PdfResult.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Mvc.Bundler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestService\AssetRestService.cs" />
+    <Compile Include="RestService\AttorneyClientRestService.cs" />
     <Compile Include="RestService\AttorneyPagRestService.cs" />
     <Compile Include="RestService\ChildCareFormRestService.cs" />
     <Compile Include="RestService\ChildCareRestService.cs" />
@@ -297,8 +299,15 @@
     <Content Include="app\Administrator\Register\registerAdmin-service.js" />
     <Content Include="app\Administrator\Register\RegisterAdmin.html" />
     <Content Include="app\Administrator\Agreement\Agreement.html" />
-    <Content Include="app\Administrator\Select\select-controller.js" />
-    <Content Include="app\Administrator\Select\Select.html" />
+    <Content Include="app\Attorney\AttorneyPage\attorneyPage-controller.js" />
+    <Content Include="app\Attorney\AttorneyPage\attorneyPage-service.js" />
+    <Content Include="app\Attorney\AttorneyPage\AttorneyPage.html" />
+    <Content Include="app\Attorney\Case\case-service.js" />
+    <Content Include="app\Attorney\CreateClient\createClient-controller.js" />
+    <Content Include="app\Attorney\CreateClient\createClient-service.js" />
+    <Content Include="app\Attorney\CreateClient\CreateClient.html" />
+    <Content Include="app\Attorney\Case\case-controller.js" />
+    <Content Include="app\Attorney\Case\Case.html" />
     <Content Include="app\Domestic\Asset\asset-controller.js" />
     <Content Include="app\Domestic\Asset\asset-service.js" />
     <Content Include="app\Domestic\Asset\asset.html" />
@@ -937,6 +946,7 @@
     <Content Include="Views\Headers\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\Client\" />
     <Folder Include="App_Data\" />
     <Folder Include="Views\Output\" />
   </ItemGroup>

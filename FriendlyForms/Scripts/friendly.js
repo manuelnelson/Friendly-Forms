@@ -36013,6 +36013,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Administrator/Agreement/User/:userId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
         when('/Administrator/CreateAttorney/User/:userId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
         when('/Administrator/ClientCases/User/:userId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
+        when('/Attorney/AttorneyPage/Attorney/:userId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
         when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
@@ -38954,7 +38955,8 @@ CSACtrl.$inject = ['$scope', '$routeParams', '$rootScope', 'csaService', 'menuSe
                 registerService.users.update(null, {
                     Id: userData.CustomId,
                     UserAuthId: userData.UserAuthId,
-                    LawFirmId: $routeParams.lawFirmId
+                    LawFirmId: $routeParams.lawFirmId,
+                    Position: 'Administrator'
                 }, function() {
                     $location.path('/Administrator/Agreement/User/' + userData.CustomId);
                 });
@@ -39056,33 +39058,48 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     headerService.setTitle('Agreement')
 }];
-;var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'createAttorneyService', 'menuService', 'headerService', 'registerService', 'userService',
-    function ($scope, $routeParams, $location, createAttorneyService, menuService, headerService, registerService, userService) {
-    $scope.submit = function () {
-        $scope.user.UserName = $scope.user.Email;
-        registerService.register.save(null, $scope.user, function () {            
-            userService.getCurrentUserSession().then(function (userData) {
-                //Tie law firm Id
-                registerService.users.update(null, {
-                    Id: userData.CustomId,
-                    UserAuthId: userData.UserAuthId,
-                    LawFirmId: $routeParams.lawFirmId,
-                    Position: $scope.user.Position,
-                }, function () {
-                    //Add attorney role to user
-                    userService.roles.save(null, {
-                        UserName: userData.UserName,
-                        Roles: ['Lawyer'],
-                    }, function () {
-                        $location.path('/Administrator/Agreement/User/' + userData.CustomId);
+;var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'registerService', 'userService', 'attorneyPageService',
+    function ($scope, $routeParams, $location, menuService, headerService, registerService, userService, attorneyPageService) {
+        $scope.submit = function () {
+            if ($scope.registerAttorneyForm.$invalid) {
+                return;
+            }
+            $scope.user.UserName = $scope.user.Email;
+            userService.register.save(null, $scope.user, function (userAuth) {
+                userService.getUserData($routeParams.userId).then(function (userData) {
+                    //Create Attorney Page
+                    attorneyPageService.attorneyPages.save(null, {
+                        UserId: userAuth.UserId,
+                        LawFirmId: userData.LawFirmId,
+                        PageName: $scope.attorney.PageName
+                    }, function (attorneyPage) {
+                        //Tie law firm Id
+                        registerService.users.update(null, {
+                            Id: userAuth.UserId,
+                            UserAuthId: userAuth.UserAuthId,
+                            LawFirmId: userData.LawFirmId,
+                            Position: $scope.user.Position,
+                        }, function () {
+                            //Add attorney role to user
+                            userService.roles.save(null, {
+                                UserName: userAuth.UserName,
+                                Roles: ['Lawyer'],
+                            }, function () {
+                                $location.path('/Attorney/AttorneyPage/Attorney/' + userAuth.UserId);
+                            });
+                        });
                     });
-
                 });
             });
-        });
+        };
+        headerService.setTitle('Add Attorneys');
+    }];
+;FormsApp.factory('createAttorneyService', ['$resource', function($resource) {
+    var service = {
+
     };
-    headerService.setTitle('Register Administrator');
-}];
+    return service;
+}]);
 ;FormsApp.factory('clientCasesService', ['$resource', function($resource) {
     var service = {
         clientCases: $resource('/api/clientCases/:userId', { userId: '@userId' },
@@ -39128,6 +39145,63 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
             }
         };
         genericService.refreshPage();
+    }];
+;FormsApp.factory('attorneyPageService', ['$resource', function ($resource) {
+    var service = {
+        attorneyPages: $resource('/api/attorneyPages', { },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+        attorneyClients: $resource('/api/attorneyClients', {},
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                getList: { method: 'GET', isArray:true, params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+}]);
+;var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'menuService', 'headerService', '$rootScope',
+    function ($scope, $routeParams, $location, attorneyPageService, userService, menuService, headerService, $rootScope) {
+        userService.users.getList({ ids: [1, 2, 3] }).then(function (data) {
+            console.log(data);
+        });
+        //attorneyPageService.attorneyClients.getList({ UserId: $routeParams.userId }).then(function (clients) {
+        //    //this is just a list of id's of the clients.  Fetch these
+        //    userService.users.getList({ids:[1,2,3]}).then(function(data) {
+        //        console.log(data);
+        //    });
+        //    $scope.clients = clients;
+        //});
+
+        //$rootScope.currentScope = $scope;
+        headerService.title("Attorney Page");
+        //$scope.submit = function (noNavigate) {
+        //    if ($scope.attorneyPageForm.$invalid) {
+        //        menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+        //        var value = headerService.getFormInput('#attorneyPageForm');
+        //        $.jStorage.set($scope.path, value);
+        //        if (!noNavigate)
+        //            menuService.nextMenu();
+        //        return;
+        //    }
+        //    $.jStorage.deleteKey($scope.storageKey);
+        //    $scope.attorneyPage.UserId = $routeParams.userId;
+        //    if (typeof $scope.attorneyPage.Id == 'undefined' || $scope.attorneyPage.Id == 0) {
+        //        attorneyPageService.attorneyPages.save(null, $scope.attorneyPage, function () {
+        //            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+        //            if (!noNavigate)
+        //                menuService.nextMenu();
+        //        });
+        //    } else {
+        //        attorneyPageService.attorneyPages.update({ Id: $scope.attorneyPage.Id }, $scope.attorneyPage, function () {
+        //            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+        //            if (!noNavigate)
+        //                menuService.nextMenu();
+        //        });
+        //    }
+        //};
     }];
 ;var HomeCtrl = function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
     menuService.setActive($location.path(), false);
@@ -39438,26 +39512,56 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
 ;FormsApp.factory('userService', ['$resource', '$q', function ($resource, $q) {
     var service = {
         userData: null,
-        users: $resource('/api/users/', {},
+        register: $resource('/api/userauths/register/', {},
             {
-                get: { method: 'GET', params: { format: 'json' } },
-                update: { method: 'PUT', params: { format: 'json' } }
             }),
-        userAuth: $resource('/api/userauths/', {},
-        {
-            get: { method: 'GET', params: { format: 'json' } },
-        }),
         roles: $resource('/api/userauths/addroles/', {},
             {
             }),
+        users: $resource('/api/users/:Ids', {ids:'@ids'},
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+        userAuths: $resource('/api/userauths/', {},
+        {
+            get: { method: 'GET', params: { format: 'json' } },
+        }),
+        userSession: $resource('/api/usersession/', {},
+        {
+            get: { method: 'GET', params: { format: 'json' } },
+        }),
         getCurrentUserSession: function () {
             var deferred = $q.defer();
-            service.userAuth.get({}, function(data) {
+            service.userSession.get({}, function (data) {
                 service.userData = data.UserSession;
                 deferred.resolve(service.userData);
             });
             return deferred.promise;
-        }
+        },
+        //note, userId is the apps userId, userAuthsId is the Id ServiceStack uses.
+        getUserAuth: function (userId, userAuthId) {
+            var deferred = $q.defer();
+            if (typeof userId != 'undefined' && userId != null) {
+                service.userAuths.get({ UserId: userId }, function(data) {
+                    deferred.resolve(data);
+                });
+            } 
+            if (typeof userAuthId != 'undefined' && userAuthId != null) {
+                service.userAuths.get({ UserAuthId: userAuthId }, function (data) {
+                    deferred.resolve(data);
+                });
+            }
+            return deferred.promise;
+        },
+        getUserData: function (userId) {
+            var deferred = $q.defer();
+            service.users.get({ Id: userId }, function (data) {
+                deferred.resolve(data);
+            });
+            return deferred.promise;
+        },
     };
     return service;
 }]);

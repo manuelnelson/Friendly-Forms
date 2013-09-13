@@ -29,6 +29,14 @@
                                 </div>
                             </div>
                             <div class="control-group">
+                                <label class="form-question">Secondary Address</label>
+                                <input  maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.SecondaryAddress" name="SecondaryAddress" placeholder="Secondary Address" type="text" value="">
+                                <div ng-show="houseForm.SecondaryAddress.$dirty && houseForm.SecondaryAddress.$invalid || (showErrors && houseForm.SecondaryAddress.$invalid)">
+                                    <span class="form-error" ng-show="houseForm.SecondaryAddress.$error.maxLength">This field cannot be longer than 100 characters.</span>
+                                    <span class="form-error" ng-show="houseForm.SecondaryAddress.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
+                            </div>
+                            <div class="control-group">
                                 <label class="form-question">City, State</label>
                                 <input maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" typeahead="suggestion for suggestion in cities($viewValue) | limitTo:8" ng-model="house.CityState" name="CityState" placeholder="City State" type="text" value="">
                                 <div ng-show="houseForm.CityState.$dirty && houseForm.CityState.$invalid || (showErrors && houseForm.CityState.$invalid)">

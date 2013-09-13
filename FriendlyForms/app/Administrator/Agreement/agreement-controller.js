@@ -6,5 +6,5 @@
         $location.path('/Administrator/Payment/User/' + $routeParams.userId);
         
     };
-    headerService.setTitle('Agreement')
+    headerService.setTitle('Agreement');
 }];

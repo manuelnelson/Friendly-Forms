@@ -107,8 +107,17 @@
     <Compile Include="Migrations\201309111800382_CaseNumberToString.Designer.cs">
       <DependentUpon>201309111800382_CaseNumberToString.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201309122133006_AttorneyClientAndUserIdToAttorney.cs" />
+    <Compile Include="Migrations\201309122133006_AttorneyClientAndUserIdToAttorney.Designer.cs">
+      <DependentUpon>201309122133006_AttorneyClientAndUserIdToAttorney.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201309131804119_AddSecondaryAddress.cs" />
+    <Compile Include="Migrations\201309131804119_AddSecondaryAddress.Designer.cs">
+      <DependentUpon>201309131804119_AddSecondaryAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\AttorneyClientOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AttorneyPageOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AttorneyPageUserOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\BcsoOrmLiteRepository.cs" />
@@ -154,6 +163,7 @@
     <Compile Include="OrmLiteRepositories\UserOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\VehicleFormOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\VehicleOrmLiteRepository.cs" />
+    <Compile Include="Repositories\AttorneyClientRepository.cs" />
     <Compile Include="Repositories\AttorneyPageRepository.cs" />
     <Compile Include="Repositories\AttorneyPageUserRepository.cs" />
     <Compile Include="Repositories\BcsoRepository.cs" />
@@ -250,6 +260,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201309111800382_CaseNumberToString.resx">
       <DependentUpon>201309111800382_CaseNumberToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309122133006_AttorneyClientAndUserIdToAttorney.resx">
+      <DependentUpon>201309122133006_AttorneyClientAndUserIdToAttorney.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309131804119_AddSecondaryAddress.resx">
+      <DependentUpon>201309131804119_AddSecondaryAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

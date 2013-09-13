@@ -152,6 +152,8 @@ namespace FriendlyForms.RestService
         public string DisplayName { get; set; }
         [DataMember(Order = 5)]
         public string Email { get; set; }
+        [DataMember(Order = 5)]
+        public string PrimaryEmail { get; set; }
         [DataMember(Order = 6)]
         public string Password { get; set; }
         [DataMember(Order = 7)]

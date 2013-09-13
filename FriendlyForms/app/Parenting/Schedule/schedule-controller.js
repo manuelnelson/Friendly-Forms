@@ -3,6 +3,7 @@
     $scope.path = $location.path();
     participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
         $scope.nonCustodialParent = data.CustodyInformation.NonCustodyParentName;
+        $scope.custodialParent = data.CustodyInformation.CustodyParentName;
     });
     $scope.showErrors = false;
     $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
@@ -14,6 +15,8 @@
             //The default time for control makes it dirty. Undo this
             $scope.scheduleForm.PickedUp.$dirty = false;
             $scope.scheduleForm.DroppedOff.$dirty = false;
+        } else {
+            $scope.schedule.BeginDate = $scope.schedule.BeginDateString
         }
     });
     $scope.submit = function(noNavigate) {

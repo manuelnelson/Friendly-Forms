@@ -1,0 +1,45 @@
+﻿<div class="form-vertical wrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Client Cases</h5>
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <button class="btn btn-primary pull-left">Add a New Case</button>
+                        <button class="btn btn-primary pull-right">View Archived Cases</button>
+                    </div><br/>
+                    <div class="row-fluid">
+                        <div ng-show="clients.length==0">
+                            <h5>No Clients Here :(</h5>
+                            <p>Create a client case <a href="/#/Attorney/CreateClient/Attorney/{{userId}}">here</a>.</p>
+                        </div>
+                        <table ng-show="clients.length>0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <!--                                    <th>Civil Case No.</th>-->
+                                    <th>Form Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="client in clients">
+                                    <td><button class="btn btn-primary" ng-click="openCase(client)">Open</button></td>
+                                    <td>{{client.Name}}</td>
+                                    <!--                                    <td>{{client.Number}}</td>-->
+                                    <td>{{client.Date}}</td>
+                                    <td><button class="btn btn-primary" ng-click="archive(client)">Archive</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" value="Close">Close</button>
+</div>

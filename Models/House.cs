@@ -1,11 +1,12 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
     [Alias("Houses")]
-    public class House : IEntity, IFormEntity
+    public class House : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -14,6 +15,7 @@ namespace Models
         public virtual User User { get; set; }
         public int MaritalHouse { get; set; }
         public string Address { get; set; }
+        public string SecondaryAddress { get; set; }
         public string CityState { get; set; }
         public string ZipCode { get; set; }
         public int? RetailValue { get; set; }
@@ -30,17 +32,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var updatingEntity = (House)entity;
-            UserId = updatingEntity.UserId;
-            MaritalHouse = updatingEntity.MaritalHouse;
-            Address = updatingEntity.Address;
-            CityState = updatingEntity.CityState;
-            ZipCode = updatingEntity.ZipCode;
-            RetailValue = updatingEntity.RetailValue;
-            MoneyOwed = updatingEntity.MoneyOwed;
-            Equity = updatingEntity.Equity;
-            MortgageOwner = updatingEntity.MortgageOwner;
-            Divide = updatingEntity.Divide;
+            throw new NotImplementedException();
         }
     }
 }

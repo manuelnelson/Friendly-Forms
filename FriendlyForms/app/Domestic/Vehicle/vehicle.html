@@ -15,14 +15,28 @@
                                     <th>Model</th>
                                     <th>Year</th>
                                     <th>Owner</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="vehicleAdded in vehicles">
-                                    <td>{{vehicleAdded.Make}}</td>
-                                    <td>{{vehicleAdded.Model}}</td>
-                                    <td>{{vehicleAdded.Year}}</td>
-                                    <td>{{vehicleAdded.Owner}}</td>
+                                    <td ng-show="!(editing && editVehicleId==vehicleAdded.Id)">{{vehicleAdded.Make}}</td>
+                                    <td ng-show="!(editing  && editVehicleId==vehicleAdded.Id)">{{vehicleAdded.Model}}</td>
+                                    <td ng-show="!(editing && editVehicleId==vehicleAdded.Id)">{{vehicleAdded.Year}}</td>
+                                    <td ng-show="!(editing  && editVehicleId==vehicleAdded.Id)">{{vehicleAdded.Owner}}</td>
+                                    <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
+                                        <input type="text" ng-model="vehicleAdded.Make" /></td>
+                                    <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
+                                        <input type="text" ng-model="vehicleAdded.Model" /></td>
+                                    <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
+                                        <input type="text" ng-model="vehicleAdded.Year" /></td>
+                                    <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
+                                        <input type="text" ng-model="vehicleAdded.Owner" /></td>
+                                    <td>
+                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editVehicleId==vehicleAdded.Id)" title="Edit" ng-click="editVehicle(vehicleAdded)"><i class="icon-white icon-edit"></i></button>
+                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editVehicleId==vehicleAdded.Id)" title="Delete" ng-click="deleteVehicle(vehicleAdded)"><i class="icon-white icon-trash"></i></button>
+                                        <button class="btn-small btn-primary btn" ng-show="editing && editVehicleId==vehicleAdded.Id" title="Done" ng-click="doneEdit(vehicleAdded)"><i class="icon-white icon-ok"></i>Done</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

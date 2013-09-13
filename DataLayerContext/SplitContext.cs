@@ -53,6 +53,7 @@ namespace DataLayerContext
         public DbSet<LawFirm> LawFirms { get; set; }
         public DbSet<AttorneyPage> AttorneyPages { get; set; }
         public DbSet<AttorneyPageUser> AttorneyPageUsers { get; set; }
+        public DbSet<AttorneyClient> AttorneyClients { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             SetupCourtMapping(modelBuilder);
@@ -99,8 +100,16 @@ namespace DataLayerContext
             SetupLawFirmEntity(modelBuilder);
             SetupAttorneyPageEntity(modelBuilder);
             SetupAttorneyPageUsersEntity(modelBuilder);
+            SetupAttorneyClientsEntity(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupAttorneyClientsEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AttorneyClient>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<AttorneyClient>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
         private void SetupAttorneyPageUsersEntity(DbModelBuilder modelBuilder)
@@ -117,6 +126,7 @@ namespace DataLayerContext
             modelBuilder.Entity<AttorneyPage>().HasKey(t => new { t.Id });
             modelBuilder.Entity<AttorneyPage>().Property(t => t.Id)
                         .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<AttorneyPageUser>().HasRequired(t => t.User).WithMany().WillCascadeOnDelete(false);
         }
 
         private void SetupLawFirmEntity(DbModelBuilder modelBuilder)

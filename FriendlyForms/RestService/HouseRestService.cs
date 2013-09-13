@@ -22,6 +22,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string Address { get; set; }
         [DataMember]
+        public string SecondaryAddress { get; set; }
+        [DataMember]
         public string CityState { get; set; }
         [DataMember]
         public string ZipCode { get; set; }

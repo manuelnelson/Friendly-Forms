@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAssetRepository.cs" />
+    <Compile Include="IAttorneyClientRepository.cs" />
     <Compile Include="IAttorneyPageRepository.cs" />
     <Compile Include="IAttorneyPageUserRepository.cs" />
     <Compile Include="IBcsoRepository.cs" />

@@ -110,6 +110,10 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Administrator/CreateAttorney/CreateAttorney-service.js
 ../app/Administrator/ClientCases/ClientCases-service.js
 ../app/Administrator/ClientCases/ClientCases-controller.js
+../app/Attorney/AttorneyPage/AttorneyPage-service.js
+../app/Attorney/AttorneyPage/AttorneyPage-controller.js
+../app/Attorney/CreateClient/CreateClient-service.js
+../app/Attorney/CreateClient/CreateClient-controller.js
 ../app/Home/home-controller.js
 ../app/menu-controller.js
 ../app/menu-service.js

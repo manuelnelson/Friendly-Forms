@@ -139,7 +139,7 @@ namespace BusinessLogic
                     new FormMenuItem
                         {
                             formName = "ChildSupport",
-                            text = "Child Support",
+                            text = "Child Support Wkst.",
                             iconClass = "",
                             path = "/Output/ChildSupport/User/" + userId,
                             pathIdentifier = "ChildSupport",
@@ -149,7 +149,7 @@ namespace BusinessLogic
                     new FormMenuItem
                         {
                             formName = "CSA",
-                            text = "CSA",
+                            text = "Child Support Add.",
                             iconClass = "",
                             path = "/Output/CSA/User/" + userId,
                             pathIdentifier = "CSA",

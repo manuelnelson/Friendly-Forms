@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper" id="courtWrapper">
     <form ng-submit="submit()" ng-controller="CourtCtrl" id="courtForm" name="courtForm" novalidate>
-        <input type="hidden" name="Id" ng-model="court.Id">
-        <input type="hidden" name="UserId" ng-model="court.UserId">
         <div class="row-fluid">
             <div class="span12">
                 <div class="widget-box">
@@ -15,7 +13,6 @@
                             <label class="form-question">County</label>
                             <select ng-model="court.CountyId" name="CountyId" ng-options="county.Id as county.CountyName for county in counties" required>
                                 <option ng-show="!court.CountyId > 0" disabled selected value="">-- Select County --</option>
-<!--                                <option ng-repeat="county in counties" value="{{county.Id}}">{{county.CountyName}}</option>-->
                             </select>
                             <div ng-show="courtForm.CountyId.$dirty && courtForm.CountyId.$invalid || (showErrors && courtForm.CountyId.$invalid)">
                                 <span class="form-error" ng-show="courtForm.CountyId.$error.required">Please select a county</span>

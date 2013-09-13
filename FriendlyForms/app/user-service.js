@@ -7,14 +7,16 @@
         roles: $resource('/api/userauths/addroles/', {},
             {
             }),
-        users: $resource('/api/users/', {},
+        users: $resource('/api/users/:Id/', { Id: '@Id' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
+                getList: { method: 'GET', isArray: true, params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
-        userAuth: $resource('/api/userauths/', {},
+        userAuths: $resource('/api/userauths/', {},
         {
             get: { method: 'GET', params: { format: 'json' } },
+            getList: { method: 'GET', isArray: true, params: { format: 'json' } },
         }),
         userSession: $resource('/api/usersession/', {},
         {
@@ -32,12 +34,12 @@
         getUserAuth: function (userId, userAuthId) {
             var deferred = $q.defer();
             if (typeof userId != 'undefined' && userId != null) {
-                service.userAuth.get({ UserId: userId }, function(data) {
+                service.userAuths.get({ UserId: userId }, function(data) {
                     deferred.resolve(data);
                 });
             } 
             if (typeof userAuthId != 'undefined' && userAuthId != null) {
-                service.userAuth.get({ UserAuthId: userAuthId }, function (data) {
+                service.userAuths.get({ UserAuthId: userAuthId }, function (data) {
                     deferred.resolve(data);
                 });
             }

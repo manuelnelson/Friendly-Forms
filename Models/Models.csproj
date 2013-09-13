@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="AttorneyClient.cs" />
     <Compile Include="AttorneyPage.cs" />
     <Compile Include="AttorneyPageUser.cs" />
     <Compile Include="Bcso.cs" />

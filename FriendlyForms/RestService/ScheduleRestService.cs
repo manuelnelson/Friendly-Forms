@@ -22,6 +22,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string BeginDate { get; set; }
         [DataMember]
+        public string BeginDateString { get; set; }
+        [DataMember]
         public string CustodianWeekendOther { get; set; }
         [DataMember]
         public string NonCustodianWeekendOther { get; set; }

@@ -8,7 +8,7 @@
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
-            $('.name').val('ChildSupportAgreement');
+            $('.name').val('ChildSupportAddendum');
             headerService.showOutputHeader();
             $scope.showPrintButton = true;
         }, 2500);

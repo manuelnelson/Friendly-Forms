@@ -69,6 +69,18 @@
             });
         });
     };
+    $scope.editing = false;
+    $scope.editVehicle = function (vehicle) {
+        $scope.editing = true;
+        $scope.editVehicleId = vehicle.Id;
+    };
+    $scope.doneEdit = function (vehicle) {
+        $scope.editing = false;
+        $scope.editVehicleId = 0;
+        vehicleService.vehicles.update({}, vehicle, function () {
+        });
+    };
+
     $scope.continue = function () {
         if ($scope.vehicleForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');

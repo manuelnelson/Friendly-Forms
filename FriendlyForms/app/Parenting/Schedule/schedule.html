@@ -30,7 +30,7 @@
                             </div>
                         </div>
                         <label>
-                            When would the {{nonCustodialParent}} like to have regular parenting time with the child(ren) on weekends?</label>
+                            When would {{nonCustodialParent}} like to have regular parenting time with the child(ren) on weekends?</label>
                         <div class="control-group">
                             <label class="form-question">
                                 What day and time will the child(ren) be picked up on weekends?</label>
@@ -104,12 +104,12 @@
                         </div>
                         <div class="control-group row-fluid">
                             <label class="form-question">
-                                On what weekends during the month would the {{nonCustodialParent}} prefer to parent your child(ren)?</label>
+                                On what weekends during the month would {{nonCustodialParent}} prefer to parent your child(ren)?</label>
                             <div class="span4">
                                 <label class="form-question">{{nonCustodialParent}}</label>
                                 <label class="radio">
                                     Every other weekend
-                                    <input required ng-change="nonCustodialChange(1)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="1"></label>
+                                    <input required ng-change="nonCustodialChange(1)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWekend" type="radio" value="1"></label>
                                 <label class="radio">
                                     1st and 3rd weekend
                                     <input ng-change="nonCustodialChange(2)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="2"></label>
@@ -127,7 +127,7 @@
                                 </div>
                             </div>
                             <div class="span4">
-                                <label class="form-question">Mother</label>
+                                <label class="form-question">{{custodialParent}}</label>
                                 <label class="radio">
                                     Every other weekend
                                     <input required ng-change="custodialChange(1)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="1"></label>
@@ -162,7 +162,7 @@
                         <h4>Weekday Visitation</h4>
                         <div class="control-group">
                             <label class="form-question">
-                                Will the {{nonCustodialParent}} spend time with the child(ren) during weekdays?</label>
+                                Will {{nonCustodialParent}} spend time with the child(ren) during weekdays?</label>
                             <label class="radio">
                                 Yes
                                     <input required ng-model="schedule.Weekdays" name="Weekdays" type="radio" value="1"></label>
@@ -175,7 +175,7 @@
                         </div>
                         <div ng-show="schedule.Weekdays == 1">
                             <label class="form-question">
-                                As the {{nonCustodialParent}}, when would you like to have your regular parenting time with the child(ren) on weekdays?</label>
+                                When would {{nonCustodialParent}} like to have your regular parenting time with the child(ren) on weekdays?</label>
                             <div class="control-group">
                                 <label class="form-question">
                                     What time will the child(ren) be picked up on weekdays?</label>
@@ -216,7 +216,7 @@
                             </div>
                             <div class="control-group row-fluid ">
                                 <label class="form-question">
-                                    On what weekdays will the {{nonCustodialParent}} excercise parenting/visitation of your child(ren)?</label>
+                                    On what weekdays will {{nonCustodialParent}} excercise parenting/visitation of your child(ren)?</label>
                                 <div class="span8">
 
                                     <label class="checkbox inline ">

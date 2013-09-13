@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
+using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -13,10 +15,16 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Vehicles/")]
+    [Route("/Vehicles", "POST")]
+    [Route("/Vehicles/", "PUT")]
+    [Route("/Vehicles", "GET")]
+    [Route("/Vehicles/{Id}")]
     public class ReqVehicle
     {
         [DataMember]
         public long Id { get; set; }
+        [DataMember]
+        public long[] Ids { get; set; }
         [DataMember]
         public long UserId { get; set; }
         [DataMember]
@@ -53,16 +61,18 @@ namespace FriendlyForms.RestService
         public IVehicleService VehicleService { get; set; }
         public object Get(ReqVehicle request)
         {
+            if (request.Ids != null && request.Ids.Length > 0)
+                return VehicleService.Get(request.Ids);
             if (request.Id != 0)
-            {
                 return VehicleService.Get(request.Id);
-            }
-            return new RespVehicle
+            if (request.UserId != 0)
+            {
+                return new RespVehicle
                 {
-                    Vehicles = VehicleService.GetByUserId(request.UserId != 0
-                                                       ? request.UserId
-                                                       : Convert.ToInt32(UserSession.CustomId)).ToList()
-                };
+                    Vehicles = VehicleService.GetByUserId(request.UserId).ToList()
+                };                
+            }
+            throw new HttpError(HttpStatusCode.BadRequest, "Invalid arguments supplied.");
         }
         public object Post(ReqVehicle request)
         {
@@ -80,6 +90,21 @@ namespace FriendlyForms.RestService
             vehicle.UserId = Convert.ToInt32(UserSession.CustomId);
             VehicleService.Update(vehicle);
             return new RespVehicle();
+        }
+        
+        public void Delete(ReqVehicle request)
+        {
+            if (request.Ids != null && request.Ids.Length > 0)
+            {
+                VehicleService.DeleteAll(request.Ids);
+                return;
+            }                
+            if (request.Id > 0)
+            {
+                VehicleService.Delete(request.Id);
+                return;
+            }
+            throw new HttpError(HttpStatusCode.BadRequest, "Invalid arguments supplied.");
         }
     }
 }

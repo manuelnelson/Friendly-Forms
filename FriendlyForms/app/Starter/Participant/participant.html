@@ -13,7 +13,7 @@
                                 Before proceeding, be sure you are able to correctly answer the following questions:
                             </label>
                             <ul>
-                                <li>Who is the primary custodian?</li>
+                                <li>Who are the Primary and Non Primary Physical Custodians?</li>
                                 <li>Who is the Plaintiff?</li>
                                 <li>Who is the Defendant?</li>
                                 <li>What are the names of every child involved in this modification?</li>
@@ -48,8 +48,7 @@
                                     <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
                                 </div>
                                 <label ng-show="participant.IsJointCustody==1" class="informative">
-                                    One of the parents must be designated as Primary Custodian for purposes of the 
-court. In the section below, please designate which parent is the Custodial Parent.</label>
+                                    For the purposes of Child Support, one parent must be designated as Primary Physical Custodian. In the section below, please designate which parent is the Primary Physical Custodial Parent. The Primary Physical Custodial Parent will receive child support, the Non Primary Physical Custodial Parent will pay child support.</label>
                             </div>
                             <div class="control-group span4">
                                 <label class="form-question">
@@ -90,10 +89,10 @@ court. In the section below, please designate which parent is the Custodial Pare
                                     The Plaintiff is the:
                                 </label>
                                 <label class="radio">
-                                    Primary Custodial Parent
+                                    Primary Physical Custodial Parent
                                     <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="1"></label>
                                 <label class="radio">
-                                    Non Custodial Parent
+                                    Non Primary Physical Custodial Parent
                                     <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="2"></label>
                                 <div ng-show="participantForm.PlaintiffCustodialParent.$dirty && participantForm.PlaintiffCustodialParent.$invalid || (showErrors && participantForm.PlaintiffCustodialParent.$invalid)">
                                     <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
