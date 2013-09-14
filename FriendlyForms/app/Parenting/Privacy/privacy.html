@@ -48,6 +48,8 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     Where will supervised parenting time take place?</label>
+                                <label>
+                                    In the box below, finish the following sentence: Supervised parenting time will occur at...</label>
                                 <input ng-model="privacy.SupervisionWhere" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" id="SupervisionWhere" name="SupervisionWhere" placeholder="Where" type="text" value="">
                                 <div ng-show="privacyForm.SupervisionWhere.$dirty && privacyForm.SupervisionWhere.$invalid || (showErrors && privacyForm.SupervisionWhere.$invalid)">
                                     <span class="form-error" ng-show="privacyForm.SupervisionWhere.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
