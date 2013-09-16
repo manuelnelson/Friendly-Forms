@@ -38,9 +38,9 @@
 <hr />
 <div ng-show="parenting.PrivacyViewModel.NeedSupervision == 1">
     <h2>Supervision</h2>
-    <p class="indented">Supervised parenting time shall apply during the day-to-day schedule as follows: {{parenting.PrivacyViewModel.SupervisionHow}}</p>
-    <p class="indented">Supervised parenting shall take place at: {{parenting.PrivacyViewModel.SupervisionWhere}}</p>
-    <p class="indented">{{parenting.PrivacyViewModel.SupervisionWho}}</p>
+    <p class="indented">Supervised parenting time shall apply during the day-to-day schedule as follows: {{parenting.PrivacyViewModel.SupervisionHow}}.</p>
+    <p class="indented">Supervised parenting shall take place at: {{parenting.PrivacyViewModel.SupervisionWhere}}.</p>
+    <p class="indented">Parenting time will be supervised by: {{parenting.PrivacyViewModel.SupervisionWho}}.</p>
     <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 1" class="indented">The cost of supervision will be the responsibility of the Father.</p>
     <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 2" class="indented">The cost of supervision will be the responsibility of the Mother.</p>
     <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 3" class="indented">The cost of supervision will be shared equally.</p>
@@ -141,14 +141,14 @@ records.
 <h2>Communication</h2>
 <p ng-show="parenting.CommunicationViewModel.AllowCommunication == 1" class="indented">
     When the child or children are in the physical custody of one parent, the other parent will have the right
-            to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase}}.
+    to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase}}.
 </p>
 <p class="indented" ng-show="parenting.CommunicationViewModel.AllowCommunication != 1">
     When the child or children are in the physical custody of one parent, the other parent will not have the
             right to contact the child or children.
 </p>
 <p ng-show="parenting.CommunicationViewModel.Limitations == 1" class="indented">The following limitations apply to contact with the child(ren): {{parenting.CommunicationViewModel.LimitationDetails}}</p>
-<p class="indented">There are no limitations regarding communication with the child(ren).</p>
+<p ng-show="parenting.CommunicationViewModel.Limitations == 2" class="indented">There are no limitations regarding communication with the child(ren).</p>
 <p ng-show="parenting.PrivacyViewModel.NeedPrivacy == 1" class="indented">
     Due to prior act of family violence, the address of the child(ren) and victim of family violence shall be
     kept confidential. The protected parent shall promptly notify the other parent, through a third party, of
