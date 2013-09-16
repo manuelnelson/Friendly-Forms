@@ -1,6 +1,6 @@
-﻿FormsApp.factory('caseService', ['$resource', function($resource) {
+﻿FormsApp.factory('clientService', ['$resource', function($resource) {
     var service = {
-        cases: $resource('/api/cases/:userId', { userId: '@userId' },
+        clients: $resource('/api/AttorneyClients/', {},
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }

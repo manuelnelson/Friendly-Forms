@@ -77,27 +77,6 @@
                                 <span class="form-error" ng-show="communicationForm.Notification.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="form-question">
-                                Should there be any limitations restricting access to rights of either parent?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="communication.AccessOfRights" name="AccessOfRights" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="communication.AccessOfRights" name="AccessOfRights" type="radio" value="2"></label>
-                            <div ng-show="communicationForm.AccessOfRights.$dirty && communicationForm.AccessOfRights.$invalid  || (showErrors && communicationForm.AccessOfRights.$invalid)">
-                                <span class="form-error" ng-show="communicationForm.AccessOfRights.$error.required">This field is required</span>
-                            </div>
-                        </div>
-                        <div class="control-group"  ng-show="communication.AccessOfRights == 1">
-                            <label class="form-question">
-                                How should the rights of either parent be limited?</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain Here" rows="2"></textarea>
-                            <div ng-show="communicationForm.AccessOfRightsDetails.$dirty && communicationForm.AccessOfRightsDetails.$invalid  || (showErrors && communicationForm.AccessOfRightsDetails.$invalid)">
-                                <span class="form-error" ng-show="communicationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

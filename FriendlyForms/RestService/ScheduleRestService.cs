@@ -70,7 +70,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string AdditionalProvisions { get; set; }
         [DataMember]
-        public bool AnyAdditionalProvisions { get; set; }
+        public int AnyAdditionalProvisions { get; set; }
     }
 
     [DataContract]

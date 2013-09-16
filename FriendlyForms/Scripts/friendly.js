@@ -1,4 +1,4 @@
-﻿;/*!
+;/*!
  * jQuery JavaScript Library v1.7.2
  * http://jquery.com/
  *
@@ -35972,6 +35972,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Starter/Court/user/:userId', { caseInsensitiveMatch: true, controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
         when('/Starter/Participant/user/:userId', { caseInsensitiveMatch: true, controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
         when('/Starter/Children/user/:userId', { caseInsensitiveMatch: true, controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
+        when('/Starter/Introduction/user/:userId', { caseInsensitiveMatch: true, controller: IntroductionCtrl, templateUrl: '/app/Starter/Introduction/Introduction.html' }).
         when('/Domestic/Asset/user/:userId', { caseInsensitiveMatch: true, controller: AssetCtrl, templateUrl: '/app/Domestic/Asset/asset.html' }).
         when('/Domestic/Debt/user/:userId', { caseInsensitiveMatch: true, controller: DebtCtrl, templateUrl: '/app/Domestic/Debt/debt.html' }).
         when('/Domestic/HealthInsurance/user/:userId', { caseInsensitiveMatch: true, controller: HealthInsuranceCtrl, templateUrl: '/app/Domestic/HealthInsurance/healthInsurance.html' }).
@@ -36014,6 +36015,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Administrator/CreateAttorney/User/:userId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
         when('/Administrator/ClientCases/User/:userId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
         when('/Attorney/AttorneyPage/Attorney/:userId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
+        when('/Attorney/CreateClient/Attorney/:userId', { caseInsensitiveMatch: true, controller: CreateClientCtrl, templateUrl: '/app/Attorney/CreateClient/CreateClient.html' }).
+        when('/Client/:userId', { caseInsensitiveMatch: true, controller: ClientCtrl, templateUrl: '/app/Attorney/Client/Client.html' }).
         when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
@@ -36491,6 +36494,14 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
     };
     return childrenService;
 }]);
+;var IntroductionCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'genericService', '$rootScope', function ($scope, $routeParams, $location, menuService, genericService, $rootScope) {
+    $scope.path = $location.path();
+    $scope.submit = function (noNavigate) {
+        menuService.nextMenu();
+    };
+    $rootScope.currentScope = $scope;
+    genericService.refreshPage();
+}];
 ;var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -36932,6 +36943,18 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
             });
         });
     };
+    $scope.editing = false;
+    $scope.editVehicle = function (vehicle) {
+        $scope.editing = true;
+        $scope.editVehicleId = vehicle.Id;
+    };
+    $scope.doneEdit = function (vehicle) {
+        $scope.editing = false;
+        $scope.editVehicleId = 0;
+        vehicleService.vehicles.update({}, vehicle, function () {
+        });
+    };
+
     $scope.continue = function () {
         if ($scope.vehicleForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
@@ -37747,6 +37770,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     $scope.path = $location.path();
     participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
         $scope.nonCustodialParent = data.CustodyInformation.NonCustodyParentName;
+        $scope.custodialParent = data.CustodyInformation.CustodyParentName;
     });
     $scope.showErrors = false;
     $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
@@ -37758,6 +37782,8 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
             //The default time for control makes it dirty. Undo this
             $scope.scheduleForm.PickedUp.$dirty = false;
             $scope.scheduleForm.DroppedOff.$dirty = false;
+        } else {
+            $scope.schedule.BeginDate = $scope.schedule.BeginDateString
         }
     });
     $scope.submit = function(noNavigate) {
@@ -38924,7 +38950,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
-            $('.name').val('ChildSupportAgreement');
+            $('.name').val('ChildSupportAddendum');
             headerService.showOutputHeader();
             $scope.showPrintButton = true;
         }, 2500);
@@ -39056,7 +39082,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
         $location.path('/Administrator/Payment/User/' + $routeParams.userId);
         
     };
-    headerService.setTitle('Agreement')
+    headerService.setTitle('Agreement');
 }];
 ;var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'registerService', 'userService', 'attorneyPageService',
     function ($scope, $routeParams, $location, menuService, headerService, registerService, userService, attorneyPageService) {
@@ -39164,45 +39190,102 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
 }]);
 ;var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'menuService', 'headerService', '$rootScope',
     function ($scope, $routeParams, $location, attorneyPageService, userService, menuService, headerService, $rootScope) {
-        userService.users.getList({ ids: [1, 2, 3] }).then(function (data) {
-            console.log(data);
+        $scope.clients = [];
+        $scope.userId = $routeParams.userId;
+        attorneyPageService.attorneyClients.getList({ UserId: $routeParams.userId }, function (attorneyClients) {
+            //this is just a list of id's of the clients.  Fetch these
+            var userIds = _.pluck(attorneyClients, 'ClientUserId');
+            if (userIds && userIds.length > 0) {
+                userService.userAuths.getList({ Ids: userIds }, function (clientsUserInfo) {
+                    var clients = _.map(attorneyClients, function(item) {
+                        var clientUserInfo = _.find(clientsUserInfo, function(userInfo) {
+                            return userInfo.Id === item.ClientUserId;
+                        });
+                        return {
+                            UserId: item.UserId,
+                            ClientUserId: item.ClientUserId,
+                            CaseNumber: item.CaseNumber,
+                            Name: clientUserInfo.DisplayName,
+                            Date: clientUserInfo.Date,
+                        };
+                    });
+                    $scope.clients = clients;
+                });
+            }
         });
-        //attorneyPageService.attorneyClients.getList({ UserId: $routeParams.userId }).then(function (clients) {
-        //    //this is just a list of id's of the clients.  Fetch these
-        //    userService.users.getList({ids:[1,2,3]}).then(function(data) {
-        //        console.log(data);
-        //    });
-        //    $scope.clients = clients;
-        //});
+        $scope.openClient = function(client) {
+            $location.path('/Client/' + client.ClientUserId);
+        };
+        $scope.archiveClient = function(client) {
 
+        };
         //$rootScope.currentScope = $scope;
-        headerService.title("Attorney Page");
-        //$scope.submit = function (noNavigate) {
-        //    if ($scope.attorneyPageForm.$invalid) {
-        //        menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-        //        var value = headerService.getFormInput('#attorneyPageForm');
-        //        $.jStorage.set($scope.path, value);
-        //        if (!noNavigate)
-        //            menuService.nextMenu();
-        //        return;
-        //    }
-        //    $.jStorage.deleteKey($scope.storageKey);
-        //    $scope.attorneyPage.UserId = $routeParams.userId;
-        //    if (typeof $scope.attorneyPage.Id == 'undefined' || $scope.attorneyPage.Id == 0) {
-        //        attorneyPageService.attorneyPages.save(null, $scope.attorneyPage, function () {
-        //            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-        //            if (!noNavigate)
-        //                menuService.nextMenu();
-        //        });
-        //    } else {
-        //        attorneyPageService.attorneyPages.update({ Id: $scope.attorneyPage.Id }, $scope.attorneyPage, function () {
-        //            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-        //            if (!noNavigate)
-        //                menuService.nextMenu();
-        //        });
-        //    }
-        //};
+        headerService.setTitle("Attorney Page");
     }];
+;FormsApp.factory('createClientService', ['$resource', function($resource) {
+    var service = {
+    };
+    return service;
+}]);
+;var CreateClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'courtService', 'headerService', 'userService',
+    function ($scope, $routeParams, $location, clientService, courtService, headerService, userService) {
+
+    $scope.submit = function() {
+        if ($scope.createClientForm.$invalid) {
+            return;
+        }
+        if($scope.user.Email.indexOf('@' < 0))
+            $scope.user.Email = $scope.user.Email + '@ourlawfirm.com';
+        userService.register.save(null, $scope.user, function (userAuth) {
+            var court = {
+                UserId: userAuth.UserId,
+                County: 0,
+                CaseNumber: $scope.court.CaseNumber,
+                AuthorOfPlan: 1,
+                PlanType: 1
+            };
+            //link client to attorney
+            var clientAttorney = {
+                UserId: $routeParams.userId,
+                ClientUserId: userAuth.UserId
+            };
+            clientService.clients.save(null, clientAttorney, function () {
+                courtService.courts.save(null, court, function() {
+                    $location.path('/Attorney/Case/' + clientAttorney.ClientUserId);
+                });
+            });
+        });
+    };
+    headerService.setTitle('Create A Client');
+}];
+;FormsApp.factory('clientService', ['$resource', function($resource) {
+    var service = {
+        clients: $resource('/api/AttorneyClients/', {},
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+}]);
+;var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', '$rootScope', function ($scope, $routeParams, $location, clientService, menuService, headerService, $rootScope) {
+    $scope.path = $location.path();
+    $scope.client = clientService.clients.get({ UserId: $routeParams.userId }, function() {
+    });
+    $scope.submit = function(noNavigate) {
+        if ($scope.clientForm.$invalid) {
+            return;
+        }
+        $scope.client.UserId = $routeParams.userId;
+        clientService.clients.update({ Id: $scope.client.Id }, $scope.client, function() {
+            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+            if (!noNavigate)
+                menuService.nextMenu();
+        });
+    };
+    $rootScope.currentScope = $scope;
+    headerService.refreshPage();
+}];
 ;var HomeCtrl = function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
     menuService.setActive($location.path(), false);
     headerService.refresh();
@@ -39518,15 +39601,16 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
         roles: $resource('/api/userauths/addroles/', {},
             {
             }),
-        users: $resource('/api/users/:Ids', {ids:'@ids'},
+        users: $resource('/api/users/:Id/', { Id: '@Id' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
-                
+                getList: { method: 'GET', isArray: true, params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
         userAuths: $resource('/api/userauths/', {},
         {
             get: { method: 'GET', params: { format: 'json' } },
+            getList: { method: 'GET', isArray: true, params: { format: 'json' } },
         }),
         userSession: $resource('/api/usersession/', {},
         {
@@ -39540,7 +39624,7 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
             });
             return deferred.promise;
         },
-        //note, userId is the apps userId, userAuthsId is the Id ServiceStack uses.
+        //note, userId is the apps userId, userAuthId is the Id ServiceStack uses.
         getUserAuth: function (userId, userAuthId) {
             var deferred = $q.defer();
             if (typeof userId != 'undefined' && userId != null) {

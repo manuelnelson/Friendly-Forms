@@ -302,12 +302,12 @@
     <Content Include="app\Attorney\AttorneyPage\attorneyPage-controller.js" />
     <Content Include="app\Attorney\AttorneyPage\attorneyPage-service.js" />
     <Content Include="app\Attorney\AttorneyPage\AttorneyPage.html" />
-    <Content Include="app\Attorney\Case\case-service.js" />
     <Content Include="app\Attorney\CreateClient\createClient-controller.js" />
     <Content Include="app\Attorney\CreateClient\createClient-service.js" />
     <Content Include="app\Attorney\CreateClient\CreateClient.html" />
-    <Content Include="app\Attorney\Case\case-controller.js" />
-    <Content Include="app\Attorney\Case\Case.html" />
+    <Content Include="app\Attorney\Client\client-controller.js" />
+    <Content Include="app\Attorney\Client\client-service.js" />
+    <Content Include="app\Attorney\Client\Client.html" />
     <Content Include="app\Domestic\Asset\asset-controller.js" />
     <Content Include="app\Domestic\Asset\asset-service.js" />
     <Content Include="app\Domestic\Asset\asset.html" />
@@ -430,6 +430,8 @@
     <Content Include="app\Starter\Court\court-controller.js" />
     <Content Include="app\Starter\Court\court-service.js" />
     <Content Include="app\Starter\Court\court.html" />
+    <Content Include="app\Starter\Introduction\introduction-controller.js" />
+    <Content Include="app\Starter\Introduction\Introduction.html" />
     <Content Include="app\Starter\Participant\participant-controller.js" />
     <Content Include="app\Starter\Participant\participant-service.js" />
     <Content Include="app\Starter\Participant\participant.html" />

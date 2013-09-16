@@ -190,7 +190,7 @@ namespace BusinessLogic
             return incompleteForms.Count != 0;
         }
         
-        private static List<FormMenuItem> AdjustItemClass(IEnumerable<IncompleteForm> incompleteForms, List<FormMenuItem> menuList)
+        private static List<FormMenuItem> AdjustIconClass(IEnumerable<IncompleteForm> incompleteForms, List<FormMenuItem> menuList)
         {
             //if menuitem is not in incomplete forms list, add the green check mark to it. 
             foreach (var formMenuItem in menuList.Where(formMenuItem => incompleteForms.All(x => x.Path.ToUpper() != formMenuItem.path.ToUpper())))
@@ -207,6 +207,15 @@ namespace BusinessLogic
         {
             var menuList = new List<FormMenuItem>
                 {
+                    new FormMenuItem
+                    {
+                        formName = "Introduction",
+                        text = "Introduction",
+                        iconClass = "",
+                        path = "/Starter/Introduction/User/" + userId,     
+                        pathIdentifier = "Introduction",
+                        itemClass = ""
+                    },
                     new FormMenuItem
                     {
                         formName = "Court",
@@ -235,7 +244,9 @@ namespace BusinessLogic
                             itemClass = ""
                         }
                 };
-            menuList = AdjustItemClass(OutputService.GetStarterIncompleteForms(userId), menuList);
+            menuList = AdjustIconClass(OutputService.GetStarterIncompleteForms(userId), menuList);
+            //Introduction doesn't have a form, let's make the item class to never be complete initially.
+            menuList.First(x => x.formName == "Introduction").iconClass = "";
             return new MenuItem
                 {
                     itemClass = "submenu",
@@ -324,7 +335,7 @@ namespace BusinessLogic
                             itemClass = ""
                         },
                 };
-            menuList = AdjustItemClass(OutputService.GetDomesticIncompleteForms(userId), menuList);
+            menuList = AdjustIconClass(OutputService.GetDomesticIncompleteForms(userId), menuList);
 
             return new MenuItem
             {
@@ -414,7 +425,7 @@ namespace BusinessLogic
                             itemClass = ""
                         },
                 };
-            menuList = AdjustItemClass(OutputService.GetParentingIncompleteForms(userId), menuList);
+            menuList = AdjustIconClass(OutputService.GetParentingIncompleteForms(userId), menuList);
             return new MenuItem
             {
                 itemClass = "submenu",
@@ -550,7 +561,7 @@ namespace BusinessLogic
                             itemClass = ""
                         },
                 };
-            menuList = AdjustItemClass(OutputService.GetFinancialIncompleteForms(userId), menuList);
+            menuList = AdjustIconClass(OutputService.GetFinancialIncompleteForms(userId), menuList);
 
             return new MenuItem
             {

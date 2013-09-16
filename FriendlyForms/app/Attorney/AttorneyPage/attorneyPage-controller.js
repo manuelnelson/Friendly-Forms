@@ -23,7 +23,12 @@
                 });
             }
         });
+        $scope.openClient = function(client) {
+            $location.path('/Client/' + client.ClientUserId);
+        };
+        $scope.archiveClient = function(client) {
 
+        };
         //$rootScope.currentScope = $scope;
         headerService.setTitle("Attorney Page");
     }];

@@ -33,10 +33,6 @@ namespace FriendlyForms.RestService
         public string LimitationDetails { get; set; }
         [DataMember]
         public int Notification { get; set; }
-        [DataMember]
-        public int AccessOfRights { get; set; }
-        [DataMember]
-        public string AccessOfRightsDetails { get; set; }
     }
 
     [DataContract]

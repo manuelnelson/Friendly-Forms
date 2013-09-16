@@ -33,7 +33,7 @@
 <p class="indented">For each of the children named below, the primary physical custodian shall be:</p>
 <div class="row-fluid" ng-repeat="child in parenting.Children">
     <div class="span6 indented">{{child.Name}}</div>
-    <div class="span6">{{parenting.PpOutputFormHelper.CustodyInformation.Parent}}</div>
+    <div class="span6">{{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}}</div>
 </div>
 <hr />
 <div ng-show="parenting.PrivacyViewModel.NeedSupervision == 1">
@@ -45,10 +45,15 @@
     <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 2" class="indented">The cost of supervision will be the responsibility of the Mother.</p>
     <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 3" class="indented">The cost of supervision will be shared equally.</p>
 </div>
-<h2>Information</h2>
+<h2>Access to Records and Information</h2>
 <p ng-show="parenting.InformationViewModel.InformationAccess == 1" class="indented">Only the father will be able to get information about the children, (e.g. doctor's records and school reports), directly from the doctor's office or school.</p>
 <p ng-show="parenting.InformationViewModel.InformationAccess == 2" class="indented">Only the mother will be able to get information about the children, (e.g. doctor's records and school reports), directly from the doctor's office or school.</p>
-<p ng-show="parenting.InformationViewModel.InformationAccess == 3" class="indented">Both parents will be able to get information about the children, (e.g. doctor's records and school reports), directly from the doctor's office or school.</p>
+<p ng-show="parenting.InformationViewModel.InformationAccess == 3" class="indented">
+    Both parents are entitled to access to all of the child(ren)’s records and information, including, but 
+not limited to, education, health, extracurricular activities, and religious communications. 
+Designation as a non-custodial parent does not affect a parent’s right to equal access to these 
+records.
+</p>
 <div class="row-fluid">
     <h2>Day-To-Day Decisions</h2>
     <p class="indented">
@@ -138,7 +143,7 @@
     When the child or children are in the physical custody of one parent, the other parent will have the right
     to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase}}.
 </p>
-<p ng-show="parenting.CommunicationViewModel.AllowCommunication == 2" class="indented">
+<p class="indented" ng-show="parenting.CommunicationViewModel.AllowCommunication != 1">
     When the child or children are in the physical custody of one parent, the other parent will not have the
             right to contact the child or children.
 </p>
@@ -146,9 +151,10 @@
 <p ng-show="parenting.CommunicationViewModel.Limitations == 2" class="indented">There are no limitations regarding communication with the child(ren).</p>
 <p ng-show="parenting.PrivacyViewModel.NeedPrivacy == 1" class="indented">
     Due to prior act of family violence, the address of the child(ren) and victim of family violence shall be
-kept confidential. The protected parent shall promptly notify the other parent, through a third party, of
-any change in contact information necessary to conduct visitation.
+    kept confidential. The protected parent shall promptly notify the other parent, through a third party, of
+    any change in contact information necessary to conduct visitation.
 </p>
+<p ng-show="parenting.CommunicationViewModel.Notification ==1">Each parent shall promptly notify the other parent of a change of address, phone number or cell phone number. A parent changing residence must give at least 30 days notice of the change and provide the full address of the new residence.</p>
 <h2>Parenting Time/Visitation Schedules</h2>
 <p class="indented">During the term of this parenting plan, {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent shall have at a minimum the following rights of parenting time/visitation:</p>
 <p class="indented">
@@ -156,7 +162,7 @@ any change in contact information necessary to conduct visitation.
         <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==2">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the first and third weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the second, fourth and fifth weekend of each month.</span>
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==3">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the first, third and fifth weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the second and fourth weekend of each month.</span>
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==4">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the second and fourth weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the first, third and fifth weekend of each month.</span>
-    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">parents will alternate weekends for visitation.</span>
+    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">parents will alfternate weekends for visitation.</span>
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">For purposes of this parenting plan, the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
 
     A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.PickupLocation}} The weekend ends on 
@@ -178,7 +184,7 @@ any change in contact information necessary to conduct visitation.
 <p class="indented">
     The parenting schedule will begin
     <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate == 1">on the date of the Court's Order.</span>
-    <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDate}}</span>
+    <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDateString}}</span>
 </p>
 <div class="row-fluid">
     <p ng-show="parenting.ScheduleViewModel.AdditionalProvisions.length > 0" class="indented">Additionally, the following provisions regarding weekday visitation will apply to the children: {{parenting.ScheduleViewModel.AdditionalProvisions}}</p>
@@ -476,58 +482,76 @@ any change in contact information necessary to conduct visitation.
     </p>
 </div>
 
-<h2>Modification of Plan or Disagreements</h2>  
-<p class="indented">Parties may, by mutual agreement, vary the parenting time/visitation; however, such agreement 
-    shall not be a binding court order. Custody shall only be modified by court order. </p>
-<p class="indented">Should the parents disagree about this parenting plan or wish to modify it, they must make a good 
-    faith effort to resolve the issue between them.</p>
+<h2>Modification of Plan or Disagreements</h2>
+<p class="indented">
+    Parties may, by mutual agreement, vary the parenting time/visitation; however, such agreement 
+    shall not be a binding court order. Custody shall only be modified by court order.
+</p>
+<p class="indented">
+    Should the parents disagree about this parenting plan or wish to modify it, they must make a good 
+    faith effort to resolve the issue between them.
+</p>
 <h2>Parents’ Consent</h2>
 <p class="indented">Please review the following and initial:</p>
-<p class="indented">1. We recognize that a close and continuing parent-child relationship and continuity in the child’s 
-    life is in the child’s best interest.  </p>
-<div class="row-fluid">    
+<p class="indented">
+    1. We recognize that a close and continuing parent-child relationship and continuity in the child’s 
+    life is in the child’s best interest. 
+</p>
+<div class="row-fluid">
     <p class="span5">{{parenting.ParticipantViewModel.PlaintiffsName}} Initials_______</p>
     <p class="span5">{{parenting.ParticipantViewModel.DefendantsName}} Initials_______</p>
 </div>
-<p class="indented">2.  We recognize that our child’s needs will change and grow as the child matures; we have 
+<p class="indented">
+    2.  We recognize that our child’s needs will change and grow as the child matures; we have 
     made a good faith effort to take these changing needs into account so that the need for future 
-    modifications to the parenting plan are minimized. </p>
-<div class="row-fluid">    
+    modifications to the parenting plan are minimized.
+</p>
+<div class="row-fluid">
     <p class="span5">{{parenting.ParticipantViewModel.PlaintiffsName}} Initials_______</p>
     <p class="span5">{{parenting.ParticipantViewModel.DefendantsName}} Initials_______</p>
 </div>
-<p class="indented">3. We recognize that the parent with physical custody will make the day-to-day decisions and 
-emergency decisions while the child is residing with such parent. </p>
-<div class="row-fluid">    
+<p class="indented">
+    3. We recognize that the parent with physical custody will make the day-to-day decisions and 
+emergency decisions while the child is residing with such parent.
+</p>
+<div class="row-fluid">
     <p class="span5">{{parenting.ParticipantViewModel.PlaintiffsName}} Initials_______</p>
     <p class="span5">{{parenting.ParticipantViewModel.DefendantsName}} Initials_______</p>
 </div>
-<p class="indented">4. We knowingly and voluntarily agree on the terms of this Parenting Plan. Each of us affirms 
-    that the information we have provided in this Plan is true and correct. </p>
-<br/><br/>
+<p class="indented">
+    4. We knowingly and voluntarily agree on the terms of this Parenting Plan. Each of us affirms 
+    that the information we have provided in this Plan is true and correct.
+</p>
+<br />
+<br />
 <div class="row-fluid">
     <div class="span5">
-        <hr/>
+        <hr />
         <span>Plaintiff: {{parenting.ParticipantViewModel.PlaintiffsName}}</span>
-    </div>    
+    </div>
     <div class="span5 offset1">
-        <hr/>
+        <hr />
         <span>Defendant: {{parenting.ParticipantViewModel.DefendantsName}}</span>
-    </div>    
+    </div>
 </div>
 <div class="row-fluid" style="text-align: center;">
-    <br/><br/>
+    <br />
+    <br />
     <h2>ORDER</h2>
-    <br/>
+    <br />
 </div>
-<p>The Court has reviewed the foregoing Parenting Plan, and it is hereby made the order of this 
-    Court. </p>
-<p>This Order entered on _____________________________________, 20 _____ . </p><br /><br/>
+<p>
+    The Court has reviewed the foregoing Parenting Plan, and it is hereby made the order of this 
+    Court.
+</p>
+<p>This Order entered on _____________________________________, 20 _____ . </p>
+<br />
+<br />
 <div class="row-fluid">
     <div class="span5 offset5">
-        <hr/>
+        <hr />
         <p>JUDGE</p>
-        <p>DEKALB COUNTY SUPERIOR COURT</p>        
+        <p>DEKALB COUNTY SUPERIOR COURT</p>
     </div>
 </div>
 <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">

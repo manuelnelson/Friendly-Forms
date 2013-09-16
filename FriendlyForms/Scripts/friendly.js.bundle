@@ -28,6 +28,7 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Starter/Participant/participant-service.js
 ../app/Starter/Children/children-controller.js
 ../app/Starter/Children/children-service.js
+../app/Starter/Introduction/Introduction-controller.js
 ../app/Domestic/Asset/asset-controller.js
 ../app/Domestic/Asset/asset-service.js
 ../app/Domestic/Debt/debt-controller.js
@@ -114,6 +115,8 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Attorney/AttorneyPage/AttorneyPage-controller.js
 ../app/Attorney/CreateClient/CreateClient-service.js
 ../app/Attorney/CreateClient/CreateClient-controller.js
+../app/Attorney/Client/Client-service.js
+../app/Attorney/Client/Client-controller.js
 ../app/Home/home-controller.js
 ../app/menu-controller.js
 ../app/menu-service.js

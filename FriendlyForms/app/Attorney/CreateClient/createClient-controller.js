@@ -1,5 +1,5 @@
-﻿var CreateClientCtrl = ['$scope', '$routeParams', '$location', 'createClientService', 'courtService', 'headerService', 'userService',
-    function ($scope, $routeParams, $location, createClientService, courtService, headerService, userService) {
+﻿var CreateClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'courtService', 'headerService', 'userService',
+    function ($scope, $routeParams, $location, clientService, courtService, headerService, userService) {
 
     $scope.submit = function() {
         if ($scope.createClientForm.$invalid) {
@@ -20,7 +20,7 @@
                 UserId: $routeParams.userId,
                 ClientUserId: userAuth.UserId
             };
-            createClientService.clients.save(null, clientAttorney, function() {
+            clientService.clients.save(null, clientAttorney, function () {
                 courtService.courts.save(null, court, function() {
                     $location.path('/Attorney/Case/' + clientAttorney.ClientUserId);
                 });

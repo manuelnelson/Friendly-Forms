@@ -1,11 +1,12 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
     [Alias("Communications")]
-    public class Communication : IEntity, IFormEntity
+    public class Communication : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -20,8 +21,6 @@ namespace Models
         public int Limitations { get; set; }
         public string LimitationDetails { get; set; }
         public int Notification { get; set; }
-        public int AccessOfRights { get; set; }
-        public string AccessOfRightsDetails { get; set; }
 
         public bool IsValid()
         {
@@ -30,18 +29,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var update = (Communication)entity;
-            AllowCommunication = update.AllowCommunication;
-            Email = update.Email;
-            LimitationDetails = update.LimitationDetails;
-            Limitations = update.Limitations;
-            Other = update.Other;
-            OtherMethod = update.OtherMethod;
-            Telephone = update.Telephone;
-            UserId = update.UserId;
-            Notification = update.Notification;
-            AccessOfRights = update.AccessOfRights;
-            AccessOfRightsDetails = update.AccessOfRightsDetails;
+           throw new NotImplementedException();
         }
 
 
