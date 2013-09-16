@@ -30,9 +30,9 @@
                                 <tr ng-repeat="client in clients">
                                     <td><button class="btn btn-primary" ng-click="openCase(client)">Open</button></td>
                                     <td>{{client.Name}}</td>
-                                    <!--                                    <td>{{client.Number}}</td>-->
+                                    <td>{{client.CaseNumber}}</td>
                                     <td>{{client.Date}}</td>
-                                    <td><button class="btn btn-primary" ng-click="archive(client)">Archive</button></td>
+                                    <td><button class="btn btn-primary" ng-click="archiveClient(client)">Archive</button></td>
                                 </tr>
                             </tbody>
                         </table>

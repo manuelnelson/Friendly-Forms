@@ -39,7 +39,7 @@ namespace Models
         public bool FridayParent { get; set; }
         public bool SaturdayParent { get; set; }
         public bool SundayParent { get; set; }
-        public bool AnyAdditionalProvisions { get; set; }
+        public int AnyAdditionalProvisions { get; set; }
         public string AdditionalProvisions { get; set; }
 
         [NotMapped]
@@ -47,6 +47,7 @@ namespace Models
         public virtual string BeginDateString
         {
             get { return BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
+            set{}
         }
 
         public bool IsValid()

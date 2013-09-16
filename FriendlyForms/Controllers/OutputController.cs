@@ -48,7 +48,7 @@ namespace FriendlyForms.Controllers
                 config.Header.SetHtmlContent(headerUrl);
             }
             config.Footer.SetFont(new Font("Times New Roman", 8F, FontStyle.Regular));
-            config.Footer.SetTexts(participants.PlaintiffsName + " Initials_______", @"[page] of [topage]", participants.DefendantsName + " Initials________");
+            config.Footer.SetTexts(participants.PlaintiffsName + " Initials_______ <br> Test", @"[page] of [topage]", participants.DefendantsName + " Initials________");
             var pdfBuf = _synchronizedPechkin.Convert(config, fullHtml);
             if (!name.Contains(".pdf"))
             {

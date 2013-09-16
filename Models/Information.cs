@@ -1,10 +1,11 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using ServiceStack.DataAnnotations;
 
 
 namespace Models
 {
-    public class Information : IEntity, IFormEntity
+    public class Information : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
@@ -12,6 +13,7 @@ namespace Models
         [Ignore]
         public virtual User User { get; set; }
         public int InformationAccess { get; set; }
+        public string AccessOfRightsDetails { get; set; }
 
         public bool IsValid()
         {
@@ -20,9 +22,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var update = (Information) entity;
-            UserId = update.UserId;
-            InformationAccess = update.InformationAccess;
+            throw new NotImplementedException();
         }
     }
 }

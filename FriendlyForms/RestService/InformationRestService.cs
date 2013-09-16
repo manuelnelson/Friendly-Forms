@@ -19,6 +19,8 @@ namespace FriendlyForms.RestService
         public long UserId { get; set; }
         [DataMember]
         public int InformationAccess { get; set; }
+        [DataMember]
+        public string AccessOfRightsDetails { get; set; }
     }
 
     [DataContract]

@@ -14,6 +14,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Starter/Court/user/:userId', { caseInsensitiveMatch: true, controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
         when('/Starter/Participant/user/:userId', { caseInsensitiveMatch: true, controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
         when('/Starter/Children/user/:userId', { caseInsensitiveMatch: true, controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
+        when('/Starter/Introduction/user/:userId', { caseInsensitiveMatch: true, controller: IntroductionCtrl, templateUrl: '/app/Starter/Introduction/Introduction.html' }).
         when('/Domestic/Asset/user/:userId', { caseInsensitiveMatch: true, controller: AssetCtrl, templateUrl: '/app/Domestic/Asset/asset.html' }).
         when('/Domestic/Debt/user/:userId', { caseInsensitiveMatch: true, controller: DebtCtrl, templateUrl: '/app/Domestic/Debt/debt.html' }).
         when('/Domestic/HealthInsurance/user/:userId', { caseInsensitiveMatch: true, controller: HealthInsuranceCtrl, templateUrl: '/app/Domestic/HealthInsurance/healthInsurance.html' }).
@@ -57,6 +58,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Administrator/ClientCases/User/:userId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
         when('/Attorney/AttorneyPage/Attorney/:userId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
         when('/Attorney/CreateClient/Attorney/:userId', { caseInsensitiveMatch: true, controller: CreateClientCtrl, templateUrl: '/app/Attorney/CreateClient/CreateClient.html' }).
+        when('/Client/:userId', { caseInsensitiveMatch: true, controller: ClientCtrl, templateUrl: '/app/Attorney/Client/Client.html' }).
         when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
