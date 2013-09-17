@@ -123,6 +123,10 @@
     <Compile Include="Migrations\201309161440397_MoveAccessDetailsToInformation.Designer.cs">
       <DependentUpon>201309161440397_MoveAccessDetailsToInformation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201309162156572_AddNotifications.cs" />
+    <Compile Include="Migrations\201309162156572_AddNotifications.Designer.cs">
+      <DependentUpon>201309162156572_AddNotifications.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AttorneyClientOrmLiteRepository.cs" />
@@ -280,6 +284,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201309161440397_MoveAccessDetailsToInformation.resx">
       <DependentUpon>201309161440397_MoveAccessDetailsToInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201309162156572_AddNotifications.resx">
+      <DependentUpon>201309162156572_AddNotifications.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

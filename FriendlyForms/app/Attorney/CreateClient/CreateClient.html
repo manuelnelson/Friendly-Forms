@@ -12,7 +12,7 @@
                             Provide the client's court case number below.               
                         </label>
                         <div class="control-group">
-                            <input ui-jq="popover" data-content="Your case number can be found XXXX." name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number*" type="text" value="" required>
+                            <input name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number*" type="text" value="" required>
                             <div ng-show="createClientForm.CaseNumber.$dirty && createClientForm.CaseNumber.$invalid || (showErrors && createClientForm.CaseNumber.$invalid)">
                                 <span class="form-error" ng-show="createClientForm.CaseNumber.$error.required">Case Number is required</span>
                                 <span class="form-error" ng-show="createClientForm.CaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
@@ -62,7 +62,7 @@
                                 <span class="form-error" ng-show="createClientForm.PrimaryEmail.$error.required">This field is required.</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary" ng-click="submit()">Register</button>
+                        <button class="btn btn-primary">Register</button>
                     </div>
                 </div>
             </div>

@@ -40,7 +40,7 @@
                         <div class="control-group" ng-show="holiday.Thanksgiving == 1">
                             <label class="form-question">
                                 At the time of</label>
-                            <input ui-jq="timepicker" class="input-small" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ThanksgivingTime" name="ThanksgivingTime" placeholder="hh:mm am/pm" type="text" value="">
+                            <input ui-jq="timepicker" class="input-small" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ThanksgivingTime" name="ThanksgivingTime" placeholder="hh:mm am/pm" type="text" value="">
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.ThanksgivingTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ThanksgivingTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
@@ -72,7 +72,7 @@
                         <div class="control-group" ng-show="holiday.Christmas == 2 || holiday.Christmas == 3 || holiday.Christmas == 4">
                             <label class="form-question">
                                 At the time of</label>
-                            <input ui-jq="timepicker" class="input-small" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ChristmasTime" name="ChristmasTime" placeholder="hh:mm am/pm" type="text" value="">
+                            <input ui-jq="timepicker" class="input-small" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ChristmasTime" name="ChristmasTime" placeholder="hh:mm am/pm" type="text" value="">
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.ChristmasTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ChristmasTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
@@ -113,7 +113,7 @@
                             Summer vacation begins
                             <input class="input-mini inline" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
                             days after the last day of school at
-                            <input ui-jq="timepicker" class="input-small inline" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value="">
+                            <input ui-jq="timepicker" class="input-small inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value="">
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.required">The field is required</span>
@@ -128,7 +128,7 @@
                             Summer vacation ends 
                             <input class="input-mini inline" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
                             days prior to the first day of school at
-                            <input ui-jq="timepicker" class="input-small inline" ng-pattern="/^(1[012]|0[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value="">
+                            <input ui-jq="timepicker" class="input-small inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value="">
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.required">The field is required</span>

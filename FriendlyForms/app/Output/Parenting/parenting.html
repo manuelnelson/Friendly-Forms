@@ -46,14 +46,13 @@
     <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 3" class="indented">The cost of supervision will be shared equally.</p>
 </div>
 <h2>Access to Records and Information</h2>
-<p ng-show="parenting.InformationViewModel.InformationAccess == 1" class="indented">Only the father will be able to get information about the children, (e.g. doctor's records and school reports), directly from the doctor's office or school.</p>
-<p ng-show="parenting.InformationViewModel.InformationAccess == 2" class="indented">Only the mother will be able to get information about the children, (e.g. doctor's records and school reports), directly from the doctor's office or school.</p>
 <p ng-show="parenting.InformationViewModel.InformationAccess == 3" class="indented">
     Both parents are entitled to access to all of the child(ren)’s records and information, including, but 
 not limited to, education, health, extracurricular activities, and religious communications. 
 Designation as a non-custodial parent does not affect a parent’s right to equal access to these 
 records.
 </p>
+<p ng-show="parenting.InformationViewModel.InformationAccess == 1 || parenting.InformationViewModel.InformationAccess == 2" class="indented">The following limitations on access rights applies: {{parenting.InformationViewModel.AccessOfRightsDetails}}.</p>
 <div class="row-fluid">
     <h2>Day-To-Day Decisions</h2>
     <p class="indented">
@@ -94,14 +93,14 @@ records.
             <span ng-show="childDecision.Decisions.ExtraCurricular == 3">Both</span>
             <span ng-show="childDecision.Decisions.ExtraCurricular == 4">N/A</span>
             <br />
-            <div ng-repeat="extraDecision in childDecision.ExtraDecisions">
+            <span ng-repeat="extraDecision in childDecision.ExtraDecisions">
                 {{extraDecision.Description}}:  
                 <span ng-show="extraDecision.DecisionMaker == 1">Father</span>
                 <span ng-show="extraDecision.DecisionMaker == 2">Mother</span>
                 <span ng-show="extraDecision.DecisionMaker == 3">Both</span>
                 <span ng-show="extraDecision.DecisionMaker == 4">N/A</span>
                 <br />
-            </div>
+            </span>
         </p>
         <hr />
     </div>
@@ -165,8 +164,8 @@ records.
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">parents will alfternate weekends for visitation.</span>
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">For purposes of this parenting plan, the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
 
-    A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.PickupLocation}} The weekend ends on 
-    {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}
+    A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up at {{parenting.ScheduleViewModel.PickupLocation}}. The weekend ends on 
+    {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off at {{parenting.ScheduleViewModel.DropOffLocation}}.
 </p>
 <div ng-show="parenting.ScheduleViewModel.Weekdays == 1">
     <p class="indented">

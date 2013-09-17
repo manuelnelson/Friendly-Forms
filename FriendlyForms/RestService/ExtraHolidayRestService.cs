@@ -64,14 +64,12 @@ namespace FriendlyForms.RestService
         public object Post(ReqExtraHoliday request)
         {
             var extraHoliday = request.TranslateTo<ExtraHoliday>();
-            extraHoliday.UserId = Convert.ToInt32(UserSession.CustomId);
             ExtraHolidayService.Add(extraHoliday);
             return extraHoliday;
         }
         public object Put(ReqExtraHoliday request)
         {
             var extraHoliday = request.TranslateTo<ExtraHoliday>();
-            extraHoliday.UserId = Convert.ToInt32(UserSession.CustomId);
             ExtraHolidayService.Update(extraHoliday);
             return new RespExtraHolidayPost();
         }

@@ -61,7 +61,7 @@
         }
         $.jStorage.deleteKey($scope.path);
         $scope.holiday.UserId = $routeParams.userId;
-        $scope.holiday.ChildId = $routeParams.childId;
+        $scope.holiday.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
             holidayService.holidays.save(null, $scope.holiday, function () {
             });

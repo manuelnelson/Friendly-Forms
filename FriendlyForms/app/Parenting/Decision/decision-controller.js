@@ -37,7 +37,7 @@
             return;
         }
         $scope.showExtraErrors = false;
-        $scope.extraDecision.ChildId = $routeParams.childId;
+        $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;;
         decisionService.extraDecisions.save(null, $scope.extraDecision, function(data) {
             $scope.extraDecisions.push(data);
             $scope.extraDecision.DecisionMaker = -1;
@@ -56,7 +56,7 @@
         }
         $.jStorage.deleteKey($scope.path);
         $scope.decision.UserId = $routeParams.userId;
-        $scope.decision.ChildId = $routeParams.childId;
+        $scope.decision.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
             decisionService.decisions.save(null, $scope.decision, function () {
             });

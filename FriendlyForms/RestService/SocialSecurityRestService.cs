@@ -48,7 +48,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqSocialSecurity request)
         {
             var socialSecurity = request.TranslateTo<SocialSecurity>();
-            socialSecurity.UserId = Convert.ToInt32(UserSession.CustomId);
             SocialSecurityService.Add(socialSecurity);
             return new RespSocialSecurity
                 {
@@ -58,7 +57,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqSocialSecurity request)
         {
             var socialSecurity = request.TranslateTo<SocialSecurity>();
-            socialSecurity.UserId = Convert.ToInt32(UserSession.CustomId);
             SocialSecurityService.Update(socialSecurity);
             return new RespSocialSecurity();
         }

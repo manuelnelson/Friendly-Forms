@@ -27,7 +27,7 @@
                         <div class="control-group" ng-show="information.InformationAccess == 1 || information.InformationAccess == 2">
                             <label class="form-question">
                                How should access to the rights of information for either parent be restricted?</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain Here" rows="2"></textarea>
+                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain any restrictions for each parent" rows="2"></textarea>
                             <div ng-show="informationForm.AccessOfRightsDetails.$dirty && informationForm.AccessOfRightsDetails.$invalid  || (showErrors && informationForm.AccessOfRightsDetails.$invalid)">
                                 <span class="form-error" ng-show="informationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>

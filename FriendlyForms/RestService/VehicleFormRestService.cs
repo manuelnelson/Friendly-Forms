@@ -44,7 +44,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqVehicleForm request)
         {
             var vehicleForm = request.TranslateTo<VehicleForm>();
-            vehicleForm.UserId = Convert.ToInt32(UserSession.CustomId);
             VehicleFormService.Add(vehicleForm);
             return new RespVehicleForm()
                 {
@@ -54,7 +53,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqVehicleForm request)
         {
             var vehicleForm = request.TranslateTo<VehicleForm>();
-            vehicleForm.UserId = Convert.ToInt32(UserSession.CustomId);
             VehicleFormService.Update(vehicleForm);
             return new RespVehicleForm();
         }    

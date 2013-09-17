@@ -61,14 +61,12 @@ namespace FriendlyForms.RestService
         public object Post(ReqExtraDecisions request)
         {
             var extraDecisions = request.TranslateTo<ExtraDecisions>();
-            extraDecisions.UserId = Convert.ToInt32(UserSession.CustomId);
             ExtraDecisionsService.Add(extraDecisions);
             return extraDecisions;
         }
         public object Put(ReqExtraDecisions request)
         {
             var extraDecisions = request.TranslateTo<ExtraDecisions>();
-            extraDecisions.UserId = Convert.ToInt32(UserSession.CustomId);
             ExtraDecisionsService.Update(extraDecisions);
             return new RespExtraDecisionsPost();
         }

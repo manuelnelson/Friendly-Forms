@@ -46,7 +46,7 @@ namespace Models
         [Ignore]
         public virtual string BeginDateString
         {
-            get { return BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
+            get { return BeginDate.HasValue ? BeginDate.Value.ToString("WeekendDayStart/dd/yyyy") : "Not Provided"; }
             set{}
         }
 
@@ -57,31 +57,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var update = (Schedule)entity;
-            BeginDate = update.BeginDate;
-            DetermineBeginDate = update.DetermineBeginDate;
-            DropOffLocation = update.DropOffLocation;
-            DroppedOff = update.DroppedOff;
-            CustodianWeekend = update.CustodianWeekend;
-            NonCustodianWeekend = update.NonCustodianWeekend;
-            PickedUp = update.PickedUp;
-            PickupLocation = update.PickupLocation;
-            UserId = update.UserId;
-            Weekdays = update.Weekdays;
-            CustodianWeekendOther = update.CustodianWeekendOther;
-            NonCustodianWeekendOther= update.NonCustodianWeekendOther;
-            WeekendDayStart = update.WeekendDayStart;
-            WeekendDayEnd = update.WeekendDayEnd;
-            WeekdayDropoff = update.WeekdayDropoff;
-            WeekdayDropoffLocation = update.WeekdayDropoffLocation;
-            WeekdayPickup = update.WeekdayPickup;
-            WeekdayPickupLocation = update.WeekdayPickupLocation;
-            MondayParent = update.MondayParent;
-            TuesdayParent = update.TuesdayParent;
-            WednesdayParent = update.WednesdayParent;
-            ThursdayParent = update.ThursdayParent;
-            AdditionalProvisions = update.AdditionalProvisions;
-            FridayParent = update.FridayParent;
+            throw new NotImplementedException();
         }
     }
 }

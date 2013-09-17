@@ -50,18 +50,16 @@ namespace FriendlyForms.RestService
 
             public object Post(PreexistingSupportFormDto request)
             {
-                var PreexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
-                PreexistingSupportFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
-                PreexistingSupportFormService.Add(PreexistingSupportFormEntity);
-                return PreexistingSupportFormEntity;
+                var preexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
+                PreexistingSupportFormService.Add(preexistingSupportFormEntity);
+                return preexistingSupportFormEntity;
             }
 
             public object Put(PreexistingSupportFormDto request)
             {
-                var PreexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
-                PreexistingSupportFormEntity.UserId = Convert.ToInt32(UserSession.CustomId);
-                PreexistingSupportFormService.Update(PreexistingSupportFormEntity);
-                return PreexistingSupportFormEntity;
+                var preexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
+                PreexistingSupportFormService.Update(preexistingSupportFormEntity);
+                return preexistingSupportFormEntity;
             }
 
             public void Delete(PreexistingSupportFormListDto request)
@@ -71,8 +69,8 @@ namespace FriendlyForms.RestService
 
             public void Delete(PreexistingSupportFormDto request)
             {
-                var PreexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
-                PreexistingSupportFormService.Delete(PreexistingSupportFormEntity);
+                var preexistingSupportFormEntity = request.TranslateTo<PreexistingSupportForm>();
+                PreexistingSupportFormService.Delete(preexistingSupportFormEntity);
             }
         }
 

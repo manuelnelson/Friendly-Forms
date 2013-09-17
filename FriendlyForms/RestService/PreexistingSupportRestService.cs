@@ -58,14 +58,12 @@ namespace FriendlyForms.RestService
         public object Post(ReqPreexistingSupport request)
         {
             var preexistingSupportEntity = request.TranslateTo<PreexistingSupport>();
-            preexistingSupportEntity.UserId = Convert.ToInt32(UserSession.CustomId);
             PreexistingSupportService.Add(preexistingSupportEntity);
             return preexistingSupportEntity;
         }
         public object Put(ReqPreexistingSupport request)
         {
             var preexistingSupport = request.TranslateTo<PreexistingSupport>();
-            preexistingSupport.UserId = Convert.ToInt32(UserSession.CustomId);
             PreexistingSupportService.Update(preexistingSupport);
             return preexistingSupport;
         }

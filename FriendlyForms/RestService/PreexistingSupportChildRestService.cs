@@ -64,7 +64,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqPreexistingSupportChild request)
         {
             var preexistingSupportChild = request.TranslateTo<PreexistingSupportChild>();
-            preexistingSupportChild.UserId = Convert.ToInt32(UserSession.CustomId);
             PreexistingSupportChildService.Update(preexistingSupportChild);
             return new RespPreexistingSupportChild();
         }

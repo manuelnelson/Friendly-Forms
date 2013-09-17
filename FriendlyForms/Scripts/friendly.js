@@ -1,4 +1,4 @@
-;/*!
+﻿;/*!
  * jQuery JavaScript Library v1.7.2
  * http://jquery.com/
  *
@@ -10998,7 +10998,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         }
 
         , formatTime: function (hour, minute, second, meridian) {
-            hour = hour < 10 ? '0' + hour : hour;
+            //hour = hour < 10 ? '0' + hour : hour;
             minute = minute < 10 ? '0' + minute : minute;
             second = second < 10 ? '0' + second : second;
 
@@ -36227,11 +36227,11 @@ FormsApp.factory('messageService', ['$location', function ($location) {
 ;var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-    $scope.court = courtService.court.get({ UserId: $routeParams.userId }, function () {
-        if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
+    $scope.courts = courtService.courts.get({ UserId: $routeParams.userId }, function () {
+        if (typeof $scope.courts.Id == 'undefined' || $scope.courts.Id == 0) {
             //see if garlic has something stored            
-            $scope.court = $.jStorage.get($scope.path);
-            if ($scope.court)
+            $scope.courts = $.jStorage.get($scope.path);
+            if ($scope.courts)
                 $scope.showErrors = true;
         }
     });
@@ -36248,15 +36248,15 @@ FormsApp.factory('messageService', ['$location', function ($location) {
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.court.UserId = $routeParams.userId;
-        if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
-            courtService.court.save(null, $scope.court, function() {
+        $scope.courts.UserId = $routeParams.userId;
+        if (typeof $scope.courts.Id == 'undefined' || $scope.courts.Id == 0) {
+            courtService.courts.save(null, $scope.courts, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
                     menuService.nextMenu();
             });
         } else {
-            courtService.court.update({ Id: $scope.court.Id }, $scope.court, function () {
+            courtService.courts.update({ Id: $scope.courts.Id }, $scope.courts, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
                     menuService.nextMenu();
@@ -36272,7 +36272,7 @@ CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'men
 ;//Todoservice
 FormsApp.factory('courtService', ['$resource', function ($resource) {
     var service = {
-        court: $resource('/api/court/:userId', { userId: '@userId' },
+        courts: $resource('/api/court/:userId', { userId: '@userId' },
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
@@ -36497,10 +36497,12 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
 ;var IntroductionCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'genericService', '$rootScope', function ($scope, $routeParams, $location, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.submit = function (noNavigate) {
+        menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
         menuService.nextMenu();
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 }];
 ;var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
@@ -37124,7 +37126,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
             return;
         }
         $scope.showExtraErrors = false;
-        $scope.extraDecision.ChildId = $routeParams.childId;
+        $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;;
         decisionService.extraDecisions.save(null, $scope.extraDecision, function(data) {
             $scope.extraDecisions.push(data);
             $scope.extraDecision.DecisionMaker = -1;
@@ -37143,7 +37145,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
         }
         $.jStorage.deleteKey($scope.path);
         $scope.decision.UserId = $routeParams.userId;
-        $scope.decision.ChildId = $routeParams.childId;
+        $scope.decision.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
             decisionService.decisions.save(null, $scope.decision, function () {
             });
@@ -37350,7 +37352,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
         }
         $.jStorage.deleteKey($scope.path);
         $scope.holiday.UserId = $routeParams.userId;
-        $scope.holiday.ChildId = $routeParams.childId;
+        $scope.holiday.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
             holidayService.holidays.save(null, $scope.holiday, function () {
             });
@@ -37922,7 +37924,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
         }
         $.jStorage.deleteKey($scope.path);
         $scope.childCare.UserId = $routeParams.userId;
-        $scope.childCare.ChildId = $routeParams.childId;
+        $scope.childCare.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
             childCareService.childCares.save(null, $scope.childCare, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38159,7 +38161,7 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
         if (!$scope.extraExpense)
             $scope.extraExpense = {};
         $scope.extraExpense.UserId = $routeParams.userId;
-        $scope.extraExpense.ChildId = $routeParams.childId;
+        $scope.extraExpense.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
             extraExpenseService.extraExpenses.save(null, $scope.extraExpense, function () {
                 callback();
@@ -38525,12 +38527,12 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             $scope.courts = result.PreexistingSupports;
     });
     $scope.addCourt = function() {
-        $scope.court.UserId = $routeParams.userId;
-        $scope.court.IsOtherParent = $routeParams.isOtherParent;
-        supportService.courts.save(null, $scope.court, function (data) {
+        $scope.courts.UserId = $routeParams.userId;
+        $scope.courts.IsOtherParent = $routeParams.isOtherParent;
+        supportService.courts.save(null, $scope.courts, function (data) {
             $scope.courts.push(data);
             $scope.courtForm.$setPristine();
-            $scope.court = '';
+            $scope.courts = '';
         });
     };
     $scope.showChildren = function(court) {
@@ -39240,7 +39242,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
             var court = {
                 UserId: userAuth.UserId,
                 County: 0,
-                CaseNumber: $scope.court.CaseNumber,
+                CaseNumber: $scope.courts.CaseNumber,
                 AuthorOfPlan: 1,
                 PlanType: 1
             };

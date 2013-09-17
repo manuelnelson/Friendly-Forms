@@ -102,7 +102,7 @@ namespace BusinessLogic
                 GrossIncome = income.CalculateTotalIncome(),
                 SelfEmploymentIncome = income.SelfIncome
             };
-            schedule.FicaIncome = (int)(schedule.SelfEmploymentIncome * .62);
+            schedule.FicaIncome = (int)(schedule.SelfEmploymentIncome * .062);
             schedule.MedicareTax = (int)(schedule.SelfEmploymentIncome * .0145);
             schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
             schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;

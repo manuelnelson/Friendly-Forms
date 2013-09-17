@@ -1,5 +1,7 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.Common.Web;
@@ -21,6 +23,7 @@ namespace FriendlyForms.RestService
             public long[] Ids { get; set; }
             public int UserAuthId { get; set; }
             public bool Verified { get; set; }
+            public string DisplayName { get; set; }
             public int? LawFirmId { get; set; }
             public string Position { get; set; }
         }
@@ -35,6 +38,11 @@ namespace FriendlyForms.RestService
                     return UserService.Get(request.Ids);
                 if(request.Id > 0)
                     return UserService.Get(request.Id);
+                if (request.LawFirmId > 0)
+                {
+                    var users = UserService.GetFiltered(x => x.LawFirmId == request.LawFirmId);
+                    return users.Select(x => x.ToUserDto()).ToList();
+                }
                 throw new HttpError(HttpStatusCode.BadRequest, "Invalid arguments supplied.");
             }
 

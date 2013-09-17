@@ -50,7 +50,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqProperty request)
         {
             var property = request.TranslateTo<Property>();
-            property.UserId = Convert.ToInt32(UserSession.CustomId);
             PropertyService.Add(property);
             return new RespProperty()
                 {
@@ -60,7 +59,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqProperty request)
         {
             var property = request.TranslateTo<Property>();
-            property.UserId = Convert.ToInt32(UserSession.CustomId);
             PropertyService.Update(property);
             return new RespProperty();
         }

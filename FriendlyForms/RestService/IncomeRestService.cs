@@ -98,7 +98,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
-            income.UserId = Convert.ToInt32(UserSession.CustomId);
             IncomeService.Add(income);
             return new RespIncome()
                 {
@@ -108,7 +107,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqIncome request)
         {
             var income = request.TranslateTo<Income>();
-            income.UserId = Convert.ToInt32(UserSession.CustomId);
             IncomeService.Update(income);
             return new RespIncome();
         }

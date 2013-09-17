@@ -57,7 +57,7 @@
         if (!$scope.extraExpense)
             $scope.extraExpense = {};
         $scope.extraExpense.UserId = $routeParams.userId;
-        $scope.extraExpense.ChildId = $routeParams.childId;
+        $scope.extraExpense.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
             extraExpenseService.extraExpenses.save(null, $scope.extraExpense, function () {
                 callback();

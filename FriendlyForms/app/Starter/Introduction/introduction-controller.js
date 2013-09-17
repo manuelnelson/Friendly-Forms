@@ -4,6 +4,7 @@
         menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
         menuService.nextMenu();
     };
-    $rootScope.currentScope = $scope;
-    genericService.refreshPage();
+    genericService.refreshPage(function () {
+        $rootScope.currentScope = $scope;
+    });
 }];

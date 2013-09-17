@@ -54,7 +54,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqResponsibility request)
         {
             var responsibility = request.TranslateTo<Responsibility>();
-            responsibility.UserId = Convert.ToInt32(UserSession.CustomId);
             ResponsibilityService.Add(responsibility);
             return new RespResponsibility
                 {
@@ -64,7 +63,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqResponsibility request)
         {
             var responsibility = request.TranslateTo<Responsibility>();
-            responsibility.UserId = Convert.ToInt32(UserSession.CustomId);
             ResponsibilityService.Update(responsibility);
             return new RespResponsibility();
         }

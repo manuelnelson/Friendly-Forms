@@ -1,7 +1,7 @@
 ﻿var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-    $scope.court = courtService.court.get({ UserId: $routeParams.userId }, function () {
+    $scope.court = courtService.courts.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
             //see if garlic has something stored            
             $scope.court = $.jStorage.get($scope.path);
@@ -24,13 +24,13 @@
         $.jStorage.deleteKey($scope.path);
         $scope.court.UserId = $routeParams.userId;
         if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
-            courtService.court.save(null, $scope.court, function() {
+            courtService.courts.save(null, $scope.court, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
                     menuService.nextMenu();
             });
         } else {
-            courtService.court.update({ Id: $scope.court.Id }, $scope.court, function () {
+            courtService.courts.update({ Id: $scope.court.Id }, $scope.courts, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
                     menuService.nextMenu();

@@ -1,6 +1,6 @@
 ﻿<div class="form-vertical wrapper" ng-controller="CreateAttorneyCtrl">
     <div class="row-fluid">
-        <form class="well form-vertical" name="registerAttorneyForm">
+        <form ng-submit="submit()" class="well form-vertical" name="registerAttorneyForm">
             <fieldset>
                 <legend>Add an Attorney</legend>
                 <label class="informative">
@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <label class="informative">
-                    The following is a list of personnel who will have online access to this Attorney Page.               
+                    The following is the login information for the attorney.               
                 </label>
                 <div class="control-group">
                     <input name="DisplayName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
@@ -54,7 +54,7 @@
                         <span class="form-error" ng-show="registerAttorneyForm.ConfirmPassword.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <button class="btn btn-primary" ng-click="submit()">Register</button>
+                <button class="btn btn-primary" >Register</button>
             </fieldset>
         </form>
     </div>

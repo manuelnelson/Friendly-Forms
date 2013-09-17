@@ -5,12 +5,6 @@
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
-        attorneyClients: $resource('/api/attorneyClients', {},
-            {
-                get: { method: 'GET', params: { format: 'json' } },
-                getList: { method: 'GET', isArray:true, params: { format: 'json' } },
-                update: { method: 'PUT', params: { format: 'json' } }
-            }),
     };
     return service;
 }]);

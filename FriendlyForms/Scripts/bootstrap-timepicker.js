@@ -413,7 +413,7 @@
         }
 
         , formatTime: function (hour, minute, second, meridian) {
-            hour = hour < 10 ? '0' + hour : hour;
+            //hour = hour < 10 ? '0' + hour : hour;
             minute = minute < 10 ? '0' + minute : minute;
             second = second < 10 ? '0' + second : second;
 

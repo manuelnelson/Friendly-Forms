@@ -46,7 +46,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqAddendum request)
         {
             var addendum = request.TranslateTo<Addendum>();
-            addendum.UserId = Convert.ToInt32(UserSession.CustomId);
             AddendumService.Add(addendum);
             return new RespAddendum()
                 {
@@ -56,7 +55,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqAddendum request)
         {
             var addendum = request.TranslateTo<Addendum>();
-            addendum.UserId = Convert.ToInt32(UserSession.CustomId);
             AddendumService.Update(addendum);
             return new RespAddendum();
         }

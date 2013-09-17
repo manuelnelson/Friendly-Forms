@@ -50,7 +50,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqDebt request)
         {
             var debt = request.TranslateTo<Debt>();
-            debt.UserId = Convert.ToInt32(UserSession.CustomId);
             DebtService.Add(debt);
             return new RespDebt()
                 {
@@ -60,8 +59,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqDebt request)
         {
             var debt = request.TranslateTo<Debt>();
-            debt.UserId = Convert.ToInt32(UserSession.CustomId);
-
             DebtService.Update(debt);
             return new RespDebt();
         }

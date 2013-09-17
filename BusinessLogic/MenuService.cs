@@ -253,7 +253,7 @@ namespace BusinessLogic
                     path = "",
                     pathIdentifier = "Starter",
                     iconClass = "icon icon-th-list",
-                    text = "Starter",
+                    text = "Preliminary Information",
                     showSubMenu = false,
                     subMenuItems = menuList
                 };

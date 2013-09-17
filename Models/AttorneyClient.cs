@@ -4,13 +4,15 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("AttorneyClients")]
+    //Determines which attorneys are tied to clients
     public class AttorneyClient : IEntity
     {
-        public long Id { get; set; }
-        //This is the attorney's UserId
-        public long UserId { get; set; }
+        [AutoIncrement]
+        public virtual long Id { get; set; }
+        public virtual long UserId { get; set; }
         [Ignore]
-        public User User { get; set; }
-        public long ClientUserId { get; set; }
+        public virtual User User { get; set; }
+        public virtual long ClientUserId { get; set; }
+        public virtual bool NotificationsEnabled { get; set; }
     }
 }

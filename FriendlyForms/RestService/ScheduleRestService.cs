@@ -96,7 +96,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqSchedule request)
         {
             var schedule = request.TranslateTo<Schedule>();
-            schedule.UserId = Convert.ToInt32(UserSession.CustomId);
             ScheduleService.Add(schedule);
             return new RespSchedule()
                 {
@@ -106,7 +105,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqSchedule request)
         {
             var schedule = request.TranslateTo<Schedule>();
-            schedule.UserId = Convert.ToInt32(UserSession.CustomId);
             ScheduleService.Update(schedule);
             return new RespSchedule();
         }

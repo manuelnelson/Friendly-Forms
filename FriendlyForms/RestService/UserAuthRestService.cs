@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
-using DataInterface;
 using FriendlyForms.Models;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.Common.Web;
 using ServiceStack.FluentValidation;
-using ServiceStack.OrmLite;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
@@ -190,6 +188,7 @@ namespace FriendlyForms.RestService
         public AssignRolesService AssignRolesService { get; set; }
         public IUserAuthRepository UserAuthRepository { get; set; }
         public IUserService UserService { get; set; }
+
         #region Get
         public object Get(UserAuthRequest request)
         {
@@ -200,13 +199,10 @@ namespace FriendlyForms.RestService
             }
             if (request.UserId != 0)
             {
-                userAuthId = UserService.Get(request.UserId).UserAuthId.ToString();
+                userAuthId = UserService.Get(request.UserId).UserAuthId.ToString(CultureInfo.InvariantCulture);
             }
             var userAuth = UserAuthRepository.GetUserAuth(userAuthId).TranslateTo<UserAuthResponse>();
-            if (request.UserId == 0)
-                userAuth.CustomId = UserService.GetByUserAuthId(Convert.ToInt32(userAuthId)).Id.ToString();
-            else
-                userAuth.CustomId = request.UserId.ToString();
+            userAuth.CustomId = request.UserId == 0 ? UserService.GetByUserAuthId(Convert.ToInt32(userAuthId)).Id.ToString(CultureInfo.InvariantCulture) : request.UserId.ToString(CultureInfo.InvariantCulture);
             return userAuth;
         }
         public object Get(UserSession request)

@@ -1445,11 +1445,18 @@ namespace FriendlyForms.RestService
             schedule.AdditionalExpenses = schedule.WorkRelated + schedule.HealthInsurance;
             otherSchedule.AdditionalExpenses = otherSchedule.WorkRelated + otherSchedule.HealthInsurance;
             nonParentSchedule.AdditionalExpenses = nonParentSchedule.WorkRelated + nonParentSchedule.HealthInsurance;
+
+            var scheduleBFather = OutputService.GetScheduleB(userId, "namehere");
+            var scheduleBMother = OutputService.GetScheduleB(userId, "name", true);
+            var totalIncome = scheduleBFather.AdjustedSupport + scheduleBMother.AdjustedSupport;
+            var fatherProRata = (int) Math.Round((double) scheduleBFather.AdjustedSupport/totalIncome*100);
+            var motherProRata = 100 - fatherProRata;
+
             schedule.ProRataParents = 0;
             otherSchedule.ProRataParents = 0;
             nonParentSchedule.ProRataParents = 0;
-            schedule.ProRataAdditional = 0;
-            otherSchedule.ProRataAdditional = 0;
+            schedule.ProRataAdditional = (int)Math.Round((double)scheduleBFather.AdjustedSupport/totalIncome * schedule.AdditionalExpenses);
+            otherSchedule.ProRataAdditional = (int)Math.Round((double)scheduleBMother.AdjustedSupport / totalIncome * otherSchedule.AdditionalExpenses);
             nonParentSchedule.ProRataAdditional = 0;
             return new ScheduleDDtoResp
                 {
@@ -1476,14 +1483,14 @@ namespace FriendlyForms.RestService
                 GrossIncome = scheduleA.IncomeTotal,
                 AdjustedIncome = scheduleBFather.AdjustedSupport,
                 //Apparently this could be 14 as well? whats the logic here?
-                CombinedIncome = scheduleBFather.AdjustedSupport / totalIncome,
+                CombinedIncome = (int)Math.Round((double)scheduleBFather.AdjustedSupport / totalIncome * 100),
             };
             var cswMother = new Csw
             {
-                GrossIncome = scheduleA.IncomeTotal,
+                GrossIncome = scheduleA.OtherIncomeTotal,
                 AdjustedIncome = scheduleBMother.AdjustedSupport,
                 //Apparently this could be 14 as well? whats the logic here?
-                CombinedIncome = scheduleBMother.AdjustedSupport / totalIncome,
+                CombinedIncome = 100-cswFather.CombinedIncome,
             };
             var cswTotal = new Csw
                 {
@@ -1507,8 +1514,8 @@ namespace FriendlyForms.RestService
 
         private static Csw FinishCsw(Csw csw, Csw cswTotal, ScheduleD scheduleD, SocialSecurity socialSecurity, Health healthInsurance, bool isFather = true)
         {
-            csw.ProRataObligation = csw.CombinedIncome * cswTotal.SupportObligation;
-            csw.WorkRelatedExpenses = csw.CombinedIncome * scheduleD.ProRataAdditional;
+            csw.ProRataObligation = (int)Math.Round((double)csw.CombinedIncome/100 * cswTotal.SupportObligation);
+            csw.WorkRelatedExpenses = scheduleD.ProRataAdditional;
             csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;
             csw.AdjustedExpensesPaid = scheduleD.TotalMonthly;
             csw.PresumptiveAmount = csw.AdjustedObligation - csw.AdjustedExpensesPaid;

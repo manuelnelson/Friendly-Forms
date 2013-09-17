@@ -47,14 +47,12 @@ namespace FriendlyForms.RestService
         public object Post(ReqOtherChildren request)
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
-            otherChildren.UserId = Convert.ToInt32(UserSession.CustomId);
             OtherChildrenService.Add(otherChildren);
             return otherChildren;
         }
         public void Put(ReqOtherChildren request)
         {
             var otherChildren = request.TranslateTo<OtherChildren>();
-            otherChildren.UserId = Convert.ToInt32(UserSession.CustomId);
             OtherChildrenService.Update(otherChildren);            
         }
     }

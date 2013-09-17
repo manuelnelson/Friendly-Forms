@@ -54,7 +54,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqChild request)
         {
             var child = request.TranslateTo<Child>();
-            child.UserId = Convert.ToInt32(UserSession.CustomId);
             ChildService.Update(child);
             return null;
         }
@@ -67,7 +66,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqChild request)
         {
             var child = request.TranslateTo<Child>();
-            child.UserId = Convert.ToInt32(UserSession.CustomId);
             ChildService.Add(child);
             return new RespChild()
             {

@@ -55,7 +55,7 @@
         }
         $.jStorage.deleteKey($scope.path);
         $scope.childCare.UserId = $routeParams.userId;
-        $scope.childCare.ChildId = $routeParams.childId;
+        $scope.childCare.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
             childCareService.childCares.save(null, $scope.childCare, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');

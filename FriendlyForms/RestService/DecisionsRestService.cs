@@ -55,15 +55,12 @@ namespace FriendlyForms.RestService
         public object Post(ReqDecisions request)
         {
             var decisions = request.TranslateTo<Decisions>();
-            decisions.UserId = Convert.ToInt32(UserSession.CustomId);
-
             DecisionsService.Add(decisions);
             return new RespDecisions();
         }
         public object Put(ReqDecisions request)
         {
             var decisions = request.TranslateTo<Decisions>();
-            decisions.UserId = Convert.ToInt32(UserSession.CustomId);
             DecisionsService.Update(decisions);
             return new RespDecisions();
         }

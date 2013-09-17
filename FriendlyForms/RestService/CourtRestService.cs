@@ -4,13 +4,12 @@ using BusinessLogic.Contracts;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
     [DataContract]
-    [Route("/Court/")]
+    [Route("/courts/")]
     public class ReqCourt
     {
         [DataMember]
@@ -56,7 +55,6 @@ namespace FriendlyForms.RestService
         public object Post(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
-            court.UserId = Convert.ToInt32(UserSession.CustomId);
             CourtService.Add(court);
             return new RespCourt()
                 {
@@ -66,7 +64,6 @@ namespace FriendlyForms.RestService
         public object Put(ReqCourt request)
         {
             var court = request.TranslateTo<Court>();
-            court.UserId = Convert.ToInt32(UserSession.CustomId);
             CourtService.Update(court);
             return new RespCourt();
         }

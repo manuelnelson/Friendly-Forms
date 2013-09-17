@@ -52,6 +52,13 @@
             });
             return deferred.promise;
         },
+        getLawFirmUsers: function(lawFirmId) {
+            var deferred = $q.defer();
+            service.users.getList({ LawFirmId: lawFirmId }, function (data) {
+                deferred.resolve(data);
+            });
+            return deferred.promise;
+        },
     };
     return service;
 }]);

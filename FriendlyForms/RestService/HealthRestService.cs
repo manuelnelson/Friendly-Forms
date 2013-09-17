@@ -84,7 +84,6 @@ namespace FriendlyForms.RestService
             public object Post(HealthDto request)
             {
                 var healthEntity = request.TranslateTo<Health>();
-                healthEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 HealthService.Add(healthEntity);
                 return new HealthDto
                     {
@@ -95,7 +94,6 @@ namespace FriendlyForms.RestService
             public void Put(HealthDto request)
             {
                 var healthEntity = request.TranslateTo<Health>();
-                healthEntity.UserId = Convert.ToInt32(UserSession.CustomId);
                 HealthService.Update(healthEntity);                
             }
 

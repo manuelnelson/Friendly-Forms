@@ -95,7 +95,6 @@ namespace FriendlyForms.RestService
         public object Post(DeviationsDto request)
         {
             var deviationsEntity = request.TranslateTo<Deviations>();
-            deviationsEntity.UserId = Convert.ToInt32(UserSession.CustomId);
             DeviationsService.Add(deviationsEntity);
             return deviationsEntity;
         }
@@ -103,7 +102,6 @@ namespace FriendlyForms.RestService
         public object Put(DeviationsDto request)
         {
             var deviationsEntity = request.TranslateTo<Deviations>();
-            deviationsEntity.UserId = Convert.ToInt32(UserSession.CustomId);
             DeviationsService.Update(deviationsEntity);
             return deviationsEntity;
         }
