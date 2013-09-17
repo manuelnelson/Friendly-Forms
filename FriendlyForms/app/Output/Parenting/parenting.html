@@ -64,7 +64,7 @@ records.
     <h2>Major Decisions</h2>
     <p class="indented">
         The parties must confer with one another prior to any decision related to non-emergency health care, education, religion, or extra-curricular activities.  The listing below indicates who will
-        be the primary decision maker when when there is disagreement regarding the most appropriate decision. 
+        be the primary decision maker when there is disagreement regarding the most appropriate decision. 
     </p>
     <div ng-repeat="childDecision in parenting.ChildDecisions">
         <h3 class="indented">{{childDecision.Child.Name}}</h3>
@@ -155,13 +155,13 @@ records.
 </p>
 <p ng-show="parenting.CommunicationViewModel.Notification ==1">Each parent shall promptly notify the other parent of a change of address, phone number or cell phone number. A parent changing residence must give at least 30 days notice of the change and provide the full address of the new residence.</p>
 <h2>Parenting Time/Visitation Schedules</h2>
-<p class="indented">During the term of this parenting plan, {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent shall have at a minimum the following rights of parenting time/visitation:</p>
+<p class="indented">During the term of this parenting plan, {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation:</p>
 <p class="indented">
-    For purposes of this parenting plan, the 
-        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==2">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the first and third weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the second, fourth and fifth weekend of each month.</span>
-    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==3">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the first, third and fifth weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the second and fourth weekend of each month.</span>
-    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==4">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParent}} will have the second and fourth weekend of each month for visitation. The {{parenting.PpOutputFormHelper.CustodyInformation.Parent}} will have the first, third and fifth weekend of each month.</span>
-    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">parents will alfternate weekends for visitation.</span>
+    For purposes of this parenting plan, 
+        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==2">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the first and third weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the second, fourth and fifth weekend of each month.</span>
+    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==3">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the first, third and fifth weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the second and fourth weekend of each month.</span>
+    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==4">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the second and fourth weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the first, third and fifth weekend of each month.</span>
+    <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">the parents will alfternate weekends for visitation.</span>
     <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">For purposes of this parenting plan, the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
 
     A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up at {{parenting.ScheduleViewModel.PickupLocation}}. The weekend ends on 
@@ -169,8 +169,8 @@ records.
 </p>
 <div ng-show="parenting.ScheduleViewModel.Weekdays == 1">
     <p class="indented">
-        {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent shall have at a minimum the following rights of parenting time/visitation on weekdays which will 
-            begin at {{parenting.ScheduleViewModel.WeekdayPickup}}. The child(ren) will be picked up at {{parenting.ScheduleViewModel.WeekdayPickupLocation}}. Weekday visitation will end at {{parenting.ScheduleViewModel.WeekdayDropoff}}. The child(ren) will be dropped off at {{parenting.ScheduleViewModel.DropOffLocation}}. This shall apply for the following day(s):
+        {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation on weekdays, which will 
+            begin at {{parenting.ScheduleViewModel.WeekdayPickup}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.WeekdayPickupLocation}}. Weekday visitation will end at {{parenting.ScheduleViewModel.WeekdayDropoff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}. This shall apply for the following day(s):
     </p>
     <p ng-show="parenting.ScheduleViewModel.MondayParent" class="linehtless50">Monday</p>
     <p ng-show="parenting.ScheduleViewModel.TuesdayParent" class="linehtless50">Tuesday</p>
