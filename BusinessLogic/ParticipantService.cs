@@ -66,7 +66,7 @@ namespace BusinessLogic
             return new CustodyInformation()
                 {
                     CustodyParent = "Both parents",
-                    LegalCustodyPhrase = "The parties will share legal custody of the children."
+                    LegalCustodyPhrase = "The parties will share legal custody of the children.",
                 };
         }
     }

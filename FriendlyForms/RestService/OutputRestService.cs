@@ -271,9 +271,11 @@ namespace FriendlyForms.RestService
         [DataMember]
         public List<ChildCareWithTotals> ChildCare { get; set; }
         [DataMember]
-        public string Father { get; set; }
-        [DataMember]
-        public string Mother { get; set; }
+        public ParentNames ParentNames { get; set; }
+        //[DataMember]
+        //public string Father { get; set; }
+        //[DataMember]
+        //public string Mother { get; set; }
     }
 
     [DataContract]
@@ -892,8 +894,8 @@ namespace FriendlyForms.RestService
             var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
             var parentNames = GetParentNames(userId);
             var scheduleD = GetScheduleD(userId);
-            scheduleD.Father = parentNames.Father;
-            scheduleD.Mother = parentNames.Mother;
+            scheduleD.ParentNames = parentNames;
+            //scheduleD.Mother = parentNames.Mother;
             return scheduleD;
         }
 
@@ -908,8 +910,8 @@ namespace FriendlyForms.RestService
             var custodyInformation = ParticipantService.GetCustodyInformation(participants);
             /*-----Get Information---*/
             var lowIncome = CalculateLowIncomeDeviation(deviations, custodyInformation, cswAll, children);
-            var highIncomeFather = CalculateHighIncomeFatherDeviation(deviations);
-            var highIncomeMother = CalculateHighIncomeMotherDeviation(deviations);
+            var highIncomeFather = CalculateHighIncomeFatherDeviation(deviations, lowIncome);
+            var highIncomeMother = CalculateHighIncomeMotherDeviation(deviations, lowIncome);
             var parentNames = GetParentNames(userId);
             var totalExpenses = CalculateTotalExpenses(extraExpenses, cswAll);
             AllowableDeviation allowableDeviation;
@@ -1098,7 +1100,7 @@ namespace FriendlyForms.RestService
             return totalExpenses;
         }
 
-        private static HighIncomeDeviation CalculateHighIncomeMotherDeviation(Deviations deviations)
+        private static HighIncomeDeviation CalculateHighIncomeMotherDeviation(Deviations deviations, LowIncomeDeviation lowIncome)
         {
             var highIncomeMother = new HighIncomeDeviation
             {
@@ -1116,11 +1118,11 @@ namespace FriendlyForms.RestService
                                                highIncomeMother.LifeInsurance + highIncomeMother.Mortgage +
                                                highIncomeMother.ChildTaxCredit + highIncomeMother.OtherInsurance +
                                                highIncomeMother.NonSpecific + highIncomeMother.PermanancyPlan +
-                                               highIncomeMother.VisitationExpense;
+                                               highIncomeMother.VisitationExpense + lowIncome.ActualAmount;
             return highIncomeMother;
         }
 
-        private static HighIncomeDeviation CalculateHighIncomeFatherDeviation(Deviations deviations)
+        private static HighIncomeDeviation CalculateHighIncomeFatherDeviation(Deviations deviations, LowIncomeDeviation lowIncome)
         {
             var highIncomeFather = new HighIncomeDeviation
             {
@@ -1138,7 +1140,7 @@ namespace FriendlyForms.RestService
                                                highIncomeFather.LifeInsurance + highIncomeFather.Mortgage +
                                                highIncomeFather.ChildTaxCredit + highIncomeFather.OtherInsurance +
                                                highIncomeFather.NonSpecific + highIncomeFather.PermanancyPlan +
-                                               highIncomeFather.VisitationExpense;
+                                               highIncomeFather.VisitationExpense + lowIncome.ActualAmount;
             return highIncomeFather;
         }
 
@@ -1449,15 +1451,24 @@ namespace FriendlyForms.RestService
             var scheduleBFather = OutputService.GetScheduleB(userId, "namehere");
             var scheduleBMother = OutputService.GetScheduleB(userId, "name", true);
             var totalIncome = scheduleBFather.AdjustedSupport + scheduleBMother.AdjustedSupport;
-            var fatherProRata = (int) Math.Round((double) scheduleBFather.AdjustedSupport/totalIncome*100);
-            var motherProRata = 100 - fatherProRata;
 
-            schedule.ProRataParents = 0;
-            otherSchedule.ProRataParents = 0;
+            schedule.ProRataParents = (int)Math.Round((double)scheduleBFather.AdjustedSupport / totalIncome * 100);
+            otherSchedule.ProRataParents = 100 - schedule.ProRataParents;
             nonParentSchedule.ProRataParents = 0;
             schedule.ProRataAdditional = (int)Math.Round((double)scheduleBFather.AdjustedSupport/totalIncome * schedule.AdditionalExpenses);
             otherSchedule.ProRataAdditional = (int)Math.Round((double)scheduleBMother.AdjustedSupport / totalIncome * otherSchedule.AdditionalExpenses);
             nonParentSchedule.ProRataAdditional = 0;
+
+            totalScheduleD.WorkRelated = schedule.WorkRelated + otherSchedule.WorkRelated +
+                                         nonParentSchedule.WorkRelated;
+            totalScheduleD.HealthInsurance = schedule.HealthInsurance + otherSchedule.HealthInsurance +
+                                             nonParentSchedule.HealthInsurance;
+            totalScheduleD.AdditionalExpenses = schedule.AdditionalExpenses + otherSchedule.AdditionalExpenses +
+                                                nonParentSchedule.AdditionalExpenses;
+            totalScheduleD.ProRataParents = schedule.ProRataParents + otherSchedule.ProRataParents +
+                                            nonParentSchedule.ProRataParents;
+            totalScheduleD.ProRataAdditional = schedule.ProRataAdditional + otherSchedule.ProRataAdditional +
+                                               nonParentSchedule.ProRataAdditional;
             return new ScheduleDDtoResp
                 {
                 FatherScheduleD = schedule,
@@ -1516,16 +1527,16 @@ namespace FriendlyForms.RestService
         {
             csw.ProRataObligation = (int)Math.Round((double)csw.CombinedIncome/100 * cswTotal.SupportObligation);
             csw.WorkRelatedExpenses = scheduleD.ProRataAdditional;
-            csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;
+            csw.AdjustedObligation = csw.ProRataObligation - csw.WorkRelatedExpenses;
             csw.AdjustedExpensesPaid = scheduleD.TotalMonthly;
-            csw.PresumptiveAmount = csw.AdjustedObligation - csw.AdjustedExpensesPaid;
+            csw.PresumptiveAmount = csw.ProRataObligation + csw.WorkRelatedExpenses + csw.AdjustedObligation + csw.AdjustedExpensesPaid;
             csw.DeviationsAmount = 0; //TODO: comes from scheduleE
             csw.Subtotal = csw.PresumptiveAmount + csw.DeviationsAmount;
             csw.SocialSecurity = (int)(socialSecurity.Amount ?? 0.0);
             csw.FinalAmount = csw.SocialSecurity > csw.Subtotal
                                         ? csw.SocialSecurity
                                         : csw.Subtotal - csw.SocialSecurity;
-            csw.UninsuredExpenses = (int)(isFather ? healthInsurance.FathersHealthAmount ?? 0.0 : healthInsurance.MothersHealthAmount ?? 0.0);
+            csw.UninsuredExpenses = (int)(isFather ? healthInsurance.FathersHealthPercentage ?? 0.0 : healthInsurance.MothersHealthPercentage ?? 0.0);
             return csw;
         }
 
@@ -1552,7 +1563,7 @@ namespace FriendlyForms.RestService
         #endregion
     }
 
-    internal class ParentNames
+    public class ParentNames
     {
         public string Father { get; set; }
         public string Mother { get; set; }
