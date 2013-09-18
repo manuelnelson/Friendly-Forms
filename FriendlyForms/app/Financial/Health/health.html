@@ -44,10 +44,10 @@
                                     Are any other health insurance beneficiaries included in the cost of premiums other than the child(ren) in this action?</label>
                                 <label class="radio">
                                     Yes
-                                    <input required ng-model="health.Prorate" name="Prorate" type="radio" value="1"></label>
+                                    <input ng-model="health.Prorate" name="Prorate" type="radio" value="1"></label>
                                 <label class="radio">
                                     No
-                                    <input required ng-model="health.Prorate" name="Prorate" type="radio" value="2"></label>
+                                    <input ng-model="health.Prorate" name="Prorate" type="radio" value="2"></label>
                                 <div ng-show="healthForm.Prorate.$dirty && healthForm.Prorate.$invalid  || (showErrors && healthForm.Prorate.$invalid)">
                                     <span class="form-error" ng-show="healthForm.Prorate.$error.required">This field is required</span>
                                 </div>

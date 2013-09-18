@@ -17,11 +17,11 @@
             $scope.otherChildren = data;
         }
         if (typeof $scope.otherChildren !== 'undefined' && $scope.otherChildren !== null && $scope.otherChildren.Id > 0) {
-            otherChildService.otherChild.get({ OtherChildrenId: $routeParams.userId }, function (data) {
-                if (data.OtherChildren.length == 0)
+            otherChildService.otherChild.get({ OtherChildrenId: data.Id }, function (result) {
+                if (result.OtherChildren.length == 0)
                     $scope.children = [];
                 else
-                    $scope.children = data.OtherChildren;
+                    $scope.children = result.OtherChildren;
             });
         } else {
             $scope.children = [];

@@ -30,7 +30,7 @@
                     menuService.nextMenu();
             });
         } else {
-            courtService.courts.update({ Id: $scope.court.Id }, $scope.courts, function () {
+            courtService.courts.update({ Id: $scope.court.Id }, $scope.court, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 if (!noNavigate)
                     menuService.nextMenu();
