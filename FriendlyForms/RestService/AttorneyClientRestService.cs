@@ -25,7 +25,8 @@ namespace FriendlyForms.RestService
             public long UserId { get; set; }
             public long ClientUserId { get; set; }
             public string CaseNumber { get; set; }
-            public bool NotificationsEnabled { get; set; }
+            public bool ChangeNotification { get; set; }
+            public bool PrintNotification { get; set; }
         }
         //Retrieves Attorneys (or their underlings) who have access to a Client
         [Route("/AttorneyClients/attorneys", "POST")]
@@ -40,7 +41,8 @@ namespace FriendlyForms.RestService
             public long UserId { get; set; }
             public long ClientUserId { get; set; }
             public string AttorneyName { get; set; }
-            public bool NotificationsEnabled { get; set; }
+            public bool ChangeNotification { get; set; }
+            public bool PrintNotification { get; set; }
         }
 
         public class AttorneyClientsService : Service
@@ -91,7 +93,7 @@ namespace FriendlyForms.RestService
             {
                 var attorneyClientEntity = request.TranslateTo<AttorneyClient>();
                 AttorneyClientService.Add(attorneyClientEntity);
-                return attorneyClientEntity;
+                return attorneyClientEntity.ToClientDto();
             }
 
             public object Put(ClientDto request)

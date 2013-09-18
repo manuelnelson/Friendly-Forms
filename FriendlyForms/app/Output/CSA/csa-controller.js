@@ -4,8 +4,8 @@
         $scope.csa = data;
         $timeout(function () {
             var html = $('#main-content').html();
-            html = html.replace(/<form.*>/, "");
-            html = html.replace(/<input.*>/g, "");
+            html = html.replace(/<form[^>]*?>([\s\S]*)<\/form>/, "");
+            //html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ChildSupportAddendum');

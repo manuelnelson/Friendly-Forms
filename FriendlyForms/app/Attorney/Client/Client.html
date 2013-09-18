@@ -24,7 +24,12 @@
                     <p>Who will receive notification of changes to the form?</p>
                     <label class="checkbox inline" ng-repeat="person in authorizedPeople">
                         {{person.AttorneyName}}                        
-                        <input ng-model="person.NotificationsEnabled" class="inline" type="checkbox" ng-click="notify($event,person)" />
+                        <input ng-model="person.ChangeNotification" class="inline" type="checkbox" ng-click="notify(person)" />
+                    </label>
+                    <p style="margin-top: 15px;">Who will receive print notification of a form? This notification fires when the client prints a form. This is an indicator that the client may have completed that particular form.</p>
+                    <label class="checkbox inline" ng-repeat="person in authorizedPeople">
+                        {{person.AttorneyName}}                        
+                        <input ng-model="person.PrintNotification" class="inline" type="checkbox" ng-click="notify(person)" />
                     </label>
                     <br/>
                     <hr style="border-top: 1px solid #ccc;border-bottom: 0;"/>
@@ -32,7 +37,7 @@
                     <p>Who has access to this client?</p>
                     <label class="checkbox inline" ng-repeat="user in lawFirmUsers">
                         {{user.DisplayName}}                        
-                        <input ng-model="user.hasAccess" class="inline" type="checkbox" ng-click="allowAccess($event,user)" />
+                        <input ng-model="user.hasAccess" class="inline" type="checkbox" ng-click="allowAccess(user)" />
                     </label>
                 </div>
             </div>

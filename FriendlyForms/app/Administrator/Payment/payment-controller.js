@@ -11,7 +11,7 @@
                     UserName: userData.UserName,
                     Roles: ['FirmAdmin', 'Lawyer'],
                 }, function () {
-                    $location.path('/Administration/ClientCases/' + userId);
+                    $location.path('/Administrator/ClientCases/User/' + userId);
                 });
             });
         };

@@ -13,6 +13,7 @@ namespace Models
         [Ignore]
         public virtual User User { get; set; }
         public virtual long ClientUserId { get; set; }
-        public virtual bool NotificationsEnabled { get; set; }
+        public virtual bool ChangeNotification { get; set; }
+        public virtual bool PrintNotification { get; set; }
     }
 }

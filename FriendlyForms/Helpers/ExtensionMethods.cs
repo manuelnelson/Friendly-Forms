@@ -12,23 +12,15 @@ namespace FriendlyForms.Helpers
     {
         public static List<AttorneyClientRestService.ClientDto> ToClientDto(this List<AttorneyClient> attorneyClients)
         {
-            var clientIds = attorneyClients.Select(x => x.ClientUserId);
             var courtService = EndpointHost.AppHost.TryResolve<ICourtService>();
-            var courts = courtService.Get(clientIds);
-            var clientDtos = attorneyClients.Select(attorneyClient => new AttorneyClientRestService.ClientDto()
-            {
-                CaseNumber = courts.First(x => x.UserId == attorneyClient.ClientUserId).CaseNumber,
-                Id = attorneyClient.Id,
-                ClientUserId = attorneyClient.ClientUserId,
-                UserId = attorneyClient.UserId,
-            }).ToList();
-            return clientDtos;
+            return attorneyClients.Select(attorneyClient => attorneyClient.ToClientDto(courtService)).ToList();
         }
 
-        public static AttorneyClientRestService.ClientDto ToClientDto(this AttorneyClient attorneyClient)
+        public static AttorneyClientRestService.ClientDto ToClientDto(this AttorneyClient attorneyClient, ICourtService courtService = null)
         {
-            var courtService = EndpointHost.AppHost.TryResolve<ICourtService>();
-            var court = courtService.Get(attorneyClient.ClientUserId);
+            if (courtService == null)
+                courtService = EndpointHost.AppHost.TryResolve<ICourtService>();
+            var court = courtService.GetByUserId(attorneyClient.ClientUserId) as Court;
             var attorneyClientDto = new AttorneyClientRestService.ClientDto
             {
                 CaseNumber = court.CaseNumber,
@@ -59,7 +51,8 @@ namespace FriendlyForms.Helpers
                 ClientUserId = attorneyClient.ClientUserId,
                 UserId = attorneyClient.UserId,
                 AttorneyName = userAuth.DisplayName,
-                NotificationsEnabled = attorneyClient.NotificationsEnabled
+                PrintNotification = attorneyClient.PrintNotification,
+                ChangeNotification = attorneyClient.ChangeNotification
             };
             return attorneyDto;
         }
@@ -67,7 +60,6 @@ namespace FriendlyForms.Helpers
         {
             if (userAuthRepository == null)
                 userAuthRepository = EndpointHost.AppHost.TryResolve<IUserAuthRepository>();
-            //var user = userService.Get(attorneyClient.UserId);
             var userAuth = userAuthRepository.GetUserAuth(user.UserAuthId.ToString(CultureInfo.InvariantCulture));
             var attorneyDto = new UserRestService.UserDto
             {

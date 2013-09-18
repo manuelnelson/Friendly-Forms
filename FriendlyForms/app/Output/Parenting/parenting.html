@@ -8,7 +8,7 @@
         parties to meet the requirements of OCGA Section 19-9-1. The parties agree on the terms of the plan and 
         afﬁrm the accuracy of the information provided, as shown by their signatures at the end of this order.
     </p>
-    <p ng-show="parenting.CourtViewModel.AuthorOfPlan != 2">This plan has been prepared by the judge.</p>
+    <p ng-show="parenting.CourtViewModel.AuthorOfPlan != 2">This plan has been preparded by the judge.</p>
     <p ng-show="parenting.CourtViewModel.PlanType == 1">This plan is a new plan.</p>
     <p ng-show="parenting.CourtViewModel.PlanType == 2">This plan modiﬁes an existing Parenting Plan: Case number {{parenting.CourtViewModel.ExistCaseNumber}}</p>
     <p ng-show="parenting.CourtViewModel.PlanType == 3">This plan modiﬁes an existing Order: Case Number {{parenting.CourtViewModel.ExistCaseNumber}}</p>
@@ -550,7 +550,7 @@ emergency decisions while the child is residing with such parent.
     <div class="span5 offset5">
         <hr />
         <p>JUDGE</p>
-        <p>DEKALB COUNTY SUPERIOR COURT</p>
+        <p>{{parenting.County}} COUNTY SUPERIOR COURT</p>
     </div>
 </div>
 <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">

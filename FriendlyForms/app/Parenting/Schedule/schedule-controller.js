@@ -16,7 +16,7 @@
             $scope.scheduleForm.PickedUp.$dirty = false;
             $scope.scheduleForm.DroppedOff.$dirty = false;
         } else {
-            $scope.schedule.BeginDate = $scope.schedule.BeginDateString
+            $scope.schedule.BeginDate = $scope.schedule.BeginDateString;
         }
     });
     $scope.submit = function(noNavigate) {

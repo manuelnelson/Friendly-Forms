@@ -46,7 +46,7 @@ namespace Models
         [Ignore]
         public virtual string BeginDateString
         {
-            get { return BeginDate.HasValue ? BeginDate.Value.ToString("WeekendDayStart/dd/yyyy") : "Not Provided"; }
+            get { return BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
             set{}
         }
 

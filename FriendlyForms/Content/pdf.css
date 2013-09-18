@@ -179,6 +179,15 @@ table thead th:last-child
 table tr:last-child {
     font-weight: bold;
 }
+ol.bold li{
+    font-weight: bold;
+}
+ol.bold li p{
+    font-weight: normal;
+}
+ul.no-style li, ol.no-style li{
+    list-style-type:none;
+}
 /*----------------------Don't change anything below this line'----------------------*/
 .container-fluid::before, .container-fluid::after
 {
