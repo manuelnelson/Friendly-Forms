@@ -131,6 +131,7 @@
     <Compile Include="ChildSupportService.cs" />
     <Compile Include="ClientService.cs" />
     <Compile Include="CommunicationService.cs" />
+    <Compile Include="ConstantsService.cs" />
     <Compile Include="Contracts\BusinessServicesException.cs" />
     <Compile Include="Contracts\IAssetService.cs" />
     <Compile Include="Contracts\IAttorneyClientService.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Contracts\IChildSupportService.cs" />
     <Compile Include="Contracts\IClientService.cs" />
     <Compile Include="Contracts\ICommunicationService.cs" />
+    <Compile Include="Contracts\IConstantsService.cs" />
     <Compile Include="Contracts\ICountyService.cs" />
     <Compile Include="Contracts\ICourtService.cs" />
     <Compile Include="Contracts\IDebtService.cs" />
@@ -263,7 +265,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>

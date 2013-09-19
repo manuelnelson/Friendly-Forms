@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -11,7 +12,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Properties/")]
-    public class ReqProperty
+    public class ReqProperty : IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -35,7 +36,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class PropertyRestService : ServiceBase
     {
         public IPropertyService PropertyService { get; set; }

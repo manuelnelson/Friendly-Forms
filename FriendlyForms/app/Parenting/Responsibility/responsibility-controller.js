@@ -1,7 +1,9 @@
 ﻿var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.responsibility = responsibilityService.responsibilities.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
             //see if garlic has something stored            
             $scope.responsibility = $.jStorage.get($scope.path);

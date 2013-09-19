@@ -36,7 +36,7 @@
             {{vehicle.Owner}} will be solely responsible for all expenses related to owning, insuring, maintaining and properly registering said vehicle.
     </p>
     <p ng-show="vehicle.Refinanced == 1" class="indented">
-        {{vehicle.Name}} will refinance this vehicle by {{vehicle.RefinanceDateString}}.
+        {{vehicle.Name}} will refinance this vehicle by {{vehicle.RefinanceDate | date:'longDate'}}.
     </p>
 </div>
 <!-- Debt -->

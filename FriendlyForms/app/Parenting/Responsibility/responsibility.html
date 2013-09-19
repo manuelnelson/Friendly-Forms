@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="ResponsibilityCtrl" name="responsibilityForm" novalidate>
         <input type="hidden" name="Id" ng-model="responsibility.Id">
         <input type="hidden" name="UserId" ng-model="responsibility.UserId">
@@ -15,12 +15,8 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Who will be responsible to pick up or drop off the child at the beginning of visitation?</label>
-                            <label class="radio inline">
-                                Father
-                                <input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                Mother
-                                <input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="2"></label>
+                            <label class="radio inline">Father<input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="1"></label>
+                            <label class="radio inline">Mother<input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="2"></label>
                             <div ng-show="responsibilityForm.BeginningVisitation.$dirty && responsibilityForm.BeginningVisitation.$invalid  || (showErrors && responsibilityForm.SupervisionCost.$invalid)">
                                 <span class="form-error" ng-show="responsibilityForm.BeginningVisitation.$error.required">This field is required</span>
                             </div>
@@ -28,12 +24,8 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Who will be responsible to pick up or drop off the child at the end of visitation?</label>
-                            <label class="radio inline">
-                                Father
-                                <input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                Mother
-                                <input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="2"></label>
+                            <label class="radio inline">Father<input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="1"></label>
+                            <label class="radio inline">Mother<input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="2"></label>
                             <div ng-show="responsibilityForm.EndVisitation.$dirty && responsibilityForm.EndVisitation.$invalid || (showErrors && responsibilityForm.EndVisitation.$invalid)">
                                 <span class="form-error" ng-show="responsibilityForm.EndVisitation.$error.required">This field is required</span>
                             </div>

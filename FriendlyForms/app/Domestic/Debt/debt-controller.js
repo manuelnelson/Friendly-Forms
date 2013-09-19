@@ -1,13 +1,15 @@
 ﻿var DebtCtrl = function($scope, $routeParams, $location, debtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-    $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function() {
+    $scope.isLoaded = false;
+    $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
             //see if garlic has something stored            
             $scope.debt = $.jStorage.get($scope.path);
             if ($scope.debt)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.debtForm.$invalid) {

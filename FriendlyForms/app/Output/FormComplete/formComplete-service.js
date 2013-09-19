@@ -1,4 +1,4 @@
-﻿FormsApp.factory('formCompleteService', ['$resource', 'menuService', function ($resource, menuService) {
+﻿FormsApp.factory('formCompleteService', ['$resource', 'constantsService', function ($resource, constantsService) {
     var service = {
         formCompletes: $resource('/api/output/formComplete/', {},
             {
@@ -10,13 +10,13 @@
             update: { method: 'PUT' },
             deleteAll: { method: 'DELETE' }
         }),
-        getOutputPaths: function(formName, userId) {
+        getOutputPaths: function (formName, userId) {            
             switch (formName) {
-                case 'ParentingPlan':
+                case constantsService.constants.ParentingPlan:
                     return ['/Output/Parenting/User/' + userId];
-                case 'MediationAgreement':
+                case constantsService.constants.DomesticMediation:
                     return ['/Output/DomesticMediation/User/' + userId];
-                case 'FinancialForm':
+                case constantsService.constants.FinancialForm:
                     return ['/Output/ScheduleA/User/' + userId,
                     '/Output/ScheduleB/User/' + userId,
                     '/Output/ScheduleD/User/' + userId,

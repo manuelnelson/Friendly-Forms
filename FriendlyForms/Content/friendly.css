@@ -7592,10 +7592,6 @@ input.ng-invalid.ng-dirty {
   font-weight: bold;
   display: inline;
 }
-.radio input[type="radio"].inline,
-.checkbox input[type="checkbox"].inline {
-  margin-top: -18px;
-}
 .bs-docs-sidenav {
   width: 228px;
   margin: 30px 0 0;

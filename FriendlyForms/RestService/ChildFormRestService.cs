@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
-using Models.ViewModels;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -11,7 +11,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/ChildForm/")]
-    public class ReqChildForm
+    public class ReqChildForm : IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -29,7 +29,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-
+    [CanViewClientInfo]
     public class ChildFormRestService : ServiceBase
     {
         public IChildFormService ChildFormService { get; set; }

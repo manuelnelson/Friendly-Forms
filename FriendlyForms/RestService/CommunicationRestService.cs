@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,7 +12,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Communication/")]
-    public class ReqCommunication
+    public class ReqCommunication : IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -43,7 +44,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class CommunicationRestService : ServiceBase
     {
         public ICommunicationService CommunicationService{ get; set; }

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,7 +11,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Decisions/")]
-    public class ReqDecisions
+    public class ReqDecisions : IHasUser
     {
         [DataMember]
         public long Id { get; set; }

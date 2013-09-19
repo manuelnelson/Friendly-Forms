@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" id="supportForm" name="supportForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -11,12 +11,8 @@
                         <div class="control-group row-fluid">
                             <label class="form-question">
                                 Do you make Current Court Ordered Child Support Payments for other children?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" ng-change="submit()" ng-model="support.Support" name="Support" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" ng-model="support.Support" ng-change="submit()" name="Support" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" ng-model="support.Support" name="Support" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" ng-model="support.Support" ng-change="submit()" name="Support" type="radio" value="2"></label>
                             <div ng-show="supportForm.Support.$dirty && supportForm.Support.$invalid || showErrors">
                                 <span class="form-error" ng-show="showErrors">This field is required</span>
                             </div>
@@ -50,7 +46,7 @@
                                     <tr ng-repeat="courtAdded in courts">
                                         <td>{{courtAdded.CourtName}}</td>
                                         <td>{{courtAdded.CaseNumber}}</td>
-                                        <td>{{courtAdded.OrderDateString}}</td>
+                                        <td>{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}</td>
                                         <td>${{courtAdded.Monthly}}</td>
                                         <td>
                                             <button class="btn btn-primary" ng-click="showChildren(courtAdded)">Children</button></td>
@@ -68,20 +64,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="childAdded in children">
-                                    <td ng-show="!(editing && editChildId==childAdded.Id)">{{childAdded.Name}}</td>
-                                    <td ng-show="!(editing  && editChildId==childAdded.Id)">{{childAdded.DateOfBirthString}}</td>
-                                    <td ng-show="editing  && editChildId==childAdded.Id">
-                                        <input type="text" ng-model="childAdded.Name" /></td>
-                                    <td ng-show="editing && editChildId==childAdded.Id">
-                                        <input ui-jq="datepicker" data-date="{{childAdded.DateOfBirthString}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirthString" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">                                        
-                                    </td>
-                                    <td>
-                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="icon-white icon-edit"></i></button>
-                                        <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Delete" ng-click="deleteChild(childAdded)"><i class="icon-white icon-trash"></i></button>
-                                        <button class="btn-small btn-primary btn" ng-show="editing && editChildId==childAdded.Id" title="Done" ng-click="doneEdit(childAdded)"><i class="icon-white icon-ok"></i>Done</button>
-                                    </td>
-                                </tr>
+                                    <tr ng-repeat="childAdded in children">
+                                        <td ng-show="!(editing && editChildId==childAdded.Id)">{{childAdded.Name}}</td>
+                                        <td ng-show="!(editing  && editChildId==childAdded.Id)">{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}</td>
+                                        <td ng-show="editing  && editChildId==childAdded.Id">
+                                            <input type="text" ng-model="childAdded.Name" /></td>
+                                        <td ng-show="editing && editChildId==childAdded.Id">
+                                            <input ui-jq="datepicker" data-date="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}">
+                                        </td>
+                                        <td>
+                                            <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="icon-white icon-edit"></i></button>
+                                            <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Delete" ng-click="deleteChild(childAdded)"><i class="icon-white icon-trash"></i></button>
+                                            <button class="btn-small btn-primary btn" ng-show="editing && editChildId==childAdded.Id" title="Done" ng-click="doneEdit(childAdded)"><i class="icon-white icon-ok"></i>Done</button>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

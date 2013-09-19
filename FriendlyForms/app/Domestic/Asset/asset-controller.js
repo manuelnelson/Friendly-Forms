@@ -1,13 +1,15 @@
 ﻿var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-    $scope.asset = assetService.assets.get({ UserId: $routeParams.userId }, function() {
+    $scope.isLoaded = false;
+    $scope.asset = assetService.assets.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.asset.Id == 'undefined' || $scope.asset.Id == 0) {
             //see if garlic has something stored            
             $scope.asset = $.jStorage.get($scope.path);
             if ($scope.asset)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.assetForm.$invalid) {

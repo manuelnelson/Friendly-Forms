@@ -1,7 +1,9 @@
 ﻿var InformationCtrl = function($scope, $routeParams, $location, informationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.information = informationService.information.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.information.Id == 'undefined' || $scope.information.Id == 0) {
             //see if garlic has something stored            
             $scope.information = $.jStorage.get($scope.path);

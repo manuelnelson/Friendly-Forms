@@ -19,12 +19,6 @@ namespace Models
         public virtual string CourtName { get; set; }
         public virtual string CaseNumber { get; set; }
         public virtual DateTime OrderDate { get; set; }
-        [NotMapped]
-        [Ignore]
-        public virtual string OrderDateString
-        {
-            get { return OrderDate.ToString("MM/dd/yyyy"); }
-        }
 
         public virtual int Monthly { get; set; }
 

@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="PropertyCtrl" id="propertyForm" name="propertyForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -11,12 +11,8 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Is there any other real estate at issue in this case?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="property.RealEstate" name="RealEstate" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="property.RealEstate" name="RealEstate" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="property.RealEstate" name="RealEstate" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="property.RealEstate" name="RealEstate" type="radio" value="2"></label>
                             <div ng-show="propertyForm.RealEstate.$dirty && propertyForm.RealEstate.$invalid || (showErrors && propertyForm.RealEstate.$invalid)">
                                 <span class="form-error" ng-show="propertyForm.RealEstate.$error.required">This field is required</span>
                             </div>

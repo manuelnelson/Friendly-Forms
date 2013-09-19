@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper" id="decisionsWrapper" ng-controller="DecisionCtrl">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded" ng-controller="DecisionCtrl">
     <div class="row-fluid">
         <div class="span12">
             <div class="widget-box">
@@ -14,18 +14,10 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     Educational Decisions</label>
-                                <label class="radio inline">
-                                    Father
-                                    <input class="inline" required ng-model="decision.Education" name="Education" type="radio" value="1"></label>
-                                <label class="radio inline">
-                                    Mother
-                                    <input class="inline" ng-model="decision.Education" name="Education" type="radio" value="2"></label>
-                                <label class="radio inline">
-                                    Both
-                                    <input class="inline" ng-model="decision.Education" name="Education" type="radio" value="3"></label>
-                                <label class="radio inline">
-                                    Not Applicable
-                                    <input class="inline" ng-model="decision.Education" name="Education" type="radio" value="4"></label>
+                                <label class="radio inline">Father<input class="inline" required ng-model="decision.Education" name="Education" type="radio" value="1"></label>
+                                <label class="radio inline">Mother<input class="inline" ng-model="decision.Education" name="Education" type="radio" value="2"></label>
+                                <label class="radio inline">Both<input class="inline" ng-model="decision.Education" name="Education" type="radio" value="3"></label>
+                                <label class="radio inline">Not Applicable<input class="inline" ng-model="decision.Education" name="Education" type="radio" value="4"></label>
                                 <div ng-show="showErrors && decisionForm.Education.$invalid">
                                     <span class="form-error" ng-show="decisionForm.Education.$error.required">The field is required</span>
                                 </div>
@@ -33,18 +25,10 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     Non-Emergency Healthcare</label>
-                                <label class="radio inline">
-                                    Father
-                                    <input class="inline" required ng-model="decision.HealthCare" name="HealthCare" type="radio" value="1"></label>
-                                <label class="radio inline">
-                                    Mother
-                                    <input class="inline" ng-model="decision.HealthCare" name="HealthCare" type="radio" value="2"></label>
-                                <label class="radio inline">
-                                    Both
-                                    <input class="inline" ng-model="decision.HealthCare" name="HealthCare" type="radio" value="3"></label>
-                                <label class="radio inline">
-                                    Not Applicable
-                                    <input class="inline" ng-model="decision.HealthCare" name="HealthCare" type="radio" value="4"></label>
+                                <label class="radio inline">Father<input class="inline" required ng-model="decision.HealthCare" name="HealthCare" type="radio" value="1"></label>
+                                <label class="radio inline">Mother<input class="inline" ng-model="decision.HealthCare" name="HealthCare" type="radio" value="2"></label>
+                                <label class="radio inline">Both<input class="inline" ng-model="decision.HealthCare" name="HealthCare" type="radio" value="3"></label>
+                                <label class="radio inline">Not Applicable<input class="inline" ng-model="decision.HealthCare" name="HealthCare" type="radio" value="4"></label>
                                 <div ng-show="showErrors && decisionForm.HealthCare.$invalid">
                                     <span class="form-error" ng-show="decisionForm.HealthCare.$error.required">The field is required</span>
                                 </div>
@@ -52,18 +36,10 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     Religious Upbringing</label>
-                                <label class="radio inline">
-                                    Father
-                                    <input class="inline" required ng-model="decision.Religion" name="Religion" type="radio" value="1"></label>
-                                <label class="radio inline">
-                                    Mother
-                                    <input class="inline" ng-model="decision.Religion" name="Religion" type="radio" value="2"></label>
-                                <label class="radio inline">
-                                    Both
-                                    <input class="inline" ng-model="decision.Religion" name="Religion" type="radio" value="3"></label>
-                                <label class="radio inline">
-                                    Not Applicable
-                                    <input class="inline" ng-model="decision.Religion" name="Religion" type="radio" value="4"></label>
+                                <label class="radio inline">Father<input class="inline" required ng-model="decision.Religion" name="Religion" type="radio" value="1"></label>
+                                <label class="radio inline">Mother<input class="inline" ng-model="decision.Religion" name="Religion" type="radio" value="2"></label>
+                                <label class="radio inline">Both<input class="inline" ng-model="decision.Religion" name="Religion" type="radio" value="3"></label>
+                                <label class="radio inline">Not Applicable<input class="inline" ng-model="decision.Religion" name="Religion" type="radio" value="4"></label>
                                 <div ng-show="showErrors && decisionForm.Religion.$invalid">
                                     <span class="form-error" ng-show="decisionForm.Religion.$error.required">The field is required</span>
                                 </div>
@@ -71,18 +47,10 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     Extracurricular Activities</label>
-                                <label class="radio inline">
-                                    Father
-                                    <input class="inline" required ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="1"></label>
-                                <label class="radio inline">
-                                    Mother
-                                    <input class="inline" ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="2"></label>
-                                <label class="radio inline">
-                                    Both
-                                    <input class="inline" ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="3"></label>
-                                <label class="radio inline">
-                                    Not Applicable
-                                    <input class="inline" ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="4"></label>
+                                <label class="radio inline">Father<input class="inline" required ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="1"></label>
+                                <label class="radio inline">Mother<input class="inline" ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="2"></label>
+                                <label class="radio inline">Both<input class="inline" ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="3"></label>
+                                <label class="radio inline">Not Applicable<input class="inline" ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="4"></label>
                                 <div ng-show="showErrors && decisionForm.ExtraCurricular.$invalid">
                                     <span class="form-error" ng-show="decisionForm.ExtraCurricular.$error.required">The field is required</span>
                                 </div>
@@ -90,18 +58,10 @@
                             <div class="control-group" ng-repeat="otherDecision in extraDecisions">
                                 <label class="form-question">
                                     {{otherDecision.Description}}</label>
-                                <label class="radio inline">
-                                    Father
-                                    <input class="inline" required ng-model="otherDecision.DecisionMaker" type="radio" value="1"></label>
-                                <label class="radio inline">
-                                    Mother
-                                    <input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="2"></label>
-                                <label class="radio inline">
-                                    Both
-                                    <input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="3"></label>
-                                <label class="radio inline">
-                                    Not Applicable
-                                    <input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="4"></label>
+                                <label class="radio inline">Father<input class="inline" required ng-model="otherDecision.DecisionMaker" type="radio" value="1"></label>
+                                <label class="radio inline">Mother<input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="2"></label>
+                                <label class="radio inline">Both<input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="3"></label>
+                                <label class="radio inline">Not Applicable<input class="inline" ng-model="otherDecision.DecisionMaker" type="radio" value="4"></label>
                                 <div ng-show="showErrors && decisionForm.otherDecision.DecisionMaker.$invalid">
                                     <span class="form-error" ng-show="decisionForm.otherDecision.DecisionMaker.$error.required">The field is required</span>
                                 </div>
@@ -137,18 +97,10 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Other Decisions</label>
-                            <label class="radio inline">
-                                Father
-                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                Mother
-                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="2"></label>
-                            <label class="radio inline">
-                                Both
-                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="3"></label>
-                            <label class="radio inline">
-                                Not Applicable
-                                <input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="4"></label>
+                            <label class="radio inline">Father<input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="1"></label>
+                            <label class="radio inline">Mother<input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="2"></label>
+                            <label class="radio inline">Both<input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="3"></label>
+                            <label class="radio inline">Not Applicable<input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="4"></label>
                             <div ng-show="addDecisionForm.DecisionMaker.$dirty && addDecisionForm.DecisionMaker.$invalid  || (showExtraErrors && addDecisionForm.DecisionMaker.$invalid)">
                                 <span class="form-error" ng-show="addDecisionForm.DecisionMaker.$error.required">The field is required</span>
                             </div>

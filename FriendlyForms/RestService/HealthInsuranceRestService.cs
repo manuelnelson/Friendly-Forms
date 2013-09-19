@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/HealthInsurances/")]
-    public class ReqHealthInsurance
+    public class ReqHealthInsurance : IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -31,7 +31,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class HealthInsuranceRestService : ServiceBase
     {
         public IHealthInsuranceService HealthInsuranceService { get; set; }

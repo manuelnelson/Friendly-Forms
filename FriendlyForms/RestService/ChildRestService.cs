@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
-using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
@@ -14,7 +14,7 @@ namespace FriendlyForms.RestService
     [Route("/Child/")]
     [Route("/Child/", "PUT")]
     [Route("/Child/", "DELETE")]
-    public class ReqChild : IReturn<RespChild>
+    public class ReqChild : IReturn<RespChild>, IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -74,7 +74,6 @@ namespace FriendlyForms.RestService
                         child.Id,
                         child.Name,
                         DateOfBirth = child.DateOfBirth == null ? "Not Provided" : child.DateOfBirth.Value.ToString("MM/dd/yyyy"),
-                        child.DateOfBirthString
                     }
             };
         }

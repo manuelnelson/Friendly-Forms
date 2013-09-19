@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,7 +12,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Supports/")]
-    public class ReqPreexistingSupport : IReturn<RespPreexistingSupport>
+    public class ReqPreexistingSupport : IReturn<RespPreexistingSupport>, IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -37,7 +38,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public List<PreexistingSupport> PreexistingSupports { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class PreexistingSupportRestService : ServiceBase
     {
         public IPreexistingSupportService PreexistingSupportService { get; set; }

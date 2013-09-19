@@ -87,13 +87,13 @@
         <tr ng-repeat="child in scheduleB.ScheduleB.OtherChildren">
             <td></td>
             <td>{{child.Name}}</td>
-            <td>{{child.DateOfBirthString}}</td>
+            <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
             <td>{{child.ClaimedBy}}</td>
         </tr>
         <tr ng-repeat="child in scheduleB.OtherScheduleB.OtherChildren">
             <td></td>
             <td>{{child.Name}}</td>
-            <td>{{child.DateOfBirthString}}</td>
+            <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
             <td>{{child.ClaimedBy}}</td>
         </tr>
     </tbody>

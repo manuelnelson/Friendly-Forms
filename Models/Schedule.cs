@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using ServiceStack.DataAnnotations;
 
@@ -41,14 +40,6 @@ namespace Models
         public bool SundayParent { get; set; }
         public int AnyAdditionalProvisions { get; set; }
         public string AdditionalProvisions { get; set; }
-
-        [NotMapped]
-        [Ignore]
-        public virtual string BeginDateString
-        {
-            get { return BeginDate.HasValue ? BeginDate.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
-            set{}
-        }
 
         public bool IsValid()
         {

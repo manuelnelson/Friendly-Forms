@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using ServiceStack.DataAnnotations;
 
@@ -7,7 +6,7 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("Children")]
-    public class Child : IEntity, IFormEntity
+    public class Child : IFormEntity
     {
         [AutoIncrement]
         public virtual long Id { get; set; }
@@ -16,12 +15,6 @@ namespace Models
         public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
-        [NotMapped]
-        [Ignore]
-        public virtual string DateOfBirthString
-        {
-            get { return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
-        }
         public int ChildFormId { get; set; }
         [Ignore]
         public virtual ChildForm ChildForm { get; set; }

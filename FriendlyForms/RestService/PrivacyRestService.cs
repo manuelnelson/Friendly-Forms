@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,7 +12,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Privacies/")]
-    public class ReqPrivacy
+    public class ReqPrivacy : IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -40,7 +41,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class PrivacyRestService : ServiceBase
     {
         public IPrivacyService PrivacyService { get; set; }

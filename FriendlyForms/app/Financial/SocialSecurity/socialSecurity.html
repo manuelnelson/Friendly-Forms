@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="SocialSecurityCtrl" id="socialSecurity.socialSecurityForm" name="socialSecurityForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -11,12 +11,8 @@
                         <div class="control-group row-fluid">
                             <label class="hoverHelp span4 form-question" data-content="Old age, survivors and disability benefits for a child who is either unmarried and has not attained the age of 18, is still in secondary school and under 19 years of age, or is under a disability which began before he attained the age of 22 years of age. The child must also be a dependent of the insured individual." data-original-title="">
                                 Do the children receive Title II Social Security benefits from your account?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="2"></label>
                             <div ng-show="socialSecurityForm.ReceiveSocial.$dirty && socialSecurityForm.ReceiveSocial.$invalid || (showErrors && socialSecurityForm.ReceiveSocial.$invalid)">
                                 <span class="form-error" ng-show="socialSecurityForm.ReceiveSocial.$error.required">This field is required</span>
                             </div>

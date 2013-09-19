@@ -245,6 +245,7 @@ namespace FriendlyForms.App_Start
         private void SetupServices(Container container)
         {
             container.Register<ICourtService>(c => new CourtService(c.Resolve<ICourtRepository>()));
+            container.Register<IConstantsService>(c => new ConstantsService());
             container.Register<IParticipantService>(c => new ParticipantService(c.Resolve<IParticipantRepository>()));
             container.Register<IChildService>(c => new ChildService(c.Resolve<IChildRepository>()));
             container.Register<IPrivacyService>(c => new PrivacyService(c.Resolve<IPrivacyRepository>()));

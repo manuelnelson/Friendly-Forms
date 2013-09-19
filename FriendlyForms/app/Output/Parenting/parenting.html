@@ -20,7 +20,7 @@
     </div>
     <div class="row-fluid" ng-repeat="child in parenting.Children">
         <div class="span6 indented40">{{child.Name}}</div>
-        <div class="span6">{{child.DateOfBirthString}}</div>
+        <div class="span6">{{child.DateOfBirth | date: 'mediumDate'}}</div>
     </div>
     <hr />
 </div>
@@ -183,7 +183,7 @@ records.
 <p class="indented">
     The parenting schedule will begin
     <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate == 1">on the date of the Court's Order.</span>
-    <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDateString}}</span>
+    <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDate | date:'longDate'}}</span>
 </p>
 <div class="row-fluid">
     <p ng-show="parenting.ScheduleViewModel.AdditionalProvisions.length > 0" class="indented">Additionally, the following provisions regarding weekday visitation will apply to the children: {{parenting.ScheduleViewModel.AdditionalProvisions}}</p>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -12,7 +13,7 @@ namespace FriendlyForms.RestService
         //will name it to asset/ eventually, but doing this to appease my previous stupidity
         [DataContract]
         [Route("/assets/")]
-        public class ReqAsset
+        public class ReqAsset : IHasUser
         {
             [DataMember]
             public long Id { get; set; }
@@ -44,7 +45,7 @@ namespace FriendlyForms.RestService
             [DataMember]
             public ResponseStatus ResponseStatus { get; set; }
         }
-        [Authenticate]
+        [CanViewClientInfo]
         public class AssetRestService : ServiceBase
         {
             public IAssetService AssetService { get; set; }

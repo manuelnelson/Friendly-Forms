@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper" ng-controller="ExtraExpenseCtrl">
+﻿<div class="form-vertical wrapper" ng-controller="ExtraExpenseCtrl" style="display: none" ng-show="isLoaded">
     <div class="row-fluid">
         <div class="span12">
             <div class="widget-box">
@@ -16,12 +16,8 @@
                         </ul>
                         <div class="control-group">
                             <label class="form-question">Do any individuals pay extraordinary expenses for the child(ren)?</label>
-                            <label class="radio inline">
-                                Yes
-                                    <input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                    <input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
                             <div ng-show="showErrors">
                                 <span class="form-error" ng-show="showErrors">Please select an option</span>
                             </div>

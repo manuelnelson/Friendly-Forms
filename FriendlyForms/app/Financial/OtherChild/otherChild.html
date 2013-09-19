@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper" ng-controller="OtherChildCtrl">
+﻿<div class="form-vertical wrapper" ng-controller="OtherChildCtrl" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" id="otherChildrenForm" name="otherChildrenForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -12,12 +12,8 @@
                         <div class="control-group row-fluid">
                             <label class="span4 form-question">
                                 Are you legally responsible for the qualified child? (Step children do not qualify)</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
                             <div ng-show="otherChildrenForm.LegallyResponsible.$dirty && otherChildrenForm.LegallyResponsible.$invalid  || (showErrors && otherChildrenForm.LegallyResponsible.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.LegallyResponsible.$error.required">This field is required</span>
                             </div>
@@ -25,12 +21,8 @@
                         <div class="control-group row-fluid">
                             <label class="span4 form-question">
                                 Does the qualified child live in your home?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="2"></label>
                             <div ng-show="otherChildrenForm.AtHome.$dirty && otherChildrenForm.AtHome.$invalid  || (showErrors && otherChildrenForm.AtHome.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.AtHome.$error.required">This field is required</span>
                             </div>
@@ -38,12 +30,8 @@
                         <div class="control-group row-fluid">
                             <label class="span4 form-question">
                                 Are you actually supporting the qualified child?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="2"></label>
                             <div ng-show="otherChildrenForm.Support.$dirty && otherChildrenForm.Support.$invalid  || (showErrors && otherChildrenForm.Support.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.Support.$error.required">This field is required</span>
                             </div>
@@ -51,12 +39,8 @@
                         <div class="control-group row-fluid">
                             <label class="span4 form-question">
                                 Is the qualified child subject to a Preexisting Child Support Order?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="2"></label>
                             <div ng-show="otherChildrenForm.Preexisting.$dirty && otherChildrenForm.Preexisting.$invalid  || (showErrors && otherChildrenForm.Preexisting.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.Preexisting.$error.required">This field is required</span>
                             </div>
@@ -64,12 +48,8 @@
                         <div class="control-group row-fluid">
                             <label class="span4 form-question">
                                 Is the qualified child currently before the court to set, modify or enforce child support?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="2"></label>
                             <div ng-show="otherChildrenForm.InCourt.$dirty && otherChildrenForm.InCourt.$invalid  || (showErrors && otherChildrenForm.InCourt.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.InCourt.$error.required">This field is required</span>
                             </div>
@@ -111,7 +91,7 @@
                                 <tbody>
                                     <tr ng-repeat="child in children">
                                         <td>{{child.Name}}</td>
-                                        <td>{{child.DateOfBirthString}}</td>
+                                        <td>{{child.DateOfBirth | date:'MM/dd/yyyy'}}</td>
                                         <td>
                                             <!--                                        <button class="btn-small btn-primary btn childEdit" title="Edit"><i class="icon-white icon-edit"></i></button>-->
                                             <button class="btn-small btn-primary btn" title="Delete" ng-click="deleteOtherChild(child)"><i class="icon-white icon-trash"></i></button>

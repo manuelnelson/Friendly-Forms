@@ -45,7 +45,7 @@ The specifics are as follows:
             </p>
         </li>
         <li>Child Support Amount
-            <p>{{csa.ParentNames.NonCustodialParent}} shall pay to {{csa.ParentNames.CustodialParent}}, for the support of the minor children, the sum of {{csa.ChildSupportAmount.MonthlyAmountWritten}} Dollars (${{csa.ChildSupportAmount.MonthlyAmount}}) per month, beginning on {{csa.ChildSupport.BeginDateString}}</p>
+            <p>{{csa.ParentNames.NonCustodialParent}} shall pay to {{csa.ParentNames.CustodialParent}}, for the support of the minor children, the sum of {{csa.ChildSupportAmount.MonthlyAmountWritten}} Dollars (${{csa.ChildSupportAmount.MonthlyAmount}}) per month, beginning on {{csa.ChildSupport.BeginDate | date:'longDate'}}</p>
         </li>
         <li>Duration of Child Support
             <p ng-show="csa.ChildSupport.SupportEnd == 1">
@@ -63,7 +63,7 @@ The specifics are as follows:
                 Until Further Order - This is not a final order, so the child support shall continue until further order of this Court.
             </p>
             <p ng-show="csa.ChildSupport.SupportEnd == 4">
-                Until Specific Date - The child support shall continue monthly thereafter until {{csa.ChildSupport.EndDateString}}.
+                Until Specific Date - The child support shall continue monthly thereafter until {{csa.ChildSupport.EndDate | date: 'longDate'}}.
             </p>
         </li>
         <li>Deviation from Presumptive Amount

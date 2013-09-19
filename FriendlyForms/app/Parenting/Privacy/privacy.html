@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper" id="privacyWrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="PrivacyCtrl" id="privacyForm" name="privacyForm" novalidate>
         <input type="hidden" name="Id" ng-model="privacy.Id">
         <input type="hidden" name="UserId" ng-model="privacy.UserId">

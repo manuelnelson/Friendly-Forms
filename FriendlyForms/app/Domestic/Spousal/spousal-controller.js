@@ -1,6 +1,7 @@
 ﻿var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.spousal = spousalService.spousals.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
             //see if garlic has something stored            
@@ -8,6 +9,7 @@
             if ($scope.spousal)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.spousalForm.$invalid) {

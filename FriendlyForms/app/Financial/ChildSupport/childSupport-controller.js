@@ -1,8 +1,9 @@
 ﻿var ChildSupportCtrl = function($scope, $routeParams, $location, childSupportService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-
-    $scope.childSupport = childSupportService.childSupports.get({ UserId: $routeParams.userId }, function() {
+    $scope.isLoaded = false;
+    $scope.childSupport = childSupportService.childSupports.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.childSupport.Id == 'undefined' || $scope.childSupport.Id == 0) {
             //see if garlic has something stored            
             $scope.childSupport = $.jStorage.get($scope.path);

@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="InformationCtrl" name="informationForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -26,13 +26,8 @@
                         </div>
                         <div class="control-group" ng-show="information.InformationAccess == 1 || information.InformationAccess == 2">
                             <label class="form-question">
-<<<<<<< HEAD
                                How should access to the rights of information for either parent be restricted?</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain any restrictions for each parent" rows="2"></textarea>
-=======
-                               Describe the restrictions to be placed upon access to information for either parent.</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="List any Restrictions to Information for either parent Here" rows="2"></textarea>
->>>>>>> 65ab6647073fe8e0b8df0d84a3f2c97068c2d058
                             <div ng-show="informationForm.AccessOfRightsDetails.$dirty && informationForm.AccessOfRightsDetails.$invalid  || (showErrors && informationForm.AccessOfRightsDetails.$invalid)">
                                 <span class="form-error" ng-show="informationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>

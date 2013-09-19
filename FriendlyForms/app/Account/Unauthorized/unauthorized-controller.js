@@ -1,4 +1,8 @@
-﻿var UnauthorizedCtrl = function($scope, $routeParams, $location, unauthorizedService, menuService, headerService) {
+﻿var UnauthorizedCtrl = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'headerService','$rootScope',
+function ($scope, $routeParams, $location, unauthorizedService, headerService, $rootScope) {
+    $rootScope.currentScope = $scope;
+    $scope.submit = function() {
+
+    };
     headerService.setTitle('Unauthorized');
-};
-UnauthorizedCtrl.$inject = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'menuService', 'headerService'];
+}];

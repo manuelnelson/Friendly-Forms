@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,26 +11,15 @@ namespace FriendlyForms.RestService
 {
     public class HealthRestService
     {
-        //REST Resource DTO
-        [Route("/Healths")]
-        [Route("/Healths/{Ids}")]
-        public class HealthListDto : IReturn<List<HealthDto>>
-        {
-            public long[] Ids { get; set; }
-
-            public HealthListDto(params long[] ids)
-            {
-                Ids = ids;
-            }
-        }
-
         [Route("/Healths", "POST")]
         [Route("/Healths", "PUT")]
         [Route("/Healths")]
-        public class HealthDto : IReturn<HealthDto>
+        public class HealthDto : IReturn<HealthDto>, IHasUser
         {
             [DataMember]
             public long Id { get; set; }
+            [DataMember]
+            public long[] Ids { get; set; }
             [DataMember]
             public long UserId { get; set; }
             [DataMember]
@@ -67,7 +56,7 @@ namespace FriendlyForms.RestService
             public int? MaximumDays { get; set; }
 
         }
-        [Authenticate]
+        [CanViewClientInfo]
         public class HealthsService : ServiceBase
         {
             public IHealthService HealthService { get; set; } //Injected by IOC
@@ -97,10 +86,6 @@ namespace FriendlyForms.RestService
                 HealthService.Update(healthEntity);                
             }
 
-            public void Delete(HealthListDto request)
-            {
-                HealthService.DeleteAll(request.Ids);
-            }
 
             public void Delete(HealthDto request)
             {

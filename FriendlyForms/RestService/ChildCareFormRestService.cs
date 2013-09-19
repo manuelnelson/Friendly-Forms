@@ -1,46 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.RestService
 {
     public class ChildCareFormRestService
     {
-        //REST Resource DTO
-        [Route("/ChildCareForms")]
-        [Route("/ChildCareForms/{Ids}")]
-        public class ChildCareFormListDto : IReturn<List<ChildCareFormDto>>
-        {
-            public long[] Ids { get; set; }
-
-            public ChildCareFormListDto(params long[] ids)
-            {
-                Ids = ids;
-            }
-        }
-
         [Route("/ChildCareForms", "POST")]
         [Route("/ChildCareForms", "PUT")]
         [Route("/ChildCareForms")]
-        public class ChildCareFormDto : IReturn<ChildCareFormDto>
+        public class ChildCareFormDto : IReturn<ChildCareFormDto>, IHasUser
         {
             [DataMember]
             public long Id { get; set; }
+            [DataMember]
+            public long[] Ids { get; set; }
             [DataMember]
             public long UserId { get; set; }
             [DataMember]
             public int ChildrenInvolved { get; set; }
         }
-        [Authenticate]
+        [CanViewClientInfo]
         public class ChildCareFormsService : ServiceBase
         {
             public IChildCareFormService ChildCareFormService { get; set; } //Injected by IOC
-
 
             public object Get(ChildCareFormDto request)
             {
@@ -63,11 +50,6 @@ namespace FriendlyForms.RestService
                 var childCareFormEntity = request.TranslateTo<ChildCareForm>();
                 ChildCareFormService.Update(childCareFormEntity);
                 return childCareFormEntity;
-            }
-
-            public void Delete(ChildCareFormListDto request)
-            {
-                ChildCareFormService.DeleteAll(request.Ids);
             }
 
             public void Delete(ChildCareFormDto request)

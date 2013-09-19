@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -10,7 +11,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/OtherChildren/")]
-    public class ReqOtherChildren : IReturn<ReqOtherChildren>
+    public class ReqOtherChildren : IReturn<ReqOtherChildren>, IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -32,7 +33,7 @@ namespace FriendlyForms.RestService
         public string Details { get; set; }
 
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class OtherChildrenRestService : ServiceBase
     {
         public IOtherChildrenService OtherChildrenService { get; set; }

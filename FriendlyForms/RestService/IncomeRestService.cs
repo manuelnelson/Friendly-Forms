@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,7 +12,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Incomes/")]
-    public class ReqIncome
+    public class ReqIncome : IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -83,7 +84,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class IncomeRestService : ServiceBase
     {
         public IIncomeService IncomeService { get; set; }

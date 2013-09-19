@@ -1,7 +1,9 @@
 ﻿var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, limitToFilter, $http, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.house = houseService.houses.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
             //see if garlic has something stored            
             $scope.house = $.jStorage.get($scope.path);

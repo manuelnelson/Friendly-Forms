@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.Common.Web;
@@ -19,7 +20,7 @@ namespace FriendlyForms.RestService
     [Route("/Vehicles/", "PUT")]
     [Route("/Vehicles", "GET")]
     [Route("/Vehicles/{Id}")]
-    public class ReqVehicle
+    public class ReqVehicle : IHasUser
     {
         [DataMember]
         public long Id { get; set; }

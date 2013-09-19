@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper" ng-model="vehicleWrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <div class="row-fluid" ng-controller="VehicleCtrl">
         <div class="span12">
             <div class="widget-box">
@@ -44,12 +44,8 @@
                     <form id="vehicleForm" name="vehicleForm" novalidate>
                         <div class="control-group">
                             <label class="form-question">Is the ownership of any vehicle(s) at issue in this case?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="2"></label>
                             <div ng-show="vehicleForm.VehiclesInvolved.$dirty && vehicleForm.VehiclesInvolved.$invalid || (showErrors && vehicleForm.VehiclesInvolved.$invalid)">
                                 <span class="form-error" ng-show="vehicleForm.VehiclesInvolved.$error.required">Please select an option</span>
                             </div>

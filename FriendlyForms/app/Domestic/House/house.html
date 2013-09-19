@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="HouseCtrl" id="houseForm" name="houseForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -9,12 +9,9 @@
                     </div>
                     <div class="widget-content">
                         <div class="control-group">
-                            <label class="form-question">
-                                Is there a marital house at issue in this case?</label>
-                            <label class="radio inline">Yes
-                                <input class="inline" required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="1"></label>
-                            <label class="radio inline">No
-                                <input class="inline" required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="2"></label>
+                            <label class="form-question">Is there a marital house at issue in this case?</label>
+                            <label class="radio inline">Yes<input required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="1"></label>
+                            <label class="radio inline">No<input required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="2"></label>
                             <div ng-show="houseForm.MaritalHouse.$dirty && houseForm.MaritalHouse.$invalid || (showErrors && houseForm.MaritalHouse.$invalid)">
                                 <span class="form-error" ng-show="houseForm.MaritalHouse.$error.required">This field is required</span>
                             </div>
@@ -22,7 +19,7 @@
                         <div ng-show="house.MaritalHouse == 1">
                             <div class="control-group">
                                 <label class="form-question">House address</label>
-                                <input  maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Address" name="Address" placeholder="Address" type="text" value="">
+                                <input maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Address" name="Address" placeholder="Address" type="text" value="">
                                 <div ng-show="houseForm.Address.$dirty && houseForm.Address.$invalid || (showErrors && houseForm.Address.$invalid)">
                                     <span class="form-error" ng-show="houseForm.Address.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.Address.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -30,7 +27,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">Secondary Address</label>
-                                <input  maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.SecondaryAddress" name="SecondaryAddress" placeholder="Secondary Address" type="text" value="">
+                                <input maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.SecondaryAddress" name="SecondaryAddress" placeholder="Secondary Address" type="text" value="">
                                 <div ng-show="houseForm.SecondaryAddress.$dirty && houseForm.SecondaryAddress.$invalid || (showErrors && houseForm.SecondaryAddress.$invalid)">
                                     <span class="form-error" ng-show="houseForm.SecondaryAddress.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.SecondaryAddress.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -46,7 +43,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">Zip Code</label>
-                                <input  ng-pattern="/^(\d{5}|\d{4})(?:[-\s]\d{4})?$/" ng-model="house.ZipCode" name="ZipCode" placeholder="Zip Code" type="text" value="">
+                                <input ng-pattern="/^(\d{5}|\d{4})(?:[-\s]\d{4})?$/" ng-model="house.ZipCode" name="ZipCode" placeholder="Zip Code" type="text" value="">
                                 <div ng-show="houseForm.ZipCode.$dirty && houseForm.ZipCode.$invalid || (showErrors && houseForm.ZipCode.$invalid)">
                                     <span class="form-error" ng-show="houseForm.ZipCode.$error.pattern">This field must be a valid zip code.</span>
                                 </div>
@@ -69,7 +66,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
-                                <input class="currency" ng-pattern="/^-?[0-9]*$/"ng-model="house.Equity" name="Equity" placeholder="Equity in Dollars" type="text" value="" maxlength="19" autocomplete="off">
+                                <input class="currency" ng-pattern="/^-?[0-9]*$/" ng-model="house.Equity" name="Equity" placeholder="Equity in Dollars" type="text" value="" maxlength="19" autocomplete="off">
                                 <div ng-show="houseForm.Equity.$dirty && houseForm.Equity.$invalid || (showErrors && houseForm.Equity.$invalid)">
                                     <span class="form-error" ng-show="houseForm.Equity.$error.maxLength">This field cannot be longer than 19 characters.</span>
                                     <span class="form-error" ng-show="houseForm.Equity.$error.pattern">This field must be a valid number.</span>
@@ -77,7 +74,7 @@
                             </div>
                             <div class="control-group">
                                 <label class="form-question">The mortgage holder on the house</label>
-                                <input  maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.MortgageOwner" name="MortgageOwner" placeholder="Mortgage holder" type="text" value="">
+                                <input maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.MortgageOwner" name="MortgageOwner" placeholder="Mortgage holder" type="text" value="">
                                 <div ng-show="houseForm.MortgageOwner.$dirty && houseForm.MortgageOwner.$invalid || (showErrors && houseForm.MortgageOwner.$invalid)">
                                     <span class="form-error" ng-show="houseForm.MortgageOwner.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.MortgageOwner.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>

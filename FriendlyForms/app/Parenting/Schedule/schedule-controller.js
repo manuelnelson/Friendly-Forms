@@ -1,23 +1,26 @@
 ﻿var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope', 'participantService',
     function ($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope, participantService) {
     $scope.path = $location.path();
+    $scope.isLoaded = false;
+    $scope.showErrors = false;
+
     participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
         $scope.nonCustodialParent = data.CustodyInformation.NonCustodyParentName;
         $scope.custodialParent = data.CustodyInformation.CustodyParentName;
     });
-    $scope.showErrors = false;
     $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
             //see if garlic has something stored            
             $scope.schedule = $.jStorage.get($scope.path);
             if ($scope.schedule)
                 $scope.showErrors = true;
             //The default time for control makes it dirty. Undo this
-            $scope.scheduleForm.PickedUp.$dirty = false;
-            $scope.scheduleForm.DroppedOff.$dirty = false;
-        } else {
-            $scope.schedule.BeginDate = $scope.schedule.BeginDateString;
-        }
+            if ($scope.scheduleForm) {
+                $scope.scheduleForm.PickedUp.$dirty = false;
+                $scope.scheduleForm.DroppedOff.$dirty = false;
+            }
+        } 
     });
     $scope.submit = function(noNavigate) {
         if ($scope.scheduleForm.$invalid) {

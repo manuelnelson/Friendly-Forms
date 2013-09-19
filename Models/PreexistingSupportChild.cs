@@ -16,12 +16,6 @@ namespace Models
         public virtual User User { get; set; }
         public virtual string Name { get; set; }
         public virtual DateTime? DateOfBirth { get; set; }
-        [NotMapped]
-        [Ignore]
-        public virtual string DateOfBirthString
-        {
-            get { return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("MM/dd/yyyy") : "Not Provided"; }
-        }
         public virtual int Gender { get; set; }
 
         public virtual int PreexistingSupportId { get; set; }

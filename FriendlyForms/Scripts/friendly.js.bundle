@@ -18,6 +18,7 @@ angular-ui.js
 ui-bootstrap-custom-tpls-0.5.0.js
 ../app/main.js
 ../app/generic-service.js
+../app/constants-service.js
 ../app/Helpers/loading-controller.js
 ../app/Helpers/loading-service.js
 ../app/Helpers/message-controller.js

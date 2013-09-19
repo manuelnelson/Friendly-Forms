@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,7 +12,7 @@ namespace FriendlyForms.RestService
 
     [DataContract]
     [Route("/Deviations/")]
-    public class DeviationsDto : IReturn<DeviationsDto>
+    public class DeviationsDto : IReturn<DeviationsDto>, IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -74,7 +75,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int? SpecificDeviations { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class DeviationsRestService : ServiceBase
     {
         public IDeviationsService DeviationsService { get; set; }

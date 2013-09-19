@@ -2,18 +2,17 @@
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
-using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace FriendlyForms.RestService
 {
     #region Request Objects
     [DataContract]
     [Route("/Participants/")]
-    public class ReqParticipant : IReturn<RespParticipant>
+    public class ReqParticipant : IReturn<RespParticipant>, IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -37,7 +36,7 @@ namespace FriendlyForms.RestService
     
     [DataContract]
     [Route("/Participants/CustodyInfomation")]
-    public class ReqCustody
+    public class ReqCustody : IHasUser
     {
         [DataMember]
         public long UserId { get; set; }
@@ -60,7 +59,7 @@ namespace FriendlyForms.RestService
     }    
 
     #endregion
-    [Authenticate]
+    [CanViewClientInfo]
     public class ParticipantRestService : ServiceBase
     {
         public IParticipantService ParticipantService { get; set; }

@@ -10,6 +10,7 @@ using BusinessLogic;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using BusinessLogic.Helpers;
+using BusinessLogic.Properties;
 using FriendlyForms.Models;
 using Models;
 using Pechkin;
@@ -720,6 +721,7 @@ namespace FriendlyForms.RestService
 
 
         #endregion
+
         public object Get(ParentingPlanDto request)
         {
             var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
@@ -831,30 +833,21 @@ namespace FriendlyForms.RestService
         public object Get(FormCompleteDto request)
         {
             var userId = request.UserId != 0 ? request.UserId : Convert.ToInt32(UserSession.CustomId);
-            switch (request.FormName)
+            Func<List<IncompleteForm>> action;
+            var actions = new Dictionary<string, Func<List<IncompleteForm>>>
+                {
+                    {Resources.ParentingPlan, () => OutputService.GetParentingIncompleteForms(userId)},
+                    {Resources.DomesticMediation, () => OutputService.GetDomesticIncompleteForms(userId)},
+                    {Resources.FinancialForm, () => OutputService.GetFinancialIncompleteForms(userId)},
+                    {Resources.StarterFormName, () => OutputService.GetStarterIncompleteForms(userId)},
+                };
+            if (actions.TryGetValue(request.FormName, out action))
             {
-                case "ParentingPlan":
-                    return new FormCompleteDtoResp
-                        {
-                            IncompleteForms = OutputService.GetParentingIncompleteForms(userId)
-                        };
-                case "MediationAgreement":
-                    return new FormCompleteDtoResp
-                        {
-                            IncompleteForms = OutputService.GetDomesticIncompleteForms(userId)
-                        };
-                case "FinancialForm":
-                    return new FormCompleteDtoResp
-                        {
-                            IncompleteForms = OutputService.GetFinancialIncompleteForms(userId)
-                        };
-                case "PreliminaryInformation":
-                    return new FormCompleteDtoResp
-                        {
-                            IncompleteForms = OutputService.GetStarterIncompleteForms(userId)
-                        };
+                return new FormCompleteDtoResp
+                    {
+                        IncompleteForms = action()
+                    };
             }
-            //Setup output form            
             return new FormCompleteDtoResp();
         }
 

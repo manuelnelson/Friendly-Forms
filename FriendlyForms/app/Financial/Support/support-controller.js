@@ -2,7 +2,9 @@
     $scope.path = $location.path();
     $scope.showAddChild = false;
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.support = supportService.supports.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             //see if garlic has something stored            
             $scope.support = $.jStorage.get($scope.path);
@@ -61,7 +63,6 @@
     $scope.doneEdit = function (child) {
         $scope.editing = false;
         $scope.editChildId = 0;
-        child.DateOfBirth = child.DateOfBirthString;
         supportService.children.update({}, child, function () {
         });
     };

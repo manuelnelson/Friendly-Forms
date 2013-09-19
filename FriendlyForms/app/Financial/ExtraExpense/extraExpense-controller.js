@@ -3,7 +3,7 @@
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     extraExpenseService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -24,6 +24,7 @@
         if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
             $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     
     $scope.submit = function (noNavigate) {

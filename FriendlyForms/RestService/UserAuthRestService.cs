@@ -96,6 +96,7 @@ namespace FriendlyForms.RestService
     [Route("/userauths/addroles")]
     public class UserRoles
     {
+        public long UserId { get; set; }
         public string[] Roles { get; set; }
         public string UserName { get; set; }
     }
@@ -241,6 +242,10 @@ namespace FriendlyForms.RestService
         [Authenticate]
         public object Post(UserRoles request)
         {
+            //TODO: Need logic here to make sure user can add these roles.  Basically check if they have paid
+            //var user = UserService.Get(request.UserId);
+            //if(user.HasPaid)
+            //else throw 403 Forbidden error
             AssignRolesService.Post(new AssignRoles
             {
                 UserName = request.UserName,
@@ -282,23 +287,6 @@ namespace FriendlyForms.RestService
             return response;
         }
         #endregion
-
-        //public object Any(UserAuths request)
-        //{
-        //    var response = new UserAuthsResponse
-        //    {
-        //        UserSession = base.UserSession,
-        //        //UserAuths = Db.Select<UserAuth>(),
-        //        //OAuthProviders = Db.Select<UserOAuthProvider>(),
-        //    };
-
-        //    //response.UserAuths.ForEach(x => x.PasswordHash = "[Redacted]");
-        //    //response.UserAuths.ForEach(x => x.Salt = "[Redacted]");
-
-        //    return response;
-        //}
-
-
     }
 
 }

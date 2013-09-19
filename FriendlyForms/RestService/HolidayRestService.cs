@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -13,7 +13,7 @@ namespace FriendlyForms.RestService
     [DataContract]
     [Route("/Holidays/")]
     [Route("/Holidays/{ChildId}", Verbs = "GET")]
-    public class ReqHoliday
+    public class ReqHoliday : IHasUser
     {
         [DataMember]
         public long Id { get; set; }

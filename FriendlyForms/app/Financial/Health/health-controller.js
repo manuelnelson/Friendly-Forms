@@ -1,6 +1,7 @@
 ﻿var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.health = healthService.healths.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
             //see if garlic has something stored            
@@ -8,6 +9,7 @@
             if ($scope.health)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.healthForm.$invalid) {

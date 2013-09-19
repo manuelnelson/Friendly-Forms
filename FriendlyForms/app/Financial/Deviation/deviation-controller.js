@@ -1,6 +1,7 @@
 ﻿var DeviationCtrl = function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.deviation = deviationService.deviations.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
             //see if garlic has something stored            
@@ -8,6 +9,7 @@
             if ($scope.deviation)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function (noNavigate) {
         if ($scope.deviationForm.$invalid) {

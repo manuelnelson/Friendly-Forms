@@ -1,6 +1,7 @@
 ﻿var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.healthInsurance = healthInsuranceService.healthInsurances.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.healthInsurance.Id == 'undefined' || $scope.healthInsurance.Id == 0) {
             //see if garlic has something stored            
@@ -8,6 +9,7 @@
             if ($scope.healthInsurance)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.healthInsuranceForm.$invalid) {

@@ -1,7 +1,9 @@
 ﻿var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.socialSecurity = socialSecurityService.socialSecurities.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
             //see if garlic has something stored            
             $scope.socialSecurity = $.jStorage.get($scope.path);

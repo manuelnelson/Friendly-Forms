@@ -1,6 +1,7 @@
 ﻿var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.tax = taxService.taxes.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.tax.Id == 'undefined' || $scope.tax.Id == 0) {
             //see if garlic has something stored            
@@ -8,6 +9,7 @@
             if ($scope.tax)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.taxForm.$invalid) {

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,25 +10,15 @@ namespace FriendlyForms.RestService
 {
     public class ChildCareRestService
     {
-        //REST Resource DTO
-        [Route("/ChildCares/{Ids}")]
-        public class ChildCareListDto : IReturn<List<ChildCareDto>>
-        {
-            public long[] Ids { get; set; }
-
-            public ChildCareListDto(params long[] ids)
-            {
-                Ids = ids;
-            }
-        }
-
         [Route("/ChildCares", "POST")]
         [Route("/ChildCares/", "PUT")]
         [Route("/ChildCares")]
-        public class ChildCareDto : IReturn<ChildCareDto>
+        public class ChildCareDto : IReturn<ChildCareDto>, IHasUser
         {
             [DataMember]
             public long Id { get; set; }
+            [DataMember]
+            public long[] Ids { get; set; }
             [DataMember]
             public long UserId { get; set; }
             [DataMember]
@@ -83,11 +72,6 @@ namespace FriendlyForms.RestService
                 var childCareEntity = request.TranslateTo<ChildCare>();
                 ChildCareService.Update(childCareEntity); 
                 return childCareEntity; 
-            }
-
-            public void Delete(ChildCareListDto request)
-            {
-                ChildCareService.DeleteAll(request.Ids);
             }
 
             public void Delete(ChildCareDto request)

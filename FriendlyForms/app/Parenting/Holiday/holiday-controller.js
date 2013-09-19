@@ -4,7 +4,7 @@
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     holidayService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -19,6 +19,7 @@
     //#region Event Handlers
     $scope.getChildHoliday = function (childId) {
         $scope.holiday = holidayService.holidays.get({ ChildId: childId }, function () {
+            $scope.isLoaded = true;
             if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
                 //see if garlic has something stored            
                 $scope.holiday = $.jStorage.get($scope.path);
@@ -40,6 +41,7 @@
         }
         $scope.showExtraErrors = false;
         $scope.extraHoliday.ChildId = $routeParams.childId;
+        $scope.extraHoliday.UserId = $routeParams.userId
         holidayService.extraHolidays.save(null, $scope.extraHoliday, function (data) {
             $scope.extraHolidays.push(data);
             $scope.extraHoliday.HolidayName = '';

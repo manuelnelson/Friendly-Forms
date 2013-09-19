@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="IncomeCtrl" id="incomeForm" name="incomeForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -12,12 +12,8 @@
                         <div class="control-group row-fluid">
                             <label class="span4 form-question">
                                 Does the father currently have any income, whether from a salary, self-employment, investments, benefits or any other source?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="2"></label>
                             <div ng-show="incomeForm.HaveSalary.$dirty && incomeForm.HaveSalary.$invalid || (showErrors && incomeForm.HaveSalary.$invalid)">
                                 <span class="form-error" ng-show="incomeForm.HaveSalary.$error.required">This field is required</span>
                             </div>
@@ -49,12 +45,8 @@
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">
                                     Do you have documented income for which you did not receive a W-2 Form at years end (eg contract or freelance work for which you receive a 1099 or 1099-R)</label>
-                                <label class="radio inline">
-                                    Yes
-                                    <input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="1"></label>
-                                <label class="radio inline">
-                                    No
-                                    <input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="2"></label>
+                                <label class="radio inline">Yes<input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="1"></label>
+                                <label class="radio inline">No<input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="2"></label>
                             </div>
                             <div ng-show="income.NonW2Income == 1">
                                 <div class="control-group row-fluid">

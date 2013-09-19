@@ -3,7 +3,7 @@
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     childCareService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -14,6 +14,7 @@
     //#region Event Handlers
     $scope.getChildChildCare = function (childId) {
         $scope.childCare = childCareService.childCares.get({ ChildId: childId }, function () {
+            $scope.isLoaded = true;
             if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
                 //see if garlic has something stored            
                 $scope.childCare = $.jStorage.get($scope.path);

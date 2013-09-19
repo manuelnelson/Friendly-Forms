@@ -1,4 +1,4 @@
-﻿<div class="form-vertical wrapper">
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="DeviationCtrl" id="deviationForm" name="deviationForm" novalidate>
         <div class="row-fluid">
             <div class="span12">
@@ -33,12 +33,8 @@
                         <div class="control-group">
                             <label class="form-question">
                                 Are you applying for a Child Support Payment Deviation?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="2"></label>
                             <div ng-show="deviationForm.Deviation.$dirty && deviationForm.Deviation.$invalid || (showErrors && deviationForm.Deviation.$invalid)">
                                 <span class="form-error" ng-show="deviationForm.Deviation.$error.required">This field is required</span>
                             </div>
@@ -202,15 +198,9 @@
                             <div class="control-group">
                                 <label class="form-question">
                                     Do you wish to apply for a Low Income or High Income Deviation?</label>
-                                <label class="radio inline">
-                                    No
-                                    <input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="3"></label>
-                                <label class="radio inline">
-                                    High
-                                    <input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="1"></label>
-                                <label class="radio inline">
-                                    Low
-                                    <input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="2"></label>
+                                <label class="radio inline">No<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="3"></label>
+                                <label class="radio inline">High<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="1"></label>
+                                <label class="radio inline">Low<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="2"></label>
                             </div>
                             <div ng-show="deviation.HighLow == 2">
                                 <div class="control-group row-fluid">

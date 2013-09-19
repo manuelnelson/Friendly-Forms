@@ -4,7 +4,7 @@
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     decisionService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -19,6 +19,7 @@
     //#region Event Handlers
     $scope.getChildDecision = function (childId) {
         $scope.decision = decisionService.decisions.get({ ChildId: childId }, function () {
+            $scope.isLoaded = true;
             if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
                 //see if garlic has something stored            
                 $scope.decision = $.jStorage.get($scope.path);
@@ -37,7 +38,8 @@
             return;
         }
         $scope.showExtraErrors = false;
-        $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;;
+        $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;
+        $scope.extraDecision.UserId = $routeParams.userId;
         decisionService.extraDecisions.save(null, $scope.extraDecision, function(data) {
             $scope.extraDecisions.push(data);
             $scope.extraDecision.DecisionMaker = -1;

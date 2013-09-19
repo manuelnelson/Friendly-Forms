@@ -19,11 +19,11 @@
                             <tbody>
                                 <tr ng-repeat="childAdded in children">
                                     <td ng-show="!(editing && editChildId==childAdded.Id)">{{childAdded.Name}}</td>
-                                    <td ng-show="!(editing  && editChildId==childAdded.Id)">{{childAdded.DateOfBirthString}}</td>
+                                    <td ng-show="!(editing  && editChildId==childAdded.Id)">{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}</td>
                                     <td ng-show="editing  && editChildId==childAdded.Id">
                                         <input type="text" ng-model="childAdded.Name" /></td>
                                     <td ng-show="editing && editChildId==childAdded.Id">
-                                        <input ui-jq="datepicker" data-date="{{childAdded.DateOfBirthString}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirthString" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">                                        
+                                        <input ui-jq="datepicker" data-date="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}">                                        
                                     </td>
                                     <td>
                                         <button class="btn-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="icon-white icon-edit"></i></button>
@@ -37,12 +37,8 @@
                     <form id="childrenForm" name="childrenForm" novalidate>
                         <div class="control-group">
                             <label class="form-question">Are there children involved in this case?</label>
-                            <label class="radio inline">
-                                Yes
-                                <input class="inline" ng-change="submit()" required ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="1"></label>
-                            <label class="radio inline">
-                                No
-                                <input class="inline" ng-change="submit()" ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" required ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" ng-change="submit()" ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="2"></label>
                             <div ng-show="childrenForm.ChildrenInvolved.$dirty && childrenForm.ChildrenInvolved.$invalid || (showErrors && childrenForm.ChildrenInvolved.$invalid)">
                                 <span class="form-error" ng-show="childrenForm.ChildrenInvolved.$error.required">Please select an option</span>
                             </div>

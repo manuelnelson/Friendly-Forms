@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -14,7 +14,7 @@ namespace FriendlyForms.RestService
     [DataContract]
     [Route("/PreexistingSupportChildren/")]
     [Route("/PreexistingSupportChildren/{Id}/")]
-    public class ReqPreexistingSupportChild
+    public class ReqPreexistingSupportChild : IHasUser
     {
         [DataMember]
         public long Id { get; set; }

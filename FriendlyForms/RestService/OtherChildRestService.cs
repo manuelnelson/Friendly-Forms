@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -13,7 +14,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/OtherChild/")]
-    public class ReqOtherChild
+    public class ReqOtherChild : IHasUser
     {
         [DataMember]
         public long Id { get; set; }

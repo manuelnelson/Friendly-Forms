@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using BusinessLogic.Contracts;
+using BusinessLogic.Properties;
 using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
@@ -44,11 +45,13 @@ namespace FriendlyForms.RestService
             public bool ChangeNotification { get; set; }
             public bool PrintNotification { get; set; }
         }
-
+        [Authenticate]
+        [RequiredRole("FirmAdmin", "Lawyer")]
         public class AttorneyClientsService : Service
         {
             public IAttorneyClientService AttorneyClientService { get; set; } //Injected by IOC
             public ICourtService CourtService { get; set; }
+            
             public object Get(ClientDto request)
             {
                 List<AttorneyClient> attorneyClients;
@@ -69,6 +72,7 @@ namespace FriendlyForms.RestService
                 }
                 throw new HttpError(HttpStatusCode.BadRequest, "Invalid arguments supplied.");
             }
+
             public object Get(AttorneyDto request)
             {
                 List<AttorneyClient> attorneyClients;
@@ -89,20 +93,21 @@ namespace FriendlyForms.RestService
                 }
                 throw new HttpError(HttpStatusCode.BadRequest, "Invalid arguments supplied.");
             }
+            
             public object Post(ClientDto request)
             {
                 var attorneyClientEntity = request.TranslateTo<AttorneyClient>();
                 AttorneyClientService.Add(attorneyClientEntity);
                 return attorneyClientEntity.ToClientDto();
             }
-
+            
             public object Put(ClientDto request)
             {
                 var attorneyClientEntity = request.TranslateTo<AttorneyClient>();
                 AttorneyClientService.Update(attorneyClientEntity);
                 return attorneyClientEntity;
             }
-
+            
             public void Delete(ClientDto request)
             {
                 if (request.Ids != null && request.Ids.Length > 0)

@@ -66,7 +66,6 @@
     $scope.doneEdit = function (child) {
         $scope.editing = false;
         $scope.editChildId = 0;
-        child.DateOfBirth = child.DateOfBirthString;
         childService.child.update({ }, child, function () {
         });
     };

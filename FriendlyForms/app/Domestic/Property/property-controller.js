@@ -1,6 +1,7 @@
 ﻿var PropertyCtrl = function($scope, $routeParams, $location, propertyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.property = propertyService.properties.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.property.Id == 'undefined' || $scope.property.Id == 0) {
             //see if garlic has something stored            
@@ -8,6 +9,7 @@
             if ($scope.property)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.propertyForm.$invalid) {

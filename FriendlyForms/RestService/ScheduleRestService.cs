@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -11,7 +12,7 @@ namespace FriendlyForms.RestService
 {
     [DataContract]
     [Route("/Schedules/")]
-    public class ReqSchedule
+    public class ReqSchedule : IHasUser
     {
         [DataMember]
         public long Id { get; set; }
@@ -21,8 +22,6 @@ namespace FriendlyForms.RestService
         public int DetermineBeginDate { get; set; }
         [DataMember]
         public string BeginDate { get; set; }
-        [DataMember]
-        public string BeginDateString { get; set; }
         [DataMember]
         public string CustodianWeekendOther { get; set; }
         [DataMember]
@@ -81,7 +80,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ResponseStatus ResponseStatus { get; set; }
     }
-    [Authenticate]
+    [CanViewClientInfo]
     public class ScheduleRestService : ServiceBase
     {
         public IScheduleService ScheduleService { get; set; }

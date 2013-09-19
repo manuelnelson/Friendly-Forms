@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using BusinessLogic.Contracts;
+﻿using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
@@ -10,25 +9,14 @@ namespace FriendlyForms.RestService
 {
     public class ExtraExpenseRestService
     {
-        //REST Resource DTO
-        [Route("/ExtraExpenses/{Ids}")]
-        public class ExtraExpenseListDto : IReturn<List<ExtraExpenseDto>>
-        {
-            public long[] Ids { get; set; }
-
-            public ExtraExpenseListDto(params long[] ids)
-            {
-                Ids = ids;
-            }
-        }
-
         [Route("/ExtraExpenses")]
         [Route("/ExtraExpenses", "POST")]
         [Route("/ExtraExpenses/", "PUT")]
         [Route("/ExtraExpenses/{Id}", "GET")]
-        public class ExtraExpenseDto : IReturn<ExtraExpenseDto>
+        public class ExtraExpenseDto : IReturn<ExtraExpenseDto>, IHasUser
         {
             public long Id { get; set; }
+            public long[] Ids { get; set; }
             public long UserId { get; set; }
             public long ChildId { get; set; }
             public int TutitionFather { get; set; }
@@ -74,10 +62,6 @@ namespace FriendlyForms.RestService
                 return ExtraExpenseEntity;
             }
 
-            public void Delete(ExtraExpenseListDto request)
-            {
-                ExtraExpenseService.DeleteAll(request.Ids);
-            }
 
             public void Delete(ExtraExpenseDto request)
             {

@@ -1,7 +1,9 @@
 ﻿var IncomeCtrl = function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.income = incomeService.incomes.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             //see if garlic has something stored            
             $scope.income = $.jStorage.get($scope.path);

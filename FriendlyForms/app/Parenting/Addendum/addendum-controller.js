@@ -1,7 +1,9 @@
 ﻿var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.addendum = addendumService.addendums.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
             //see if garlic has something stored            
             $scope.addendum = $.jStorage.get($scope.path);

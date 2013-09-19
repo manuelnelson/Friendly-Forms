@@ -205,7 +205,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AzureCacheClient.cs" />
+    <Compile Include="Helpers\CanViewClientInfo.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
+    <Compile Include="Helpers\IHasUser.cs" />
     <Compile Include="Helpers\PdfResult.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -225,6 +227,7 @@
     <Compile Include="RestService\ChildRestService.cs" />
     <Compile Include="RestService\ChildSupportRestService.cs" />
     <Compile Include="RestService\CommunicationRestService.cs" />
+    <Compile Include="RestService\ConstantRestService.cs" />
     <Compile Include="RestService\CountyRestService.cs" />
     <Compile Include="RestService\CourtRestService.cs" />
     <Compile Include="RestService\DebtRestService.cs" />
@@ -308,6 +311,7 @@
     <Content Include="app\Attorney\Client\client-controller.js" />
     <Content Include="app\Attorney\Client\client-service.js" />
     <Content Include="app\Attorney\Client\Client.html" />
+    <Content Include="app\constants-service.js" />
     <Content Include="app\Domestic\Asset\asset-controller.js" />
     <Content Include="app\Domestic\Asset\asset-service.js" />
     <Content Include="app\Domestic\Asset\asset.html" />

@@ -1,7 +1,9 @@
 ﻿var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.privacy = privacyService.privacies.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
             //see if garlic has something stored            
             $scope.privacy = $.jStorage.get($scope.path);

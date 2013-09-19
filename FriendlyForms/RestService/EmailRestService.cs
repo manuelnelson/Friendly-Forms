@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BusinessLogic.Contracts;
+using FriendlyForms.Helpers;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
@@ -8,7 +9,7 @@ namespace FriendlyForms.RestService
     public class EmailRestService
     {
         [Route("/Emails", "POST")]
-        public class EmailDto : IReturn<EmailDto>
+        public class EmailDto : IReturn<EmailDto>, IHasUser
         {
             public long UserId { get; set; }
             public string Email { get; set; }

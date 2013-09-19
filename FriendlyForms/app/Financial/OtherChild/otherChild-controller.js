@@ -3,11 +3,13 @@
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
+    $scope.isLoaded = false;
     $scope.showErrors = false;
     //#endregion
 
     //#region intialize
     otherChildService.otherChildren.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (data) {
+        $scope.isLoaded = true;
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.otherChildren = $.jStorage.get($scope.path);
