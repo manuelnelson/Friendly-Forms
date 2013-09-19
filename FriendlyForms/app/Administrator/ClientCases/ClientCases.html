@@ -1,6 +1,6 @@
 ﻿<div class="form-vertical wrapper">
     <div class="row-fluid">
-        <div class="span12">
+        <div class="span6">
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon"><i class="icon-signal"></i></span>
@@ -8,29 +8,68 @@
                 </div>
                 <div class="widget-content">
                     <div class="row-fluid">
-                        <button class="btn btn-primary pull-left">Add a New Case</button>
+                        <a href="/#/Attorney/CreateClient/Attorney/{{userId}}" class="btn btn-primary pull-left">Add a New Case</a>
                         <button class="btn btn-primary pull-right">View Archived Cases</button>
-                    </div>
+                    </div><br/>
                     <div class="row-fluid">
-                        <table>
+                        <div ng-show="clients.length==0">
+                            <h5>No Clients Here :(</h5>
+                            <p>Create a client case <a href="/#/Attorney/CreateClient/Attorney/{{userId}}">here</a>.</p>
+                        </div>
+                        <table class="table table-bordered table-striped table-hover" ng-show="clients.length>0">
                             <thead>
                                 <tr>
                                     <th></th>
                                     <th>Name</th>
                                     <th>Civil Case No.</th>
-                                    <th>Attorney</th>
                                     <th>Form Date</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="case in cases">
-                                    <td><button class="btn btn-primary" ng-click="openCase(case)">Open</button></td>
-                                    <td>{{case.Name}}</td>
-                                    <td>{{case.Number}}</td>
-                                    <td>{{case.Attorney}}</td>
-                                    <td>{{case.Date}}</td>
-                                    <td><button class="btn btn-primary" ng-click="archive(case)">Archive</button></td>
+                                <tr ng-repeat="client in clients">
+                                    <td><button class="btn btn-primary" ng-click="openClient(client)">Open</button></td>
+                                    <td>{{client.Name}}</td>
+                                    <td>{{client.CaseNumber}}</td>
+                                    <td>{{client.CreatedDate | date:'mediumDate'}}</td>
+                                    <td><button class="btn btn-primary" ng-click="archiveClient(client)">Archive</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span6">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Attorneys</h5>
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <a class="btn btn-primary pull-left" href="/#/Administrator/CreateAttorney/User/{{userId}}">Create Attorney</a>
+                    </div><br/>
+                    <div class="row-fluid">
+                        <div ng-show="attorneys.length==0">
+                            <h5>No Attorneys Here :(</h5>
+                            <p>Click the 'Create Attorney' button above to add an attorney.</p>
+                        </div>
+                        <table class="table table-bordered table-striped table-hover" ng-show="attorneys.length>0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="attorney in attorneys">
+                                    <td><button class="btn btn-primary" ng-click="openAttorney(attorney)">Open Page</button></td>
+                                    <td>{{attorney.DisplayName}}</td>
+                                    <td>{{attorney.Position}}</td>
+                                    <td><button class="btn btn-primary" ng-click="archiveAttorney(attorney)">Archive</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -39,5 +78,4 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" value="Close">Close</button>
 </div>

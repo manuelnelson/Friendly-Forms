@@ -1,11 +1,11 @@
 ﻿var FormCompleteCtrl = function($scope, $routeParams, $location, formCompleteService, menuService, genericService, headerService, $rootScope) {
     //#region Initialize
     $scope.storageKey = $location.path();
-    $scope.formName = $routeParams.formName;
+    $scope.formName = $routeParams.formName.replace(/([A-Z])/g, ' $1');
     $scope.CheckingFormProgress = true;
     $scope.NoErrors = true;
     checkProgress();
-    $scope.isStarter = $routeParams.formName == 'Starter';
+    $scope.isStarter = $routeParams.formName == 'PreliminaryInformation';
     //#endregion
     function checkProgress() {
         formCompleteService.formCompletes.get({ FormName: $routeParams.formName, UserId: $routeParams.userId }, function (result) {
@@ -27,7 +27,7 @@
         if (noNavigate)
             return;
         //special case for starter since we need to reload menu
-        if ($routeParams.formName === 'Starter') {
+        if ($routeParams.formName === 'PreliminaryInformation') {
             menuService.getMenu().then(function() {
                 $location.path('/Domestic/House/user/' + $routeParams.userId);
             });

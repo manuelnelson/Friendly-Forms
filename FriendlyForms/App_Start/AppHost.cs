@@ -24,6 +24,7 @@ using ServiceStack.OrmLite.SqlServer;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.ServiceInterface.Validation;
+using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(FriendlyForms.App_Start.AppHost), "Start")]
@@ -74,8 +75,8 @@ namespace FriendlyForms.App_Start
 		public override void Configure(Funq.Container container)
 		{
 			//Set JSON web services to return idiomatic JSON camelCase properties
-			ServiceStack.Text.JsConfig.EmitCamelCaseNames = false;
-
+			JsConfig.EmitCamelCaseNames = false;
+            JsConfig.DateHandler = JsonDateHandler.ISO8601;
             var appSettings = new AppSettings();
             AppConfig = new AppConfig(appSettings);
             container.Register(AppConfig);

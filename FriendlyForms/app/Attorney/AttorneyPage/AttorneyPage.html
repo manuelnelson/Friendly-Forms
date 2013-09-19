@@ -8,7 +8,7 @@
                 </div>
                 <div class="widget-content">
                     <div class="row-fluid">
-                        <button class="btn btn-primary pull-left">Add a New Case</button>
+                        <a href="/#/Attorney/CreateClient/Attorney/{{userId}}" class="btn btn-primary pull-left">Add a New Case</a>
                         <button class="btn btn-primary pull-right">View Archived Cases</button>
                     </div><br/>
                     <div class="row-fluid">
@@ -16,22 +16,22 @@
                             <h5>No Clients Here :(</h5>
                             <p>Create a client case <a href="/#/Attorney/CreateClient/Attorney/{{userId}}">here</a>.</p>
                         </div>
-                        <table ng-show="clients.length>0">
+                        <table class="table table-bordered table-striped table-hover" ng-show="clients.length>0">
                             <thead>
                                 <tr>
                                     <th></th>
                                     <th>Name</th>
-                                    <!--                                    <th>Civil Case No.</th>-->
+                                    <th>Civil Case No.</th>
                                     <th>Form Date</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="client in clients">
-                                    <td><button class="btn btn-primary" ng-click="openCase(client)">Open</button></td>
+                                    <td><button class="btn btn-primary" ng-click="openClient(client)">Open</button></td>
                                     <td>{{client.Name}}</td>
                                     <td>{{client.CaseNumber}}</td>
-                                    <td>{{client.Date}}</td>
+                                    <td>{{client.CreatedDate | date:'mediumDate'}}</td>
                                     <td><button class="btn btn-primary" ng-click="archiveClient(client)">Archive</button></td>
                                 </tr>
                             </tbody>
@@ -41,5 +41,4 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" value="Close">Close</button>
 </div>

@@ -9,18 +9,24 @@
                 <div class="widget-content">
                     <span style="font-size: 18px; float: left">{{userAuth.DisplayName}}</span>
                     <span style="font-size: 16px; float: right">Civil Case Number:  {{court.CaseNumber}}</span>
-                    <hr style="border-top: 1px solid #ccc;border-bottom: 0;"/>
+                    <hr style="border-top: 1px solid #ccc; border-bottom: 0;" />
                     <h5>Basic Information</h5>
                     <div class="row-fluid">
                         <span class="span1">Email Identifier</span><span class="span3">{{userAuth.Email}}</span>
                         <span class="span1">Client Email</span><span class="span3">{{userAuth.PrimaryEmail}}</span>
                     </div>
-                    <!--                    <div class="row-fluid">
-                        <span class="span4">Client Email</span><span>{{user.PrimaryEmail}}</span>
-                    </div>-->
-                    <br />
-                    <hr style="border-top: 1px solid #ccc;border-bottom: 0;"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Notifications</h5>
+                </div>
+                <div class="widget-content">
                     <p>Who will receive notification of changes to the form?</p>
                     <label class="checkbox inline" ng-repeat="person in authorizedPeople">
                         {{person.AttorneyName}}                        
@@ -31,14 +37,23 @@
                         {{person.AttorneyName}}                        
                         <input ng-model="person.PrintNotification" class="inline" type="checkbox" ng-click="notify(person)" />
                     </label>
-                    <br/>
-                    <hr style="border-top: 1px solid #ccc;border-bottom: 0;"/>
-                    <h5>Add Authorized Users</h5>
+                </div>
+            </div>
+        </div>
+        <div class="span6">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Authorized Users</h5>
+                </div>
+                <div class="widget-content">
                     <p>Who has access to this client?</p>
-                    <label class="checkbox inline" ng-repeat="user in lawFirmUsers">
-                        {{user.DisplayName}}                        
-                        <input ng-model="user.hasAccess" class="inline" type="checkbox" ng-click="allowAccess(user)" />
-                    </label>
+                    <ul class="no-style">
+                        <li ng-repeat="user in lawFirmUsers">
+                            <span class="checkbox">
+                                <input ng-model="user.hasAccess" type="checkbox" ng-click="allowAccess(user)" />{{user.DisplayName}}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

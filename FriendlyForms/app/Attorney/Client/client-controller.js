@@ -28,8 +28,10 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
                 ClientUserId: $routeParams.userId,
                 ChangeNotification: false,
                 PrintNotification: false
-            },function(attorneyClient) {
-                $scope.authorizedPeople.push(attorneyClient);
+            }, function (client) {
+                clientService.attorneys.get({ Id: client.Id }, function (attorney) {
+                    $scope.authorizedPeople.push(attorney);
+                });
             });
         } else {
             //delete user from attorney client table

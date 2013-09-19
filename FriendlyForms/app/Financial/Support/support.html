@@ -120,8 +120,7 @@
                         </form>
                         <div ng-show="showAddChild">
                             <form ng-submit="addChild()" id="childForm" name="childForm" novalidate>
-                                <h5>Add children to Child Support</h5>
-                                <br />
+                                <h5 style="margin-bottom: 10px">Add children to Child Support</h5>
                                 <div class="control-group row-fluid">
                                     <label class="span4 form-question">Name</label>
                                     <input class="hoverHelp" data-content="Enter the child's full name here." ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="child.Name" name="child.Name" placeholder="Name" type="text" value="" data-original-title="">
@@ -138,7 +137,8 @@
                                 </div>
                             </form>
                             <button class="btn btn-primary" ng-click="addChild()" value="Add">Add </button>
-                            <button class="btn btn-primary" ng-click="hideAddChild()" value="Done">Done </button>
+                            <button class="btn btn-primary" ng-show="children.length > 0" ng-click="hideAddChild()" value="Done">Done </button>
+                            <button class="btn btn-primary" ng-show="children.length === 0" ng-click="hideAddChild()" value="Cancel">Cancel </button>
                         </div>
                     </div>
                 </div>

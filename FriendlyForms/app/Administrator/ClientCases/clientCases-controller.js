@@ -1,36 +1,25 @@
-﻿var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'genericService', '$rootScope',
-    function ($scope, $routeParams, $location, clientCasesService, menuService, genericService, $rootScope) {
-        $scope.path = $location.path();
-        $scope.clientCases = clientCasesService.clientCases.get({ UserId: $routeParams.userId }, function () {
-            if (typeof $scope.clientCases.Id == 'undefined' || $scope.clientCases.Id == 0) {
-                //see if garlic has something stored            
-                $scope.clientCases = $.jStorage.get($scope.path);
-            }
+﻿var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService',
+    function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService) {
+        $scope.clients = [];
+        $scope.userId = $routeParams.userId;
+        userService.getUserData($routeParams.userId).then(function(data) {
+            $scope.admin = data;
+            userService.getLawFirmUsers(data.LawFirmId).then(function(lawFirmUsers) {
+                $scope.attorneys = lawFirmUsers;
+            });
         });
-        $scope.submit = function (noNavigate) {
-            if ($scope.clientCasesForm.$invalid) {
-                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-                var value = genericService.getFormInput('#clientCasesForm');
-                $.jStorage.set($scope.path, value);
-                if (!noNavigate)
-                    menuService.nextMenu();
-                return;
-            }
-            $.jStorage.deleteKey($scope.storageKey);
-            $scope.clientCases.UserId = $routeParams.userId;
-            if (typeof $scope.clientCases.Id == 'undefined' || $scope.clientCases.Id == 0) {
-                clientCasesService.clientCases.save(null, $scope.clientCases, function () {
-                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                    if (!noNavigate)
-                        menuService.nextMenu();
-                });
-            } else {
-                clientCasesService.clientCases.update({ Id: $scope.clientCases.Id }, $scope.clientCases, function () {
-                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                    if (!noNavigate)
-                        menuService.nextMenu();
-                });
-            }
+        clientService.getClients($routeParams.userId).then(function(clients) {
+            $scope.clients = clients;
+        });
+        $scope.openClient = function (client) {
+            $location.path('/Client/' + client.ClientUserId);
         };
-        genericService.refreshPage();
+        $scope.archiveClient = function (client) {
+
+        };
+        $scope.openAttorney = function(attorney) {
+            $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
+        };
+        headerService.setTitle("Administrator");
+
     }];

@@ -848,7 +848,7 @@ namespace FriendlyForms.RestService
                         {
                             IncompleteForms = OutputService.GetFinancialIncompleteForms(userId)
                         };
-                case "Starter":
+                case "PreliminaryInformation":
                     return new FormCompleteDtoResp
                         {
                             IncompleteForms = OutputService.GetStarterIncompleteForms(userId)

@@ -22,16 +22,16 @@
                     AuthorOfPlan: 1,
                     PlanType: 1
                 };
-                //link client to attorney
-                var clientAttorney = {
-                    UserId: $routeParams.userId,
-                    ClientUserId: userAuth.UserId
-                };
-                clientService.clients.save(null, clientAttorney, function () {
-                    courtService.courts.save(null, court, function () {
+                courtService.courts.save(null, court, function () {
+                    var clientAttorney = {
+                        UserId: $routeParams.userId,
+                        ClientUserId: userAuth.UserId
+                    };
+                    clientService.clients.save(null, clientAttorney, function () {
                         $location.path('/Attorney/Client/' + clientAttorney.ClientUserId);
                     });
                 });
+                //link client to attorney
             });
         };
         headerService.setTitle('Create A Client');

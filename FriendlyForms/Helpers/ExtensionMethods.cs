@@ -36,7 +36,6 @@ namespace FriendlyForms.Helpers
             var userService = EndpointHost.AppHost.TryResolve<IUserService>();
             return attorneyClients.Select(attorneyClient => attorneyClient.ToAttorneyDto(userAuthRepository, userService)).ToList();
         }
-
         public static AttorneyClientRestService.AttorneyDto ToAttorneyDto(this AttorneyClient attorneyClient, IUserAuthRepository userAuthRepository = null, IUserService userService = null)
         {
             if(userAuthRepository== null)
@@ -72,5 +71,6 @@ namespace FriendlyForms.Helpers
             };
             return attorneyDto;
         }
+
     }
 }

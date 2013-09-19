@@ -10,12 +10,12 @@
                     <div class="widget-content">
                         <div ng-show="CheckingFormProgress">
                             <h4>Checking Progress...</h4>
-                            <p>Please wait while we double check to make sure the {{FormName}} is entirely complete...</p>
+                            <p>Please wait while we double check to make sure the {{formName}} form is entirely complete...</p>
                         </div>
                         <div ng-show="!CheckingFormProgress && NoErrors">
                             <h4>Complete!</h4>
-                            <p ng-show="!isStarter">You have successfully completed the {{FormName}} form.  Click continue to preview the output</p>
-                            <p ng-show="isStarter">You have successfully completed the {{FormName}} form.  Click continue to move on to the next form.</p>
+                            <p ng-show="!isStarter">You have successfully completed the {{formName}} form.  Click continue to preview the output</p>
+                            <p ng-show="isStarter">You have successfully completed the {{formName}} form.  Click continue to move on to the next form.</p>
                         </div>
                         <div ng-show="!CheckingFormProgress && !NoErrors">
                             <h4>Needs Attention</h4>

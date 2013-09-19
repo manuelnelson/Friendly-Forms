@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
 using FriendlyForms.Models;
@@ -17,14 +19,11 @@ namespace FriendlyForms.RestService
 {
     #region UserAuth
     [Route("/userauths")]
-    public class UserAuths
-    {
-        public int[] Ids { get; set; }
-    }
-    [Route("/userauths")]
     [DataContract]
     public class UserAuthRequest
     {
+        [DataMember]
+        public long[] UserIds { get; set; }
         [DataMember]
         public long UserId { get; set; }
         [DataMember]
@@ -192,17 +191,28 @@ namespace FriendlyForms.RestService
         #region Get
         public object Get(UserAuthRequest request)
         {
-            var userAuthId = "";
             if (!string.IsNullOrEmpty(request.UserAuthId))
             {
-                userAuthId = request.UserAuthId;
+                var userAuthId = request.UserAuthId;
+                var userAuth = UserAuthRepository.GetUserAuth(userAuthId).TranslateTo<UserAuthResponse>();
+                userAuth.CustomId = request.UserId == 0 ? UserService.GetByUserAuthId(Convert.ToInt32(userAuthId)).Id.ToString(CultureInfo.InvariantCulture) : request.UserId.ToString(CultureInfo.InvariantCulture);
+                return userAuth;
             }
             if (request.UserId != 0)
             {
-                userAuthId = UserService.Get(request.UserId).UserAuthId.ToString(CultureInfo.InvariantCulture);
+                return GetUserAuth(request.UserId);
             }
-            var userAuth = UserAuthRepository.GetUserAuth(userAuthId).TranslateTo<UserAuthResponse>();
-            userAuth.CustomId = request.UserId == 0 ? UserService.GetByUserAuthId(Convert.ToInt32(userAuthId)).Id.ToString(CultureInfo.InvariantCulture) : request.UserId.ToString(CultureInfo.InvariantCulture);
+            if (request.UserIds != null && request.UserIds.Length > 0)
+            {
+                return request.UserIds.Select(GetUserAuth).ToList();
+            }
+            throw new HttpError(HttpStatusCode.BadRequest, "Invalid arguments supplied.");
+        }
+        private UserAuthResponse GetUserAuth(long userId)
+        {
+            var user = UserService.Get(userId);
+            var userAuth = UserAuthRepository.GetUserAuth(user.UserAuthId.ToString(CultureInfo.InvariantCulture)).TranslateTo<UserAuthResponse>();
+            userAuth.CustomId = user.Id.ToString(CultureInfo.InvariantCulture);
             return userAuth;
         }
         public object Get(UserSession request)
@@ -272,20 +282,21 @@ namespace FriendlyForms.RestService
             return response;
         }
         #endregion
-        public object Any(UserAuths request)
-        {
-            var response = new UserAuthsResponse
-            {
-                UserSession = base.UserSession,
-                //UserAuths = Db.Select<UserAuth>(),
-                //OAuthProviders = Db.Select<UserOAuthProvider>(),
-            };
 
-            //response.UserAuths.ForEach(x => x.PasswordHash = "[Redacted]");
-            //response.UserAuths.ForEach(x => x.Salt = "[Redacted]");
+        //public object Any(UserAuths request)
+        //{
+        //    var response = new UserAuthsResponse
+        //    {
+        //        UserSession = base.UserSession,
+        //        //UserAuths = Db.Select<UserAuth>(),
+        //        //OAuthProviders = Db.Select<UserOAuthProvider>(),
+        //    };
 
-            return response;
-        }
+        //    //response.UserAuths.ForEach(x => x.PasswordHash = "[Redacted]");
+        //    //response.UserAuths.ForEach(x => x.Salt = "[Redacted]");
+
+        //    return response;
+        //}
 
 
     }

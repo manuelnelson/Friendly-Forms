@@ -66,6 +66,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
+
 FormsApp.value('ui.config', {
     jq: {
         popover: {
@@ -87,6 +88,7 @@ function integerFormatter(value) {
     }
 }
 var INTEGER_REGEXP = /^\-?\d*$/;
+
 FormsApp.directive('integer', function () {
     return {
         require: 'ngModel',
