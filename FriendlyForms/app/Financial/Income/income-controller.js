@@ -1,7 +1,9 @@
-﻿var IncomeCtrl = function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope) {
+﻿var IncomeCtrl = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope', 'participantService', 
+    function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope, participantService) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
+    $scope.parent = $routeParams.isOtherParent == 'true' ? 'mother' : 'father';
     $scope.income = incomeService.incomes.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         $scope.isLoaded = true;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
@@ -40,5 +42,4 @@
     genericService.refreshPage(function () {
         $rootScope.currentScope = $scope;
     });
-};
-IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope'];
+}];

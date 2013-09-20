@@ -5,6 +5,6 @@ namespace BusinessLogic.Contracts
 {
     public interface IMenuService
     {
-        List<MenuItem> Get(string route, long userId, bool isAuthenticated = false);
+        List<MenuItem> Get(string route, long userId, bool showAdminMenu, bool showAttorneyMenu, bool isAuthenticated = false);
     }
 }

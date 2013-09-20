@@ -46,7 +46,7 @@ namespace FriendlyForms.RestService
             public bool PrintNotification { get; set; }
         }
         [Authenticate]
-        [RequiredRole("FirmAdmin", "Lawyer")]
+        [RequiredRole("Lawyer")]
         public class AttorneyClientsService : Service
         {
             public IAttorneyClientService AttorneyClientService { get; set; } //Injected by IOC

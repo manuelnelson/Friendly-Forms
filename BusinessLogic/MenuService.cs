@@ -2,6 +2,7 @@
 using System.Linq;
 using BusinessLogic.Contracts;
 using BusinessLogic.Models;
+using BusinessLogic.Properties;
 using Models;
 
 namespace BusinessLogic
@@ -24,7 +25,7 @@ namespace BusinessLogic
             OutputService = outputService;
         }
 
-        public List<MenuItem> Get(string route, long userId, bool isAuthenticated = false)
+        public List<MenuItem> Get(string route, long userId, bool showAdminMenu, bool showAttorneyMenu, bool isAuthenticated = false)
         {
             //Always has Home Link
             var menuList = new List<MenuItem>
@@ -41,7 +42,17 @@ namespace BusinessLogic
             {
                 return menuList;
             }
-            if (UserIsAtStarterStage(userId))
+            if (showAdminMenu)
+            {
+                var adminMenu = GetAdminMenu(userId);
+                menuList.Add(adminMenu);
+            } 
+            else if (showAttorneyMenu)
+            {
+                var attorneyMenu = GetAttorneyMenu(userId);
+                menuList.Add(attorneyMenu);                
+            }
+            else if (UserIsAtStarterStage(userId))
             {
                 var starterMenu = GetStarterMenu(userId);
                 //Get Completed Status of forms for the menu
@@ -67,6 +78,19 @@ namespace BusinessLogic
                     text = "Log out",
                 });
             return menuList;
+        }
+
+        private MenuItem GetAttorneyMenu(long userId)
+        {
+            return new MenuItem
+            {
+                itemClass = "",
+                path = "/#/Attorney/AttorneyPage/Attorney/" + userId,
+                pathIdentifier = "Attorney",
+                iconClass = "icon icon-user",
+                text = "Attorney Profile",
+                showSubMenu = false,
+            };
         }
 
         private MenuItem GetOutputMenu(long userId, List<MenuItem> mainList)
@@ -251,7 +275,7 @@ namespace BusinessLogic
                 {
                     itemClass = "submenu",
                     path = "",
-                    pathIdentifier = "Starter",
+                    pathIdentifier = Resources.StarterFormName,
                     iconClass = "icon icon-th-list",
                     text = "Preliminary Information",
                     showSubMenu = false,
@@ -572,6 +596,19 @@ namespace BusinessLogic
                 text = FinancialText,
                 showSubMenu = false,
                 subMenuItems = menuList
+            };
+
+        }
+        private MenuItem GetAdminMenu(long userId)
+        {
+            return new MenuItem
+            {
+                itemClass = "",
+                path = "/#/Administrator/ClientCases/User/" + userId,
+                pathIdentifier = "Administrator",
+                iconClass = "icon icon-user",
+                text = "Administration",
+                showSubMenu = false,
             };
 
         }

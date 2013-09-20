@@ -34,7 +34,7 @@ namespace FriendlyForms.RestService
             public string PageName { get; set; }
         }
         [Authenticate]
-        [RequiredRole("FirmAdmin", "Lawyer")]
+        [RequiredRole("Lawyer")]
         public class AttorneyPagesService : Service
         {
             public IAttorneyPageService AttorneyPageService { get; set; } //Injected by IOC

@@ -95,7 +95,7 @@
     }
     <div ng-controller="LoadingCtrl" id="loading" ng-show="loading"><span>{{message}}</span></div>
     @Html.Partial("_templateErrorMessage")
-@*        @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))*@
+@*    @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))*@
     @Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal)
 </body>
 </html>

@@ -19,10 +19,10 @@ namespace BusinessLogic.Models
         public int Total34 { get; set; }
         [DataMember]
         public int Total5Minus1 { get; set; }
-        [DataMember]
-        public List<PreexistingSupportChild> PreexistingSupportChild { get; set; }
-        [DataMember]
-        public List<PreexistingSupport> PreexistingSupport { get; set; }
+        //[DataMember]
+        //public List<PreexistingSupportChild> PreexistingSupportChild { get; set; }
+        //[DataMember]
+        //public List<PreexistingSupport> PreexistingSupport { get; set; }
         [DataMember]
         public int TotalSupport { get; set; }
         [DataMember]
@@ -40,5 +40,7 @@ namespace BusinessLogic.Models
         public int TheoreticalSupport { get; set; }
         [DataMember]
         public int PreexistingOrder { get; set; }
+        [DataMember]
+        public string IncomeDetails { get; set; }
     }
 }

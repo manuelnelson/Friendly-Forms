@@ -50,15 +50,12 @@
 <table>
     <thead>
         <tr>
-            <th colspan="3">Adjustment for Preexisting Child Support Orders Being Paid for Other Children</th>
+            <th>Adjustment for Preexisting Child Support Orders Being Paid for Other Children</th>
+            <th>{{scheduleB.Father}}</th>
+            <th>{{scheduleB.Mother}}</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
         <tr>
             <td>8. Total Adjustment for Preexisting Child Support Orders</td>
             <td>${{scheduleB.ScheduleB.TotalSupport}}</td>
@@ -98,7 +95,7 @@
         </tr>
     </tbody>
 </table>
-<table>
+<table ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0 || scheduleB.ScheduleB.OtherChildrenDescription.length > 0">
     <thead>
         <tr>
             <th>Reason for Inclusion of Qualified Children in This Court Case</th>
@@ -107,8 +104,8 @@
     <tbody>
         <tr>
             <td>
-                <p>The addition of Qualified Children for {{scheduleB.Mother}} is based upon: {{scheduleB.OtherScheduleB.OtherChildrenDescription}}</p>
-                <p>The addition of Qualified Children for {{scheduleB.Father}} is based upon: {{scheduleB.ScheduleB.OtherChildrenDescription}}</p>
+                <p ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Mother}} is based upon: {{scheduleB.OtherScheduleB.OtherChildrenDescription}}</p>
+                <p ng-show="scheduleB.ScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Father}} is based upon: {{scheduleB.ScheduleB.OtherChildrenDescription}}</p>
             </td>
         </tr>
     </tbody>
@@ -143,9 +140,10 @@
     </tbody>
 </table>
 <br />
-<div class="borderBox centered" style="width: 90%;">
-    <p><span style="font-weight: bold">Other income for {{scheduleB.Father}} is based upon:</span> {{scheduleB.ScheduleB.OtherDetails}}</p>
-    <p><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.OtherDetails}}</p>
+<!--The children are mine by a previous marriage-->
+<div class="borderBox centered" style="width: 90%;" ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0 || scheduleB.ScheduleB.IncomeDetails.length > 0">
+    <p ng-show="scheduleB.ScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Father}} is based upon:</span> {{scheduleB.ScheduleB.IncomeDetails}}</p>
+    <p ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.IncomeDetails}}</p>
 </div>
 <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
     <input type="hidden" class="html" name="html" />

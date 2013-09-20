@@ -1,10 +1,15 @@
-﻿var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope',
-function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope) {
-    $scope.userAuth = userService.getUserAuth($routeParams.userId);
-    $scope.user = userService.getUserData($routeParams.userId);
+﻿var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'constantsService',
+function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, constantsService) {
+    //#region Init
+    userService.getUserAuth($routeParams.userId).then(function (userAuth) {
+         $scope.userAuth = userAuth;
+         headerService.setTitle(userAuth.DisplayName);
+     });
+    userService.getUserData($routeParams.userId).then(function(user) {
+        $scope.user = user;        
+    });
     $scope.court = courtService.courts.get({ UserId: $routeParams.userId }, function () {
     });
-
     clientService.attorneys.getList({ ClientUserId: $routeParams.userId }, function (data) {
         $scope.authorizedPeople = data;
         var authorizedUsersIds = _.pluck(data, 'UserId');
@@ -20,7 +25,16 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
             });
         }
     });
-    $scope.allowAccess = function(person) {
+    //#endregion
+
+    //#region EventHandlers
+    $scope.viewCase = function() {
+        //get menu for user        
+        menuService.getMenu($routeParams.userId).then(function (menuItems) {
+            menuService.goToFirstFormMenu();
+        });
+    };
+    $scope.allowAccess = function (person) {
         if (person.hasAccess) {
             //post user to attorneyclient table
             clientService.clients.save(null, {
@@ -54,6 +68,6 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
         clientService.clients.update(null, person, function () {
         });
     };
+    //#endregion
     $rootScope.currentScope = $scope;
-    headerService.setTitle("Client Profile");
 }];

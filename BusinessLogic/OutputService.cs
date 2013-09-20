@@ -6,6 +6,7 @@ using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using Models;
 using Models.Contract;
+using Models.ViewModels;
 using ServiceStack.Common;
 
 namespace BusinessLogic
@@ -106,12 +107,18 @@ namespace BusinessLogic
             schedule.MedicareTax = (int)(schedule.SelfEmploymentIncome * .0145);
             schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
             schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
-            if (preexistingSupport != null)
+            if (preexistingSupport != null && preexistingSupport.Support == (int)YesNo.Yes)
             {
-                var preexistingSupportChildren = PreexistingSupportChildService.GetChildrenBySupportId(preexistingSupport.Id).ToList();
-                schedule.PreexistingSupportChild = preexistingSupportChildren.ToList();
-                schedule.PreexistingSupport = preexistingSupportChildren.Select(preexistingSupportChild => PreexistingSupportService.Get(preexistingSupportChild.PreexistingSupportId)).ToList();                 
-                schedule.TotalSupport = schedule.PreexistingSupport.Sum(c => c.Monthly);
+                var preexistingCourts =
+                    PreexistingSupportService.GetFiltered(x => x.UserId == userId && x.IsOtherParent == isOtherParent)
+                                             .ToList();
+                foreach (var preexistingSupportChildren in preexistingCourts.Select(court => PreexistingSupportChildService.GetChildrenBySupportId(court.Id).ToList()))
+                {                    
+                    //schedule.PreexistingSupportChild.AddRange(preexistingSupportChildren.ToList());
+                    var support = preexistingSupportChildren.Select(preexistingSupportChild => PreexistingSupportService.Get(preexistingSupportChild.PreexistingSupportId)).ToList();
+                    //schedule.PreexistingSupport = 
+                    schedule.TotalSupport += support.Sum(c => c.Monthly);
+                }
             }
             schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
             if (otherChildren != null)
@@ -130,6 +137,7 @@ namespace BusinessLogic
             schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
                                             ? schedule.AdjustedSupport - schedule.TheoreticalSupport
                                             : schedule.Subtotal - schedule.TheoreticalSupport;
+            schedule.IncomeDetails = income.OtherDetails;
             return schedule;
 
         }

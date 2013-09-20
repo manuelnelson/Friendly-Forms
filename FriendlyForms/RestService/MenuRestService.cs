@@ -1,5 +1,6 @@
 ﻿using System;
 using BusinessLogic.Contracts;
+using BusinessLogic.Properties;
 using ServiceStack.ServiceHost;
 
 namespace FriendlyForms.RestService
@@ -20,7 +21,12 @@ namespace FriendlyForms.RestService
 
             public object Get(MenuDto request)
             {
-                return MenuService.Get(request.Route, Convert.ToInt32(UserSession.CustomId), UserSession.IsAuthenticated);
+
+                var showAdminMenu = request.UserId == Convert.ToInt64(UserSession.CustomId) &&
+                                    UserSession.HasRole(Resources.AdminRole);
+                var showAttorneyMenu = request.UserId == Convert.ToInt64(UserSession.CustomId) &&
+                                    UserSession.HasRole(Resources.AttorneyRole);
+                return MenuService.Get(request.Route, request.UserId, showAdminMenu, showAttorneyMenu, isAuthenticated: UserSession.IsAuthenticated);
             }
 
         }

@@ -17,10 +17,6 @@
                 item.itemClass = '';
             });
         },
-        children: $resource('/api/child/:userId', { userId: '@userId' },
-            {
-                update: { method: 'PUT' },
-            }),
         getFirstChildId: function () {
             for (var i = 0; i < service.menuItems.length; i++) {
                 var item = service.menuItems[i];
@@ -34,15 +30,16 @@
                 }
             }
         },
-        getMenu: function () {
+        getMenu: function (userId) {
             var deferred = $q.defer();
-            var userId = service.userId;
+            if(!userId)
+                userId = service.userId;
             if (typeof userId === 'undefined')
                 userId = 0;
             service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {
                 service.setItems(menuItems);
                 service.isInitialized = true;
-                deferred.resolve();
+                deferred.resolve(menuItems);
             });
             return deferred.promise;
         },
@@ -74,6 +71,15 @@
                     };
                 }
             }
+        },
+        //This can be handy when navigating to someone's case, to just go to the first form
+        goToFirstFormMenu: function () {
+            //go to first menuItem that has submenus
+            var menuItem = _.find(service.menuItems, function (item) {
+                return item.subMenuItems && item.subMenuItems.length > 0;
+            });
+            if (menuItem)
+                $location.path(menuItem.subMenuItems[0].path);
         },
         enableMenu: function(path) {
             var menuGroup = service.getMenuGroupByPath(path);
