@@ -336,6 +336,7 @@
     <Content Include="app\Domestic\Vehicle\vehicle-controller.js" />
     <Content Include="app\Domestic\Vehicle\vehicle-service.js" />
     <Content Include="app\Domestic\Vehicle\vehicle.html" />
+    <Content Include="app\filters.js" />
     <Content Include="app\Financial\ChildCare\childcare-controller.js" />
     <Content Include="app\Financial\ChildCare\childcare-service.js" />
     <Content Include="app\Financial\ChildCare\ChildCare.html" />

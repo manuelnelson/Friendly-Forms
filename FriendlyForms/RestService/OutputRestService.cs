@@ -865,6 +865,21 @@ namespace FriendlyForms.RestService
             var parentNames = GetParentNames(userId);
             var schedule = OutputService.GetScheduleB(userId, parentNames.Father);
             var scheduleOther = OutputService.GetScheduleB(userId, parentNames.Mother, true);
+
+            //This part has to done after the fact, since we need calculations from both mother and father schedules.
+            var children = ChildService.GetByUserId(userId);
+            var totalIncome = schedule.AdjustedSupport + scheduleOther.AdjustedSupport;
+            schedule.GeorgiaObligations = (int) BcsoService.GetAmount(totalIncome, children.Count);
+            schedule.TheoreticalSupport = (int)(schedule.GeorgiaObligations * .75);
+            schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
+                                            ? schedule.AdjustedSupport - schedule.TheoreticalSupport
+                                            : schedule.Subtotal - schedule.TheoreticalSupport;
+
+            scheduleOther.GeorgiaObligations = (int)BcsoService.GetAmount(totalIncome, children.Count);
+            scheduleOther.TheoreticalSupport = (int)(scheduleOther.GeorgiaObligations * .75);
+            scheduleOther.PreexistingOrder = Math.Abs(scheduleOther.AdjustedSupport - 0) > 0.01
+                                            ? scheduleOther.AdjustedSupport - scheduleOther.TheoreticalSupport
+                                            : scheduleOther.Subtotal - scheduleOther.TheoreticalSupport;
             return new ScheduleBDtoResp
             {
                 ScheduleB = schedule,

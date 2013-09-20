@@ -29,8 +29,8 @@ The specifics are as follows:
     <ol class="bold">
         <li>Gross Income
             <p>
-                The {{csa.ParentNames.Father}} gross monthly income (before taxes) is ${{csa.GrossIncome.FatherAmount}}; the {{csa.ParentNames.Mother}} gross monthly 
-                income (before taxes) is ${{csa.GrossIncome.MotherAmount}}.
+                The {{csa.ParentNames.Father}} gross monthly income (before taxes) is {{csa.GrossIncome.FatherAmount | dollarAmount}}; the {{csa.ParentNames.Mother}} gross monthly 
+                income (before taxes) is {{csa.GrossIncome.MotherAmount  | dollarAmount}}.
             </p>
         </li>
         <li>Number of Children
@@ -45,7 +45,7 @@ The specifics are as follows:
             </p>
         </li>
         <li>Child Support Amount
-            <p>{{csa.ParentNames.NonCustodialParent}} shall pay to {{csa.ParentNames.CustodialParent}}, for the support of the minor children, the sum of {{csa.ChildSupportAmount.MonthlyAmountWritten}} Dollars (${{csa.ChildSupportAmount.MonthlyAmount}}) per month, beginning on {{csa.ChildSupport.BeginDate | date:'longDate'}}</p>
+            <p>{{csa.ParentNames.NonCustodialParent}} shall pay to {{csa.ParentNames.CustodialParent}}, for the support of the minor children, the sum of {{csa.ChildSupportAmount.MonthlyAmountWritten}} Dollars ({{csa.ChildSupportAmount.MonthlyAmount | dollarAmount}}) per month, beginning on {{csa.ChildSupport.BeginDate | date:'longDate'}}</p>
         </li>
         <li>Duration of Child Support
             <p ng-show="csa.ChildSupport.SupportEnd == 1">
@@ -79,7 +79,7 @@ The specifics are as follows:
                  Deviation - It has been determined that one or more of the Deviations allowed under OCGA §19-
                 6-15 applies in this case, as shown by the attached Schedule E. The Presumptive Amount of Child 
                 Support that would have been required under OCGA §19-6-15 if the deviations had not been applied is 
-                ${{csa.Deviation.Amount}} per month, as shown on the attached Child Support Worksheet. The attached Schedule E 
+                {{csa.Deviation.Amount | dollarAmount}} per month, as shown on the attached Child Support Worksheet. The attached Schedule E 
                 explains the reasons for the deviation, how the application of the guidelines would be unjust or inappropriate considering the relative ability of each parent to provide support, and how the best interest of 
                 the children who are subject to this child support determination is served by deviation from the presumptive amount of child support.
             </p>

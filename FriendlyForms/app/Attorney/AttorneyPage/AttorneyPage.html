@@ -8,13 +8,13 @@
                 </div>
                 <div class="widget-content">
                     <div class="row-fluid">
-                        <a href="/#/Attorney/CreateClient/Attorney/{{userId}}" class="btn btn-primary pull-left">Add a New Case</a>
+                        <a href="/#/Attorney/CreateClient/Attorney/{{userId}}" class="btn btn-primary pull-left">Add a New Client</a>
                         <button class="btn btn-primary pull-right">View Archived Cases</button>
                     </div><br/>
                     <div class="row-fluid">
                         <div ng-show="clients.length==0">
                             <h5>No Clients Here :(</h5>
-                            <p>Create a client case <a href="/#/Attorney/CreateClient/Attorney/{{userId}}">here</a>.</p>
+                            <p>Create a client case by clicking the 'Add a New Client' button above.</p>
                         </div>
                         <table class="table table-bordered table-striped table-hover" ng-show="clients.length>0">
                             <thead>

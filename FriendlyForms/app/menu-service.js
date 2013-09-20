@@ -34,6 +34,9 @@
             var deferred = $q.defer();
             if(!userId)
                 userId = service.userId;
+            else 
+                service.userId = userId;
+            
             if (typeof userId === 'undefined')
                 userId = 0;
             service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {

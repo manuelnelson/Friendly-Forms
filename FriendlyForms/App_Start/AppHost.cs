@@ -297,7 +297,7 @@ namespace FriendlyForms.App_Start
                 c.Resolve<ICourtService>(), c.Resolve<IParticipantService>(), c.Resolve<IChildService>(), c.Resolve<IPrivacyService>(), c.Resolve<IInformationService>(), c.Resolve<IDecisionsService>(), c.Resolve<IExtraDecisionsService>(), c.Resolve<IHolidayService>(),
                 c.Resolve<IExtraHolidayService>(), c.Resolve<IResponsibilityService>(), c.Resolve<ICommunicationService>(), c.Resolve<IScheduleService>(),
                 c.Resolve<IHouseService>(), c.Resolve<IPropertyService>(), c.Resolve<IVehicleService>(), c.Resolve<IDebtService>(), c.Resolve<IAssetService>(), c.Resolve<IHealthInsuranceService>(), c.Resolve<ITaxService>(), c.Resolve<ISpousalService>(),
-                c.Resolve<IChildSupportService>(), c.Resolve<IVehicleFormService>(), c.Resolve<IChildCareFormService>(), c.Resolve<IExtraExpenseFormService>(), c.Resolve<IHealthService>(), c.Resolve<ISocialSecurityService>(), c.Resolve<IDeviationsService>(), c.Resolve<IChildFormService>(), c.Resolve<IAddendumService>(), c.Resolve<IPreexistingSupportService>()));
+                c.Resolve<IChildSupportService>(), c.Resolve<IVehicleFormService>(), c.Resolve<IChildCareFormService>(), c.Resolve<IExtraExpenseFormService>(), c.Resolve<IHealthService>(), c.Resolve<ISocialSecurityService>(), c.Resolve<IDeviationsService>(), c.Resolve<IChildFormService>(), c.Resolve<IAddendumService>(), c.Resolve<IPreexistingSupportService>(), c.Resolve<IBcsoService>()));
         }
         /* Uncomment to enable ServiceStack Authentication and CustomUserSession*/
 		private void ConfigureAuth(Container container)

@@ -1,5 +1,5 @@
-﻿var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService',
-    function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService) {
+﻿var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
+    function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService, loginMenuService) {
         $scope.clients = [];
         $scope.userId = $routeParams.userId;
         $scope.isLoaded = false;
@@ -23,5 +23,5 @@
             $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
         };
         headerService.setTitle("Administrator");
-
+        loginMenuService.refresh();
     }];

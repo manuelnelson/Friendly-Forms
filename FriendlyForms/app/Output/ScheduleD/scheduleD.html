@@ -17,38 +17,38 @@
     <tbody>
         <tr>
             <td>1. Work Related Child Care</td>
-            <td class="currency">${{scheduleD.FatherScheduleD.WorkRelated}}</td>
-            <td class="currency">${{scheduleD.MotherScheduleD.WorkRelated}}</td>
-            <td class="currency">${{scheduleD.NonParentScheduleD.WorkRelated}}</td>
-            <td class="currency">${{scheduleD.TotalScheduleD.WorkRelated}}</td>
+            <td>{{scheduleD.FatherScheduleD.WorkRelated | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.WorkRelated | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.WorkRelated | dollarAmount}}</td>
+            <td>{{scheduleD.TotalScheduleD.WorkRelated | dollarAmount}}</td>
         </tr>
         <tr>
             <td>2. Health Insurance Paid for Children</td>
-            <td class="currency">${{scheduleD.FatherScheduleD.HealthInsurance}}</td>
-            <td class="currency">${{scheduleD.MotherScheduleD.HealthInsurance}}</td>
-            <td class="currency">${{scheduleD.NonParentScheduleD.HealthInsurance}}</td>
-            <td class="currency">${{scheduleD.TotalScheduleD.HealthInsurance}}</td>
+            <td>{{scheduleD.FatherScheduleD.HealthInsurance | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.HealthInsurance | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.HealthInsurance | dollarAmount}}</td>
+            <td>{{scheduleD.TotalScheduleD.HealthInsurance | dollarAmount}}</td>
         </tr>
         <tr>
             <td>3. Total Monthly Additional Expenses</td>
-            <td class="currency">${{scheduleD.FatherScheduleD.AdditionalExpenses}}</td>
-            <td class="currency">${{scheduleD.MotherScheduleD.AdditionalExpenses}}</td>
-            <td class="currency">${{scheduleD.NonParentScheduleD.AdditionalExpenses}}</td>
-            <td class="currency">${{scheduleD.TotalScheduleD.AdditionalExpenses}}</td>
+            <td>{{scheduleD.FatherScheduleD.AdditionalExpenses | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.AdditionalExpenses | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.AdditionalExpenses | dollarAmount}}</td>
+            <td>{{scheduleD.TotalScheduleD.AdditionalExpenses | dollarAmount}}</td>
         </tr>
         <tr>
             <td>4. Pro Rata Share of Parents' Income</td>
-            <td class="currency">{{scheduleD.FatherScheduleD.ProRataParents}}%</td>
-            <td class="currency">{{scheduleD.MotherScheduleD.ProRataParents}}%</td>
-            <td class="currency">-</td>
-            <td class="currency">{{scheduleD.TotalScheduleD.ProRataParents}}%</td>
+            <td>{{scheduleD.FatherScheduleD.ProRataParents}}%</td>
+            <td>{{scheduleD.MotherScheduleD.ProRataParents}}%</td>
+            <td>-</td>
+            <td>{{scheduleD.TotalScheduleD.ProRataParents}}%</td>
         </tr>
         <tr>
             <td>5. Pro Rata Share of Additional Expenses</td>
-            <td class="currency">${{scheduleD.FatherScheduleD.ProRataAdditional}}</td>
-            <td class="currency">${{scheduleD.MotherScheduleD.ProRataAdditional}}</td>
-            <td class="currency">-</td>
-            <td class="currency">${{scheduleD.TotalScheduleD.ProRataAdditional}}</td>
+            <td>{{scheduleD.FatherScheduleD.ProRataAdditional | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.ProRataAdditional | dollarAmount}}</td>
+            <td>-</td>
+            <td>{{scheduleD.TotalScheduleD.ProRataAdditional | dollarAmount}}</td>
         </tr>
     </tbody>
 </table>
@@ -79,21 +79,21 @@
         </tr>
         <tr ng-repeat="child in scheduleD.ChildCare">
             <td>{{child.Name}}</td>
-            <td>${{child.SchoolFather}}</td>
-            <td>${{child.SummerFather}}</td>
-            <td>${{child.BreaksFather}}</td>
-            <td>${{child.OtherFather}}</td>
-            <td>${{child.TotalFather}}</td>
-            <td>${{child.TotalFatherMonthly}}</td>
+            <td>{{child.SchoolFather | dollarAmount}}</td>
+            <td>{{child.SummerFather | dollarAmount}}</td>
+            <td>{{child.BreaksFather | dollarAmount}}</td>
+            <td>{{child.OtherFather | dollarAmount}}</td>
+            <td>{{child.TotalFather | dollarAmount}}</td>
+            <td>{{child.TotalFatherMonthly | dollarAmount}}</td>
         </tr>
         <tr>
             <td>Totals</td>
-            <td>${{scheduleD.FatherScheduleD.TotalSchool}}</td>
-            <td>${{scheduleD.FatherScheduleD.TotalSummer}}</td>
-            <td>${{scheduleD.FatherScheduleD.TotalBreaks}}</td>
-            <td>${{scheduleD.FatherScheduleD.TotalOther}}</td>
-            <td>${{scheduleD.FatherScheduleD.TotalYearly}}</td>
-            <td>${{scheduleD.FatherScheduleD.TotalMonthly}}</td>
+            <td>{{scheduleD.FatherScheduleD.TotalSchool | dollarAmount}}</td>
+            <td>{{scheduleD.FatherScheduleD.TotalSummer | dollarAmount}}</td>
+            <td>{{scheduleD.FatherScheduleD.TotalBreaks | dollarAmount}}</td>
+            <td>{{scheduleD.FatherScheduleD.TotalOther | dollarAmount}}</td>
+            <td>{{scheduleD.FatherScheduleD.TotalYearly | dollarAmount}}</td>
+            <td>{{scheduleD.FatherScheduleD.TotalMonthly | dollarAmount}}</td>
         </tr>
         <tr>
             <td style="font-weight:bold">{{scheduleD.ParentNames.Mother}}</td>
@@ -106,21 +106,21 @@
         </tr>
         <tr ng-repeat="child in scheduleD.ChildCare">
             <td>{{child.Name}}</td>
-            <td>${{child.SchoolMother}}</td>
-            <td>${{child.SummerMother}}</td>
-            <td>${{child.BreaksMother}}</td>
-            <td>${{child.OtherMother}}</td>
-            <td>${{child.TotalMother}}</td>
-            <td>${{child.TotalMotherMonthly}}</td>
+            <td>{{child.SchoolMother | dollarAmount}}</td>
+            <td>{{child.SummerMother | dollarAmount}}</td>
+            <td>{{child.BreaksMother | dollarAmount}}</td>
+            <td>{{child.OtherMother | dollarAmount}}</td>
+            <td>{{child.TotalMother | dollarAmount}}</td>
+            <td>{{child.TotalMotherMonthly | dollarAmount}}</td>
         </tr>
         <tr>
             <td>Totals</td>
-            <td>${{scheduleD.MotherScheduleD.TotalSchool}}</td>
-            <td>${{scheduleD.MotherScheduleD.TotalSummer}}</td>
-            <td>${{scheduleD.MotherScheduleD.TotalBreaks}}</td>
-            <td>${{scheduleD.MotherScheduleD.TotalOther}}</td>
-            <td>${{scheduleD.MotherScheduleD.TotalYearly}}</td>
-            <td>${{scheduleD.MotherScheduleD.TotalMonthly}}</td>
+            <td>{{scheduleD.MotherScheduleD.TotalSchool | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.TotalSummer | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.TotalBreaks | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.TotalOther | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.TotalYearly | dollarAmount}}</td>
+            <td>{{scheduleD.MotherScheduleD.TotalMonthly | dollarAmount}}</td>
         </tr>
         <tr>
             <td style="font-weight:bold">Nonparent Custodian</td>
@@ -133,21 +133,21 @@
         </tr>
         <tr ng-repeat="child in scheduleD.ChildCare">
             <td>{{child.Name}}</td>
-            <td>${{child.SchoolNonParent}}</td>
-            <td>${{child.SummerNonParent}}</td>
-            <td>${{child.BreaksNonParent}}</td>
-            <td>${{child.OtherNonParent}}</td>
-            <td>${{child.TotalNonParent}}</td>
-            <td>${{child.TotalNonParentMonthly}}</td>
+            <td>{{child.SchoolNonParent | dollarAmount}}</td>
+            <td>{{child.SummerNonParent | dollarAmount}}</td>
+            <td>{{child.BreaksNonParent | dollarAmount}}</td>
+            <td>{{child.OtherNonParent | dollarAmount}}</td>
+            <td>{{child.TotalNonParent | dollarAmount}}</td>
+            <td>{{child.TotalNonParentMonthly | dollarAmount}}</td>
         </tr>
         <tr>
             <td>Totals</td>
-            <td>${{scheduleD.NonParentScheduleD.TotalSchool}}</td>
-            <td>${{scheduleD.NonParentScheduleD.TotalSummer}}</td>
-            <td>${{scheduleD.NonParentScheduleD.TotalBreaks}}</td>
-            <td>${{scheduleD.NonParentScheduleD.TotalOther}}</td>
-            <td>${{scheduleD.NonParentScheduleD.TotalYearly}}</td>
-            <td>${{scheduleD.NonParentScheduleD.TotalMonthly}}</td>
+            <td>{{scheduleD.NonParentScheduleD.TotalSchool | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.TotalSummer | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.TotalBreaks | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.TotalOther | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.TotalYearly | dollarAmount}}</td>
+            <td>{{scheduleD.NonParentScheduleD.TotalMonthly | dollarAmount}}</td>
         </tr>
     </tbody>
 </table>

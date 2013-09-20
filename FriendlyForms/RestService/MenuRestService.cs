@@ -21,7 +21,6 @@ namespace FriendlyForms.RestService
 
             public object Get(MenuDto request)
             {
-
                 var showAdminMenu = request.UserId == Convert.ToInt64(UserSession.CustomId) &&
                                     UserSession.HasRole(Resources.AdminRole);
                 var showAttorneyMenu = request.UserId == Convert.ToInt64(UserSession.CustomId) &&

@@ -12,8 +12,8 @@
 <p ng-show="domesticMediation.HouseViewModel.MaritalHouse==2" class="indented">There is no marital home at issue in this case.</p>
 <div ng-show="domesticMediation.HouseViewModel.MaritalHouse==1">
     <p class="indented">
-        The marital house is located at {{domesticMediation.HouseViewModel.Address}}, {{domesticMediation.HouseViewModel.CityState}} {{domesticMediation.HouseViewModel.ZipCode}}. {{domesticMediation.HouseViewModel.MortgageOwner}} is the mortgage owner. The home has an estimated value of $<span class="currencyText">{{domesticMediation.HouseViewModel.RetailValue}}</span>, with $<span class="currencyText">{{domesticMediation.HouseViewModel.MoneyOwed}}</span> still outstanding.  After subtracting estimated real estate commissions and other sale related expenses, 
-        the value of the equity in the property is approximately <span ng-show="domesticMediation.HouseViewModel.Equity >= 0" class="currencyText">${{domesticMediation.HouseViewModel.Equity}}</span><span ng-show="domesticMediation.HouseViewModel.Equity < 0" class="currencyText">-${{domesticMediation.HouseViewModel.Equity*-1}}</span>.        
+        The marital house is located at {{domesticMediation.HouseViewModel.Address}}, {{domesticMediation.HouseViewModel.CityState}} {{domesticMediation.HouseViewModel.ZipCode}}. {{domesticMediation.HouseViewModel.MortgageOwner}} is the mortgage owner. The home has an estimated value of {{domesticMediation.HouseViewModel.RetailValue | dollarAmount}}, with {{domesticMediation.HouseViewModel.MoneyOwed | dollarAmount}} still outstanding.  After subtracting estimated real estate commissions and other sale related expenses, 
+        the value of the equity in the property is approximately {{domesticMediation.HouseViewModel.Equity | dollarAmount}}.        
     </p>
     <p class="indented">The parties have agreed that issues related to the marital home will be handled in the following manner: {{domesticMediation.HouseViewModel.Divide}}</p>
 </div>

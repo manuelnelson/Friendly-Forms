@@ -14,36 +14,36 @@
     <tbody>
         <tr>
             <td>1. Total Gross Monthly Income</td>
-            <td class="currency">${{scheduleB.ScheduleB.GrossIncome}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.GrossIncome}}</td>
+            <td>{{scheduleB.ScheduleB.GrossIncome | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.GrossIncome | dollarAmount}}</td>
         </tr>
         <tr>
             <td>2. Monthly Self-Employment Income on which a parent
                     paid Self-Employment Taxes for FICA & Medicare.</td>
-            <td class="currency">${{scheduleB.ScheduleB.SelfEmploymentIncome}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.SelfEmploymentIncome}}</td>
+            <td>{{scheduleB.ScheduleB.SelfEmploymentIncome | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.SelfEmploymentIncome | dollarAmount}}</td>
         </tr>
         <tr>
             <td>3. Amount of FICA owed by parent for self-employment
                     income.</td>
-            <td class="currency">${{scheduleB.ScheduleB.FicaIncome}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.FicaIncome}}</td>
+            <td>{{scheduleB.ScheduleB.FicaIncome | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.FicaIncome | dollarAmount}}</td>
         </tr>
         <tr>
             <td>4. Amount of Medicare tax owed by a parent for
                     self-employment income.</td>
-            <td class="currency">${{scheduleB.ScheduleB.MedicareTax}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.MedicareTax}}</td>
+            <td>{{scheduleB.ScheduleB.MedicareTax | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.MedicareTax | dollarAmount}}</td>
         </tr>
         <tr>
             <td>5. Total for lines 3 and 4.</td>
-            <td class="currency">${{scheduleB.ScheduleB.Total34}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.Total34}}</td>
+            <td>{{scheduleB.ScheduleB.Total34 | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.Total34 | dollarAmount}}</td>
         </tr>
         <tr>
             <td>6. Line 5 minus line 1.</td>
-            <td class="currency">${{scheduleB.ScheduleB.Total5Minus1}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.Total5Minus1}}</td>
+            <td>{{scheduleB.ScheduleB.Total5Minus1 | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.Total5Minus1 | dollarAmount}}</td>
         </tr>
     </tbody>
 </table>
@@ -58,13 +58,13 @@
     <tbody>
         <tr>
             <td>8. Total Adjustment for Preexisting Child Support Orders</td>
-            <td>${{scheduleB.ScheduleB.TotalSupport}}</td>
-            <td>${{scheduleB.OtherScheduleB.TotalSupport}}</td>
+            <td>{{scheduleB.ScheduleB.TotalSupport | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.TotalSupport | dollarAmount}}</td>
         </tr>
         <tr>
             <td>9. Adjusted Total</td>
-            <td>${{scheduleB.ScheduleB.AdjustedSupport}}</td>
-            <td>${{scheduleB.OtherScheduleB.AdjustedSupport}}</td>
+            <td>{{scheduleB.ScheduleB.AdjustedSupport | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.AdjustedSupport | dollarAmount}}</td>
         </tr>
     </tbody>
 </table>
@@ -119,23 +119,23 @@
         </tr>
         <tr>
             <td>11. Subtotal</td>
-            <td class="currency">${{scheduleB.ScheduleB.Subtotal}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.Subtotal}}</td>
+            <td>{{scheduleB.ScheduleB.Subtotal | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.Subtotal | dollarAmount}}</td>
         </tr>
         <tr>
             <td>12. Amount based upon Georgia Schedule of Basic Child Support Obligations.</td>
-            <td class="currency">${{scheduleB.ScheduleB.GeorgiaObligations}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.GeorgiaObligations}}</td>
+            <td>{{scheduleB.ScheduleB.GeorgiaObligations | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.GeorgiaObligations | dollarAmount}}</td>
         </tr>
         <tr>
             <td>13. Theoretical Child Support Order</td>
-            <td class="currency">${{scheduleB.ScheduleB.TheoreticalSupport}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.TheoreticalSupport}}</td>
+            <td>{{scheduleB.ScheduleB.TheoreticalSupport | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.TheoreticalSupport | dollarAmount}}</td>
         </tr>
         <tr>
             <td>14. Allowed Preexisting Child Support Order.</td>
-            <td class="currency">${{scheduleB.ScheduleB.PreexistingOrder}}</td>
-            <td class="currency">${{scheduleB.OtherScheduleB.PreexistingOrder}}</td>
+            <td>{{scheduleB.ScheduleB.PreexistingOrder | dollarAmount}}</td>
+            <td>{{scheduleB.OtherScheduleB.PreexistingOrder | dollarAmount}}</td>
         </tr>
     </tbody>
 </table>

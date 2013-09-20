@@ -1,4 +1,5 @@
-﻿var DeviationCtrl = function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope) {
+﻿var DeviationCtrl = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope', 'scheduleBService',
+    function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope, scheduleBService) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -11,7 +12,10 @@
         }
         $scope.isLoaded = true;
     });
-    $scope.submit = function (noNavigate) {
+        scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function(data) {
+            $scope.IncomeHigherAmount = parseInt(data.ScheduleB.AdjustedSupport) - 30000;
+        });
+        $scope.submit = function (noNavigate) {
         if ($scope.deviationForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#deviationForm');
@@ -40,5 +44,4 @@
         $rootScope.currentScope = $scope;
     });
 
-};
-DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];
+}];

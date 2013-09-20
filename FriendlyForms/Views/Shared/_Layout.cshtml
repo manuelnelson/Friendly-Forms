@@ -23,6 +23,8 @@
             <a class="btn btn-mini btn-inverse" ng-show="user.IsAuthenticated" href="/" style="display: none"><i class="icon icon-home"></i><span class="text">Home</span></a>
             <a class="btn btn-mini btn-inverse dropdown-toggle" ng-show="user.IsAuthenticated" data-toggle="dropdown" href="#"><span class="icon-user icon"></span>{{user.DisplayName}}</a>
             <ul class="dropdown-menu">
+                <li ng-show="isAdmin"><a title="Administration" href="/#/Administrator/ClientCases/User/{{user.CustomId}}">Profile</a></li>
+                <li ng-show="isAttorney"><a title="Attorney Page" href="/#/Attorney/AttorneyPage/Attorney/{{user.CustomId}}">Profile</a></li>
                 <li><a title="Log off" href="/#/Account/Logoff">Logout</a></li>
             </ul>
             <a class="btn btn-mini btn-inverse" ng-show="!user.IsAuthenticated" style="display: none" href="/#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a>

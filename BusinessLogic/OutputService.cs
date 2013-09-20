@@ -48,18 +48,20 @@ namespace BusinessLogic
         private IDeviationsService DeviationsService { get; set; }
         private IChildFormService ChildFormService { get; set; }
         private IAddendumService AddendumService { get; set; }
+        private IBcsoService BcsoService { get; set; }
         public OutputService(IIncomeService incomeService, IPreexistingSupportFormService preexistingSupportFormService, IOtherChildService otherChildService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService,
             ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionsService, IExtraDecisionsService extraDecisionsService,
             IHolidayService holidayService, IExtraHolidayService extraHolidayService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ITaxService taxService, ISpousalService spousalService,
             IChildSupportService childSupportService, IVehicleFormService vehicleFormService, IChildCareFormService childCareFormService, IExtraExpenseFormService extraExpenseFormService,
-            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService, IChildFormService childFormService, IAddendumService addendumService, IPreexistingSupportService preexistingSupportService)
+            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService, IChildFormService childFormService, IAddendumService addendumService, IPreexistingSupportService preexistingSupportService, IBcsoService bcsoService)
         {
             DeviationsService = deviationsService;
             ExtraExpenseFormService = extraExpenseFormService;
             HealthService = healthService;
             ChildCareFormService = childCareFormService;
             SocialSecurityService = socialSecurityService;
+            BcsoService = bcsoService;
             IncomeService = incomeService;
             PreexistingSupportChildService = preexistingSupportChildService;
             PreexistingSupportFormService = preexistingSupportFormService;
@@ -97,7 +99,6 @@ namespace BusinessLogic
             var income = IncomeService.GetByUserId(userId, isOtherParent).TranslateTo<IncomeDto>();
             var preexistingSupport = PreexistingSupportFormService.GetByUserId(userId, isOtherParent);
             var otherChildren = OtherChildrenService.GetByUserId(userId, isOtherParent);
-
             var schedule = new ScheduleB
             {
                 GrossIncome = income.CalculateTotalIncome(),
@@ -131,15 +132,8 @@ namespace BusinessLogic
                 schedule.OtherChildrenDescription = otherChildren.Details;
             }
             schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0.0) > 0.01 ? schedule.Total5Minus1 : schedule.GrossIncome;
-            //Todo: get this number
-            schedule.GeorgiaObligations = 0;
-            schedule.TheoreticalSupport = (int)(schedule.GeorgiaObligations * .75);
-            schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
-                                            ? schedule.AdjustedSupport - schedule.TheoreticalSupport
-                                            : schedule.Subtotal - schedule.TheoreticalSupport;
             schedule.IncomeDetails = income.OtherDetails;
             return schedule;
-
         }
 
         public List<IncompleteForm> GetParentingIncompleteForms(long userId)
