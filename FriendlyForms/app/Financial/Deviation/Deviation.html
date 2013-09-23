@@ -40,28 +40,41 @@
                             </div>
                         </div>
                         <div ng-show="deviation.Deviation == 1">
+                             <label class="form-question">
+                                    <p>
+                                        Provide an explanation for the following question:
+                                    </p>
+                                </label>
                             <div class="control-group row-fluid">
                                 <label class="form-question">Would the amount of Child Support payable before you apply the deviation be unjust or inappropriate?</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Unjust" name="Unjust" placeholder="Describe to the Court why this is so" rows="2"></textarea>
+                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Unjust" name="Unjust" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="deviationForm.Unjust.$dirty && deviationForm.Unjust.$invalid || (showErrors && deviationForm.Unjust.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.Unjust.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="deviationForm.Unjust.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
+                            <p>
+                                Provide an explanation for the following question:
+                            </p>
+                            </label>
                             <div class="control-group row-fluid">
                                 <label class="form-question">Would the deviation serve the best interests of the child(ren) for whom support is being determined?</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.BestInterest" name="BestInterest" placeholder="Describe to the Court why this is so" rows="2"></textarea>
+                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.BestInterest" name="BestInterest" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="deviationForm.BestInterest.$dirty && deviationForm.BestInterest.$invalid || (showErrors && deviationForm.BestInterest.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.BestInterest.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="deviationForm.BestInterest.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
+                            <p>
+                                Provide an explanation for the following question:
+                            </p>
+                            </label>
                             <div class="control-group row-fluid">
                                 <label class="form-question">
                                     Would the deviation seriously impair the ability of the custodial parent or non-parent custodian to 
                                     maintain minimally adequate housing, food and clothing for the children being supported by the order and 
                                     to provide other basic necessities?</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Impair" name="Impair" placeholder="Describe to the Court why this is so" rows="2"></textarea>
+                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Impair" name="Impair" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="deviationForm.Impair.$dirty && deviationForm.Impair.$invalid || (showErrors && deviationForm.Impair.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.Impair.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="deviationForm.Impair.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -71,14 +84,14 @@
                                 <label class="form-question">
                                     <p>
                                         Requested deviation amounts may be entered as a positive or negative number. For negative 
-                                            numbers, add the minus sign " - " before the amount. What do you want the result here to be? Specific and 
-                                            Nonspecific Deviations entered as a positive amount may increase the noncustodial parent's child support 
-                                            obligation, while those same deviations entered as a negative (-) amount may decrease the noncustodial parent's 
-                                            child support obligation
+                                        numbers, add the minus sign " - " before the amount. What do you want the result here to be? Specific and 
+                                        Nonspecific Deviations entered as a positive amount may increase the noncustodial parent's child support 
+                                        obligation, while those same deviations entered as a negative (-) amount may decrease the noncustodial parent's 
+                                        child support obligation
                                     </p>
                                     <p>
                                         Do not enter the TOTAL amount of monthly expenses; enter the requested amount you want the 
-                                            court to consider as a deviation from the Presumptive Amount of Child Support.
+                                        court to consider as a deviation from the Presumptive Amount of Child Support.
                                     </p>
                                 </label>
                             </div>
@@ -222,10 +235,10 @@
                                 <div class="control-group row-fluid">
                                     <label class="span4 form-question">
                                         Your income is {{IncomeHigherAmount | dollarAmount}} higher than $30,000 per month, the highest 
-                                            monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
-                                            reported income is included, the amount of child support payable (in addition to the 
-                                            child support applicable to the first $30,000) would be {{IncomeHigherAmount | dollarAmount}}. Would you like to use 
-                                            the amount shown here, or enter another amount (including $0)?</label>
+                                        monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                        reported income is included, the amount of child support payable (in addition to the 
+                                        child support applicable to the first $30,000) would be {{IncomeHigherAmount | dollarAmount}}. Would you like to use 
+                                        the amount shown here, or enter another amount (including $0)?</label>
                                     <input ng-model="deviation.HighDeviation" ng-pattern="/^-?[0-9]*$/" name="HighDeviation" type="text" value="">
                                     <div ng-show="deviationForm.HighDeviation.$dirty && deviationForm.HighDeviation.$invalid || (showErrors && deviationForm.HighDeviation.$invalid)">
                                         <span class="form-error" ng-show="deviationForm.HighDeviation.$error.pattern">This field must be a number.</span>
