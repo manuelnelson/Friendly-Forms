@@ -29,5 +29,37 @@
         public int Fringe { get; set; }
         public int Other { get; set; }
         public string OtherDetails { get; set; }
+
+        public IncomeDto ToMonthly()
+        {
+            //All values are originally annual values.  Need to divide by 12 (obviously) to convert to monthly
+            return new IncomeDto()
+                {
+                    W2Income = W2Income / 12,
+                    NonW2Income = NonW2Income / 12,
+                    SelfIncome = SelfIncome / 12,
+                    SelfIncomeNoDeductions = SelfIncomeNoDeductions / 12,
+                    Commisions = Commisions / 12,
+                    Bonuses = Bonuses / 12,
+                    Overtime = Overtime / 12,
+                    Severance = Severance / 12,
+                    Retirement = Retirement / 12,
+                    Interest = Interest / 12,
+                    Dividends = Dividends / 12,
+                    Trust = Trust / 12,
+                    Annuities = Annuities / 12,
+                    Capital = Capital / 12,
+                    SocialSecurity = SocialSecurity / 12,
+                    Compensation = Compensation / 12,
+                    Unemployment = Unemployment / 12,
+                    CivilCase = CivilCase / 12,
+                    Gifts = Gifts / 12,
+                    Prizes = Prizes / 12,
+                    Alimony = Alimony / 12,
+                    Assets = Assets / 12,
+                    Fringe = Fringe / 12,
+                    Other = Other / 12,
+                };
+        }
     }
 }

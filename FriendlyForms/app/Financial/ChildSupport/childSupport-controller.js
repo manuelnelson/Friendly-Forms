@@ -36,6 +36,12 @@
             });
         }
     };
+    $scope.beginDateChange = function() {
+        $scope.childSupport.BeginDate = null;
+    };
+    $scope.endDateChange = function () {
+        $scope.childSupport.EndDate = null;
+    };
     genericService.refreshPage(function () {
         $rootScope.currentScope = $scope;
     });

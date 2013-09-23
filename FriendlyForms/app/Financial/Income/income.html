@@ -44,13 +44,13 @@
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="span4 form-question">
-                                    Do you have documented income for which you did not receive a W-2 Form at years end (eg contract or freelance work for which you receive a 1099 or 1099-R)</label>
+                                    Do you have self employment income?</label>
                                 <label class="radio inline">Yes<input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="1"></label>
                                 <label class="radio inline">No<input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="2"></label>
                             </div>
                             <div ng-show="income.NonW2Income == 1">
                                 <div class="control-group row-fluid">
-                                    <label class="span4 form-question">Annual self-employment income in which self-employment taxes for FICA and Medicare were deducted.</label>
+                                    <label class="span4 form-question">Gross annual self employment income, minus expenses. (FICA and Medicare taxes will be calculated)</label>
                                     <input ng-pattern="/^[0-9]*$/" ng-model="income.SelfIncome" name="SelfIncome" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.SelfIncome.$dirty && incomeForm.SelfIncome.$invalid || (showErrors && incomeForm.SelfIncome.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.SelfIncome.$error.pattern">This field must be a number.</span>

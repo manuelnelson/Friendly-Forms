@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using BusinessLogic.Contracts;
@@ -69,7 +68,7 @@ namespace FriendlyForms.RestService
         {
             var otherChild = request.TranslateTo<OtherChild>();
             OtherChildService.Update(otherChild);
-            return new RespOtherChild();
+            return otherChild;
         }
         public object Delete(ReqOtherChild request)
         {

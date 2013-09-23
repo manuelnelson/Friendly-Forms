@@ -11,6 +11,7 @@ using BusinessLogic.Helpers;
 using BusinessLogic.Properties;
 using FriendlyForms.Models;
 using Models;
+using Models.ViewModels;
 using Pechkin;
 using Pechkin.Synchronized;
 using ServiceStack.Common;
@@ -362,6 +363,8 @@ namespace FriendlyForms.RestService
         public HighIncomeDeviation HighIncomeDeviationMother { get; set; }
         [DataMember]
         public ExtraExpenses TotalExpenses { get; set; }
+        [DataMember]
+        public int ExcessiveParet { get; set; }
 
         [DataMember]
         public double ParentingTime { get; set; }
@@ -993,7 +996,10 @@ namespace FriendlyForms.RestService
                     HasDeviation = deviations.Deviation == 1,
                     Amount = csw.FatherCsw.DeviationsAmount
                 };
-
+            var health = HealthService.GetByUserId(userId) as Health;
+            var insuranceProvider = health.ProvideHealth == (int) DecisionMaker.Father
+                                        ? parentNames.Father
+                                        : parentNames.Mother;
             var csaDto = new CsaDtoResp
             {
                 Children = ChildService.GetByUserId(userId),
@@ -1002,8 +1008,9 @@ namespace FriendlyForms.RestService
                 ChildSupport = ChildSupportService.GetByUserId(userId) as ChildSupport,
                 ParentNames = parentNames,
                 Deviation = deviation,
-                HealthInsurance = HealthService.GetByUserId(userId) as Health,
+                HealthInsurance = health,
                 SocialSecurity = SocialSecurityService.GetByUserId(userId),
+                InsuranceProvider = insuranceProvider,
                 County = county,
                 Court = court
             };
@@ -1059,6 +1066,7 @@ namespace FriendlyForms.RestService
                                              extraExpense.SpecialMother;
                 totalExpenses.TotalNonParent += extraExpense.EducationNonParent + extraExpense.MedicalNonParent +
                                                 extraExpense.SpecialNonParent;
+                totalExpenses.ExtraSpent += extraExpense.ExtraSpent;
             }
             var totalIncome = scheduleBFather.AdjustedSupport + scheduleBMother.AdjustedSupport;
             totalExpenses.ProRataFather = (int)Math.Round((double)scheduleBFather.AdjustedSupport / totalIncome * 100);
@@ -1313,8 +1321,8 @@ namespace FriendlyForms.RestService
 
         private ScheduleADtoResp GetScheduleA(long userId)
         {
-            var income = IncomeService.GetByUserId(userId).TranslateTo<IncomeDto>();
-            var incomeOther = IncomeService.GetByUserId(userId, isOtherParent: true).TranslateTo<IncomeDto>();
+            var income = IncomeService.GetByUserId(userId).TranslateTo<IncomeDto>().ToMonthly();
+            var incomeOther = IncomeService.GetByUserId(userId, isOtherParent: true).TranslateTo<IncomeDto>().ToMonthly();
             var incomeCombined = new IncomeDto
             {
                 Alimony = income.Alimony + incomeOther.Alimony,

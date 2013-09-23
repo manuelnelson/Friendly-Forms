@@ -35029,7 +35029,7 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position' ] )
        * undefined; otherwise, it uses the `triggerMap` value of the show
        * trigger; else it will just use the show trigger.
        */
-      function getTriggers ( trigger ) {
+      function getTriggers(trigger) {
         var show = trigger || options.trigger || defaultTriggerShow;
         var hide = triggerMap[show] || show;
         return {
@@ -35221,7 +35221,9 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position' ] )
             if (hasRegisteredTriggers) {
               element.unbind( triggers.show, showTooltipBind );
               element.unbind( triggers.hide, hideTooltipBind );
-            }
+              tooltip.unbind(triggers.show, showTooltipBind);
+              tooltip.unbind(triggers.hide, hideTooltipBind);
+          }
 
             triggers = getTriggers( val );
 
@@ -35230,7 +35232,9 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position' ] )
             } else {
               element.bind( triggers.show, showTooltipBind );
               element.bind( triggers.hide, hideTooltipBind );
-            }
+              tooltip.bind(triggers.show, showTooltipBind);
+              tooltip.bind(triggers.hide, hideTooltipBind);
+          }
 
             hasRegisteredTriggers = true;
           });
@@ -36068,6 +36072,12 @@ FormsApp.directive('integer', function () {
 });
 
 
+;FormsApp.filter('dollarAmount', function () {
+    return function (input) {
+        var integerInput = parseInt(input);
+        return integerInput < 0 ? '-$' + Math.abs(integerInput) : '$' + Math.abs(integerInput);
+    };
+});
 ;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', '$q', function (menuService, headerService, $location, $q) {
     var service = {
         calculateRemainingPercentage: function(val1, val2) {
@@ -36102,7 +36112,7 @@ FormsApp.directive('integer', function () {
     };
     return service;
 }]);
-;FormsApp.factory('constantsService', ['$resource', function($resource) {
+;FormsApp.factory('constantsService', ['$resource', '$q', function($resource, $q) {
     var service = {
         constantResource: $resource('/api/constants/', { },
             {
@@ -36112,11 +36122,16 @@ FormsApp.directive('integer', function () {
         //Note: This method is called by the loginMenuService (since it's available on every page and will guarantee intialization)
         //Every other service should access constants directly
         initializeConstants: function () {
-            if (service.constants.length === 0) {
-                service.constantResource.get({}, function (data) {
+            var deferred = $q.defer();
+            if (typeof service.constants.length === 'undefined') {
+                service.constantResource.get({}, function(data) {
                     service.constants = data;
+                    deferred.resolve(data);
                 });
+            } else {
+                deferred.resolve(service.constants);
             }
+            return deferred.promise;
         }
     };
     return service;
@@ -36236,6 +36251,10 @@ FormsApp.factory('messageService', ['$location', function ($location) {
                     }
                     $location.path('/Account/Unauthorized');
                     //service.showMessage("Unauthorized", "You must be logged in to complete this action. Log in <a href='/Account/LogOn/' title='Log In' >here</a>", Application.properties.messageType.Warning);
+                    return false;
+                case 403://Forbidden 
+                    //go to unauthorized page
+                    $location.path('/Account/Unauthorized');
                     return false;
                 default:
                     service.showMessage("Uh oh!", "Sorry, we could not process your request.  The error has been logged and we will do our best to correct the error asap.", Application.properties.messageType.Error);
@@ -36527,13 +36546,15 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
 ;var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-    $scope.asset = assetService.assets.get({ UserId: $routeParams.userId }, function() {
+    $scope.isLoaded = false;
+    $scope.asset = assetService.assets.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.asset.Id == 'undefined' || $scope.asset.Id == 0) {
             //see if garlic has something stored            
             $scope.asset = $.jStorage.get($scope.path);
             if ($scope.asset)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.assetForm.$invalid) {
@@ -36578,13 +36599,15 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
 ;var DebtCtrl = function($scope, $routeParams, $location, debtService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-    $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function() {
+    $scope.isLoaded = false;
+    $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
             //see if garlic has something stored            
             $scope.debt = $.jStorage.get($scope.path);
             if ($scope.debt)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.debtForm.$invalid) {
@@ -36629,6 +36652,7 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
 ;var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.healthInsurance = healthInsuranceService.healthInsurances.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.healthInsurance.Id == 'undefined' || $scope.healthInsurance.Id == 0) {
             //see if garlic has something stored            
@@ -36636,6 +36660,7 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
             if ($scope.healthInsurance)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.healthInsuranceForm.$invalid) {
@@ -36680,7 +36705,9 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
 ;var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, limitToFilter, $http, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.house = houseService.houses.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
             //see if garlic has something stored            
             $scope.house = $.jStorage.get($scope.path);
@@ -36741,6 +36768,7 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
 ;var PropertyCtrl = function($scope, $routeParams, $location, propertyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.property = propertyService.properties.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.property.Id == 'undefined' || $scope.property.Id == 0) {
             //see if garlic has something stored            
@@ -36748,6 +36776,7 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
             if ($scope.property)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.propertyForm.$invalid) {
@@ -36793,6 +36822,7 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
 ;var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.spousal = spousalService.spousals.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
             //see if garlic has something stored            
@@ -36800,6 +36830,7 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
             if ($scope.spousal)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.spousalForm.$invalid) {
@@ -36845,6 +36876,7 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
 ;var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.tax = taxService.taxes.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.tax.Id == 'undefined' || $scope.tax.Id == 0) {
             //see if garlic has something stored            
@@ -36852,6 +36884,7 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
             if ($scope.tax)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.taxForm.$invalid) {
@@ -36895,98 +36928,100 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
     return service;
 }]);
 ;var VehicleCtrl = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope', 'participantService',
-    function($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope, participantService) {
-    //#region properties
-    $scope.continuePressed = false;
-    $scope.path = $location.path();
-    //#endregion
+    function ($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope, participantService) {
+        //#region properties
+        $scope.continuePressed = false;
+        $scope.path = $location.path();
+        $scope.isLoaded = false;
+        //#endregion
 
-    //#region intialize
-    genericService.refreshPage(function () {
-        $rootScope.currentScope = $scope;
-    });
-    $scope.showErrors = false;
-
-    vehicleService.vehicleForm.get({ UserId: $routeParams.userId }, function (data) {
-        if (typeof data.Id == 'undefined' || data.Id == 0) {
-            //see if garlic has something stored            
-            $scope.vehicleForm = $.jStorage.get($scope.path);
-            $scope.showErrors = true;
-        } else {
-            $scope.vehicleForm = data;
-        }
-    });
-    participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
-        $scope.custodianNames = data.CustodyInformation.CustodianNames;
-    });
-    vehicleService.vehicles.get({ UserId: $routeParams.userId }, function (data) {
-        if (data.Vehicles.length == 0)
-            $scope.vehicles = [];
-        else
-            $scope.vehicles = data.Vehicles;
-    });
-    //#endregion
-
-    //#region event handlers
-    $scope.submit = function () {
-        if ($scope.vehicleForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-            var value = genericService.getFormInput('#vehicleForm');
-            $.jStorage.set($scope.path, value);
-            return;
-        }
-        $.jStorage.deleteKey($scope.path);
-        $scope.vehicleForm.UserId = $routeParams.userId;
-        if (typeof $scope.vehicleForm.Id == 'undefined' || $scope.vehicleForm.Id == 0) {
-            vehicleService.vehicleForm.save(null, $scope.vehicleForm, function () {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            });
-        } else {
-            vehicleService.vehicleForm.update(null, $scope.vehicleForm, function () {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            });
-        }
-    };
-    $scope.addVehicle = function () {
-        $scope.vehicle.UserId = $routeParams.userId;
-        $scope.vehicle.vehicleFormId = $scope.vehicleForm.Id;
-        vehicleService.vehicles.save(null, $scope.vehicle, function (data) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-            $scope.vehicles.push(data.Vehicle);
-            $scope.addVehicleForm.$setPristine();
-            $scope.vehicle = '';
-
+        //#region intialize
+        genericService.refreshPage(function () {
+            $rootScope.currentScope = $scope;
         });
-    };
-    $scope.deleteVehicle = function (vehicle) {
-        vehicleService.vehicles.delete({ Id: vehicle.Id }, function () {
-            $scope.vehicles = _.reject($scope.vehicles, function (item) {
-                return item.Id == vehicle.Id;
-            });
+        $scope.showErrors = false;
+
+        vehicleService.vehicleForm.get({ UserId: $routeParams.userId }, function (data) {
+            if (typeof data.Id == 'undefined' || data.Id == 0) {
+                //see if garlic has something stored            
+                $scope.vehicleForm = $.jStorage.get($scope.path);
+                $scope.showErrors = true;
+            } else {
+                $scope.vehicleForm = data;
+            }
+            $scope.isLoaded = true;
         });
-    };
-    $scope.editing = false;
-    $scope.editVehicle = function (vehicle) {
-        $scope.editing = true;
-        $scope.editVehicleId = vehicle.Id;
-    };
-    $scope.doneEdit = function (vehicle) {
+        participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
+            $scope.custodianNames = data.CustodyInformation.CustodianNames;
+        });
+        vehicleService.vehicles.get({ UserId: $routeParams.userId }, function (data) {
+            if (data.Vehicles.length == 0)
+                $scope.vehicles = [];
+            else
+                $scope.vehicles = data.Vehicles;
+        });
+        //#endregion
+
+        //#region event handlers
+        $scope.submit = function () {
+            if ($scope.vehicleForm.$invalid) {
+                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                var value = genericService.getFormInput('#vehicleForm');
+                $.jStorage.set($scope.path, value);
+                return;
+            }
+            $.jStorage.deleteKey($scope.path);
+            $scope.vehicleForm.UserId = $routeParams.userId;
+            if (typeof $scope.vehicleForm.Id == 'undefined' || $scope.vehicleForm.Id == 0) {
+                vehicleService.vehicleForm.save(null, $scope.vehicleForm, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                });
+            } else {
+                vehicleService.vehicleForm.update(null, $scope.vehicleForm, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                });
+            }
+        };
+        $scope.addVehicle = function () {
+            $scope.vehicle.UserId = $routeParams.userId;
+            $scope.vehicle.vehicleFormId = $scope.vehicleForm.Id;
+            vehicleService.vehicles.save(null, $scope.vehicle, function (data) {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                $scope.vehicles.push(data.Vehicle);
+                $scope.addVehicleForm.$setPristine();
+                $scope.vehicle = '';
+
+            });
+        };
+        $scope.deleteVehicle = function (vehicle) {
+            vehicleService.vehicles.delete({ Id: vehicle.Id }, function () {
+                $scope.vehicles = _.reject($scope.vehicles, function (item) {
+                    return item.Id == vehicle.Id;
+                });
+            });
+        };
         $scope.editing = false;
-        $scope.editVehicleId = 0;
-        vehicleService.vehicles.update({}, vehicle, function () {
-        });
-    };
+        $scope.editVehicle = function (vehicle) {
+            $scope.editing = true;
+            $scope.editVehicleId = vehicle.Id;
+        };
+        $scope.doneEdit = function (vehicle) {
+            $scope.editing = false;
+            $scope.editVehicleId = 0;
+            vehicleService.vehicles.update({}, vehicle, function () {
+            });
+        };
 
-    $scope.continue = function () {
-        if ($scope.vehicleForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
-        } else {
-            menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-        }
-        menuService.nextMenu();
-    };
-    //#endregion    
-}];
+        $scope.continue = function () {
+            if ($scope.vehicleForm.$invalid) {
+                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            } else {
+                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+            }
+            menuService.nextMenu();
+        };
+        //#endregion    
+    }];
 ;FormsApp.factory('vehicleService', ['$resource', function ($resource) {
     var service = {
         vehicles: $resource('/api/vehicles/', {},
@@ -37005,7 +37040,9 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
 ;var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.addendum = addendumService.addendums.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
             //see if garlic has something stored            
             $scope.addendum = $.jStorage.get($scope.path);
@@ -37057,8 +37094,9 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
 ;var CommunicationCtrl = function($scope, $routeParams, $location, communicationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-
-    $scope.communication = communicationService.communications.get({ UserId: $routeParams.userId }, function() {
+    $scope.isLoaded = false;
+    $scope.communication = communicationService.communications.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.communication.Id == 'undefined' || $scope.communication.Id == 0) {
             //see if garlic has something stored            
             $scope.communication = $.jStorage.get($scope.path);
@@ -37113,7 +37151,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     decisionService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -37128,6 +37166,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
     //#region Event Handlers
     $scope.getChildDecision = function (childId) {
         $scope.decision = decisionService.decisions.get({ ChildId: childId }, function () {
+            $scope.isLoaded = true;
             if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
                 //see if garlic has something stored            
                 $scope.decision = $.jStorage.get($scope.path);
@@ -37146,7 +37185,8 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
             return;
         }
         $scope.showExtraErrors = false;
-        $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;;
+        $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;
+        $scope.extraDecision.UserId = $routeParams.userId;
         decisionService.extraDecisions.save(null, $scope.extraDecision, function(data) {
             $scope.extraDecisions.push(data);
             $scope.extraDecision.DecisionMaker = -1;
@@ -37315,7 +37355,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
     $scope.showErrors = false;
     $scope.showMessage = false;
     $scope.showExtraErrors = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     holidayService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -37330,6 +37370,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
     //#region Event Handlers
     $scope.getChildHoliday = function (childId) {
         $scope.holiday = holidayService.holidays.get({ ChildId: childId }, function () {
+            $scope.isLoaded = true;
             if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
                 //see if garlic has something stored            
                 $scope.holiday = $.jStorage.get($scope.path);
@@ -37351,6 +37392,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
         }
         $scope.showExtraErrors = false;
         $scope.extraHoliday.ChildId = $routeParams.childId;
+        $scope.extraHoliday.UserId = $routeParams.userId
         holidayService.extraHolidays.save(null, $scope.extraHoliday, function (data) {
             $scope.extraHolidays.push(data);
             $scope.extraHoliday.HolidayName = '';
@@ -37627,7 +37669,9 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
 ;var InformationCtrl = function($scope, $routeParams, $location, informationService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.information = informationService.information.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.information.Id == 'undefined' || $scope.information.Id == 0) {
             //see if garlic has something stored            
             $scope.information = $.jStorage.get($scope.path);
@@ -37679,7 +37723,9 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
 ;var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.privacy = privacyService.privacies.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
             //see if garlic has something stored            
             $scope.privacy = $.jStorage.get($scope.path);
@@ -37731,7 +37777,9 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
 ;var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.responsibility = responsibilityService.responsibilities.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
             //see if garlic has something stored            
             $scope.responsibility = $.jStorage.get($scope.path);
@@ -37790,20 +37838,25 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
 ;var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope', 'participantService',
     function ($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope, participantService) {
     $scope.path = $location.path();
+    $scope.isLoaded = false;
+    $scope.showErrors = false;
+
     participantService.custody.get({ UserId: $routeParams.userId }, function (data) {
         $scope.nonCustodialParent = data.CustodyInformation.NonCustodyParentName;
         $scope.custodialParent = data.CustodyInformation.CustodyParentName;
     });
-    $scope.showErrors = false;
     $scope.schedule = scheduleService.schedules.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
             //see if garlic has something stored            
             $scope.schedule = $.jStorage.get($scope.path);
             if ($scope.schedule)
                 $scope.showErrors = true;
             //The default time for control makes it dirty. Undo this
-            $scope.scheduleForm.PickedUp.$dirty = false;
-            $scope.scheduleForm.DroppedOff.$dirty = false;
+            if ($scope.scheduleForm) {
+                $scope.scheduleForm.PickedUp.$dirty = false;
+                $scope.scheduleForm.DroppedOff.$dirty = false;
+            }
         } 
     });
     $scope.submit = function(noNavigate) {
@@ -37890,7 +37943,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     childCareService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -37901,6 +37954,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     //#region Event Handlers
     $scope.getChildChildCare = function (childId) {
         $scope.childCare = childCareService.childCares.get({ ChildId: childId }, function () {
+            $scope.isLoaded = true;
             if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
                 //see if garlic has something stored            
                 $scope.childCare = $.jStorage.get($scope.path);
@@ -38018,8 +38072,9 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
 ;var ChildSupportCtrl = function($scope, $routeParams, $location, childSupportService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
-
-    $scope.childSupport = childSupportService.childSupports.get({ UserId: $routeParams.userId }, function() {
+    $scope.isLoaded = false;
+    $scope.childSupport = childSupportService.childSupports.get({ UserId: $routeParams.userId }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.childSupport.Id == 'undefined' || $scope.childSupport.Id == 0) {
             //see if garlic has something stored            
             $scope.childSupport = $.jStorage.get($scope.path);
@@ -38068,9 +38123,11 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
     };
     return service;
 }]);
-;var DeviationCtrl = function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope) {
+;var DeviationCtrl = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope', 'scheduleBService',
+    function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope, scheduleBService) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.deviation = deviationService.deviations.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
             //see if garlic has something stored            
@@ -38078,8 +38135,12 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
             if ($scope.deviation)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
-    $scope.submit = function (noNavigate) {
+        scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function(data) {
+            $scope.IncomeHigherAmount = parseInt(data.ScheduleB.AdjustedSupport) - 30000;
+        });
+        $scope.submit = function (noNavigate) {
         if ($scope.deviationForm.$invalid) {
             menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
             var value = genericService.getFormInput('#deviationForm');
@@ -38108,8 +38169,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
         $rootScope.currentScope = $scope;
     });
 
-};
-DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope'];
+}];
 ;FormsApp.factory('deviationService', ['$resource',function($resource) {
     var service = {
         deviations: $resource('/api/deviations/:userId', { userId: '@userId' },
@@ -38125,7 +38185,7 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.showMessage = false;
-//    $rootScope.currentScope = $scope;
+    $scope.isLoaded = false;
     extraExpenseService.children.get({ UserId: $routeParams.userId }, function (data) {
         $scope.children = data.Children;
         $scope.childNdx = _.indexOf(_.pluck($scope.children, 'Id'), parseInt($routeParams.childId));
@@ -38146,6 +38206,7 @@ DeviationCtrl.$inject = ['$scope', '$routeParams', '$location', 'deviationServic
         if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
             $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     
     $scope.submit = function (noNavigate) {
@@ -38260,6 +38321,7 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
 ;var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.health = healthService.healths.get({ UserId: $routeParams.userId }, function () {
         if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
             //see if garlic has something stored            
@@ -38267,6 +38329,7 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
             if ($scope.health)
                 $scope.showErrors = true;
         }
+        $scope.isLoaded = true;
     });
     $scope.submit = function(noNavigate) {
         if ($scope.healthForm.$invalid) {
@@ -38309,10 +38372,14 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     };
     return service;
 }]);
-;var IncomeCtrl = function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope) {
+;var IncomeCtrl = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope', 'participantService', 
+    function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope, participantService) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
+    $scope.parent = $routeParams.isOtherParent == 'true' ? 'mother' : 'father';
     $scope.income = incomeService.incomes.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             //see if garlic has something stored            
             $scope.income = $.jStorage.get($scope.path);
@@ -38349,8 +38416,8 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     genericService.refreshPage(function () {
         $rootScope.currentScope = $scope;
     });
-};
-IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope'];
+}];
+
 ;FormsApp.factory('incomeService', ['$resource', function($resource) {
     var service = {
         incomes: $resource('/api/incomes/:userId', { userId: '@userId' },
@@ -38366,11 +38433,13 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
+    $scope.isLoaded = false;
     $scope.showErrors = false;
     //#endregion
 
     //#region intialize
     otherChildService.otherChildren.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (data) {
+        $scope.isLoaded = true;
         if (typeof data.Id == 'undefined' || data.Id == 0) {
             //see if garlic has something stored            
             $scope.otherChildren = $.jStorage.get($scope.path);
@@ -38472,7 +38541,9 @@ IncomeCtrl.$inject = ['$scope', '$routeParams', '$location', 'incomeService', 'm
 ;var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.socialSecurity = socialSecurityService.socialSecurities.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
             //see if garlic has something stored            
             $scope.socialSecurity = $.jStorage.get($scope.path);
@@ -38526,7 +38597,9 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
     $scope.path = $location.path();
     $scope.showAddChild = false;
     $scope.showErrors = false;
+    $scope.isLoaded = false;
     $scope.support = supportService.supports.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
+        $scope.isLoaded = true;
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             //see if garlic has something stored            
             $scope.support = $.jStorage.get($scope.path);
@@ -38646,7 +38719,7 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
     };
     return service;
 }]);
-;FormsApp.factory('formCompleteService', ['$resource', 'menuService', function ($resource, menuService) {
+;FormsApp.factory('formCompleteService', ['$resource', 'constantsService', function ($resource, constantsService) {
     var service = {
         formCompletes: $resource('/api/output/formComplete/', {},
             {
@@ -38658,13 +38731,13 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
             update: { method: 'PUT' },
             deleteAll: { method: 'DELETE' }
         }),
-        getOutputPaths: function(formName, userId) {
+        getOutputPaths: function (formName, userId) {            
             switch (formName) {
-                case 'ParentingPlan':
+                case constantsService.constants.ParentingPlan:
                     return ['/Output/Parenting/User/' + userId];
-                case 'MediationAgreement':
+                case constantsService.constants.DomesticMediation:
                     return ['/Output/DomesticMediation/User/' + userId];
-                case 'FinancialForm':
+                case constantsService.constants.FinancialForm:
                     return ['/Output/ScheduleA/User/' + userId,
                     '/Output/ScheduleB/User/' + userId,
                     '/Output/ScheduleD/User/' + userId,
@@ -38678,47 +38751,48 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
     };
     return service;
 }]);
-;var FormCompleteCtrl = function($scope, $routeParams, $location, formCompleteService, menuService, genericService, headerService, $rootScope) {
-    //#region Initialize
-    $scope.storageKey = $location.path();
-    $scope.formName = $routeParams.formName.replace(/([A-Z])/g, ' $1');
-    $scope.CheckingFormProgress = true;
-    $scope.NoErrors = true;
-    checkProgress();
-    $scope.isStarter = $routeParams.formName == 'PreliminaryInformation';
-    //#endregion
-    function checkProgress() {
-        formCompleteService.formCompletes.get({ FormName: $routeParams.formName, UserId: $routeParams.userId }, function (result) {
-            if (result.IncompleteForms.length === 0) {
-                $scope.NoErrors = true;
-                var outputPaths = formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId);
-                for (var i = 0; i < outputPaths.length; i++) {
-                    menuService.enableMenu(outputPaths[i]);
+;var FormCompleteCtrl = ['$scope', '$routeParams', '$location', 'formCompleteService', 'menuService', 'genericService', 'headerService', '$rootScope', 'constantsService',
+    function ($scope, $routeParams, $location, formCompleteService, menuService, genericService, headerService, $rootScope, constantsService) {
+        //#region Initialize
+        $scope.formName = $routeParams.formName.replace(/([A-Z])/g, ' $1');
+        $scope.CheckingFormProgress = true;
+        $scope.NoErrors = true;
+        checkProgress();
+        var starterFormName = constantsService.constants.StarterFormName;
+        $scope.isStarter = $routeParams.formName == starterFormName;
+        //#endregion
+        function checkProgress() {
+            formCompleteService.formCompletes.get({ FormName: $routeParams.formName, UserId: $routeParams.userId }, function (result) {
+                if (result.IncompleteForms.length === 0) {
+                    $scope.NoErrors = true;
+                    var outputPaths = formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId);
+                    for (var i = 0; i < outputPaths.length; i++) {
+                        menuService.enableMenu(outputPaths[i]);
+                    }
+                } else {
+                    $scope.IncompleteForms = result.IncompleteForms;//.join(", ");
+                    $scope.NoErrors = false;
                 }
-            } else {
-                $scope.IncompleteForms = result.IncompleteForms;//.join(", ");
-                $scope.NoErrors = false;
-            }
-            $scope.CheckingFormProgress = false;
-        });
-    }
-
-    $scope.submit = function (noNavigate) {
-        if (noNavigate)
-            return;
-        //special case for starter since we need to reload menu
-        if ($routeParams.formName === 'PreliminaryInformation') {
-            menuService.getMenu().then(function() {
-                $location.path('/Domestic/House/user/' + $routeParams.userId);
+                $scope.CheckingFormProgress = false;
             });
-        } else {
-            $location.path(formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId)[0]);
         }
-    };
-    $rootScope.currentScope = $scope;
-    headerService.setTitle('Form Completed');
-};
-FormCompleteCtrl.$inject = ['$scope', '$routeParams', '$location', 'formCompleteService', 'menuService', 'genericService', 'headerService','$rootScope'];
+
+        $scope.submit = function (noNavigate) {
+            if (noNavigate)
+                return;
+            //special case for starter since we need to reload menu
+            if ($routeParams.formName === starterFormName) {
+                menuService.getMenu($routeParams.userId).then(function () {
+                    $location.path('/Domestic/House/user/' + $routeParams.userId);
+                });
+            } else {
+                $location.path(formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId)[0]);
+            }
+        };
+        $rootScope.currentScope = $scope;
+        headerService.setTitle('Form Completed');
+    }];
+
 ;FormsApp.factory('parentingService', ['$resource', function ($resource) {
     var service = {
         parentings: $resource('/api/output/parenting/', {},
@@ -39074,18 +39148,20 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 });
-;var PaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'headerService', 'userService',
-    function ($scope, $routeParams, $location, paymentService, menuService, headerService, userService) {
+;var PaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'headerService', 'userService', 'constantsService',
+    function ($scope, $routeParams, $location, paymentService, menuService, headerService, userService, constantsService) {
         headerService.setTitle('Payment');
         $scope.submit = function () {
             if ($scope.paymentForm.$invalid) {
                 return;
             }
+            var adminRole = constantsService.constants.AdminRole;
+            var attorneyRole = constantsService.constants.AttorneyRole;
             var userId = $routeParams.userId;
             userService.getCurrentUserSession().then(function (userData) {
                 userService.roles.save(null, {
                     UserName: userData.UserName,
-                    Roles: ['FirmAdmin', 'Lawyer'],
+                    Roles: [adminRole, attorneyRole],
                 }, function () {
                     $location.path('/Administrator/ClientCases/User/' + userId);
                 });
@@ -39155,21 +39231,23 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 }]);
-;var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService',
-    function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService) {
+;var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
+    function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService, loginMenuService) {
         $scope.clients = [];
         $scope.userId = $routeParams.userId;
+        $scope.isLoaded = false;
         userService.getUserData($routeParams.userId).then(function(data) {
             $scope.admin = data;
             userService.getLawFirmUsers(data.LawFirmId).then(function(lawFirmUsers) {
                 $scope.attorneys = lawFirmUsers;
+                $scope.isLoaded = true;
             });
         });
         clientService.getClients($routeParams.userId).then(function(clients) {
             $scope.clients = clients;
         });
         $scope.openClient = function (client) {
-            $location.path('/Client/' + client.ClientUserId);
+            $location.path('/Attorney/Client/' + client.ClientUserId);
         };
         $scope.archiveClient = function (client) {
 
@@ -39178,7 +39256,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
             $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
         };
         headerService.setTitle("Administrator");
-
+        loginMenuService.refresh();
     }];
 ;FormsApp.factory('attorneyPageService', ['$resource', function ($resource) {
     var service = {
@@ -39190,8 +39268,8 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 }]);
-;var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'menuService', 'headerService', 'clientService',
-    function ($scope, $routeParams, $location, attorneyPageService, userService, menuService, headerService, clientService) {
+;var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'menuService', 'headerService', 'clientService', 'loginMenuService',
+    function ($scope, $routeParams, $location, attorneyPageService, userService, menuService, headerService, clientService, loginMenuService) {
         $scope.clients = [];
         $scope.userId = $routeParams.userId;
         clientService.getClients($routeParams.userId).then(function (clients) {
@@ -39205,6 +39283,8 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
 
         };
         headerService.setTitle("Attorney Page");
+        loginMenuService.refresh();
+
     }];
 ;FormsApp.factory('createClientService', ['$resource', function($resource) {
     var service = {
@@ -39291,13 +39371,18 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 }]);
-;var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope',
-function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope) {
-    $scope.userAuth = userService.getUserAuth($routeParams.userId);
-    $scope.user = userService.getUserData($routeParams.userId);
+;var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'constantsService',
+function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, constantsService) {
+    //#region Init
+    userService.getUserAuth($routeParams.userId).then(function (userAuth) {
+         $scope.userAuth = userAuth;
+         headerService.setTitle(userAuth.DisplayName);
+     });
+    userService.getUserData($routeParams.userId).then(function(user) {
+        $scope.user = user;        
+    });
     $scope.court = courtService.courts.get({ UserId: $routeParams.userId }, function () {
     });
-
     clientService.attorneys.getList({ ClientUserId: $routeParams.userId }, function (data) {
         $scope.authorizedPeople = data;
         var authorizedUsersIds = _.pluck(data, 'UserId');
@@ -39313,7 +39398,16 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
             });
         }
     });
-    $scope.allowAccess = function(person) {
+    //#endregion
+
+    //#region EventHandlers
+    $scope.viewCase = function() {
+        //get menu for user        
+        menuService.getMenu($routeParams.userId).then(function (menuItems) {
+            menuService.goToFirstFormMenu();
+        });
+    };
+    $scope.allowAccess = function (person) {
         if (person.hasAccess) {
             //post user to attorneyclient table
             clientService.clients.save(null, {
@@ -39347,8 +39441,8 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
         clientService.clients.update(null, person, function () {
         });
     };
+    //#endregion
     $rootScope.currentScope = $scope;
-    headerService.setTitle("Client Profile");
 }];
 ;var HomeCtrl = function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
     menuService.setActive($location.path(), false);
@@ -39403,10 +39497,6 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route','$location', 'menuService
                 item.itemClass = '';
             });
         },
-        children: $resource('/api/child/:userId', { userId: '@userId' },
-            {
-                update: { method: 'PUT' },
-            }),
         getFirstChildId: function () {
             for (var i = 0; i < service.menuItems.length; i++) {
                 var item = service.menuItems[i];
@@ -39420,15 +39510,19 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route','$location', 'menuService
                 }
             }
         },
-        getMenu: function () {
+        getMenu: function (userId) {
             var deferred = $q.defer();
-            var userId = service.userId;
+            if(!userId)
+                userId = service.userId;
+            else 
+                service.userId = userId;
+            
             if (typeof userId === 'undefined')
                 userId = 0;
             service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {
                 service.setItems(menuItems);
                 service.isInitialized = true;
-                deferred.resolve();
+                deferred.resolve(menuItems);
             });
             return deferred.promise;
         },
@@ -39460,6 +39554,15 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route','$location', 'menuService
                     };
                 }
             }
+        },
+        //This can be handy when navigating to someone's case, to just go to the first form
+        goToFirstFormMenu: function () {
+            //go to first menuItem that has submenus
+            var menuItem = _.find(service.menuItems, function (item) {
+                return item.subMenuItems && item.subMenuItems.length > 0;
+            });
+            if (menuItem)
+                $location.path(menuItem.subMenuItems[0].path);
         },
         enableMenu: function(path) {
             var menuGroup = service.getMenuGroupByPath(path);
@@ -39721,11 +39824,18 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
     return service;
 }]);
 ;var LoginMenuCtrl = ['$scope', '$routeParams', '$location', 'loginMenuService', 'constantsService', function ($scope, $routeParams, $location, loginMenuService, constantsService) {
-    //Called here to ensure constants initialization
-    constantsService.initializeConstants();
-
+    $scope.isAdmin = false;
+    $scope.isLawyer = false;
     $scope.$watch(function () { return loginMenuService.authUser; }, function () {
         $scope.user = loginMenuService.authUser;
+        //Called here to ensure constants initialization
+        constantsService.initializeConstants().then(function () {
+            if ($scope.user.Roles && $scope.user.Roles.length > 0) {
+                $scope.isAdmin = $scope.user.Roles.indexOf(constantsService.constants.AdminRole) > -1;
+                if (!$scope.isAdmin)
+                    $scope.isLawyer = $scope.user.Roles.indexOf(constantsService.constants.AttorneyRole) > -1;
+            }
+        });
     }, true);
     loginMenuService.refresh();    
 }];
@@ -39792,10 +39902,15 @@ LogoffCtrl.$inject = ['$scope', '$routeParams', '$location', 'logoffService', 'h
     };
     return service;
 }]);
-;var UnauthorizedCtrl = function($scope, $routeParams, $location, unauthorizedService, menuService, headerService) {
+;var UnauthorizedCtrl = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'headerService','$rootScope',
+function ($scope, $routeParams, $location, unauthorizedService, headerService, $rootScope) {
+    $rootScope.currentScope = $scope;
+    $scope.submit = function() {
+
+    };
     headerService.setTitle('Unauthorized');
-};
-UnauthorizedCtrl.$inject = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'menuService', 'headerService'];
+}];
+
 ;FormsApp.factory('unauthorizedService', function($resource) {
     var service = {
     };

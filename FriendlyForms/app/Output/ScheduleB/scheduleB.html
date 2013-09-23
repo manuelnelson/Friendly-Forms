@@ -123,7 +123,7 @@
             <td>{{scheduleB.OtherScheduleB.Subtotal | dollarAmount}}</td>
         </tr>
         <tr>
-            <td>12. Amount based upon Georgia Schedule of Basic Child Support Obligations.</td>
+            <td>12. Amount based upon Georgia Schedule of Basic Child Support Obligations</td>
             <td>{{scheduleB.ScheduleB.GeorgiaObligations | dollarAmount}}</td>
             <td>{{scheduleB.OtherScheduleB.GeorgiaObligations | dollarAmount}}</td>
         </tr>
@@ -132,10 +132,12 @@
             <td>{{scheduleB.ScheduleB.TheoreticalSupport | dollarAmount}}</td>
             <td>{{scheduleB.OtherScheduleB.TheoreticalSupport | dollarAmount}}</td>
         </tr>
-        <tr>
-            <td>14. Allowed Preexisting Child Support Order.</td>
-            <td>{{scheduleB.ScheduleB.PreexistingOrder | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.PreexistingOrder | dollarAmount}}</td>
+        <tr ng-show="scheduleB.ScheduleB.OtherChildren.length>0 || scheduleB.OtherScheduleB.OtherChildren.length>0">
+            <td>14. Allowed Preexisting Child Support Order</td>
+            <td ng-show="scheduleB.ScheduleB.OtherChildren.length>0">{{scheduleB.ScheduleB.PreexistingOrder | dollarAmount}}</td>
+            <td ng-show="scheduleB.ScheduleB.OtherChildren.length==0">$0</td>
+            <td ng-show="scheduleB.OtherScheduleB.OtherChildren.length>0">{{scheduleB.OtherScheduleB.PreexistingOrder | dollarAmount}}</td>
+            <td ng-show="scheduleB.OtherScheduleB.OtherChildren.length==0">$0</td>
         </tr>
     </tbody>
 </table>

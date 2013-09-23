@@ -230,7 +230,7 @@
         <tr>
             <td>13. Monthly Excessive Parenting Time Deviation</td>
             <td></td>
-            <td>{{scheduleE.TotalExpenses.EducationMother | dollarAmount}}</td>
+            <td>{{scheduleE.TotalExpenses.ExtraSpent | dollarAmount}}</td>
             <td></td>
         </tr>
     </tbody>
@@ -290,24 +290,6 @@
             <td>{{scheduleE.Mother}}</td>
             <td>Non Parent Custodian</td>
         </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.Education">
-            <td>{{item.Name}}</td>
-            <td>{{item.Father | dollarAmount}}</td>
-            <td>{{item.Mother | dollarAmount}}</td>
-            <td>{{item.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr id="other-education">
-            <td>2. Other Extraordinary Educational Expenses</td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-            <td>Non Parent Custodian</td>
-        </tr>
         <tr ng-repeat="item in scheduleE.Extraordinaries.Tuition">
             <td>{{item.Name}}</td>
             <td>{{item.Father | dollarAmount}}</td>
@@ -319,6 +301,24 @@
             <td>{{scheduleE.Extraordinaries.TuitionTotal.Father | dollarAmount}}</td>
             <td>{{scheduleE.Extraordinaries.TuitionTotal.Mother | dollarAmount}}</td>
             <td>{{scheduleE.Extraordinaries.TuitionTotal.NonParent | dollarAmount}}</td>
+        </tr>
+        <tr id="other-education">
+            <td>2. Other Extraordinary Educational Expenses</td>
+            <td>{{scheduleE.Father}}</td>
+            <td>{{scheduleE.Mother}}</td>
+            <td>Non Parent Custodian</td>
+        </tr>
+        <tr ng-repeat="item in scheduleE.Extraordinaries.Education">
+            <td>{{item.Name}}</td>
+            <td>{{item.Father | dollarAmount}}</td>
+            <td>{{item.Mother | dollarAmount}}</td>
+            <td>{{item.NonParent | dollarAmount}}</td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">TOTAL</td>
+            <td>{{scheduleE.Extraordinaries.EducationTotal.Father | dollarAmount}}</td>
+            <td>{{scheduleE.Extraordinaries.EducationTotal.Mother | dollarAmount}}</td>
+            <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent | dollarAmount}}</td>
         </tr>
         <tr id="yearly-education">
             <td>3. Total Yearly Extraordinary Educational Expense</td>

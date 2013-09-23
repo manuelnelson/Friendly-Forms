@@ -152,8 +152,7 @@
                             </div>
                             <div class="control-group row-fluid">
                                 <label class="form-question">
-                                    Do you have visitation with the child for more days each year than was ordered by the court? If so, what is the total annual amount 
-                            spent for excess visitation?</label>
+                                    Do you have visitation with the child for more days each year than was ordered by the court? If so, what is the total annual amount spent for excess visitation? <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="Enter the dollar amount spent for visitation in excess of the court order." popover-title="Tip"></i></label>
                                 <input ng-pattern="/^[0-9]*$/" ng-model="extraExpense.ExtraSpent" name="ExtraSpent" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.ExtraSpent.$dirty && extraExpenseChildForm.ExtraSpent.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.ExtraSpent.$error.pattern">This field must be a number.</span>

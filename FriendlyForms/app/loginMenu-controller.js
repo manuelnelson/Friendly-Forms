@@ -5,7 +5,7 @@
         $scope.user = loginMenuService.authUser;
         //Called here to ensure constants initialization
         constantsService.initializeConstants().then(function () {
-            if ($scope.user.Roles && $scope.user.Roles.length > 0) {
+            if ($scope.user && $scope.user.Roles && $scope.user.Roles.length > 0) {
                 $scope.isAdmin = $scope.user.Roles.indexOf(constantsService.constants.AdminRole) > -1;
                 if (!$scope.isAdmin)
                     $scope.isLawyer = $scope.user.Roles.indexOf(constantsService.constants.AttorneyRole) > -1;

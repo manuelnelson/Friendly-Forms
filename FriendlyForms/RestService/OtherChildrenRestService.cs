@@ -5,7 +5,6 @@ using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.RestService
 {
