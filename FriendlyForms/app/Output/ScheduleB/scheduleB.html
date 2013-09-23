@@ -128,12 +128,12 @@
             <td>{{scheduleB.OtherScheduleB.GeorgiaObligations | dollarAmount}}</td>
         </tr>
         <tr>
-            <td>13. Theoretical Child Support Order</td>
+            <td>13. 75% of Basic Child Support Obligation</td>
             <td>{{scheduleB.ScheduleB.TheoreticalSupport | dollarAmount}}</td>
             <td>{{scheduleB.OtherScheduleB.TheoreticalSupport | dollarAmount}}</td>
         </tr>
         <tr ng-show="scheduleB.ScheduleB.OtherChildren.length>0 || scheduleB.OtherScheduleB.OtherChildren.length>0">
-            <td>14. Allowed Preexisting Child Support Order</td>
+            <td>14. Final Monthly Adjusted Income</td>
             <td ng-show="scheduleB.ScheduleB.OtherChildren.length>0">{{scheduleB.ScheduleB.PreexistingOrder | dollarAmount}}</td>
             <td ng-show="scheduleB.ScheduleB.OtherChildren.length==0">$0</td>
             <td ng-show="scheduleB.OtherScheduleB.OtherChildren.length>0">{{scheduleB.OtherScheduleB.PreexistingOrder | dollarAmount}}</td>
