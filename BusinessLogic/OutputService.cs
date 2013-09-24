@@ -49,13 +49,15 @@ namespace BusinessLogic
         private IChildFormService ChildFormService { get; set; }
         private IAddendumService AddendumService { get; set; }
         private IBcsoService BcsoService { get; set; }
+        private IUserService UserService { get; set; }
         public OutputService(IIncomeService incomeService, IPreexistingSupportFormService preexistingSupportFormService, IOtherChildService otherChildService, IPreexistingSupportChildService preexistingSupportChildService, IOtherChildrenService otherChildrenService,
             ICourtService courtService, IParticipantService participantService, IChildService childService, IPrivacyService privacyService, IInformationService informationService, IDecisionsService decisionsService, IExtraDecisionsService extraDecisionsService,
             IHolidayService holidayService, IExtraHolidayService extraHolidayService, IResponsibilityService responsibilityService, ICommunicationService communicationService, IScheduleService scheduleService,
             IHouseService houseService, IPropertyService propertyService, IVehicleService vehicleService, IDebtService debtService, IAssetService assetService, IHealthInsuranceService healthInsuranceService, ITaxService taxService, ISpousalService spousalService,
             IChildSupportService childSupportService, IVehicleFormService vehicleFormService, IChildCareFormService childCareFormService, IExtraExpenseFormService extraExpenseFormService,
-            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService, IChildFormService childFormService, IAddendumService addendumService, IPreexistingSupportService preexistingSupportService, IBcsoService bcsoService)
+            IHealthService healthService, ISocialSecurityService socialSecurityService, IDeviationsService deviationsService, IChildFormService childFormService, IAddendumService addendumService, IPreexistingSupportService preexistingSupportService, IBcsoService bcsoService, IUserService userService)
         {
+            UserService = userService;
             DeviationsService = deviationsService;
             ExtraExpenseFormService = extraExpenseFormService;
             HealthService = healthService;
@@ -443,8 +445,16 @@ namespace BusinessLogic
             var court = CourtService.GetByUserId(userId);
             var participants = ParticipantService.GetByUserId(userId);
             var childForm = ChildFormService.GetByUserId(userId);
-
+            var user = UserService.Get(userId);
             var incompleteForms = new List<IncompleteForm>();
+            if (user == null || !user.Verified)
+            {
+                incompleteForms.Add(new IncompleteForm
+                {
+                    Name = "Beta Agreement",
+                    Path = "/Starter/BetaAgreement/User/" + userId
+                });                                
+            }
             if (court == null || !court.IsValid())
             {
                 incompleteForms.Add(new IncompleteForm

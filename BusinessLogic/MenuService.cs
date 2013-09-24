@@ -233,6 +233,15 @@ namespace BusinessLogic
                 {
                     new FormMenuItem
                     {
+                        formName = "BetaAgreement",
+                        text = "Beta Agreement",
+                        iconClass = "",
+                        path = "/Starter/BetaAgreement/User/" + userId,     
+                        pathIdentifier = "BetaAgreement",
+                        itemClass = ""
+                    },
+                    new FormMenuItem
+                    {
                         formName = "Introduction",
                         text = "Introduction",
                         iconClass = "",

@@ -429,6 +429,8 @@
     <Content Include="app\Parenting\Schedule\schedule-controller.js" />
     <Content Include="app\Parenting\Schedule\schedule-service.js" />
     <Content Include="app\Parenting\Schedule\schedule.html" />
+    <Content Include="app\Starter\BetaAgreement\betaAgreement-controller.js" />
+    <Content Include="app\Starter\BetaAgreement\betaAgreement.html" />
     <Content Include="app\Starter\Children\children-controller.js" />
     <Content Include="app\Starter\Children\children-service.js" />
     <Content Include="app\Starter\Children\children.html" />
