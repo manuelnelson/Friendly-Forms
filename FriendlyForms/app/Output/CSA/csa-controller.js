@@ -1,7 +1,9 @@
 ﻿var CSACtrl = function ($scope, $routeParams, $rootScope, csaService, menuService, genericService, headerService, $timeout) {
     $scope.showPrintButton = false;
+    $scope.isLoaded = false;
     csaService.csas.get({ UserId: $routeParams.userId }, function (data) {
         $scope.csa = data;
+        $scope.isLoaded = true;
         $timeout(function () {
             var html = $('#main-content').html();
             html = html.replace(/<form[^>]*?>([\s\S]*)<\/form>/, "");

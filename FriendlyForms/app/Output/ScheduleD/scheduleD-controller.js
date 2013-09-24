@@ -1,8 +1,10 @@
 ﻿var ScheduleDCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleDService', 'menuService', 'genericService', 'headerService', '$timeout',
     function ($scope, $routeParams, $rootScope, scheduleDService, menuService, genericService, headerService, $timeout) {
     $scope.showPrintButton = false;
+    $scope.isLoaded = false;
     scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleD = data;
+        $scope.isLoaded = true;
         $timeout(function () {
             var html = $('#main-content').html();
             html = html.replace(/<form.*>/, "");

@@ -1,7 +1,9 @@
 ﻿var DomesticMediationCtrl = function ($scope, $routeParams, $location, $timeout, domesticMediationService, menuService, genericService, headerService,$rootScope) {
     $scope.showPrintButton = false;
+    $scope.isLoaded = false;
     domesticMediationService.domesticMediations.get({ UserId: $routeParams.userId }, function (data) {
         $scope.domesticMediation = data;
+        $scope.isLoaded = true;
         //TODO: Find a non-jquery dependency way of doing this - angulars jqLite seems to be able to handle this
         $timeout(function () {
             var html = $('#main-content').html();

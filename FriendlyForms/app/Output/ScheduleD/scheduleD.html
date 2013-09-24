@@ -1,5 +1,5 @@
 ﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
-
+<div ng-show="isLoaded">
 <div class="row-fluid" style="text-align: center;">
     <h2>CHILD SUPPORT SCHEDULE D</h2>
     <h2>ADDITIONAL EXPENSES</h2>
@@ -153,6 +153,7 @@
 </table>
 <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
     <input type="hidden" class="html" name="html" />
-     <input type="hidden" class="name" name="name" />
-   <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+    <input type="hidden" class="name" name="name" />
+    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
 </form>
+</div>

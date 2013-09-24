@@ -1,8 +1,10 @@
 ﻿var ChildSupportOutputCtrl = ['$scope', '$routeParams', '$rootScope', 'childSupportOutputService', 'menuService', 'headerService', '$timeout',
     function ($scope, $routeParams, $rootScope, childSupportOutputService, menuService, headerService, $timeout) {
     $scope.showPrintButton = false;
+    $scope.isLoaded = false;
     childSupportOutputService.childSupports.get({ UserId: $routeParams.userId }, function (data) {
         $scope.childSupport = data;
+        $scope.isLoaded = true;
         $timeout(function () {
             var html = $('#main-content').html();
             html = html.replace(/<form.*>/, "");

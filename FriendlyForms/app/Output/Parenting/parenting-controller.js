@@ -1,8 +1,10 @@
 ﻿var ParentingCtrl = ['$scope', '$routeParams', '$rootScope', 'parentingService', 'menuService', 'genericService', 'headerService', '$timeout',
     function ($scope, $routeParams, $rootScope, parentingService, menuService, genericService, headerService, $timeout) {
     $scope.showPrintButton = false;
+    $scope.isLoaded = false;
     parentingService.parentings.get({ UserId: $routeParams.userId }, function (data) {
         $scope.parenting = data;
+        $scope.isLoaded = true;
         $timeout(function () {
             var html = $('#main-content').html();
             html = html.replace(/<form.*>/, "");
