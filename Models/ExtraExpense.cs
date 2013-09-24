@@ -33,6 +33,28 @@ namespace Models
         public string SpecialDescriptionNonParent { get; set; }
         public int ExtraSpent { get; set; }
 
+        public ExtraExpense ToMonthly()
+        {
+            return new ExtraExpense
+                {
+                    Id = Id,
+                    UserId = UserId,
+                    ChildId = ChildId,
+                    TutitionFather = Convert.ToInt32((float)TutitionFather / 12),
+                    TutitionMother = Convert.ToInt32((float)TutitionMother/12),
+                    TutitionNonParent = Convert.ToInt32((float)TutitionNonParent/12),
+                    EducationFather = Convert.ToInt32((float)EducationFather/12),
+                    EducationMother = Convert.ToInt32((float)EducationMother/12),
+                    EducationNonParent = Convert.ToInt32((float)EducationNonParent/12),
+                    MedicalFather = Convert.ToInt32((float)EducationFather/12),
+                    MedicalMother = Convert.ToInt32((float)MedicalMother/12),
+                    MedicalNonParent = Convert.ToInt32((float)MedicalNonParent/12),
+                    SpecialFather = Convert.ToInt32((float)SpecialFather/12),
+                    SpecialMother = Convert.ToInt32((float)SpecialMother/12),
+                    SpecialNonParent = Convert.ToInt32((float)SpecialNonParent/12),
+                    ExtraSpent = Convert.ToInt32((float)ExtraSpent/12),
+                };
+        }
 
         public bool IsValid()
         {

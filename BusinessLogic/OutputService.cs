@@ -115,9 +115,7 @@ namespace BusinessLogic
                                              .ToList();
                 foreach (var preexistingSupportChildren in preexistingCourts.Select(court => PreexistingSupportChildService.GetChildrenBySupportId(court.Id).ToList()))
                 {                    
-                    //schedule.PreexistingSupportChild.AddRange(preexistingSupportChildren.ToList());
                     var support = preexistingSupportChildren.Select(preexistingSupportChild => PreexistingSupportService.Get(preexistingSupportChild.PreexistingSupportId)).ToList();
-                    //schedule.PreexistingSupport = 
                     schedule.TotalSupport += support.Sum(c => c.Monthly);
                 }
             }
@@ -130,9 +128,16 @@ namespace BusinessLogic
                     otherChildDto.ClaimedBy = parentName;
                 }
                 schedule.OtherChildrenDescription = otherChildren.Details;
+
+                schedule.GeorgiaObligations = (int)BcsoService.GetAmount(schedule.Total5Minus1, schedule.OtherChildren.Count);
+                schedule.TheoreticalSupport = (int)(schedule.GeorgiaObligations * .75);
+                schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
+                                                ? schedule.AdjustedSupport - schedule.TheoreticalSupport
+                                                : schedule.Subtotal - schedule.TheoreticalSupport;
             }
-            schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0.0) > 0.01 ? schedule.Total5Minus1 : schedule.GrossIncome;
+            schedule.Subtotal = schedule.Total5Minus1 == 0 ? schedule.GrossIncome : schedule.Total5Minus1;
             schedule.IncomeDetails = income.OtherDetails;
+
             return schedule;
         }
 
