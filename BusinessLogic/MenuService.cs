@@ -38,7 +38,7 @@ namespace BusinessLogic
                             text = "Home",
                         }
                 };
-            if (!isAuthenticated)
+            if (!isAuthenticated || userId == 0)
             {
                 return menuList;
             }
@@ -231,6 +231,15 @@ namespace BusinessLogic
         {
             var menuList = new List<FormMenuItem>
                 {
+                    new FormMenuItem
+                    {
+                        formName = "BetaAgreement",
+                        text = "Beta Agreement",
+                        iconClass = "",
+                        path = "/Starter/BetaAgreement/User/" + userId,     
+                        pathIdentifier = "BetaAgreement",
+                        itemClass = ""
+                    },
                     new FormMenuItem
                     {
                         formName = "Introduction",

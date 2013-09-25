@@ -1,165 +1,179 @@
-﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
-<div class="row-fluid" style="text-align: center;">
-    <h2>CHILD SUPPORT SCHEDULE A</h2>
-    <h2>GROSS INCOME</h2>
+﻿<link href="../../../Content/output.css" rel="stylesheet" />
+<div class="form-vertical wrapper" >
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Schedule A Preview</h5>
+                </div>
+                <div class="widget-content" style="display: none" ng-show="isLoaded">
+                    <div class="row-fluid" style="text-align: center;">
+                        <h2>CHILD SUPPORT SCHEDULE A</h2>
+                        <h2>GROSS INCOME</h2>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>GROSS INCOME</th>
+                                <th>{{scheduleA.Father}}</th>
+                                <th>{{scheduleA.Mother}}</th>
+                                <th>Combined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1. Salary and wages</td>
+                                <td>{{scheduleA.Income.W2Income | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.W2Income | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.W2Income | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>2. Commissions, Fees, Tips</td>
+                                <td>{{scheduleA.Income.Commisions | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Commisions | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Commisions | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>3. Income From Self-Employment</td>
+                                <td>{{scheduleA.Income.SelfIncomeNoDeductions | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.SelfIncomeNoDeductions | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.SelfIncomeNoDeductions | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>4. Bonuses</td>
+                                <td>{{scheduleA.Income.Bonuses | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Bonuses | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Bonuses | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>5. Overtime Payments</td>
+                                <td>{{scheduleA.Income.Overtime | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Overtime | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Overtime | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>6. Severance Pay</td>
+                                <td>{{scheduleA.Income.Severance | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Severance | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Severance | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>7. Recurring Income from Pensions or Retirement Plans</td>
+                                <td>{{scheduleA.Income.Retirement | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Retirement | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Retirement | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>8. Interest Income</td>
+                                <td>{{scheduleA.Income.Interest | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Interest | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Interest | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>9. Income from Dividends</td>
+                                <td>{{scheduleA.Income.Dividends | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Dividends | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Dividends | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>10. Trust Income</td>
+                                <td>{{scheduleA.Income.Trust | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Trust | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Trust | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>11. Income from Annuities</td>
+                                <td>{{scheduleA.Income.Annuities | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Annuities | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Annuities | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>12. Capital Gains</td>
+                                <td>{{scheduleA.Income.Capital | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Capital | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Capital | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>13. Social Security Disability or Retirement Benefits</td>
+                                <td>{{scheduleA.Income.SocialSecurity | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.SocialSecurity | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.SocialSecurity | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>14. Worker's Compensation Benefits</td>
+                                <td>{{scheduleA.Income.Compensation | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Compensation | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Compensation | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>15. Unemployment Benefits</td>
+                                <td>{{scheduleA.Income.Unemployment | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Unemployment | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Unemployment | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>16. Judgements from Personal Injury or Other Civil Cases</td>
+                                <td>{{scheduleA.Income.CivilCase | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.CivilCase | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.CivilCase | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>17. Gifts</td>
+                                <td>{{scheduleA.Income.Gifts | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Gifts | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Gifts | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>18. Prizes / Lottery Winnings</td>
+                                <td>{{scheduleA.Income.Prizes | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Prizes | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Prizes | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>19. Alimony & maintenance from persons not in this case</td>
+                                <td>{{scheduleA.Income.Alimony | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Alimony | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Alimony | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>20. Assets which are used for support of family</td>
+                                <td>{{scheduleA.Income.Assets | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Assets | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Assets | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>21. Fringe Benefits</td>
+                                <td>{{scheduleA.Income.Fringe | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Fringe | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Fringe | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>22. Any Other Income, including Imputed Income</td>
+                                <td>{{scheduleA.Income.Other | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncome.Other | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncome.Other | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>23. TOTAL GROSS MONTHLY INCOME</td>
+                                <td>{{scheduleA.IncomeTotal | dollarAmount}}</td>
+                                <td>{{scheduleA.OtherIncomeTotal | dollarAmount}}</td>
+                                <td>{{scheduleA.CombinedIncomeTotal | dollarAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <div class="borderBox centered" style="width: 90%;">
+                        <p><span style="font-weight: bold">Other income for {{scheduleA.Father}} is based upon:</span> {{scheduleA.Income.OtherDetails}}</p>
+                        <p><span style="font-weight: bold">Other income for {{scheduleA.Mother}} is based upon:</span> {{scheduleA.OtherIncome.OtherDetails}}</p>
+                    </div>
+                    <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+                        <input type="hidden" class="html" name="html" />
+                        <input type="hidden" class="name" name="name" />
+                        <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<table>
-    <thead>
-        <tr>
-            <th>GROSS INCOME</th>
-            <th>{{scheduleA.Father}}</th>
-            <th>{{scheduleA.Mother}}</th>
-            <th>Combined</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1. Salary and wages</td>
-            <td>{{scheduleA.Income.W2Income | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.W2Income | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.W2Income | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>2. Commissions, Fees, Tips</td>
-            <td>{{scheduleA.Income.Commisions | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Commisions | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Commisions | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>3. Income From Self-Employment</td>
-            <td>{{scheduleA.Income.SelfIncomeNoDeductions | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.SelfIncomeNoDeductions | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.SelfIncomeNoDeductions | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>4. Bonuses</td>
-            <td>{{scheduleA.Income.Bonuses | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Bonuses | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Bonuses | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>5. Overtime Payments</td>
-            <td>{{scheduleA.Income.Overtime | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Overtime | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Overtime | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>6. Severance Pay</td>
-            <td>{{scheduleA.Income.Severance | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Severance | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Severance | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>7. Recurring Income from Pensions or Retirement Plans</td>
-            <td>{{scheduleA.Income.Retirement | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Retirement | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Retirement | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>8. Interest Income</td>
-            <td>{{scheduleA.Income.Interest | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Interest | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Interest | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>9. Income from Dividends</td>
-            <td>{{scheduleA.Income.Dividends | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Dividends | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Dividends | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>10. Trust Income</td>
-            <td>{{scheduleA.Income.Trust | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Trust | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Trust | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>11. Income from Annuities</td>
-            <td>{{scheduleA.Income.Annuities | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Annuities | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Annuities | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>12. Capital Gains</td>
-            <td>{{scheduleA.Income.Capital | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Capital | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Capital | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>13. Social Security Disability or Retirement Benefits</td>
-            <td>{{scheduleA.Income.SocialSecurity | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.SocialSecurity | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.SocialSecurity | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>14. Worker's Compensation Benefits</td>
-            <td>{{scheduleA.Income.Compensation | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Compensation | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Compensation | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>15. Unemployment Benefits</td>
-            <td>{{scheduleA.Income.Unemployment | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Unemployment | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Unemployment | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>16. Judgements from Personal Injury or Other Civil Cases</td>
-            <td>{{scheduleA.Income.CivilCase | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.CivilCase | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.CivilCase | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>17. Gifts</td>
-            <td>{{scheduleA.Income.Gifts | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Gifts | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Gifts | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>18. Prizes / Lottery Winnings</td>
-            <td>{{scheduleA.Income.Prizes | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Prizes | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Prizes | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>19. Alimony & maintenance from persons not in this case</td>
-            <td>{{scheduleA.Income.Alimony | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Alimony | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Alimony | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>20. Assets which are used for support of family</td>
-            <td>{{scheduleA.Income.Assets | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Assets | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Assets | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>21. Fringe Benefits</td>
-            <td>{{scheduleA.Income.Fringe | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Fringe | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Fringe | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>22. Any Other Income, including Imputed Income</td>
-            <td>{{scheduleA.Income.Other | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncome.Other | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncome.Other | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>23. TOTAL GROSS MONTHLY INCOME</td>
-            <td>{{scheduleA.IncomeTotal | dollarAmount}}</td>
-            <td>{{scheduleA.OtherIncomeTotal | dollarAmount}}</td>
-            <td>{{scheduleA.CombinedIncomeTotal | dollarAmount}}</td>
-        </tr>
-    </tbody>
-</table>
-<br />
-<div class="borderBox centered" style="width: 90%;">
-    <p><span style="font-weight: bold">Other income for {{scheduleA.Father}} is based upon:</span> {{scheduleA.Income.OtherDetails}}</p>
-    <p><span style="font-weight: bold">Other income for {{scheduleA.Mother}} is based upon:</span> {{scheduleA.OtherIncome.OtherDetails}}</p>
-</div>
-<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-    <input type="hidden" class="html" name="html" />
-    <input type="hidden" class="name" name="name" />
-    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
-</form>

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using BusinessLogic.Contracts;
-using BusinessLogic.Properties;
 using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;

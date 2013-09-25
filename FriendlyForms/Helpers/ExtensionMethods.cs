@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using BusinessLogic.Contracts;
@@ -6,6 +7,7 @@ using FriendlyForms.RestService;
 using Models;
 using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.WebHost.Endpoints;
+
 namespace FriendlyForms.Helpers
 {
     public static class ExtensionMethods
@@ -38,9 +40,9 @@ namespace FriendlyForms.Helpers
         }
         public static AttorneyClientRestService.AttorneyDto ToAttorneyDto(this AttorneyClient attorneyClient, IUserAuthRepository userAuthRepository = null, IUserService userService = null)
         {
-            if(userAuthRepository== null)
+            if (userAuthRepository == null)
                 userAuthRepository = EndpointHost.AppHost.TryResolve<IUserAuthRepository>();
-            if(userService == null)
+            if (userService == null)
                 userService = EndpointHost.AppHost.TryResolve<IUserService>();
             var user = userService.Get(attorneyClient.UserId);
             var userAuth = userAuthRepository.GetUserAuth(user.UserAuthId.ToString(CultureInfo.InvariantCulture));
@@ -71,6 +73,5 @@ namespace FriendlyForms.Helpers
             };
             return attorneyDto;
         }
-
     }
 }

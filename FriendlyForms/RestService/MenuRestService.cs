@@ -24,8 +24,10 @@ namespace FriendlyForms.RestService
                 var showAdminMenu = request.UserId == Convert.ToInt64(UserSession.CustomId) &&
                                     UserSession.HasRole(Resources.AdminRole);
                 var showAttorneyMenu = request.UserId == Convert.ToInt64(UserSession.CustomId) &&
-                                    UserSession.HasRole(Resources.AttorneyRole);
-                return MenuService.Get(request.Route, request.UserId, showAdminMenu, showAttorneyMenu, isAuthenticated: UserSession.IsAuthenticated);
+                                       UserSession.HasRole(Resources.AttorneyRole);
+
+                return MenuService.Get(request.Route, request.UserId, showAdminMenu, showAttorneyMenu,
+                                       isAuthenticated: UserSession.IsAuthenticated);
             }
 
         }

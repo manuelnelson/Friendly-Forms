@@ -1,6 +1,7 @@
 ﻿using System;
 using BusinessLogic.Contracts;
 using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using DataInterface;
 using Elmah;
 
@@ -32,6 +33,10 @@ namespace BusinessLogic
                 ErrorSignal.FromCurrentContext().Raise(ex);
                 throw new Exception("Unable to retrieve Basic child support obligations", ex);
             }
+        }
+        public double GetAmount(ScheduleB scheduleB)
+        {
+            return GetAmount(scheduleB.Total5Minus1, scheduleB.OtherChildren.Count);
         }
     }
 }

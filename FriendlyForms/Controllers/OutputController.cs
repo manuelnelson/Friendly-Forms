@@ -33,8 +33,9 @@ namespace FriendlyForms.Controllers
         public ActionResult Pdf(string html, string name = "form")
         {
             var contentPath = Server.MapPath("~/Content/");
-            var css = System.IO.File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
-            var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style></head><body><div id=""main-content"">{1}</div></body></html>", css, html);
+            var pdfCss = System.IO.File.ReadAllText(Path.Combine(contentPath, "pdf.css"));
+            var outputCss = System.IO.File.ReadAllText(Path.Combine(contentPath, "output.css"));
+            var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style><style type=""text/css"">{1}</style></head><body><div id=""main-content"">{2}</div></body></html>", outputCss, pdfCss, html); 
             var config = new ObjectConfig();
             config.SetAllowLocalContent(true);
             config.SetPrintBackground(true);

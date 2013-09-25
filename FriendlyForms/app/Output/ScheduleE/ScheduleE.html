@@ -1,518 +1,533 @@
-﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
-<div class="row-fluid" style="text-align: center;">
-    <h2>CHILD SUPPORT SCHEDULE E</h2>
-    <h2>Deviation (Special Circumstances)</h2>
-</div>
-<table>
-    <thead>
-        <tr>
-            <th colspan="3">DEVIATION FOR LOW INCOME</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td></td>
-            <td>{{scheduleE.Father}}</td>
-            <td>*Court or Jury Allowable Deviations</td>
-        </tr>
-        <tr>
-            <td>1(a). Proposed Low Income Deviation Amount</td>
-            <td>{{scheduleE.LowIncomeDeviation.DeviationAmount | dollarAmount}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>1(b). Compare requested deviation amount with minimum order amount</td>
-            <td>{{scheduleE.LowIncomeDeviation.CompareAmount | dollarAmount}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>1(c). Calculated Deviation Amount</td>
-            <td>{{scheduleE.LowIncomeDeviation.CalculatedAmount | dollarAmount}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>1(d). Low Income Deviation Amount</td>
-            <td>{{scheduleE.LowIncomeDeviation.ActualAmount | dollarAmount}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <p>
-                    DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY:Court or Jury - Place a check mark in the boxNonFather at the left to show you are 
+﻿<link href="../../../Content/output.css" rel="stylesheet" />
+<div class="form-vertical wrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Schedule E Preview</h5>
+                </div>
+                <div class="widget-content" style="display: none" ng-show="isLoaded">
+
+                    <div class="row-fluid" style="text-align: center;">
+                        <h2>CHILD SUPPORT SCHEDULE E</h2>
+                        <h2>Deviation (Special Circumstances)</h2>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="3">DEVIATION FOR LOW INCOME</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>*Court or Jury Allowable Deviations</td>
+                            </tr>
+                            <tr>
+                                <td>1(a). Proposed Low Income Deviation Amount</td>
+                                <td>{{scheduleE.LowIncomeDeviation.DeviationAmount | dollarAmount}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1(b). Compare requested deviation amount with minimum order amount</td>
+                                <td>{{scheduleE.LowIncomeDeviation.CompareAmount | dollarAmount}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1(c). Calculated Deviation Amount</td>
+                                <td>{{scheduleE.LowIncomeDeviation.CalculatedAmount | dollarAmount}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1(d). Low Income Deviation Amount</td>
+                                <td>{{scheduleE.LowIncomeDeviation.ActualAmount | dollarAmount}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p>
+                                        DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY:Court or Jury - Place a check mark in the boxNonFather at the left to show you are 
                         excluding or changing the deviation amount(s) displaying in Line 1(d); otherwise, leave the check box blank and continue to thenext section 
                         of this schedule. If this Discretionary Check Box is checked, enter a new “Discretionary amount allowed by Court/Jury” AS AN AMOUNT 
                         TO BE SUBTRACTED or as a zero ($0.00) under the noncustodial parent’s column for (c) Mother and/or (d) Father. The amount(s) entered 
                         under columns (c) and/or (d) will then be used to total with the other deviation(s) in Line 14 of this Schedule.
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <p>
-                    Explanation for Requesting a Low Income Deviation: {{scheduleE.LowIncomeDeviation.Explaination}}
-                </p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th colspan="5">DEVIATION FOR HIGH INCOME & OTHER AMOUNTS</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td colspan="3">2(a). High Income- Combined Adjusted Income greater than $30,000/month.</td>
-            <td>{{scheduleE.HighIncomeAdjusted}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="3"></td>
-            <td colspan="2">*Court or Jury Allowable Deviations</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-        </tr>
-        <tr>
-            <td>2(b). Deviation Based on High Income.</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.Deviation | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.Deviation | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>3. Other Health Related Insurance (dental, vision)</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.OtherInsurance | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.OtherInsurance | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>4. Life Insurance</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.LifeInsurance | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.LifeInsurance | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>5. Child and Dependent Care Tax Credit</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.ChildTaxCredit | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.ChildTaxCredit | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>6. Visitation Related Travel Expenses</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.VisitationExpense | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.VisitationExpense | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>7. Alimony PAID</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.Alimony | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.Alimony | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>8. Mortgage (if non-custodial parent is providing cost of home where child resides)</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.Mortgage | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.Mortgage | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>9. Permanency Plan or Foster Care Plan</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.PermanancyPlan | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.PermanancyPlan | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>10. Other - Non-specific Deviations</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.NonSpecific | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.NonSpecific | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>11. TOTAL DEVIATIONS</td>
-            <td>{{scheduleE.HighIncomeDeviationFather.TotalDeviations | dollarAmount}}</td>
-            <td>{{scheduleE.HighIncomeDeviationMother.TotalDeviations | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="5">INSTRUCTIONS FOR COURT/JURY: Place a check mark in the box at the left to show amounts entered in Line 11 columns (c) and (d), 
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <p>
+                                        Explanation for Requesting a Low Income Deviation: {{scheduleE.LowIncomeDeviation.Explaination}}
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="5">DEVIATION FOR HIGH INCOME & OTHER AMOUNTS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3">2(a). High Income- Combined Adjusted Income greater than $30,000/month.</td>
+                                <td>{{scheduleE.HighIncomeAdjusted}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td colspan="2">*Court or Jury Allowable Deviations</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.Mother}}</td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.Mother}}</td>
+                            </tr>
+                            <tr>
+                                <td>2(b). Deviation Based on High Income.</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.Deviation | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.Deviation | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>3. Other Health Related Insurance (dental, vision)</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.OtherInsurance | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.OtherInsurance | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>4. Life Insurance</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.LifeInsurance | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.LifeInsurance | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>5. Child and Dependent Care Tax Credit</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.ChildTaxCredit | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.ChildTaxCredit | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>6. Visitation Related Travel Expenses</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.VisitationExpense | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.VisitationExpense | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>7. Alimony PAID</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.Alimony | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.Alimony | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>8. Mortgage (if non-custodial parent is providing cost of home where child resides)</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.Mortgage | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.Mortgage | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>9. Permanency Plan or Foster Care Plan</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.PermanancyPlan | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.PermanancyPlan | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>10. Other - Non-specific Deviations</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.NonSpecific | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.NonSpecific | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>11. TOTAL DEVIATIONS</td>
+                                <td>{{scheduleE.HighIncomeDeviationFather.TotalDeviations | dollarAmount}}</td>
+                                <td>{{scheduleE.HighIncomeDeviationMother.TotalDeviations | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">INSTRUCTIONS FOR COURT/JURY: Place a check mark in the box at the left to show amounts entered in Line 11 columns (c) and (d), 
                     rather than amounts entered in Line 11 columns (a) and (b), will be used in calculations. Only one set of answers for parents from Line 11 can 
                     be included on Line 14 with all other deviations.</td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th>Extraordinary and Special Expenses</th>
-            <th>{{scheduleE.Father}}</th>
-            <th>{{scheduleE.Mother}}</th>
-            <th>Nonparent Custodian</th>
-            <th>Combined</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>12(a). Extraordinary Educational Expenses</td>
-            <td>{{scheduleE.TotalExpenses.EducationFather | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.EducationMother | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.EducationNonParent | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.EducationTotal | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>12(b). Extraordinary Medical Expenses</td>
-            <td>{{scheduleE.TotalExpenses.MedicalFather | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.MedicalMother | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.MedicalNonParent | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.MedicalTotal | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>12(c). Allowable Special Expenses</td>
-            <td>{{scheduleE.TotalExpenses.SpecialFather | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.SpecialMother | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.SpecialNonParent | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.SpecialTotal | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>12(d). Total Expenses</td>
-            <td>{{scheduleE.TotalExpenses.TotalFather | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.TotalMother | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.TotalNonParent | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.TotalTotal | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>12(e). Percentage Pro Rata Share of Income</td>
-            <td>{{scheduleE.TotalExpenses.ProRataFather}}%</td>
-            <td>{{scheduleE.TotalExpenses.ProRataMother}}%</td>
-            <td></td>
-            <td>{{scheduleE.TotalExpenses.ProRataTotal}}%</td>
-        </tr>
-        <tr>
-            <td>12(f). Amount times Percentage</td>
-            <td>{{scheduleE.TotalExpenses.PercentageFather | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.PercentageMother | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>12(g). Deviation amount for Extraordinary Educational, Medical and Special Expenses</td>
-            <td>{{scheduleE.TotalExpenses.DeviationFather | dollarAmount}}</td>
-            <td>{{scheduleE.TotalExpenses.DeviationMother | dollarAmount}}</td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th>Parenting Time Deviation for Noncustodial Parent</th>
-            <th></th>
-            <th>{{scheduleE.NonCustodial}}</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>13. Monthly Excessive Parenting Time Deviation</td>
-            <td></td>
-            <td>{{scheduleE.TotalExpenses.ExtraSpent | dollarAmount}}</td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th colspan="4">Total Allowable Deviation</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td></td>
-            <td>{{scheduleE.Custodial}}</td>
-            <td>{{scheduleE.NonCustodial}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>14. Total Allowable Deviations</td>
-            <td>{{scheduleE.AllowableDeviation.AllowableFather | dollarAmount}}</td>
-            <td>{{scheduleE.AllowableDeviation.AllowableMother | dollarAmount}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td colspan="4">B. Would the presumptive amount be unjust or inappropriate?</td>
-        </tr>
-        <tr>
-            <td colspan="4">{{scheduleE.AllowableDeviation.PresumptiveAmount}}</td>
-        </tr>
-        <tr>
-            <td colspan="4">C. Would deviation serve the best interests of the children for whom support is being determined?</td>
-        </tr>
-        <tr>
-            <td colspan="4">{{scheduleE.AllowableDeviation.BestInterest}}</td>
-        </tr>
-        <tr>
-            <td colspan="4">D. Would deviation seriously impair the ability of the Custodial Parent or Nonparent Custodian to maintain minimally adequate housing, food and clothing for the children being supported by the order and to provide other basic necessities?</td>
-        </tr>
-        <tr>
-            <td colspan="4">{{scheduleE.AllowableDeviation.ImpairAbility}}</td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th colspan="4">SUPPLEMENTAL TABLE 1</th>
-        </tr>
-    </thead>
-    <tbody id="supplemental-table">
-        <tr>
-            <td colspan="4">EXTRAORDINARY EDUCATIONAL EXPENSES FOR EACH CHILD</td>
-        </tr>
-        <tr id="education">
-            <td>1. Tuition, Room & Board, Fees and Books</td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-            <td>Non Parent Custodian</td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.Tuition">
-            <td>{{item.Name}}</td>
-            <td>{{item.Father | dollarAmount}}</td>
-            <td>{{item.Mother | dollarAmount}}</td>
-            <td>{{item.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.TuitionTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.TuitionTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.TuitionTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr id="other-education">
-            <td>2. Other Extraordinary Educational Expenses</td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-            <td>Non Parent Custodian</td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.Education">
-            <td>{{item.Name}}</td>
-            <td>{{item.Father | dollarAmount}}</td>
-            <td>{{item.Mother | dollarAmount}}</td>
-            <td>{{item.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr id="yearly-education">
-            <td>3. Total Yearly Extraordinary Educational Expense</td>
-            <td>TOTAL</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyEducation">
-            <td>{{item.Name}}</td>
-            <td>{{item.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">COMBINED TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.YearlyEducationTotal.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr id="monthly-education">
-            <td>4. Monthly Extraordinary Educational Expenses</td>
-            <td>TOTAL</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyEducation">
-            <td>{{item.Name}}</td>
-            <td>{{item.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">COMBINED TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.MonthlyEducationTotal.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td colspan="4">EXTRAORDINARY MEDICAL EXPENSES FOR EACH CHILD</td>
-        </tr>
-        <tr id="medical">
-            <td>5. Extraordinary Medical Expenses</td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-            <td>Non Parent Custodian</td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.Medical">
-            <td>{{item.Name}}</td>
-            <td>{{item.Father | dollarAmount}}</td>
-            <td>{{item.Mother | dollarAmount}}</td>
-            <td>{{item.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr id="yearly-medical">
-            <td>6. Yearly Expenditure for Extraordinary Medical Expenses</td>
-            <td>TOTAL</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyMedical">
-            <td>{{item.Name}}</td>
-            <td>{{item.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">COMBINED TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.YearlyMedicalTotal.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr id="monthly-medical">
-            <td>7. Monthly Expenditure for Extraordinary Medical Expenses</td>
-            <td>TOTAL</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyMedical">
-            <td>{{item.Name}}</td>
-            <td>{{item.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">COMBINED TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.MonthlyMedicalTotal.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td colspan="4">SPECIAL EXPENSES FOR CHILD REARING</td>
-        </tr>
-        <tr id="rearing">
-            <td>8. Special Expenses for Child Rearing</td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-            <td>Non Parent Custodian</td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.Rearing">
-            <td>{{item.Name}}</td>
-            <td>{{item.Father | dollarAmount}}</td>
-            <td>{{item.Mother | dollarAmount}}</td>
-            <td>{{item.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr id="yearly-rearing">
-            <td>9. Yearly Expenditure for Special Expenses for Child Rearing</td>
-            <td>TOTAL</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyRearing">
-            <td>{{item.Name}}</td>
-            <td>{{item.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">COMBINED TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.YearlyRearingTotal.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr id="monthly-rearing">
-            <td>10. Monthly Expenditure for Special Expenses for Child Rearing</td>
-            <td>TOTAL</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyRearing">
-            <td>{{item.Name}}</td>
-            <td>{{item.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-        <tr>
-            <td style="text-align: right;">COMBINED TOTAL</td>
-            <td>{{scheduleE.Extraordinaries.MonthlyRearingTotal.Total | dollarAmount}}</td>
-            <td colspan="2"></td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th colspan="4">TOTAL EXPENSE AMOUNTS PAID BY ALL PARTIES</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td></td>
-            <td>{{scheduleE.Father}}</td>
-            <td>{{scheduleE.Mother}}</td>
-            <td>Non Parent Custodian</td>
-        </tr>
-        <tr>
-            <td>11. Yearly Expenditure for Extraordinary Educational Expenses</td>
-            <td>{{scheduleE.Extraordinaries.AllEducationTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.AllEducationTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.AllEducationTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>12. Monthly Expenditure for Extraordinary Educational Expenses</td>
-            <td>{{scheduleE.Extraordinaries.AllEducationTotalMonthly.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.AllEducationTotalMonthly.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.AllEducationTotalMonthly.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>13. Yearly Expenditure for Extraordinary Medical Expenses</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>14. Monthly Expenditure for Extraordinary Medical Expenses</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotalMonthly.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotalMonthly.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.MedicalTotalMonthly.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>15. Yearly Expenditure for Special Child Rearing Expenses</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>16. Monthly Expenditure for Special Child Rearing Expenses</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotalMonthly.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotalMonthly.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.RearingTotalMonthly.NonParent | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>TOTAL EXPENSE PAID BY PARTY</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father + Extraordinaries.MedicalTotal.Father + Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother + Extraordinaries.MedicalTotal.Mother + Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
-            <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent + Extraordinaries.MedicalTotal.NonParent + Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
-        </tr>
-    </tbody>
-</table>
-<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-    <input type="hidden" class="html" name="html" />
-    <input type="hidden" class="name" name="name" />
-    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
-</form>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Extraordinary and Special Expenses</th>
+                                <th>{{scheduleE.Father}}</th>
+                                <th>{{scheduleE.Mother}}</th>
+                                <th>Nonparent Custodian</th>
+                                <th>Combined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12(a). Extraordinary Educational Expenses</td>
+                                <td>{{scheduleE.TotalExpenses.EducationFather | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.EducationMother | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.EducationNonParent | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.EducationTotal | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>12(b). Extraordinary Medical Expenses</td>
+                                <td>{{scheduleE.TotalExpenses.MedicalFather | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.MedicalMother | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.MedicalNonParent | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.MedicalTotal | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>12(c). Allowable Special Expenses</td>
+                                <td>{{scheduleE.TotalExpenses.SpecialFather | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.SpecialMother | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.SpecialNonParent | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.SpecialTotal | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>12(d). Total Expenses</td>
+                                <td>{{scheduleE.TotalExpenses.TotalFather | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.TotalMother | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.TotalNonParent | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.TotalTotal | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>12(e). Percentage Pro Rata Share of Income</td>
+                                <td>{{scheduleE.TotalExpenses.ProRataFather}}%</td>
+                                <td>{{scheduleE.TotalExpenses.ProRataMother}}%</td>
+                                <td></td>
+                                <td>{{scheduleE.TotalExpenses.ProRataTotal}}%</td>
+                            </tr>
+                            <tr>
+                                <td>12(f). Amount times Percentage</td>
+                                <td>{{scheduleE.TotalExpenses.PercentageFather | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.PercentageMother | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>12(g). Deviation amount for Extraordinary Educational, Medical and Special Expenses</td>
+                                <td>{{scheduleE.TotalExpenses.DeviationFather | dollarAmount}}</td>
+                                <td>{{scheduleE.TotalExpenses.DeviationMother | dollarAmount}}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parenting Time Deviation for Noncustodial Parent</th>
+                                <th></th>
+                                <th>{{scheduleE.NonCustodial}}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>13. Monthly Excessive Parenting Time Deviation</td>
+                                <td></td>
+                                <td>{{scheduleE.TotalExpenses.ExtraSpent | dollarAmount}}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">Total Allowable Deviation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>{{scheduleE.Custodial}}</td>
+                                <td>{{scheduleE.NonCustodial}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>14. Total Allowable Deviations</td>
+                                <td>{{scheduleE.AllowableDeviation.AllowableFather | dollarAmount}}</td>
+                                <td>{{scheduleE.AllowableDeviation.AllowableMother | dollarAmount}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">B. Would the presumptive amount be unjust or inappropriate?</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">{{scheduleE.AllowableDeviation.PresumptiveAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">C. Would deviation serve the best interests of the children for whom support is being determined?</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">{{scheduleE.AllowableDeviation.BestInterest}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">D. Would deviation seriously impair the ability of the Custodial Parent or Nonparent Custodian to maintain minimally adequate housing, food and clothing for the children being supported by the order and to provide other basic necessities?</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">{{scheduleE.AllowableDeviation.ImpairAbility}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">SUPPLEMENTAL TABLE 1</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplemental-table">
+                            <tr>
+                                <td colspan="4">EXTRAORDINARY EDUCATIONAL EXPENSES FOR EACH CHILD</td>
+                            </tr>
+                            <tr id="education">
+                                <td>1. Tuition, Room & Board, Fees and Books</td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.Mother}}</td>
+                                <td>Non Parent Custodian</td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.Tuition">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Father | dollarAmount}}</td>
+                                <td>{{item.Mother | dollarAmount}}</td>
+                                <td>{{item.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.TuitionTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.TuitionTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.TuitionTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr id="other-education">
+                                <td>2. Other Extraordinary Educational Expenses</td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.Mother}}</td>
+                                <td>Non Parent Custodian</td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.Education">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Father | dollarAmount}}</td>
+                                <td>{{item.Mother | dollarAmount}}</td>
+                                <td>{{item.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr id="yearly-education">
+                                <td>3. Total Yearly Extraordinary Educational Expense</td>
+                                <td>TOTAL</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyEducation">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">COMBINED TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.YearlyEducationTotal.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr id="monthly-education">
+                                <td>4. Monthly Extraordinary Educational Expenses</td>
+                                <td>TOTAL</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyEducation">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">COMBINED TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.MonthlyEducationTotal.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">EXTRAORDINARY MEDICAL EXPENSES FOR EACH CHILD</td>
+                            </tr>
+                            <tr id="medical">
+                                <td>5. Extraordinary Medical Expenses</td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.Mother}}</td>
+                                <td>Non Parent Custodian</td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.Medical">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Father | dollarAmount}}</td>
+                                <td>{{item.Mother | dollarAmount}}</td>
+                                <td>{{item.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr id="yearly-medical">
+                                <td>6. Yearly Expenditure for Extraordinary Medical Expenses</td>
+                                <td>TOTAL</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyMedical">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">COMBINED TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.YearlyMedicalTotal.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr id="monthly-medical">
+                                <td>7. Monthly Expenditure for Extraordinary Medical Expenses</td>
+                                <td>TOTAL</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyMedical">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">COMBINED TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.MonthlyMedicalTotal.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">SPECIAL EXPENSES FOR CHILD REARING</td>
+                            </tr>
+                            <tr id="rearing">
+                                <td>8. Special Expenses for Child Rearing</td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.Mother}}</td>
+                                <td>Non Parent Custodian</td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.Rearing">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Father | dollarAmount}}</td>
+                                <td>{{item.Mother | dollarAmount}}</td>
+                                <td>{{item.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr id="yearly-rearing">
+                                <td>9. Yearly Expenditure for Special Expenses for Child Rearing</td>
+                                <td>TOTAL</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.YearlyRearing">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">COMBINED TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.YearlyRearingTotal.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr id="monthly-rearing">
+                                <td>10. Monthly Expenditure for Special Expenses for Child Rearing</td>
+                                <td>TOTAL</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr ng-repeat="item in scheduleE.Extraordinaries.MonthlyRearing">
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;">COMBINED TOTAL</td>
+                                <td>{{scheduleE.Extraordinaries.MonthlyRearingTotal.Total | dollarAmount}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">TOTAL EXPENSE AMOUNTS PAID BY ALL PARTIES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.Mother}}</td>
+                                <td>Non Parent Custodian</td>
+                            </tr>
+                            <tr>
+                                <td>11. Yearly Expenditure for Extraordinary Educational Expenses</td>
+                                <td>{{scheduleE.Extraordinaries.AllEducationTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.AllEducationTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.AllEducationTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>12. Monthly Expenditure for Extraordinary Educational Expenses</td>
+                                <td>{{scheduleE.Extraordinaries.AllEducationTotalMonthly.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.AllEducationTotalMonthly.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.AllEducationTotalMonthly.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>13. Yearly Expenditure for Extraordinary Medical Expenses</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>14. Monthly Expenditure for Extraordinary Medical Expenses</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotalMonthly.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotalMonthly.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.MedicalTotalMonthly.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>15. Yearly Expenditure for Special Child Rearing Expenses</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>16. Monthly Expenditure for Special Child Rearing Expenses</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotalMonthly.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotalMonthly.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.RearingTotalMonthly.NonParent | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>TOTAL EXPENSE PAID BY PARTY</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father + Extraordinaries.MedicalTotal.Father + Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother + Extraordinaries.MedicalTotal.Mother + Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent + Extraordinaries.MedicalTotal.NonParent + Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+                        <input type="hidden" class="html" name="html" />
+                        <input type="hidden" class="name" name="name" />
+                        <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

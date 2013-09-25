@@ -35,13 +35,13 @@
                             <label class="form-question">
                                 When will child support payment end?</label>
                             <label class="radio">
-                                Beyond Age 18 for High School <i class="icon icon-question-sign" popover-placement="right" popover-trigger="focus" popover="The child support shall continue monthly thereafter until each child reaches the age of eighteen, dies, marries, or otherwise becomes emancipated; provided that if a child becomes eighteen years old while enrolled in and attending secondary school on a full-time basis, then the child support shall continue for the child until the child has graduated from secondary school or reaches twenty years of age, whichever occurs first." popover-title="Tip"></i>
+                                Beyond Age 18 for High School <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="The child support shall continue monthly thereafter until each child reaches the age of eighteen, dies, marries, or otherwise becomes emancipated; provided that if a child becomes eighteen years old while enrolled in and attending secondary school on a full-time basis, then the child support shall continue for the child until the child has graduated from secondary school or reaches twenty years of age, whichever occurs first." popover-title="Tip"></i>
                                 <input required ng-model="childSupport.SupportEnd" ng-click="endDateChange()" name="SupportEnd" type="radio" value="1"></label>
                             <label class="radio">
                                 Stops at Age 18 <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="The child support shall continue monthly thereafter until each child reaches the age of eighteen, dies, marries, or otherwise becomes emancipated." popover-title="Tip"></i>
                                 <input required ng-model="childSupport.SupportEnd" ng-click="endDateChange()" name="SupportEnd" type="radio" value="2"></label>
                             <label class="radio">
-                                Until Further Order <i class="icon icon-question-sign" popover-placement="right" popover-title="Tip" popover="This is not a final order, so the child support shall continue until further order of this Court."></i>
+                                Until Further Order <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-placement="right" popover-title="Tip" popover="This is not a final order, so the child support shall continue until further order of this Court."></i>
                                 <input required ng-model="childSupport.SupportEnd" ng-click="endDateChange()" name="SupportEnd" type="radio" value="3"></label>
                             <label class="radio">
                                 Until Specific Date - The child support shall continue monthly thereafter until:

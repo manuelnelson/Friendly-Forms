@@ -15,6 +15,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Starter/Participant/user/:userId', { caseInsensitiveMatch: true, controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
         when('/Starter/Children/user/:userId', { caseInsensitiveMatch: true, controller: ChildrenCtrl, templateUrl: '/app/Starter/Children/children.html' }).
         when('/Starter/Introduction/user/:userId', { caseInsensitiveMatch: true, controller: IntroductionCtrl, templateUrl: '/app/Starter/Introduction/Introduction.html' }).
+        when('/Starter/BetaAgreement/user/:userId', { caseInsensitiveMatch: true, controller: BetaAgreementCtrl, templateUrl: '/app/Starter/BetaAgreement/BetaAgreement.html' }).
         when('/Domestic/Asset/user/:userId', { caseInsensitiveMatch: true, controller: AssetCtrl, templateUrl: '/app/Domestic/Asset/asset.html' }).
         when('/Domestic/Debt/user/:userId', { caseInsensitiveMatch: true, controller: DebtCtrl, templateUrl: '/app/Domestic/Debt/debt.html' }).
         when('/Domestic/HealthInsurance/user/:userId', { caseInsensitiveMatch: true, controller: HealthInsuranceCtrl, templateUrl: '/app/Domestic/HealthInsurance/healthInsurance.html' }).

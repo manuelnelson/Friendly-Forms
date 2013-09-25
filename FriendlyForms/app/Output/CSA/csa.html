@@ -1,60 +1,71 @@
-﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
-<div class="row-fluid" style="text-align: center;">
-    <h2>CHILD SUPPORT ADDENDUM</h2>
-    <h4>{{csa.County}} County Superior Court</h4>
-    <h4>STATE OF GEORGIA</h4>
-</div>
-<div class="row-fluid">
-    <span class="pull-left">Plaintiff: {{csa.ParentNames.PlaintiffName}}</span>
-</div>
-<div class="row-fluid" style="margin-bottom: 15px;">
-    <span class="pull-left">Defendant: {{csa.ParentNames.DefendantName}}</span>
-    <span class="pull-right">Civil Action Case Number: {{csa.Court.CaseNumber}}</span>
-</div>
-<div class="row-fluid">
-    <p class="checkbox">
-        <input type="checkbox" ng-show="csa.ChildSupport.BothParties == 1" disabled="disabled" checked="checked" />
-        <input type="checkbox" ng-show="csa.ChildSupport.BothParties != 1" disabled="disabled" />
-        The parties have agreed to the terms of this order and this information has been furnished by both parties 
+﻿<link href="../../../Content/output.css" rel="stylesheet" />
+<div class="form-vertical wrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Child Support Addendum Preview</h5>
+                </div>
+                <div class="widget-content" style="display: none" ng-show="isLoaded">
+                    <div class="row-fluid" style="text-align: center;">
+                        <h2>CHILD SUPPORT ADDENDUM</h2>
+                        <h4>{{csa.County}} County Superior Court</h4>
+                        <h4>STATE OF GEORGIA</h4>
+                    </div>
+                    <div class="row-fluid">
+                        <span class="pull-left">Plaintiff: {{csa.ParentNames.PlaintiffName}}</span>
+                    </div>
+                    <div class="row-fluid" style="margin-bottom: 15px;">
+                        <span class="pull-left">Defendant: {{csa.ParentNames.DefendantName}}</span>
+                        <span class="pull-right">Civil Action Case Number: {{csa.Court.CaseNumber}}</span>
+                    </div>
+                    <div class="row-fluid">
+                        <p class="checkbox">
+                            <input type="checkbox" ng-show="csa.ChildSupport.BothParties == 1" disabled="disabled" checked="checked" />
+                            <input type="checkbox" ng-show="csa.ChildSupport.BothParties != 1" disabled="disabled" />
+                            The parties have agreed to the terms of this order and this information has been furnished by both parties 
         to meet the requirements of OCGA §19-6-15. The parties agree on the terms of the order and affirm the 
         accuracy of the information provided, as shown by their signatures at the end of this addendum.
-    </p>
-    <p class="checkbox">
-        <input type="checkbox" disabled="disabled" />
-        This addendum includes findings of fact and conclusions of law and fact made by the Court, in compliance with OCGA §19-6-15.
-    </p>
-    <br />
-    <p>
-        Application of Child Support Guidelines. The statutory requirements of OCGA §19-6-15 have 
+                        </p>
+                        <p class="checkbox">
+                            <input type="checkbox" disabled="disabled" />
+                            This addendum includes findings of fact and conclusions of law and fact made by the Court, in compliance with OCGA §19-6-15.
+                        </p>
+                        <br />
+                        <p>
+                            Application of Child Support Guidelines. The statutory requirements of OCGA §19-6-15 have 
 been applied in reaching the amount of child support provided under the final order in this action. 
 The specifics are as follows:
-    </p>
-</div>
-<div class="row-fluid">
-    <ol class="bold">
-        <li>Gross Income
+                        </p>
+                    </div>
+                    <div class="row-fluid">
+                        <ol class="bold">
+                            <li>Gross Income
             <p>
                 The {{csa.ParentNames.Father}} gross monthly income (before taxes) is {{csa.GrossIncome.FatherAmount | dollarAmount}}; the {{csa.ParentNames.Mother}} gross monthly 
                 income (before taxes) is {{csa.GrossIncome.MotherAmount  | dollarAmount}}.
             </p>
-        </li>
-        <li>Number of Children
+                            </li>
+                            <li>Number of Children
             <p>
                 The number of children for whom support is being provided in this case is  {{csa.Children.length}}.
             </p>
-        </li>
-        <li>Attachments
+                            </li>
+                            <li>Attachments
             <p>
                 The Child Support Worksheet and Schedule E are attached and made a part of this addendum, along 
                 with any other applicable schedules.
             </p>
-        </li>
-        <li>Child Support Amount
-            <p>{{csa.ParentNames.NonCustodialParent}} shall pay to {{csa.ParentNames.CustodialParent}}, for the support of the minor children, the sum of {{csa.ChildSupportAmount.MonthlyAmountWritten}} Dollars ({{csa.ChildSupportAmount.MonthlyAmount | dollarAmount}}) per month, beginning on 
-                <span ng-show="csa.ChildSupport.SupportBegin == 1"> the first day of the first month after the divorce is finalized.</span>
-                <span ng-show="csa.ChildSupport.SupportBegin == 2 && csa.ChildSupport.BeginDate.HasValue">{{csa.ChildSupport.BeginDate.Value | date:'longDate'}}</span></p>
-        </li>
-        <li>Duration of Child Support
+                            </li>
+                            <li>Child Support Amount
+            <p>
+                {{csa.ParentNames.NonCustodialParent}} shall pay to {{csa.ParentNames.CustodialParent}}, for the support of the minor children, the sum of {{csa.ChildSupportAmount.MonthlyAmountWritten}} Dollars ({{csa.ChildSupportAmount.MonthlyAmount | dollarAmount}}) per month, beginning on 
+                <span ng-show="csa.ChildSupport.SupportBegin == 1">the first day of the first month after the divorce is finalized.</span>
+                <span ng-show="csa.ChildSupport.SupportBegin == 2 && csa.ChildSupport.BeginDate.HasValue">{{csa.ChildSupport.BeginDate.Value | date:'longDate'}}</span>
+                                </p>
+                            </li>
+                            <li>Duration of Child Support
             <p ng-show="csa.ChildSupport.SupportEnd == 1">
                 Beyond Age 18 for High School - The child support shall continue monthly thereafter until each child 
                 reaches the age of eighteen, dies, marries, or otherwise becomes emancipated; provided that if a child 
@@ -62,18 +73,18 @@ The specifics are as follows:
                 the child support shall continue for the child until the child has graduated from secondary school or 
                 reaches twenty years of age, whichever occurs first
             </p>
-            <p ng-show="csa.ChildSupport.SupportEnd == 2">
-                Stops at Age 18 - The child support shall continue monthly thereafter until each child reaches the age 
+                                <p ng-show="csa.ChildSupport.SupportEnd == 2">
+                                    Stops at Age 18 - The child support shall continue monthly thereafter until each child reaches the age 
                 of eighteen, dies, marries, or otherwise becomes emancipated.
-            </p>
-            <p ng-show="csa.ChildSupport.SupportEnd == 3">
-                Until Further Order - This is not a final order, so the child support shall continue until further order of this Court.
-            </p>
-            <p ng-show="csa.ChildSupport.SupportEnd == 4">
-                Until Specific Date - The child support shall continue monthly thereafter until {{csa.ChildSupport.EndDate.Value | date: 'longDate'}}.
-            </p>
-        </li>
-        <li>Deviation from Presumptive Amount
+                                </p>
+                                <p ng-show="csa.ChildSupport.SupportEnd == 3">
+                                    Until Further Order - This is not a final order, so the child support shall continue until further order of this Court.
+                                </p>
+                                <p ng-show="csa.ChildSupport.SupportEnd == 4">
+                                    Until Specific Date - The child support shall continue monthly thereafter until {{csa.ChildSupport.EndDate.Value | date: 'longDate'}}.
+                                </p>
+                            </li>
+                            <li>Deviation from Presumptive Amount
             <p class="checkbox">
                 <input type="checkbox" ng-show="!csa.Deviation.HasDeviation" disabled="disabled" checked="checked" />
                 <input type="checkbox" ng-show="csa.Deviation.HasDeviation" disabled="disabled" />
@@ -81,17 +92,17 @@ The specifics are as follows:
                 applies in this case, as shown by the attached Schedule E. The amount of support in Paragraph 4 above 
                 is the Presumptive Amount of Child Support shown on the attached Child Support Worksheet.
             </p>
-            <p ng-show="csa.Deviation.HasDeviation" class="checkbox">
-                <input type="checkbox" disabled="disabled" checked="checked" />
-                Deviation - It has been determined that one or more of the Deviations allowed under OCGA §19-
+                                <p ng-show="csa.Deviation.HasDeviation" class="checkbox">
+                                    <input type="checkbox" disabled="disabled" checked="checked" />
+                                    Deviation - It has been determined that one or more of the Deviations allowed under OCGA §19-
                 6-15 applies in this case, as shown by the attached Schedule E. The Presumptive Amount of Child 
                 Support that would have been required under OCGA §19-6-15 if the deviations had not been applied is 
                 {{csa.Deviation.Amount | dollarAmount}} per month, as shown on the attached Child Support Worksheet. The attached Schedule E 
                 explains the reasons for the deviation, how the application of the guidelines would be unjust or inappropriate considering the relative ability of each parent to provide support, and how the best interest of 
                 the children who are subject to this child support determination is served by deviation from the presumptive amount of child support.
-            </p>
-        </li>
-        <li>Health, Dental & Vision Insurance for Children
+                                </p>
+                            </li>
+                            <li>Health, Dental & Vision Insurance for Children
             <div ng-show="csa.HealthInsurance.ProvideHealth == 1 || csa.HealthInsurance.ProvideHealth == 2">
                 <p>
                     <span style="font-weight: bold">Insurance Available - </span>The following insurance for the children involved in this action is available at a 
@@ -150,28 +161,28 @@ The specifics are as follows:
                     provider has not been paid by one of the parties).
                 </p>
             </div>
-            <div ng-show="csa.HealthInsurance.ProvideHealth == 3">
-                <p>
-                    <span style="font-weight: bold">Insurance Not Available - </span>Insurance (other than Medicaid) is not available at this time to either party 
+                                <div ng-show="csa.HealthInsurance.ProvideHealth == 3">
+                                    <p>
+                                        <span style="font-weight: bold">Insurance Not Available - </span>Insurance (other than Medicaid) is not available at this time to either party 
                     at a reasonable cost. If health insurance for the children later becomes available to the parent who is 
                     required to pay child support for these children, then that parent must obtain the following types of 
                     insurance, unless it is then being provided by the other parent:               
-                </p>
-                <ul>
-                    <li>
-                        <input type="checkbox" disabled="disabled" />
-                        Health (medical, mental health, and hospitalization)</li>
-                    <li>
-                        <input type="checkbox" disabled="disabled" />
-                        Dental</li>
-                    <li>
-                        <input type="checkbox" disabled="disabled" />
-                        Vision</li>
-                </ul>
-                <p>When insurance has been obtained by either party, Paragraphs 7 (a)(1) and (2) shall apply</p>
-            </div>
-        </li>
-        <li>Uninsured Health Care Expenses
+                                    </p>
+                                    <ul>
+                                        <li>
+                                            <input type="checkbox" disabled="disabled" />
+                                            Health (medical, mental health, and hospitalization)</li>
+                                        <li>
+                                            <input type="checkbox" disabled="disabled" />
+                                            Dental</li>
+                                        <li>
+                                            <input type="checkbox" disabled="disabled" />
+                                            Vision</li>
+                                    </ul>
+                                    <p>When insurance has been obtained by either party, Paragraphs 7 (a)(1) and (2) shall apply</p>
+                                </div>
+                            </li>
+                            <li>Uninsured Health Care Expenses
             <p>
                 The {{csa.ParentNames.Father}} shall pay {{csa.HealthInsurance.FathersHealthPercentage}}% and the {{csa.ParentNames.Father}} shall pay {{csa.HealthInsurance.MothersHealthPercentage}}% of all expenses 
                 incurred for the children’s health care (including medical, dental, mental health, hospital and vision care) 
@@ -180,86 +191,86 @@ The specifics are as follows:
                 party (or pay the health care provider directly) for the appropriate percentage of the expense, within 
                 {{csa.HealthInsurance.MaximumDays}} days after receiving the verification of a particular health care expense.
             </p>
-        </li>
-        <li>Parenting Time Amounts
+                            </li>
+                            <li>Parenting Time Amounts
             <p>The approximate number of days of parenting time per year according to the visitation order is _______ days for the Father and _______ days for the Mother.</p>
-        </li>
-        <li>Social Security Benefits
+                            </li>
+                            <li>Social Security Benefits
             <p ng-show="csa.SocialSecurity.ReceiveSocial == 2">
                 <span style="font-weight: bold">Not Received - </span>The children do not receive Title II Social Security benefits under the
                 account of the parent ordered to pay child support.                              
             </p>
-            <p ng-show="csa.SocialSecurity.ReceiveSocial == 1">
-                <span style="font-weight: bold">Received - </span>The children receive Title II Social Security benefits under the account of the parent
+                                <p ng-show="csa.SocialSecurity.ReceiveSocial == 1">
+                                    <span style="font-weight: bold">Received - </span>The children receive Title II Social Security benefits under the account of the parent
                 ordered to pay child support. The benefits received by the children shall be counted as child support
                 payments, and shall be applied against the final child support order to be paid by that parent.          
-            </p>
-            <ol ng-show="csa.SocialSecurity.ReceiveSocial == 1">
-                <li>If the amount of benefits received is less than the amount of support ordered, the
+                                </p>
+                                <ol ng-show="csa.SocialSecurity.ReceiveSocial == 1">
+                                    <li>If the amount of benefits received is less than the amount of support ordered, the
                     obligor shall pay the amount exceeding the Social Security benefit.</li>
-                <li>If the amount of benefits received is equal to or more than the amount of support
+                                    <li>If the amount of benefits received is equal to or more than the amount of support
                     ordered, the obligor’s responsibility is met and no further support shall be paid.
-                </li>
-                <li>Any Title II benefits received for the children’s benefit shall be retained by the custodial
+                                    </li>
+                                    <li>Any Title II benefits received for the children’s benefit shall be retained by the custodial
                     parent or nonparent custodian for the children’s benefit, and it shall not be used as a reason 
                     for decreasing the final child support order or reducing arrearages.
-                </li>
-            </ol>
-        </li>
-        <li>Modification
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>Modification
             <p ng-show="csa.Court.PlanType == 1">
                 <span style="font-weight: bold">Not Modification Action - </span>This is an initial determination of child support, not a modification action.
             </p>
-            <p ng-show="(csa.Court.PlanType == 2 || csa.Court.PlanType == 3) && !csa.ChildSupportDifferent">
-                <span style="font-weight: bold">Support Not Modified - </span>This action is a modification action, but the order does not modify the amount of child support that 
+                                <p ng-show="(csa.Court.PlanType == 2 || csa.Court.PlanType == 3) && !csa.ChildSupportDifferent">
+                                    <span style="font-weight: bold">Support Not Modified - </span>This action is a modification action, but the order does not modify the amount of child support that 
                 was previously ordered for these children.
-            </p>
-            <p ng-show="(csa.Court.PlanType == 2 || csa.Court.PlanType == 3) && csa.ChildSupportDifferent">
-                <span style="font-weight: bold">Support Amount Modified - </span>The order modifies the amount of child support that was previously ordered for these children. The 
+                                </p>
+                                <p ng-show="(csa.Court.PlanType == 2 || csa.Court.PlanType == 3) && csa.ChildSupportDifferent">
+                                    <span style="font-weight: bold">Support Amount Modified - </span>The order modifies the amount of child support that was previously ordered for these children. The 
                 basis for the modification is:
-            </p>
-            <ul class="no-style">
-                <li>
-                    <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
-                        Substantial change in the income and financial status of the Father;
-                    </p>
-                </li>
-                <li>
-                    <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
-                        Substantial change in the income and financial status of the Mother;
-                    </p>
-                </li>
-                <li>
-                    <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
-                        Substantial change in the needs of the Children;
-                    </p>
-                </li>
-                <li>
-                    <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
-                        The noncustodial parent failed to exercise visitation provided under the prior order;
-                    </p>
-                </li>
-                <li>
-                    <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
-                        The noncustodial parent has exercised more visitation than was provided in the prior order.
-                    </p>
-                </li>
-            </ul>
-        </li>
-        <li>Continuing Garnishment for Child Support
+                                </p>
+                                <ul class="no-style">
+                                    <li>
+                                        <p class="checkbox">
+                                            <input type="checkbox" disabled="disabled" />
+                                            Substantial change in the income and financial status of the Father;
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p class="checkbox">
+                                            <input type="checkbox" disabled="disabled" />
+                                            Substantial change in the income and financial status of the Mother;
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p class="checkbox">
+                                            <input type="checkbox" disabled="disabled" />
+                                            Substantial change in the needs of the Children;
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p class="checkbox">
+                                            <input type="checkbox" disabled="disabled" />
+                                            The noncustodial parent failed to exercise visitation provided under the prior order;
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p class="checkbox">
+                                            <input type="checkbox" disabled="disabled" />
+                                            The noncustodial parent has exercised more visitation than was provided in the prior order.
+                                        </p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>Continuing Garnishment for Child Support
             <p>
                 Whenever, in violation of the terms of the order, there shall have been a failure to make the support
                 payments, so that the amount unpaid is equal to or greater than the amount payable for one month, the
                 payments required to be made may also be collected by the process of continuing garnishment for
                 support.
             </p>
-        </li>
-        <li>Income Deduction Order
+                            </li>
+                            <li>Income Deduction Order
             <ul class="no-style">
                 <li>
                     <p class="checkbox">
@@ -299,47 +310,52 @@ The specifics are as follows:
                     </p>
                 </li>
             </ul>
-        </li>
-    </ol>
-    <br />
-    <p>
-        Parties’ Consent - We knowingly and voluntarily agree on the terms of this order. Each of us affirms that the 
+                            </li>
+                        </ol>
+                        <br />
+                        <p>
+                            Parties’ Consent - We knowingly and voluntarily agree on the terms of this order. Each of us affirms that the 
         information we have provided in this Addendum is true and correct.
-    </p>
-    <div class="row-fluid">
-        <div class="span5">
-            <hr />
-            <p>Father's Signature</p>
-        </div>
-        <div class="span5">
-            <hr />
-            <p>Mother's Signature</p>
-        </div>
-    </div>
-    <div class="row-fluid" style="text-align: center;">
-        <br />
-        <br />
-        <h2>ORDER</h2>
-        <br />
-    </div>
-    <p>
-        The Court has reviewed the foregoing Child Support Addendum, and it is hereby made the order of this 
+                        </p>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <hr />
+                                <p>Father's Signature</p>
+                            </div>
+                            <div class="span5">
+                                <hr />
+                                <p>Mother's Signature</p>
+                            </div>
+                        </div>
+                        <div class="row-fluid" style="text-align: center;">
+                            <br />
+                            <br />
+                            <h2>ORDER</h2>
+                            <br />
+                        </div>
+                        <p>
+                            The Court has reviewed the foregoing Child Support Addendum, and it is hereby made the order of this 
     Court.
-    </p>
-    <p>This Order entered on _____________________________________, 20 _____ . </p>
-    <br />
-    <br />
-    <div class="row-fluid">
-        <div class="span5 offset5">
-            <hr />
-            <p>JUDGE</p>
-            <p>{{csa.County}} COUNTY SUPERIOR COURT</p>
+                        </p>
+                        <p>This Order entered on _____________________________________, 20 _____ . </p>
+                        <br />
+                        <br />
+                        <div class="row-fluid">
+                            <div class="span5 offset5">
+                                <hr />
+                                <p>JUDGE</p>
+                                <p>{{csa.County}} COUNTY SUPERIOR COURT</p>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+                        <input type="hidden" class="html" name="html" />
+                        <input type="hidden" class="name" name="name" />
+                        <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<br />
-<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-    <input type="hidden" class="html" name="html" />
-    <input type="hidden" class="name" name="name" />
-    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
-</form>

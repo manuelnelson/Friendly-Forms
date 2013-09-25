@@ -1,154 +1,168 @@
-﻿<link href="../../../Content/pdf.css" rel="stylesheet" />
-<div class="row-fluid" style="text-align: center;">
-    <h2>CHILD SUPPORT SCHEDULE B</h2>
-    <h2>ADJUSTED INCOME</h2>
-</div>
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th>{{scheduleB.Father}}</th>
-            <th>{{scheduleB.Mother}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1. Total Gross Monthly Income</td>
-            <td>{{scheduleB.ScheduleB.GrossIncome | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.GrossIncome | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>2. Monthly Self-Employment Income on which a parent
+﻿<link href="../../../Content/output.css" rel="stylesheet" />
+<div class="form-vertical wrapper">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Schedule B Preview</h5>
+                </div>
+                <div class="widget-content" style="display: none" ng-show="isLoaded">
+                    <div class="row-fluid" style="text-align: center;">
+                        <h2>CHILD SUPPORT SCHEDULE B</h2>
+                        <h2>ADJUSTED INCOME</h2>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{scheduleB.Father}}</th>
+                                <th>{{scheduleB.Mother}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1. Total Gross Monthly Income</td>
+                                <td>{{scheduleB.ScheduleB.GrossIncome | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.GrossIncome | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>2. Monthly Self-Employment Income on which a parent
                     paid Self-Employment Taxes for FICA & Medicare.</td>
-            <td>{{scheduleB.ScheduleB.SelfEmploymentIncome | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.SelfEmploymentIncome | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>3. Amount of FICA owed by parent for self-employment
+                                <td>{{scheduleB.ScheduleB.SelfEmploymentIncome | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.SelfEmploymentIncome | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>3. Amount of FICA owed by parent for self-employment
                     income.</td>
-            <td>{{scheduleB.ScheduleB.FicaIncome | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.FicaIncome | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>4. Amount of Medicare tax owed by a parent for
+                                <td>{{scheduleB.ScheduleB.FicaIncome | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.FicaIncome | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>4. Amount of Medicare tax owed by a parent for
                     self-employment income.</td>
-            <td>{{scheduleB.ScheduleB.MedicareTax | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.MedicareTax | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>5. Total for lines 3 and 4.</td>
-            <td>{{scheduleB.ScheduleB.Total34 | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.Total34 | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>6. Line 5 minus line 1.</td>
-            <td>{{scheduleB.ScheduleB.Total5Minus1 | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.Total5Minus1 | dollarAmount}}</td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th>Adjustment for Preexisting Child Support Orders Being Paid for Other Children</th>
-            <th>{{scheduleB.Father}}</th>
-            <th>{{scheduleB.Mother}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>8. Total Adjustment for Preexisting Child Support Orders</td>
-            <td>{{scheduleB.ScheduleB.TotalSupport | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.TotalSupport | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>9. Adjusted Total</td>
-            <td>{{scheduleB.ScheduleB.AdjustedSupport | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.AdjustedSupport | dollarAmount}}</td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <thead>
-        <tr>
-            <th colspan="4">Adjustment for Other Qualified Children</th>
-        </tr>
-    </thead>
-    <tbody id="other-qualified-children">
-        <tr>
-            <th></th>
-            <th>Name of Child</th>
-            <th>DOB</th>
-            <th>Credit Claimed By</th>
-        </tr>
-        <tr ng-repeat="child in scheduleB.ScheduleB.OtherChildren">
-            <td></td>
-            <td>{{child.Name}}</td>
-            <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
-            <td>{{child.ClaimedBy}}</td>
-        </tr>
-        <tr ng-repeat="child in scheduleB.OtherScheduleB.OtherChildren">
-            <td></td>
-            <td>{{child.Name}}</td>
-            <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
-            <td>{{child.ClaimedBy}}</td>
-        </tr>
-    </tbody>
-</table>
-<table ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0 || scheduleB.ScheduleB.OtherChildrenDescription.length > 0">
-    <thead>
-        <tr>
-            <th>Reason for Inclusion of Qualified Children in This Court Case</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <p ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Mother}} is based upon: {{scheduleB.OtherScheduleB.OtherChildrenDescription}}</p>
-                <p ng-show="scheduleB.ScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Father}} is based upon: {{scheduleB.ScheduleB.OtherChildrenDescription}}</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<table>
-    <tbody>
-        <tr>
-            <td></td>
-            <td>{{scheduleB.Father}}</td>
-            <td>{{scheduleB.Mother}}</td>
-        </tr>
-        <tr>
-            <td>11. Subtotal</td>
-            <td>{{scheduleB.ScheduleB.Subtotal | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.Subtotal | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>12. Amount based upon Georgia Schedule of Basic Child Support Obligations</td>
-            <td>{{scheduleB.ScheduleB.GeorgiaObligations | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.GeorgiaObligations | dollarAmount}}</td>
-        </tr>
-        <tr>
-            <td>13. 75% of Basic Child Support Obligation</td>
-            <td>{{scheduleB.ScheduleB.TheoreticalSupport | dollarAmount}}</td>
-            <td>{{scheduleB.OtherScheduleB.TheoreticalSupport | dollarAmount}}</td>
-        </tr>
-        <tr ng-show="scheduleB.ScheduleB.OtherChildren.length>0 || scheduleB.OtherScheduleB.OtherChildren.length>0">
-            <td>14. Final Monthly Adjusted Income</td>
-            <td ng-show="scheduleB.ScheduleB.OtherChildren.length>0">{{scheduleB.ScheduleB.PreexistingOrder | dollarAmount}}</td>
-            <td ng-show="scheduleB.ScheduleB.OtherChildren.length==0">$0</td>
-            <td ng-show="scheduleB.OtherScheduleB.OtherChildren.length>0">{{scheduleB.OtherScheduleB.PreexistingOrder | dollarAmount}}</td>
-            <td ng-show="scheduleB.OtherScheduleB.OtherChildren.length==0">$0</td>
-        </tr>
-    </tbody>
-</table>
-<br />
-<!--The children are mine by a previous marriage-->
-<div class="borderBox centered" style="width: 90%;" ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0 || scheduleB.ScheduleB.IncomeDetails.length > 0">
-    <p ng-show="scheduleB.ScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Father}} is based upon:</span> {{scheduleB.ScheduleB.IncomeDetails}}</p>
-    <p ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.IncomeDetails}}</p>
+                                <td>{{scheduleB.ScheduleB.MedicareTax | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.MedicareTax | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>5. Total for lines 3 and 4.</td>
+                                <td>{{scheduleB.ScheduleB.Total34 | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.Total34 | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>6. Line 5 minus line 1.</td>
+                                <td>{{scheduleB.ScheduleB.Total5Minus1 | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.Total5Minus1 | dollarAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Adjustment for Preexisting Child Support Orders Being Paid for Other Children</th>
+                                <th>{{scheduleB.Father}}</th>
+                                <th>{{scheduleB.Mother}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>8. Total Adjustment for Preexisting Child Support Orders</td>
+                                <td>{{scheduleB.ScheduleB.TotalSupport | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.TotalSupport | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>9. Adjusted Total</td>
+                                <td>{{scheduleB.ScheduleB.AdjustedSupport | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.AdjustedSupport | dollarAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4">Adjustment for Other Qualified Children</th>
+                            </tr>
+                        </thead>
+                        <tbody id="other-qualified-children">
+                            <tr>
+                                <th></th>
+                                <th>Name of Child</th>
+                                <th>DOB</th>
+                                <th>Credit Claimed By</th>
+                            </tr>
+                            <tr ng-repeat="child in scheduleB.ScheduleB.OtherChildren">
+                                <td></td>
+                                <td>{{child.Name}}</td>
+                                <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
+                                <td>{{child.ClaimedBy}}</td>
+                            </tr>
+                            <tr ng-repeat="child in scheduleB.OtherScheduleB.OtherChildren">
+                                <td></td>
+                                <td>{{child.Name}}</td>
+                                <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
+                                <td>{{child.ClaimedBy}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0 || scheduleB.ScheduleB.OtherChildrenDescription.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Reason for Inclusion of Qualified Children in This Court Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Mother}} is based upon: {{scheduleB.OtherScheduleB.OtherChildrenDescription}}</p>
+                                    <p ng-show="scheduleB.ScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Father}} is based upon: {{scheduleB.ScheduleB.OtherChildrenDescription}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>{{scheduleB.Father}}</td>
+                                <td>{{scheduleB.Mother}}</td>
+                            </tr>
+                            <tr>
+                                <td>11. Subtotal</td>
+                                <td>{{scheduleB.ScheduleB.Subtotal | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.Subtotal | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>12. Amount based upon Georgia Schedule of Basic Child Support Obligations</td>
+                                <td>{{scheduleB.ScheduleB.GeorgiaObligations | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.GeorgiaObligations | dollarAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>13. 75% of Basic Child Support Obligation</td>
+                                <td>{{scheduleB.ScheduleB.TheoreticalSupport | dollarAmount}}</td>
+                                <td>{{scheduleB.OtherScheduleB.TheoreticalSupport | dollarAmount}}</td>
+                            </tr>
+                            <tr ng-show="scheduleB.ScheduleB.OtherChildren.length>0 || scheduleB.OtherScheduleB.OtherChildren.length>0">
+                                <td>14. Final Monthly Adjusted Income</td>
+                                <td ng-show="scheduleB.ScheduleB.OtherChildren.length>0">{{scheduleB.ScheduleB.PreexistingOrder | dollarAmount}}</td>
+                                <td ng-show="scheduleB.ScheduleB.OtherChildren.length==0">$0</td>
+                                <td ng-show="scheduleB.OtherScheduleB.OtherChildren.length>0">{{scheduleB.OtherScheduleB.PreexistingOrder | dollarAmount}}</td>
+                                <td ng-show="scheduleB.OtherScheduleB.OtherChildren.length==0">$0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <!--The children are mine by a previous marriage-->
+                    <div class="borderBox centered" style="width: 90%;" ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0 || scheduleB.ScheduleB.IncomeDetails.length > 0">
+                        <p ng-show="scheduleB.ScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Father}} is based upon:</span> {{scheduleB.ScheduleB.IncomeDetails}}</p>
+                        <p ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.IncomeDetails}}</p>
+                    </div>
+                    <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+                        <input type="hidden" class="html" name="html" />
+                        <input type="hidden" class="name" name="name" />
+                        <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-    <input type="hidden" class="html" name="html" />
-    <input type="hidden" class="name" name="name" />
-    <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
-</form>

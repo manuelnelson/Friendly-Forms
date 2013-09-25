@@ -4,30 +4,30 @@
     {
         public int HaveSalary { get; set; }
         public string OtherIncome { get; set; }
-        public int W2Income { get; set; }
-        public int NonW2Income { get; set; }
-        public int SelfIncome { get; set; }
-        public int SelfIncomeNoDeductions { get; set; }
-        public int Commisions { get; set; }
-        public int Bonuses { get; set; }
-        public int Overtime { get; set; }
-        public int Severance { get; set; }
-        public int Retirement { get; set; }
-        public int Interest { get; set; }
-        public int Dividends { get; set; }
-        public int Trust { get; set; }
-        public int Annuities { get; set; }
-        public int Capital { get; set; }
-        public int SocialSecurity { get; set; }
-        public int Compensation { get; set; }
-        public int Unemployment { get; set; }
-        public int CivilCase { get; set; }
-        public int Gifts { get; set; }
-        public int Prizes { get; set; }
-        public int Alimony { get; set; }
-        public int Assets { get; set; }
-        public int Fringe { get; set; }
-        public int Other { get; set; }
+        public double W2Income { get; set; }
+        public double NonW2Income { get; set; }
+        public double SelfIncome { get; set; }
+        public double SelfIncomeNoDeductions { get; set; }
+        public double Commisions { get; set; }
+        public double Bonuses { get; set; }
+        public double Overtime { get; set; }
+        public double Severance { get; set; }
+        public double Retirement { get; set; }
+        public double Interest { get; set; }
+        public double Dividends { get; set; }
+        public double Trust { get; set; }
+        public double Annuities { get; set; }
+        public double Capital { get; set; }
+        public double SocialSecurity { get; set; }
+        public double Compensation { get; set; }
+        public double Unemployment { get; set; }
+        public double CivilCase { get; set; }
+        public double Gifts { get; set; }
+        public double Prizes { get; set; }
+        public double Alimony { get; set; }
+        public double Assets { get; set; }
+        public double Fringe { get; set; }
+        public double Other { get; set; }
         public string OtherDetails { get; set; }
 
         public IncomeDto ToMonthly()

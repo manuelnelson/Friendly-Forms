@@ -1,10 +1,12 @@
-﻿var ParentingCtrl = ['$scope', '$routeParams', '$rootScope', 'parentingService', 'menuService', 'genericService', 'headerService', '$timeout',
-    function ($scope, $routeParams, $rootScope, parentingService, menuService, genericService, headerService, $timeout) {
+﻿var ParentingCtrl = ['$scope', '$routeParams', '$rootScope', 'parentingService', 'menuService', 'genericService', 'headerService', '$timeout', '$location',
+function ($scope, $routeParams, $rootScope, parentingService, menuService, genericService, headerService, $timeout,$location) {
     $scope.showPrintButton = false;
+    $scope.isLoaded = false;
     parentingService.parentings.get({ UserId: $routeParams.userId }, function (data) {
         $scope.parenting = data;
+        $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -15,6 +17,8 @@
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
 
