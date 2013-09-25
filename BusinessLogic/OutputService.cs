@@ -98,7 +98,7 @@ namespace BusinessLogic
 
         public ScheduleB GetScheduleB(long userId, string parentName, bool isOtherParent = false)
         {
-            var income = IncomeService.GetByUserId(userId, isOtherParent).TranslateTo<IncomeDto>().ToMonthly();
+            var income = IncomeService.GetByUserId(userId, isOtherParent).ToIncomeDto().ToMonthly();
             var preexistingSupport = PreexistingSupportFormService.GetByUserId(userId, isOtherParent);
             var otherChildren = OtherChildrenService.GetByUserId(userId, isOtherParent);
             var schedule = new ScheduleB

@@ -20,7 +20,7 @@
                         </div>
                         <div class="control-group">
                             <label class="form-question">Case Number</label>
-                            <input ui-jq="popover" data-content="Your case number can be found XXXX." name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number" type="text" value="" required>
+                            <input name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number" type="text" value="" required>
                             <div ng-show="courtForm.CaseNumber.$dirty && courtForm.CaseNumber.$invalid || (showErrors && courtForm.CaseNumber.$invalid)">
                                 <span class="form-error" ng-show="courtForm.CaseNumber.$error.required">Case Number is required</span>
                                 <span class="form-error" ng-show="courtForm.CaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>

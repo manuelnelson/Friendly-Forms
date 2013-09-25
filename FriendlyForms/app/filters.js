@@ -1,6 +1,7 @@
 ﻿FormsApp.filter('dollarAmount', function () {
     return function (input) {
-        var integerInput = parseInt(input);
-        return integerInput < 0 ? '-$' + Math.abs(integerInput) : '$' + Math.abs(integerInput);
+        var isNegative = input < 0;
+        var dollarInput = Math.abs(input).toFixed(2);
+        return isNegative ? '-$' + dollarInput : '$' + dollarInput;
     };
 });

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Models;
 
 namespace BusinessLogic.Models
 {
@@ -8,38 +7,38 @@ namespace BusinessLogic.Models
     public class ScheduleB
     {
         [DataMember]
-        public int GrossIncome { get; set; }
+        public double GrossIncome { get; set; }
         [DataMember]
-        public int SelfEmploymentIncome { get; set; }
+        public double SelfEmploymentIncome { get; set; }
         [DataMember]
-        public int FicaIncome { get; set; }
+        public double FicaIncome { get; set; }
         [DataMember]
-        public int MedicareTax { get; set; }
+        public double MedicareTax { get; set; }
         [DataMember]
-        public int Total34 { get; set; }
+        public double Total34 { get; set; }
         [DataMember]
-        public int Total5Minus1 { get; set; }
+        public double Total5Minus1 { get; set; }
         //[DataMember]
         //public List<PreexistingSupportChild> PreexistingSupportChild { get; set; }
         //[DataMember]
         //public List<PreexistingSupport> PreexistingSupport { get; set; }
         [DataMember]
-        public int TotalSupport { get; set; }
+        public double TotalSupport { get; set; }
         [DataMember]
-        public int AdjustedSupport { get; set; }
+        public double AdjustedSupport { get; set; }
 
         [DataMember]
         public List<OtherChildDto> OtherChildren { get; set; }
         [DataMember]
         public string OtherChildrenDescription { get; set; }
         [DataMember]
-        public int Subtotal { get; set; }
+        public double Subtotal { get; set; }
         [DataMember]
-        public int GeorgiaObligations { get; set; }
+        public double GeorgiaObligations { get; set; }
         [DataMember]
-        public int TheoreticalSupport { get; set; }
+        public double TheoreticalSupport { get; set; }
         [DataMember]
-        public int PreexistingOrder { get; set; }
+        public double PreexistingOrder { get; set; }
         [DataMember]
         public string IncomeDetails { get; set; }
     }

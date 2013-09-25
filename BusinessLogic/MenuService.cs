@@ -38,7 +38,7 @@ namespace BusinessLogic
                             text = "Home",
                         }
                 };
-            if (!isAuthenticated)
+            if (!isAuthenticated || userId == 0)
             {
                 return menuList;
             }

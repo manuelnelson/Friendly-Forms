@@ -573,6 +573,7 @@
     <Content Include="Content\images\sprite.png" />
     <Content Include="Content\js\ss-validation.js" />
     <Content Include="Content\less\friendly-custom.less" />
+    <Content Include="Content\output.css" />
     <Content Include="jqunback-1.51.min.js" />
     <Content Include="libeay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

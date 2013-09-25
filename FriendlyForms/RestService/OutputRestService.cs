@@ -9,6 +9,7 @@ using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using BusinessLogic.Helpers;
 using BusinessLogic.Properties;
+using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Models;
 using Models.ViewModels;
@@ -227,11 +228,11 @@ namespace FriendlyForms.RestService
         [DataMember]
         public IncomeDto CombinedIncome { get; set; }
         [DataMember]
-        public int IncomeTotal { get; set; }
+        public double IncomeTotal { get; set; }
         [DataMember]
-        public int OtherIncomeTotal { get; set; }
+        public double OtherIncomeTotal { get; set; }
         [DataMember]
-        public int CombinedIncomeTotal { get; set; }
+        public double CombinedIncomeTotal { get; set; }
         [DataMember]
         public string Father { get; set; }
         [DataMember]
@@ -411,9 +412,9 @@ namespace FriendlyForms.RestService
     public class AllowableDeviation
     {
         [DataMember]
-        public int AllowableFather { get; set; }
+        public double AllowableFather { get; set; }
         [DataMember]
-        public int AllowableMother { get; set; }
+        public double AllowableMother { get; set; }
         [DataMember]
         public string PresumptiveAmount { get; set; }
         [DataMember]
@@ -614,20 +615,20 @@ namespace FriendlyForms.RestService
 
     public class Csw
     {
-        public int GrossIncome { get; set; }
-        public int AdjustedIncome { get; set; }
-        public int CombinedIncome { get; set; }
-        public int SupportObligation { get; set; }
-        public int ProRataObligation { get; set; }
-        public int WorkRelatedExpenses { get; set; }
-        public int AdjustedObligation { get; set; }
-        public int AdjustedExpensesPaid { get; set; }
-        public int PresumptiveAmount { get; set; }
-        public int DeviationsAmount { get; set; }
-        public int Subtotal { get; set; }
-        public int SocialSecurity { get; set; }
-        public int FinalAmount { get; set; }
-        public int UninsuredExpenses { get; set; }
+        public double GrossIncome { get; set; }
+        public double AdjustedIncome { get; set; }
+        public double CombinedIncome { get; set; }
+        public double SupportObligation { get; set; }
+        public double ProRataObligation { get; set; }
+        public double WorkRelatedExpenses { get; set; }
+        public double AdjustedObligation { get; set; }
+        public double AdjustedExpensesPaid { get; set; }
+        public double PresumptiveAmount { get; set; }
+        public double DeviationsAmount { get; set; }
+        public double Subtotal { get; set; }
+        public double SocialSecurity { get; set; }
+        public double FinalAmount { get; set; }
+        public double UninsuredExpenses { get; set; }
     }
 
     #endregion
@@ -652,18 +653,18 @@ namespace FriendlyForms.RestService
     public class Deviation
     {
         public bool HasDeviation { get; set; }
-        public int? Amount { get; set; }
+        public double? Amount { get; set; }
     }
     public class ChildSupportAmount
     {
         public string MonthlyAmountWritten { get; set; }
-        public int MonthlyAmount { get; set; }
+        public double MonthlyAmount { get; set; }
     }
 
     public class GrossIncome    
     {
-        public int FatherAmount { get; set; }
-        public int MotherAmount { get; set; }
+        public double FatherAmount { get; set; }
+        public double MotherAmount { get; set; }
     }
 
     #endregion
@@ -970,10 +971,9 @@ namespace FriendlyForms.RestService
                 };
             var childSupportAmount = new ChildSupportAmount
                 {
-                    MonthlyAmount =
-                        parentNames.NonCustodyIsFather ? csw.FatherCsw.FinalAmount : csw.MotherCsw.FinalAmount
+                    MonthlyAmount = parentNames.NonCustodyIsFather ? csw.FatherCsw.FinalAmount : csw.MotherCsw.FinalAmount
                 };
-            childSupportAmount.MonthlyAmountWritten = Numbers.IntegerToWritten(childSupportAmount.MonthlyAmount);
+            childSupportAmount.MonthlyAmountWritten = Numbers.IntegerToWritten(Convert.ToInt32(childSupportAmount.MonthlyAmount));
             var deviations = DeviationsService.GetByUserId(userId) as Deviations;
             var deviation = new Deviation
                 {
@@ -1002,7 +1002,7 @@ namespace FriendlyForms.RestService
         }
 
 
-        private static AllowableDeviation CalculateAllowableDeviation(Deviations deviations, LowIncomeDeviation lowIncome, HighIncomeDeviation highIncomeFather, HighIncomeDeviation highIncomeMother, int highIncomeAdjusted, ExtraExpenses totalExpenses)
+        private static AllowableDeviation CalculateAllowableDeviation(Deviations deviations, LowIncomeDeviation lowIncome, HighIncomeDeviation highIncomeFather, HighIncomeDeviation highIncomeMother, double highIncomeAdjusted, ExtraExpenses totalExpenses)
         {
             return new AllowableDeviation
             {
@@ -1303,8 +1303,8 @@ namespace FriendlyForms.RestService
 
         private ScheduleADtoResp GetScheduleA(long userId)
         {
-            var income = IncomeService.GetByUserId(userId).TranslateTo<IncomeDto>().ToMonthly();
-            var incomeOther = IncomeService.GetByUserId(userId, isOtherParent: true).TranslateTo<IncomeDto>().ToMonthly();
+            var income = IncomeService.GetByUserId(userId).ToIncomeDto().ToMonthly();
+            var incomeOther = IncomeService.GetByUserId(userId, isOtherParent: true).ToIncomeDto().ToMonthly();
             var incomeCombined = new IncomeDto
             {
                 Alimony = income.Alimony + incomeOther.Alimony,
@@ -1616,9 +1616,9 @@ namespace FriendlyForms.RestService
 
     public class TotalIncomes
     {
-        public int TotalIncomeMother { get; set; }
-        public int TotalIncomeFather { get; set; }
-        public int TotalIncomeTotal { get; set; }
+        public double TotalIncomeMother { get; set; }
+        public double TotalIncomeFather { get; set; }
+        public double TotalIncomeTotal { get; set; }
         public int ProRataFatherPercentage { get; set; }
         public int ProRataMotherPercentage { get; set; }
         public double ProRataFather { get; set; }

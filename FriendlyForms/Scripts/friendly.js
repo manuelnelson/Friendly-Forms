@@ -35172,6 +35172,8 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
 
                         // And show the tooltip.
                         scope.tt_isOpen = true;
+                        var $test = $document.find('.popover');
+                        $test.bind('mouseleave', hideTooltipBind);
                     }
 
                     // Hide the tooltip popup element.
@@ -35190,6 +35192,8 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
                         } else {
                             tooltip.remove();
                         }
+                        var $test = $document.find('.popover');
+                        $test.unbind('mouseleave', hideTooltipBind);
                     }
 
                     /**
@@ -35217,12 +35221,10 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
                     });
 
                     attrs.$observe(prefix + 'Trigger', function (val) {
-                        var $tooltip = angular.element(tooltip);
+                        $body = $body || $document.find('#main-content');
                         if (hasRegisteredTriggers) {
                             element.unbind(triggers.show, showTooltipBind);
-                            //element.unbind(triggers.hide, hideTooltipBind);
-                            $tooltip.unbind(triggers.show, showTooltipBind);
-                            $tooltip.unbind(triggers.hide, hideTooltipBind);
+                            //element.unbind(triggers.hide, hideTooltipBind);                            
                         }
 
                         triggers = getTriggers(val);
@@ -35231,9 +35233,10 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
                             element.bind(triggers.show, toggleTooltipBind);
                         } else {
                             element.bind(triggers.show, showTooltipBind);
-                            element.bind(triggers.hide, hideTooltipBind);
-                            $tooltip.bind(triggers.show, showTooltipBind);
-                            $tooltip.bind(triggers.hide, hideTooltipBind);
+                            //element.bind(triggers.hide, hideTooltipBind);
+                            //$body.bind(triggers.show, showTooltipBind);
+                            //$body.bind(triggers.hide, hideTooltipBind);
+                            //$body.bind('click', hideTooltipBind);
                         }
 
                         hasRegisteredTriggers = true;
@@ -36075,8 +36078,8 @@ FormsApp.directive('integer', function () {
 
 ;FormsApp.filter('dollarAmount', function () {
     return function (input) {
-        var integerInput = parseInt(input);
-        return integerInput < 0 ? '-$' + Math.abs(integerInput) : '$' + Math.abs(integerInput);
+        var dollarInput = (input).toFixed(2);
+        return dollarInput < 0 ? '-$' + Math.abs(dollarInput) : '$' + Math.abs(dollarInput);
     };
 });
 ;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', '$q', function (menuService, headerService, $location, $q) {
@@ -36546,6 +36549,7 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
 }];
 ;var BetaAgreementCtrl = ['$scope', '$routeParams', '$location', 'registerService', 'menuService', 'genericService', '$rootScope', 'userService',
     function ($scope, $routeParams, $location, registerService, menuService, genericService, $rootScope, userService) {
+        $scope.path = $location.path();
         $scope.submit = function (noNavigate) {
             userService.getUserData($routeParams.userId).then(function (userData) {
                 registerService.users.update(null, {
@@ -38838,15 +38842,15 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
     };
     return service;
 }]);
-;var ParentingCtrl = ['$scope', '$routeParams', '$rootScope', 'parentingService', 'menuService', 'genericService', 'headerService', '$timeout',
-    function ($scope, $routeParams, $rootScope, parentingService, menuService, genericService, headerService, $timeout) {
+;var ParentingCtrl = ['$scope', '$routeParams', '$rootScope', 'parentingService', 'menuService', 'genericService', 'headerService', '$timeout', '$location',
+function ($scope, $routeParams, $rootScope, parentingService, menuService, genericService, headerService, $timeout,$location) {
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     parentingService.parentings.get({ UserId: $routeParams.userId }, function (data) {
         $scope.parenting = data;
         $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -38857,6 +38861,8 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
 
@@ -38885,7 +38891,7 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
         $scope.isLoaded = true;
         //TODO: Find a non-jquery dependency way of doing this - angulars jqLite seems to be able to handle this
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -38913,8 +38919,8 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 }]);
-;var ScheduleACtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleAService', 'menuService', 'genericService', 'headerService', '$timeout', 
-    function ($scope, $routeParams, $rootScope, scheduleAService, menuService, genericService, headerService, $timeout) {
+;var ScheduleACtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleAService', 'menuService', 'genericService', 'headerService', '$timeout', '$location',
+    function ($scope, $routeParams, $rootScope, scheduleAService, menuService, genericService, headerService, $timeout, $location) {
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     scheduleAService.scheduleAs.get({ UserId: $routeParams.userId }, function (data) {
@@ -38925,7 +38931,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $scope.scheduleA = data;
         $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -38936,6 +38942,8 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
@@ -38951,15 +38959,15 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 }]);
-;var ScheduleBCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleBService', 'menuService', 'genericService', 'headerService', '$timeout',
-    function ($scope, $routeParams, $rootScope, scheduleBService, menuService, genericService, headerService, $timeout) {
+;var ScheduleBCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleBService', 'menuService', 'genericService', 'headerService', '$timeout', '$location',
+    function ($scope, $routeParams, $rootScope, scheduleBService, menuService, genericService, headerService, $timeout, $location) {
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleB = data;
         $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -38970,6 +38978,8 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
@@ -38985,15 +38995,15 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 }]);
-;var ScheduleDCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleDService', 'menuService', 'genericService', 'headerService', '$timeout',
-    function ($scope, $routeParams, $rootScope, scheduleDService, menuService, genericService, headerService, $timeout) {
+;var ScheduleDCtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleDService', 'menuService', 'genericService', 'headerService', '$timeout', '$location',
+    function ($scope, $routeParams, $rootScope, scheduleDService, menuService, genericService, headerService, $timeout, $location) {
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     scheduleDService.scheduleDs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleD = data;
         $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -39004,6 +39014,8 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
@@ -39019,15 +39031,15 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 }]);
-;var ScheduleECtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleEService', 'menuService', 'genericService', 'headerService', '$timeout',
-    function ($scope, $routeParams, $rootScope, scheduleEService, menuService, genericService, headerService, $timeout) {
+;var ScheduleECtrl = ['$scope', '$routeParams', '$rootScope', 'scheduleEService', 'menuService', 'genericService', 'headerService', '$timeout', '$location',
+    function ($scope, $routeParams, $rootScope, scheduleEService, menuService, genericService, headerService, $timeout, $location) {
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     scheduleEService.scheduleEs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleE = data;
         $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -39038,6 +39050,8 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
@@ -39053,15 +39067,15 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 }]);
-;var ChildSupportOutputCtrl = ['$scope', '$routeParams', '$rootScope', 'childSupportOutputService', 'menuService', 'headerService', '$timeout',
-    function ($scope, $routeParams, $rootScope, childSupportOutputService, menuService, headerService, $timeout) {
+;var ChildSupportOutputCtrl = ['$scope', '$routeParams', '$rootScope', 'childSupportOutputService', 'menuService', 'headerService', '$timeout', '$location',
+    function ($scope, $routeParams, $rootScope, childSupportOutputService, menuService, headerService, $timeout, $location) {
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     childSupportOutputService.childSupports.get({ UserId: $routeParams.userId }, function (data) {
         $scope.childSupport = data;
         $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -39072,6 +39086,8 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
@@ -39086,14 +39102,15 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 }]);
-;var CSACtrl = function ($scope, $routeParams, $rootScope, csaService, menuService, genericService, headerService, $timeout) {
+;var CSACtrl = ['$scope', '$routeParams', '$rootScope', 'csaService', 'menuService', 'genericService', 'headerService', '$timeout','$location',
+    function ($scope, $routeParams, $rootScope, csaService, menuService, genericService, headerService, $timeout, $location) {
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     csaService.csas.get({ UserId: $routeParams.userId }, function (data) {
         $scope.csa = data;
         $scope.isLoaded = true;
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form[^>]*?>([\s\S]*)<\/form>/, "");
             //html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
@@ -39104,11 +39121,12 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         }, 2500);
     });
     $scope.submit = function (noNavigate) {
+        var menuGroup = menuService.getMenuGroupByPath($location.path());
+        menuGroup.subMenuItem.iconClass = "";
     };
     $rootScope.currentScope = $scope;
     headerService.hide();
-};
-CSACtrl.$inject = ['$scope', '$routeParams', '$rootScope', 'csaService', 'menuService', 'genericService', 'headerService', '$timeout'];
+}];
 ;FormsApp.factory('registerAdminService', ['$resource',function($resource) {
     var service = {
         registerAdmins: $resource('/api/register/', { },

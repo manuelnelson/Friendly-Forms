@@ -6,7 +6,7 @@
         $scope.isLoaded = true;
         //TODO: Find a non-jquery dependency way of doing this - angulars jqLite seems to be able to handle this
         $timeout(function () {
-            var html = $('#main-content').html();
+            var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
             html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");

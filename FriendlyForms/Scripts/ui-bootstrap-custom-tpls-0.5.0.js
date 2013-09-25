@@ -803,6 +803,8 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
 
                         // And show the tooltip.
                         scope.tt_isOpen = true;
+                        var $test = $document.find('.popover');
+                        $test.bind('mouseleave', hideTooltipBind);
                     }
 
                     // Hide the tooltip popup element.
@@ -821,6 +823,8 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
                         } else {
                             tooltip.remove();
                         }
+                        var $test = $document.find('.popover');
+                        $test.unbind('mouseleave', hideTooltipBind);
                     }
 
                     /**
@@ -848,12 +852,10 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
                     });
 
                     attrs.$observe(prefix + 'Trigger', function (val) {
-                        var $tooltip = angular.element(tooltip);
+                        $body = $body || $document.find('#main-content');
                         if (hasRegisteredTriggers) {
                             element.unbind(triggers.show, showTooltipBind);
-                            //element.unbind(triggers.hide, hideTooltipBind);
-                            $tooltip.unbind(triggers.show, showTooltipBind);
-                            $tooltip.unbind(triggers.hide, hideTooltipBind);
+                            //element.unbind(triggers.hide, hideTooltipBind);                            
                         }
 
                         triggers = getTriggers(val);
@@ -862,9 +864,10 @@ angular.module('ui.bootstrap.tooltip', ['ui.bootstrap.position'])
                             element.bind(triggers.show, toggleTooltipBind);
                         } else {
                             element.bind(triggers.show, showTooltipBind);
-                            element.bind(triggers.hide, hideTooltipBind);
-                            $tooltip.bind(triggers.show, showTooltipBind);
-                            $tooltip.bind(triggers.hide, hideTooltipBind);
+                            //element.bind(triggers.hide, hideTooltipBind);
+                            //$body.bind(triggers.show, showTooltipBind);
+                            //$body.bind(triggers.hide, hideTooltipBind);
+                            //$body.bind('click', hideTooltipBind);
                         }
 
                         hasRegisteredTriggers = true;

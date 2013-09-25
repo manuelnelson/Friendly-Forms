@@ -4,7 +4,7 @@ namespace BusinessLogic.Helpers
 {
     public static class OutputHelper
     {
-        public static int CalculateTotalIncome(this IncomeDto income)
+        public static double CalculateTotalIncome(this IncomeDto income)
         {
             return income.W2Income + income.Commisions + income.SelfIncomeNoDeductions + income.Bonuses + income.Overtime +
                    income.Severance + income.Retirement + income.Interest + income.Dividends + income.Trust + income.Annuities +
