@@ -1256,7 +1256,7 @@ jQuery.support = (function() {
 
 	// Preliminary tests
 	div.setAttribute( "className", "t" );
-	div.innerHTML = "  <link/><table></table><a href='/a'>a</a><input type='checkbox'/>";
+	div.innerHTML = "  <link/><table></table><a href='/a'>a</a><input class="form-control" type='checkbox'/>";
 
 	all = div.getElementsByTagName("*");
 	a = div.getElementsByTagName("a")[ 0 ];
@@ -5217,7 +5217,7 @@ if ( document.querySelectorAll ) {
 
 			// FF 3.5 - :enabled/:disabled and hidden elements (hidden elements are still enabled)
 			// IE8 throws error here (do not put tests after this one)
-			div.innerHTML = "<input type='hidden'/>";
+			div.innerHTML = "<input class="form-control" type='hidden'/>";
 			if ( !div.querySelectorAll(":enabled").length ) {
 				rbuggyQSA.push(":enabled", ":disabled");
 			}
@@ -13583,7 +13583,7 @@ var NON_ASSIGNABLE_MODEL_EXPRESSION = 'Non-assignable model expression: ';
       }
     </script>
     <div ng-controller="Ctrl">
-      <input ng-model="name"> <br>
+      <input class="form-control" ng-model="name"> <br>
       <textarea ng-model="html"></textarea> <br>
       <div compile="html"></div>
     </div>
@@ -15667,7 +15667,7 @@ function $LocationProvider(){
        <div ng-controller="LogCtrl">
          <p>Reload this page with open console, enter text and hit the log button...</p>
          Message:
-         <input type="text" ng-model="message"/>
+         <input class="form-control" type="text" ng-model="message"/>
          <button ng-click="$log.log(message)">log</button>
          <button ng-click="$log.warn(message)">warn</button>
          <button ng-click="$log.info(message)">info</button>
@@ -18759,7 +18759,7 @@ function $SnifferProvider() {
          }
        </script>
        <div ng-controller="Ctrl">
-         <input type="text" ng-model="greeting" />
+         <input class="form-control" type="text" ng-model="greeting" />
          <button ng-click="$window.alert(greeting)">ALERT</button>
        </div>
      </doc:source>
@@ -19357,7 +19357,7 @@ function $HttpProvider() {
               <option>GET</option>
               <option>JSONP</option>
             </select>
-            <input type="text" ng-model="url" size="80"/>
+            <input class="form-control" type="text" ng-model="url" size="80"/>
             <button ng-click="fetch()">fetch</button><br>
             <button ng-click="updateModel('GET', 'http-hello.html')">Sample GET</button>
             <button ng-click="updateModel('JSONP', 'http://angularjs.org/greet.php?callback=JSON_CALLBACK&name=Super%20Hero')">Sample JSONP</button>
@@ -20235,7 +20235,7 @@ function $FilterProvider($provide) {
                                 {name:'Julie', phone:'555-8765'},
                                 {name:'Juliette', phone:'555-5678'}]"></div>
 
-       Search: <input ng-model="searchText">
+       Search: <input class="form-control" ng-model="searchText">
        <table id="searchTextResults">
          <tr><th>Name</th><th>Phone</th></tr>
          <tr ng-repeat="friend in friends | filter:searchText">
@@ -20244,10 +20244,10 @@ function $FilterProvider($provide) {
          </tr>
        </table>
        <hr>
-       Any: <input ng-model="search.$"> <br>
-       Name only <input ng-model="search.name"><br>
-       Phone only <input ng-model="search.phone"><br>
-       Equality <input type="checkbox" ng-model="strict"><br>
+       Any: <input class="form-control" ng-model="search.$"> <br>
+       Name only <input class="form-control" ng-model="search.name"><br>
+       Phone only <input class="form-control" ng-model="search.phone"><br>
+       Equality <input class="form-control" type="checkbox" ng-model="strict"><br>
        <table id="searchObjResults">
          <tr><th>Name</th><th>Phone</th></tr>
          <tr ng-repeat="friend in friends | filter:search:strict">
@@ -20409,7 +20409,7 @@ function filterFilter() {
          }
        </script>
        <div ng-controller="Ctrl">
-         <input type="number" ng-model="amount"> <br>
+         <input class="form-control" type="number" ng-model="amount"> <br>
          default currency symbol ($): {{amount | currency}}<br>
          custom currency identifier (USD$): {{amount | currency:"USD$"}}
        </div>
@@ -20460,7 +20460,7 @@ function currencyFilter($locale) {
          }
        </script>
        <div ng-controller="Ctrl">
-         Enter number: <input ng-model='val'><br>
+         Enter number: <input class="form-control" ng-model='val'><br>
          Default formatting: {{val | number}}<br>
          No fractions: {{val | number:0}}<br>
          Negative number: {{-val | number:4}}
@@ -20887,9 +20887,9 @@ var uppercaseFilter = valueFn(uppercase);
          }
        </script>
        <div ng-controller="Ctrl">
-         Limit {{numbers}} to: <input type="integer" ng-model="numLimit">
+         Limit {{numbers}} to: <input class="form-control" type="integer" ng-model="numLimit">
          <p>Output numbers: {{ numbers | limitTo:numLimit }}</p>
-         Limit {{letters}} to: <input type="integer" ng-model="letterLimit">
+         Limit {{letters}} to: <input class="form-control" type="integer" ng-model="letterLimit">
          <p>Output letters: {{ letters | limitTo:letterLimit }}</p>
        </div>
      </doc:source>
@@ -21175,7 +21175,7 @@ var htmlAnchorDirective = valueFn({
  * This example uses `link` variable inside `href` attribute:
     <doc:example>
       <doc:source>
-        <input ng-model="value" /><br />
+        <input class="form-control" ng-model="value" /><br />
         <a id="link-1" href ng-click="value = 1">link 1</a> (link, don't reload)<br />
         <a id="link-2" href="" ng-click="value = 2">link 2</a> (link, don't reload)<br />
         <a id="link-3" ng-href="/{{'123'}}">link 3</a> (link, reload!)<br />
@@ -21298,7 +21298,7 @@ var htmlAnchorDirective = valueFn({
  * @example
     <doc:example>
       <doc:source>
-        Click me to toggle: <input type="checkbox" ng-model="checked"><br/>
+        Click me to toggle: <input class="form-control" type="checkbox" ng-model="checked"><br/>
         <button ng-model="button" ng-disabled="checked">Button</button>
       </doc:source>
       <doc:scenario>
@@ -21328,8 +21328,8 @@ var htmlAnchorDirective = valueFn({
  * @example
     <doc:example>
       <doc:source>
-        Check me to check both: <input type="checkbox" ng-model="master"><br/>
-        <input id="checkSlave" type="checkbox" ng-checked="master">
+        Check me to check both: <input class="form-control" type="checkbox" ng-model="master"><br/>
+        <input class="form-control" id="checkSlave" type="checkbox" ng-checked="master">
       </doc:source>
       <doc:scenario>
         it('should check both checkBoxes', function() {
@@ -21359,7 +21359,7 @@ var htmlAnchorDirective = valueFn({
  * @example
      <doc:example>
        <doc:source>
-         Check me check multiple: <input type="checkbox" ng-model="checked"><br/>
+         Check me check multiple: <input class="form-control" type="checkbox" ng-model="checked"><br/>
          <select id="select" ng-multiple="checked">
            <option>Misko</option>
            <option>Igor</option>
@@ -21394,8 +21394,8 @@ var htmlAnchorDirective = valueFn({
  * @example
     <doc:example>
       <doc:source>
-        Check me to make text readonly: <input type="checkbox" ng-model="checked"><br/>
-        <input type="text" ng-readonly="checked" value="I'm Angular"/>
+        Check me to make text readonly: <input class="form-control" type="checkbox" ng-model="checked"><br/>
+        <input class="form-control" type="text" ng-readonly="checked" value="I'm Angular"/>
       </doc:source>
       <doc:scenario>
         it('should toggle readonly attr', function() {
@@ -21424,7 +21424,7 @@ var htmlAnchorDirective = valueFn({
  * @example
     <doc:example>
       <doc:source>
-        Check me to select: <input type="checkbox" ng-model="selected"><br/>
+        Check me to select: <input class="form-control" type="checkbox" ng-model="selected"><br/>
         <select>
           <option>Hello!</option>
           <option id="greet" ng-selected="selected">Greetings!</option>
@@ -21457,7 +21457,7 @@ var htmlAnchorDirective = valueFn({
  * @example
      <doc:example>
        <doc:source>
-         Check me check multiple: <input type="checkbox" ng-model="open"><br/>
+         Check me check multiple: <input class="form-control" type="checkbox" ng-model="open"><br/>
          <details id="details" ng-open="open">
             <summary>Show/Hide me</summary>
          </details>
@@ -21753,7 +21753,7 @@ function FormController(element, attrs) {
          }
        </script>
        <form name="myForm" ng-controller="Ctrl">
-         userType: <input name="input" ng-model="userType" required>
+         userType: <input class="form-control" name="input" ng-model="userType" required>
          <span class="error" ng-show="myForm.input.$error.required">Required!</span><br>
          <tt>userType = {{userType}}</tt><br>
          <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br>
@@ -21877,7 +21877,7 @@ var inputType = {
            }
          </script>
          <form name="myForm" ng-controller="Ctrl">
-           Single word: <input type="text" name="input" ng-model="text"
+           Single word: <input class="form-control" type="text" name="input" ng-model="text"
                                ng-pattern="word" required ng-trim="false">
            <span class="error" ng-show="myForm.input.$error.required">
              Required!</span>
@@ -21954,7 +21954,7 @@ var inputType = {
            }
          </script>
          <form name="myForm" ng-controller="Ctrl">
-           Number: <input type="number" name="input" ng-model="value"
+           Number: <input class="form-control" type="number" name="input" ng-model="value"
                           min="0" max="99" required>
            <span class="error" ng-show="myForm.list.$error.required">
              Required!</span>
@@ -22023,7 +22023,7 @@ var inputType = {
            }
          </script>
          <form name="myForm" ng-controller="Ctrl">
-           URL: <input type="url" name="input" ng-model="text" required>
+           URL: <input class="form-control" type="url" name="input" ng-model="text" required>
            <span class="error" ng-show="myForm.input.$error.required">
              Required!</span>
            <span class="error" ng-show="myForm.input.$error.url">
@@ -22089,7 +22089,7 @@ var inputType = {
            }
          </script>
            <form name="myForm" ng-controller="Ctrl">
-             Email: <input type="email" name="input" ng-model="text" required>
+             Email: <input class="form-control" type="email" name="input" ng-model="text" required>
              <span class="error" ng-show="myForm.input.$error.required">
                Required!</span>
              <span class="error" ng-show="myForm.input.$error.email">
@@ -22146,9 +22146,9 @@ var inputType = {
            }
          </script>
          <form name="myForm" ng-controller="Ctrl">
-           <input type="radio" ng-model="color" value="red">  Red <br/>
-           <input type="radio" ng-model="color" value="green"> Green <br/>
-           <input type="radio" ng-model="color" value="blue"> Blue <br/>
+           <input class="form-control" type="radio" ng-model="color" value="red">  Red <br/>
+           <input class="form-control" type="radio" ng-model="color" value="green"> Green <br/>
+           <input class="form-control" type="radio" ng-model="color" value="blue"> Blue <br/>
            <tt>color = {{color}}</tt><br/>
           </form>
         </doc:source>
@@ -22189,8 +22189,8 @@ var inputType = {
            }
          </script>
          <form name="myForm" ng-controller="Ctrl">
-           Value1: <input type="checkbox" ng-model="value1"> <br/>
-           Value2: <input type="checkbox" ng-model="value2"
+           Value1: <input class="form-control" type="checkbox" ng-model="value1"> <br/>
+           Value2: <input class="form-control" type="checkbox" ng-model="value2"
                           ng-true-value="YES" ng-false-value="NO"> <br/>
            <tt>value1 = {{value1}}</tt><br/>
            <tt>value2 = {{value2}}</tt><br/>
@@ -22230,7 +22230,7 @@ function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
 
     // By default we will trim the value
     // If the attribute ng-trim exists we will avoid trimming
-    // e.g. <input ng-model="foo" ng-trim="false">
+    // e.g. <input class="form-control" ng-model="foo" ng-trim="false">
     if (toBoolean(attr.ngTrim || 'T')) {
       value = trim(value);
     }
@@ -22560,10 +22560,10 @@ function checkboxInputType(scope, element, attr, ctrl) {
        </script>
        <div ng-controller="Ctrl">
          <form name="myForm">
-           User name: <input type="text" name="userName" ng-model="user.name" required>
+           User name: <input class="form-control" type="text" name="userName" ng-model="user.name" required>
            <span class="error" ng-show="myForm.userName.$error.required">
              Required!</span><br>
-           Last name: <input type="text" name="lastName" ng-model="user.last"
+           Last name: <input class="form-control" type="text" name="lastName" ng-model="user.last"
              ng-minlength="3" ng-maxlength="10">
            <span class="error" ng-show="myForm.lastName.$error.minlength">
              Too short!</span>
@@ -22990,8 +22990,8 @@ var ngModelDirective = function() {
  *       }
  *     </script>
  *     <div ng-controller="Controller">
- *       <input type="checkbox" ng-model="confirmed" ng-change="change()" id="ng-change-example1" />
- *       <input type="checkbox" ng-model="confirmed" id="ng-change-example2" />
+ *       <input class="form-control" type="checkbox" ng-model="confirmed" ng-change="change()" id="ng-change-example1" />
+ *       <input class="form-control" type="checkbox" ng-model="confirmed" id="ng-change-example2" />
  *       <label for="ng-change-example2">Confirmed</label><br />
  *       debug = {{confirmed}}<br />
  *       counter = {{counter}}
@@ -23071,7 +23071,7 @@ var requiredDirective = function() {
          }
        </script>
        <form name="myForm" ng-controller="Ctrl">
-         List: <input name="namesInput" ng-model="names" ng-list required>
+         List: <input class="form-control" name="namesInput" ng-model="names" ng-list required>
          <span class="error" ng-show="myForm.list.$error.required">
            Required!</span>
          <tt>names = {{names}}</tt><br/>
@@ -23182,7 +23182,7 @@ var ngValueDirective = function() {
          }
        </script>
        <div ng-controller="Ctrl">
-         Enter name: <input type="text" ng-model="name"><br>
+         Enter name: <input class="form-control" type="text" ng-model="name"><br>
          Hello <span ng-bind="name"></span>!
        </div>
      </doc:source>
@@ -23229,8 +23229,8 @@ var ngBindDirective = ngDirective(function(scope, element, attr) {
          }
        </script>
        <div ng-controller="Ctrl">
-        Salutation: <input type="text" ng-model="salutation"><br>
-        Name: <input type="text" ng-model="name"><br>
+        Salutation: <input class="form-control" type="text" ng-model="salutation"><br>
+        Name: <input class="form-control" type="text" ng-model="name"><br>
         <pre ng-bind-template="{{salutation}} {{name}}!"></pre>
        </div>
      </doc:source>
@@ -23364,8 +23364,8 @@ function classDirective(name, selector) {
  * @example
    <example>
      <file name="index.html">
-      <input type="button" value="set" ng-click="myVar='my-class'">
-      <input type="button" value="clear" ng-click="myVar=''">
+      <input class="form-control" type="button" value="set" ng-click="myVar='my-class'">
+      <input class="form-control" type="button" value="clear" ng-click="myVar=''">
       <br>
       <span ng-class="myVar">Sample Text</span>
      </file>
@@ -23609,7 +23609,7 @@ var ngCloakDirective = ngDirective({
         };
       </script>
       <div ng-controller="SettingsController as settings">
-        Name: <input type="text" ng-model="settings.name"/>
+        Name: <input class="form-control" type="text" ng-model="settings.name"/>
         [ <a href="" ng-click="settings.greet()">greet</a> ]<br/>
         Contact:
         <ul>
@@ -23618,7 +23618,7 @@ var ngCloakDirective = ngDirective({
                <option>phone</option>
                <option>email</option>
             </select>
-            <input type="text" ng-model="contact.value"/>
+            <input class="form-control" type="text" ng-model="contact.value"/>
             [ <a href="" ng-click="settings.clearContact(contact)">clear</a>
             | <a href="" ng-click="settings.removeContact(contact)">X</a> ]
           </li>
@@ -23675,7 +23675,7 @@ var ngCloakDirective = ngDirective({
         }
       </script>
       <div ng-controller="SettingsController">
-        Name: <input type="text" ng-model="name"/>
+        Name: <input class="form-control" type="text" ng-model="name"/>
         [ <a href="" ng-click="greet()">greet</a> ]<br/>
         Contact:
         <ul>
@@ -23684,7 +23684,7 @@ var ngCloakDirective = ngDirective({
                <option>phone</option>
                <option>email</option>
             </select>
-            <input type="text" ng-model="contact.value"/>
+            <input class="form-control" type="text" ng-model="contact.value"/>
             [ <a href="" ng-click="clearContact(contact)">clear</a>
             | <a href="" ng-click="removeContact(contact)">X</a> ]
           </li>
@@ -24002,7 +24002,7 @@ forEach(
       </script>
       <form ng-submit="submit()" ng-controller="Ctrl">
         Enter text and hit enter:
-        <input type="text" ng-model="text" name="text" />
+        <input class="form-control" type="text" ng-model="text" name="text" />
         <input type="submit" id="submit" value="Submit" />
         <pre>list={{list}}</pre>
       </form>
@@ -24074,7 +24074,7 @@ var ngSubmitDirective = ngDirective(function(scope, element, attrs) {
  * @example
   <example animations="true">
     <file name="index.html">
-      Click me: <input type="checkbox" ng-model="checked" ng-init="checked=true" /><br/>
+      Click me: <input class="form-control" type="checkbox" ng-model="checked" ng-init="checked=true" /><br/>
       Show when checked:
       <span ng-if="checked" ng-animate="'example'">
         I'm removed when the checkbox is unchecked.
@@ -24496,9 +24496,9 @@ var ngNonBindableDirective = ngDirective({ terminal: true, priority: 1000 });
           }
         </script>
         <div ng-controller="Ctrl">
-          Person 1:<input type="text" ng-model="person1" value="Igor" /><br/>
-          Person 2:<input type="text" ng-model="person2" value="Misko" /><br/>
-          Number of People:<input type="text" ng-model="personCount" value="1" /><br/>
+          Person 1:<input class="form-control" type="text" ng-model="person1" value="Igor" /><br/>
+          Person 2:<input class="form-control" type="text" ng-model="person2" value="Misko" /><br/>
+          Number of People:<input class="form-control" type="text" ng-model="personCount" value="1" /><br/>
 
           <!--- Example with simple pluralization rules for en locale --->
           Without Offset:
@@ -24677,7 +24677,7 @@ var ngPluralizeDirective = ['$locale', '$interpolate', function($locale, $interp
         {name:'Samantha', age:60, gender:'girl'}
       ]">
         I have {{friends.length}} friends. They are:
-        <input type="search" ng-model="q" placeholder="filter friends..." />
+        <input class="form-control" type="search" ng-model="q" placeholder="filter friends..." />
         <ul>
           <li ng-repeat="friend in friends | filter:q"
               ng-animate="{enter: 'example-repeat-enter',
@@ -24943,13 +24943,13 @@ var ngRepeatDirective = ['$parse', '$animator', function($parse, $animator) {
  * @example
   <example animations="true">
     <file name="index.html">
-      Click me: <input type="checkbox" ng-model="checked"><br/>
+      Click me: <input class="form-control" type="checkbox" ng-model="checked"><br/>
       <div>
         Show:
         <span class="check-element"
               ng-show="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
         </span>
       </div>
       <div>
@@ -24957,7 +24957,7 @@ var ngRepeatDirective = ['$parse', '$animator', function($parse, $animator) {
         <span class="check-element"
               ng-hide="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
         </span>
       </div>
     </file>
@@ -25052,13 +25052,13 @@ var ngShowDirective = ['$animator', function($animator) {
  * @example
   <example animations="true">
     <file name="index.html">
-      Click me: <input type="checkbox" ng-model="checked"><br/>
+      Click me: <input class="form-control" type="checkbox" ng-model="checked"><br/>
       <div>
         Show:
         <span class="check-element"
               ng-show="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
         </span>
       </div>
       <div>
@@ -25066,7 +25066,7 @@ var ngShowDirective = ['$animator', function($animator) {
         <span class="check-element"
               ng-hide="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
         </span>
       </div>
     </file>
@@ -25149,8 +25149,8 @@ var ngHideDirective = ['$animator', function($animator) {
  * @example
    <example>
      <file name="index.html">
-        <input type="button" value="set" ng-click="myStyle={color:'red'}">
-        <input type="button" value="clear" ng-click="myStyle={}">
+        <input class="form-control" type="button" value="set" ng-click="myStyle={color:'red'}">
+        <input class="form-control" type="button" value="clear" ng-click="myStyle={}">
         <br/>
         <span ng-style="myStyle">Sample Text</span>
         <pre>myStyle={{myStyle}}</pre>
@@ -25399,7 +25399,7 @@ var ngSwitchDefaultDirective = ngDirective({
          });
        </script>
        <div ng-controller="Ctrl">
-         <input ng-model="title"><br>
+         <input class="form-control" ng-model="title"><br>
          <textarea ng-model="text"></textarea> <br/>
          <pane title="{{title}}">{{text}}</pane>
        </div>
@@ -25774,7 +25774,7 @@ var scriptDirective = ['$templateCache', function($templateCache) {
         <div ng-controller="MyCntrl">
           <ul>
             <li ng-repeat="color in colors">
-              Name: <input ng-model="color.name">
+              Name: <input class="form-control" ng-model="color.name">
               [<a href ng-click="colors.splice($index, 1)">X</a>]
             </li>
             <li>

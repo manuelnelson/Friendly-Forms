@@ -1,19 +1,19 @@
 ﻿<link href="../../../Content/output.css" rel="stylesheet" />
 <div class="form-vertical wrapper">
-    <div class="row-fluid">
-        <div class="span12">
+    <div class="row">
+        <div class="col-md-12">
             <div class="widget-box">
                 <div class="widget-title">
-                    <span class="icon"><i class="icon-signal"></i></span>
+                    <span class="icon"><i class="glyphicon-signal"></i></span>
                     <h5>Domestic Mediation Preview</h5>
                 </div>
                 <div class="widget-content" style="display: none" ng-show="isLoaded">
-                    <div class="row-fluid" style="text-align: center;">
+                    <div class="row" style="text-align: center;">
                         <h2>DOMESTIC MEDIATION AGREEMENT</h2>
                     </div>
                     <p>This case is a Divorce.</p>
                     <p>{{domesticMediation.ParticipantsViewModel.PlaintiffsName}} and {{domesticMediation.ParticipantsViewModel.DefendantsName}} have agreed to abide by the following:</p>
-                    <div class="row-fluid" style="text-align: center;">
+                    <div class="row" style="text-align: center;">
                         <h2>Matters Not Concerning Minor Children</h2>
                     </div>
                     <!-- House -->
@@ -108,7 +108,7 @@
                     </p>
                     <p ng-show="domesticMediation.TaxViewModel.Taxes!=2" class="indented">Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
 
-                    <div class="row-fluid" style="text-align: center;">
+                    <div class="row" style="text-align: center;">
                         <h2>Affirmation of Agreement</h2>
                     </div>
 
@@ -125,32 +125,32 @@
                     <p>So agreed, this __________ day of _________________, 20___</p>
                     <br />
                     <br />
-                    <div class="row-fluid">
-                        <div class="span5">
+                    <div class="row">
+                        <div class="col-md-5">
                             <hr />
                             <span>Plaintiff: {{domesticMediation.ParticipantsViewModel.PlaintiffsName}}</span>
                         </div>
-                        <div class="span5 offset1">
+                        <div class="col-md-5 offset1">
                             <hr />
                             <span>Defendant: {{domesticMediation.ParticipantsViewModel.DefendantsName}}</span>
                         </div>
                     </div>
                     <br />
                     <br />
-                    <div class="row-fluid">
-                        <div class="span5">
+                    <div class="row">
+                        <div class="col-md-5">
                             <hr />
                             <span>Attorney for Plaintiff</span>
                         </div>
-                        <div class="span5 offset1">
+                        <div class="col-md-5 offset1">
                             <hr />
                             <span>Attorney for Defendant</span>
                         </div>
                     </div>
                     <form action="/output/pdf" id="bottomPrintButton" ng-show="showPrintButton" method="post" target="_blank">
-                        <input type="hidden" class="html" name="html" />
-                        <input type="hidden" class="name" name="name" />
-                        <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+                        <input class="form-control" type="hidden" class="html" name="html" />
+                        <input class="form-control" type="hidden" class="name" name="name" />
+                        <input type="submit" class="btn btn-default btn-default-primary btn printForm" value="Print to PDF">
                     </form>
                 </div>
             </div>

@@ -1,30 +1,30 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="InformationCtrl" name="informationForm" novalidate>
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="icon-signal"></i></span>
+                        <span class="icon"><i class="glyphicon-signal"></i></span>
                         <h5>Information</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="control-group">
+                        <div class="input-group">
                             <label class="form-question">
                                 Who will be able to get information about the children, like doctor's records and school reports, directly from the doctor's office or school?</label>
                             <label class="radio">
                                 Mother
-                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="2"></label>
+                                <input class="form-control" required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="2"></label>
                             <label class="radio">
                                 Father
-                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="1"></label>
+                                <input class="form-control" required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="1"></label>
                             <label class="radio">
                                 Both
-                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="3"></label>
+                                <input class="form-control" required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="3"></label>
                             <div ng-show="informationForm.InformationAccess.$dirty && informationForm.InformationAccess.$invalid || (showErrors && informationForm.InformationAccess.$invalid)">
                                 <span class="form-error" ng-show="informationForm.InformationAccess.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group" ng-show="information.InformationAccess == 1 || information.InformationAccess == 2">
+                        <div class="input-group" ng-show="information.InformationAccess == 1 || information.InformationAccess == 2">
                             <label class="form-question">
                                How should access to the rights of information for either parent be restricted?</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain any restrictions for each parent" rows="2"></textarea>
@@ -36,6 +36,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
     </form>
 </div>

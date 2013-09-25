@@ -1,35 +1,35 @@
 ﻿<link href="../../../Content/output.css" rel="stylesheet" />
 <div class="form-vertical wrapper">
-    <div class="row-fluid">
-        <div class="span12">
+    <div class="row">
+        <div class="col-md-12">
             <div class="widget-box">
                 <div class="widget-title">
-                    <span class="icon"><i class="icon-signal"></i></span>
+                    <span class="icon"><i class="glyphicon-signal"></i></span>
                     <h5>Child Support Addendum Preview</h5>
                 </div>
                 <div class="widget-content" style="display: none" ng-show="isLoaded">
-                    <div class="row-fluid" style="text-align: center;">
+                    <div class="row" style="text-align: center;">
                         <h2>CHILD SUPPORT ADDENDUM</h2>
                         <h4>{{csa.County}} County Superior Court</h4>
                         <h4>STATE OF GEORGIA</h4>
                     </div>
-                    <div class="row-fluid">
+                    <div class="row">
                         <span class="pull-left">Plaintiff: {{csa.ParentNames.PlaintiffName}}</span>
                     </div>
-                    <div class="row-fluid" style="margin-bottom: 15px;">
+                    <div class="row" style="margin-bottom: 15px;">
                         <span class="pull-left">Defendant: {{csa.ParentNames.DefendantName}}</span>
                         <span class="pull-right">Civil Action Case Number: {{csa.Court.CaseNumber}}</span>
                     </div>
-                    <div class="row-fluid">
+                    <div class="row">
                         <p class="checkbox">
-                            <input type="checkbox" ng-show="csa.ChildSupport.BothParties == 1" disabled="disabled" checked="checked" />
-                            <input type="checkbox" ng-show="csa.ChildSupport.BothParties != 1" disabled="disabled" />
+                            <input class="form-control" type="checkbox" ng-show="csa.ChildSupport.BothParties == 1" disabled="disabled" checked="checked" />
+                            <input class="form-control" type="checkbox" ng-show="csa.ChildSupport.BothParties != 1" disabled="disabled" />
                             The parties have agreed to the terms of this order and this information has been furnished by both parties 
         to meet the requirements of OCGA §19-6-15. The parties agree on the terms of the order and affirm the 
         accuracy of the information provided, as shown by their signatures at the end of this addendum.
                         </p>
                         <p class="checkbox">
-                            <input type="checkbox" disabled="disabled" />
+                            <input class="form-control" type="checkbox" disabled="disabled" />
                             This addendum includes findings of fact and conclusions of law and fact made by the Court, in compliance with OCGA §19-6-15.
                         </p>
                         <br />
@@ -39,7 +39,7 @@ been applied in reaching the amount of child support provided under the final or
 The specifics are as follows:
                         </p>
                     </div>
-                    <div class="row-fluid">
+                    <div class="row">
                         <ol class="bold">
                             <li>Gross Income
             <p>
@@ -86,14 +86,14 @@ The specifics are as follows:
                             </li>
                             <li>Deviation from Presumptive Amount
             <p class="checkbox">
-                <input type="checkbox" ng-show="!csa.Deviation.HasDeviation" disabled="disabled" checked="checked" />
-                <input type="checkbox" ng-show="csa.Deviation.HasDeviation" disabled="disabled" />
+                <input class="form-control" type="checkbox" ng-show="!csa.Deviation.HasDeviation" disabled="disabled" checked="checked" />
+                <input class="form-control" type="checkbox" ng-show="csa.Deviation.HasDeviation" disabled="disabled" />
                 No Deviation - It has been determined that none of the Deviations allowed under OCGA §19-6-15 
                 applies in this case, as shown by the attached Schedule E. The amount of support in Paragraph 4 above 
                 is the Presumptive Amount of Child Support shown on the attached Child Support Worksheet.
             </p>
                                 <p ng-show="csa.Deviation.HasDeviation" class="checkbox">
-                                    <input type="checkbox" disabled="disabled" checked="checked" />
+                                    <input class="form-control" type="checkbox" disabled="disabled" checked="checked" />
                                     Deviation - It has been determined that one or more of the Deviations allowed under OCGA §19-
                 6-15 applies in this case, as shown by the attached Schedule E. The Presumptive Amount of Child 
                 Support that would have been required under OCGA §19-6-15 if the deviations had not been applied is 
@@ -111,35 +111,35 @@ The specifics are as follows:
                 <ul class="no-style">
                     <li ng-show="csa.HealthInsurance.HealthInsurance">
                         <p class="checkbox">
-                            <input type="checkbox" disabled="disabled" checked="checked" />
+                            <input class="form-control" type="checkbox" disabled="disabled" checked="checked" />
                             Health (medical, mental health, and hospitalization)
                         </p>
                     </li>
                     <li ng-show="!csa.HealthInsurance.HealthInsurance">
                         <p class="checkbox">
-                            <input type="checkbox" disabled="disabled" />
+                            <input class="form-control" type="checkbox" disabled="disabled" />
                             Health (medical, mental health, and hospitalization)
                         </p>
                     </li>
                     <li ng-show="csa.HealthInsurance.DentalInsurance">
                         <p class="checkbox">
-                            <input type="checkbox" disabled="disabled" checked="checked" />
+                            <input class="form-control" type="checkbox" disabled="disabled" checked="checked" />
                             Dental
                         </p>
                     </li>
                     <li ng-show="!csa.HealthInsurance.DentalInsurance">
                         <p class="checkbox">
-                            <input type="checkbox" disabled="disabled" />
+                            <input class="form-control" type="checkbox" disabled="disabled" />
                         Dental</li>
                     <li ng-show="csa.HealthInsurance.VisionInsurance">
                         <p class="checkbox">
-                            <input type="checkbox" disabled="disabled" checked="checked" />
+                            <input class="form-control" type="checkbox" disabled="disabled" checked="checked" />
                             Vision
                         </p>
                     </li>
                     <li ng-show="!csa.HealthInsurance.VisionInsurance">
                         <p class="checkbox">
-                            <input type="checkbox" disabled="disabled" />
+                            <input class="form-control" type="checkbox" disabled="disabled" />
                             Vision
                         </p>
                     </li>
@@ -170,13 +170,13 @@ The specifics are as follows:
                                     </p>
                                     <ul>
                                         <li>
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             Health (medical, mental health, and hospitalization)</li>
                                         <li>
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             Dental</li>
                                         <li>
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             Vision</li>
                                     </ul>
                                     <p>When insurance has been obtained by either party, Paragraphs 7 (a)(1) and (2) shall apply</p>
@@ -232,31 +232,31 @@ The specifics are as follows:
                                 <ul class="no-style">
                                     <li>
                                         <p class="checkbox">
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             Substantial change in the income and financial status of the Father;
                                         </p>
                                     </li>
                                     <li>
                                         <p class="checkbox">
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             Substantial change in the income and financial status of the Mother;
                                         </p>
                                     </li>
                                     <li>
                                         <p class="checkbox">
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             Substantial change in the needs of the Children;
                                         </p>
                                     </li>
                                     <li>
                                         <p class="checkbox">
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             The noncustodial parent failed to exercise visitation provided under the prior order;
                                         </p>
                                     </li>
                                     <li>
                                         <p class="checkbox">
-                                            <input type="checkbox" disabled="disabled" />
+                                            <input class="form-control" type="checkbox" disabled="disabled" />
                                             The noncustodial parent has exercised more visitation than was provided in the prior order.
                                         </p>
                                     </li>
@@ -274,7 +274,7 @@ The specifics are as follows:
             <ul class="no-style">
                 <li>
                     <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
+                        <input class="form-control" type="checkbox" disabled="disabled" />
                         (a) An Income Deduction Order shall be entered by the Court, under OCGA § 19-6-32, for
                     payment of the child support and alimony (if any) provided. The Income Deduction Order shall take 
                     effect:
@@ -282,13 +282,13 @@ The specifics are as follows:
                     <ul>
                         <li>
                             <p class="checkbox">
-                                <input type="checkbox" disabled="disabled" />
+                                <input class="form-control" type="checkbox" disabled="disabled" />
                                 (1) immediately upon entry by the Court.
                             </p>
                         </li>
                         <li>
                             <p class="checkbox">
-                                <input type="checkbox" disabled="disabled" />
+                                <input class="form-control" type="checkbox" disabled="disabled" />
                                 (2) upon accrual of a delinquency equal to one month’s support. The Income Deduction Order 
                             may be enforced by serving a “Notice of Delinquency,” as provided in OCGA §19-6-32 (f).
                             </p>
@@ -297,13 +297,13 @@ The specifics are as follows:
                 </li>
                 <li>
                     <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
+                        <input class="form-control" type="checkbox" disabled="disabled" />
                         (b) The parties agree that an Income Deduction Order is not immediately necessary.
                     </p>
                 </li>
                 <li>
                     <p class="checkbox">
-                        <input type="checkbox" disabled="disabled" />
+                        <input class="form-control" type="checkbox" disabled="disabled" />
                         (c) The Court finds that there is good cause not to require income deduction, having determined
                     that income deduction will not serve the children’s best interests and that there has been sufficient 
                     proof of timely payment of any previously ordered support.
@@ -317,17 +317,17 @@ The specifics are as follows:
                             Parties’ Consent - We knowingly and voluntarily agree on the terms of this order. Each of us affirms that the 
         information we have provided in this Addendum is true and correct.
                         </p>
-                        <div class="row-fluid">
-                            <div class="span5">
+                        <div class="row">
+                            <div class="col-md-5">
                                 <hr />
                                 <p>Father's Signature</p>
                             </div>
-                            <div class="span5">
+                            <div class="col-md-5">
                                 <hr />
                                 <p>Mother's Signature</p>
                             </div>
                         </div>
-                        <div class="row-fluid" style="text-align: center;">
+                        <div class="row" style="text-align: center;">
                             <br />
                             <br />
                             <h2>ORDER</h2>
@@ -340,8 +340,8 @@ The specifics are as follows:
                         <p>This Order entered on _____________________________________, 20 _____ . </p>
                         <br />
                         <br />
-                        <div class="row-fluid">
-                            <div class="span5 offset5">
+                        <div class="row">
+                            <div class="col-md-5 offset5">
                                 <hr />
                                 <p>JUDGE</p>
                                 <p>{{csa.County}} COUNTY SUPERIOR COURT</p>
@@ -350,9 +350,9 @@ The specifics are as follows:
                     </div>
                     <br />
                     <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-                        <input type="hidden" class="html" name="html" />
-                        <input type="hidden" class="name" name="name" />
-                        <input type="submit" class="btn-primary btn printForm" value="Print to PDF">
+                        <input class="form-control" type="hidden" class="html" name="html" />
+                        <input class="form-control" type="hidden" class="name" name="name" />
+                        <input type="submit" class="btn btn-default btn-default-primary btn printForm" value="Print to PDF">
                     </form>
                 </div>
             </div>

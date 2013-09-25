@@ -1,43 +1,43 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="PrivacyCtrl" id="privacyForm" name="privacyForm" novalidate>
-        <input type="hidden" name="Id" ng-model="privacy.Id">
-        <input type="hidden" name="UserId" ng-model="privacy.UserId">
-        <div class="row-fluid">
-            <div class="span12">
+        <input class="form-control" type="hidden" name="Id" ng-model="privacy.Id">
+        <input class="form-control" type="hidden" name="UserId" ng-model="privacy.UserId">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="icon-signal"></i></span>
+                        <span class="icon"><i class="glyphicon-signal"></i></span>
                         <h5>Privacy</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="control-group">
+                        <div class="input-group">
                             <label class="form-question">
                                 Have there been documented prior acts of family violence that would cause either of you not to want the other party to have your addresses?</label>
                             <label class="radio">
                                 Yes
-                                <input required id="NeedPrivacy" ng-model="privacy.NeedPrivacy" name="NeedPrivacy" type="radio" value="1"></label>
+                                <input class="form-control" required id="NeedPrivacy" ng-model="privacy.NeedPrivacy" name="NeedPrivacy" type="radio" value="1"></label>
                             <label class="radio">
                                 No
-                                <input required id="Radio1" ng-model="privacy.NeedPrivacy" name="NeedPrivacy" type="radio" value="2"></label>
+                                <input class="form-control" required id="Radio1" ng-model="privacy.NeedPrivacy" name="NeedPrivacy" type="radio" value="2"></label>
                             <div ng-show="privacyForm.NeedPrivacy.$dirty && privacyForm.NeedPrivacy.$invalid || (showErrors && privacyForm.NeedPrivacy.$invalid)">
                                 <span class="form-error" ng-show="privacyForm.NeedPrivacy.$error.required">Privacy is required</span>
                             </div>
                         </div>
-                        <div class="control-group">
+                        <div class="input-group">
                             <label class="form-question">
                                 Does either parent require supervised parenting time?</label>
                             <label class="radio">
                                 Yes
-                                <input required ng-model="privacy.NeedSupervision" id="NeedSupervision" name="NeedSupervision" type="radio" value="1"></label>
+                                <input class="form-control" required ng-model="privacy.NeedSupervision" id="NeedSupervision" name="NeedSupervision" type="radio" value="1"></label>
                             <label class="radio">
                                 No
-                                <input required ng-model="privacy.NeedSupervision" id="Radio2" name="NeedSupervision" type="radio" value="2"></label>
+                                <input class="form-control" required ng-model="privacy.NeedSupervision" id="Radio2" name="NeedSupervision" type="radio" value="2"></label>
                             <div ng-show="privacyForm.NeedSupervision.$dirty && privacyForm.NeedSupervision.$invalid || (showErrors && privacyForm.NeedSupervision.$invalid)">
                                 <span class="form-error" ng-show="privacyForm.NeedSupervision.$error.required">Supervision is required</span>
                             </div>
                         </div>
                         <div ng-show="privacy.NeedSupervision == 1">
-                            <div class="control-group">
+                            <div class="input-group">
                                 <label class="form-question">
                                     How will supervised parenting time be applied during the day-to-day schedule?</label>
                                 <textarea cols="20" ng-model="privacy.SupervisionHow" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" id="SupervisionHow" name="SupervisionHow" placeholder="Details" rows="4" style="width: 98%"></textarea>
@@ -45,36 +45,36 @@
                                     <span class="form-error" ng-show="privacyForm.SupervisionHow.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
-                            <div class="control-group">
+                            <div class="input-group">
                                 <label class="form-question">
                                     Where will supervised parenting time take place?</label>
                                 <label>
                                     In the box below, finish the following sentence: Supervised parenting time will occur at...</label>
-                                <input ng-model="privacy.SupervisionWhere" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" id="SupervisionWhere" name="SupervisionWhere" placeholder="Where" type="text" value="">
+                                <input class="form-control" ng-model="privacy.SupervisionWhere" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" id="SupervisionWhere" name="SupervisionWhere" placeholder="Where" type="text" value="">
                                 <div ng-show="privacyForm.SupervisionWhere.$dirty && privacyForm.SupervisionWhere.$invalid || (showErrors && privacyForm.SupervisionWhere.$invalid)">
                                     <span class="form-error" ng-show="privacyForm.SupervisionWhere.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
-                            <div class="control-group">
+                            <div class="input-group">
                                 <label class="form-question">
                                     Who will supervise the parenting time?</label>
-                                <input ng-model="privacy.SupervisionWho" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" id="SupervisionWho" name="SupervisionWho" placeholder="Person or organization" type="text" value="">
+                                <input class="form-control" ng-model="privacy.SupervisionWho" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" id="SupervisionWho" name="SupervisionWho" placeholder="Person or organization" type="text" value="">
                                 <div ng-show="privacyForm.SupervisionWho.$dirty && privacyForm.SupervisionWho.$invalid || (showErrors && privacyForm.SupervisionWho.$invalid)">
                                     <span class="form-error" ng-show="privacyForm.SupervisionWho.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
-                            <div class="control-group">
+                            <div class="input-group">
                                 <label class="form-question">
                                     Who will be responsible for the cost of supervision?</label>
                                 <label class="radio">
                                     Father
-                                    <input ng-model="privacy.SupervisionCost" id="SupervisionCost" name="SupervisionCost" type="radio" value="1"></label>
+                                    <input class="form-control" ng-model="privacy.SupervisionCost" id="SupervisionCost" name="SupervisionCost" type="radio" value="1"></label>
                                 <label class="radio">
                                     Mother
-                                    <input ng-model="privacy.SupervisionCost" id="Radio3" name="SupervisionCost" type="radio" value="2"></label>
+                                    <input class="form-control" ng-model="privacy.SupervisionCost" id="Radio3" name="SupervisionCost" type="radio" value="2"></label>
                                 <label class="radio">
                                     Cost will be shared
-                                    <input ng-model="privacy.SupervisionCost" id="Radio4" name="SupervisionCost" type="radio" value="3"></label>
+                                    <input class="form-control" ng-model="privacy.SupervisionCost" id="Radio4" name="SupervisionCost" type="radio" value="3"></label>
 <!--                                <div ng-show="privacyForm.SupervisionCost.$dirty && privacyForm.SupervisionCost.$invalid || (showErrors && privacyForm.SupervisionCost.$invalid)">
                                     <span class="form-error" ng-show="privacyForm.SupervisionCost.$error.required">This field is required</span>
                                 </div>-->
@@ -84,6 +84,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
     </form>
 </div>

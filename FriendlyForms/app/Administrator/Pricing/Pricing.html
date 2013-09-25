@@ -1,5 +1,5 @@
 ﻿<div class="form-vertical wrapper" ng-controller="PricingCtrl">
-    <div class="row-fluid">
+    <div class="row">
         <form class="well form-vertical" ng-submit="submit()" name="pricingForm" id="pricingForm">
             <fieldset>
                 <legend>Pricing</legend>
@@ -7,21 +7,21 @@
                     <label class="informative">
                         All plans are billed monthly for one year from the date of acceptance of the Subscription Agreement found on the next page. You are under no financial obligation at this time. 
                     </label>
-                <div class="control-group">
+                <div class="input-group">
                     <label class="radio">
                         Silver Plan: $315 per month.   Seven (7) forms per month. Each additional form is $55
-                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="1"></label>
+                        <input class="form-control" required ng-model="pricing.Subscription" name="Subscription" type="radio" value="1"></label>
                     <label class="radio">
                         Gold Plan: $500 per month.   Fifteen (15) forms per month. Each additional form is $50
-                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="2"></label>
+                        <input class="form-control" required ng-model="pricing.Subscription" name="Subscription" type="radio" value="2"></label>
                     <label class="radio">
                         Premiere Plan: $750 per month.   Thirty (30) forms per month. Each additional form is $40
-                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="3"></label>
+                        <input class="form-control" required ng-model="pricing.Subscription" name="Subscription" type="radio" value="3"></label>
                     <div ng-show="showErrors && pricingForm.Subscription.$invalid">
                         <span class="form-error" ng-show="pricingForm.Subscription.$error.required">The field is required</span>
                     </div>
                 </div>
-                <button class="btn btn-primary">Next</button>
+                <button class="btn btn-default btn-default btn-primary">Next</button>
             </fieldset>
         </form>
     </div>

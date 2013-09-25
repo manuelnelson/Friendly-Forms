@@ -685,10 +685,10 @@
                 return this.options.templates[this.options.template];
             }
             if (this.showInputs) {
-                var hourTemplate = '<input type="text" name="hour" class="bootstrap-timepicker-hour" maxlength="2"/>';
-                var minuteTemplate = '<input type="text" name="minute" class="bootstrap-timepicker-minute" maxlength="2"/>';
-                var secondTemplate = '<input type="text" name="second" class="bootstrap-timepicker-second" maxlength="2"/>';
-                var meridianTemplate = '<input type="text" name="meridian" class="bootstrap-timepicker-meridian" maxlength="2"/>';
+                var hourTemplate = '<input class="form-control" type="text" name="hour" class="bootstrap-timepicker-hour" maxlength="2"/>';
+                var minuteTemplate = '<input class="form-control" type="text" name="minute" class="bootstrap-timepicker-minute" maxlength="2"/>';
+                var secondTemplate = '<input class="form-control" type="text" name="second" class="bootstrap-timepicker-second" maxlength="2"/>';
+                var meridianTemplate = '<input class="form-control" type="text" name="meridian" class="bootstrap-timepicker-meridian" maxlength="2"/>';
             } else {
                 var hourTemplate = '<span class="bootstrap-timepicker-hour"></span>';
                 var minuteTemplate = '<span class="bootstrap-timepicker-minute"></span>';
@@ -697,16 +697,16 @@
             }
             var templateContent = '<table class="' + (this.showSeconds ? 'show-seconds' : '') + ' ' + (this.showMeridian ? 'show-meridian' : '') + '">' +
                                        '<tr>' +
-                                           '<td><a href="#" data-action="incrementHour"><i class="icon-chevron-up"></i></a></td>' +
+                                           '<td><a href="#" data-action="incrementHour"><i class="glyphicon-chevron-up"></i></a></td>' +
                                            '<td class="separator">&nbsp;</td>' +
-                                           '<td><a href="#" data-action="incrementMinute"><i class="icon-chevron-up"></i></a></td>' +
+                                           '<td><a href="#" data-action="incrementMinute"><i class="glyphicon-chevron-up"></i></a></td>' +
                                            (this.showSeconds ?
                                                '<td class="separator">&nbsp;</td>' +
-                                               '<td><a href="#" data-action="incrementSecond"><i class="icon-chevron-up"></i></a></td>'
+                                               '<td><a href="#" data-action="incrementSecond"><i class="glyphicon-chevron-up"></i></a></td>'
                                            : '') +
                                            (this.showMeridian ?
                                                '<td class="separator">&nbsp;</td>' +
-                                               '<td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="icon-chevron-up"></i></a></td>'
+                                               '<td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="glyphicon-chevron-up"></i></a></td>'
                                            : '') +
                                        '</tr>' +
                                        '<tr>' +
@@ -723,16 +723,16 @@
                                            : '') +
                                        '</tr>' +
                                        '<tr>' +
-                                           '<td><a href="#" data-action="decrementHour"><i class="icon-chevron-down"></i></a></td>' +
+                                           '<td><a href="#" data-action="decrementHour"><i class="glyphicon-chevron-down"></i></a></td>' +
                                            '<td class="separator"></td>' +
-                                           '<td><a href="#" data-action="decrementMinute"><i class="icon-chevron-down"></i></a></td>' +
+                                           '<td><a href="#" data-action="decrementMinute"><i class="glyphicon-chevron-down"></i></a></td>' +
                                            (this.showSeconds ?
                                                 '<td class="separator">&nbsp;</td>' +
-                                                '<td><a href="#" data-action="decrementSecond"><i class="icon-chevron-down"></i></a></td>'
+                                                '<td><a href="#" data-action="decrementSecond"><i class="glyphicon-chevron-down"></i></a></td>'
                                            : '') +
                                            (this.showMeridian ?
                                                 '<td class="separator">&nbsp;</td>' +
-                                                '<td><a href="#" data-action="toggleMeridian"><i class="icon-chevron-down"></i></a></td>'
+                                                '<td><a href="#" data-action="toggleMeridian"><i class="glyphicon-chevron-down"></i></a></td>'
                                            : '') +
                                        '</tr>' +
                                    '</table>';
@@ -749,7 +749,7 @@
                                         templateContent +
                                    '</div>' +
                                    '<div class="modal-footer">' +
-                                       '<a href="#" class="btn btn-primary" data-dismiss="modal">Ok</a>' +
+                                       '<a href="#" class="btn btn-default btn-default btn-primary" data-dismiss="modal">Ok</a>' +
                                    '</div>' +
                                '</div>';
 

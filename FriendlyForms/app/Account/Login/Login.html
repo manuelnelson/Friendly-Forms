@@ -1,25 +1,25 @@
 ﻿<div class="form-vertical wrapper">
-    <div class="row-fluid">
+    <div class="row">
         <form class="well form-vertical" ng-submit="submit()" ng-controller="LoginCtrl" name="loginForm">
             <fieldset>
                 <legend>Account Information</legend>
                 <p>
                     Please enter your user name and password. 
                 </p>
-                <div class="control-group">
-                    <input id="UserName" name="UserName" required ng-model="login.UserName" placeholder="Email" type="email" value="">
+                <div class="input-group">
+                    <input class="form-control" id="UserName" name="UserName" required ng-model="login.UserName" placeholder="Email" type="email" value="">
                     <div ng-show="loginForm.UserName.$dirty && loginForm.UserName.$invalid">
                         <span class="form-error" ng-show="loginForm.UserName.$error.email">Not a valid e-mail address.</span>
                         <span class="form-error" ng-show="loginForm.UserName.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <div class="control-group">
-                    <input id="Password" name="Password" ng-model="login.Password" required placeholder="Password" type="password">
+                <div class="input-group">
+                    <input class="form-control" id="Password" name="Password" ng-model="login.Password" required placeholder="Password" type="password">
                     <div ng-show="loginForm.Password.$dirty && loginForm.Password.$invalid">
                         <span class="form-error" ng-show="loginForm.Password.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <input type="submit" id="submit" ng-click="submit()" class="btn btn-primary" value="Log In">
+                <input type="submit" id="submit" ng-click="submit()" class="btn btn-default btn-default btn-primary" value="Log In">
                 <p style="margin-top: 10px;"><a href="/#/Account/Register">Register</a> if you don't have an account.</p>
             </fieldset>
         </form>

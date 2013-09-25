@@ -1,29 +1,29 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="HealthInsuranceCtrl" id="healthInsuranceForm" name="healthInsuranceForm" novalidate>
-        <input type="hidden" name="Id" ng-model="healthInsurance.Id">
-        <input type="hidden" name="UserId" ng-model="healthInsurance.UserId">
-        <div class="row-fluid">
-            <div class="span12">
+        <input class="form-control" type="hidden" name="Id" ng-model="healthInsurance.Id">
+        <input class="form-control" type="hidden" name="UserId" ng-model="healthInsurance.UserId">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="icon-signal"></i></span>
+                        <span class="icon"><i class="glyphicon-signal"></i></span>
                         <h5>Health Insurance Information</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="control-group">
+                        <div class="input-group">
                             <label class="form-question">
                                 Will the parents be solely responsible for providing their own individual health insurance following the divorce?</label>
                             <label class="radio">
                                 Yes
-                                <input required ng-model="healthInsurance.Health" name="Health" type="radio" value="1"></label>
+                                <input class="form-control" required ng-model="healthInsurance.Health" name="Health" type="radio" value="1"></label>
                             <label class="radio">
                                 No
-                                <input required ng-model="healthInsurance.Health" name="Health" type="radio" value="2"></label>
+                                <input class="form-control" required ng-model="healthInsurance.Health" name="Health" type="radio" value="2"></label>
                             <div ng-show="healthInsuranceForm.Health.$dirty && healthInsuranceForm.Health.$invalid || (showErrors && healthInsuranceForm.Health.$invalid)">
                                 <span class="form-error" ng-show="healthInsuranceForm.Health.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="control-group" ng-show="healthInsurance.Health == 2">
+                        <div class="input-group" ng-show="healthInsurance.Health == 2">
                             <label class="form-question">
                                 How will health insurance be funded?</label>
                             <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="healthInsurance.HealthDescription" name="HealthDescription" placeholder="Details" rows="2"></textarea>
@@ -35,6 +35,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
     </form>
 </div>
