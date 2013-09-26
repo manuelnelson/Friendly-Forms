@@ -20,7 +20,7 @@
                             </ul>
                             <div class="input-group span4">
                                 <h4>Plaintiff</h4>
-                                <input class="form-control" ui-jq="popover" ng-model="participant.PlaintiffsName" name="PlaintiffsName" data-content="Enter the plaintiff's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Plaintiff's Name" type="text" data-original-title="">
+                                <div class="col-lg-4"><input class="form-control" ui-jq="popover" ng-model="participant.PlaintiffsName" name="PlaintiffsName" data-content="Enter the plaintiff's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Plaintiff's Name" type="text" data-original-title="">
                                 <div ng-show="participantForm.PlaintiffsName.$dirty && participantForm.PlaintiffsName.$invalid || (showErrors && participantForm.DefendantsName.$invalid)">
                                     <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
@@ -28,14 +28,14 @@
                             </div>
                             <div class="input-group span4">
                                 <h4>Defendant</h4>
-                                <input class="form-control" ui-jq="popover" data-content="Enter the defendants's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="DefendantsName" ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
+                                <div class="col-lg-4"><input class="form-control" ui-jq="popover" data-content="Enter the defendants's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="DefendantsName" ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
                                 <div ng-show="(participantForm.DefendantsName.$dirty && participantForm.DefendantsName.$invalid) || (showErrors && participantForm.DefendantsName.$invalid)">
                                     <span class="form-error" ng-show="participantForm.DefendantsName.$error.required">This field is required</span>
                                     <span class="form-error" ng-show="participantForm.DefendantsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
                                 </div>
                             </div>
                             <div class="span8">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     Are the parents filing for Joint Custody?
                                 </label>
                                 <div class="radio"><label>
@@ -51,7 +51,7 @@
                                     For the purposes of Child Support, one parent must be designated as Primary Physical Custodian. In the section below, please designate which parent is the Primary Physical Custodial Parent. The Primary Physical Custodial Parent will receive child support, the Non Primary Physical Custodial Parent will pay child support.</label>
                             </div>
                             <div class="span4">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     The Plaintiff is the: 
                                 </label>
                                 <div class="radio"><label>
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                             <div class="span4">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     The Defendant is the: 
                                 </label>
                                 <div class="radio"><label>
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="span4">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     The Plaintiff is the:
                                 </label>
                                 <div class="radio"><label>
@@ -99,7 +99,7 @@
                                 </div>
                             </div>
                             <div class="span4">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     The Defendant is the:
                                 </label>
                                 <div class="radio"><label>

@@ -14,10 +14,10 @@
                             <li>MEDICAL EXPENSES</li>
                             <li>CHILD REARING - Summer Camp, Music or Art Lessons, Travel, Band, Clubs, Athletics, etc.</li>
                         </ul>
-                        <div class="input-group">
-                            <label class="form-question">Do any individuals pay extraordinary expenses for the child(ren)?</label>
-                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
+                        <div class="form-group">
+                            <label class="form-question col-lg-12">Do any individuals pay extraordinary expenses for the child(ren)?</label>
+                            <label class="radio-inline">Yes<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
+                            <label class="radio-inline">No<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
                             <div ng-show="showErrors">
                                 <span class="form-error" ng-show="showErrors">Please select an option</span>
                             </div>
@@ -26,123 +26,124 @@
                     <div ng-show="extraExpenseForm.HasExtraExpenses == 1">
                         <form id="extraExpenseChildForm" name="extraExpenseChildForm" novalidate>
                             <h4>{{childName}}</h4>
-                            <label class="form-question">Educational expenses for Tuition,Room & Board, Fees and Books</label>
-                            <div class="input-group row">
+                            <label class="form-question col-lg-12">Educational expenses for Tuition,Room & Board, Fees and Books</label>
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.TutitionFather" name="TutitionFather" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.TutitionFather" name="TutitionFather" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.TutitionFather.$dirty && extraExpenseChildForm.TutitionFather.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.TutitionFather.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.TutitionFather.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.TutitionMother" name="TutitionMother" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.TutitionMother" name="TutitionMother" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.TutitionMother.$dirty && extraExpenseChildForm.TutitionMother.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.TutitionMother.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.TutitionMother.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.TutitionNonParent" name="TutitionNonParent" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.TutitionNonParent" name="TutitionNonParent" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.TutitionNonParent.$dirty && extraExpenseChildForm.TutitionNonParent.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.TutitionNonParent.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.TutitionNonParent.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <label class="form-question">Other Educational expenses</label>
-                            <div class="input-group row">
+                            <label class="form-question col-lg-12">Other Educational expenses</label>
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.EducationFather" name="EducationFather" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.EducationFather" name="EducationFather" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.EducationFather.$dirty && extraExpenseChildForm.EducationFather.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.EducationFather.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.EducationFather.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.EducationMother" name="EducationMother" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.EducationMother" name="EducationMother" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.EducationMother.$dirty && extraExpenseChildForm.EducationMother.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.EducationMother.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.EducationMother.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.EducationNonParent" name="EducationNonParent" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.EducationNonParent" name="EducationNonParent" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.EducationNonParent.$dirty && extraExpenseChildForm.EducationNonParent.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.EducationNonParent.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.EducationNonParent.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <label class="form-question">Extraordinary Medical Expenses</label>
-                            <div class="input-group row">
+                            <label class="form-question col-lg-12">Extraordinary Medical Expenses</label>
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.MedicalFather" name="MedicalFather" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.MedicalFather" name="MedicalFather" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.MedicalFather.$dirty && extraExpenseChildForm.MedicalFather.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.MedicalFather.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.MedicalFather.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.MedicalMother" name="MedicalMother" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.MedicalMother" name="MedicalMother" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.MedicalMother.$dirty && extraExpenseChildForm.MedicalMother.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.MedicalMother.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.MedicalMother.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.MedicalNonParent" name="MedicalNonParent" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.MedicalNonParent" name="MedicalNonParent" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.MedicalNonParent.$dirty && extraExpenseChildForm.MedicalNonParent.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.MedicalNonParent.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.MedicalNonParent.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <label class="form-question">Special Expenses for Child Rearing (including, but not limited to summer camp, music orart lessons, travel, band, clubs, athletics, etc.)</label>
-                            <div class="input-group row">
+                            <label class="form-question col-lg-12">Special Expenses for Child Rearing (including, but not limited to summer camp, music orart lessons, travel, band, clubs, athletics, etc.)</label>
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.SpecialFather" name="SpecialFather" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.SpecialFather" name="SpecialFather" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.SpecialFather.$dirty && extraExpenseChildForm.SpecialFather.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialFather.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialFather.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Provide a brief description of the expenses</label>
-                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionFather" name="SpecialDescriptionFather" placeholder="Explain" rows="2"></textarea>
+                                <div class="col-md-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionFather" name="SpecialDescriptionFather" placeholder="Explain" rows="2"></textarea></div>
                                 <div ng-show="extraExpenseChildForm.SpecialDescriptionFather.$dirty && extraExpenseChildForm.SpecialDescriptionFather.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionFather.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionFather.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.SpecialMother" name="SpecialMother" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.SpecialMother" name="SpecialMother" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.SpecialMother.$dirty && extraExpenseChildForm.SpecialMother.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialMother.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialMother.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Provide a brief description of the expenses</label>
-                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionMother" name="SpecialDescriptionMother" placeholder="Explain" rows="2"></textarea>
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionMother" name="SpecialDescriptionMother" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="extraExpenseChildForm.SpecialDescriptionMother.$dirty && extraExpenseChildForm.SpecialDescriptionMother.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionMother.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionMother.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.SpecialNonParent" name="SpecialNonParent" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.SpecialNonParent" name="SpecialNonParent" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.SpecialNonParent.$dirty && extraExpenseChildForm.SpecialNonParent.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialNonParent.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialNonParent.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Provide a brief description of the expenses</label>
                                 <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionNonParent" name="SpecialDescriptionNonParent" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="extraExpenseChildForm.SpecialDescriptionNonParent.$dirty && extraExpenseChildForm.SpecialDescriptionNonParent.$invalid">
@@ -150,10 +151,10 @@
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionNonParent.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
-                                <label class="form-question">
+                            <div class="form-group row">
+                                <label class="form-question col-lg-12">
                                     Do you have visitation with the child for more days each year than was ordered by the court? If so, what is the total annual amount spent for excess visitation? <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="Enter the dollar amount spent for visitation in excess of the court order." popover-title="Tip"></i></label>
-                                <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.ExtraSpent" name="ExtraSpent" placeholder="Annual Amount" type="text" value=""  >
+                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="extraExpense.ExtraSpent" name="ExtraSpent" placeholder="Annual Amount" type="text" value=""  >
                                 <div ng-show="extraExpenseChildForm.ExtraSpent.$dirty && extraExpenseChildForm.ExtraSpent.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.ExtraSpent.$error.pattern">This field must be a number.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.ExtraSpent.$error.required">The field is required</span>

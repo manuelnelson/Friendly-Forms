@@ -1,7 +1,7 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="HealthInsuranceCtrl" id="healthInsuranceForm" name="healthInsuranceForm" novalidate>
-        <input class="form-control" type="hidden" name="Id" ng-model="healthInsurance.Id">
-        <input class="form-control" type="hidden" name="UserId" ng-model="healthInsurance.UserId">
+        <div class="col-lg-4"><input class="form-control" type="hidden" name="Id" ng-model="healthInsurance.Id">
+        <div class="col-lg-4"><input class="form-control" type="hidden" name="UserId" ng-model="healthInsurance.UserId">
         <div class="row">
             <div class="col-md-12">
                 <div class="widget-box">
@@ -10,23 +10,29 @@
                         <h5>Health Insurance Information</h5>
                     </div>
                     <div class="widget-content">
-                            <label class="form-question">
-                                Will the parents be solely responsible for providing their own individual health insurance following the divorce?</label>
-                            <div class="radio"><label>
+                        <label class="form-question col-lg-12">
+                            Will the parents be solely responsible for providing their own individual health insurance following the divorce?</label>
+                        <div class="radio">
+                            <label>
                                 Yes
-                                <input required ng-model="healthInsurance.Health" name="Health" type="radio" value="1"></label></div>
-                            <div class="radio"><label>
+                                <input required ng-model="healthInsurance.Health" name="Health" type="radio" value="1"></label>
+                        </div>
+                        <div class="radio">
+                            <label>
                                 No
-                                <input required ng-model="healthInsurance.Health" name="Health" type="radio" value="2"></label></div>
-                            <div ng-show="healthInsuranceForm.Health.$dirty && healthInsuranceForm.Health.$invalid || (showErrors && healthInsuranceForm.Health.$invalid)">
-                                <span class="form-error" ng-show="healthInsuranceForm.Health.$error.required">This field is required</span>
-                            </div>
-                        <div class="input-group" ng-show="healthInsurance.Health == 2">
-                            <label class="form-question">
-                                How will health insurance be funded?</label>
-                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="healthInsurance.HealthDescription" name="HealthDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="healthInsuranceForm.HealthDescription.$dirty && healthInsuranceForm.HealthDescription.$invalid || (showErrors && healthInsuranceForm.HealthDescription.$invalid)">
-                                <span class="form-error" ng-show="healthInsuranceForm.HealthDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <input required ng-model="healthInsurance.Health" name="Health" type="radio" value="2"></label>
+                        </div>
+                        <div ng-show="healthInsuranceForm.Health.$dirty && healthInsuranceForm.Health.$invalid || (showErrors && healthInsuranceForm.Health.$invalid)">
+                            <span class="form-error" ng-show="healthInsuranceForm.Health.$error.required">This field is required</span>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-lg-4" ng-show="healthInsurance.Health == 2">
+                                <label class="form-question col-lg-12">
+                                    How will health insurance be funded?</label>
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="healthInsurance.HealthDescription" name="HealthDescription" placeholder="Details" rows="2"></textarea>
+                                <div ng-show="healthInsuranceForm.HealthDescription.$dirty && healthInsuranceForm.HealthDescription.$invalid || (showErrors && healthInsuranceForm.HealthDescription.$invalid)">
+                                    <span class="form-error" ng-show="healthInsuranceForm.HealthDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -13,7 +13,7 @@
                         <h3>{{childName}}</h3>
                         <br>
                         <h4>Thanksgiving Break</h4>
-                        <label class="form-question">
+                        <label class="form-question col-lg-12">
                             How would you like to manage Thanksgiving Break? From the time school is dismissed on the last day prior to the holiday until:</label>
                         <div class="radio">
                             <label>
@@ -33,25 +33,25 @@
                         <div ng-show="showErrors && holidayForm.Thanksgiving.$invalid">
                             <span class="form-error" ng-show="holidayForm.Thanksgiving.$error.required">The field is required</span>
                         </div>
-                        <div class="input-group" ng-show="holiday.Thanksgiving == 3">
-                            <label class="form-question">
+                        <div class="form-group row" ng-show="holiday.Thanksgiving == 3">
+                            <label class="form-question col-lg-12">
                                 Define your Thanksgiving Holiday schedule</label>
                             <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ThanksgivingOther" name="ThanksgivingOther" rows="2"></textarea>
                             <div ng-show="showErrors && holidayForm.ThanksgivingOther.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ThanksgivingOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
-                        <div class="input-group" ng-show="holiday.Thanksgiving == 1">
-                            <label class="form-question">
+                        <div class="form-group row" ng-show="holiday.Thanksgiving == 1">
+                            <label class="form-question col-lg-12">
                                 At the time of</label>
-                            <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ThanksgivingTime" name="ThanksgivingTime" placeholder="hh:mm am/pm" type="text" value="">
+                            <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ThanksgivingTime" name="ThanksgivingTime" placeholder="hh:mm am/pm" type="text" value=""></div>
                             <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.ThanksgivingTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ThanksgivingTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
                             </div>
                         </div>
                         <h4>Winter Break</h4>
-                        <label class="form-question">
+                        <label class="form-question col-lg-12">
                             How would you like to manage Winter Break? From the time school is dismissed on the last day prior to the holiday</label>
                         <div class="radio">
                             <label>
@@ -79,17 +79,17 @@
                                 <div ng-show="showErrors && holidayForm.Christmas.$invalid">
                                     <span class="form-error" ng-show="holidayForm.Christmas.$error.required">The field is required</span>
                                 </div>
-                                <div class="input-group" ng-show="holiday.Christmas == 2 || holiday.Christmas == 3 || holiday.Christmas == 4">
-                                    <label class="form-question">
+                                <div class="form-group row" ng-show="holiday.Christmas == 2 || holiday.Christmas == 3 || holiday.Christmas == 4">
+                                    <label class="form-question col-lg-12">
                                         At the time of</label>
-                                    <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ChristmasTime" name="ChristmasTime" placeholder="hh:mm am/pm" type="text" value="">
+                                    <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ChristmasTime" name="ChristmasTime" placeholder="hh:mm am/pm" type="text" value=""></div>
                                     <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                     <div ng-show="showErrors && holidayForm.ChristmasTime.$invalid">
                                         <span class="form-error" ng-show="holidayForm.ChristmasTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
                                     </div>
                                 </div>
-                                <div class="input-group" ng-show="holiday.Christmas == 5">
-                                    <label class="form-question">
+                                <div class="form-group row" ng-show="holiday.Christmas == 5">
+                                    <label class="form-question col-lg-12">
                                         Define your Winter Break schedule</label>
                                     <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ChristmasOther" name="ChristmasOther" rows="2"></textarea>
                                     <div ng-show="showErrors && holidayForm.ChristmasOther.$invalid">
@@ -97,7 +97,7 @@
                                     </div>
                                 </div>
                                 <h4>Spring Break</h4>
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     How would you like to manage the start of Spring Break?  From the time school is dismissed on the last day prior to the break until:</label>
                                 <div class="radio">
                                     <label>
@@ -112,8 +112,8 @@
                                 <div ng-show="showErrors && holidayForm.SpringBreak.$invalid">
                                     <span class="form-error" ng-show="holidayForm.SpringBreak.$error.required">The field is required</span>
                                 </div>
-                                <div class="input-group" ng-show="holiday.SpringBreak == 2">
-                                    <label class="form-question">
+                                <div class="form-group row" ng-show="holiday.SpringBreak == 2">
+                                    <label class="form-question col-lg-12">
                                         Define your Spring Break schedule</label>
                                     <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SpringOther" name="SpringOther" rows="2"></textarea>
                                     <div ng-show="showErrors && holidayForm.SpringOther.$invalid">
@@ -121,11 +121,11 @@
                                     </div>
                                 </div>
                                 <h4>Summer Break</h4>
-                                <div class="input-group">
+                                <div class="form-group row">
                                     Summer vacation begins
-                            <input class="form-control" class="input-mini inline" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
+                            <div class="col-lg-4"><input class="form-control" class="input-mini inline" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
                                     days after the last day of school at
-                            <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value="">
+                            <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value=""></div>
                                     <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                     <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
                                         <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.required">The field is required</span>
@@ -136,11 +136,11 @@
                                         <span class="form-error" ng-show="holidayForm.SummerBeginTime.$error.required">The field is required</span>
                                     </div>
                                 </div>
-                                <div class="input-group">
+                                <div class="form-group row">
                                     Summer vacation ends 
-                            <input class="form-control" class="input-mini inline" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
+                            <div class="col-lg-4"><input class="form-control" class="input-mini inline" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
                                     days prior to the first day of school at
-                            <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value="">
+                            <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value=""></div>
                                     <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                     <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
                                         <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.required">The field is required</span>
@@ -151,8 +151,8 @@
                                         <span class="form-error" ng-show="holidayForm.SummerEndTime.$error.required">The field is required</span>
                                     </div>
                                 </div>
-                                <div class="input-group">
-                                    <label class="form-question">
+                                <div class="form-group row">
+                                    <label class="form-question col-lg-12">
                                         How will each of you spend time with the child(ren) during summer vacation.</label>
                                     <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SummerDetails" name="SummerDetails" rows="2"></textarea>
                                     <div ng-show="showErrors && holidayForm.SummerDetails.$invalid">
@@ -160,7 +160,7 @@
                                     </div>
                                 </div>
                                 <h4>Fall Break</h4>
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     How would you like to manage the start of fall break?  From the time school is dismissed on the last day prior to the break until:</label>
                                 <div class="radio">
                                     <label>
@@ -175,8 +175,8 @@
                                 <div ng-show="showErrors && holidayForm.FallBreak.$invalid">
                                     <span class="form-error" ng-show="holidayForm.FallBreak.$error.required">The field is required</span>
                                 </div>
-                                <div class="input-group" ng-show="holiday.FallBreak == 2">
-                                    <label class="form-question">
+                                <div class="form-group row" ng-show="holiday.FallBreak == 2">
+                                    <label class="form-question col-lg-12">
                                         Define your Fall Break schedule</label>
                                     <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.FallOther" name="FallOther" rows="2"></textarea>
                                     <div ng-show="showErrors && holidayForm.FallOther.$invalid">
@@ -184,21 +184,21 @@
                                     </div>
                                 </div>
                                 <h4>Other Holidays</h4>
-                                <div class="input-group">
-                                    <label class="form-question">
+                                <div class="form-group row">
+                                    <label class="form-question col-lg-12">
                                         When a holiday falls on Friday or Monday, should the holiday visitation include the weekend immediately before or after that holiday?</label>
                                     <label class="checkbox">
                                         Include the following Saturday and Sunday when holiday falls on Friday 
-                                <input class="form-control" class="inline" value="" ng-model="holiday.FridayHoliday" name="FridayHoliday" type="checkbox"></label>
+                                <div class="col-lg-4"><input class="form-control" class="inline" value="" ng-model="holiday.FridayHoliday" name="FridayHoliday" type="checkbox"></label>
                                     <label class="checkbox">
                                         Include the preceding Saturday and Sunday when holiday falls on Monday 
-                                <input class="form-control" ng-model="holiday.MondayHoliday" name="MondayHoliday" type="checkbox" value="">
+                                <div class="col-lg-4"><input class="form-control" ng-model="holiday.MondayHoliday" name="MondayHoliday" type="checkbox" value=""></div>
                                     </label>
                                     <div ng-show="showErrors && holidayForm.Education.$invalid">
                                         <span class="form-error" ng-show="holidayForm.Thanksgiving.$error.required">The field is required</span>
                                     </div>
                                 </div>
-                                <label class="form-question">Many people define holiday parenting time as the children being with one parent during a holiday when it falls in even-numbered years, and the other parent during that same holiday when it falls in odd-numbered years. Others are able to see that it would be to everyone’s advantage for one parent to have the children on a specific holiday every year while some people do not want to specify the parenting time for a holiday.</label>
+                                <label class="form-question col-lg-12">Many people define holiday parenting time as the children being with one parent during a holiday when it falls in even-numbered years, and the other parent during that same holiday when it falls in odd-numbered years. Others are able to see that it would be to everyone’s advantage for one parent to have the children on a specific holiday every year while some people do not want to specify the parenting time for a holiday.</label>
                                 <div class="row">
                                     <div class="col-md-2">&nbsp;</div>
                                     <div class="col-md-5">Father</div>
@@ -586,15 +586,15 @@
                     <form ng-submit="addExtraHoliday()" id="extraHolidayForm" name="extraHolidayForm" novalidate>
                         <div class="row">
                             <div class="input-group col-md-2">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     Holiday Name</label>
-                                <input class="form-control" class="col-md-12" required ng-model="extraHoliday.HolidayName" name="HolidayName" placeholder="Holiday Name" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control" class="col-md-12" required ng-model="extraHoliday.HolidayName" name="HolidayName" placeholder="Holiday Name" type="text" value=""></div>
                                 <div ng-show="extraHolidayForm.HolidayName.$dirty && extraHolidayForm.HolidayName.$invalid || (showExtraErrors && extraHolidayForm.HolidayName.$invalid)">
                                     <span class="form-error" ng-show="extraHolidayForm.HolidayName.$error.required">The field is required</span>
                                 </div>
                             </div>
                             <div class="input-group col-md-5">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     Father</label><br />
                                 <label class="radio-inline">Odd<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayFather" name="HolidayFather" type="radio" value="1"></label>
                                 <label class="radio-inline">Even<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayFather" name="HolidayFather" type="radio" value="2"></label>
@@ -605,7 +605,7 @@
                                 </div>
                             </div>
                             <div class="input-group col-md-5">
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     Mother</label><br />
                                 <label class="radio-inline">Odd<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayMother" name="HolidayMother" type="radio" value="1"></label>
                                 <label class="radio-inline">Even<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayMother" name="HolidayMother" type="radio" value="2"></label>

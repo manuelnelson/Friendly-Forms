@@ -8,7 +8,7 @@
                         <h5>Child Support</h5>
                     </div>
                     <div class="widget-content">
-                        <label class="form-question">
+                        <label class="form-question col-lg-12">
                             When will child support payment begin?</label>
                         <div class="radio">
                             <label>
@@ -24,16 +24,16 @@
                             <span class="form-error" ng-show="childSupportForm.SupportBegin.$error.required">This field is required</span>
                         </div>
                         <div ng-show="childSupport.SupportBegin == 2">
-                            <div class="input-group">
-                                <label class="form-question">
+                            <div class="form-group row">
+                                <label class="form-question col-lg-12">
                                     Begin Date</label>
-                                <input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childSupport.BeginDate" name="childSupport.BeginDate" placeholder="MM/DD/YYYY" type="text" value="{{childSupport.BeginDate | date:'MM/dd/yyyy'}}">
+                                <div class="col-lg-4"><input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childSupport.BeginDate" name="childSupport.BeginDate" placeholder="MM/DD/YYYY" type="text" value="{{childSupport.BeginDate | date:'MM/dd/yyyy'}}">
                                 <div ng-show="childSupportForm.BeginDate.$dirty && childSupportForm.BeginDate.$invalid || (showErrors && childSupportForm.BeginDate.$invalid)">
                                     <span class="form-error" ng-show="childSupportForm.BeginDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                 </div>
                             </div>
                         </div>
-                        <label class="form-question">
+                        <label class="form-question col-lg-12">
                             When will child support payment end?</label>
                         <div class="radio">
                             <label>
@@ -57,16 +57,16 @@
                                     <span class="form-error" ng-show="childSupportForm.SupportEnd.$error.required">This field is required</span>
                                 </div>
                                 <div ng-show="childSupport.SupportEnd == 4">
-                                    <div class="input-group">
-                                        <label class="form-question">
+                                    <div class="form-group row">
+                                        <label class="form-question col-lg-12">
                                             End Date</label>
-                                        <input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childSupport.EndDate" name="childSupport.EndDate" placeholder="MM/DD/YYYY" type="text" value="{{childSupport.EndDate | date:'MM/dd/yyyy'}}">
+                                        <div class="col-lg-4"><input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childSupport.EndDate" name="childSupport.EndDate" placeholder="MM/DD/YYYY" type="text" value="{{childSupport.EndDate | date:'MM/dd/yyyy'}}">
                                         <div ng-show="childSupportForm.EndDate.$dirty && childSupportForm.EndDate.$invalid || (showErrors && childSupportForm.EndDate.$invalid)">
                                             <span class="form-error" ng-show="childSupportForm.EndDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                         </div>
                                     </div>
                                 </div>
-                                <label class="form-question">
+                                <label class="form-question col-lg-12">
                                     Are both parties in the divorce working together, either directly or indirectly, and in agreement on the information provided in this document, or is one party providing this information in order to generate a settlement proposal?
                                 </label>
                                 <div class="radio">

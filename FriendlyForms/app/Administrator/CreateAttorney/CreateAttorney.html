@@ -6,8 +6,8 @@
                 <label class="informative">
                     Provide a name for this page, for example "John Smith". 
                 </label>
-                <div class="input-group">
-                    <input class="form-control" name="PageName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="attorney.PageName" placeholder="Page Name*" type="text" value="">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="PageName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="attorney.PageName" placeholder="Page Name*" type="text" value=""></div>
                     <div ng-show="registerAttorneyForm.PageName.$dirty && registerAttorneyForm.PageName.$invalid">
                         <span class="form-error" ng-show="registerAttorneyForm.PageName.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                         <span class="form-error" ng-show="registerAttorneyForm.PageName.$error.required">This field is required.</span>
@@ -16,22 +16,22 @@
                 <label class="informative">
                     The following is the login information for the attorney.               
                 </label>
-                <div class="input-group">
-                    <input class="form-control" name="DisplayName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="DisplayName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.DisplayName" placeholder="Name*" type="text" value=""></div>
                     <div ng-show="registerAttorneyForm.DisplayName.$dirty && registerAttorneyForm.DisplayName.$invalid">
                         <span class="form-error" ng-show="registerAttorneyForm.DisplayName.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                         <span class="form-error" ng-show="registerAttorneyForm.DisplayName.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <div class="input-group">
-                    <input class="form-control" name="Email" required ng-model="user.Email" placeholder="Email*" type="email" value="">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="Email" required ng-model="user.Email" placeholder="Email*" type="email" value=""></div>
                     <div ng-show="registerAttorneyForm.Email.$dirty && registerAttorneyForm.Email.$invalid">
                         <span class="form-error" ng-show="registerAttorneyForm.Email.$error.email">Not a valid e-mail address.</span>
                         <span class="form-error" ng-show="registerAttorneyForm.Email.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <div class="input-group">
-                    <input class="form-control" name="Position" required ng-model="user.Position" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Position*" type="text" value="">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="Position" required ng-model="user.Position" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Position*" type="text" value=""></div>
                     <div ng-show="registerAttorneyForm.Position.$dirty && registerAttorneyForm.Position.$invalid">
                         <span class="form-error" ng-show="registerAttorneyForm.Position.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                         <span class="form-error" ng-show="registerAttorneyForm.Position.$error.required">This field is required.</span>
@@ -40,15 +40,15 @@
                 <label class="informative">
                     Please enter a password so the person listed above can gain access to this Attorney Page.               
                 </label>
-                <div class="input-group">
-                    <input class="form-control" name="Password" required ng-model="user.Password" ng-minlength="6" placeholder="Password*" type="password">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="Password" required ng-model="user.Password" ng-minlength="6" placeholder="Password*" type="password">
                     <div ng-show="registerAttorneyForm.Password.$dirty && registerAttorneyForm.Password.$invalid">
                         <span class="form-error" ng-show="registerAttorneyForm.Password.$error.minlength">Password must be at least than 6 characters.</span>
                         <span class="form-error" ng-show="registerAttorneyForm.Password.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <div class="input-group">
-                    <input class="form-control" name="ConfirmPassword" required ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="ConfirmPassword" required ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
                     <div ng-show="registerAttorneyForm.ConfirmPassword.$dirty && registerAttorneyForm.ConfirmPassword.$invalid">
                         <span class="form-error" ng-show="registerAttorneyForm.ConfirmPassword.$error.minlength">Password must be at least than 6 characters.</span>
                         <span class="form-error" ng-show="registerAttorneyForm.ConfirmPassword.$error.required">This field is required.</span>

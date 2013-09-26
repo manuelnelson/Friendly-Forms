@@ -6,29 +6,29 @@
                 <label>
                     Please create the administrators login credentials 
                 </label>
-                <div class="input-group">
-                    <input class="form-control" name="DisplayName" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="DisplayName" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.DisplayName" placeholder="Name*" type="text" value=""></div>
                     <div ng-show="registerAdminForm.DisplayName.$dirty && registerAdminForm.DisplayName.$invalid">
                         <span class="form-error" ng-show="registerAdminForm.DisplayName.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                         <span class="form-error" ng-show="registerAdminForm.DisplayName.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <div class="input-group">
-                    <input class="form-control" name="Email" ng-model="user.Email" placeholder="Email*" type="email" value="">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="Email" ng-model="user.Email" placeholder="Email*" type="email" value=""></div>
                     <div ng-show="registerAdminForm.Email.$dirty && registerAdminForm.Email.$invalid">
                         <span class="form-error" ng-show="registerAdminForm.Email.$error.email">Not a valid e-mail address.</span>
                         <span class="form-error" ng-show="registerAdminForm.Email.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <div class="input-group">
-                    <input class="form-control" name="Password" ng-model="user.Password" ng-minlength="6" placeholder="Password*" type="password">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="Password" ng-model="user.Password" ng-minlength="6" placeholder="Password*" type="password">
                     <div ng-show="registerAdminForm.Password.$dirty && registerAdminForm.Password.$invalid">
                         <span class="form-error" ng-show="registerAdminForm.Password.$error.minlength">Password must be at least than 6 characters.</span>
                         <span class="form-error" ng-show="registerAdminForm.Password.$error.required">This field is required.</span>
                     </div>
                 </div>
-                <div class="input-group">
-                    <input class="form-control" name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
+                <div class="form-group row">
+                    <div class="col-lg-4"><input class="form-control" name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
                     <div ng-show="registerAdminForm.ConfirmPassword.$dirty && registerAdminForm.ConfirmPassword.$invalid">
                         <span class="form-error" ng-show="registerAdminForm.ConfirmPassword.$error.minlength">Password must be at least than 6 characters.</span>
                         <span class="form-error" ng-show="registerAdminForm.ConfirmPassword.$error.required">This field is required.</span>

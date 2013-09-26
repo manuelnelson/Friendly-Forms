@@ -8,21 +8,27 @@
                         <h5>Spousal Support</h5>
                     </div>
                     <div class="widget-content">
-                            <label class="form-question">
-                                What are the provisions for spousal support?</label>
-                            <div class="radio"><label>
+                        <label class="form-question col-lg-12">
+                            What are the provisions for spousal support?</label>
+                        <div class="radio">
+                            <label>
                                 There will be no spousal support in this case
-                                <input required ng-model="spousal.Spousal" name="Spousal" type="radio" value="2"></label></div>
-                            <div class="radio"><label>
+                                <input required ng-model="spousal.Spousal" name="Spousal" type="radio" value="2"></label>
+                        </div>
+                        <div class="radio">
+                            <label>
                                 Provisions for spousal support will occur as follows
-                                <input required ng-model="spousal.Spousal" name="Spousal" type="radio" value="1"></label></div>
-                            <div ng-show="spousalForm.Spousal.$dirty && spousalForm.Spousal.$invalid || (showErrors && spousalForm.Spousal.$invalid)">
-                                <span class="form-error" ng-show="spousalForm.Spousal.$error.required">This field is required</span>
-                            </div>
-                        <div class="input-group" ng-show="spousal.Spousal == 1">
-                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="spousal.SpousalDescription" name="SpousalDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="spousalForm.SpousalDescription.$dirty && spousalForm.SpousalDescription.$invalid || (showErrors && spousalForm.SpousalDescription.$invalid)">
-                                <span class="form-error" ng-show="spousalForm.SpousalDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <input required ng-model="spousal.Spousal" name="Spousal" type="radio" value="1"></label>
+                        </div>
+                        <div ng-show="spousalForm.Spousal.$dirty && spousalForm.Spousal.$invalid || (showErrors && spousalForm.Spousal.$invalid)">
+                            <span class="form-error" ng-show="spousalForm.Spousal.$error.required">This field is required</span>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-lg-4" ng-show="spousal.Spousal == 1">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="spousal.SpousalDescription" name="SpousalDescription" placeholder="Details" rows="2"></textarea>
+                                <div ng-show="spousalForm.SpousalDescription.$dirty && spousalForm.SpousalDescription.$invalid || (showErrors && spousalForm.SpousalDescription.$invalid)">
+                                    <span class="form-error" ng-show="spousalForm.SpousalDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
                             </div>
                         </div>
                     </div>

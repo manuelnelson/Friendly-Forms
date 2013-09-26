@@ -10,51 +10,51 @@
                     <div class="widget-content">
                         <label class="informative">
                             Define how you will communicate with your child(ren) when they are with the other parent.</label>
-                        <div class="input-group">
-                            <label class="form-question">
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
                                 When the child(ren) is/are with the other parent, will each of you want to be able to communicate with them while they are with the other parent?</label>
-                            <label class="radio inline">Yes<input class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="2"></label>
+                            <label class="radio-inline">Yes<input class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="1"></label>
+                            <label class="radio-inline">No<input class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="2"></label>
                             <div ng-show="communicationForm.AllowCommunication.$dirty && communicationForm.AllowCommunication.$invalid || (showErrors && communicationForm.AllowCommunication.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.AllowCommunication.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="input-group" ng-show="communication.AllowCommunication == 1">
-                            <label class="form-question">
+                        <div class="form-group row" ng-show="communication.AllowCommunication == 1">
+                            <label class="form-question col-lg-12">
                                 What method(s) will the parents use to communicate? (check all that apply)</label>
 
-                            <label class="checkbox inline ">Telephone<input class="form-control" class="inline" ng-model="communication.Telephone" name="Telephone" type="checkbox" value="False"></label>
-                            <label class="checkbox inline">Email<input class="form-control" class="inline" ng-model="communication.Email" name="Email" type="checkbox" value="False"></label>
-                            <label class="checkbox inline">Other<input class="form-control" class="inline" ng-model="communication.Other" name="Other" type="checkbox" value="False"></label>
+                            <label class="checkbox inline ">Telephone<div class="col-lg-4"><input class="form-control" class="inline" ng-model="communication.Telephone" name="Telephone" type="checkbox" value="False"></label>
+                            <label class="checkbox inline">Email<div class="col-lg-4"><input class="form-control" class="inline" ng-model="communication.Email" name="Email" type="checkbox" value="False"></label>
+                            <label class="checkbox inline">Other<div class="col-lg-4"><input class="form-control" class="inline" ng-model="communication.Other" name="Other" type="checkbox" value="False"></label>
                         </div>
-                        <div class="input-group" ng-show="communication.Other">
-                            <input class="form-control" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.OtherMethod" name="OtherMethod" placeholder="Other method" type="text" value="">
+                        <div class="form-group row" ng-show="communication.Other">
+                            <div class="col-lg-4"><input class="form-control" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.OtherMethod" name="OtherMethod" placeholder="Other method" type="text" value=""></div>
                             <div ng-show="communicationForm.OtherMethod.$dirty && communicationForm.OtherMethod.$invalid  || (showErrors && communicationForm.OtherMethod.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.OtherMethod.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label class="form-question">
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
                                 Should there be any limitations on the ability of one parent to communicate with the child while he/she is with the other parent?</label>
-                            <label class="radio inline">Yes<input class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="2"></label>
+                            <label class="radio-inline">Yes<input class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="1"></label>
+                            <label class="radio-inline">No<input class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="2"></label>
                             <div ng-show="communicationForm.Limitations.$dirty && communicationForm.Limitations.$invalid  || (showErrors && communicationForm.Limitations.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.Limitations.$error.required">This field is required</span>
                             </div>
                         </div>
-                        <div class="input-group" ng-show="communication.Limitations == 1">
-                            <label class="form-question">
+                        <div class="form-group row" ng-show="communication.Limitations == 1">
+                            <label class="form-question col-lg-12">
                                 Define any limitations on communication</label>
                             <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea>
                             <div ng-show="communicationForm.LimitationDetails.$dirty && communicationForm.LimitationDetails.$invalid  || (showErrors && communicationForm.LimitationDetails.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.LimitationDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label class="form-question">
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
                                 Should each parent notify the other of any changes of address or telephone number?</label>
-                            <label class="radio inline">Yes<input class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="2"></label>
+                            <label class="radio-inline">Yes<input class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="1"></label>
+                            <label class="radio-inline">No<input class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="2"></label>
                             <div ng-show="communicationForm.Notification.$dirty && communicationForm.Notification.$invalid  || (showErrors && communicationForm.Notification.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.Notification.$error.required">This field is required</span>
                             </div>

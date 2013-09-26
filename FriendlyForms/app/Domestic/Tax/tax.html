@@ -8,23 +8,29 @@
                         <h5>Taxes</h5>
                     </div>
                     <div class="widget-content">
-                            <label class="form-question">
-                                Will each party be entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final?</label>
-                            <div class="radio"><label>
-                                Yes
-                                <input required ng-model="tax.Taxes" name="Taxes" type="radio" value="1"></label></div>
-                            <div class="radio"><label>
-                                No
-                                <input required ng-model="tax.Taxes" name="Taxes" type="radio" value="2"></label></div>
-                            <div ng-show="taxForm.Taxes.$dirty && taxForm.Taxes.$invalid || (showErrors && taxForm.Taxes.$invalid)">
-                                <span class="form-error" ng-show="taxForm.Taxes.$error.required">This field is required</span>
-                            </div>
-                        <div class="input-group" ng-show="tax.Taxes == 2">
+                        <label class="form-question col-lg-12">
+                            Will each party be entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final?</label>
+                        <div class="radio">
                             <label>
-                                How will tax filing be handled at the conclusion of this case?</label>
-                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="tax.TaxDescription" name="TaxDescription" placeholder="Details" rows="2"></textarea>
-                            <div ng-show="taxForm.TaxDescription.$dirty && taxForm.TaxDescription.$invalid || (showErrors && taxForm.TaxDescription.$invalid)">
-                                <span class="form-error" ng-show="taxForm.TaxDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                Yes
+                                <input required ng-model="tax.Taxes" name="Taxes" type="radio" value="1"></label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                No
+                                <input required ng-model="tax.Taxes" name="Taxes" type="radio" value="2"></label>
+                        </div>
+                        <div ng-show="taxForm.Taxes.$dirty && taxForm.Taxes.$invalid || (showErrors && taxForm.Taxes.$invalid)">
+                            <span class="form-error" ng-show="taxForm.Taxes.$error.required">This field is required</span>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-lg-4" ng-show="tax.Taxes == 2">
+                                <label>
+                                    How will tax filing be handled at the conclusion of this case?</label>
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="tax.TaxDescription" name="TaxDescription" placeholder="Details" rows="2"></textarea>
+                                <div ng-show="taxForm.TaxDescription.$dirty && taxForm.TaxDescription.$invalid || (showErrors && taxForm.TaxDescription.$invalid)">
+                                    <span class="form-error" ng-show="taxForm.TaxDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
                             </div>
                         </div>
                     </div>

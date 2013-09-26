@@ -726,7 +726,7 @@ window.Modernizr = (function(window,document,undefined){
     function webforms(){
     
         // Run through HTML5's new input attributes to see if the UA understands any.
-        // We're using f which is the <input class="form-control"> element created early on
+        // We're using f which is the <div class="col-lg-4"><input class="form-control"> element created early on
         // Mike Taylr has created a comprehensive resource for testing these attributes
         //   when applied to all input types: 
         //   http://miketaylr.com/code/input-type-attr.html

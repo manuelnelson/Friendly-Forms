@@ -9,10 +9,10 @@
                 <div class="widget-content">
                     <form id="childCareFormForm" name="childCareFormForm" novalidate>
                         <label class="informative">In this section you will define health insurance premiums paid to provide coverage for the child(ren) in this action.</label>
-                        <div class="input-group">
-                            <label class="form-question">Do any individuals pay for child care for the child(ren)?</label>
-                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" ng-model="childCareForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" ng-change="submit()" ng-model="childCareForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="2"></label>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Do any individuals pay for child care for the child(ren)?</label>
+                            <label class="radio-inline">Yes<input class="inline" ng-change="submit()" ng-model="childCareForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="1"></label>
+                            <label class="radio-inline">No<input class="inline" ng-change="submit()" ng-model="childCareForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="2"></label>
                             <div ng-show="showErrors">
                                 <span class="form-error" ng-show="showErrors">Please select an option</span>
                             </div>
@@ -21,90 +21,90 @@
                     <div ng-show="childCareForm.ChildrenInvolved == 1">
                         <form id="childCareChildForm" name="childCareChildForm" novalidate>
                             <h4>{{childName}}</h4>
-                            <label class="form-question">Total yearly amount during school year</label>
+                            <label class="form-question col-lg-12">Total yearly amount during school year</label>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SchoolFather" name="SchoolFather" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SchoolFather" name="SchoolFather" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.SchoolFather.$dirty && childCareChildForm.SchoolFather.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.SchoolFather.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SchoolMother" name="SchoolMother" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SchoolMother" name="SchoolMother" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.SchoolMother.$dirty && childCareChildForm.SchoolMother.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.SchoolMother.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SchoolNonParent" name="SchoolNonParent" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SchoolNonParent" name="SchoolNonParent" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.SchoolNonParent.$dirty && childCareChildForm.SchoolNonParent.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.SchoolNonParent.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
-                            <label class="form-question">Total yearly amount during Summer Break</label>
+                            <label class="form-question col-lg-12">Total yearly amount during Summer Break</label>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SummerFather" name="SummerFather" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SummerFather" name="SummerFather" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.SummerFather.$dirty && childCareChildForm.SummerFather.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.SummerFather.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SummerMother" name="SummerMother" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SummerMother" name="SummerMother" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.SummerMother.$dirty && childCareChildForm.SummerMother.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.SummerMother.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SummerNonParent" name="SummerNonParent" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.SummerNonParent" name="SummerNonParent" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.SummerNonParent.$dirty && childCareChildForm.SummerNonParent.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.SummerNonParent.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
-                            <label class="form-question">Total yearly amount during other school breaks</label>
+                            <label class="form-question col-lg-12">Total yearly amount during other school breaks</label>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.BreaksFather" name="BreaksFather" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.BreaksFather" name="BreaksFather" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.BreaksFather.$dirty && childCareChildForm.BreaksFather.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.BreaksFather.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.BreaksMother" name="BreaksMother" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.BreaksMother" name="BreaksMother" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.BreaksMother.$dirty && childCareChildForm.BreaksMother.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.BreaksMother.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.BreaksNonParent" name="BreaksNonParent" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.BreaksNonParent" name="BreaksNonParent" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.BreaksNonParent.$dirty && childCareChildForm.BreaksNonParent.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.BreaksNonParent.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
-                            <label class="form-question">Total yearly amount of other child care (e.g. pre-school or child with disability)</label>
+                            <label class="form-question col-lg-12">Total yearly amount of other child care (e.g. pre-school or child with disability)</label>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Father</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.OtherFather" name="OtherFather" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.OtherFather" name="OtherFather" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.OtherFather.$dirty && childCareChildForm.OtherFather.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.OtherFather.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Mother</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.OtherMother" name="OtherMother" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.OtherMother" name="OtherMother" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.OtherMother.$dirty && childCareChildForm.OtherMother.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.OtherMother.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
                             <div class="input-group row" style="display: block;">
                                 <label class="col-md-4 form-question">Nonparent Custodian</label>
-                                <input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.OtherNonParent" name="OtherNonParent" placeholder="Annual Amount" type="text" value="">
+                                <div class="col-lg-4"><input class="form-control"  ng-pattern="/^[0-9]*$/" ng-model="childCare.OtherNonParent" name="OtherNonParent" placeholder="Annual Amount" type="text" value=""></div>
                                 <div ng-show="childCareChildForm.OtherNonParent.$dirty && childCareChildForm.OtherNonParent.$invalid">
                                     <span class="form-error" ng-show="childCareChildForm.OtherNonParent.$error.pattern">This field must be a number.</span>
                                 </div>

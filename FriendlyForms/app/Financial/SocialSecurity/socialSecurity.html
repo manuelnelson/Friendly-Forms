@@ -11,15 +11,15 @@
                         <div class="input-group row">
                             <label class="hoverHelp span4 form-question" data-content="Old age, survivors and disability benefits for a child who is either unmarried and has not attained the age of 18, is still in secondary school and under 19 years of age, or is under a disability which began before he attained the age of 22 years of age. The child must also be a dependent of the insured individual." data-original-title="">
                                 Do the children receive Title II Social Security benefits from your account?</label>
-                            <label class="radio inline">Yes<input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="2"></label>
+                            <label class="radio-inline">Yes<input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="1"></label>
+                            <label class="radio-inline">No<input class="inline" required ng-model="socialSecurity.ReceiveSocial" name="ReceiveSocial" type="radio" value="2"></label>
                             <div ng-show="socialSecurityForm.ReceiveSocial.$dirty && socialSecurityForm.ReceiveSocial.$invalid || (showErrors && socialSecurityForm.ReceiveSocial.$invalid)">
                                 <span class="form-error" ng-show="socialSecurityForm.ReceiveSocial.$error.required">This field is required</span>
                             </div>
                         </div>
                         <div class="input-group row" ng-show="socialSecurity.ReceiveSocial == 1">
                             <label class="col-md-4 form-question">Amount per month</label>
-                            <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="socialSecurity.Amount" name="Amount" placeholder="Monthly Amount" type="text" value="">
+                            <div class="col-lg-4"><input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="socialSecurity.Amount" name="Amount" placeholder="Monthly Amount" type="text" value=""></div>
                             <div ng-show="socialSecurityForm.Amount.$dirty && socialSecurityForm.Amount.$invalid || (showErrors && socialSecurityForm.Amount.$invalid)">
 								<span class="form-error" ng-show="socialSecurityForm.Amount.$error.pattern">This field must be a number.</span>
                             </div>

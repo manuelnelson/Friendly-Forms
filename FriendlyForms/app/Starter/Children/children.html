@@ -21,9 +21,9 @@
                                     <td ng-show="!(editing && editChildId==childAdded.Id)">{{childAdded.Name}}</td>
                                     <td ng-show="!(editing  && editChildId==childAdded.Id)">{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}</td>
                                     <td ng-show="editing  && editChildId==childAdded.Id">
-                                        <input class="form-control" type="text" ng-model="childAdded.Name" /></td>
+                                        <div class="col-lg-4"><input class="form-control" type="text" ng-model="childAdded.Name" /></td>
                                     <td ng-show="editing && editChildId==childAdded.Id">
-                                        <input class="form-control" ui-jq="datepicker" data-date="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}">                                        
+                                        <div class="col-lg-4"><input class="form-control" ui-jq="datepicker" data-date="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}">                                        
                                     </td>
                                     <td>
                                         <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="icon-white icon-edit"></i></button>
@@ -35,10 +35,10 @@
                         </table>
                     </div>
                     <form id="childrenForm" name="childrenForm" novalidate>
-                        <div class="input-group">
-                            <label class="form-question">Are there children involved in this case?</label>
-                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" required ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" ng-change="submit()" ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="2"></label>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Are there children involved in this case?</label>
+                            <label class="radio-inline">Yes<input class="inline" ng-change="submit()" required ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="1"></label>
+                            <label class="radio-inline">No<input class="inline" ng-change="submit()" ng-model="childForm.ChildrenInvolved" name="ChildrenInvolved" type="radio" value="2"></label>
                             <div ng-show="childrenForm.ChildrenInvolved.$dirty && childrenForm.ChildrenInvolved.$invalid || (showErrors && childrenForm.ChildrenInvolved.$invalid)">
                                 <span class="form-error" ng-show="childrenForm.ChildrenInvolved.$error.required">Please select an option</span>
                             </div>
@@ -47,7 +47,7 @@
                     <form ng-submit="addChild()" id="addChildForm" ng-show="childForm.ChildrenInvolved == 1" name="addChildForm" novalidate>
                         <div class="input-group row">
                             <label class="col-md-2">Name</label>
-                            <input class="form-control" ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="child.Name" name="Name" placeholder="Name" type="text" value="" data-original-title="">
+                            <div class="col-lg-4"><input class="form-control" ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="child.Name" name="Name" placeholder="Name" type="text" value="" data-original-title="">
                             <div ng-show="addChildForm.Name.$dirty && addChildForm.Name.$invalid">
                                 <span class="form-error" ng-show="addChildForm.Name.$error.required">The Name field is required</span>
                                 <span class="form-error" ng-show="addChildForm.Name.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="input-group row">
                             <label class="col-md-2">Date of Birth</label>
-                            <input class="form-control" ui-jq="datepicker" data-date="06/05/2013" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
+                            <div class="col-lg-4"><input class="form-control" ui-jq="datepicker" data-date="06/05/2013" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value=""></div>
                             <div ng-show="addChildForm.DateOfBirth.$dirty && addChildForm.DateOfBirth.$invalid">
                                 <span class="form-error" ng-show="addChildForm.DateOfBirth.$error.required">The Date of Birth field is required</span>
                                 <span class="form-error" ng-show="addChildForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>

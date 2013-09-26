@@ -157,8 +157,8 @@
                         <p ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.IncomeDetails}}</p>
                     </div>
                     <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-                        <input class="form-control" type="hidden" class="html" name="html" />
-                        <input class="form-control" type="hidden" class="name" name="name" />
+                        <div class="col-lg-4"><input class="form-control" type="hidden" class="html" name="html" />
+                        <div class="col-lg-4"><input class="form-control" type="hidden" class="name" name="name" />
                         <input type="submit" class="btn btn-default btn-default-primary btn printForm" value="Print to PDF">
                     </form>
                 </div>

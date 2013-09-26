@@ -685,10 +685,10 @@
                 return this.options.templates[this.options.template];
             }
             if (this.showInputs) {
-                var hourTemplate = '<input class="form-control" type="text" name="hour" class="bootstrap-timepicker-hour" maxlength="2"/>';
-                var minuteTemplate = '<input class="form-control" type="text" name="minute" class="bootstrap-timepicker-minute" maxlength="2"/>';
-                var secondTemplate = '<input class="form-control" type="text" name="second" class="bootstrap-timepicker-second" maxlength="2"/>';
-                var meridianTemplate = '<input class="form-control" type="text" name="meridian" class="bootstrap-timepicker-meridian" maxlength="2"/>';
+                var hourTemplate = '<div class="col-lg-4"><input class="form-control" type="text" name="hour" class="bootstrap-timepicker-hour" maxlength="2"/>';
+                var minuteTemplate = '<div class="col-lg-4"><input class="form-control" type="text" name="minute" class="bootstrap-timepicker-minute" maxlength="2"/>';
+                var secondTemplate = '<div class="col-lg-4"><input class="form-control" type="text" name="second" class="bootstrap-timepicker-second" maxlength="2"/>';
+                var meridianTemplate = '<div class="col-lg-4"><input class="form-control" type="text" name="meridian" class="bootstrap-timepicker-meridian" maxlength="2"/>';
             } else {
                 var hourTemplate = '<span class="bootstrap-timepicker-hour"></span>';
                 var minuteTemplate = '<span class="bootstrap-timepicker-minute"></span>';
