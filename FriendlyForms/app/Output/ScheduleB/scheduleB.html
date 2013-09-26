@@ -77,7 +77,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table>
+                    <table ng-show="showOtherChildren">
                         <thead>
                             <tr>
                                 <th colspan="4">Adjustment for Other Qualified Children</th>
@@ -104,7 +104,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0 || scheduleB.ScheduleB.OtherChildrenDescription.length > 0">
+                    <table ng-show="showOtherChildren && (scheduleB.OtherScheduleB.OtherChildrenDescription.length>0 || scheduleB.ScheduleB.OtherChildrenDescription.length > 0)">
                         <thead>
                             <tr>
                                 <th>Reason for Inclusion of Qualified Children in This Court Case</th>

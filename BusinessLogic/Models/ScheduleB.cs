@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Models;
 
 namespace BusinessLogic.Models
 {
@@ -26,7 +27,8 @@ namespace BusinessLogic.Models
         public double TotalSupport { get; set; }
         [DataMember]
         public double AdjustedSupport { get; set; }
-
+        [DataMember]
+        public OtherChildren OtherChildrenForm { get; set; }
         [DataMember]
         public List<OtherChildDto> OtherChildren { get; set; }
         [DataMember]
