@@ -96,6 +96,8 @@ namespace BusinessLogic
             PreexistingSupportService = preexistingSupportService;
         }
 
+        private const double Fica = .062;
+        private const double MedicareTax = .0145;
         public ScheduleB GetScheduleB(long userId, string parentName, bool isOtherParent = false)
         {
             var income = IncomeService.GetByUserId(userId, isOtherParent).ToIncomeDto().ToMonthly();
@@ -107,8 +109,8 @@ namespace BusinessLogic
                     SelfEmploymentIncome = income.SelfIncome,
                     OtherChildrenForm = otherChildren
                 };
-            schedule.FicaIncome = (int)(schedule.SelfEmploymentIncome * .062);
-            schedule.MedicareTax = (int)(schedule.SelfEmploymentIncome * .0145);
+            schedule.FicaIncome = schedule.SelfEmploymentIncome * Fica;
+            schedule.MedicareTax = schedule.SelfEmploymentIncome * MedicareTax;
             schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
             schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
             if (preexistingSupport != null && preexistingSupport.Support == (int)YesNo.Yes)
