@@ -313,11 +313,11 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int TotalNonParent { get; set; }
         [DataMember]
-        public int TotalFatherMonthly { get; set; }
+        public double TotalFatherMonthly { get; set; }
         [DataMember]
-        public int TotalMotherMonthly { get; set; }
+        public double TotalMotherMonthly { get; set; }
         [DataMember]
-        public int TotalNonParentMonthly { get; set; }
+        public double TotalNonParentMonthly { get; set; }
         [DataMember]
         public string Name { get; set; }
     }
@@ -325,13 +325,13 @@ namespace FriendlyForms.RestService
     public class ScheduleD
     {
         [DataMember]
-        public int WorkRelated { get; set; }
+        public double WorkRelated { get; set; }
         [DataMember]
         public int HealthInsurance { get; set; }
         [DataMember]
-        public int AdditionalExpenses { get; set; }
+        public double AdditionalExpenses { get; set; }
         [DataMember]
-        public int ProRataParents { get; set; }
+        public double ProRataParents { get; set; }
         [DataMember]
         public int ProRataAdditional { get; set; }
         [DataMember]
@@ -345,7 +345,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int TotalYearly { get; set; }
         [DataMember]
-        public int TotalMonthly { get; set; }
+        public double TotalMonthly { get; set; }
     }
 
     #endregion
@@ -505,9 +505,9 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int TotalTotal { get; set; }
         [DataMember]
-        public int ProRataFather { get; set; }
+        public double ProRataFather { get; set; }
         [DataMember]
-        public int ProRataMother { get; set; }
+        public double ProRataMother { get; set; }
         [DataMember]
         public int ProRataTotal { get; set; }
         [DataMember]
@@ -1379,9 +1379,9 @@ namespace FriendlyForms.RestService
                                                    childCareWithTotal.SchoolMother + childCareWithTotal.SummerMother;
                 childCareWithTotal.TotalNonParent = childCareWithTotal.BreaksNonParent + childCareWithTotal.OtherNonParent +
                                                       childCareWithTotal.SchoolNonParent + childCareWithTotal.SummerNonParent;
-                childCareWithTotal.TotalFatherMonthly = childCareWithTotal.TotalFather / 12;
-                childCareWithTotal.TotalMotherMonthly = childCareWithTotal.TotalMother / 12;
-                childCareWithTotal.TotalNonParentMonthly = childCareWithTotal.TotalNonParent / 12;
+                childCareWithTotal.TotalFatherMonthly = (double)childCareWithTotal.TotalFather / 12;
+                childCareWithTotal.TotalMotherMonthly = (double)childCareWithTotal.TotalMother / 12;
+                childCareWithTotal.TotalNonParentMonthly = (double)childCareWithTotal.TotalNonParent / 12;
                 childCareWithTotal.Name = child.Name;
                 schedule.TotalSummer += childCare.SummerFather;
                 otherSchedule.TotalSummer += childCare.SummerMother;
@@ -1399,13 +1399,13 @@ namespace FriendlyForms.RestService
                 otherSchedule.TotalYearly += childCareWithTotal.TotalMother;
                 nonParentSchedule.TotalYearly += childCareWithTotal.TotalNonParent;
             }
-            schedule.TotalMonthly = schedule.TotalYearly / 12;
-            otherSchedule.TotalMonthly = otherSchedule.TotalYearly / 12;
-            nonParentSchedule.TotalMonthly = nonParentSchedule.TotalYearly / 12;
+            schedule.TotalMonthly = (double)schedule.TotalYearly / 12;
+            otherSchedule.TotalMonthly = (double)otherSchedule.TotalYearly / 12;
+            nonParentSchedule.TotalMonthly = (double)nonParentSchedule.TotalYearly / 12;
 
-            schedule.WorkRelated = schedule.TotalYearly;
-            otherSchedule.WorkRelated = otherSchedule.TotalYearly;
-            nonParentSchedule.WorkRelated = nonParentSchedule.TotalYearly;
+            schedule.WorkRelated = schedule.TotalMonthly;
+            otherSchedule.WorkRelated = otherSchedule.TotalMonthly;
+            nonParentSchedule.WorkRelated = nonParentSchedule.TotalMonthly;
             schedule.AdditionalExpenses = schedule.WorkRelated + schedule.HealthInsurance;
             otherSchedule.AdditionalExpenses = otherSchedule.WorkRelated + otherSchedule.HealthInsurance;
             nonParentSchedule.AdditionalExpenses = nonParentSchedule.WorkRelated + nonParentSchedule.HealthInsurance;
@@ -1536,14 +1536,14 @@ namespace FriendlyForms.RestService
             var proRataObligationFather = (int)Math.Round((double)totalIncomes.ProRataFatherPercentage * fatherSupportObligation);
             var workRelatedExpensesFather = scheduleDFather.ProRataAdditional;
             var adjustedObligationFather = proRataObligationFather - workRelatedExpensesFather;
-            var adjustedExpensesPaidFather = scheduleDFather.TotalMonthly;
+            var adjustedExpensesPaidFather = (int)scheduleDFather.TotalMonthly;
             var presumptiveAmountFather = proRataObligationFather + workRelatedExpensesFather + adjustedObligationFather + adjustedExpensesPaidFather;
             //calculate mother
             var motherSupportObligation = (int)BcsoService.GetAmount(scheduleBMother.Total5Minus1, scheduleBMother.OtherChildren.Count);
             var proRataObligationMother = (int)Math.Round((double)totalIncomes.ProRataMotherPercentage * motherSupportObligation);
             var workRelatedExpensesMother = scheduleDMother.ProRataAdditional;
             var adjustedObligationMother = proRataObligationMother - workRelatedExpensesMother;
-            var adjustedExpensesPaidMother = scheduleDMother.TotalMonthly;
+            var adjustedExpensesPaidMother = (int)scheduleDMother.TotalMonthly;
             var presumptiveAmountMother = proRataObligationMother + workRelatedExpensesMother + adjustedObligationMother + adjustedExpensesPaidMother;
             return new PresumptiveAmounts()
                 {
@@ -1562,9 +1562,9 @@ namespace FriendlyForms.RestService
             var totalIncome = fatherIncome + motherIncome;
             var totalIncomes = new TotalIncomes
                 {
-                    ProRataFatherPercentage = Convert.ToInt32((float)fatherIncome / totalIncome * 100),
-                    ProRataFather = (double)fatherIncome/totalIncome,
-                    ProRataMother = (double)motherIncome/totalIncome,
+                    ProRataFatherPercentage = (float)fatherIncome / totalIncome * 100,
+                    ProRataFather = fatherIncome/totalIncome,
+                    ProRataMother = motherIncome/totalIncome,
                     TotalIncomeFather = fatherIncome,
                     TotalIncomeMother = motherIncome,
                     TotalIncomeTotal = totalIncome
@@ -1619,8 +1619,8 @@ namespace FriendlyForms.RestService
         public double TotalIncomeMother { get; set; }
         public double TotalIncomeFather { get; set; }
         public double TotalIncomeTotal { get; set; }
-        public int ProRataFatherPercentage { get; set; }
-        public int ProRataMotherPercentage { get; set; }
+        public double ProRataFatherPercentage { get; set; }
+        public double ProRataMotherPercentage { get; set; }
         public double ProRataFather { get; set; }
         public double ProRataMother { get; set; }
     }

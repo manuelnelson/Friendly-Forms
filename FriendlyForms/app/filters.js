@@ -5,3 +5,9 @@
         return isNegative ? '-$' + dollarInput : '$' + dollarInput;
     };
 });
+FormsApp.filter('percentage', function () {
+    return function (input) {
+        var percent = Math.abs(input).toFixed(2);
+        return percent + '%';
+    };
+});

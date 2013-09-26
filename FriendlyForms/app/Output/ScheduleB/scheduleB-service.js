@@ -5,6 +5,11 @@
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
+        showOtherChildren: function(scheduleB) {
+            if(scheduleB.OtherChildrenForm.LegallyResponsible == 1 && scheduleB.OtherChildrenForm.AtHome == 1 && scheduleB.OtherChildrenForm.Support == 1 && scheduleB.OtherChildrenForm.Preexisting == 2 && scheduleB.OtherChildrenForm.InCourt == 2 && scheduleB.OtherChildren.length > 0)
+                return true;
+            return false;
+        }
     };
     return service;
 }]);

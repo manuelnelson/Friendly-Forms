@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using ServiceStack.DataAnnotations;
 
@@ -7,7 +6,7 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("OtherChilds")]
-    public class OtherChild : IEntity, IFormEntity
+    public class OtherChild : IFormEntity
     {
         [AutoIncrement]
         public virtual long Id { get; set; }
@@ -27,11 +26,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var update = (OtherChild) entity;
-            DateOfBirth = update.DateOfBirth;
-            Name = update.Name;
-            UserId = update.UserId;
-            OtherChildrenId = update.OtherChildrenId;
+            throw new NotImplementedException();
         }
 
     }

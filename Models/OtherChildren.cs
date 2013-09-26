@@ -1,10 +1,11 @@
-﻿using Models.Contract;
+﻿using System;
+using Models.Contract;
 using ServiceStack.DataAnnotations;
 
 namespace Models
 {
     [Alias("OtherChildrens")]
-    public class OtherChildren : IEntity, IFormEntity
+    public class OtherChildren : IFormEntity
     {
         [AutoIncrement]
         public virtual long Id { get; set; }
@@ -26,15 +27,7 @@ namespace Models
 
         public void Update(IFormEntity entity)
         {
-            var update = (OtherChildren) entity;
-            IsOtherParent = update.IsOtherParent;
-            AtHome = update.AtHome;
-            Details = update.Details;                    
-            InCourt = update.InCourt;
-            LegallyResponsible = update.LegallyResponsible;
-            Preexisting = update.Preexisting;
-            Support = update.Support;
-            UserId = update.UserId;
+            throw new NotImplementedException();
         }
     }
 }

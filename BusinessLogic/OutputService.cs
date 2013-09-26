@@ -102,10 +102,11 @@ namespace BusinessLogic
             var preexistingSupport = PreexistingSupportFormService.GetByUserId(userId, isOtherParent);
             var otherChildren = OtherChildrenService.GetByUserId(userId, isOtherParent);
             var schedule = new ScheduleB
-            {
-                GrossIncome = income.CalculateTotalIncome(),
-                SelfEmploymentIncome = income.SelfIncome
-            };
+                {
+                    GrossIncome = income.CalculateTotalIncome(),
+                    SelfEmploymentIncome = income.SelfIncome,
+                    OtherChildrenForm = otherChildren
+                };
             schedule.FicaIncome = (int)(schedule.SelfEmploymentIncome * .062);
             schedule.MedicareTax = (int)(schedule.SelfEmploymentIncome * .0145);
             schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
