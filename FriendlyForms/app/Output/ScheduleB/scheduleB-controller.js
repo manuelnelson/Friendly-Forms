@@ -4,7 +4,8 @@
     $scope.isLoaded = false;
     scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleB = data;
-        $scope.showOtherChildren = scheduleBService.showOtherChildren(data.ScheduleB) || scheduleBService.showOtherChildren(data.OtherScheduleB);
+        $scope.showFatherOtherChildren = scheduleBService.showOtherChildren(data.ScheduleB);
+        $scope.showMotherOtherChildren =  scheduleBService.showOtherChildren(data.OtherScheduleB);
         $scope.isLoaded = true;
         $timeout(function () {
             var html = $('.widget-content').html();
