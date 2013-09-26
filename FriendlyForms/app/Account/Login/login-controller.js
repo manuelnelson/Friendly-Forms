@@ -1,9 +1,10 @@
-﻿var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService', 'loginMenuService',
-    function ($scope, $routeParams, $location, loginService, headerService, loginMenuService) {
+﻿var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService', 'loginMenuService', 'menuService',
+    function ($scope, $routeParams, $location, loginService, headerService, loginMenuService, menuService) {
         $scope.submit = function () {
             loginService.login.post(null, $scope.login, function () {
-                loginMenuService.refresh();
-                $location.path('/');
+                loginMenuService.refresh().then(function() {
+                    menuService.goToFirstFormMenu();
+                });
             }, function() {
                 $scope.loginForm.$setPristine();
                 $scope.login = '';
