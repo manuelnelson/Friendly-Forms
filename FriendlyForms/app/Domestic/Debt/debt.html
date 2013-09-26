@@ -4,25 +4,23 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Debt Information</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="input-group">
                             <label class="form-question">
                                 How will marital debt be divided?</label>
-                            <label class="radio">
+                            <div class="radio"><label>
                                 There is no jointly held marital debt to be considered as part of this case. Each party will keep all debt currently held in his or her name.
-                                <input class="form-control" required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="2"></label>
-                            <label class="radio">
+                                <input required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="2"></label></div>
+                            <div class="radio"><label>
                                 Division of debt will be divided in the following manner:
-                                <input class="form-control" required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="1"></label>
+                                <input required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="1"></label></div>
                             <div ng-show="debtForm.MaritalDebt.$dirty && debtForm.MaritalDebt.$invalid || (showErrors && debtForm.MaritalDebt.$invalid)">
                                 <span class="form-error" ng-show="debtForm.MaritalDebt.$error.required">This field is required</span>
                             </div>
-                        </div>
                         <div class="input-group" ng-show="debt.MaritalDebt == 1">
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
+                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
                             <div ng-show="debtForm.DebtDivision.$dirty && debtForm.DebtDivision.$invalid || (showErrors && debtForm.DebtDivision.$invalid)">
                                 <span class="form-error" ng-show="debtForm.DebtDivision.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
@@ -31,6 +29,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

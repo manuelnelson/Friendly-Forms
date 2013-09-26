@@ -4,27 +4,25 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Taxes</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="input-group">
                             <label class="form-question">
                                 Will each party be entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final?</label>
-                            <label class="radio">
+                            <div class="radio"><label>
                                 Yes
-                                <input class="form-control" required ng-model="tax.Taxes" name="Taxes" type="radio" value="1"></label>
-                            <label class="radio">
+                                <input required ng-model="tax.Taxes" name="Taxes" type="radio" value="1"></label></div>
+                            <div class="radio"><label>
                                 No
-                                <input class="form-control" required ng-model="tax.Taxes" name="Taxes" type="radio" value="2"></label>
+                                <input required ng-model="tax.Taxes" name="Taxes" type="radio" value="2"></label></div>
                             <div ng-show="taxForm.Taxes.$dirty && taxForm.Taxes.$invalid || (showErrors && taxForm.Taxes.$invalid)">
                                 <span class="form-error" ng-show="taxForm.Taxes.$error.required">This field is required</span>
                             </div>
-                        </div>
                         <div class="input-group" ng-show="tax.Taxes == 2">
                             <label>
                                 How will tax filing be handled at the conclusion of this case?</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="tax.TaxDescription" name="TaxDescription" placeholder="Details" rows="2"></textarea>
+                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="tax.TaxDescription" name="TaxDescription" placeholder="Details" rows="2"></textarea>
                             <div ng-show="taxForm.TaxDescription.$dirty && taxForm.TaxDescription.$invalid || (showErrors && taxForm.TaxDescription.$invalid)">
                                 <span class="form-error" ng-show="taxForm.TaxDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
@@ -33,6 +31,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

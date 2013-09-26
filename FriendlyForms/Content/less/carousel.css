@@ -89,8 +89,8 @@
 }
 .carousel-control .icon-prev,
 .carousel-control .icon-next,
-.carousel-control .glyphicon-chevron-left,
-.carousel-control .glyphicon-chevron-right {
+.carousel-control .icon-chevron-left,
+.carousel-control .icon-chevron-right {
   position: absolute;
   top: 50%;
   left: 50%;

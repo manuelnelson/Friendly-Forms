@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Communication</h5>
                     </div>
                     <div class="widget-content">
@@ -13,8 +13,8 @@
                         <div class="input-group">
                             <label class="form-question">
                                 When the child(ren) is/are with the other parent, will each of you want to be able to communicate with them while they are with the other parent?</label>
-                            <label class="radio inline">Yes<input class="form-control" class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="communication.AllowCommunication" name="AllowCommunication" type="radio" value="2"></label>
                             <div ng-show="communicationForm.AllowCommunication.$dirty && communicationForm.AllowCommunication.$invalid || (showErrors && communicationForm.AllowCommunication.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.AllowCommunication.$error.required">This field is required</span>
                             </div>
@@ -36,8 +36,8 @@
                         <div class="input-group">
                             <label class="form-question">
                                 Should there be any limitations on the ability of one parent to communicate with the child while he/she is with the other parent?</label>
-                            <label class="radio inline">Yes<input class="form-control" class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="communication.Limitations" name="Limitations" type="radio" value="2"></label>
                             <div ng-show="communicationForm.Limitations.$dirty && communicationForm.Limitations.$invalid  || (showErrors && communicationForm.Limitations.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.Limitations.$error.required">This field is required</span>
                             </div>
@@ -45,7 +45,7 @@
                         <div class="input-group" ng-show="communication.Limitations == 1">
                             <label class="form-question">
                                 Define any limitations on communication</label>
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea>
+                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea>
                             <div ng-show="communicationForm.LimitationDetails.$dirty && communicationForm.LimitationDetails.$invalid  || (showErrors && communicationForm.LimitationDetails.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.LimitationDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
@@ -53,8 +53,8 @@
                         <div class="input-group">
                             <label class="form-question">
                                 Should each parent notify the other of any changes of address or telephone number?</label>
-                            <label class="radio inline">Yes<input class="form-control" class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="communication.Notification" name="Notification" type="radio" value="2"></label>
                             <div ng-show="communicationForm.Notification.$dirty && communicationForm.Notification.$invalid  || (showErrors && communicationForm.Notification.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.Notification.$error.required">This field is required</span>
                             </div>
@@ -63,6 +63,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

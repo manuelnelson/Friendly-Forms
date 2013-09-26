@@ -11637,16 +11637,16 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
             }
             var templateContent = '<table class="' + (this.showSeconds ? 'show-seconds' : '') + ' ' + (this.showMeridian ? 'show-meridian' : '') + '">' +
                                        '<tr>' +
-                                           '<td><a href="#" data-action="incrementHour"><i class="glyphicon-chevron-up"></i></a></td>' +
+                                           '<td><a href="#" data-action="incrementHour"><i class="icon-chevron-up"></i></a></td>' +
                                            '<td class="separator">&nbsp;</td>' +
-                                           '<td><a href="#" data-action="incrementMinute"><i class="glyphicon-chevron-up"></i></a></td>' +
+                                           '<td><a href="#" data-action="incrementMinute"><i class="icon-chevron-up"></i></a></td>' +
                                            (this.showSeconds ?
                                                '<td class="separator">&nbsp;</td>' +
-                                               '<td><a href="#" data-action="incrementSecond"><i class="glyphicon-chevron-up"></i></a></td>'
+                                               '<td><a href="#" data-action="incrementSecond"><i class="icon-chevron-up"></i></a></td>'
                                            : '') +
                                            (this.showMeridian ?
                                                '<td class="separator">&nbsp;</td>' +
-                                               '<td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="glyphicon-chevron-up"></i></a></td>'
+                                               '<td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="icon-chevron-up"></i></a></td>'
                                            : '') +
                                        '</tr>' +
                                        '<tr>' +
@@ -11663,16 +11663,16 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
                                            : '') +
                                        '</tr>' +
                                        '<tr>' +
-                                           '<td><a href="#" data-action="decrementHour"><i class="glyphicon-chevron-down"></i></a></td>' +
+                                           '<td><a href="#" data-action="decrementHour"><i class="icon-chevron-down"></i></a></td>' +
                                            '<td class="separator"></td>' +
-                                           '<td><a href="#" data-action="decrementMinute"><i class="glyphicon-chevron-down"></i></a></td>' +
+                                           '<td><a href="#" data-action="decrementMinute"><i class="icon-chevron-down"></i></a></td>' +
                                            (this.showSeconds ?
                                                 '<td class="separator">&nbsp;</td>' +
-                                                '<td><a href="#" data-action="decrementSecond"><i class="glyphicon-chevron-down"></i></a></td>'
+                                                '<td><a href="#" data-action="decrementSecond"><i class="icon-chevron-down"></i></a></td>'
                                            : '') +
                                            (this.showMeridian ?
                                                 '<td class="separator">&nbsp;</td>' +
-                                                '<td><a href="#" data-action="toggleMeridian"><i class="glyphicon-chevron-down"></i></a></td>'
+                                                '<td><a href="#" data-action="toggleMeridian"><i class="icon-chevron-down"></i></a></td>'
                                            : '') +
                                        '</tr>' +
                                    '</table>';
@@ -12488,9 +12488,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 		},
 		headTemplate: '<thead>'+
 							'<tr>'+
-								'<th class="prev"><i class="glyphicon-arrow-left"/></th>'+
+								'<th class="prev"><i class="icon-arrow-left"/></th>'+
 								'<th colspan="5" class="switch"></th>'+
-								'<th class="next"><i class="glyphicon-arrow-right"/></th>'+
+								'<th class="next"><i class="icon-arrow-right"/></th>'+
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>'
@@ -31357,7 +31357,7 @@ var ngRepeatDirective = ['$parse', '$animator', function($parse, $animator) {
         <span class="check-element"
               ng-show="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
         </span>
       </div>
       <div>
@@ -31365,7 +31365,7 @@ var ngRepeatDirective = ['$parse', '$animator', function($parse, $animator) {
         <span class="check-element"
               ng-hide="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
         </span>
       </div>
     </file>
@@ -31466,7 +31466,7 @@ var ngShowDirective = ['$animator', function($animator) {
         <span class="check-element"
               ng-show="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
         </span>
       </div>
       <div>
@@ -31474,7 +31474,7 @@ var ngShowDirective = ['$animator', function($animator) {
         <span class="check-element"
               ng-hide="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
         </span>
       </div>
     </file>

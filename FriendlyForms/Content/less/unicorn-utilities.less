@@ -1,3 +1,5 @@
+@import "variables.less"; 
+@import "mixins.less";  
 /* Utilities */
 // Remove padding
 .nopadding {	
@@ -12,7 +14,7 @@
 
 // Line
 .line {
-    background: url("../img/line.png") repeat-x scroll 0 0 transparent;
+    background: url("@{icon-font-path}line.png") repeat-x scroll 0 0 transparent;
     display: block;
     height: 8px;
 }

@@ -1,19 +1,16 @@
 //
 // Variables
 // --------------------------------------------------
-@headerHighlightColor: #4b6176;
-@headerBackgroundColor: #243a4f;
-@navButtonColor: #4b6176;
-@navButtonColorHighlight: #4b6176;
-@navButtonColor: #4b6176;
-@brown: #4b6176;
-@greenDark: #4b6176;
-@green: #4b6176;
-@greenDarkest: #4b6176;
-@greenDarker: #4b6176;
-@greenLight: #4b6176;
-@brown: #4b6176;
-@brown: #4b6176;
+@brown: #232639;
+@greenDark: #2D335B;
+@green: #353C6C;
+@greenDarkest: #141528;
+@greenDarker: #19182D;
+@greenLight: #444C87;
+@headerHighlightColor:	lighten(@brown, 6%);
+@headerBackgroundColor: @brown;
+@navButtonColor: darken(@brown, 6%);
+@navButtonColorHighlight: @brown;
 
 // Global values
 // --------------------------------------------------
@@ -38,8 +35,8 @@
 
 // Scaffolding
 // -------------------------
-
-@body-bg:               #fff;
+ 
+@body-bg:               @greenDark;
 @text-color:            @gray-dark;
 
 // Links
@@ -71,7 +68,7 @@
 // -------------------------
 
 @icon-font-path:          "../images/";
-@icon-font-name:          "glyphicons-halflings-regular";
+@icon-font-name:          "icons-halflings-regular";
 
 
 // Components

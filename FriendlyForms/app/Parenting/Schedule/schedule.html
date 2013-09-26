@@ -1,26 +1,24 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="ScheduleCtrl" id="scheduleForm" name="scheduleForm" novalidate>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Schedule</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="input-group">
                             <label class="form-question">
                                 On what date would you like the general parenting schedule to begin?</label>
-                            <label class="radio">
+                            <div class="radio"><label>
                                 Date of Judge's Order
-                                <input class="form-control" required ng-model="schedule.DetermineBeginDate" name="DetermineBeginDate" type="radio" value="1"></label>
-                            <label class="radio">
+                                <input required ng-model="schedule.DetermineBeginDate" name="DetermineBeginDate" type="radio" value="1"></label></div>
+                            <div class="radio"><label>
                                 Date of your choice
-                                <input class="form-control" required ng-model="schedule.DetermineBeginDate" name="DetermineBeginDate" type="radio" value="2"></label>
+                                <input required ng-model="schedule.DetermineBeginDate" name="DetermineBeginDate" type="radio" value="2"></label></div>
                             <div ng-show="scheduleForm.DetermineBeginDate.$dirty && scheduleForm.DetermineBeginDate.$invalid || (showErrors && scheduleForm.DetermineBeginDate.$invalid)">
                                 <span class="form-error" ng-show="scheduleForm.DetermineBeginDate.$error.required">This field is required</span>
                             </div>
-                        </div>
                         <div class="input-group" ng-show="schedule.DetermineBeginDate == 2">
                             <label class="form-question">
                                 Parenting schedule begins on:</label>
@@ -46,7 +44,7 @@
                             </select>
                             <input class="form-control" ui-jq="timepicker" class="input-sm" required ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.PickedUp" name="PickedUp" placeholder="hh:mm am/pm" type="text" value="">
                             <!--                            <timepicker ng-model="schedule.PickedUp"  required hour-step="1" minute-step="15" show-meridian="ismeridian" name="PickedUp" placeholder="hh:mm am/pm"></timepicker>-->
-                            <i class="glyphicon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="scheduleForm.WeekendDayStart.$dirty && scheduleForm.WeekendDayStart.$invalid || (showErrors && scheduleForm.WeekendDayStart.$invalid)">
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayStart.$error.required">This field is required</span>
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayStart.$error.pattern">This field may only contain numbers, letters and dashes.</span>
@@ -81,7 +79,7 @@
                                 <option value="Saturday">Saturday</option>
                             </select>
                             <input class="form-control" ui-jq="timepicker" class="input-sm" required ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.DroppedOff" name="DroppedOff" placeholder="hh:mm am/pm" type="text" value="">
-                            <i class="glyphicon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="scheduleForm.WeekendDayEnd.$dirty && scheduleForm.WeekendDayEnd.$invalid || (showErrors && scheduleForm.WeekendDayEnd.$invalid)">
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayEnd.$error.required">This field is required</span>
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayEnd.$error.pattern">This field may only contain numbers, letters and dashes.</span>
@@ -102,47 +100,47 @@
                                 <span class="form-error" ng-show="scheduleForm.DropOffLocation.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
-                        <div class="input-group row">
+                        <div class="row">
                             <label class="form-question">
                                 On what weekends during the month would {{nonCustodialParent}} prefer to parent your child(ren)?</label>
                             <div class="col-md-4">
                                 <label class="form-question">{{nonCustodialParent}}</label>
-                                <label class="radio">
+                                <div class="radio"><label>
                                     Every other weekend
-                                    <input class="form-control" required ng-change="nonCustodialChange(1)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWekend" type="radio" value="1"></label>
-                                <label class="radio">
+                                    <input required ng-change="nonCustodialChange(1)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWekend" type="radio" value="1"></label></div>
+                                <div class="radio"><label>
                                     1st and 3rd weekend
-                                    <input class="form-control" ng-change="nonCustodialChange(2)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="2"></label>
-                                <label class="radio">
+                                    <input ng-change="nonCustodialChange(2)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="2"></label></div>
+                                <div class="radio"><label>
                                     1st, 3rd and 5th weekend
-                                    <input class="form-control" ng-change="nonCustodialChange(3)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="3"></label>
-                                <label class="radio">
+                                    <input ng-change="nonCustodialChange(3)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="3"></label></div>
+                                <div class="radio"><label>
                                     2nd and 4th weekend
-                                    <input class="form-control" ng-change="nonCustodialChange(4)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="4"></label>
-                                <label class="radio">
+                                    <input ng-change="nonCustodialChange(4)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="4"></label></div>
+                                <div class="radio"><label>
                                     Other
-                                    <input class="form-control" ng-change="nonCustodialChange(5)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="5"></label>
+                                    <input ng-change="nonCustodialChange(5)" ng-model="schedule.NonCustodianWeekend" name="NonCustodianWeekend" type="radio" value="5"></label></div>
                                 <div ng-show="scheduleForm.NonCustodianWeekend.$dirty && scheduleForm.NonCustodianWeekend.$invalid || (showErrors && scheduleForm.NonCustodianWeekend.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.NonCustodianWeekend.$error.required">This field is required</span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-question">{{custodialParent}}</label>
-                                <label class="radio">
+                                <div class="radio"><label>
                                     Every other weekend
-                                    <input class="form-control" required ng-change="custodialChange(1)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="1"></label>
-                                <label class="radio">
+                                    <input required ng-change="custodialChange(1)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="1"></label></div>
+                                <div class="radio"><label>
                                     1st and 3rd weekend
-                                    <input class="form-control" required ng-change="custodialChange(2)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="2"></label>
-                                <label class="radio">
+                                    <input required ng-change="custodialChange(2)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="2"></label></div>
+                                <div class="radio"><label>
                                     1st, 3rd and 5th weekend
-                                    <input class="form-control" required ng-change="custodialChange(3)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="3"></label>
-                                <label class="radio">
+                                    <input required ng-change="custodialChange(3)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="3"></label></div>
+                                <div class="radio"><label>
                                     2nd and 4th weekend
-                                    <input class="form-control" required ng-change="custodialChange(4)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="4"></label>
-                                <label class="radio">
+                                    <input required ng-change="custodialChange(4)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="4"></label></div>
+                                <div class="radio"><label>
                                     Other
-                                    <input class="form-control" required ng-change="custodialChange(5)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="5"></label>
+                                    <input required ng-change="custodialChange(5)" ng-model="schedule.CustodianWeekend" name="CustodianWeekend" type="radio" value="5"></label></div>
                                 <div ng-show="scheduleForm.CustodianWeekend.$dirty && scheduleForm.CustodianWeekend.$invalid">
                                     <span class="form-error" ng-show="scheduleForm.CustodianWeekend.$error.required">This field is required</span>
                                 </div>
@@ -153,26 +151,24 @@
                                 <label class="form-question">
                                     Describe in detail the weekend days visitation schedule:
                                 </label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.NonCustodianWeekendOther" name="NonCustodianWeekendOther" placeholder="Description" rows="2"></textarea>
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.NonCustodianWeekendOther" name="NonCustodianWeekendOther" placeholder="Description" rows="2"></textarea>
                                 <div ng-show="scheduleForm.NonCustodianWeekendOther.$dirty && scheduleForm.NonCustodianWeekendOther.$invalid || (showErrors && scheduleForm.NonCustodianWeekendOther.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.NonCustodianWeekendOther.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                                 </div>
                             </div>
                         </div>
                         <h4>Weekday Visitation</h4>
-                        <div class="input-group">
                             <label class="form-question">
                                 Will {{nonCustodialParent}} spend time with the child(ren) during weekdays?</label>
-                            <label class="radio">
+                            <div class="radio"><label>
                                 Yes
-                                    <input class="form-control" required ng-model="schedule.Weekdays" name="Weekdays" type="radio" value="1"></label>
-                            <label class="radio">
+                                    <input required ng-model="schedule.Weekdays" name="Weekdays" type="radio" value="1"></label></div>
+                            <div class="radio"><label>
                                 No
-                                    <input class="form-control" required ng-model="schedule.Weekdays" name="Weekdays" type="radio" value="2"></label>
+                                    <input required ng-model="schedule.Weekdays" name="Weekdays" type="radio" value="2"></label></div>
                             <div ng-show="scheduleForm.Weekdays.$dirty && scheduleForm.Weekdays.$invalid || (showErrors && scheduleForm.Weekdays.$invalid)">
                                 <span class="form-error" ng-show="scheduleForm.Weekdays.$error.required">This field is required</span>
                             </div>
-                        </div>
                         <div ng-show="schedule.Weekdays == 1">
                             <label class="form-question">
                                 When would {{nonCustodialParent}} like to have your regular parenting time with the child(ren) on weekdays?</label>
@@ -180,7 +176,7 @@
                                 <label class="form-question">
                                     What time will the child(ren) be picked up on weekdays?</label>
                                 <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayPickup" name="WeekdayPickup" placeholder="hh:mm am/pm" type="text" value="">
-                                <i class="glyphicon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 <div ng-show="scheduleForm.WeekdayPickup.$dirty && scheduleForm.WeekdayPickup.$invalid || (showErrors && scheduleForm.WeekdayPickup.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.WeekdayPickup.$error.pattern">This field must be a valid time.</span>
                                 </div>
@@ -199,7 +195,7 @@
                                 <label class="form-question">
                                     What time will the child(ren) be dropped off on weekdays?</label>
                                 <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayDropoff" name="WeekdayDropoff" placeholder="hh:mm am/pm" type="text" value="">
-                                <i class="glyphicon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 <div ng-show="scheduleForm.WeekdayDropoff.$dirty && scheduleForm.WeekdayDropoff.$invalid || (showErrors && scheduleForm.WeekdayDropoff.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.WeekdayDropoff.$error.pattern">This field must be a valid time.</span>
                                 </div>
@@ -228,21 +224,19 @@
                                     <label class="checkbox inline">Sunday<input class="form-control" class="inline valid" ng-model="schedule.SundayParent" name="SundayParent" type="checkbox" value="False"></label>
                                 </div>
                             </div>
-                            <div class="input-group">
                                 <label class="form-question">
                                     In addition to the above weekday visitation with regard to the children, are there any additional provisions which will apply?</label>
-                                <label class="radio">
+                                <div class="radio"><label>
                                     Yes
-                                    <input class="form-control" ng-model="schedule.AnyAdditionalProvisions" name="AnyAdditionalProvisions" type="radio" value="1"></label>
-                                <label class="radio">
+                                    <input ng-model="schedule.AnyAdditionalProvisions" name="AnyAdditionalProvisions" type="radio" value="1"></label></div>
+                                <div class="radio"><label>
                                     No
-                                    <input class="form-control" ng-model="schedule.AnyAdditionalProvisions" name="AnyAdditionalProvisions" type="radio" value="2"></label>
+                                    <input ng-model="schedule.AnyAdditionalProvisions" name="AnyAdditionalProvisions" type="radio" value="2"></label></div>
                                 <div ng-show="scheduleForm.AnyAdditionalProvisions.$dirty && scheduleForm.AnyAdditionalProvisions.$invalid || (showErrors && scheduleForm.AnyAdditionalProvisions.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.AnyAdditionalProvisions.$error.required">This field is required</span>
                                 </div>
-                            </div>
                             <div class="input-group" ng-show="schedule.AnyAdditionalProvisions == 1">
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.AdditionalProvisions" name="AdditionalProvisions" placeholder="List Provisions Here" rows="2"></textarea>
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.AdditionalProvisions" name="AdditionalProvisions" placeholder="List Provisions Here" rows="2"></textarea>
                                 <div ng-show="scheduleForm.AdditionalProvisions.$dirty && scheduleForm.AdditionalProvisions.$invalid || (showErrors && scheduleForm.AdditionalProvisions.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.AdditionalProvisions.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                                 </div>                                
@@ -252,6 +246,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

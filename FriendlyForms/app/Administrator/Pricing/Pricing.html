@@ -7,20 +7,18 @@
                     <label class="informative">
                         All plans are billed monthly for one year from the date of acceptance of the Subscription Agreement found on the next page. You are under no financial obligation at this time. 
                     </label>
-                <div class="input-group">
-                    <label class="radio">
+                    <div class="radio"><label>
                         Silver Plan: $315 per month.   Seven (7) forms per month. Each additional form is $55
-                        <input class="form-control" required ng-model="pricing.Subscription" name="Subscription" type="radio" value="1"></label>
-                    <label class="radio">
+                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="1"></label></div>
+                    <div class="radio"><label>
                         Gold Plan: $500 per month.   Fifteen (15) forms per month. Each additional form is $50
-                        <input class="form-control" required ng-model="pricing.Subscription" name="Subscription" type="radio" value="2"></label>
-                    <label class="radio">
+                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="2"></label></div>
+                    <div class="radio"><label>
                         Premiere Plan: $750 per month.   Thirty (30) forms per month. Each additional form is $40
-                        <input class="form-control" required ng-model="pricing.Subscription" name="Subscription" type="radio" value="3"></label>
+                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="3"></label></div>
                     <div ng-show="showErrors && pricingForm.Subscription.$invalid">
                         <span class="form-error" ng-show="pricingForm.Subscription.$error.required">The field is required</span>
                     </div>
-                </div>
                 <button class="btn btn-default btn-default btn-primary">Next</button>
             </fieldset>
         </form>

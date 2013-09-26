@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Income</h5>
                     </div>
                     <div class="widget-content">
@@ -12,8 +12,8 @@
                         <div class="input-group row">
                             <label class="col-md-4 form-question">
                                 Does the {{parent}} currently have any income, whether from a salary, self-employment, investments, benefits or any other source?</label>
-                            <label class="radio inline">Yes<input class="form-control" class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" required ng-model="income.HaveSalary" name="HaveSalary" type="radio" value="2"></label>
                             <div ng-show="incomeForm.HaveSalary.$dirty && incomeForm.HaveSalary.$invalid || (showErrors && incomeForm.HaveSalary.$invalid)">
                                 <span class="form-error" ng-show="incomeForm.HaveSalary.$error.required">This field is required</span>
                             </div>
@@ -45,8 +45,8 @@
                             <div class="input-group row">
                                 <label class="col-md-4 form-question">
                                     Do you have self employment income?</label>
-                                <label class="radio inline">Yes<input class="form-control" class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="1"></label>
-                                <label class="radio inline">No<input class="form-control" class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="2"></label>
+                                <label class="radio inline">Yes<input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="1"></label>
+                                <label class="radio inline">No<input class="inline" ng-model="income.NonW2Income" name="NonW2Income" type="radio" value="2"></label>
                             </div>
                             <div ng-show="income.NonW2Income == 1">
                                 <div class="input-group row">
@@ -206,7 +206,7 @@
                             </div>
                             <div class="input-group row">
                                 <label class="col-md-4 form-question">Please explain the basis for Imputed Income as entered above.</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="income.OtherDetails" name="OtherDetails" placeholder="Details" rows="2"></textarea>
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="income.OtherDetails" name="OtherDetails" placeholder="Details" rows="2"></textarea>
                                 <div ng-show="incomeForm.OtherDetails.$dirty && incomeForm.OtherDetails.$invalid || (showErrors && incomeForm.OtherDetails.$invalid)">
                                     <span class="form-error" ng-show="incomeForm.OtherDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
@@ -216,6 +216,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="widget-box">
                 <div class="widget-title">
-                    <span class="icon"><i class="glyphicon-signal"></i></span>
+                    <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Vehicles</h5>
                 </div>
                 <div class="widget-content">
@@ -33,9 +33,9 @@
                                     <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
                                         <input class="form-control" type="text" ng-model="vehicleAdded.Owner" /></td>
                                     <td>
-                                        <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editVehicleId==vehicleAdded.Id)" title="Edit" ng-click="editVehicle(vehicleAdded)"><i class="glyphicon-white icon-edit"></i></button>
-                                        <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editVehicleId==vehicleAdded.Id)" title="Delete" ng-click="deleteVehicle(vehicleAdded)"><i class="glyphicon-white icon-trash"></i></button>
-                                        <button class="btn btn-default btn-default-small btn-primary btn" ng-show="editing && editVehicleId==vehicleAdded.Id" title="Done" ng-click="doneEdit(vehicleAdded)"><i class="glyphicon-white icon-ok"></i>Done</button>
+                                        <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editVehicleId==vehicleAdded.Id)" title="Edit" ng-click="editVehicle(vehicleAdded)"><i class="icon-white icon-edit"></i></button>
+                                        <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editVehicleId==vehicleAdded.Id)" title="Delete" ng-click="deleteVehicle(vehicleAdded)"><i class="icon-white icon-trash"></i></button>
+                                        <button class="btn btn-default btn-default-small btn-primary btn" ng-show="editing && editVehicleId==vehicleAdded.Id" title="Done" ng-click="doneEdit(vehicleAdded)"><i class="icon-white icon-ok"></i>Done</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -44,8 +44,8 @@
                     <form id="vehicleForm" name="vehicleForm" novalidate>
                         <div class="input-group">
                             <label class="form-question">Is the ownership of any vehicle(s) at issue in this case?</label>
-                            <label class="radio inline">Yes<input class="form-control" class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="2"></label>
                             <div ng-show="vehicleForm.VehiclesInvolved.$dirty && vehicleForm.VehiclesInvolved.$invalid || (showErrors && vehicleForm.VehiclesInvolved.$invalid)">
                                 <span class="form-error" ng-show="vehicleForm.VehiclesInvolved.$error.required">Please select an option</span>
                             </div>
@@ -87,18 +87,16 @@
                                 <span class="form-error" ng-show="addVehicleForm.Owner.$error.required">The field is required</span>
                             </div>
                         </div>
-                        <div class="input-group">
                             <label class="form-question">Will this vehicle be refinanced?</label>
-                            <label class="radio">
+                            <div class="radio"><label>
                                 Yes
-                                <input class="form-control" ng-model="vehicle.Refinanced" name="Refinanced" type="radio" value="1"></label>
-                            <label class="radio">
+                                <input ng-model="vehicle.Refinanced" name="Refinanced" type="radio" value="1"></label></div>
+                            <div class="radio"><label>
                                 No
-                                <input class="form-control" ng-model="vehicle.Refinanced" name="Refinanced" type="radio" value="2"></label>
+                                <input ng-model="vehicle.Refinanced" name="Refinanced" type="radio" value="2"></label></div>
                             <div ng-show="addVehicleForm.Refinanced.$dirty && addVehicleForm.Refinanced.$invalid || (showErrors && addVehicleForm.Refinanced.$invalid)">
                                 <span class="form-error" ng-show="addVehicleForm.Refinanced.$error.required">The field is required</span>
                             </div>
-                        </div>
                         <div ng-show="vehicle.Refinanced == 1">
                             <div class="input-group">
                                 <label class="form-question">In whose name will the vehicle be refinanced?</label>
@@ -119,5 +117,5 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-default btn-default btn-primary" ng-click="continue()">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+    <button class="btn btn-default btn-default btn-primary" ng-click="continue()">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>

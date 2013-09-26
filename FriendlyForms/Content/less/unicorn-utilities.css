@@ -1,4 +1,4 @@
-/* Utilities */
+﻿/* Utilities */
 .nopadding {
   padding: 0 !important;
 }
@@ -9,7 +9,7 @@
   border: 0 !important;
 }
 .line {
-  background: url("../img/line.png") repeat-x scroll 0 0 transparent;
+  background: url("../images/line.png") repeat-x scroll 0 0 transparent;
   display: block;
   height: 8px;
 }

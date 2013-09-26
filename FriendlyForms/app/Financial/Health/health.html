@@ -4,27 +4,25 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Health Insurance Information</h5>
                     </div>
                     <div class="widget-content">
                         <label class="informative">In this section you will define health insurance premiums paid to provide coverage for the child(ren) in this action.</label>
-                        <div class="input-group">
                             <label class="form-question">
                                 Which parent will provide health insurance for the child(ren)?</label>
-                            <label class="radio">
+                            <div class="radio"><label>
                                 Father
-                                <input class="form-control" required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="1"></label>
-                            <label class="radio">
+                                <input required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="1"></label></div>
+                            <div class="radio"><label>
                                 Mother
-                                <input class="form-control" required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="2"></label>
-                            <label class="radio">
+                                <input required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="2"></label></div>
+                            <div class="radio"><label>
                                 Neither
-                                <input class="form-control" required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="3"></label>
+                                <input required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="3"></label></div>
                             <div ng-show="healthForm.ProvideHealth.$dirty && healthForm.ProvideHealth.$invalid || (showErrors && healthForm.ProvideHealth.$invalid)">
                                 <span class="form-error" ng-show="healthForm.ProvideHealth.$error.required">This field is required</span>
                             </div>
-                        </div>
                         <div ng-show="health.ProvideHealth == 1 || health.ProvideHealth == 2">
                             <div class="input-group">
                                 <label class="form-question">
@@ -39,19 +37,17 @@
                                     Vision
                                     <input class="form-control" ng-model="health.VisionInsurance" name="NonCustodialHealth" type="checkbox" value="False"></label>
                             </div>
-                            <div class="input-group">
                                 <label class="informative">
                                     Are any other health insurance beneficiaries included in the cost of premiums other than the child(ren) in this action?</label>
-                                <label class="radio">
+                                <div class="radio"><label>
                                     Yes
-                                    <input class="form-control" ng-model="health.Prorate" name="Prorate" type="radio" value="1"></label>
-                                <label class="radio">
+                                    <input ng-model="health.Prorate" name="Prorate" type="radio" value="1"></label></div>
+                                <div class="radio"><label>
                                     No
-                                    <input class="form-control" ng-model="health.Prorate" name="Prorate" type="radio" value="2"></label>
+                                    <input ng-model="health.Prorate" name="Prorate" type="radio" value="2"></label></div>
                                 <div ng-show="healthForm.Prorate.$dirty && healthForm.Prorate.$invalid  || (showErrors && healthForm.Prorate.$invalid)">
                                     <span class="form-error" ng-show="healthForm.Prorate.$error.required">This field is required</span>
                                 </div>
-                            </div>
                             <div class="input-group" ng-show="health.Prorate == 1">
                                 <label class="form-question">
                                     Other than the child(ren), who is also covered in the insurance policy?</label>
@@ -127,6 +123,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

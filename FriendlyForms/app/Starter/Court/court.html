@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Court Information</h5>
                     </div>
                     <div class="widget-content">
@@ -26,36 +26,36 @@
                                 <span class="form-error" ng-show="courtForm.CaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label class="form-question" ui-jq="popover" data-content="Was this plan prepared by a judge, or by the parties involved?">
-                                Who is the author of this plan?
-                            </label>
-                            <label class="radio">
+                        <label class="form-question" ui-jq="popover" data-content="Was this plan prepared by a judge, or by the parties involved?">
+                            Who is the author of this plan?
+                        </label>
+                        <div class="radio">
+                            <label>
                                 Parties agree to this plan
-                                <input class="form-control" data-val="true" ng-model="court.AuthorOfPlan" type="radio" value="1" required></label>
-                            <label class="radio">
-                                Plan Prepared by a judge
-                                <input class="form-control" id="Radio1" ng-model="court.AuthorOfPlan" type="radio" value="2" required></label>
-                            <div ng-show="court.AuthorOfPlan.$dirty && court.AuthorOfPlan.$invalid || (showErrors && courtForm.AuthorOfPlan.$invalid)">
-                                <span class="form-error" ng-show="court.AuthorOfPlan.$error.required">Author is required</span>
-                            </div>
+                                <input data-val="true" ng-model="court.AuthorOfPlan" type="radio" value="1" required></label>
                         </div>
-                        <div class="input-group">
-                            <label class="form-question" ui-jq="popover" data-content="This plan has either been in force prior to this action or it is a new plan being enforced for the first time.">
-                                Is this a new plan or an existing plan?
-                            </label>
-                            <label class="radio">
-                                A new plan
-                                <input class="form-control" ng-model="court.PlanType" type="radio" value="1" required></label>
-                            <label class="radio">
-                                A modification of an existing plan
-                                <input class="form-control" ng-model="court.PlanType" type="radio" value="2"></label>
-                            <label class="radio">
-                                A modification of an existing order
-                                <input class="form-control" ng-model="court.PlanType" type="radio" value="3"></label>
-                            <div ng-show="court.PlanType.$dirty && court.PlanType.$invalid || (showErrors && courtForm.PlanType.$invalid)">
-                                <span class="form-error" ng-show="court.PlanType.$error.required">Author is required</span>
-                            </div>
+                        <div class="radio">
+                            <label>
+                                Plan Prepared by a judge
+                                <input id="Radio1" ng-model="court.AuthorOfPlan" type="radio" value="2" required></label>
+                        </div>
+                        <div ng-show="court.AuthorOfPlan.$dirty && court.AuthorOfPlan.$invalid || (showErrors && courtForm.AuthorOfPlan.$invalid)">
+                            <span class="form-error" ng-show="court.AuthorOfPlan.$error.required">Author is required</span>
+                        </div>
+                        <label class="form-question" ui-jq="popover" data-content="This plan has either been in force prior to this action or it is a new plan being enforced for the first time.">
+                            Is this a new plan or an existing plan?
+                        </label>
+                        <div class="radio">
+                            <label>A new plan<input ng-model="court.PlanType" type="radio" value="1" required></label>
+                        </div>
+                        <div class="radio">
+                            <label>A modification of an existing plan<input ng-model="court.PlanType" type="radio" value="2"></label>
+                        </div>
+                        <div class="radio">
+                            <label>A modification of an existing order<input ng-model="court.PlanType" type="radio" value="3"></label>
+                        </div>
+                        <div ng-show="court.PlanType.$dirty && court.PlanType.$invalid || (showErrors && courtForm.PlanType.$invalid)">
+                            <span class="form-error" ng-show="court.PlanType.$error.required">Author is required</span>
                         </div>
                         <div class="input-group" ng-show="court.PlanType==2 || court.PlanType==3">
                             <label class="form-question">Case Number</label>
@@ -68,6 +68,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

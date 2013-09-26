@@ -24949,7 +24949,7 @@ var ngRepeatDirective = ['$parse', '$animator', function($parse, $animator) {
         <span class="check-element"
               ng-show="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
         </span>
       </div>
       <div>
@@ -24957,7 +24957,7 @@ var ngRepeatDirective = ['$parse', '$animator', function($parse, $animator) {
         <span class="check-element"
               ng-hide="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
         </span>
       </div>
     </file>
@@ -25058,7 +25058,7 @@ var ngShowDirective = ['$animator', function($animator) {
         <span class="check-element"
               ng-show="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-up"></span> I show up when your checkbox is checked.
+          <span class="icon-thumbs-up"></span> I show up when your checkbox is checked.
         </span>
       </div>
       <div>
@@ -25066,7 +25066,7 @@ var ngShowDirective = ['$animator', function($animator) {
         <span class="check-element"
               ng-hide="checked"
               ng-animate="{show: 'example-show', hide: 'example-hide'}">
-          <span class="glyphicon-thumbs-down"></span> I hide when your checkbox is checked.
+          <span class="icon-thumbs-down"></span> I hide when your checkbox is checked.
         </span>
       </div>
     </file>

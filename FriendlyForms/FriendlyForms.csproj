@@ -759,7 +759,9 @@
     <Content Include="bundler\node_modules\stylus\node_modules\mkdirp\test\umask_sync.js" />
     <Content Include="bundler\node_modules\uglify-js.js" />
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\font\fontawesome-webfont.svg" />
+    <Content Include="Content\font\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\font\glyphiconshalflings-regular.svg" />
     <Content Include="Content\friendly.min.css" />
     <Content Include="Content\images\breadcrumb.png" />
     <Content Include="Content\images\chosen-sprite.png" />
@@ -832,6 +834,12 @@
     </Content>
     <Content Include="Content\less\carousel.min.css">
       <DependentUpon>carousel.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\font-awesome.css">
+      <DependentUpon>font-awesome.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\font-awesome.min.css">
+      <DependentUpon>font-awesome.less</DependentUpon>
     </Content>
     <Content Include="Content\less\friendly-custom.less" />
     <Content Include="Content\less\glyphicons.css">
@@ -1150,9 +1158,18 @@
     <Content Include="bundler\LICENSE" />
     <Content Include="bundler\coffee.cmd" />
     <Content Include="bundler\bundler.cmd" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\font\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\font\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\font\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Content\font\glyphiconshalflings-regular.eot" />
+    <Content Include="Content\font\glyphiconshalflings-regular.otf" />
+    <Content Include="Content\font\glyphiconshalflings-regular.ttf" />
+    <Content Include="Content\font\glyphiconshalflings-regular.woff" />
+    <Content Include="Content\less\font-awesome.less" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap-affix.js" />
     <Content Include="Scripts\bootstrap-alert.js" />

@@ -4,15 +4,15 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Preexisting Child Support</h5>
                     </div>
                     <div class="widget-content">
                         <div class="input-group row">
                             <label class="form-question">
                                 Do you make Current Court Ordered Child Support Payments for other children?</label>
-                            <label class="radio inline">Yes<input class="form-control" class="inline" ng-change="submit()" ng-model="support.Support" name="Support" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" class="inline" ng-model="support.Support" ng-change="submit()" name="Support" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" ng-model="support.Support" name="Support" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" ng-model="support.Support" ng-change="submit()" name="Support" type="radio" value="2"></label>
                             <div ng-show="supportForm.Support.$dirty && supportForm.Support.$invalid || showErrors">
                                 <span class="form-error" ng-show="showErrors">This field is required</span>
                             </div>
@@ -27,7 +27,7 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Preexisting Child Support</h5>
                     </div>
                     <div class="widget-content">
@@ -73,9 +73,9 @@
                                             <input class="form-control" ui-jq="datepicker" data-date="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="childAdded.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="{{childAdded.DateOfBirth | date:'MM/dd/yyyy'}}">
                                         </td>
                                         <td>
-                                            <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="glyphicon-white icon-edit"></i></button>
-                                            <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Delete" ng-click="deleteChild(childAdded)"><i class="glyphicon-white icon-trash"></i></button>
-                                            <button class="btn btn-default btn-default-small btn-primary btn" ng-show="editing && editChildId==childAdded.Id" title="Done" ng-click="doneEdit(childAdded)"><i class="glyphicon-white icon-ok"></i>Done</button>
+                                            <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Edit" ng-click="editChild(childAdded)"><i class="icon-white icon-edit"></i></button>
+                                            <button class="btn btn-default btn-default-small btn-primary btn" ng-show="!(editing && editChildId==childAdded.Id)" title="Delete" ng-click="deleteChild(childAdded)"><i class="icon-white icon-trash"></i></button>
+                                            <button class="btn btn-default btn-default-small btn-primary btn" ng-show="editing && editChildId==childAdded.Id" title="Done" ng-click="doneEdit(childAdded)"><i class="icon-white icon-ok"></i>Done</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -141,5 +141,5 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-default btn-default btn-primary" ng-click="continue()">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+    <button class="btn btn-default btn-default btn-primary" ng-click="continue()">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>

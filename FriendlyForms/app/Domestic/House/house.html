@@ -4,14 +4,14 @@
             <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
-                        <span class="icon"><i class="glyphicon-signal"></i></span>
+                        <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Marital House</h5>
                     </div>
                     <div class="widget-content">
                         <div class="input-group">
                             <label class="form-question">Is there a marital house at issue in this case?</label>
-                            <label class="radio inline">Yes<input class="form-control" required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="1"></label>
+                            <label class="radio inline">No<input required ng-model="house.MaritalHouse" name="MaritalHouse" type="radio" value="2"></label>
                             <div ng-show="houseForm.MaritalHouse.$dirty && houseForm.MaritalHouse.$invalid || (showErrors && houseForm.MaritalHouse.$invalid)">
                                 <span class="form-error" ng-show="houseForm.MaritalHouse.$error.required">This field is required</span>
                             </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="input-group">
                                 <label class="form-question">How will you divide the marital home?</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Divide" name="Divide" placeholder="Describe how assets and liabilities related to the marital home will be divided. Keep in mind how issues like the amount necessary to pay off the existing mortgage, current equity in the home, and the costs to maintain the home, or any need for the mortgage to be refinanced will be addressed." rows="2"></textarea>
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Divide" name="Divide" placeholder="Describe how assets and liabilities related to the marital home will be divided. Keep in mind how issues like the amount necessary to pay off the existing mortgage, current equity in the home, and the costs to maintain the home, or any need for the mortgage to be refinanced will be addressed." rows="2"></textarea>
                                 <div ng-show="houseForm.Divide.$dirty && houseForm.Divide.$invalid || (showErrors && houseForm.Divide.$invalid)">
                                     <span class="form-error" ng-show="houseForm.Divide.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.Divide.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -93,6 +93,6 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

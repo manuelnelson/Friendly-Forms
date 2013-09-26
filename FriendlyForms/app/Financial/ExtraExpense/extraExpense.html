@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="widget-box">
                 <div class="widget-title">
-                    <span class="icon"><i class="glyphicon-signal"></i></span>
+                    <span class="icon"><i class="icon-signal"></i></span>
                     <h5>Extra Expenses</h5>
                 </div>
                 <div class="widget-content">
@@ -16,8 +16,8 @@
                         </ul>
                         <div class="input-group">
                             <label class="form-question">Do any individuals pay extraordinary expenses for the child(ren)?</label>
-                            <label class="radio inline">Yes<input class="form-control" class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="form-control" class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
+                            <label class="radio inline">Yes<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="1"></label>
+                            <label class="radio inline">No<input class="inline" ng-change="submit()" ng-model="extraExpenseForm.HasExtraExpenses" name="HasExtraExpenses" type="radio" value="2"></label>
                             <div ng-show="showErrors">
                                 <span class="form-error" ng-show="showErrors">Please select an option</span>
                             </div>
@@ -112,7 +112,7 @@
                             </div>
                             <div class="input-group row">
                                 <label class="col-md-4 form-question">Provide a brief description of the expenses</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionFather" name="SpecialDescriptionFather" placeholder="Explain" rows="2"></textarea>
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionFather" name="SpecialDescriptionFather" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="extraExpenseChildForm.SpecialDescriptionFather.$dirty && extraExpenseChildForm.SpecialDescriptionFather.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionFather.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionFather.$error.required">The field is required</span>
@@ -128,7 +128,7 @@
                             </div>
                             <div class="input-group row">
                                 <label class="col-md-4 form-question">Provide a brief description of the expenses</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionMother" name="SpecialDescriptionMother" placeholder="Explain" rows="2"></textarea>
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionMother" name="SpecialDescriptionMother" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="extraExpenseChildForm.SpecialDescriptionMother.$dirty && extraExpenseChildForm.SpecialDescriptionMother.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionMother.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionMother.$error.required">The field is required</span>
@@ -144,7 +144,7 @@
                             </div>
                             <div class="input-group row">
                                 <label class="col-md-4 form-question">Provide a brief description of the expenses</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionNonParent" name="SpecialDescriptionNonParent" placeholder="Explain" rows="2"></textarea>
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@@$'()!~:#/&amp;_\-,\%]*$/" ng-model="extraExpense.SpecialDescriptionNonParent" name="SpecialDescriptionNonParent" placeholder="Explain" rows="2"></textarea>
                                 <div ng-show="extraExpenseChildForm.SpecialDescriptionNonParent.$dirty && extraExpenseChildForm.SpecialDescriptionNonParent.$invalid">
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionNonParent.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                     <span class="form-error" ng-show="extraExpenseChildForm.SpecialDescriptionNonParent.$error.required">The field is required</span>
@@ -165,6 +165,6 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-default btn-default btn-primary" ng-click="previousChild()"><i class="glyphicon-arrow-left icon-white"></i>Previous</button>
-    <button class="btn btn-default btn-default btn-primary" ng-click="nextChild()" value="Continue">Continue <i class="glyphicon-arrow-right icon-white"></i></button>
+    <button class="btn btn-default btn-default btn-primary" ng-click="previousChild()"><i class="icon-arrow-left icon-white"></i>Previous</button>
+    <button class="btn btn-default btn-default btn-primary" ng-click="nextChild()" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
 </div>

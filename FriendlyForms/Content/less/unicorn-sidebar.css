@@ -93,7 +93,7 @@
   z-index: 16;
 }
 #sidebar > ul > li.active > a {
-  background: url("../img/menu-active.png") no-repeat scroll right center transparent !important;
+  background: url("../images/menu-active.png") no-repeat scroll right center transparent !important;
 }
 @media (max-width: 480px) {
   #sidebar {

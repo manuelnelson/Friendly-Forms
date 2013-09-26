@@ -49,6 +49,7 @@ less/unicorn-bootstrap.less
 less/unicorn-plugins.less
 less/unicorn-utilities.less
 less/unicorn-footer.less
+less/font-awesome.less
 less/friendly-color.less
 less/friendly-uniform.less
 less/friendly-theme.less
