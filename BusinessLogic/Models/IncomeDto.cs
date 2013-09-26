@@ -30,8 +30,8 @@
         public double Other { get; set; }
         public string OtherDetails { get; set; }
 
-        public const double MedicareTax = .0145;
-        public const double Fica = .062;
+        //public const double MedicareTax = .0145;
+        //public const double Fica = .062;
         public IncomeDto ToMonthly()
         {
             //All values are originally annual values.  Need to divide by 12 (obviously) to convert to monthly
@@ -40,7 +40,7 @@
                     W2Income = W2Income / 12,
                     NonW2Income = NonW2Income / 12,
                     SelfIncome = SelfIncome / 12,
-                    SelfIncomeNoDeductions = (SelfIncomeNoDeductions * MedicareTax * Fica) / 12,
+                    SelfIncomeNoDeductions = SelfIncomeNoDeductions / 12,
                     Commisions = Commisions / 12,
                     Bonuses = Bonuses / 12,
                     Overtime = Overtime / 12,
