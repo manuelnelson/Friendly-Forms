@@ -45,7 +45,7 @@
     $scope.deleteCourt = function (court) {
         supportService.children.delete({ PreexistingSupportId: court.Id }, function () {
         });
-        supportService.courts.delete({ Id: court.Id }, function () {
+        supportService.courts.delete(court, function () {
             $scope.courts = _.reject($scope.courts, function (item) {
                 return item.Id == court.Id;
             });
