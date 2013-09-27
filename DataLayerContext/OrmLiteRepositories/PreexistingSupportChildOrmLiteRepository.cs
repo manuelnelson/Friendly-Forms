@@ -18,5 +18,13 @@ namespace DataLayerContext.OrmLiteRepositories
                 return db.Select<PreexistingSupportChild>(x => x.PreexistingSupportId == preexistingSupportId);
             }     
         }
+
+        public void DeleteChildrenBySupportId(int preexistingSupportId)
+        {
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                db.Delete<PreexistingSupportChild>(x => x.PreexistingSupportId == preexistingSupportId);
+            }
+        }
     }
 }

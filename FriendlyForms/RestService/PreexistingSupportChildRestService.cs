@@ -69,7 +69,10 @@ namespace FriendlyForms.RestService
         }
         public object Delete(ReqPreexistingSupportChild request)
         {
-            PreexistingSupportChildService.Delete(request.Id);
+            if (request.Id > 0)
+                PreexistingSupportChildService.Delete(request.Id);
+            else if (request.PreexistingSupportId > 0)
+                PreexistingSupportChildService.DeleteChildrenBySupportId(request.PreexistingSupportId);
             return null;
         }
     }

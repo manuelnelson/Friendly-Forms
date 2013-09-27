@@ -35,6 +35,7 @@
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Court Name</th>
                                         <th>Case Number</th>
                                         <th>Date</th>
@@ -44,12 +45,26 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="courtAdded in courts">
-                                        <td>{{courtAdded.CourtName}}</td>
-                                        <td>{{courtAdded.CaseNumber}}</td>
-                                        <td>{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}</td>
-                                        <td>${{courtAdded.Monthly}}</td>
                                         <td>
-                                            <button class="btn btn-primary" ng-click="showChildren(courtAdded)">Children</button></td>
+                                            <button class="btn btn-primary" ng-click="showChildren(courtAdded)">Children</button>                                            
+                                        </td>
+                                        <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.CourtName}}</td>
+                                        <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.CaseNumber}}</td>
+                                        <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}</td>
+                                        <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">${{courtAdded.Monthly}}</td>
+                                        <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
+                                            <input type="text" ng-model="courtAdded.CourtName" /></td>
+                                        <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
+                                            <input type="text" ng-model="courtAdded.CaseNumber" /></td>
+                                        <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
+                                            <input ui-jq="datepicker" data-date="{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="courtAdded.OrderDate" name="OrderDate" placeholder="MM/DD/YYYY" type="text" value="{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}">
+                                        <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
+                                            <input type="text" ng-model="courtAdded.Monthly" /></td>
+                                        <td>
+                                            <button class="btn-small btn-primary btn" ng-show="!(courtEditing && editCourtId==courtAdded.Id)" title="Edit" ng-click="editCourt(courtAdded)"><i class="icon-white icon-edit"></i></button>
+                                            <button class="btn-small btn-primary btn" ng-show="!(courtEditing && editCourtId==courtAdded.Id)" title="Delete" ng-click="deleteCourt(courtAdded)"><i class="icon-white icon-trash"></i></button>
+                                            <button class="btn-small btn-primary btn" ng-show="courtEditing && editCourtId==courtAdded.Id" title="Done" ng-click="doneCourtEdit(courtAdded)"><i class="icon-white icon-ok"></i>Done</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

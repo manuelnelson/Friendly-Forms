@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Models.Contract;
 using ServiceStack.DataAnnotations;
@@ -19,8 +20,12 @@ namespace Models
         public virtual string CourtName { get; set; }
         public virtual string CaseNumber { get; set; }
         public virtual DateTime OrderDate { get; set; }
-
         public virtual int Monthly { get; set; }
+
+        [Ignore]
+        [NotMapped]
+        public virtual List<PreexistingSupportChild> Children { get; set; }
+
 
         public bool IsValid()
         {

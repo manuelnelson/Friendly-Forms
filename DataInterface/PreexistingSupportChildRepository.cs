@@ -6,5 +6,6 @@ namespace DataInterface
     public interface IPreexistingSupportChildRepository : IFormRepository<PreexistingSupportChild>
     {
         IEnumerable<PreexistingSupportChild> GetChildrenById(long preexistingSupportId);
+        void DeleteChildrenBySupportId(int preexistingSupportId);
     }
 }

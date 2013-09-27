@@ -115,14 +115,14 @@ namespace BusinessLogic
             schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
             if (preexistingSupport != null && preexistingSupport.Support == (int)YesNo.Yes)
             {
-                var preexistingCourts =
-                    PreexistingSupportService.GetFiltered(x => x.UserId == userId && x.IsOtherParent == isOtherParent)
-                                             .ToList();
-                foreach (var preexistingSupportChildren in preexistingCourts.Select(court => PreexistingSupportChildService.GetChildrenBySupportId(court.Id).ToList()))
-                {                    
-                    var support = preexistingSupportChildren.Select(preexistingSupportChild => PreexistingSupportService.Get(preexistingSupportChild.PreexistingSupportId)).ToList();
-                    schedule.TotalSupport += support.Sum(c => c.Monthly);
+                var preexistingCourts = PreexistingSupportService.GetFiltered(x => x.UserId == userId && x.IsOtherParent == isOtherParent).ToList();
+                foreach (var preexistingCourt in preexistingCourts)
+                {
+                    preexistingCourt.Children =
+                        PreexistingSupportChildService.GetChildrenBySupportId(preexistingCourt.Id).ToList();
+                    schedule.TotalSupport += preexistingCourt.Monthly;
                 }
+                schedule.PreexistingSupport = preexistingCourts;
             }
             schedule.AdjustedSupport = schedule.Total5Minus1 - schedule.TotalSupport;
             if (otherChildren != null)
@@ -134,13 +134,13 @@ namespace BusinessLogic
                 }
                 schedule.OtherChildrenDescription = otherChildren.Details;
 
-                schedule.GeorgiaObligations = (int)BcsoService.GetAmount(schedule.Total5Minus1, schedule.OtherChildren.Count);
-                schedule.TheoreticalSupport = (int)(schedule.GeorgiaObligations * .75);
+                schedule.GeorgiaObligations = BcsoService.GetAmount(schedule.Total5Minus1, schedule.OtherChildren.Count);
+                schedule.TheoreticalSupport = (schedule.GeorgiaObligations * .75);
                 schedule.PreexistingOrder = Math.Abs(schedule.AdjustedSupport - 0) > 0.01
                                                 ? schedule.AdjustedSupport - schedule.TheoreticalSupport
                                                 : schedule.Subtotal - schedule.TheoreticalSupport;
             }
-            schedule.Subtotal = schedule.Total5Minus1 == 0 ? schedule.GrossIncome : schedule.Total5Minus1;
+            schedule.Subtotal = Math.Abs(schedule.Total5Minus1 - 0) < 0.01 ? schedule.GrossIncome : schedule.Total5Minus1;
             schedule.IncomeDetails = income.OtherDetails;
 
             return schedule;

@@ -31,7 +31,30 @@
             $scope.court = '';
         });
     };
-    $scope.showChildren = function(court) {
+    $scope.courtEditing = false;
+    $scope.editCourt = function (court) {
+        $scope.courtEditing = true;
+        $scope.editCourtId = court.Id;
+    };
+    $scope.doneCourtEdit = function (court) {
+        $scope.courtEditing = false;
+        $scope.editCourtId = 0;
+        supportService.courts.update({}, court, function () {
+        });
+    };
+    $scope.deleteCourt = function (court) {
+        supportService.children.delete({ PreexistingSupportId: court.Id }, function () {
+        });
+        supportService.courts.delete({ Id: court.Id }, function () {
+            $scope.courts = _.reject($scope.courts, function (item) {
+                return item.Id == court.Id;
+            });
+        });
+    };
+
+
+
+    $scope.showChildren = function (court) {
         supportService.children.get({ PreexistingSupportId: court.Id }, function (data) {
             if (data.Children.length == 0)
                 $scope.children = [];
@@ -53,7 +76,6 @@
             $scope.child = '';
         });
     };
-    
 
     $scope.editing = false;
     $scope.editChild = function (child) {
