@@ -27,5 +27,17 @@ namespace BusinessLogic
             }
         }
 
+        public void DeleteChildrenBySupportId(int preexistingSupportId)
+        {
+            try
+            {
+                FormRepository.DeleteChildrenBySupportId(preexistingSupportId);
+            }
+            catch (Exception ex)
+            {
+                ErrorSignal.FromCurrentContext().Raise(ex);
+                throw new Exception("Unable to retrieve information", ex);
+            }
+        }
     }
 }
