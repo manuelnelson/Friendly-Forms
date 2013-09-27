@@ -67,5 +67,11 @@ namespace FriendlyForms.RestService
             PreexistingSupportService.Update(preexistingSupport);
             return preexistingSupport;
         }
+        public object Delete(ReqPreexistingSupport request)
+        {
+            PreexistingSupportService.Delete(request.Id);
+            return null;
+
+        }
     }
 }
