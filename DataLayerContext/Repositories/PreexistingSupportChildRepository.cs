@@ -16,5 +16,15 @@ namespace DataLayerContext.Repositories
         {
             return GetDbSet().Where(p => p.PreexistingSupportId == preexistingSupportId).Include(x=>x.PreexistingSupport);
         }
+
+        public void DeleteChildrenBySupportId(int preexistingSupportId)
+        {
+            var list = GetDbSet().Where(x => x.PreexistingSupportId == preexistingSupportId);
+            foreach (var preexistingSupportChild in list)
+            {
+                GetDbSet().Remove(preexistingSupportChild);
+            }
+            UnitOfWork.Commit();
+        }
     }
 }
