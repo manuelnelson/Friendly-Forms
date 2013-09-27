@@ -61,6 +61,8 @@
                     Assets = Assets / 12,
                     Fringe = Fringe / 12,
                     Other = Other / 12,
+                    OtherDetails = OtherDetails,
+                    OtherIncome = OtherIncome                    
                 };
         }
     }

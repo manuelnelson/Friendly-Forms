@@ -6,7 +6,6 @@ using FriendlyForms.Helpers;
 using Models;
 using ServiceStack.Common;
 using ServiceStack.ServiceHost;
-using ServiceStack.ServiceInterface;
 
 namespace FriendlyForms.RestService
 {
@@ -29,7 +28,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string OrderDate { get; set; }
         [DataMember]
-        public string Monthly { get; set; }
+        public int Monthly { get; set; }
     }
 
     [DataContract]
