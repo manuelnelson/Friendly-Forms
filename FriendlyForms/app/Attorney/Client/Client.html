@@ -17,7 +17,7 @@
                     </div>
                     <div class="row">
                         <br/>
-                        <button ng-click="viewCase()" class="btn btn-default btn-default btn-primary">View Case</button>
+                        <button ng-click="viewCase()" class="btn btn-default btn-primary">View Case</button>
                     </div>
                 </div>
             </div>
@@ -32,10 +32,10 @@
                 </div>
                 <div class="widget-content">
                     <p>Who will receive notification of changes to the form?</p>
-                    <label class="checkbox inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<div class="col-lg-4"><input class="form-control" ng-model="person.ChangeNotification" class="inline" type="checkbox" ng-click="notify(person)" />
+                    <label class="checkbox-inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<div class="col-lg-4"><input class="form-control" ng-model="person.ChangeNotification" class="inline" type="checkbox" ng-click="notify(person)" />
                     </label>
                     <p style="margin-top: 15px;">Who will receive print notification of a form? This notification fires when the client prints a form. This is an indicator that the client may have completed that particular form.</p>
-                    <label class="checkbox inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<div class="col-lg-4"><input class="form-control" ng-model="person.PrintNotification" class="inline" type="checkbox" ng-click="notify(person)" />
+                    <label class="checkbox-inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<div class="col-lg-4"><input class="form-control" ng-model="person.PrintNotification" class="inline" type="checkbox" ng-click="notify(person)" />
                     </label>
                 </div>
             </div>

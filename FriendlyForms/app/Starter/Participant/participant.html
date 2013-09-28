@@ -18,103 +18,137 @@
                                 <li>What are the Names and Date of Birth of every child involved in this Court Action?</li>
                                 <li>What is the Case Number for this Court Action?</li>
                             </ul>
-                            <div class="input-group span4">
-                                <h4>Plaintiff</h4>
-                                <div class="col-lg-4"><input class="form-control" ui-jq="popover" ng-model="participant.PlaintiffsName" name="PlaintiffsName" data-content="Enter the plaintiff's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Plaintiff's Name" type="text" data-original-title="">
-                                <div ng-show="participantForm.PlaintiffsName.$dirty && participantForm.PlaintiffsName.$invalid || (showErrors && participantForm.DefendantsName.$invalid)">
-                                    <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.required">This field is required</span>
-                                    <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
+                            <div class="form-group row">
+                                <div class="col-lg-4">
+                                    <h4>Plaintiff</h4>
+                                    <input class="form-control" ui-jq="popover" ng-model="participant.PlaintiffsName" name="PlaintiffsName" data-content="Enter the plaintiff's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Plaintiff's Name" type="text" data-original-title="">
+                                    <div ng-show="participantForm.PlaintiffsName.$dirty && participantForm.PlaintiffsName.$invalid || (showErrors && participantForm.DefendantsName.$invalid)">
+                                        <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.required">This field is required</span>
+                                        <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <h4>Defendant</h4>
+                                    <input class="form-control" ui-jq="popover" data-content="Enter the defendants's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="DefendantsName" ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
+                                    <div ng-show="(participantForm.DefendantsName.$dirty && participantForm.DefendantsName.$invalid) || (showErrors && participantForm.DefendantsName.$invalid)">
+                                        <span class="form-error" ng-show="participantForm.DefendantsName.$error.required">This field is required</span>
+                                        <span class="form-error" ng-show="participantForm.DefendantsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="input-group span4">
-                                <h4>Defendant</h4>
-                                <div class="col-lg-4"><input class="form-control" ui-jq="popover" data-content="Enter the defendants's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="DefendantsName" ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
-                                <div ng-show="(participantForm.DefendantsName.$dirty && participantForm.DefendantsName.$invalid) || (showErrors && participantForm.DefendantsName.$invalid)">
-                                    <span class="form-error" ng-show="participantForm.DefendantsName.$error.required">This field is required</span>
-                                    <span class="form-error" ng-show="participantForm.DefendantsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
-                                </div>
-                            </div>
-                            <div class="span8">
+                            <div class="form-group row">
                                 <label class="form-question col-lg-12">
                                     Are the parents filing for Joint Custody?
                                 </label>
-                                <div class="radio"><label>
-                                    Yes
-                                <input required ng-model="participant.IsJointCustody" name="IsJointCustody" type="radio" value="1"></label></div>
-                                <div class="radio"><label>
-                                    No
-                                <input required ng-model="participant.IsJointCustody" name="IsJointCustody" type="radio" value="2"></label></div>
-                                <div ng-show="participantForm.IsJointCustody.$dirty && participantForm.IsJointCustody.$invalid || (showErrors && participantForm.IsJointCustody.$invalid)">
-                                    <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
+                                <div class="col-lg-12">
+                                    <div class="radio">
+                                        <label>
+                                            Yes
+                                            <input required ng-model="participant.IsJointCustody" name="IsJointCustody" type="radio" value="1"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            No
+                                            <input required ng-model="participant.IsJointCustody" name="IsJointCustody" type="radio" value="2"></label>
+                                    </div>
+                                    <div ng-show="participantForm.IsJointCustody.$dirty && participantForm.IsJointCustody.$invalid || (showErrors && participantForm.IsJointCustody.$invalid)">
+                                        <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
+                                    </div>
                                 </div>
-                                <label ng-show="participant.IsJointCustody==1" class="informative">
+                                <label ng-show="participant.IsJointCustody==1" class="informative col-lg-12">
                                     For the purposes of Child Support, one parent must be designated as Primary Physical Custodian. In the section below, please designate which parent is the Primary Physical Custodial Parent. The Primary Physical Custodial Parent will receive child support, the Non Primary Physical Custodial Parent will pay child support.</label>
                             </div>
-                            <div class="span4">
-                                <label class="form-question col-lg-12">
+                            <div class="form-group row">
+                                <label class="form-question col-lg-4">
                                     The Plaintiff is the: 
                                 </label>
-                                <div class="radio"><label>
-                                    Father
-                                <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="2"></label></div>
-                                <div class="radio"><label>
-                                    Mother
-                                <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="1"></label></div>
-                                <div class="radio"><label>
-                                    Plaintiff 
-                                <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="3"></label></div>
-                                <div ng-show="participantForm.PlaintiffRelationship.$dirty && participantForm.PlaintiffRelationship.$invalid || (showErrors && participantForm.PlaintiffRelationship.$invalid)">
-                                    <span class="form-error" ng-show="participantForm.PlaintiffRelationship.$error.required">This field is required</span>
-                                </div>
-                            </div>
-                            <div class="span4">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-lg-8">
                                     The Defendant is the: 
                                 </label>
-                                <div class="radio"><label>
-                                    Father
-                                <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="2"></label></div>
-                                <div class="radio"><label>
-                                    Mother
-                                <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="1"></label></div>
-                                <div class="radio"><label>
-                                    Defendant 
-                                <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="4"></label></div>
-                                <div ng-show="participantForm.DefendantRelationship.$dirty && participantForm.DefendantRelationship.$invalid || (showErrors && participantForm.DefendantRelationship.$invalid)">
-                                    <span class="form-error" ng-show="participantForm.DefendantRelationship.$error.required">This field is required</span>
+                                <div class="col-lg-4">
+                                    <div class="radio">
+                                        <label>
+                                            Father
+                                            <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="2"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            Mother
+                                            <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="1"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            Plaintiff 
+                                            <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="3"></label>
+                                    </div>
+                                    <div ng-show="participantForm.PlaintiffRelationship.$dirty && participantForm.PlaintiffRelationship.$invalid || (showErrors && participantForm.PlaintiffRelationship.$invalid)">
+                                        <span class="form-error" ng-show="participantForm.PlaintiffRelationship.$error.required">This field is required</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="radio">
+                                        <label>
+                                            Father
+                                            <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="2"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            Mother
+                                            <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="1"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            Defendant 
+                                            <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="4"></label>
+                                    </div>
+                                    <div ng-show="participantForm.DefendantRelationship.$dirty && participantForm.DefendantRelationship.$invalid || (showErrors && participantForm.DefendantRelationship.$invalid)">
+                                        <span class="form-error" ng-show="participantForm.DefendantRelationship.$error.required">This field is required</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="span4">
-                                <label class="form-question col-lg-12">
+                            <div class="form-group row">
+                                <label class="form-question col-lg-4">
                                     The Plaintiff is the:
                                 </label>
-                                <div class="radio"><label>
-                                    Primary Physical Custodial Parent
-                                    <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="1"></label></div>
-                                <div class="radio"><label>
-                                    Non Primary Physical Custodial Parent
-                                    <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="2"></label></div>
-                                <div ng-show="participantForm.PlaintiffCustodialParent.$dirty && participantForm.PlaintiffCustodialParent.$invalid || (showErrors && participantForm.PlaintiffCustodialParent.$invalid)">
-                                    <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
-                                </div>
-                            </div>
-                            <div class="span4">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-lg-8">
                                     The Defendant is the:
                                 </label>
-                                <div class="radio"><label>
-                                    Primary Custodial Parent
-                                    <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="1"></label></div>
-                                <div class="radio"><label>
-                                    Non Custodial Parent
-                                    <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="2"></label></div>
-                                <div ng-show="participantForm.DefendantCustodialParent.$dirty && participantForm.DefendantCustodialParent.$invalid || (showErrors && participantForm.DefendantCustodialParent.$invalid)">
-                                    <span class="form-error" ng-show="participantForm.DefendantCustodialParent.$error.required">This field is required</span>
+                                <div class="col-lg-4">
+                                    <div class="radio">
+                                        <label>
+                                            Primary Physical Custodial Parent
+                                            <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="1"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            Non Primary Physical Custodial Parent
+                                            <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="2"></label>
+                                    </div>
+                                    <div ng-show="participantForm.PlaintiffCustodialParent.$dirty && participantForm.PlaintiffCustodialParent.$invalid || (showErrors && participantForm.PlaintiffCustodialParent.$invalid)">
+                                        <span class="form-error" ng-show="participantForm.PlaintiffCustodialParent.$error.required">This field is required</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="radio">
+                                        <label>
+                                            Primary Custodial Parent
+                                            <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="1"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            Non Custodial Parent
+                                            <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="2"></label>
+                                    </div>
+                                    <div ng-show="participantForm.DefendantCustodialParent.$dirty && participantForm.DefendantCustodialParent.$invalid || (showErrors && participantForm.DefendantCustodialParent.$invalid)">
+                                        <span class="form-error" ng-show="participantForm.DefendantCustodialParent.$error.required">This field is required</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>

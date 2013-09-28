@@ -11,63 +11,81 @@
                         <label class="informative">Fill in the information regarding your circumstances below.</label>
                         <div class="form-group row">
                             <label class="form-question col-lg-12">County</label>
-                            <select ng-model="court.CountyId" name="CountyId" ng-options="county.Id as county.CountyName for county in counties" required>
-                                <option ng-show="!court.CountyId > 0" disabled selected value=""></div>-- Select County --</option>
-                            </select>
-                            <div ng-show="courtForm.CountyId.$dirty && courtForm.CountyId.$invalid || (showErrors && courtForm.CountyId.$invalid)">
-                                <span class="form-error" ng-show="courtForm.CountyId.$error.required">Please select a county</span>
+                            <div class="col-lg-4">
+                                <select ng-model="court.CountyId" name="CountyId" ng-options="county.Id as county.CountyName for county in counties" required>
+                                    <option ng-show="!court.CountyId > 0" disabled selected value="">-- Select County --</option>
+                                </select>
+                                <div ng-show="courtForm.CountyId.$dirty && courtForm.CountyId.$invalid || (showErrors && courtForm.CountyId.$invalid)">
+                                    <span class="form-error" ng-show="courtForm.CountyId.$error.required">Please select a county</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="form-question col-lg-12">Case Number</label>
-                            <div class="col-lg-4"><input class="form-control" name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number" type="text" value="" required>
+                            <div class="col-lg-4">
+                                <input class="form-control" name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number" type="text" value="" required>
+                            </div>
                             <div ng-show="courtForm.CaseNumber.$dirty && courtForm.CaseNumber.$invalid || (showErrors && courtForm.CaseNumber.$invalid)">
                                 <span class="form-error" ng-show="courtForm.CaseNumber.$error.required">Case Number is required</span>
                                 <span class="form-error" ng-show="courtForm.CaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
                             </div>
                         </div>
-                        <label class="form-question col-lg-12" ui-jq="popover" data-content="Was this plan prepared by a judge, or by the parties involved?">
-                            Who is the author of this plan?
-                        </label>
-                        <div class="radio">
-                            <label>
-                                Parties agree to this plan
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12" ui-jq="popover" data-content="Was this plan prepared by a judge, or by the parties involved?">
+                                Who is the author of this plan?
+                            </label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        Parties agree to this plan
                                 <input data-val="true" ng-model="court.AuthorOfPlan" type="radio" value="1" required></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                Plan Prepared by a judge
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Plan Prepared by a judge
                                 <input id="Radio1" ng-model="court.AuthorOfPlan" type="radio" value="2" required></label>
+                                </div>
+                                <div ng-show="court.AuthorOfPlan.$dirty && court.AuthorOfPlan.$invalid || (showErrors && courtForm.AuthorOfPlan.$invalid)">
+                                    <span class="form-error" ng-show="court.AuthorOfPlan.$error.required">Author is required</span>
+                                </div>
+                            </div>
                         </div>
-                        <div ng-show="court.AuthorOfPlan.$dirty && court.AuthorOfPlan.$invalid || (showErrors && courtForm.AuthorOfPlan.$invalid)">
-                            <span class="form-error" ng-show="court.AuthorOfPlan.$error.required">Author is required</span>
-                        </div>
-                        <label class="form-question col-lg-12" ui-jq="popover" data-content="This plan has either been in force prior to this action or it is a new plan being enforced for the first time.">
-                            Is this a new plan or an existing plan?
-                        </label>
-                        <div class="radio">
-                            <label>A new plan<input ng-model="court.PlanType" type="radio" value="1" required></label>
-                        </div>
-                        <div class="radio">
-                            <label>A modification of an existing plan<input ng-model="court.PlanType" type="radio" value="2"></label>
-                        </div>
-                        <div class="radio">
-                            <label>A modification of an existing order<input ng-model="court.PlanType" type="radio" value="3"></label>
-                        </div>
-                        <div ng-show="court.PlanType.$dirty && court.PlanType.$invalid || (showErrors && courtForm.PlanType.$invalid)">
-                            <span class="form-error" ng-show="court.PlanType.$error.required">Author is required</span>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12" ui-jq="popover" data-content="This plan has either been in force prior to this action or it is a new plan being enforced for the first time.">
+                                Is this a new plan or an existing plan?
+                            </label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>A new plan<input ng-model="court.PlanType" type="radio" value="1" required></label>
+                                </div>
+                                <div class="radio">
+                                    <label>A modification of an existing plan<input ng-model="court.PlanType" type="radio" value="2"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>A modification of an existing order<input ng-model="court.PlanType" type="radio" value="3"></label>
+                                </div>
+                                <div ng-show="court.PlanType.$dirty && court.PlanType.$invalid || (showErrors && courtForm.PlanType.$invalid)">
+                                    <span class="form-error" ng-show="court.PlanType.$error.required">Author is required</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row" ng-show="court.PlanType==2 || court.PlanType==3">
                             <label class="form-question col-lg-12">Case Number</label>
-                            <div class="col-lg-4"><input class="form-control" ng-model="court.ExistCaseNumber" ui-jq="popover" data-content="Your case number can be found XXXX." placeholder="Case Number" type="text" ng-pattern="/^[0-9a-zA-Z\s-]*$/">
-                            <div ng-show="court.ExistCaseNumber.$dirty && court.ExistCaseNumber.$invalid || (showErrors && courtForm.ExistCaseNumber.$invalid)">
-                                <span class="form-error" ng-show="court.ExistCaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="court.ExistCaseNumber" ui-jq="popover" data-content="Your case number can be found XXXX." placeholder="Case Number" type="text" ng-pattern="/^[0-9a-zA-Z\s-]*$/">
+                                <div ng-show="court.ExistCaseNumber.$dirty && court.ExistCaseNumber.$invalid || (showErrors && courtForm.ExistCaseNumber.$invalid)">
+                                    <span class="form-error" ng-show="court.ExistCaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary btn-continue" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

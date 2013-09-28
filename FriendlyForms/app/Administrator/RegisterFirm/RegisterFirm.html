@@ -1,41 +1,55 @@
 ﻿<div class="form-vertical wrapper" ng-controller="RegisterFirmCtrl">
     <div class="row">
-        <form class="well form-vertical" ng-submit="submit()" name="lawFirmForm" id="lawFirmForm">
-            <fieldset>
-                <legend>Law Firm Information</legend>
-                <label>
-                    Please enter information about the law firm. 
-                </label>
-                <div class="form-group row">
-                    <div class="col-lg-4"><input class="form-control" id="Name" name="Name" required ng-model="lawFirm.Name" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Name of Firm*" type="text" value=""></div>
-                    <div ng-show="lawFirmForm.Name.$dirty && lawFirmForm.Name.$invalid">
-                        <span class="form-error" ng-show="lawFirmForm.Name.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                        <span class="form-error" ng-show="lawFirmForm.Name.$error.required">This field is required.</span>
+        <div class="col-lg-6">
+            <form class="well form-vertical" ng-submit="submit()" name="lawFirmForm" id="lawFirmForm">
+                <fieldset>
+                    <legend>Law Firm Information</legend>
+                    <div class="form-group row">
+                        <label class="col-lg-12">
+                            Please enter information about the law firm. 
+                        </label>
+                        <div class="col-lg-4">
+                            <input class="form-control" id="Name" name="Name" required ng-model="lawFirm.Name" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Name of Firm*" type="text" value="">
+                        </div>
+                        <div ng-show="lawFirmForm.Name.$dirty && lawFirmForm.Name.$invalid">
+                            <span class="form-error" ng-show="lawFirmForm.Name.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            <span class="form-error" ng-show="lawFirmForm.Name.$error.required">This field is required.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-lg-4"><input class="form-control" id="Address" name="Address" required ng-model="lawFirm.Address" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Address*" type="text" value=""></div>
-                    <div ng-show="lawFirmForm.Address.$dirty && lawFirmForm.Address.$invalid">
-                        <span class="form-error" ng-show="lawFirmForm.Address.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                        <span class="form-error" ng-show="lawFirmForm.Address.$error.required">This field is required.</span>
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <input class="form-control" id="Address" name="Address" required ng-model="lawFirm.Address" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Address*" type="text" value="">
+                        </div>
+                        <div ng-show="lawFirmForm.Address.$dirty && lawFirmForm.Address.$invalid">
+                            <span class="form-error" ng-show="lawFirmForm.Address.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            <span class="form-error" ng-show="lawFirmForm.Address.$error.required">This field is required.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-lg-4"><input class="form-control" id="CityState" required name="CityState" ng-model="lawFirm.CityState" typeahead="suggestion for suggestion in cities($viewValue)" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="City, State*" type="text">
-                    <div ng-show="lawFirmForm.CityState.$dirty && lawFirmForm.CityState.$invalid">
-                        <span class="form-error" ng-show="lawFirmForm.CityState.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                        <span class="form-error" ng-show="lawFirmForm.CityState.$error.required">This field is required.</span>
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <input class="form-control" id="CityState" required name="CityState" ng-model="lawFirm.CityState" typeahead="suggestion for suggestion in cities($viewValue)" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="City, State*" type="text">
+                        </div>
+                        <div ng-show="lawFirmForm.CityState.$dirty && lawFirmForm.CityState.$invalid">
+                            <span class="form-error" ng-show="lawFirmForm.CityState.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            <span class="form-error" ng-show="lawFirmForm.CityState.$error.required">This field is required.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-lg-4"><input class="form-control" id="Zip" required name="Zip" ng-model="lawFirm.Zip" ng-pattern="/^(\d{5}|\d{4})(?:[-\s]\d{4})?$/" placeholder="Zip Code*" type="text">
-                    <div ng-show="lawFirmForm.Zip.$dirty && lawFirmForm.Zip.$invalid">
-                        <span class="form-error" ng-show="lawFirmForm.Zip.$error.pattern">This field must be a valid zip code.</span>
-                        <span class="form-error" ng-show="lawFirmForm.Zip.$error.required">This field is required.</span>
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <input class="form-control" id="Zip" required name="Zip" ng-model="lawFirm.Zip" ng-pattern="/^(\d{5}|\d{4})(?:[-\s]\d{4})?$/" placeholder="Zip Code*" type="text">
+                        </div>
+                        <div ng-show="lawFirmForm.Zip.$dirty && lawFirmForm.Zip.$invalid">
+                            <span class="form-error" ng-show="lawFirmForm.Zip.$error.pattern">This field must be a valid zip code.</span>
+                            <span class="form-error" ng-show="lawFirmForm.Zip.$error.required">This field is required.</span>
+                        </div>
                     </div>
-                </div>
-                <button class="btn btn-default btn-default btn-primary">Register</button>
-            </fieldset>
-        </form>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-default btn-primary">Register</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>

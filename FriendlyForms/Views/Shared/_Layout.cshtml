@@ -43,7 +43,7 @@
     </div>
     <div id="content">
         <div ng-controller="HeaderCtrl" class="ng-cloak">
-            <div id="header">
+            <div id="content-header">
                 <div ng-show="showFeedbackHeader">
                     <h1>{{PageTitle}}</h1>
                     <div class="btn-group">
@@ -53,19 +53,25 @@
                 <div ng-show="showOutput">
                     <div class="btn-group">
                         <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-                            <input class="form-control" type="hidden" class="html" name="html" />
-                            <input class="form-control" type="hidden" class="name" name="name" />
+                            <input type="hidden" class="html" name="html" />
+                            <input type="hidden" class="name" name="name" />
                             <button class="btn btn-default btn-lg tip-bottom printForm" value="Print to PDF"><i class="icon-print"></i></button>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="container" ng-show="showFeedbackHeader">
+            <div ng-show="showFeedbackHeader">
                 <div class="row" ng-show="showIssue">
                     <form ng-submit="submitIssues()" name="feedbackForm" class="form-inline pull-right">
-                        <input class="form-control" type="text" ng-model="feedback.Email" name="feedback.Email" class="input" placeholder="Your Email">
-                        <input class="form-control" type="text" ng-model="feedback.Message" name="feedback.Message" class="input-xlarge" placeholder="List feedback here" />
-                        <button type="submit" class="btn btn-default btn-primary">Submit</button>
+                        <div class="form-group">
+                            <input class="form-control" type="text" ng-model="feedback.Email" name="feedback.Email" placeholder="Your Email">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" ng-model="feedback.Message" name="feedback.Message" placeholder="List feedback here" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default btn-primary">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>

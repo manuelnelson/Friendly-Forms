@@ -1,7 +1,5 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="ResponsibilityCtrl" name="responsibilityForm" novalidate>
-        <div class="col-lg-4"><input class="form-control" type="hidden" name="Id" ng-model="responsibility.Id">
-        <div class="col-lg-4"><input class="form-control" type="hidden" name="UserId" ng-model="responsibility.UserId">
         <div class="row">
             <div class="col-md-12">
                 <div class="widget-box">
@@ -15,68 +13,94 @@
                         <div class="form-group row">
                             <label class="form-question col-lg-12">
                                 Who will be responsible to pick up or drop off the child at the beginning of visitation?</label>
-                            <label class="radio-inline">Father<input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="1"></label>
-                            <label class="radio-inline">Mother<input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="2"></label>
-                            <div ng-show="responsibilityForm.BeginningVisitation.$dirty && responsibilityForm.BeginningVisitation.$invalid  || (showErrors && responsibilityForm.SupervisionCost.$invalid)">
-                                <span class="form-error" ng-show="responsibilityForm.BeginningVisitation.$error.required">This field is required</span>
+                            <div class="col-lg-12">
+                                <label class="radio-inline">Father<input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="1"></label>
+                                <label class="radio-inline">Mother<input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="2"></label>
+                                <div ng-show="responsibilityForm.BeginningVisitation.$dirty && responsibilityForm.BeginningVisitation.$invalid  || (showErrors && responsibilityForm.SupervisionCost.$invalid)">
+                                    <span class="form-error" ng-show="responsibilityForm.BeginningVisitation.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="form-question col-lg-12">
                                 Who will be responsible to pick up or drop off the child at the end of visitation?</label>
-                            <label class="radio-inline">Father<input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="1"></label>
-                            <label class="radio-inline">Mother<input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="2"></label>
-                            <div ng-show="responsibilityForm.EndVisitation.$dirty && responsibilityForm.EndVisitation.$invalid || (showErrors && responsibilityForm.EndVisitation.$invalid)">
-                                <span class="form-error" ng-show="responsibilityForm.EndVisitation.$error.required">This field is required</span>
+                            <div class="col-lg-12">
+                                <label class="radio-inline">Father<input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="1"></label>
+                                <label class="radio-inline">Mother<input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="2"></label>
+                                <div ng-show="responsibilityForm.EndVisitation.$dirty && responsibilityForm.EndVisitation.$invalid || (showErrors && responsibilityForm.EndVisitation.$invalid)">
+                                    <span class="form-error" ng-show="responsibilityForm.EndVisitation.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
+                        <div class="form-group row">
                             <label class="form-question col-lg-12">
                                 Will each of you pay your own portion of the costs to pick up or drop off the child, or will each of you be responsible to pay a percentage of the costs of transportation?</label>
-                            <div class="radio"><label>
-                                Each parent will pay their own expenses
-                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="1"></label></div>
-                            <div class="radio"><label>
-                                Each parent will pay half of the expenses
-                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="2"></label></div>
-                            <div class="radio"><label>
-                                Each parent will pay a percentage
-                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="3"></label></div>
-                            <div class="radio"><label>
-                                Other
-                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="4"></label></div>
-                            <div ng-show="responsibilityForm.TransportationCosts.$dirty && responsibilityForm.TransportationCosts.$invalid || (showErrors && responsibilityForm.TransportationCosts.$invalid)">
-                                <span class="form-error" ng-show="responsibilityForm.TransportationCosts.$error.required">This field is required</span>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        Each parent will pay their own expenses
+                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="1"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Each parent will pay half of the expenses
+                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="2"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Each parent will pay a percentage
+                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="3"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Other
+                                <input ng-model="responsibility.TransportationCosts" required name="TransportationCosts" type="radio" value="4"></label>
+                                </div>
+                                <div ng-show="responsibilityForm.TransportationCosts.$dirty && responsibilityForm.TransportationCosts.$invalid || (showErrors && responsibilityForm.TransportationCosts.$invalid)">
+                                    <span class="form-error" ng-show="responsibilityForm.TransportationCosts.$error.required">This field is required</span>
+                                </div>
                             </div>
+                        </div>
                         <div ng-show="responsibility.TransportationCosts == 3">
                             <div class="form-group row">
                                 <label class="form-question col-lg-12">
                                     Father's percentage</label>
-                                <div class="col-lg-4"><input class="form-control" ng-model="responsibility.FatherPercentage" ng-change="CalculatePercentage('Father')" class="input-mini" ng-pattern="/^[0-9]*$/" name="FatherPercentage" placeholder="%" type="text" value="0">
-                                <div ng-show="responsibilityForm.FatherPercentage.$dirty && responsibilityForm.FatherPercentage.$invalid || (showErrors && responsibilityForm.FatherPercentage.$invalid)">
-                                    <span class="form-error" ng-show="responsibilityForm.FatherPercentage.$error.pattern">This field must be a number</span>
+                                <div class="col-lg-4">
+                                    <input class="form-control" ng-model="responsibility.FatherPercentage" ng-change="CalculatePercentage('Father')" class="input-mini" ng-pattern="/^[0-9]*$/" name="FatherPercentage" placeholder="%" type="text" value="0">
+                                    <div ng-show="responsibilityForm.FatherPercentage.$dirty && responsibilityForm.FatherPercentage.$invalid || (showErrors && responsibilityForm.FatherPercentage.$invalid)">
+                                        <span class="form-error" ng-show="responsibilityForm.FatherPercentage.$error.pattern">This field must be a number</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-12">
                                     Mother's percentage</label>
-                                <div class="col-lg-4"><input class="form-control" ng-model="responsibility.MotherPercentage" ng-change="CalculatePercentage('Mother')" class="input-mini" ng-pattern="/^[0-9]*$/" name="MotherPercentage" placeholder="%" type="text" value="0">
-                                <div ng-show="responsibilityForm.MotherPercentage.$dirty && responsibilityForm.MotherPercentage.$invalid || (showErrors && responsibilityForm.MotherPercentage.$invalid)">
-                                    <span class="form-error" ng-show="responsibilityForm.MotherPercentage.$error.pattern">This field must be a number</span>
+                                <div class="col-lg-4">
+                                    <input class="form-control" ng-model="responsibility.MotherPercentage" ng-change="CalculatePercentage('Mother')" class="input-mini" ng-pattern="/^[0-9]*$/" name="MotherPercentage" placeholder="%" type="text" value="0">
+                                    <div ng-show="responsibilityForm.MotherPercentage.$dirty && responsibilityForm.MotherPercentage.$invalid || (showErrors && responsibilityForm.MotherPercentage.$invalid)">
+                                        <span class="form-error" ng-show="responsibilityForm.MotherPercentage.$error.pattern">This field must be a number</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row" ng-show="responsibility.TransportationCosts == 4">
                             <label class="form-question col-lg-12">
                                 The parties agree that visitation-related expenses will be paid as follows:</label>
-                            <textarea ng-model="responsibility.OtherDetails" class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="OtherDetails" placeholder="Description" rows="2"></textarea>
+                            <div class="col-lg-4">
+                                <textarea ng-model="responsibility.OtherDetails" class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="OtherDetails" placeholder="Description" rows="2"></textarea>
+                            </div>
                             <div ng-show="responsibilityForm.OtherDetails.$dirty && responsibilityForm.OtherDetails.$invalid || (showErrors && responsibilityForm.OtherDetails.$invalid)">
                                 <span class="form-error" ng-show="responsibilityForm.OtherDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary btn-continue" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

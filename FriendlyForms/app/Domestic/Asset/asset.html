@@ -8,91 +8,107 @@
                         <h5>Assets</h5>
                     </div>
                     <div class="widget-content">
-                        <label class="form-question col-lg-12">
-                            How will retirment assets be divided?</label>
-                        <div class="radio">
-                            <label>
-                                There are no retirement assets to be considered.
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How will retirment assets be divided?</label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        There are no retirement assets to be considered.
                                 <input required ng-model="asset.Retirement" name="Retirement" type="radio" value="2"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                Division of retirement assets will occur as follows:
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Division of retirement assets will occur as follows:
                                 <input required ng-model="asset.Retirement" name="Retirement" type="radio" value="1"></label>
+                                </div>
+                                <div ng-show="assetForm.Retirement.$dirty && assetForm.Retirement.$invalid  || (showErrors && assetForm.Retirement.$invalid)">
+                                    <span class="form-error" ng-show="assetForm.Retirement.$error.required">This field is required</span>
+                                </div>
+                            </div>
                         </div>
-                        <div ng-show="assetForm.Retirement.$dirty && assetForm.Retirement.$invalid  || (showErrors && assetForm.Retirement.$invalid)">
-                            <span class="form-error" ng-show="assetForm.Retirement.$error.required">This field is required</span>
-                        </div>
-                        <div class="row">
-                            <div class="input-group col-lg-4" ng-show="asset.Retirement == 1">
+                        <div class="form-group row" ng-show="asset.Retirement == 1">
+                            <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.RetirementDescription" name="RetirementDescription" placeholder="Details" rows="2"></textarea>
-                                <div ng-show="assetForm.RetirementDescription.$dirty && assetForm.RetirementDescription.$invalid || (showErrors && assetForm.RetirementDescription.$invalid)">
-                                    <span class="form-error" ng-show="assetForm.RetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                </div>
+                            </div>
+                            <div ng-show="assetForm.RetirementDescription.$dirty && assetForm.RetirementDescription.$invalid || (showErrors && assetForm.RetirementDescription.$invalid)">
+                                <span class="form-error" ng-show="assetForm.RetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
-                        <label class="form-question col-lg-12">
-                            How will non-retirment assets be divided?</label>
-                        <div class="radio">
-                            <label>
-                                There are no non-retirement assets to be considered.
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How will non-retirment assets be divided?</label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        There are no non-retirement assets to be considered.
                                 <input required ng-model="asset.NonRetirement" name="NonRetirement" type="radio" value="2"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                Division of non-retirement assets will occur as follows:
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Division of non-retirement assets will occur as follows:
                                 <input required ng-model="asset.NonRetirement" name="NonRetirement" type="radio" value="1"></label>
+                                </div>
+                                <div ng-show="assetForm.NonRetirement.$dirty && assetForm.NonRetirement.$invalid || (showErrors && assetForm.NonRetirement.$invalid)">
+                                    <span class="form-error" ng-show="assetForm.NonRetirement.$error.required">This field is required</span>
+                                </div>
+                            </div>
                         </div>
-                        <div ng-show="assetForm.NonRetirement.$dirty && assetForm.NonRetirement.$invalid || (showErrors && assetForm.NonRetirement.$invalid)">
-                            <span class="form-error" ng-show="assetForm.NonRetirement.$error.required">This field is required</span>
-                        </div>
-                        <div class="row">
-                            <div class="input-group col-lg-4" ng-show="asset.NonRetirement == 1">
+                        <div class="form-group row" ng-show="asset.NonRetirement == 1">
+                            <div class="col-lg-4">
                                 <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.NonRetirementDescription" name="NonRetirementDescription" placeholder="Details" rows="2"></textarea>
-                                <div ng-show="assetForm.NonRetirementDescription.$dirty && assetForm.NonRetirementDescription.$invalid || (showErrors && assetForm.NonRetirementDescription.$invalid)">
-                                    <span class="form-error" ng-show="assetForm.NonRetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                </div>
+                            </div>
+                            <div ng-show="assetForm.NonRetirementDescription.$dirty && assetForm.NonRetirementDescription.$invalid || (showErrors && assetForm.NonRetirementDescription.$invalid)">
+                                <span class="form-error" ng-show="assetForm.NonRetirementDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
                         </div>
-                        <label class="form-question col-lg-12">
-                            How will business assets and liabilites be divided?</label>
-                        <div class="radio">
-                            <label>
-                                There are no business assets or liabilities to be considered.
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How will business assets and liabilites be divided?</label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        There are no business assets or liabilities to be considered.
                                 <input required ng-model="asset.Business" name="Business" type="radio" value="2"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                Division of business assets or liabilities will occur as follows: 
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Division of business assets or liabilities will occur as follows: 
                                 <input required ng-model="asset.Business" name="Business" type="radio" value="1"></label>
-                        </div>
-                        <div ng-show="assetForm.Business.$dirty && assetForm.Business.$invalid || (showErrors && assetForm.Business.$invalid)">
-                            <span class="form-error" ng-show="assetForm.Business.$error.required">This field is required</span>
-                        </div>
-                        <div class="row">
-                            <div class="input-group col-lg-4" ng-show="asset.Business == 1">
-                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.BusinessDescription" name="BusinessDescription" placeholder="Details" rows="2"></textarea>
-                                <div ng-show="assetForm.BusinessDescription.$dirty && assetForm.BusinessDescription.$invalid || (showErrors && assetForm.BusinessDescription.$invalid)">
-                                    <span class="form-error" ng-show="assetForm.BusinessDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
+                                <div ng-show="assetForm.Business.$dirty && assetForm.Business.$invalid || (showErrors && assetForm.Business.$invalid)">
+                                    <span class="form-error" ng-show="assetForm.Business.$error.required">This field is required</span>
                                 </div>
                             </div>
                         </div>
-                        <label class="form-question col-lg-12">
-                            Are there any other assets or liabilities to be divided?</label>
-                        <div class="radio">
-                            <label>
-                                Yes
+                        <div class="form-group row" ng-show="asset.Business == 1">
+                            <div class="col-lg-4">
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.BusinessDescription" name="BusinessDescription" placeholder="Details" rows="2"></textarea>
+                            </div>
+                            <div ng-show="assetForm.BusinessDescription.$dirty && assetForm.BusinessDescription.$invalid || (showErrors && assetForm.BusinessDescription.$invalid)">
+                                <span class="form-error" ng-show="assetForm.BusinessDescription.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                Are there any other assets or liabilities to be divided?</label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        Yes
                                 <input required ng-model="asset.AdditionalAssets" name="AdditionalAssets" type="radio" value="1"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                No
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        No
                                 <input required ng-model="asset.AdditionalAssets" name="AdditionalAssets" type="radio" value="2"></label>
+                                </div>
+                                <div ng-show="assetForm.AdditionalAssets.$dirty && assetForm.AdditionalAssets.$invalid || (showErrors && assetForm.AdditionalAssets.$invalid)">
+                                    <span class="form-error" ng-show="assetForm.AdditionalAssets.$error.required">This field is required</span>
+                                </div>
+                            </div>
                         </div>
-                        <div ng-show="assetForm.AdditionalAssets.$dirty && assetForm.AdditionalAssets.$invalid || (showErrors && assetForm.AdditionalAssets.$invalid)">
-                            <span class="form-error" ng-show="assetForm.AdditionalAssets.$error.required">This field is required</span>
-                        </div>
-                        <div class="row">
+                        <div class="form-group row">
                             <div class="input-group col-lg-4" ng-show="asset.AdditionalAssets == 1">
                                 <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="asset.AdditionalAssetsDescription" name="AdditionalAssetsDescription" placeholder="Details" rows="2"></textarea>
                                 <div ng-show="assetForm.AdditionalAssetsDescription.$dirty && assetForm.AdditionalAssetsDescription.$invalid || (showErrors && assetForm.AdditionalAssetsDescription.$invalid)">
@@ -100,10 +116,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary btn-continue" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

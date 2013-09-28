@@ -9,55 +9,67 @@
                     </div>
                     <div class="widget-content">
                         <label class="informative">If you are seeking an adjustment for other qualified children in the home, please answer the questions below</label>
-                        <div class="input-group row">
+                        <div class="form-group row">
                             <label class="col-md-4 form-question">
                                 Are you legally responsible for the qualified child? (Step children do not qualify)</label>
-                            <label class="radio-inline">Yes<input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="1"></label>
-                            <label class="radio-inline">No<input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.LegallyResponsible.$dirty && otherChildrenForm.LegallyResponsible.$invalid  || (showErrors && otherChildrenForm.LegallyResponsible.$invalid)">
-                                <span class="form-error" ng-show="otherChildrenForm.LegallyResponsible.$error.required">This field is required</span>
+                            <div class="col-lg-8">
+                                <label class="radio-inline">Yes<input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="1"></label>
+                                <label class="radio-inline">No<input class="inline" required ng-click="checkToShowMessage()" ng-model="otherChildren.LegallyResponsible" name="LegallyResponsible" type="radio" value="2"></label>
+                                <div ng-show="otherChildrenForm.LegallyResponsible.$dirty && otherChildrenForm.LegallyResponsible.$invalid  || (showErrors && otherChildrenForm.LegallyResponsible.$invalid)">
+                                    <span class="form-error" ng-show="otherChildrenForm.LegallyResponsible.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-group row">
+                        <div class="form-group row">
                             <label class="col-md-4 form-question">
                                 Does the qualified child live in your home?</label>
-                            <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="1"></label>
-                            <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.AtHome.$dirty && otherChildrenForm.AtHome.$invalid  || (showErrors && otherChildrenForm.AtHome.$invalid)">
-                                <span class="form-error" ng-show="otherChildrenForm.AtHome.$error.required">This field is required</span>
+                            <div class="col-lg-8">
+                                <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="1"></label>
+                                <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.AtHome" name="AtHome" type="radio" value="2"></label>
+                                <div ng-show="otherChildrenForm.AtHome.$dirty && otherChildrenForm.AtHome.$invalid  || (showErrors && otherChildrenForm.AtHome.$invalid)">
+                                    <span class="form-error" ng-show="otherChildrenForm.AtHome.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-group row">
+                        <div class="form-group row">
                             <label class="col-md-4 form-question">
                                 Are you actually supporting the qualified child?</label>
-                            <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="1"></label>
-                            <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.Support.$dirty && otherChildrenForm.Support.$invalid  || (showErrors && otherChildrenForm.Support.$invalid)">
-                                <span class="form-error" ng-show="otherChildrenForm.Support.$error.required">This field is required</span>
+                            <div class="col-lg-8">
+                                <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="1"></label>
+                                <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.Support" name="Support" type="radio" value="2"></label>
+                                <div ng-show="otherChildrenForm.Support.$dirty && otherChildrenForm.Support.$invalid  || (showErrors && otherChildrenForm.Support.$invalid)">
+                                    <span class="form-error" ng-show="otherChildrenForm.Support.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-group row">
+                        <div class="form-group row">
                             <label class="col-md-4 form-question">
                                 Is the qualified child subject to a Preexisting Child Support Order?</label>
-                            <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="1"></label>
-                            <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.Preexisting.$dirty && otherChildrenForm.Preexisting.$invalid  || (showErrors && otherChildrenForm.Preexisting.$invalid)">
-                                <span class="form-error" ng-show="otherChildrenForm.Preexisting.$error.required">This field is required</span>
+                            <div class="col-lg-8">
+                                <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="1"></label>
+                                <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.Preexisting" name="Preexisting" type="radio" value="2"></label>
+                                <div ng-show="otherChildrenForm.Preexisting.$dirty && otherChildrenForm.Preexisting.$invalid  || (showErrors && otherChildrenForm.Preexisting.$invalid)">
+                                    <span class="form-error" ng-show="otherChildrenForm.Preexisting.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-group row">
+                        <div class="form-group row">
                             <label class="col-md-4 form-question">
                                 Is the qualified child currently before the court to set, modify or enforce child support?</label>
-                            <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="1"></label>
-                            <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="2"></label>
-                            <div ng-show="otherChildrenForm.InCourt.$dirty && otherChildrenForm.InCourt.$invalid  || (showErrors && otherChildrenForm.InCourt.$invalid)">
-                                <span class="form-error" ng-show="otherChildrenForm.InCourt.$error.required">This field is required</span>
+                            <div class="col-lg-8">
+                                <label class="radio-inline">Yes<input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="1"></label>
+                                <label class="radio-inline">No<input class="inline" required ng-model="otherChildren.InCourt" name="InCourt" type="radio" value="2"></label>
+                                <div ng-show="otherChildrenForm.InCourt.$dirty && otherChildrenForm.InCourt.$invalid  || (showErrors && otherChildrenForm.InCourt.$invalid)">
+                                    <span class="form-error" ng-show="otherChildrenForm.InCourt.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-group row" ng-show="otherChildren.LegallyResponsible == 1 && otherChildren.AtHome == 1 && otherChildren.Support == 1 && otherChildren.Preexisting == 2 && otherChildren.InCourt == 2">
+                        <div class="form-group row" ng-show="otherChildren.LegallyResponsible == 1 && otherChildren.AtHome == 1 && otherChildren.Support == 1 && otherChildren.Preexisting == 2 && otherChildren.InCourt == 2">
                             <label class="col-md-4 form-question">
                                 Enter a comment here explaining why you have included another qualified child in the current court case.</label>
-                            <textarea class="form-control inline" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="otherChildren.Details" name="Details" placeholder="Details" rows="2"></textarea>
+                            <div class="col-lg-4">
+                                <textarea class="form-control inline" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="otherChildren.Details" name="Details" placeholder="Details" rows="2"></textarea>
+                            </div>
                             <div ng-show="otherChildrenForm.Details.$dirty && otherChildrenForm.Details.$invalid  || (showErrors && otherChildrenForm.Details.$invalid)">
                                 <span class="form-error" ng-show="otherChildrenForm.Details.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
@@ -93,9 +105,9 @@
                                         <td>{{child.Name}}</td>
                                         <td>{{child.DateOfBirth | date:'MM/dd/yyyy'}}</td>
                                         <td>
-                                            <!--                                        <button class="btn btn-default btn-default-small btn-primary btn childEdit" title="Edit"><i class="icon-white icon-edit"></i></button>-->
-                                            <button class="btn btn-default btn-default-small btn-primary btn" title="Delete" ng-click="deleteOtherChild(child)"><i class="icon-white icon-trash"></i></button>
-                                            <!--                                        <button class="btn btn-default btn-default-small btn-primary btn childDone hide" data-id="1" title="Done"><i class="icon-white icon-ok"></i>Done</button>-->
+                                            <!--                                        <button class="btn btn-default-small btn-primary btn childEdit" title="Edit"><i class="icon-white icon-edit"></i></button>-->
+                                            <button class="btn btn-default-small btn-primary btn" title="Delete" ng-click="deleteOtherChild(child)"><i class="icon-white icon-trash"></i></button>
+                                            <!--                                        <button class="btn btn-default-small btn-primary btn childDone hide" data-id="1" title="Done"><i class="icon-white icon-ok"></i>Done</button>-->
                                         </td>
 
                                     </tr>
@@ -103,31 +115,37 @@
                             </table>
                         </div>
                         <form id="otherChildForm" name="otherChildForm" novalidate>
-                            <div class="input-group row">
-                                <label class="col-md-4 form-question">Name</label>
-                                <div class="col-lg-4"><input class="form-control" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="otherChild.Name" name="otherChild.Name" placeholder="Name" type="text" value=""></div>
+                            <div class="form-group row">
+                                <label class="col-md-2 form-question">Name</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" required ng-model="otherChild.Name" name="otherChild.Name" placeholder="Name" type="text" value="">
+                                </div>
                                 <div ng-show="otherChildForm.Name.$dirty && otherChildForm.Name.$invalid">
                                     <span class="form-error" ng-show="otherChildForm.Name.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                     <span class="form-error" ng-show="otherChildForm.Name.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <div class="input-group row">
-                                <label class="col-md-4 form-question">Date of Birth</label>
-                                <div class="col-lg-4"><input class="form-control" ui-jq="datepicker" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="otherChild.DateOfBirth" name="otherChild.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value=""></div>
+                            <div class="form-group row">
+                                <label class="col-md-2 form-question">Date of Birth</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" ui-jq="datepicker" required ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="otherChild.DateOfBirth" name="otherChild.DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="">
+                                </div>
                                 <div ng-show="otherChildForm.DateOfBirth.$dirty && otherChildForm.DateOfBirth.$invalid">
                                     <span class="form-error" ng-show="otherChildForm.DateOfBirth.$error.pattern">Date must be in mm/dd/yyyy format.</span>
                                     <span class="form-error" ng-show="otherChildForm.DateOfBirth.$error.required">The field is required</span>
                                 </div>
                             </div>
-                            <button class="btn btn-default btn-default btn-primary" ng-click="addOtherChild()" value="Add">Add</button>
+                            <button class="btn btn-default btn-primary" ng-click="addOtherChild()" value="Add">Add</button>
                             <br />
                         </form>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary" ng-click="submit()" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <button class="btn btn-default btn-default btn-primary" ng-click="submit()" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
-
 </div>

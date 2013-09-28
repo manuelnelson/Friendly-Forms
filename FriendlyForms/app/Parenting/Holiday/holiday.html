@@ -13,30 +13,36 @@
                         <h3>{{childName}}</h3>
                         <br>
                         <h4>Thanksgiving Break</h4>
-                        <label class="form-question col-lg-12">
-                            How would you like to manage Thanksgiving Break? From the time school is dismissed on the last day prior to the holiday until:</label>
-                        <div class="radio">
-                            <label>
-                                The day before returning to school. 
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How would you like to manage Thanksgiving Break? From the time school is dismissed on the last day prior to the holiday until:</label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        The day before returning to school. 
                                 <input required ng-model="holiday.Thanksgiving" name="Thanksgiving" type="radio" value="1"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                Until returning to school after the holiday. 
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Until returning to school after the holiday. 
                                 <input ng-model="holiday.Thanksgiving" name="Thanksgiving" type="radio" value="2"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                Other
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Other
                                 <input ng-model="holiday.Thanksgiving" name="Thanksgiving" type="radio" value="3"></label>
-                        </div>
-                        <div ng-show="showErrors && holidayForm.Thanksgiving.$invalid">
-                            <span class="form-error" ng-show="holidayForm.Thanksgiving.$error.required">The field is required</span>
+                                </div>
+                                <div ng-show="showErrors && holidayForm.Thanksgiving.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.Thanksgiving.$error.required">The field is required</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.Thanksgiving == 3">
                             <label class="form-question col-lg-12">
                                 Define your Thanksgiving Holiday schedule</label>
-                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ThanksgivingOther" name="ThanksgivingOther" rows="2"></textarea>
+                            <div class="col-lg-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ThanksgivingOther" name="ThanksgivingOther" rows="2"></textarea>
+                            </div>
                             <div ng-show="showErrors && holidayForm.ThanksgivingOther.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ThanksgivingOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
@@ -44,61 +50,75 @@
                         <div class="form-group row" ng-show="holiday.Thanksgiving == 1">
                             <label class="form-question col-lg-12">
                                 At the time of</label>
-                            <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ThanksgivingTime" name="ThanksgivingTime" placeholder="hh:mm am/pm" type="text" value=""></div>
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            <div class="col-lg-4">
+                                <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ThanksgivingTime" name="ThanksgivingTime" placeholder="hh:mm am/pm" type="text" value="">
+                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            </div>
                             <div ng-show="showErrors && holidayForm.ThanksgivingTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ThanksgivingTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
                             </div>
                         </div>
                         <h4>Winter Break</h4>
-                        <label class="form-question col-lg-12">
-                            How would you like to manage Winter Break? From the time school is dismissed on the last day prior to the holiday</label>
-                        <div class="radio">
-                            <label>
-                                Until returning to school after Winter Break
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How would you like to manage Winter Break? From the time school is dismissed on the last day prior to the holiday</label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        Until returning to school after Winter Break
                                 <input required ng-model="holiday.Christmas" name="Christmas" type="radio" value="1"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                On Christmas Eve 
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        On Christmas Eve 
                                 <input ng-model="holiday.Christmas" name="Christmas" type="radio" value="2"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                On Christmas Day
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        On Christmas Day
                                 <input ng-model="holiday.Christmas" name="Christmas" type="radio" value="3"></label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                On the day after Christmas 
-                                <input ng-model="holiday.Christmas" name="Christmas" type="radio" value="4"></label></div>
-                            <div class="radio">
-                                <label>
-                                    Other
-                                <input ng-model="holiday.Christmas" name="Christmas" type="radio" value="5"></label></div>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        On the day after Christmas 
+                                <input ng-model="holiday.Christmas" name="Christmas" type="radio" value="4"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Other
+                                <input ng-model="holiday.Christmas" name="Christmas" type="radio" value="5"></label>
+                                </div>
                                 <div ng-show="showErrors && holidayForm.Christmas.$invalid">
                                     <span class="form-error" ng-show="holidayForm.Christmas.$error.required">The field is required</span>
                                 </div>
-                                <div class="form-group row" ng-show="holiday.Christmas == 2 || holiday.Christmas == 3 || holiday.Christmas == 4">
-                                    <label class="form-question col-lg-12">
-                                        At the time of</label>
-                                    <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ChristmasTime" name="ChristmasTime" placeholder="hh:mm am/pm" type="text" value=""></div>
-                                    <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
-                                    <div ng-show="showErrors && holidayForm.ChristmasTime.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.ChristmasTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row" ng-show="holiday.Christmas == 5">
-                                    <label class="form-question col-lg-12">
-                                        Define your Winter Break schedule</label>
-                                    <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ChristmasOther" name="ChristmasOther" rows="2"></textarea>
-                                    <div ng-show="showErrors && holidayForm.ChristmasOther.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.ChristmasOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                    </div>
-                                </div>
-                                <h4>Spring Break</h4>
-                                <label class="form-question col-lg-12">
-                                    How would you like to manage the start of Spring Break?  From the time school is dismissed on the last day prior to the break until:</label>
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-show="holiday.Christmas == 2 || holiday.Christmas == 3 || holiday.Christmas == 4">
+                            <label class="form-question col-lg-12">
+                                At the time of</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ChristmasTime" name="ChristmasTime" placeholder="hh:mm am/pm" type="text" value="">
+                            </div>
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            <div ng-show="showErrors && holidayForm.ChristmasTime.$invalid">
+                                <span class="form-error" ng-show="holidayForm.ChristmasTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-show="holiday.Christmas == 5">
+                            <label class="form-question col-lg-12">
+                                Define your Winter Break schedule</label>
+                            <div class="col-lg-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ChristmasOther" name="ChristmasOther" rows="2"></textarea>
+                            </div>
+                            <div ng-show="showErrors && holidayForm.ChristmasOther.$invalid">
+                                <span class="form-error" ng-show="holidayForm.ChristmasOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <h4>Spring Break</h4>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How would you like to manage the start of Spring Break?  From the time school is dismissed on the last day prior to the break until:</label>
+                            <div class="col-lg-12">
                                 <div class="radio">
                                     <label>
                                         Until returning to school after Spring Break
@@ -112,56 +132,72 @@
                                 <div ng-show="showErrors && holidayForm.SpringBreak.$invalid">
                                     <span class="form-error" ng-show="holidayForm.SpringBreak.$error.required">The field is required</span>
                                 </div>
-                                <div class="form-group row" ng-show="holiday.SpringBreak == 2">
-                                    <label class="form-question col-lg-12">
-                                        Define your Spring Break schedule</label>
-                                    <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SpringOther" name="SpringOther" rows="2"></textarea>
-                                    <div ng-show="showErrors && holidayForm.SpringOther.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.SpringOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                    </div>
-                                </div>
-                                <h4>Summer Break</h4>
-                                <div class="form-group row">
-                                    Summer vacation begins
-                            <div class="col-lg-4"><input class="form-control" class="input-mini inline" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
-                                    days after the last day of school at
-                            <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value=""></div>
-                                    <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
-                                    <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.required">The field is required</span>
-                                        <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.number">This field must be a number.</span>
-                                    </div>
-                                    <div ng-show="showErrors && holidayForm.SummerBeginTime.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.SummerBeginTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
-                                        <span class="form-error" ng-show="holidayForm.SummerBeginTime.$error.required">The field is required</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    Summer vacation ends 
-                            <div class="col-lg-4"><input class="form-control" class="input-mini inline" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
-                                    days prior to the first day of school at
-                            <div class="col-lg-4"><input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value=""></div>
-                                    <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
-                                    <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.required">The field is required</span>
-                                        <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.number">This field must be a number.</span>
-                                    </div>
-                                    <div ng-show="showErrors && holidayForm.SummerEndTime.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.SummerEndTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
-                                        <span class="form-error" ng-show="holidayForm.SummerEndTime.$error.required">The field is required</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="form-question col-lg-12">
-                                        How will each of you spend time with the child(ren) during summer vacation.</label>
-                                    <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SummerDetails" name="SummerDetails" rows="2"></textarea>
-                                    <div ng-show="showErrors && holidayForm.SummerDetails.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.SummerDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                    </div>
-                                </div>
-                                <h4>Fall Break</h4>
-                                <label class="form-question col-lg-12">
-                                    How would you like to manage the start of fall break?  From the time school is dismissed on the last day prior to the break until:</label>
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-show="holiday.SpringBreak == 2">
+                            <label class="form-question col-lg-12">
+                                Define your Spring Break schedule</label>
+                            <div class="col-lg-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SpringOther" name="SpringOther" rows="2"></textarea>
+                            </div>
+                            <div ng-show="showErrors && holidayForm.SpringOther.$invalid">
+                                <span class="form-error" ng-show="holidayForm.SpringOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <h4>Summer Break</h4>
+                        <div class="form-group row">
+                            Summer vacation begins
+                            <div class="col-lg-4">
+                                <input class="form-control" class="input-mini inline" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
+                            </div>
+                            days after the last day of school at
+                            <div class="col-lg-4">
+                                <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value="">
+                            </div>
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
+                                <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.required">The field is required</span>
+                                <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.number">This field must be a number.</span>
+                            </div>
+                            <div ng-show="showErrors && holidayForm.SummerBeginTime.$invalid">
+                                <span class="form-error" ng-show="holidayForm.SummerBeginTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
+                                <span class="form-error" ng-show="holidayForm.SummerBeginTime.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            Summer vacation ends 
+                            <div class="col-lg-4">
+                                <input class="form-control" class="input-mini inline" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
+                            </div>
+                            days prior to the first day of school at
+                            <div class="col-lg-4">
+                                <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value="">
+                            </div>
+                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+                            <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
+                                <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.required">The field is required</span>
+                                <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.number">This field must be a number.</span>
+                            </div>
+                            <div ng-show="showErrors && holidayForm.SummerEndTime.$invalid">
+                                <span class="form-error" ng-show="holidayForm.SummerEndTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
+                                <span class="form-error" ng-show="holidayForm.SummerEndTime.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How will each of you spend time with the child(ren) during summer vacation.</label>
+                            <div class="col-lg-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SummerDetails" name="SummerDetails" rows="2"></textarea>
+                            </div>
+                            <div ng-show="showErrors && holidayForm.SummerDetails.$invalid">
+                                <span class="form-error" ng-show="holidayForm.SummerDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <h4>Fall Break</h4>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                How would you like to manage the start of fall break?  From the time school is dismissed on the last day prior to the break until:</label>
+                            <div class="col-lg-12">
                                 <div class="radio">
                                     <label>
                                         Until returning to school after Fall Break
@@ -175,401 +211,406 @@
                                 <div ng-show="showErrors && holidayForm.FallBreak.$invalid">
                                     <span class="form-error" ng-show="holidayForm.FallBreak.$error.required">The field is required</span>
                                 </div>
-                                <div class="form-group row" ng-show="holiday.FallBreak == 2">
-                                    <label class="form-question col-lg-12">
-                                        Define your Fall Break schedule</label>
-                                    <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.FallOther" name="FallOther" rows="2"></textarea>
-                                    <div ng-show="showErrors && holidayForm.FallOther.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.FallOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-show="holiday.FallBreak == 2">
+                            <label class="form-question col-lg-12">
+                                Define your Fall Break schedule</label>
+                            <div class="col-lg-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.FallOther" name="FallOther" rows="2"></textarea>
+                            </div>
+                            <div ng-show="showErrors && holidayForm.FallOther.$invalid">
+                                <span class="form-error" ng-show="holidayForm.FallOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <h4>Other Holidays</h4>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                When a holiday falls on Friday or Monday, should the holiday visitation include the weekend immediately before or after that holiday?</label>
+                            <div class="col-lg-12">
+                                <label class="checkbox">
+                                    <input value="" ng-model="holiday.FridayHoliday" name="FridayHoliday" type="checkbox">Include the following Saturday and Sunday when holiday falls on Friday
+                                </label>
+                                <label class="checkbox">
+                                    <input ng-model="holiday.MondayHoliday" name="MondayHoliday" type="checkbox" value="">Include the preceding Saturday and Sunday when holiday falls on Monday 
+                                </label>
+                                <div ng-show="showErrors && holidayForm.Education.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.Thanksgiving.$error.required">The field is required</span>
                                 </div>
-                                <h4>Other Holidays</h4>
-                                <div class="form-group row">
-                                    <label class="form-question col-lg-12">
-                                        When a holiday falls on Friday or Monday, should the holiday visitation include the weekend immediately before or after that holiday?</label>
-                                    <label class="checkbox">
-                                        Include the following Saturday and Sunday when holiday falls on Friday 
-                                <div class="col-lg-4"><input class="form-control" class="inline" value="" ng-model="holiday.FridayHoliday" name="FridayHoliday" type="checkbox"></label>
-                                    <label class="checkbox">
-                                        Include the preceding Saturday and Sunday when holiday falls on Monday 
-                                <div class="col-lg-4"><input class="form-control" ng-model="holiday.MondayHoliday" name="MondayHoliday" type="checkbox" value=""></div>
-                                    </label>
-                                    <div ng-show="showErrors && holidayForm.Education.$invalid">
-                                        <span class="form-error" ng-show="holidayForm.Thanksgiving.$error.required">The field is required</span>
-                                    </div>
+                            </div>
+                        </div>
+                        <label class="form-question col-lg-12">Many people define holiday parenting time as the children being with one parent during a holiday when it falls in even-numbered years, and the other parent during that same holiday when it falls in odd-numbered years. Others are able to see that it would be to everyone’s advantage for one parent to have the children on a specific holiday every year while some people do not want to specify the parenting time for a holiday.</label>
+                        <div class="form-group row">
+                            <div class="col-md-2">&nbsp;</div>
+                            <div class="col-md-5">Father</div>
+                            <div class="col-md-5">Mother</div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">All</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="4"></label>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="4"></label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Winter Break</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ChristmasFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ChristmasFather.$error.required">The field is required</span>
                                 </div>
-                                <label class="form-question col-lg-12">Many people define holiday parenting time as the children being with one parent during a holiday when it falls in even-numbered years, and the other parent during that same holiday when it falls in odd-numbered years. Others are able to see that it would be to everyone’s advantage for one parent to have the children on a specific holiday every year while some people do not want to specify the parenting time for a holiday.</label>
-                                <div class="row">
-                                    <div class="col-md-2">&nbsp;</div>
-                                    <div class="col-md-5">Father</div>
-                                    <div class="col-md-5">Mother</div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ChristmasMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ChristmasMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">All</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-model="holiday.allFather" ng-change="matchValue('Father')" name="allFather" type="radio" value="4"></label>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-model="holiday.allMother" ng-change="matchValue('Mother')" name="allMother" type="radio" value="4"></label>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">MLK Day</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MlkFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MlkFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Winter Break</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChristmasFather')" ng-model="holiday.ChristmasFather" name="ChristmasFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ChristmasFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ChristmasFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChristmasMother')" ng-model="holiday.ChristmasMother" name="ChristmasMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ChristmasMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ChristmasMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MlkMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MlkMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">MLK Day</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MlkFather')" ng-model="holiday.MlkFather" name="MlkFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MlkFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MlkFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MlkMother')" ng-model="holiday.MlkMother" name="MlkMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MlkMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MlkMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">President's Day</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.PresidentsFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.PresidentsFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">President's Day</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('PresidentsFather')" ng-model="holiday.PresidentsFather" name="PresidentsFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.PresidentsFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.PresidentsFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.PresidentsMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.PresidentsMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('PresidentsMother')" ng-model="holiday.PresidentsMother" name="PresidentsMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.PresidentsMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.PresidentsMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Spring Break</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.SpringBreakFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.SpringBreakFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.SpringBreakMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.SpringBreakMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Spring Break</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('SpringBreakFather')" ng-model="holiday.SpringBreakFather" name="SpringBreakFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.SpringBreakFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.SpringBreakFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Mother's Day</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MothersFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MothersFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MothersMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MothersMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('SpringBreakMother')" ng-model="holiday.SpringBreakMother" name="SpringBreakMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.SpringBreakMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.SpringBreakMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Memorial Day</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MemorialFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MemorialFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MemorialMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MemorialMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Mother's Day</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersFather')" ng-model="holiday.MothersFather" name="MothersFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MothersFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MothersFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Father's Day</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.FathersFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.FathersFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.FathersMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.FathersMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersMother')" ng-model="holiday.MothersMother" name="MothersMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MothersMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MothersMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Independance Day</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.IndependenceFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.IndependenceFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.IndependenceMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.IndependenceMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Memorial Day</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MemorialFather')" ng-model="holiday.MemorialFather" name="MemorialFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MemorialFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MemorialFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Labor Day</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.LaborFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.LaborFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.LaborMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.LaborMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MemorialMother')" ng-model="holiday.MemorialMother" name="MemorialMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MemorialMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MemorialMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Fall Break</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.FallBreakFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.FallBreakFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.FallBreakMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.FallBreakMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Father's Day</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersFather')" ng-model="holiday.FathersFather" name="FathersFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.FathersFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.FathersFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Halloween</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.HalloweenFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.HalloweenFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.HalloweenMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.HalloweenMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersMother')" ng-model="holiday.FathersMother" name="FathersMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.FathersMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.FathersMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Thanksgiving Break</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ThanksgivingFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ThanksgivingFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ThanksgivingMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ThanksgivingMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Independance Day</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('IndependenceFather')" ng-model="holiday.IndependenceFather" name="IndependenceFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.IndependenceFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.IndependenceFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Child(ren)'s Birthdays</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ChildrensFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ChildrensFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ChildrensMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ChildrensMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('IndependenceMother')" ng-model="holiday.IndependenceMother" name="IndependenceMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.IndependenceMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.IndependenceMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Father's Birthdays</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.FathersBdayFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.FathersBdayFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.FathersBdayMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.FathersBdayMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Labor Day</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('LaborFather')" ng-model="holiday.LaborFather" name="LaborFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.LaborFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.LaborFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Mother's Birthdays</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MothersBdayFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MothersBdayFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.MothersBdayMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.MothersBdayMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('LaborMother')" ng-model="holiday.LaborMother" name="LaborMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.LaborMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.LaborMother.$error.required">The field is required</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">Religious Holidays</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ReligiousFather.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ReligiousFather.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="4"></label>
-                                        <div ng-show="showErrors && holidayForm.ReligiousMother.$invalid">
-                                            <span class="form-error" ng-show="holidayForm.ReligiousMother.$error.required">The field is required</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Fall Break</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FallBreakFather')" ng-model="holiday.FallBreakFather" name="FallBreakFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.FallBreakFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.FallBreakFather.$error.required">The field is required</span>
                                 </div>
-                                <div class="input-group row" ng-repeat="addedHoliday in extraHolidays">
-                                    <div class="col-md-2">{{addedHoliday.HolidayName}}</div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" required ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="4"></label>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label class="radio-inline">Odd<input class="inline" required ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="1"></label>
-                                        <label class="radio-inline">Even<input class="inline" ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="2"></label>
-                                        <label class="radio-inline">Every<input class="inline" ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="3"></label>
-                                        <label class="radio-inline">Never<input class="inline" ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="4"></label>
-                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FallBreakMother')" ng-model="holiday.FallBreakMother" name="FallBreakMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.FallBreakMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.FallBreakMother.$error.required">The field is required</span>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Halloween</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('HalloweenFather')" ng-model="holiday.HalloweenFather" name="HalloweenFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.HalloweenFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.HalloweenFather.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('HalloweenMother')" ng-model="holiday.HalloweenMother" name="HalloweenMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.HalloweenMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.HalloweenMother.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Thanksgiving Break</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ThanksgivingFather')" ng-model="holiday.ThanksgivingFather" name="ThanksgivingFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ThanksgivingFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ThanksgivingFather.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ThanksgivingMother')" ng-model="holiday.ThanksgivingMother" name="ThanksgivingMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ThanksgivingMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ThanksgivingMother.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Child(ren)'s Birthdays</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChildrensFather')" ng-model="holiday.ChildrensFather" name="ChildrensFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ChildrensFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ChildrensFather.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ChildrensMother')" ng-model="holiday.ChildrensMother" name="ChildrensMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ChildrensMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ChildrensMother.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Father's Birthdays</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersBdayFather')" ng-model="holiday.FathersBdayFather" name="FathersBdayFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.FathersBdayFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.FathersBdayFather.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('FathersBdayMother')" ng-model="holiday.FathersBdayMother" name="FathersBdayMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.FathersBdayMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.FathersBdayMother.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Mother's Birthdays</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersBdayFather')" ng-model="holiday.MothersBdayFather" name="MothersBdayFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MothersBdayFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MothersBdayFather.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('MothersBdayMother')" ng-model="holiday.MothersBdayMother" name="MothersBdayMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.MothersBdayMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.MothersBdayMother.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">Religious Holidays</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ReligiousFather')" ng-model="holiday.ReligiousFather" name="ReligiousFather" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ReligiousFather.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ReligiousFather.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeHoliday('ReligiousMother')" ng-model="holiday.ReligiousMother" name="ReligiousMother" type="radio" value="4"></label>
+                                <div ng-show="showErrors && holidayForm.ReligiousMother.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ReligiousMother.$error.required">The field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" ng-repeat="addedHoliday in extraHolidays">
+                            <div class="col-md-2">{{addedHoliday.HolidayName}}</div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" required ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeExtraHoliday($index, 'Father')" ng-model="addedHoliday.HolidayFather" name="HolidayFather{{$index}}" type="radio" value="4"></label>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="radio-inline">Odd<input class="inline" required ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="1"></label>
+                                <label class="radio-inline">Even<input class="inline" ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="2"></label>
+                                <label class="radio-inline">Every<input class="inline" ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="3"></label>
+                                <label class="radio-inline">Never<input class="inline" ng-click="changeExtraHoliday($index, 'Mother')" ng-model="addedHoliday.HolidayMother" name="HolidayMother{{$index}}" type="radio" value="4"></label>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -584,11 +625,13 @@
                 </div>
                 <div class="widget-content">
                     <form ng-submit="addExtraHoliday()" id="extraHolidayForm" name="extraHolidayForm" novalidate>
-                        <div class="row">
-                            <div class="input-group col-md-2">
+                        <div class="form-group row">
+                            <div class="col-md-2">
                                 <label class="form-question col-lg-12">
                                     Holiday Name</label>
-                                <div class="col-lg-4"><input class="form-control" class="col-md-12" required ng-model="extraHoliday.HolidayName" name="HolidayName" placeholder="Holiday Name" type="text" value=""></div>
+                                <div class="col-lg-12">
+                                    <input class="form-control" class="col-md-12" required ng-model="extraHoliday.HolidayName" name="HolidayName" placeholder="Holiday Name" type="text" value="">
+                                </div>
                                 <div ng-show="extraHolidayForm.HolidayName.$dirty && extraHolidayForm.HolidayName.$invalid || (showExtraErrors && extraHolidayForm.HolidayName.$invalid)">
                                     <span class="form-error" ng-show="extraHolidayForm.HolidayName.$error.required">The field is required</span>
                                 </div>
@@ -616,7 +659,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-default btn-default btn-primary">Add </button>
+                        <button class="btn btn-default btn-primary">Add </button>
                     </form>
                 </div>
             </div>
@@ -633,7 +676,7 @@
             same. You will still have the opportunity to make changes to any of your selections on the page(s) that follow this one. Please note that this will overwrite any existing data you may have entered for other 
             children.
         </label>
-        <div class="btn btn-default btn-default btn-primary dropdown copy-button" id="copy-holidays">
+        <div class="btn btn-default btn-primary dropdown copy-button" id="copy-holidays">
             <a href="#" style="display: block; color: white;" data-target="#copy-holidays" class="dropdown-toggle">Copy To<i class="icon-share icon-white"></i></a>
             <ul class="dropdown-menu">
                 <li><a title="all" ng-click="copyChild(0)">All</a></li>
@@ -641,6 +684,10 @@
             </ul>
         </div>
     </div>
-    <button class="btn btn-default btn-default btn-primary" ng-click="previousChild()"><i class="icon-arrow-left icon-white"></i>Previous</button>
-    <button class="btn btn-default btn-default btn-primary" ng-click="nextChild()">Continue <i class="icon-arrow-right icon-white"></i></button>
+    <div class="form-group row">
+        <div class="col-lg-12">
+            <button class="btn btn-default btn-primary" ng-click="previousChild()" value="Previous"><i class="icon-arrow-left icon-white"></i>Previous</button>
+            <button class="btn btn-default btn-primary" ng-click="nextChild()" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+        </div>
+    </div>
 </div>

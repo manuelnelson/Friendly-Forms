@@ -8,32 +8,47 @@
                         <h5>Information</h5>
                     </div>
                     <div class="widget-content">
+                        <div class="form-group row">
                             <label class="form-question col-lg-12">
                                 Who will be able to get information about the children, like doctor's records and school reports, directly from the doctor's office or school?</label>
-                            <div class="radio"><label>
-                                Mother
-                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="2"></label></div>
-                            <div class="radio"><label>
-                                Father
-                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="1"></label></div>
-                            <div class="radio"><label>
-                                Both
-                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="3"></label></div>
-                            <div ng-show="informationForm.InformationAccess.$dirty && informationForm.InformationAccess.$invalid || (showErrors && informationForm.InformationAccess.$invalid)">
-                                <span class="form-error" ng-show="informationForm.InformationAccess.$error.required">This field is required</span>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        Mother
+                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="2"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Father
+                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="1"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Both
+                                <input required ng-model="information.InformationAccess" name="InformationAccess" type="radio" value="3"></label>
+                                </div>
+                                <div ng-show="informationForm.InformationAccess.$dirty && informationForm.InformationAccess.$invalid || (showErrors && informationForm.InformationAccess.$invalid)">
+                                    <span class="form-error" ng-show="informationForm.InformationAccess.$error.required">This field is required</span>
+                                </div>
                             </div>
+                        </div>
                         <div class="form-group row" ng-show="information.InformationAccess == 1 || information.InformationAccess == 2">
                             <label class="form-question col-lg-12">
-                               How should access to the rights of information for either parent be restricted?</label>
-                            <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain any restrictions for each parent" rows="2"></textarea>
+                                How should access to the rights of information for either parent be restricted?</label>
+                            <div class="col-lg-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain any restrictions for each parent" rows="2"></textarea></div>
                             <div ng-show="informationForm.AccessOfRightsDetails.$dirty && informationForm.AccessOfRightsDetails.$invalid  || (showErrors && informationForm.AccessOfRightsDetails.$invalid)">
                                 <span class="form-error" ng-show="informationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary btn-continue" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

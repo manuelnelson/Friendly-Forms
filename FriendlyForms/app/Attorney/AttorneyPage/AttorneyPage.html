@@ -8,8 +8,8 @@
                 </div>
                 <div class="widget-content">
                     <div class="row">
-                        <a href="/#/Attorney/CreateClient/Attorney/{{userId}}" class="btn btn-default btn-default btn-primary pull-left">Add a New Client</a>
-                        <button class="btn btn-default btn-default btn-primary pull-right">View Archived Cases</button>
+                        <a href="/#/Attorney/CreateClient/Attorney/{{userId}}" class="btn btn-default btn-primary pull-left">Add a New Client</a>
+                        <button class="btn btn-default btn-primary pull-right">View Archived Cases</button>
                     </div><br/>
                     <div class="row">
                         <div ng-show="clients.length==0">
@@ -28,11 +28,11 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="client in clients">
-                                    <td><button class="btn btn-default btn-default btn-primary" ng-click="openClient(client)">Open</button></td>
+                                    <td><button class="btn btn-default btn-primary" ng-click="openClient(client)">Open</button></td>
                                     <td>{{client.Name}}</td>
                                     <td>{{client.CaseNumber}}</td>
                                     <td>{{client.CreatedDate | date:'mediumDate'}}</td>
-                                    <td><button class="btn btn-default btn-default btn-primary" ng-click="archiveClient(client)">Archive</button></td>
+                                    <td><button class="btn btn-default btn-primary" ng-click="archiveClient(client)">Archive</button></td>
                                 </tr>
                             </tbody>
                         </table>

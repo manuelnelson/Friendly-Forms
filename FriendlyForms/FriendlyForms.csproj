@@ -274,7 +274,7 @@
     <Content Include="app\Account\Login\Login.html" />
     <Content Include="app\Account\Logoff\logoff-controller.js" />
     <Content Include="app\Account\Logoff\logoff-service.js" />
-    <Content Include="app\Account\Logoff\Logoff.html" />
+    <Content Include="app\Account\Logoff\logoff.html" />
     <Content Include="app\Account\Register\register-controller.js" />
     <Content Include="app\Account\Register\register-service.js" />
     <Content Include="app\Account\Register\Register.html" />

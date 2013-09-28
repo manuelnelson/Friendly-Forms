@@ -11689,7 +11689,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
                                         templateContent +
                                    '</div>' +
                                    '<div class="modal-footer">' +
-                                       '<a href="#" class="btn btn-default btn-default btn-primary" data-dismiss="modal">Ok</a>' +
+                                       '<a href="#" class="btn btn-default btn-primary" data-dismiss="modal">Ok</a>' +
                                    '</div>' +
                                '</div>';
 
