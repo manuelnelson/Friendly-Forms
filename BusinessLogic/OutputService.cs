@@ -101,7 +101,6 @@ namespace BusinessLogic
         public ScheduleB GetScheduleB(long userId, string parentName, bool isOtherParent = false)
         {
             var income = IncomeService.GetByUserId(userId, isOtherParent).ToIncomeDto().ToMonthly();
-            var preexistingSupport = PreexistingSupportFormService.GetByUserId(userId, isOtherParent);
             var otherChildren = OtherChildrenService.GetByUserId(userId, isOtherParent);
             var schedule = new ScheduleB
                 {
@@ -113,7 +112,8 @@ namespace BusinessLogic
             schedule.MedicareTax = schedule.SelfEmploymentIncome * MedicareTax;
             schedule.Total34 = schedule.FicaIncome + schedule.MedicareTax;
             schedule.Total5Minus1 = schedule.GrossIncome - schedule.Total34;
-            if (preexistingSupport != null && preexistingSupport.Support == (int)YesNo.Yes)
+            schedule.PreexistingSupportForm = PreexistingSupportFormService.GetByUserId(userId, isOtherParent);            
+            if (schedule.PreexistingSupportForm != null && schedule.PreexistingSupportForm.Support == (int)YesNo.Yes)
             {
                 var preexistingCourts = PreexistingSupportService.GetFiltered(x => x.UserId == userId && x.IsOtherParent == isOtherParent).ToList();
                 foreach (var preexistingCourt in preexistingCourts)

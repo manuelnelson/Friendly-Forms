@@ -6,6 +6,7 @@
         $scope.scheduleB = data;
         $scope.showFatherOtherChildren = scheduleBService.showOtherChildren(data.ScheduleB);
         $scope.showMotherOtherChildren =  scheduleBService.showOtherChildren(data.OtherScheduleB);
+        $scope.showPreexistingChildren = scheduleBService.showPreexistingChildren(data.ScheduleB) || scheduleBService.showPreexistingChildren(data.OtherScheduleB);
         $scope.isLoaded = true;
         $timeout(function () {
             var html = $('.widget-content').html();
@@ -22,9 +23,6 @@
         var menuGroup = menuService.getMenuGroupByPath($location.path());
         menuGroup.subMenuItem.iconClass = "";
     };
-        function showOtherChildren(scheduleB) {
-            
-        }
     $rootScope.currentScope = $scope;
     headerService.hide();
 }];
