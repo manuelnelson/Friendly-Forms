@@ -56,42 +56,46 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table>
+                    <table ng-show="showPreexistingChildren">
                         <thead>
                             <tr>
-                                <th colspan="6">Adjustment for Preexisting Child Support Orders Being Paid for Other Children</th>
+                                <th colspan="7">Adjustment for Preexisting Child Support Orders Being Paid for Other Children</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
+                                <td>Child Name(s) and Date of Birth</td>                                
                                 <td>Court Name</td>
                                 <td>Case #</td>
-                                <td>Child Names</td>
                                 <td>Order Date</td>
                                 <td>{{scheduleB.Father}}</td>
                                 <td>{{scheduleB.Mother}}</td>
                             </tr>
                             <tr ng-repeat="court in scheduleB.ScheduleB.PreexistingSupport">
-                                <td>{{court.CourtName}}</td>
-                                <td>{{court.CaseNumber}}</td>
-                                <td><ul class="unstyled">
+                                <td>
+                                    <ul class="unstyled">
                                         <li ng-repeat="child in court.Children">
                                             <span class="pull-left">{{child.Name}}</span><span class="pull-right">{{child.DateOfBirth | date:'shortDate'}}</span><br/>
                                         </li>
-                                    </ul></td>
-                                <td>{{court.OrderDate | date: 'mediumDate'}}</td>
+                                    </ul>
+                                </td>
+                                <td>{{court.CourtName}}, GA</td>
+                                <td>{{court.CaseNumber}}</td>
+                                <td>{{court.OrderDate | date: 'shortDate'}}</td>
                                 <td>{{court.Monthly | dollarAmount}}</td>
                                 <td></td>
                             </tr>
                             <tr ng-repeat="court in scheduleB.OtherScheduleB.PreexistingSupport">
-                                <td>{{court.CourtName}}</td>
-                                <td>{{court.CaseNumber}}</td>
-                                <td><ul class="unstyled">
+                                <td>
+                                    <ul class="unstyled">
                                         <li ng-repeat="child in court.Children">
                                             <span class="pull-left">{{child.Name}}</span><span class="pull-right">{{child.DateOfBirth | date:'shortDate'}}</span><br/>
                                         </li>
-                                    </ul></td>
-                                <td>{{court.OrderDate | date: 'mediumDate'}}</td>
+                                    </ul>
+                                </td>
+                                <td>{{court.CourtName}}, GA</td>
+                                <td>{{court.CaseNumber}}</td>
+                                <td>{{court.OrderDate | date: 'shortDate'}}</td>
                                 <td></td>
                                 <td>{{court.Monthly | dollarAmount}}</td>
                             </tr>
