@@ -188,6 +188,7 @@
     <Compile Include="Helpers\Numbers.cs" />
     <Compile Include="Helpers\OutputHelper.cs" />
     <Compile Include="LawFirmService.cs" />
+    <Compile Include="Models\ExtraExpenses.cs" />
     <Compile Include="Models\IncompleteForm.cs" />
     <Compile Include="Models\FormMenuItem.cs" />
     <Compile Include="Models\IncomeDto.cs" />

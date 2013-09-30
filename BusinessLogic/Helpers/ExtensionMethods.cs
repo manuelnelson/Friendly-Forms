@@ -40,5 +40,26 @@ namespace BusinessLogic.Helpers
                     OtherDetails = income.OtherDetails,
                 };
         }
+        public static ExtraExpenses ToMonthly(this ExtraExpense extraExpense)
+        {
+            return new ExtraExpenses
+            {
+                ChildId = extraExpense.ChildId,
+                TutitionFather = (float)extraExpense.TutitionFather / 12,
+                TutitionMother = (float)extraExpense.TutitionMother / 12,
+                TutitionNonParent = (float)extraExpense.TutitionNonParent / 12,
+                EducationFather = (float)extraExpense.EducationFather / 12,
+                EducationMother = (float)extraExpense.EducationMother / 12,
+                EducationNonParent = (float)extraExpense.EducationNonParent / 12,
+                MedicalFather = (float)extraExpense.MedicalFather / 12,
+                MedicalMother = (float)extraExpense.MedicalMother / 12,
+                MedicalNonParent = (float)extraExpense.MedicalNonParent / 12,
+                SpecialFather = (float)extraExpense.SpecialFather / 12,
+                SpecialMother = (float)extraExpense.SpecialMother / 12,
+                SpecialNonParent = (float)extraExpense.SpecialNonParent / 12,
+                ExtraSpent = (float)extraExpense.ExtraSpent / 12,
+            };
+
+        }
     }
 }
