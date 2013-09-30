@@ -956,6 +956,7 @@
     <Content Include="Views\Headers\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\Account\Survey\" />
     <Folder Include="app\Client\" />
     <Folder Include="App_Data\" />
     <Folder Include="Views\Output\" />

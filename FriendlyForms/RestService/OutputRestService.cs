@@ -461,72 +461,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int TotalDeviations { get; set; }
     }
-    [DataContract]
-    public class ExtraExpenses
-    {
-        [DataMember]
-        public int TutitionFather { get; set; }
-        [DataMember]
-        public int TutitionMother { get; set; }
-        [DataMember]
-        public int TutitionNonParent { get; set; }
-        [DataMember]
-        public int TutitionNonTotal { get; set; }
-        [DataMember]
-        public int EducationFather { get; set; }
-        [DataMember]
-        public int EducationMother { get; set; }
-        [DataMember]
-        public int EducationNonParent { get; set; }
-        [DataMember]
-        public int EducationTotal { get; set; }
-        [DataMember]
-        public int MedicalFather { get; set; }
-        [DataMember]
-        public int MedicalMother { get; set; }
-        [DataMember]
-        public int MedicalNonParent { get; set; }
-        [DataMember]
-        public int MedicalTotal { get; set; }
-        [DataMember]
-        public int SpecialFather { get; set; }
-        [DataMember]
-        public int SpecialMother { get; set; }
-        [DataMember]
-        public int SpecialNonParent { get; set; }
-        [DataMember]
-        public int SpecialTotal { get; set; }
-        [DataMember]
-        public int TotalFather { get; set; }
-        [DataMember]
-        public int TotalMother { get; set; }
-        [DataMember]
-        public int TotalNonParent { get; set; }
-        [DataMember]
-        public int TotalTotal { get; set; }
-        [DataMember]
-        public double ProRataFather { get; set; }
-        [DataMember]
-        public double ProRataMother { get; set; }
-        [DataMember]
-        public int ProRataTotal { get; set; }
-        [DataMember]
-        public int PercentageFather { get; set; }
-        [DataMember]
-        public int PercentageMother { get; set; }
-        [DataMember]
-        public int DeviationFather { get; set; }
-        [DataMember]
-        public int DeviationMother { get; set; }
-        [DataMember]
-        public string SpecialDescriptionFather { get; set; }
-        [DataMember]
-        public string SpecialDescriptionMother { get; set; }
-        [DataMember]
-        public string SpecialDescriptionNonParent { get; set; }
-        [DataMember]
-        public int ExtraSpent { get; set; }
-    }
+
     [DataContract]
     public class Extraordinaries
     {
@@ -587,13 +522,13 @@ namespace FriendlyForms.RestService
     public class Extraordinary
     {
         [DataMember]
-        public int Father { get; set; }
+        public double Father { get; set; }
         [DataMember]
-        public int Mother { get; set; }
+        public double Mother { get; set; }
         [DataMember]
-        public int NonParent { get; set; }
+        public double NonParent { get; set; }
         [DataMember]
-        public int Total { get; set; }
+        public double Total { get; set; }
         [DataMember]
         public string Name { get; set; }
     }
