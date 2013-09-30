@@ -173,7 +173,7 @@ table thead th:last-child
     -webkit-border-top-right-radius: 10px;
     border-top-right-radius: 10px;
 }
-table tr:last-child {
+table tr.bold {
     font-weight: bold;
 }
 ol.bold li{

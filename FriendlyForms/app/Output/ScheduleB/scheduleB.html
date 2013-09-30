@@ -21,7 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr class="bold">
                                 <td>1. Total Gross Monthly Income</td>
                                 <td>{{scheduleB.ScheduleB.GrossIncome | dollarAmount}}</td>
                                 <td>{{scheduleB.OtherScheduleB.GrossIncome | dollarAmount}}</td>
@@ -120,24 +120,21 @@
                     <table ng-show="showFatherOtherChildren || showMotherOtherChildren">
                         <thead>
                             <tr>
-                                <th colspan="4">Adjustment for Other Qualified Children</th>
+                                <th colspan="3">Adjustment for Other Qualified Children</th>
                             </tr>
                         </thead>
-                        <tbody id="other-qualified-children">
+                        <tbody>
                             <tr>
-                                <th></th>
-                                <th>Name of Child</th>
-                                <th>DOB</th>
-                                <th>Credit Claimed By</th>
+                                <td>Name of Child</td>
+                                <td>DOB</td>
+                                <td>Credit Claimed By</td>
                             </tr>
                             <tr ng-show="showFatherOtherChildren" ng-repeat="child in scheduleB.ScheduleB.OtherChildren">
-                                <td></td>
                                 <td>{{child.Name}}</td>
                                 <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
                                 <td>{{child.ClaimedBy}}</td>
                             </tr>
                             <tr ng-show="showMotherOtherChildren" ng-repeat="child in scheduleB.OtherScheduleB.OtherChildren">
-                                <td></td>
                                 <td>{{child.Name}}</td>
                                 <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
                                 <td>{{child.ClaimedBy}}</td>
