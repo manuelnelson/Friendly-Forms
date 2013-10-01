@@ -1,5 +1,13 @@
 ﻿namespace Models.ViewModels
 {
+    public enum Survey
+    {
+        StronglyDisagree=1,
+        Disagree,
+        Neutral,
+        Agree,
+        StronglyAgree
+    }
     public enum Role
     {
         Admin =1,

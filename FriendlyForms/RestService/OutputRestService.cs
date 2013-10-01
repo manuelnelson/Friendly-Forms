@@ -953,11 +953,11 @@ namespace FriendlyForms.RestService
             };
         }
 
-        private static ExtraExpenses CalculateTotalExpenses(IEnumerable<ExtraExpense> extraExpenses, ScheduleB scheduleBFather, ScheduleB scheduleBMother, Extraordinaries extraordinaries)
+        private const double DeterminationOfAllowableExpenseFactor = 0.07;
+        private static ExtraExpenses CalculateTotalExpenses(IEnumerable<ExtraExpense> extraExpenses, Extraordinaries extraordinaries, int supportObligation, TotalIncomes totalIncomes)
         {
             var totalExpenses = new ExtraExpenses();
-            var monthlyExpenses = extraExpenses.Select(extraExpense => extraExpense.ToMonthly()).ToList();
-            totalExpenses.ExtraSpent = monthlyExpenses.Sum(x => x.ExtraSpent);
+            totalExpenses.ExtraSpent = extraExpenses.Sum(x => x.ExtraSpent);
 
             totalExpenses.EducationFather = extraordinaries.AllEducationTotalMonthly.Father;
             totalExpenses.EducationMother = extraordinaries.AllEducationTotalMonthly.Mother;
@@ -967,21 +967,26 @@ namespace FriendlyForms.RestService
             totalExpenses.MedicalMother = extraordinaries.MedicalTotalMonthly.Mother;
             totalExpenses.MedicalNonParent = extraordinaries.MedicalTotalMonthly.NonParent;
             totalExpenses.MedicalTotal = extraordinaries.MedicalTotalMonthly.Total;
-            totalExpenses.SpecialFather = extraordinaries.RearingTotalMonthly.Father;
-            totalExpenses.SpecialMother = extraordinaries.RearingTotalMonthly.Mother;
-            totalExpenses.SpecialNonParent = extraordinaries.RearingTotalMonthly.NonParent;
-            totalExpenses.SpecialTotal = extraordinaries.RearingTotalMonthly.Total;
-            totalExpenses.TotalFather = extraordinaries.AllEducationTotalMonthly.Father + extraordinaries.MedicalTotalMonthly.Father + extraordinaries.RearingTotalMonthly.Father;
-            totalExpenses.TotalMother = extraordinaries.AllEducationTotalMonthly.Mother + extraordinaries.MedicalTotalMonthly.Mother + extraordinaries.RearingTotalMonthly.Mother;
-            totalExpenses.TotalNonParent = extraordinaries.AllEducationTotalMonthly.NonParent + extraordinaries.MedicalTotalMonthly.NonParent + extraordinaries.RearingTotalMonthly.NonParent;
+            var percentSupportObl = supportObligation * DeterminationOfAllowableExpenseFactor;
+            var expensesFactor = extraordinaries.RearingTotalMonthly.Total > percentSupportObl
+                                     ? extraordinaries.RearingTotalMonthly.Total - percentSupportObl
+                                     : 0;
 
-            var totalIncomes = GetTotalIncomes(scheduleBFather, scheduleBMother);
+            totalExpenses.SpecialFather = (extraordinaries.RearingTotal.Father / extraordinaries.RearingTotal.Total) * expensesFactor;
+            totalExpenses.SpecialMother = (extraordinaries.RearingTotal.Mother / extraordinaries.RearingTotal.Total) * expensesFactor;
+            totalExpenses.SpecialNonParent = (extraordinaries.RearingTotal.NonParent / extraordinaries.RearingTotal.Total) * expensesFactor;
+            totalExpenses.SpecialTotal = totalExpenses.SpecialFather + totalExpenses.SpecialMother +
+                                         totalExpenses.SpecialNonParent;
+            totalExpenses.TotalFather = extraordinaries.AllEducationTotalMonthly.Father + extraordinaries.MedicalTotalMonthly.Father + totalExpenses.SpecialFather;
+            totalExpenses.TotalMother = extraordinaries.AllEducationTotalMonthly.Mother + extraordinaries.MedicalTotalMonthly.Mother + totalExpenses.SpecialMother;
+            totalExpenses.TotalNonParent = extraordinaries.AllEducationTotalMonthly.NonParent + extraordinaries.MedicalTotalMonthly.NonParent + totalExpenses.SpecialNonParent;
+
             totalExpenses.ProRataFather = totalIncomes.ProRataFatherPercentage;
             totalExpenses.ProRataMother = totalIncomes.ProRataMotherPercentage;
             totalExpenses.ProRataTotal = 100;
             totalExpenses.TotalTotal = totalExpenses.TotalFather + totalExpenses.TotalMother + totalExpenses.TotalNonParent;
-            totalExpenses.PercentageFather = (int)Math.Round((double)totalExpenses.ProRataFather/100 * totalExpenses.TotalFather);
-            totalExpenses.PercentageMother = (int)Math.Round((double)totalExpenses.ProRataMother / 100 * totalExpenses.TotalMother);
+            totalExpenses.PercentageFather = totalIncomes.ProRataFather * totalExpenses.TotalTotal;
+            totalExpenses.PercentageMother = totalIncomes.ProRataMother * totalExpenses.TotalTotal;
             totalExpenses.DeviationFather = totalExpenses.PercentageFather - totalExpenses.TotalFather;
             totalExpenses.DeviationMother = totalExpenses.PercentageMother - totalExpenses.TotalMother;
             return totalExpenses;
@@ -1105,6 +1110,8 @@ namespace FriendlyForms.RestService
                 rearingTotal.Father += extraExpense.SpecialFather;
                 rearingTotal.Mother += extraExpense.SpecialMother;
                 rearingTotal.NonParent += extraExpense.SpecialNonParent;
+                rearingTotal.Total += extraExpense.SpecialFather + extraExpense.SpecialMother +
+                                      extraExpense.SpecialNonParent;
                 var yearlyEducationTotal = extraExpense.EducationFather + extraExpense.EducationMother +
                                            extraExpense.EducationNonParent + extraExpense.TutitionFather +
                                            extraExpense.TutitionMother + extraExpense.TutitionNonParent;
@@ -1365,11 +1372,10 @@ namespace FriendlyForms.RestService
             /*-----Get Information---*/
             var scheduleBFather = OutputService.GetScheduleB(userId, "");
             var scheduleBMother = OutputService.GetScheduleB(userId, "", isOtherParent: true);
-            //If there are other children, use the PreexistingOrder amount, otherwise just use Adjusted Support
             var totalIncomes = GetTotalIncomes(scheduleBFather, scheduleBMother);
-            var highIncomeAdjusted = totalIncomes.TotalIncomeTotal;    
-            
+            var highIncomeAdjusted = totalIncomes.TotalIncomeTotal;                
             var scheduleD = GetScheduleD(userId);
+            //If there are other children, use the PreexistingOrder amount, otherwise just use Adjusted Support
             var presumptiveAmounts = GetPresumptiveAmounts(scheduleD.FatherScheduleD, scheduleD.MotherScheduleD, scheduleBFather,
                                                            scheduleBMother);
             var lowIncome = CalculateLowIncomeDeviation(deviations, custodyInformation, children, presumptiveAmounts);
@@ -1377,7 +1383,9 @@ namespace FriendlyForms.RestService
             var highIncomeMother = CalculateHighIncomeMotherDeviation(deviations);
             var parentNames = GetParentNames(userId);
             var extraordinaries = CalculateExtraordinaries(extraExpenses, children);
-            var totalExpenses = CalculateTotalExpenses(extraExpenses, scheduleBFather, scheduleBMother, extraordinaries);
+            var totalOtherChildren = scheduleBFather.OtherChildren.Count + scheduleBMother.OtherChildren.Count;
+            var supportObligation = (int)BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, totalOtherChildren);
+            var totalExpenses = CalculateTotalExpenses(extraExpenses, extraordinaries, supportObligation, totalIncomes);
             
             AllowableDeviation allowableDeviation = CalculateAllowableDeviation(deviations, lowIncome, highIncomeFather, highIncomeMother, highIncomeAdjusted,
                                                        totalExpenses);

@@ -52,11 +52,11 @@ namespace BusinessLogic.Models
         [DataMember]
         public double ProRataMother { get; set; }
         [DataMember]
-        public int ProRataTotal { get; set; }
+        public double ProRataTotal { get; set; }
         [DataMember]
-        public int PercentageFather { get; set; }
+        public double PercentageFather { get; set; }
         [DataMember]
-        public int PercentageMother { get; set; }
+        public double PercentageMother { get; set; }
         [DataMember]
         public double DeviationFather { get; set; }
         [DataMember]

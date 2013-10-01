@@ -278,6 +278,9 @@
     <Content Include="app\Account\Register\register-controller.js" />
     <Content Include="app\Account\Register\register-service.js" />
     <Content Include="app\Account\Register\Register.html" />
+    <Content Include="app\Account\Survey\survey-controller.js" />
+    <Content Include="app\Account\Survey\survey-service.js" />
+    <Content Include="app\Account\Survey\survey.html" />
     <Content Include="app\Account\Unauthorized\unauthorized-controller.js" />
     <Content Include="app\Account\Unauthorized\unauthorized-service.js" />
     <Content Include="app\Account\Unauthorized\Unauthorized.html" />
@@ -956,7 +959,6 @@
     <Content Include="Views\Headers\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\Account\Survey\" />
     <Folder Include="app\Client\" />
     <Folder Include="App_Data\" />
     <Folder Include="Views\Output\" />
