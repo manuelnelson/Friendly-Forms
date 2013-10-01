@@ -36029,6 +36029,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
         when('/Account/Register/', { caseInsensitiveMatch: true, controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
+        when('/Account/Survey/User/:userId', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
@@ -36078,8 +36079,15 @@ FormsApp.directive('integer', function () {
 
 ;FormsApp.filter('dollarAmount', function () {
     return function (input) {
-        var dollarInput = (input).toFixed(2);
-        return dollarInput < 0 ? '-$' + Math.abs(dollarInput) : '$' + Math.abs(dollarInput);
+        var isNegative = input < 0;
+        var dollarInput = Math.abs(input).toFixed(2);
+        return isNegative ? '-$' + dollarInput : '$' + dollarInput;
+    };
+});
+FormsApp.filter('percentage', function () {
+    return function (input) {
+        var percent = Math.abs(input).toFixed(2);
+        return percent + '%';
     };
 });
 ;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', '$q', function (menuService, headerService, $location, $q) {
@@ -36552,18 +36560,27 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
         $scope.path = $location.path();
         $scope.submit = function (noNavigate) {
             userService.getUserData($routeParams.userId).then(function (userData) {
+                if (userData.Verified) {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                } else {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                }
+                if (!noNavigate)
+                    menuService.nextMenu();
+            });
+        };
+        $scope.accept = function() {
+            userService.getUserData($routeParams.userId).then(function (userData) {
                 registerService.users.update(null, {
                     Id: userData.Id,
                     UserAuthId: userData.UserAuthId,
                     Verified: true,
                 }, function () {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                    if (!noNavigate)
-                        menuService.nextMenu();
+                    menuService.nextMenu();
                 });
             });
         };
-
         genericService.refreshPage(function () {
             $rootScope.currentScope = $scope;
         });
@@ -38665,7 +38682,30 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             $scope.court = '';
         });
     };
-    $scope.showChildren = function(court) {
+    $scope.courtEditing = false;
+    $scope.editCourt = function (court) {
+        $scope.courtEditing = true;
+        $scope.editCourtId = court.Id;
+    };
+    $scope.doneCourtEdit = function (court) {
+        $scope.courtEditing = false;
+        $scope.editCourtId = 0;
+        supportService.courts.update({}, court, function () {
+        });
+    };
+    $scope.deleteCourt = function (court) {
+        supportService.children.delete({ PreexistingSupportId: court.Id }, function () {
+        });
+        supportService.courts.delete(court, function () {
+            $scope.courts = _.reject($scope.courts, function (item) {
+                return item.Id == court.Id;
+            });
+        });
+    };
+
+
+
+    $scope.showChildren = function (court) {
         supportService.children.get({ PreexistingSupportId: court.Id }, function (data) {
             if (data.Children.length == 0)
                 $scope.children = [];
@@ -38687,7 +38727,6 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             $scope.child = '';
         });
     };
-    
 
     $scope.editing = false;
     $scope.editChild = function (child) {
@@ -38956,6 +38995,17 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
+        showOtherChildren: function(scheduleB) {
+            if(scheduleB.OtherChildrenForm.LegallyResponsible == 1 && scheduleB.OtherChildrenForm.AtHome == 1 && scheduleB.OtherChildrenForm.Support == 1 && scheduleB.OtherChildrenForm.Preexisting == 2 && scheduleB.OtherChildrenForm.InCourt == 2 && scheduleB.OtherChildren.length > 0)
+                return true;
+            return false;
+        },
+        showPreexistingChildren: function (scheduleB) {
+            if (scheduleB.PreexistingSupportForm.Support == 1 && scheduleB.PreexistingSupport.length > 0)
+                return true;
+            return false;
+        }
+
     };
     return service;
 }]);
@@ -38965,6 +39015,9 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     $scope.isLoaded = false;
     scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function (data) {
         $scope.scheduleB = data;
+        $scope.showFatherOtherChildren = scheduleBService.showOtherChildren(data.ScheduleB);
+        $scope.showMotherOtherChildren =  scheduleBService.showOtherChildren(data.OtherScheduleB);
+        $scope.showPreexistingChildren = scheduleBService.showPreexistingChildren(data.ScheduleB) || scheduleBService.showPreexistingChildren(data.OtherScheduleB);
         $scope.isLoaded = true;
         $timeout(function () {
             var html = $('.widget-content').html();
@@ -39909,34 +39962,42 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
     loginMenuService.refresh();    
 }];
 
-;FormsApp.factory('loginMenuService', ['$resource', 'menuService', 'userService', function ($resource, menuService, userService) {
+;FormsApp.factory('loginMenuService', ['$resource', 'menuService', 'userService','$q',
+   function ($resource, menuService, userService, $q) {
     var service = {
         auth: $resource('/api/auth/logout', {},
             {
                 logout: { method: 'GET', params: { format: 'json' } },
             }),
         refresh: function () {
+            var deferred = $q.defer();
             userService.getCurrentUserSession().then(function (userData) {
                 if (userData != null && userData.IsAuthenticated) {
                     service.authUser = userData;
                     menuService.userId = service.authUser.CustomId;
-                    menuService.getMenu();
+                    menuService.getMenu().then(function() {
+                        deferred.resolve();
+                    });
                 } else {
                     service.authUser = null;
                     menuService.userId = 0;
-                    menuService.getMenu();
+                    menuService.getMenu().then(function () {
+                        deferred.resolve();
+                    });
                 }
             });
+            return deferred.promise;
         }
     };
     return service;
 }]);
-;var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService', 'loginMenuService',
-    function ($scope, $routeParams, $location, loginService, headerService, loginMenuService) {
+;var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService', 'loginMenuService', 'menuService',
+    function ($scope, $routeParams, $location, loginService, headerService, loginMenuService, menuService) {
         $scope.submit = function () {
             loginService.login.post(null, $scope.login, function () {
-                loginMenuService.refresh();
-                $location.path('/');
+                loginMenuService.refresh().then(function() {
+                    menuService.goToFirstFormMenu();
+                });
             }, function() {
                 $scope.loginForm.$setPristine();
                 $scope.login = '';
@@ -40010,6 +40071,29 @@ RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
         authUser: null,
+    };
+    return service;
+}]);
+;var SurveyCtrl = ['$scope', '$routeParams', '$location', 'surveyService', 'menuService', 'genericService', '$rootScope', function($scope, $routeParams, $location, surveyService, menuService, genericService, $rootScope) {
+    $scope.path = $location.path();
+
+    $scope.submit = function(noNavigate) {
+        if ($scope.surveyForm.$invalid) {
+            var value = genericService.getFormInput('#surveyForm');
+            $.jStorage.set($scope.path, value);
+            return;
+        }
+        $scope.survey.UserId = $routeParams.userId;
+    };
+    genericService.refreshPage(function() {
+        $rootScope.currentScope = $scope;
+    });
+}];
+;FormsApp.factory('surveyService', ['$resource', function($resource) {
+    var service = {
+        surveys: $resource('/api/surveys/', {  },
+            {
+            }),
     };
     return service;
 }]);
