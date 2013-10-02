@@ -252,7 +252,7 @@
        </script>
 
        <div ng-controller="BuzzController">
-         <input ng-model="userId"/>
+         <div class="col-lg-4"><input class="form-control" ng-model="userId"/>
          <button ng-click="fetch()">fetch</button>
          <hr/>
          <div ng-repeat="item in activities.data.items">

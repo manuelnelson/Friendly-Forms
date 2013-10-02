@@ -28,34 +28,6 @@ a:hover {
     width: 191px;
 }
 
-/* Search input */
-#search {
-	position: absolute;
-	z-index: 25;
-	top: 6px;
-	left: 230px;
-}
-#search input[type=text] {
-	border-radius: 4px 0 0 4px;
-	padding: 4px 10px 5px;
-	border: 0;
-	box-shadow: 2px 2px 3px rgba(0,0,0,0.7) inset, 0 1px 0 rgba(255,255,255,0.2); 
-	width: 100px;
-}
-
-#search button {
-	border: 0;
-	margin-top: -9px;
-	padding: 5px 10px 4px;
-	border-radius: 0 4px 4px 0;
-	box-shadow: -2px 2px 3px rgba(0,0,0,0.7) inset, 0 1px 0 rgba(255,255,255,0.2); 
-}
-#search button i {
-	opacity: 0.5;
-}
-#search button:hover i, #search button:active i {
-	opacity: 0.9;
-}
 #user-nav {
     position: absolute;
     right: 30px;
@@ -87,7 +59,7 @@ a:hover {
 }
 #user-nav > ul > li > a > i, #sidebar li a i {
 	vertical-align: top;
-	background-image: url('/Content/images/glyphicons-halflings-white.png');
+	background-image: url('/Content/images/icons-halflings-white.png');
 	opacity: .5;
 	margin-top: 2px;
 }
@@ -233,7 +205,7 @@ a:hover {
 	top: -7px;
 } 
 
-.container-fluid .row-fluid:first-child {
+.container .row:first-child {
 	margin-top: 20px;
 }
 /* Breadcrumb */
@@ -984,12 +956,12 @@ a:hover {
 form {
 	margin-bottom: 0;
 }
-.form-horizontal .control-group {
+.form-horizontal .input-group {
 	border-top: 1px solid #ffffff;
 	border-bottom: 1px solid #eeeeee;
 	margin-bottom: 0;
 }
-.form-horizontal .control-group:last-child {
+.form-horizontal .input-group:last-child {
 	border-bottom: 0;
 }
 .form-horizontal .control-label {
@@ -1073,7 +1045,7 @@ form {
 	}
 	#sidebar > a > i {
 		margin-right: 10px;
-		background-image: url('/Content/images/glyphicons-halflings-white.png');
+		background-image: url('/Content/images/icons-halflings-white.png');
 	}
 	#sidebar > ul {
 		display: none;
@@ -1168,7 +1140,7 @@ form {
 	body {
 		padding: 0 !important;
 	}
-	.container-fluid {
+	.container {
 		padding-left: 20px;
 		padding-right: 20px;
 	}
@@ -1178,7 +1150,7 @@ form {
 	}
 }
 @media (min-width: 768px) and (max-width: 979px) {
-	[class*="span"], .row-fluid [class*="span"] {
+	[class*="span"], .row [class*="span"] {
 		display: block;
 		float: none;
 		margin-left: 0;

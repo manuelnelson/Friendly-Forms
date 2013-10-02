@@ -7305,7 +7305,7 @@ $.extend(Datepicker.prototype, {
 		if (!inst) {
 			this.uuid += 1;
 			var id = 'dp' + this.uuid;
-			this._dialogInput = $('<input type="text" id="' + id +
+			this._dialogInput = $('<div class="col-lg-4"><input class="form-control" type="text" id="' + id +
 				'" style="position: absolute; top: -100px; width: 0px; z-index: -10;"/>');
 			this._dialogInput.keydown(this._doKeyDown);
 			$('body').append(this._dialogInput);

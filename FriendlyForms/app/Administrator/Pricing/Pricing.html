@@ -1,28 +1,42 @@
 ﻿<div class="form-vertical wrapper" ng-controller="PricingCtrl">
-    <div class="row-fluid">
-        <form class="well form-vertical" ng-submit="submit()" name="pricingForm" id="pricingForm">
-            <fieldset>
-                <legend>Pricing</legend>
-                <h5 style="margin-top: 0">Choose which plan works best for your firm </h5>
-                    <label class="informative">
-                        All plans are billed monthly for one year from the date of acceptance of the Subscription Agreement found on the next page. You are under no financial obligation at this time. 
-                    </label>
-                <div class="control-group">
-                    <label class="radio">
-                        Silver Plan: $315 per month.   Seven (7) forms per month. Each additional form is $55
-                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="1"></label>
-                    <label class="radio">
-                        Gold Plan: $500 per month.   Fifteen (15) forms per month. Each additional form is $50
-                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="2"></label>
-                    <label class="radio">
-                        Premiere Plan: $750 per month.   Thirty (30) forms per month. Each additional form is $40
-                        <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="3"></label>
-                    <div ng-show="showErrors && pricingForm.Subscription.$invalid">
-                        <span class="form-error" ng-show="pricingForm.Subscription.$error.required">The field is required</span>
+    <div class="row">
+        <div class="col-lg-6">
+            <form class="well form-vertical" ng-submit="submit()" name="pricingForm" id="pricingForm">
+                <fieldset>
+                    <legend>Pricing</legend>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <h5 style="margin-top: 0">Choose which plan works best for your firm </h5>
+                            <label class="informative col-lg-12">
+                                All plans are billed monthly for one year from the date of acceptance of the Subscription Agreement found on the next page. You are under no financial obligation at this time. 
+                            </label>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="radio">
+                                <label>
+                                    Silver Plan: $315 per month.   Seven (7) forms per month. Each additional form is $55
+                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="1"></label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    Gold Plan: $500 per month.   Fifteen (15) forms per month. Each additional form is $50
+                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="2"></label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    Premiere Plan: $750 per month.   Thirty (30) forms per month. Each additional form is $40
+                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="3"></label>
+                            </div>
+                            <div ng-show="showErrors && pricingForm.Subscription.$invalid">
+                                <span class="form-error" ng-show="pricingForm.Subscription.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <button class="btn btn-default btn-primary">Next</button>
+                        </div>
                     </div>
-                </div>
-                <button class="btn btn-primary">Next</button>
-            </fieldset>
-        </form>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>

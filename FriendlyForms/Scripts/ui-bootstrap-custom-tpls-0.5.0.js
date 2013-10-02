@@ -1507,11 +1507,11 @@ angular.module("template/datepicker/popup.html", []).run(["$templateCache", func
       "	<li class=\"divider\"></li>\n" +
       "	<li style=\"padding: 9px;\">\n" +
       "		<span class=\"btn-group\">\n" +
-      "			<button class=\"btn btn-small btn-inverse\" ng-click=\"today()\">Today</button>\n" +
-      "			<button class=\"btn btn-small btn-info\" ng-click=\"showWeeks = ! showWeeks\" ng-class=\"{active: showWeeks}\">Weeks</button>\n" +
-      "			<button class=\"btn btn-small btn-danger\" ng-click=\"clear()\">Clear</button>\n" +
+      "			<button class=\"btn btn-sm btn-inverse\" ng-click=\"today()\">Today</button>\n" +
+      "			<button class=\"btn btn-sm btn-info\" ng-click=\"showWeeks = ! showWeeks\" ng-class=\"{active: showWeeks}\">Weeks</button>\n" +
+      "			<button class=\"btn btn-sm btn-danger\" ng-click=\"clear()\">Clear</button>\n" +
       "		</span>\n" +
-      "		<button class=\"btn btn-small btn-success pull-right\" ng-click=\"isOpen = false\">Close</button>\n" +
+      "		<button class=\"btn btn-sm btn-success pull-right\" ng-click=\"isOpen = false\">Close</button>\n" +
       "	</li>\n" +
       "</ul>");
 }]);
@@ -1557,9 +1557,9 @@ angular.module("template/timepicker/timepicker.html", []).run(["$templateCache",
       "		<td ng-show=\"showMeridian\"></td>\n" +
       "	</tr>\n" +
       "	<tr>\n" +
-      "		<td class=\"control-group\" ng-class=\"{'error': !validHours}\"><input type=\"text\" ng-model=\"hours\" ng-change=\"updateHours()\" class=\"span1 text-center\" ng-mousewheel=\"incrementHours()\" ng-readonly=\"readonlyInput\" maxlength=\"2\" /></td>\n" +
+      "		<td class=\"input-group\" ng-class=\"{'error': !validHours}\"><input type=\"text\" ng-model=\"hours\" ng-change=\"updateHours()\" class=\"span1 text-center\" ng-mousewheel=\"incrementHours()\" ng-readonly=\"readonlyInput\" maxlength=\"2\" /></td>\n" +
       "		<td>:</td>\n" +
-      "		<td class=\"control-group\" ng-class=\"{'error': !validMinutes}\"><input type=\"text\" ng-model=\"minutes\" ng-change=\"updateMinutes()\" class=\"span1 text-center\" ng-readonly=\"readonlyInput\" maxlength=\"2\"></td>\n" +
+      "		<td class=\"input-group\" ng-class=\"{'error': !validMinutes}\"><input type=\"text\" ng-model=\"minutes\" ng-change=\"updateMinutes()\" class=\"span1 text-center\" ng-readonly=\"readonlyInput\" maxlength=\"2\"></td>\n" +
       "		<td ng-show=\"showMeridian\"><button ng-click=\"toggleMeridian()\" class=\"btn text-center\">{{meridian}}</button></td>\n" +
       "	</tr>\n" +
       "	<tr class=\"text-center\">\n" +

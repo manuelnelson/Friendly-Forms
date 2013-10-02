@@ -12,28 +12,29 @@
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <![endif]-->
 </head>
 <body>
     <div id="header">
         <h1><a href="/">Split Solutions</a></h1>
     </div>
-    <div id="user-nav" class="navbar" ng-controller="LoginMenuCtrl">
-        <div id="nav-menu" class="nav btn-group">
-            <a class="btn btn-mini btn-inverse" ng-show="user.IsAuthenticated" href="/" style="display: none"><i class="icon icon-home"></i><span class="text">Home</span></a>
-            <a class="btn btn-mini btn-inverse dropdown-toggle" ng-show="user.IsAuthenticated" data-toggle="dropdown" href="#"><span class="icon-user icon"></span>{{user.DisplayName}}</a>
-            <ul class="dropdown-menu">
-                <li ng-show="isAdmin"><a title="Administration" href="/#/Administrator/ClientCases/User/{{user.CustomId}}">Profile</a></li>
-                <li ng-show="isAttorney"><a title="Attorney Page" href="/#/Attorney/AttorneyPage/Attorney/{{user.CustomId}}">Profile</a></li>
-                <li><a title="Log off" href="/#/Account/Logoff">Logout</a></li>
-            </ul>
-            <a class="btn btn-mini btn-inverse" ng-show="!user.IsAuthenticated" style="display: none" href="/#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a>
-        </div>
+    <div id="user-nav" ng-controller="LoginMenuCtrl">
+        <ul class="nav btn-group">
+            <li class="btn"><a class="btn btn-default btn-xs btn-inverse" ng-show="user.IsAuthenticated" href="/" style="display: none"><i class="icon icon-home"></i><span class="text">Home</span></a></li>
+            <li class="btn"><a class="btn btn-default btn-xs btn-inverse dropdown-toggle" ng-show="user.IsAuthenticated" data-toggle="dropdown" href="#"><span class="icon-user icon"></span>{{user.DisplayName}}</a>
+                <ul class="dropdown-menu">
+                    <li ng-show="isAdmin"><a title="Administration" href="/#/Administrator/ClientCases/User/{{user.CustomId}}">Profile</a></li>
+                    <li ng-show="isAttorney"><a title="Attorney Page" href="/#/Attorney/AttorneyPage/Attorney/{{user.CustomId}}">Profile</a></li>
+                    <li><a title="Log off" href="/#/Account/Logoff">Logout</a></li>
+                </ul>
+            </li>
+            <li class="btn"><a class="btn btn-default btn-xs btn-inverse" ng-show="!user.IsAuthenticated" style="display: none" href="/#/Account/Login/"><i class="icon icon-off"></i><span class="text">Log in</span></a></li>
+        </ul>
     </div>
     @RenderBody()
     <div id="sidebar" ng-controller="MenuCtrl">
         <ul class="ng-cloak">
-            <li ng-repeat="menuItem in menuItems" ng-click="menuClick()" class="{{menuItem.itemClass}}"><a href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>
+            <li ng-repeat="menuItem in menuItems" ng-click="menuClick()" ng-class="(menuItem.showSubMenu) ? 'open' :''" class="{{menuItem.itemClass}}"><a href="{{menuItem.path}}"><i class="{{menuItem.iconClass}}"></i><span>{{menuItem.text}}</span></a>
                 <ul ng-show="menuItem.showSubMenu">
                     <li ng-repeat="subMenuItem in menuItem.subMenuItems | filter:enableFilter" class="{{subMenuItem.itemClass}}" ng-click="subMenuClick(subMenuItem)" data-path="{{subMenuItem.path}}"><a href="javascript:"><i class="{{subMenuItem.iconClass}}"></i><span>{{subMenuItem.text}}</span></a></li>
                 </ul>
@@ -54,50 +55,54 @@
                         <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
                             <input type="hidden" class="html" name="html" />
                             <input type="hidden" class="name" name="name" />
-                            <button class="btn btn-large tip-bottom printForm" value="Print to PDF"><i class="icon-print"></i></button>
+                            <button class="btn btn-default btn-lg tip-bottom printForm" value="Print to PDF"><i class="icon-print"></i></button>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="container-fluid" ng-show="showFeedbackHeader">
-                <div class="row-fluid" ng-show="showIssue">
+            <div ng-show="showFeedbackHeader">
+                <div class="row" ng-show="showIssue">
                     <form ng-submit="submitIssues()" name="feedbackForm" class="form-inline pull-right">
-                        <input type="text" ng-model="feedback.Email" name="feedback.Email" class="input" placeholder="Your Email">
-                        <input type="text" ng-model="feedback.Message" name="feedback.Message" class="input-xlarge" placeholder="List feedback here" />
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="form-group">
+                            <input class="form-control" type="text" ng-model="feedback.Email" name="feedback.Email" placeholder="Your Email">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" ng-model="feedback.Message" name="feedback.Message" placeholder="List feedback here" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default btn-primary">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>
-            <div class="row-fluid" id="breadcrumb" ng-show="showFeedbackHeader" style="margin-top: 10px;">
+            <div class="row" id="breadcrumb" ng-show="showFeedbackHeader" style="margin-top: 10px;">
                 <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a>
                 <a ng-repeat="level in levels" class="tip-bottom" href="/#/{{level.path}}">{{level.text}}</a>
             </div>
         </div>
-        <div class="container-fluid" id="main-content">
-            <div ng-controller="MessageCtrl" ng-show="showMessage" class="row-fluid">
-                <div class="span12 ng-cloak">
-                    <div class="alert {{AlertType}}">
-                        <a ng-click="close();" class="close">×</a>
-                        <strong>{{Title}}</strong> {{Message}}
-                    </div>
+        <div ng-controller="MessageCtrl" ng-show="showMessage" class="row">
+            <div class="col-md-12 ng-cloak">
+                <div class="alert {{AlertType}}">
+                    <a ng-click="close();" class="close">×</a>
+                    <strong>{{Title}}</strong> {{Message}}
                 </div>
             </div>
-            <div ng-view></div>
-            <hr />
-            <footer>
-                <p>
-                    ©Split Solutions 2013
-                </p>
-            </footer>
         </div>
+        <div ng-view></div>
+        <hr />
     </div>
+    <footer>
+        <p>
+            ©Split Solutions 2013
+        </p>
+    </footer>
     @if (!Convert.ToBoolean(ConfigurationManager.AppSettings["DisableMiniProfiler"]))
     {
         Html.Raw(Profiler.RenderIncludes().ToHtmlString());
     }
     <div ng-controller="LoadingCtrl" id="loading" ng-show="loading"><span>{{message}}</span></div>
     @Html.Partial("_templateErrorMessage")
-@*    @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))*@
+    @*    @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal) : Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.MinifiedAndCombined))*@
     @Html.RenderJsBundle("~/Scripts/friendly.js.bundle", BundleOptions.Normal)
 </body>
 </html>

@@ -1,7 +1,7 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="DeviationCtrl" id="deviationForm" name="deviationForm" novalidate>
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-signal"></i></span>
@@ -30,213 +30,264 @@
                             button and proceed to the next section.
                             </p>
                         </div>
-                        <div class="control-group">
-                            <label class="form-question">
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
                                 Are you applying for a Child Support Payment Deviation?</label>
-                            <label class="radio inline">Yes<input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="1"></label>
-                            <label class="radio inline">No<input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="2"></label>
-                            <div ng-show="deviationForm.Deviation.$dirty && deviationForm.Deviation.$invalid || (showErrors && deviationForm.Deviation.$invalid)">
-                                <span class="form-error" ng-show="deviationForm.Deviation.$error.required">This field is required</span>
+                            <div class="col-lg-12">
+                                <label class="radio-inline">Yes<input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="1"></label>
+                                <label class="radio-inline">No<input class="inline" required ng-model="deviation.Deviation" name="Deviation" type="radio" value="2"></label>
+                                <div ng-show="deviationForm.Deviation.$dirty && deviationForm.Deviation.$invalid || (showErrors && deviationForm.Deviation.$invalid)">
+                                    <span class="form-error" ng-show="deviationForm.Deviation.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div ng-show="deviation.Deviation == 1">
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Would the amount of Child Support payable before you apply the deviation be unjust or inappropriate? Please explain in detail.</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Unjust" name="Unjust" placeholder="Explain" rows="2"></textarea>
-                                <div ng-show="deviationForm.Unjust.$dirty && deviationForm.Unjust.$invalid || (showErrors && deviationForm.Unjust.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.Unjust.$error.required">This field is required</span>
-                                    <span class="form-error" ng-show="deviationForm.Unjust.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                </div>
+                        <div class="form-group row" ng-show="deviation.Deviation == 1">
+                            <label class="form-question col-lg-12">Would the amount of Child Support payable before you apply the deviation be unjust or inappropriate? Please explain in detail.</label>
+                            <div class="form-group col-lg-4">
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Unjust" name="Unjust" placeholder="Explain" rows="2"></textarea>
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Would the deviation serve the best interests of the child(ren) for whom support is being determined? Please explain in detail.</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.BestInterest" name="BestInterest" placeholder="Explain" rows="2"></textarea>
-                                <div ng-show="deviationForm.BestInterest.$dirty && deviationForm.BestInterest.$invalid || (showErrors && deviationForm.BestInterest.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.BestInterest.$error.required">This field is required</span>
-                                    <span class="form-error" ng-show="deviationForm.BestInterest.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                </div>
+                            <div ng-show="deviationForm.Unjust.$dirty && deviationForm.Unjust.$invalid || (showErrors && deviationForm.Unjust.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.Unjust.$error.required">This field is required</span>
+                                <span class="form-error" ng-show="deviationForm.Unjust.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">
-                                    Would the deviation seriously impair the ability of the custodial parent or non-parent custodian to 
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Would the deviation serve the best interests of the child(ren) for whom support is being determined? Please explain in detail.</label>
+                            <div class="col-lg-4">
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.BestInterest" name="BestInterest" placeholder="Explain" rows="2"></textarea>
+                            </div>
+                            <div ng-show="deviationForm.BestInterest.$dirty && deviationForm.BestInterest.$invalid || (showErrors && deviationForm.BestInterest.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.BestInterest.$error.required">This field is required</span>
+                                <span class="form-error" ng-show="deviationForm.BestInterest.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                Would the deviation seriously impair the ability of the custodial parent or non-parent custodian to 
                                     maintain minimally adequate housing, food and clothing for the children being supported by the order and 
                                     to provide other basic necessities? Please explain in detail.</label>
-                                <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Impair" name="Impair" placeholder="Explain" rows="2"></textarea>
-                                <div ng-show="deviationForm.Impair.$dirty && deviationForm.Impair.$invalid || (showErrors && deviationForm.Impair.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.Impair.$error.required">This field is required</span>
-                                    <span class="form-error" ng-show="deviationForm.Impair.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
-                                </div>
+                            <div class="col-lg-4">
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.Impair" name="Impair" placeholder="Explain" rows="2"></textarea>
                             </div>
-                            <div class="control-group row-fluid">
-                                <div class="form-question">
-                                    <p>
-                                        Requested deviation amounts may be entered as a positive or negative number. For negative 
+                            <div ng-show="deviationForm.Impair.$dirty && deviationForm.Impair.$invalid || (showErrors && deviationForm.Impair.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.Impair.$error.required">This field is required</span>
+                                <span class="form-error" ng-show="deviationForm.Impair.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="form-question col-lg-12">
+                                <p>
+                                    Requested deviation amounts may be entered as a positive or negative number. For negative 
                                         numbers, add the minus sign " - " before the amount. What do you want the result here to be? Specific and 
                                         Nonspecific Deviations entered as a positive amount may increase the noncustodial parent's child support 
                                         obligation, while those same deviations entered as a negative (-) amount may decrease the noncustodial parent's 
                                         child support obligation
-                                    </p>
-                                    <p>
-                                        Do not enter the TOTAL amount of monthly expenses; enter the requested amount you want the 
+                                </p>
+                                <p>
+                                    Do not enter the TOTAL amount of monthly expenses; enter the requested amount you want the 
                                         court to consider as a deviation from the Presumptive Amount of Child Support.
-                                    </p>
-                                </div>
+                                </p>
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Other Health Related Insurance</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.HealthFather" ui-jq="popover" data-content="Just checking... are you paying attention?" name="HealthFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.HealthFather.$dirty && deviationForm.HealthFather.$invalid || (showErrors && deviationForm.HealthFather.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
-                                </div>
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.HealthMother" name="HealthMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.HealthMother.$dirty && deviationForm.HealthMother.$invalid || (showErrors && deviationForm.HealthMother.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Other Health Related Insurance</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.HealthFather" ui-jq="popover" data-content="Just checking... are you paying attention?" name="HealthFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Life Insurance</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.InsuranceFather" name="InsuranceFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.InsuranceFather.$dirty && deviationForm.InsuranceFather.$invalid || (showErrors && deviationForm.InsuranceFather.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.InsuranceFather.$error.pattern">This field must be a number.</span>
-                                </div>
+                            <div ng-show="deviationForm.HealthFather.$dirty && deviationForm.HealthFather.$invalid || (showErrors && deviationForm.HealthFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                            <br>
+                            <label class="col-md-2 form-question">Mother</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.HealthMother" name="HealthMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.HealthMother.$dirty && deviationForm.HealthMother.$invalid || (showErrors && deviationForm.HealthMother.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Life Insurance</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.InsuranceFather" name="InsuranceFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.InsuranceFather.$dirty && deviationForm.InsuranceFather.$invalid || (showErrors && deviationForm.InsuranceFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.InsuranceFather.$error.pattern">This field must be a number.</span>
+                            </div>
 
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.InsuranceMother" name="InsuranceMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.InsuranceMother.$dirty && deviationForm.InsuranceMother.$invalid || (showErrors && deviationForm.InsuranceMother.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.InsuranceMother.$error.pattern">This field must be a number.</span>
-                                </div>
+                            <br>
+                            <label class="col-md-2 form-question">Mother</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.InsuranceMother" name="InsuranceMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Child and Dependent Care Tax Credit</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.TaxCreditFather" name="TaxCreditFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.TaxCreditFather.$dirty && deviationForm.TaxCreditFather.$invalid || (showErrors && deviationForm.TaxCreditFather.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.TaxCreditFather.$error.pattern">This field must be a number.</span>
-                                </div>
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.TaxCreditMother" name="TaxCreditMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.TaxCreditMother.$dirty && deviationForm.TaxCreditMother.$invalid || (showErrors && deviationForm.TaxCreditMother.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.TaxCreditMother.$error.pattern">This field must be a number.</span>
-                                </div>
+                            <div ng-show="deviationForm.InsuranceMother.$dirty && deviationForm.InsuranceMother.$invalid || (showErrors && deviationForm.InsuranceMother.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.InsuranceMother.$error.pattern">This field must be a number.</span>
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Visitation Related Travel Expenses</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.VisitationFather" name="VisitationFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.VisitationFather.$dirty && deviationForm.VisitationFather.$invalid || (showErrors && deviationForm.VisitationFather.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Child and Dependent Care Tax Credit</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.TaxCreditFather" name="TaxCreditFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.TaxCreditFather.$dirty && deviationForm.TaxCreditFather.$invalid || (showErrors && deviationForm.TaxCreditFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.TaxCreditFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                            <br>
+                            <label class="col-md-2 form-question">Mother</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.TaxCreditMother" name="TaxCreditMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.TaxCreditMother.$dirty && deviationForm.TaxCreditMother.$invalid || (showErrors && deviationForm.TaxCreditMother.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.TaxCreditMother.$error.pattern">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Visitation Related Travel Expenses</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.VisitationFather" name="VisitationFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.VisitationFather.$dirty && deviationForm.VisitationFather.$invalid || (showErrors && deviationForm.VisitationFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-2 form-question">Mother</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" ng-model="deviation.VisitationMother" name="VisitationMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                                 </div>
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.VisitationMother" name="VisitationMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                                 <div ng-show="deviationForm.VisitationMother.$dirty && deviationForm.VisitationMother.$invalid || (showErrors && deviationForm.VisitationMother.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.VisitationMother.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Alimony PAID</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.AlimonyPaidFather" name="AlimonyPaidFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.AlimonyPaidFather.$dirty && deviationForm.AlimonyPaidFather.$invalid || (showErrors && deviationForm.AlimonyPaidFather.$invalid)">
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Alimony PAID</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.AlimonyPaidFather" name="AlimonyPaidFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.AlimonyPaidFather.$dirty && deviationForm.AlimonyPaidFather.$invalid || (showErrors && deviationForm.AlimonyPaidFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                            <br>
+                            <label class="col-md-2 form-question">Mother</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.AlimonyPaidMother" name="AlimonyPaidMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.AlimonyPaidMother.$dirty && deviationForm.AlimonyPaidMother.$invalid || (showErrors && deviationForm.AlimonyPaidMother.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.MortgageFather" name="MortgageFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.MortgageFather.$dirty && deviationForm.MortgageFather.$invalid || (showErrors && deviationForm.MortgageFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.MortgageFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                            <br>
+                            <label class="col-md-2 form-question">Mother</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.MortgageMother" name="MortgageMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.MortgageMother.$dirty && deviationForm.MortgageMother.$invalid || (showErrors && deviationForm.MortgageMother.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Permanency Plan or Foster Care Plan</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.PermanencyFather" name="PermanencyFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.PermanencyFather.$dirty && deviationForm.PermanencyFather.$invalid || (showErrors && deviationForm.PermanencyFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.PermanencyFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                            <br>
+                            <label class="col-md-2 form-question">Mother</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.PermanencyMother" name="PermanencyMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.PermanencyMother.$dirty && deviationForm.PermanencyMother.$invalid || (showErrors && deviationForm.PermanencyMother.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.PermanencyMother.$error.pattern">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">Other or Non-specific Deviations</label>
+                            <label class="col-md-2 form-question">Father</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.NonSpecificFather" name="NonSpecificFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.NonSpecificFather.$dirty && deviationForm.NonSpecificFather.$invalid || (showErrors && deviationForm.NonSpecificFather.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.NonSpecificFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                            <br>
+                            <label class="col-md-2 form-question">Mother</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" ng-model="deviation.NonSpecificMother" name="NonSpecificMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                            </div>
+                            <div ng-show="deviationForm.NonSpecificMother.$dirty && deviationForm.NonSpecificMother.$invalid || (showErrors && deviationForm.NonSpecificMother.$invalid)">
+                                <span class="form-error" ng-show="deviationForm.NonSpecificMother.$error.pattern">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                Do you wish to apply for a Low Income or High Income Deviation?</label>
+                            <div class="col-lg-12">
+                                <label class="radio-inline">No<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="3"></label>
+                                <label class="radio-inline">High<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="1"></label>
+                                <label class="radio-inline">Low<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="2"></label>
+                            </div>
+                        </div>
+                        <div ng-show="deviation.HighLow == 2">
+                            <div class="form-group row">
+                                <label class="col-md-4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" ng-model="deviation.LowDeviation" ng-pattern="/^-?[0-9]*$/" name="LowDeviation" type="text" value="">
+                                </div>
+                                <div ng-show="deviationForm.LowDeviation.$dirty && deviationForm.LowDeviation.$invalid || (showErrors && deviationForm.LowDeviation.$invalid)">
+                                    <span class="form-error" ng-show="deviationForm.LowDeviation.$error.pattern">This field must be a number.</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
+                                <div class="col-lg-4">
+                                    <textarea cols="20" placeholder="Explain" class="form-control" ng-model="deviation.WhyLow" name="WhyLow" rows="2"></textarea>
+                                </div>
+                                <div ng-show="deviationForm.HealthFather.$dirty && deviationForm.HealthFather.$invalid || (showErrors && deviationForm.HealthFather.$invalid)">
                                     <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
                                 </div>
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.AlimonyPaidMother" name="AlimonyPaidMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.AlimonyPaidMother.$dirty && deviationForm.AlimonyPaidMother.$invalid || (showErrors && deviationForm.AlimonyPaidMother.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div ng-show="deviation.HighLow == 1">
+                            <div class="form-group row">
+                                <label class="col-md-4 form-question">
+                                    Your income is {{IncomeHigherAmount | dollarAmount}} higher than $30,000 per month, the highest 
+                                    monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
+                                    reported income is included, the amount of child support payable (in addition to the 
+                                    child support applicable to the first $30,000) would be {{IncomeHigherAmount | dollarAmount}}. Would you like to use 
+                                    the amount shown here, or enter another amount (including $0)?</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" ng-model="deviation.HighDeviation" ng-pattern="/^-?[0-9]*$/" name="HighDeviation" type="text" value="">
+                                </div>
+                                <div ng-show="deviationForm.HighDeviation.$dirty && deviationForm.HighDeviation.$invalid || (showErrors && deviationForm.HighDeviation.$invalid)">
+                                    <span class="form-error" ng-show="deviationForm.HighDeviation.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Mortgage (if non-custodial parent is providing cost of home where child resides)</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.MortgageFather" name="MortgageFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.MortgageFather.$dirty && deviationForm.MortgageFather.$invalid || (showErrors && deviationForm.MortgageFather.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.MortgageFather.$error.pattern">This field must be a number.</span>
-                                </div>
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.MortgageMother" name="MortgageMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.MortgageMother.$dirty && deviationForm.MortgageMother.$invalid || (showErrors && deviationForm.MortgageMother.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
-                                </div>
-                            </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Permanency Plan or Foster Care Plan</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.PermanencyFather" name="PermanencyFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.PermanencyFather.$dirty && deviationForm.PermanencyFather.$invalid || (showErrors && deviationForm.PermanencyFather.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.PermanencyFather.$error.pattern">This field must be a number.</span>
-                                </div>
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.PermanencyMother" name="PermanencyMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.PermanencyMother.$dirty && deviationForm.PermanencyMother.$invalid || (showErrors && deviationForm.PermanencyMother.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.PermanencyMother.$error.pattern">This field must be a number.</span>
-                                </div>
-                            </div>
-                            <div class="control-group row-fluid">
-                                <label class="form-question">Other or Non-specific Deviations</label>
-                                <label class="span2 form-question">Father</label>
-                                <input ng-model="deviation.NonSpecificFather" name="NonSpecificFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.NonSpecificFather.$dirty && deviationForm.NonSpecificFather.$invalid || (showErrors && deviationForm.NonSpecificFather.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.NonSpecificFather.$error.pattern">This field must be a number.</span>
-                                </div>
-                                <br>
-                                <label class="span2 form-question">Mother</label>
-                                <input ng-model="deviation.NonSpecificMother" name="NonSpecificMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                <div ng-show="deviationForm.NonSpecificMother.$dirty && deviationForm.NonSpecificMother.$invalid || (showErrors && deviationForm.NonSpecificMother.$invalid)">
-                                    <span class="form-error" ng-show="deviationForm.NonSpecificMother.$error.pattern">This field must be a number.</span>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="form-question">
-                                    Do you wish to apply for a Low Income or High Income Deviation?</label>
-                                <label class="radio inline">No<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="3"></label>
-                                <label class="radio inline">High<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="1"></label>
-                                <label class="radio inline">Low<input class="inline" ng-model="deviation.HighLow" name="HighLow" type="radio" value="2"></label>
-                            </div>
-                            <div ng-show="deviation.HighLow == 2">
-                                <div class="control-group row-fluid">
-                                    <label class="span4 form-question">Enter "Proposed Low Income Deviation amount" AS A POSITIVE NUMBER.</label>
-                                    <input ng-model="deviation.LowDeviation" ng-pattern="/^-?[0-9]*$/" name="LowDeviation" type="text" value="">
-                                    <div ng-show="deviationForm.LowDeviation.$dirty && deviationForm.LowDeviation.$invalid || (showErrors && deviationForm.LowDeviation.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.LowDeviation.$error.pattern">This field must be a number.</span>
-                                    </div>
-                                </div>
-                                <div class="control-group row-fluid">
-                                    <label class="span4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
-                                    <textarea cols="20" ng-model="deviation.WhyLow" name="WhyLow" rows="2"></textarea>
-                                    <div ng-show="deviationForm.HealthFather.$dirty && deviationForm.HealthFather.$invalid || (showErrors && deviationForm.HealthFather.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div ng-show="deviation.HighLow == 1">
-                                <div class="control-group row-fluid">
-                                    <label class="span4 form-question">
-                                        Your income is {{IncomeHigherAmount | dollarAmount}} higher than $30,000 per month, the highest 
-                                        monthly amount show in the Basic Child Support Obligation table (BCSO). If all your 
-                                        reported income is included, the amount of child support payable (in addition to the 
-                                        child support applicable to the first $30,000) would be {{IncomeHigherAmount | dollarAmount}}. Would you like to use 
-                                        the amount shown here, or enter another amount (including $0)?</label>
-                                    <input ng-model="deviation.HighDeviation" ng-pattern="/^-?[0-9]*$/" name="HighDeviation" type="text" value="">
-                                    <div ng-show="deviationForm.HighDeviation.$dirty && deviationForm.HighDeviation.$invalid || (showErrors && deviationForm.HighDeviation.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.HighDeviation.$error.pattern">This field must be a number.</span>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary btn-continue" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

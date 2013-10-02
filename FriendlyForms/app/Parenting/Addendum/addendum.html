@@ -1,36 +1,48 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="AddendumCtrl" id="addendumForm" name="addendumForm" novalidate>
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Special Considerations</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="control-group">
-                            <label class="form-question">
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
                                 Are there any special circumstances which the Court should be made aware of?</label>
-                            <label class="radio">
-                                Yes
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        Yes
                                 <input required ng-model="addendum.HasAddendum" name="HasAddendum" type="radio" value="1"></label>
-                            <label class="radio">
-                                No
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        No
                                 <input required ng-model="addendum.HasAddendum" name="HasAddendum" type="radio" value="2"></label>
-                            <div ng-show="addendumForm.HasAddendum.$dirty && addendumForm.HasAddendum.$invalid || (showErrors && addendumForm.HasAddendum.$invalid)">
-                                <span class="form-error" ng-show="addendumForm.HasAddendum.$error.required">This field is required</span>
+                                </div>
+                                <div ng-show="addendumForm.HasAddendum.$dirty && addendumForm.HasAddendum.$invalid || (showErrors && addendumForm.HasAddendum.$invalid)">
+                                    <span class="form-error" ng-show="addendumForm.HasAddendum.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="control-group" ng-show="addendum.HasAddendum == 1">
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="addendum.AddendumDetails" name="AddendumDetails" placeholder="Details" rows="2"></textarea>
+                        <div class="form-group row" ng-show="addendum.HasAddendum == 1">
+                            <div class="col-lg-4">
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="addendum.AddendumDetails" name="AddendumDetails" placeholder="Details" rows="2"></textarea>
+                            </div>
                             <div ng-show="addendumForm.AddendumDetails.$dirty && addendumForm.AddendumDetails.$invalid || (showErrors && addendumForm.HasAddendum.$invalid)">
                                 <span class="form-error" ng-show="addendumForm.AddendumDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary btn-continue" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

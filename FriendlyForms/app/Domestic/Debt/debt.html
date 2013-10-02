@@ -1,36 +1,48 @@
 ﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
     <form ng-submit="submit()" ng-controller="DebtCtrl" id="debtForm" name="debtForm" novalidate>
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-signal"></i></span>
                         <h5>Debt Information</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="control-group">
-                            <label class="form-question">
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
                                 How will marital debt be divided?</label>
-                            <label class="radio">
-                                There is no jointly held marital debt to be considered as part of this case. Each party will keep all debt currently held in his or her name.
-                                <input required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="2"></label>
-                            <label class="radio">
-                                Division of debt will be divided in the following manner:
-                                <input required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="1"></label>
-                            <div ng-show="debtForm.MaritalDebt.$dirty && debtForm.MaritalDebt.$invalid || (showErrors && debtForm.MaritalDebt.$invalid)">
-                                <span class="form-error" ng-show="debtForm.MaritalDebt.$error.required">This field is required</span>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        There is no jointly held marital debt to be considered as part of this case. Each party will keep all debt currently held in his or her name.
+                                    <input required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="2"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Division of debt will be divided in the following manner:
+                                    <input required ng-model="debt.MaritalDebt" name="MaritalDebt" type="radio" value="1"></label>
+                                </div>
+                                <div ng-show="debtForm.MaritalDebt.$dirty && debtForm.MaritalDebt.$invalid || (showErrors && debtForm.MaritalDebt.$invalid)">
+                                    <span class="form-error" ng-show="debtForm.MaritalDebt.$error.required">This field is required</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="control-group" ng-show="debt.MaritalDebt == 1">
-                            <textarea class="input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
+                        <div class="form-group row" ng-show="debt.MaritalDebt == 1">
+                            <div class="col-lg-4">
+                                <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="debt.DebtDivision" name="DebtDivision" placeholder="Details" rows="2"></textarea>
+                            </div>
                             <div ng-show="debtForm.DebtDivision.$dirty && debtForm.DebtDivision.$invalid || (showErrors && debtForm.DebtDivision.$invalid)">
                                 <span class="form-error" ng-show="debtForm.DebtDivision.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary btn-continue" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

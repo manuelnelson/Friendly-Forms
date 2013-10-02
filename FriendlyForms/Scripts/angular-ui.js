@@ -354,8 +354,8 @@ angular.module('ui.directives')
  * Pass an object with keynames for events to ui-event
  * Allows $event object and $params object to be passed
  *
- * @example <input ui-event="{ focus : 'counter++', blur : 'someCallback()' }">
- * @example <input ui-event="{ myCustomEvent : 'myEventHandler($event, $params)'}">
+ * @example <div class="col-lg-4"><input class="form-control" ui-event="{ focus : 'counter++', blur : 'someCallback()' }">
+ * @example <div class="col-lg-4"><input class="form-control" ui-event="{ myCustomEvent : 'myEventHandler($event, $params)'}">
  *
  * @param ui-event {string|object literal} The event to bind to as a string or a hash of events with their callbacks
  */
@@ -429,7 +429,7 @@ angular.module('ui.directives').directive('uiIf', [function () {
  *     Multiple parameters can be separated by commas
  * @param [ui-refresh] {expression} Watch expression and refire plugin on changes
  *
- * @example <input ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
+ * @example <div class="col-lg-4"><input class="form-control" ui-jq="datepicker" ui-options="{showOn:'click'},secondParameter,thirdParameter" ui-refresh="iChange">
  */
 angular.module('ui.directives').directive('uiJq', ['ui.config', '$timeout', function uiJqInjectingFunction(uiConfig, $timeout) {
 
@@ -566,7 +566,7 @@ angular.module('ui.directives').factory('keypressHelper', ['$parse', function ke
 /**
  * Bind one or more handlers to particular keys or their combination
  * @param hash {mixed} keyBindings Can be an object or string where keybinding expression of keys or keys combinations and AngularJS Exspressions are set. Object syntax: "{ keys1: expression1 [, keys2: expression2 [ , ... ]]}". String syntax: ""expression1 on keys1 [ and expression2 on keys2 [ and ... ]]"". Expression is an AngularJS Expression, and key(s) are dash-separated combinations of keys and modifiers (one or many, if any. Order does not matter). Supported modifiers are 'ctrl', 'shift', 'alt' and key can be used either via its keyCode (13 for Return) or name. Named keys are 'backspace', 'tab', 'enter', 'esc', 'space', 'pageup', 'pagedown', 'end', 'home', 'left', 'up', 'right', 'down', 'insert', 'delete'.
- * @example <input ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <input ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
+ * @example <div class="col-lg-4"><input class="form-control" ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <div class="col-lg-4"><input class="form-control" ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
  **/
 angular.module('ui.directives').directive('uiKeydown', ['keypressHelper', function (keypressHelper) {
     return {
@@ -1251,10 +1251,10 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (u
  * The ui-validate directive makes it easy to use any function(s) defined in scope as a validator function(s).
  * A validator function will trigger validation on both model and input changes.
  *
- * @example <input ui-validate=" 'myValidatorFunction($value)' ">
- * @example <input ui-validate="{ foo : '$value > anotherModel', bar : 'validateFoo($value)' }">
- * @example <input ui-validate="{ foo : '$value > anotherModel' }" ui-validate-watch=" 'anotherModel' ">
- * @example <input ui-validate="{ foo : '$value > anotherModel', bar : 'validateFoo($value)' }" ui-validate-watch=" { foo : 'anotherModel' } ">
+ * @example <div class="col-lg-4"><input class="form-control" ui-validate=" 'myValidatorFunction($value)' ">
+ * @example <div class="col-lg-4"><input class="form-control" ui-validate="{ foo : '$value > anotherModel', bar : 'validateFoo($value)' }">
+ * @example <div class="col-lg-4"><input class="form-control" ui-validate="{ foo : '$value > anotherModel' }" ui-validate-watch=" 'anotherModel' ">
+ * @example <div class="col-lg-4"><input class="form-control" ui-validate="{ foo : '$value > anotherModel', bar : 'validateFoo($value)' }" ui-validate-watch=" { foo : 'anotherModel' } ">
  *
  * @param ui-validate {string|object literal} If strings is passed it should be a scope's function to be used as a validator.
  * If an object literal is passed a key denotes a validation error key while a value should be a validator function.
