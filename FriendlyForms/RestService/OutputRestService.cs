@@ -937,36 +937,40 @@ namespace FriendlyForms.RestService
         }
 
 
-        private static AllowableDeviation CalculateAllowableDeviation(Deviations deviations, LowIncomeDeviation lowIncome, HighIncomeDeviation highIncomeFather, HighIncomeDeviation highIncomeMother, double highIncomeAdjusted, ExtraExpenses totalExpenses)
+        private static AllowableDeviation CalculateAllowableDeviation(Deviations deviations, LowIncomeDeviation lowIncome, HighIncomeDeviation highIncomeFather, HighIncomeDeviation highIncomeMother, double highIncomeAdjusted, ExtraExpenses totalExpenses, ParentNames parentNames)
         {
-            return new AllowableDeviation
+            var allowableDeviation = new AllowableDeviation
             {
                 PresumptiveAmount = deviations.Unjust,
                 BestInterest = deviations.BestInterest,
                 ImpairAbility = deviations.Impair,
-                //AllowableFather = highIncomeAdjusted + highIncomeFather.TotalDeviations - lowIncome.ActualAmount + totalExpenses.DeviationFather -
-                //    totalExpenses.ExtraSpent,
-                AllowableFather =  highIncomeFather.TotalDeviations - lowIncome.ActualAmount + totalExpenses.DeviationFather -
-                    totalExpenses.ExtraSpent,
-                AllowableMother =  highIncomeMother.TotalDeviations - lowIncome.ActualAmount + totalExpenses.DeviationMother -
-                    totalExpenses.ExtraSpent,
+                AllowableFather =  highIncomeFather.TotalDeviations - lowIncome.ActualAmount + totalExpenses.DeviationFather,
+                AllowableMother =  highIncomeMother.TotalDeviations + totalExpenses.DeviationMother, 
             };
+            //; -totalExpenses.ExtraSpent,
+            if (parentNames.NonCustodyIsFather)
+                allowableDeviation.AllowableFather = allowableDeviation.AllowableFather - totalExpenses.ExtraSpent - lowIncome.ActualAmount;
+            else
+                allowableDeviation.AllowableMother = allowableDeviation.AllowableMother - totalExpenses.ExtraSpent - lowIncome.ActualAmount;
+            return allowableDeviation;
         }
 
         private const double DeterminationOfAllowableExpenseFactor = 0.07;
         private static ExtraExpenses CalculateTotalExpenses(IEnumerable<ExtraExpense> extraExpenses, Extraordinaries extraordinaries, int supportObligation, TotalIncomes totalIncomes)
         {
-            var totalExpenses = new ExtraExpenses();
-            totalExpenses.ExtraSpent = extraExpenses.Sum(x => x.ExtraSpent);
+            var totalExpenses = new ExtraExpenses
+                {
+                    ExtraSpent = extraExpenses.Sum(x => x.ExtraSpent),
+                    EducationFather = extraordinaries.AllEducationTotalMonthly.Father,
+                    EducationMother = extraordinaries.AllEducationTotalMonthly.Mother,
+                    EducationNonParent = extraordinaries.AllEducationTotalMonthly.NonParent,
+                    EducationTotal = extraordinaries.AllEducationTotalMonthly.Total,
+                    MedicalFather = extraordinaries.MedicalTotalMonthly.Father,
+                    MedicalMother = extraordinaries.MedicalTotalMonthly.Mother,
+                    MedicalNonParent = extraordinaries.MedicalTotalMonthly.NonParent,
+                    MedicalTotal = extraordinaries.MedicalTotalMonthly.Total
+                };
 
-            totalExpenses.EducationFather = extraordinaries.AllEducationTotalMonthly.Father;
-            totalExpenses.EducationMother = extraordinaries.AllEducationTotalMonthly.Mother;
-            totalExpenses.EducationNonParent = extraordinaries.AllEducationTotalMonthly.NonParent;
-            totalExpenses.EducationTotal = extraordinaries.AllEducationTotalMonthly.Total;
-            totalExpenses.MedicalFather = extraordinaries.MedicalTotalMonthly.Father;
-            totalExpenses.MedicalMother = extraordinaries.MedicalTotalMonthly.Mother;
-            totalExpenses.MedicalNonParent = extraordinaries.MedicalTotalMonthly.NonParent;
-            totalExpenses.MedicalTotal = extraordinaries.MedicalTotalMonthly.Total;
             var percentSupportObl = supportObligation * DeterminationOfAllowableExpenseFactor;
             var expensesFactor = extraordinaries.RearingTotalMonthly.Total > percentSupportObl
                                      ? extraordinaries.RearingTotalMonthly.Total - percentSupportObl
@@ -1133,7 +1137,7 @@ namespace FriendlyForms.RestService
                                          extraExpense.SpecialNonParent;
                 yearlyRearing.Add(new Extraordinary
                 {
-                    Father = yearlyRearingTotal,
+                    Total = yearlyRearingTotal,
                     Name = child.Name,
                 });
                 yearlyRearingCombinedTotal.Total += yearlyRearingTotal;
@@ -1163,7 +1167,7 @@ namespace FriendlyForms.RestService
                                            extraExpense.SpecialNonParent;
                 monthlyRearing.Add(new Extraordinary
                 {
-                    Father = monthlyRearingTotal,
+                    Total = monthlyRearingTotal,
                     Name = child.Name,
                 });
                 monthlyRearingCombinedTotal.Total += monthlyRearingTotal;
@@ -1193,6 +1197,7 @@ namespace FriendlyForms.RestService
             allEducationTotalMonthly.Father = tuitionTotalMonthly.Father + educationTotalMonthly.Father;
             allEducationTotalMonthly.Mother = tuitionTotalMonthly.Mother + educationTotalMonthly.Mother;
             allEducationTotalMonthly.NonParent = tuitionTotalMonthly.NonParent + educationTotalMonthly.NonParent;
+            allEducationTotalMonthly.Total = educationTotalMonthly.Total + tuitionTotalMonthly.Total;
             
             var extraordinaries = new Extraordinaries
             {
@@ -1373,7 +1378,7 @@ namespace FriendlyForms.RestService
             var scheduleBFather = OutputService.GetScheduleB(userId, "");
             var scheduleBMother = OutputService.GetScheduleB(userId, "", isOtherParent: true);
             var totalIncomes = GetTotalIncomes(scheduleBFather, scheduleBMother);
-            var highIncomeAdjusted = totalIncomes.TotalIncomeTotal;                
+            var highIncomeAdjusted = totalIncomes.TotalIncomeTotal - 30000 > 0 ? totalIncomes.TotalIncomeTotal - 30000 : 0;                
             var scheduleD = GetScheduleD(userId);
             //If there are other children, use the PreexistingOrder amount, otherwise just use Adjusted Support
             var presumptiveAmounts = GetPresumptiveAmounts(scheduleD.FatherScheduleD, scheduleD.MotherScheduleD, scheduleBFather,
@@ -1387,8 +1392,8 @@ namespace FriendlyForms.RestService
             var supportObligation = (int)BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, totalOtherChildren);
             var totalExpenses = CalculateTotalExpenses(extraExpenses, extraordinaries, supportObligation, totalIncomes);
             
-            AllowableDeviation allowableDeviation = CalculateAllowableDeviation(deviations, lowIncome, highIncomeFather, highIncomeMother, highIncomeAdjusted,
-                                                       totalExpenses);
+            var allowableDeviation = CalculateAllowableDeviation(deviations, lowIncome, highIncomeFather, highIncomeMother, highIncomeAdjusted,
+                                                       totalExpenses, parentNames);
 
             return new ScheduleEDtoResp
             {
@@ -1457,13 +1462,13 @@ namespace FriendlyForms.RestService
             };
             var csw9 = custodyInformation.NonCustodyIsFather ? presumptiveAmounts.Father : presumptiveAmounts.Mother;
             lowIncome.CompareAmount = csw9 - lowIncome.DeviationAmount;
-            var minChildSupportAmount = 100 + children.Count * 50;
+            var minChildSupportAmount = 50 + children.Count * 50;
             lowIncome.CalculatedAmount = Math.Abs(csw9 - minChildSupportAmount);
             var smallerAmount = lowIncome.CalculatedAmount > lowIncome.CompareAmount
                                     ? lowIncome.CompareAmount
                                     : lowIncome.CalculatedAmount;
 
-            lowIncome.ActualAmount = lowIncome.CompareAmount < minChildSupportAmount ? smallerAmount : lowIncome.DeviationAmount;
+            lowIncome.ActualAmount = smallerAmount;//lowIncome.CompareAmount < minChildSupportAmount ? smallerAmount : lowIncome.DeviationAmount;
             lowIncome.Explaination = deviations.WhyLow;
             return lowIncome;
         }
@@ -1520,18 +1525,18 @@ namespace FriendlyForms.RestService
         }
         private static Csw FinishCsw(Csw csw, double supportObligation, ScheduleD scheduleD, SocialSecurity socialSecurity, Health healthInsurance, bool isFather = true)
         {
-            csw.ProRataObligation = (int)Math.Round(csw.CombinedIncome/100 * supportObligation);
+            csw.ProRataObligation = csw.CombinedIncome/100 * supportObligation;
             csw.WorkRelatedExpenses = scheduleD.ProRataAdditional;
             csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;
             csw.AdjustedExpensesPaid = scheduleD.AdditionalExpenses;
             csw.PresumptiveAmount = csw.AdjustedObligation - csw.AdjustedExpensesPaid;
             //csw.DeviationsAmount = 0; //TODO: comes from scheduleE
             csw.Subtotal = csw.PresumptiveAmount + csw.DeviationsAmount;
-            csw.SocialSecurity = (int)(socialSecurity.Amount ?? 0.0);
+            csw.SocialSecurity = socialSecurity.Amount ?? 0.0;
             csw.FinalAmount = csw.SocialSecurity > csw.Subtotal
                                         ? csw.SocialSecurity
                                         : csw.Subtotal - csw.SocialSecurity;
-            csw.UninsuredExpenses = (int)(isFather ? healthInsurance.FathersHealthPercentage ?? 0.0 : healthInsurance.MothersHealthPercentage ?? 0.0);
+            csw.UninsuredExpenses = isFather ? healthInsurance.FathersHealthPercentage ?? 0.0 : healthInsurance.MothersHealthPercentage ?? 0.0;
             return csw;
         }
 

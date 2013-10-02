@@ -47,10 +47,11 @@
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <p>
-                                        DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY:Court or Jury - Place a check mark in the boxNonFather at the left to show you are 
-                        excluding or changing the deviation amount(s) displaying in Line 1(d); otherwise, leave the check box blank and continue to thenext section 
-                        of this schedule. If this Discretionary Check Box is checked, enter a new “Discretionary amount allowed by Court/Jury” AS AN AMOUNT 
+                                    <p class="checkbox" style="line-height: 20px;">
+                                        <input type="checkbox" disabled="disabled" />
+                                        DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY: Court or Jury - Place a check mark in the box 'NonFather' at the left to show you are 
+                        excluding or changing the deviation amount(s) displaying in Line 1(d); otherwise, leave the check box blank and continue to the next section 
+                        of this schedule. If this Discretionary Check Box is checked, enter a new "Discretionary amount allowed by Court/Jury" AS AN AMOUNT 
                         TO BE SUBTRACTED or as a zero ($0.00) under the noncustodial parent’s column for (c) Mother and/or (d) Father. The amount(s) entered 
                         under columns (c) and/or (d) will then be used to total with the other deviation(s) in Line 14 of this Schedule.
                                     </p>
@@ -74,7 +75,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="3">2(a). High Income- Combined Adjusted Income greater than $30,000/month.</td>
-                                <td>{{scheduleE.HighIncomeAdjusted}}</td>
+                                <td>{{scheduleE.HighIncomeAdjusted | dollarAmount}}</td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -514,10 +515,10 @@
                                 <td>{{scheduleE.Extraordinaries.RearingTotalMonthly.NonParent | dollarAmount}}</td>
                             </tr>
                             <tr class="bold">
-                                <td>TOTAL EXPENSE PAID BY PARTY</td>
-                                <td>{{scheduleE.Extraordinaries.EducationTotal.Father + Extraordinaries.TuitionTotal.Father + Extraordinaries.MedicalTotal.Father + Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
-                                <td>{{scheduleE.Extraordinaries.EducationTotal.Mother + Extraordinaries.TuitionTotal.Mother + Extraordinaries.MedicalTotal.Mother + Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
-                                <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent + Extraordinaries.TuitionTotal.NonParent + Extraordinaries.MedicalTotal.NonParent + Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
+                                <td>17. Total Annual Expenditures Paid by Party</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.Father + scheduleE.Extraordinaries.TuitionTotal.Father + scheduleE.Extraordinaries.MedicalTotal.Father + scheduleE.Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.Mother + scheduleE.Extraordinaries.TuitionTotal.Mother + scheduleE.Extraordinaries.MedicalTotal.Mother + scheduleE.Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
+                                <td>{{scheduleE.Extraordinaries.EducationTotal.NonParent + scheduleE.Extraordinaries.TuitionTotal.NonParent + scheduleE.Extraordinaries.MedicalTotal.NonParent + scheduleE.Extraordinaries.RearingTotal.NonParent | dollarAmount}}</td>
                             </tr>
                         </tbody>
                     </table>
