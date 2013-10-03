@@ -25,5 +25,8 @@
             messageService.showMessage("Feedback Sent!", "Your feedback has been sent and is appreciated! You should hear from us within 48 hours.", Application.properties.messageType.Success);
         });
     };
+    $scope.submitPrint = function() {
+        $('#topPrintButton').submit();
+    };
 };
 HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'messageService', '$rootScope'];

@@ -13,7 +13,7 @@
     });
     $scope.submit = function(noNavigate) {
         if ($scope.addendumForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#addendumForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)

@@ -53,7 +53,7 @@
     };
     $scope.submit = function (noNavigate, callback) {
         if ($scope.holidayForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.menuPath, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.menuPath, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#holidayForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;

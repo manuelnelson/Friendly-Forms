@@ -17,7 +17,7 @@
         });
         $scope.submit = function (noNavigate) {
         if ($scope.deviationForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#deviationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)

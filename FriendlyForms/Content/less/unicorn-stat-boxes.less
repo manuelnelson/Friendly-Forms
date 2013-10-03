@@ -1,8 +1,10 @@
+@import "variables.less";
+@import "mixins.less";
 /* Stat boxes */
 .stat-boxes, .quick-actions, .quick-actions-horizontal, .stats-plain {
     display: inline-block;
     list-style: none outside none;
-    margin: 20px 0 10px;
+    margin: 10px 0 10px;
     text-align: center;
     padding: 0;
 }
@@ -37,7 +39,7 @@
 }
 .quick-actions {
 	li {
-		min-width: 120px;
+		min-width: 70px;
 		a {
 			padding: 10px 30px;
 			i[class^="icon-"], i[class*=" icon-"] {
@@ -46,8 +48,6 @@
 				background-position: 0 0;
 				background-color: transparent;
 				width: 32px;
-				height: 32px;
-				display: block;
 				margin: 0 auto 5px;
 			}
 		}

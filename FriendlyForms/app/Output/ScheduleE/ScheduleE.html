@@ -13,7 +13,7 @@
                         <h2>CHILD SUPPORT SCHEDULE E</h2>
                         <h2>Deviation (Special Circumstances)</h2>
                     </div>
-                    <table>
+                    <table class="page-break">
                         <thead>
                             <tr>
                                 <th colspan="3">DEVIATION FOR LOW INCOME</th>
@@ -22,7 +22,7 @@
                         <tbody>
                             <tr>
                                 <td></td>
-                                <td>{{scheduleE.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
                                 <td>*Court or Jury Allowable Deviations</td>
                             </tr>
                             <tr>
@@ -48,7 +48,7 @@
                             <tr>
                                 <td colspan="3">
                                     <p class="checkbox" style="line-height: 20px;">
-                                        <input type="checkbox" disabled="disabled"/>
+                                        <input type="checkbox" disabled="disabled" />
                                         DISCRETIONARY CHECK BOX FOR COURT OR JURY ONLY: Place a check mark in the box at the left to 
                                         show you are excluding or changing the deviation amount(s) displaying in Line 1(d); otherwise, 
                                         leave the check box blank. If this Discretionary Check Box is checked, enter a new 
@@ -67,7 +67,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table>
+                    <table class="page-break">
                         <thead>
                             <tr>
                                 <th colspan="5">DEVIATION FOR HIGH INCOME & OTHER AMOUNTS</th>
@@ -85,10 +85,10 @@
                             </tr>
                             <tr>
                                 <td></td>
-                                <td>{{scheduleE.Father}}</td>
-                                <td>{{scheduleE.Mother}}</td>
-                                <td>{{scheduleE.Father}}</td>
-                                <td>{{scheduleE.Mother}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
                             </tr>
                             <tr>
                                 <td>2(b). Deviation Based on High Income.</td>
@@ -171,8 +171,8 @@
                         <thead>
                             <tr>
                                 <th>Extraordinary and Special Expenses</th>
-                                <th>{{scheduleE.Father}}</th>
-                                <th>{{scheduleE.Mother}}</th>
+                                <th>{{scheduleE.ParentNames.Father}}</th>
+                                <th>{{scheduleE.ParentNames.Mother}}</th>
                                 <th>Nonparent Custodian</th>
                                 <th>Combined</th>
                             </tr>
@@ -234,7 +234,7 @@
                             <tr>
                                 <th>Parenting Time Deviation for Noncustodial Parent</th>
                                 <th></th>
-                                <th>{{scheduleE.NonCustodial}}</th>
+                                <th>{{scheduleE.ParentNames.NonCustodialParent}}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -247,7 +247,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table>
+                    <table class="page-break">
                         <thead>
                             <tr>
                                 <th colspan="4">Total Allowable Deviation</th>
@@ -256,8 +256,8 @@
                         <tbody>
                             <tr>
                                 <td></td>
-                                <td>{{scheduleE.Custodial}}</td>
-                                <td>{{scheduleE.NonCustodial}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -286,20 +286,20 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table>
+                    <table class="page-break">
                         <thead>
                             <tr>
                                 <th colspan="4">SUPPLEMENTAL TABLE 1</th>
                             </tr>
                         </thead>
-                        <tbody id="supplemental-table">
+                        <tbody>
                             <tr>
                                 <td colspan="4">EXTRAORDINARY EDUCATIONAL EXPENSES FOR EACH CHILD</td>
                             </tr>
                             <tr id="education">
                                 <td>1. Tuition, Room & Board, Fees and Books</td>
-                                <td>{{scheduleE.Father}}</td>
-                                <td>{{scheduleE.Mother}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
                                 <td>Non Parent Custodian</td>
                             </tr>
                             <tr ng-repeat="item in scheduleE.Extraordinaries.Tuition">
@@ -316,8 +316,8 @@
                             </tr>
                             <tr id="other-education">
                                 <td>2. Other Extraordinary Educational Expenses</td>
-                                <td>{{scheduleE.Father}}</td>
-                                <td>{{scheduleE.Mother}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
                                 <td>Non Parent Custodian</td>
                             </tr>
                             <tr ng-repeat="item in scheduleE.Extraordinaries.Education">
@@ -362,13 +362,22 @@
                                 <td>{{scheduleE.Extraordinaries.MonthlyEducationTotal.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
                             </tr>
+                        </tbody>
+                    </table>
+                    <table class="page-break">
+                        <thead>
+                            <tr>
+                                <th colspan="4">SUPPLEMENTAL TABLE 1 CONTINUED</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <tr>
                                 <td colspan="4">EXTRAORDINARY MEDICAL EXPENSES FOR EACH CHILD</td>
                             </tr>
                             <tr id="medical">
                                 <td>5. Extraordinary Medical Expenses</td>
-                                <td>{{scheduleE.Father}}</td>
-                                <td>{{scheduleE.Mother}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
                                 <td>Non Parent Custodian</td>
                             </tr>
                             <tr ng-repeat="item in scheduleE.Extraordinaries.Medical">
@@ -418,8 +427,8 @@
                             </tr>
                             <tr id="rearing">
                                 <td>8. Special Expenses for Child Rearing</td>
-                                <td>{{scheduleE.Father}}</td>
-                                <td>{{scheduleE.Mother}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
                                 <td>Non Parent Custodian</td>
                             </tr>
                             <tr ng-repeat="item in scheduleE.Extraordinaries.Rearing">
@@ -475,8 +484,8 @@
                         <tbody>
                             <tr>
                                 <td></td>
-                                <td>{{scheduleE.Father}}</td>
-                                <td>{{scheduleE.Mother}}</td>
+                                <td>{{scheduleE.ParentNames.Father}}</td>
+                                <td>{{scheduleE.ParentNames.Mother}}</td>
                                 <td>Non Parent Custodian</td>
                             </tr>
                             <tr>
@@ -523,11 +532,15 @@
                             </tr>
                         </tbody>
                     </table>
-                    <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
-                        <div class="col-lg-4"><input class="form-control" type="hidden" class="html" name="html" />
-                        <div class="col-lg-4"><input class="form-control" type="hidden" class="name" name="name" />
-                        <input type="submit" class="btn btn-default-primary btn printForm" value="Print to PDF">
-                    </form>
+                    <div class=" form-group row">
+                        <div class="col-lg-12">
+                            <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+                                <input type="hidden" class="html" name="html" />
+                                <input type="hidden" class="name" name="name" />
+                                <input type="submit" style="margin-left: 50px;" class="btn btn-default btn-primary printForm" value="Print to PDF">
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

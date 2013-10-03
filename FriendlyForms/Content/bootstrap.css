@@ -1444,8 +1444,8 @@ table .span24 {
 .dropdown-menu > .active > a > [class*=" icon-"] {
   background-image: url("/Content/images/icons-halflings-white.png");
 }
-.icon-blue,
-#sidebar li a i.icon-blue,
+.icon-white,
+#sidebar li a i.icon-white,
 .nav > .active > a > [class^="icon-"],
 .nav > .active > a > [class*=" icon-"],
 .dropdown-menu > li > a:hover > [class^="icon-"],

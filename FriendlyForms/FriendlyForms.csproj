@@ -968,6 +968,12 @@
     <Content Include="Content\less\unicorn-sidebar.min.css">
       <DependentUpon>unicorn-sidebar.less</DependentUpon>
     </Content>
+    <Content Include="Content\less\unicorn-stat-boxes.css">
+      <DependentUpon>unicorn-stat-boxes.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\unicorn-stat-boxes.min.css">
+      <DependentUpon>unicorn-stat-boxes.less</DependentUpon>
+    </Content>
     <Content Include="Content\less\unicorn-style-switcher.css">
       <DependentUpon>unicorn-style-switcher.less</DependentUpon>
     </Content>

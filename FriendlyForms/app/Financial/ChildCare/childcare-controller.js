@@ -28,7 +28,7 @@
     });
     $scope.submit = function () {
         if (!$scope.childCareForm || ($scope.childCareForm.ChildrenInvolved != "1" && $scope.childCareForm.ChildrenInvolved != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             return;
         }
         $scope.showErrors = false;
@@ -46,7 +46,7 @@
     };
     $scope.submitChildCare = function(callback) {
         if ($scope.childCareChildForm.$invalid || $scope.childCare === null) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#childCareChildForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;

@@ -13,7 +13,7 @@
     });
     $scope.submit = function (noNavigate) {
         if (!$scope.socialSecurity || ($scope.socialSecurity.ReceiveSocial != 1 && $scope.socialSecurity.ReceiveSocial != 2)) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#socialSecurityForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)

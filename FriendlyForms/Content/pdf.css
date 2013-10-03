@@ -1,5 +1,4 @@
-﻿#main-content, #content-header
-{
+﻿.widget-content {
     background-color: white;
     background-image: none;
     font-family: Times, "Times New Roman", Times, serif;
@@ -7,3 +6,7 @@
     line-height: 27px;
 }
 
+.page-break {
+    clear: both;
+    page-break-after: always;
+}

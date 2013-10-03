@@ -15,7 +15,7 @@
     });
     $scope.submit = function(noNavigate) {
         if (!$scope.income || ($scope.income.HaveSalary != "1" && $scope.income.HaveSalary != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#incomeForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)

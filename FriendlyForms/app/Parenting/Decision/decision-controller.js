@@ -50,7 +50,7 @@
     };
     $scope.submit = function (noNavigate, callback) {
         if ($scope.decisionForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.menuPath, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.menuPath, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#decisionForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;

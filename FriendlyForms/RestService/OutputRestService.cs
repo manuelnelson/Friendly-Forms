@@ -374,11 +374,12 @@ namespace FriendlyForms.RestService
 
         [DataMember]
         public AllowableExpenses AllowableExpenses { get; set; }
-
         [DataMember]
-        public string Father { get; set; }
-        [DataMember]
-        public string Mother { get; set; }
+        public ParentNames ParentNames { get; set; }
+        //[DataMember]
+        //public string Father { get; set; }
+        //[DataMember]
+        //public string Mother { get; set; }
     }
 
     [DataContract]
@@ -1404,8 +1405,7 @@ namespace FriendlyForms.RestService
                 TotalExpenses = totalExpenses,
                 AllowableDeviation = allowableDeviation,
                 Extraordinaries = extraordinaries,
-                Father = parentNames.Father,
-                Mother = parentNames.Mother
+                ParentNames = parentNames,
             };
         }
         

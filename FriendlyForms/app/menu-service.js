@@ -132,7 +132,7 @@
                 var item = service.menuItems[i];
                 subMenuItem = _.find(item.subMenuItems, function (subItem) {
                     //return subItem.itemClass === 'active';
-                    return subItem.iconClass === 'icon-blue icon-pencil';
+                    return subItem.iconClass === 'icon-white icon-pencil';
                 });
                 if (subMenuItem) {
                     var currentFormScope = $rootScope.$root.currentScope;
@@ -178,7 +178,7 @@
                 menuGroup.menuItem.showSubMenu = true;
                 menuGroup.menuItem.itemClass = 'submenu active';
                 menuGroup.subMenuItem.itemClass = 'active';
-                menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
+                menuGroup.subMenuItem.iconClass = 'icon-white icon-pencil';
                 //Navigate to new path if we are not already there.
                 if ($location.path() !== menuGroup.subMenuItem.path)
                     $location.path(menuGroup.subMenuItem.path);

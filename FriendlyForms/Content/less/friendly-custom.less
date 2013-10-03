@@ -1,5 +1,6 @@
 ﻿@import "variables.less"; 
 @import "mixins.less";    
+@import "variables.less"; 
 /*-----------------friendly-specific------------*/
 /*.btn-continue{
     margin-left:
@@ -17,7 +18,7 @@ border-radius: 3px;
 #loading
 {
     background-color: @blueDark;
-    .border-radius(3px);
+    border-radius: @border-radius-base;
     color: @white;
     font-weight: bold;
     margin: 0;
@@ -34,7 +35,7 @@ border-radius: 3px;
 
 //Forms
 .form-error, input.ng-invalid.ng-dirty{
-	color: @errorText;
+	color: @brand-danger;
 	font-weight:bold;
 	display:inline
 }
@@ -200,7 +201,7 @@ border-radius: 3px;
 }
 .bs-docs-sidenav .active .icon-chevron-right,
 .bs-docs-sidenav .active a:hover .icon-chevron-right {
-  background-image: url("@{iconWhiteSpritePath}");
+  background-image: url("@{icon-font-path}");
   opacity: 1;
 }
 .bs-docs-sidenav.affix {

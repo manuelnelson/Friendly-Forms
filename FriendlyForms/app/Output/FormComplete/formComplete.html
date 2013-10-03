@@ -8,26 +8,34 @@
                         <h5>Completion</h5>
                     </div>
                     <div class="widget-content">
-                        <div ng-show="CheckingFormProgress">
-                            <h4>Checking Progress...</h4>
-                            <p>Please wait while we double check to make sure the {{formName}} form is entirely complete...</p>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <div ng-show="CheckingFormProgress">
+                                    <h4>Checking Progress...</h4>
+                                    <p>Please wait while we double check to make sure the {{formName}} form is entirely complete...</p>
+                                </div>
+                                <div ng-show="!CheckingFormProgress && NoErrors">
+                                    <h4>Complete!</h4>
+                                    <p ng-show="!isStarter">You have successfully completed the {{formName}} form.  Click continue to preview the output</p>
+                                    <p ng-show="isStarter">You have successfully completed the {{formName}} form.  Click continue to move on to the next form.</p>
+                                </div>
+                                <div ng-show="!CheckingFormProgress && !NoErrors">
+                                    <h4>Needs Attention</h4>
+                                    <p>The following forms still need attention: </p>
+                                    <ul>
+                                        <li ng-repeat="form in IncompleteForms"><a href="#{{form.Path}}">{{form.Name}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div ng-show="!CheckingFormProgress && NoErrors">
-                            <h4>Complete!</h4>
-                            <p ng-show="!isStarter">You have successfully completed the {{formName}} form.  Click continue to preview the output</p>
-                            <p ng-show="isStarter">You have successfully completed the {{formName}} form.  Click continue to move on to the next form.</p>
-                        </div>
-                        <div ng-show="!CheckingFormProgress && !NoErrors">
-                            <h4>Needs Attention</h4>
-                            <p>The following forms still need attention: </p>
-                            <ul>
-                                <li ng-repeat="form in IncompleteForms"><a href="#{{form.Path}}">{{form.Name}}</a></li>
-                            </ul>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary" ng-show="!CheckingFormProgress && NoErrors">Continue <i class="icon-arrow-right icon-white"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="btn btn-default btn-primary" ng-show="!CheckingFormProgress && NoErrors">Continue <i class="icon-arrow-right icon-white"></i></button>
     </form>
 </div>

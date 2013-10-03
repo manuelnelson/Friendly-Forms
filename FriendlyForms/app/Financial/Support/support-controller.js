@@ -101,7 +101,7 @@
 
     $scope.submit = function (noNavigate) {
         if (!$scope.support || ($scope.support.Support != "1" && $scope.support.Support != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             return;
         }
         $scope.showErrors = false;

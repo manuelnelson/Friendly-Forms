@@ -6,7 +6,7 @@
                 if (userData.Verified) {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 } else {
-                    menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                    menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
                 }
                 if (!noNavigate)
                     menuService.nextMenu();

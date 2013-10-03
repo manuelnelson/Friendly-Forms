@@ -30,7 +30,7 @@
     //#region event handlers
     $scope.submit = function () {
         if (!$scope.childForm || ($scope.childForm.ChildrenInvolved != 1 && $scope.childForm.ChildrenInvolved != 2)) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#childForm');
             $.jStorage.set($scope.path, value);
             return;

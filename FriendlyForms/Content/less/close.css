@@ -1,4 +1,10 @@
-﻿.close {
+﻿/*@brown: #232639;
+@greenDark: #2D335B;
+@green: #353C6C;
+@greenDarkest: #141528;
+@greenDarker: #19182D;
+@greenLight: #444C87;*/
+.close {
   float: right;
   font-size: 21px;
   font-weight: bold;

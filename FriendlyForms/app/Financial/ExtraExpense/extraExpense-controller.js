@@ -29,7 +29,7 @@
     
     $scope.submit = function (noNavigate) {
         if (!$scope.extraExpenseForm || ($scope.extraExpenseForm.HasExtraExpenses != "1" && $scope.extraExpenseForm.HasExtraExpenses != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             return;
         }
         $scope.showErrors = false;
@@ -47,7 +47,7 @@
     };
     $scope.submitExtraExpense = function (callback) {
         if ($scope.extraExpenseChildForm.$invalid) {
-            //menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            //menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#extraExpenseChildForm');
             $.jStorage.set($scope.path, value);
             if (callback)

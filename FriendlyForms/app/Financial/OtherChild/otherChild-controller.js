@@ -42,7 +42,7 @@
         $scope.submit = function (noNavigate) {
             var deferred = $q.defer();
             if ($scope.otherChildrenForm.$invalid) {
-                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
                 var value = genericService.getFormInput('#otherChildrenForm');
                 $.jStorage.set($scope.path, value);
                 if (!noNavigate) {

@@ -36,7 +36,7 @@
         //#region event handlers
         $scope.submit = function () {
             if ($scope.vehicleForm.$invalid) {
-                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
                 var value = genericService.getFormInput('#vehicleForm');
                 $.jStorage.set($scope.path, value);
                 return;
@@ -85,7 +85,7 @@
 
         $scope.continue = function () {
             if ($scope.vehicleForm.$invalid) {
-                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             } else {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             }

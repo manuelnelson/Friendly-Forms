@@ -8,6 +8,7 @@
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form[^>]*?>([\s\S]*)<\/form>/, "");
+            html = html.replace(/<input type="submit".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ChildSupportAddendum');

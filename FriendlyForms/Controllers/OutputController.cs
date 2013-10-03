@@ -37,7 +37,7 @@ namespace FriendlyForms.Controllers
             var outputCss = System.IO.File.ReadAllText(Path.Combine(contentPath, "output.css"));
             var fullHtml = string.Format(@"<!DOCTYPE html> <html> <head><style type=""text/css"">{0}</style><style type=""text/css"">{1}</style></head><body><div id=""main-content"">{2}</div></body></html>", outputCss, pdfCss, html); 
             var config = new ObjectConfig();
-            config.SetAllowLocalContent(true);
+            config.SetAllowLocalContent(true);                    
             config.SetPrintBackground(true);
 
             var userId = Convert.ToInt32(UserSession.CustomId);

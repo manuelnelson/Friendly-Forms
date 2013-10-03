@@ -8,7 +8,7 @@
             throw "Must provide value";
         },
         iconSuccess: 'icon-green icon-ok',
-        iconEdit: 'icon-blue icon-pencil',
+        iconEdit: 'icon-white icon-pencil',
         iconError: 'icon-red icon-pencil',
         getFormInput: function(formName) {
             var model = {};

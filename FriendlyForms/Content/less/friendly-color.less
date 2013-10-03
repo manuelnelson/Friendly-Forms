@@ -1,8 +1,9 @@
 ﻿@import "variables.less"; 
 @import "mixins.less";   
+
 /*--------test------*/   
 body {
-	background-color: @body-bg;       
+	background-color: @body-bg;     
 }
 
 #header {
@@ -49,12 +50,12 @@ body {
 	/*border-bottom: 1px solid #3B4276;*/
 }
 #sidebar > ul ul li a:hover, #sidebar > ul ul li.active a {
-	color: #CCCCCC;
+	color: #FFFFFF;
 	background-color: #414980;
 }
 
 .dropdown-menu li a:hover, .dropdown-menu .active a, .dropdown-menu .active a:hover {
-	background-color: #532424;
+	background-color: #414980;
 }
 
 @media (max-width: 480px) {
@@ -73,4 +74,17 @@ body {
 	#sidebar > ul ul:after {
 		border-right: 6px solid #13152A;
     }
+}
+/*icons*/
+i.icon-white{
+    color: #EEE;
+    margin-right: 4px;
+}
+i.icon-green{
+    color: #29FF29;
+    margin-right: 4px;
+}
+i.icon-red{
+    color: #EF1919;
+    margin-right: 4px;
 }

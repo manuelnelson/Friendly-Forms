@@ -41,9 +41,10 @@ less/unicorn-widgets.less
 less/unicorn-widget-messages.less
 less/unicorn-gallery.less
 less/unicorn-forms.less
+less/unicorn-stat-boxes.less
 less/unicorn-pagination.less
 less/unicorn-tables.less
-less/unicorn-invoice.less
+less/unicorn-invoice.less 
 less/unicorn-charts.less
 less/unicorn-bootstrap.less
 less/unicorn-plugins.less

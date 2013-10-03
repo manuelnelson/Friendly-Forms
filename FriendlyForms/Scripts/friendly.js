@@ -36384,7 +36384,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
         when('/Account/Register/', { caseInsensitiveMatch: true, controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
-        when('/Account/Survey/User/:userId', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
+        when('/Account/Survey/', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
@@ -36455,7 +36455,7 @@ FormsApp.filter('percentage', function () {
             throw "Must provide value";
         },
         iconSuccess: 'icon-green icon-ok',
-        iconEdit: 'icon-blue icon-pencil',
+        iconEdit: 'icon-white icon-pencil',
         iconError: 'icon-red icon-pencil',
         getFormInput: function(formName) {
             var model = {};
@@ -36647,7 +36647,7 @@ FormsApp.factory('messageService', ['$location', function ($location) {
     });
     $scope.submit = function (noNavigate) {
         if ($scope.courtForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');            
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');            
             var value = genericService.getFormInput('#courtForm');
             $.jStorage.set($scope.path, value);
             if(!noNavigate)
@@ -36705,7 +36705,7 @@ FormsApp.factory('courtService', ['$resource', function ($resource) {
     });
     $scope.submit = function (noNavigate) {
         if ($scope.participantForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#participantForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -36825,7 +36825,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     //#region event handlers
     $scope.submit = function () {
         if (!$scope.childForm || ($scope.childForm.ChildrenInvolved != 1 && $scope.childForm.ChildrenInvolved != 2)) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#childForm');
             $.jStorage.set($scope.path, value);
             return;
@@ -36918,7 +36918,7 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
                 if (userData.Verified) {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                 } else {
-                    menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                    menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
                 }
                 if (!noNavigate)
                     menuService.nextMenu();
@@ -36955,7 +36955,7 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
     });
     $scope.submit = function(noNavigate) {
         if ($scope.assetForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#assetForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37008,7 +37008,7 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
     });
     $scope.submit = function(noNavigate) {
         if ($scope.debtForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#debtForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37061,7 +37061,7 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
     });
     $scope.submit = function(noNavigate) {
         if ($scope.healthInsuranceForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#healthInsuranceForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37114,7 +37114,7 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
     });
     $scope.submit = function(noNavigate) {
         if ($scope.houseForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#houseForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37177,7 +37177,7 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
     });
     $scope.submit = function(noNavigate) {
         if ($scope.propertyForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#propertyForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37231,7 +37231,7 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
     });
     $scope.submit = function(noNavigate) {
         if ($scope.spousalForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#spousalForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37285,7 +37285,7 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
     });
     $scope.submit = function(noNavigate) {
         if ($scope.taxForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#taxForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37362,7 +37362,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
         //#region event handlers
         $scope.submit = function () {
             if ($scope.vehicleForm.$invalid) {
-                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
                 var value = genericService.getFormInput('#vehicleForm');
                 $.jStorage.set($scope.path, value);
                 return;
@@ -37411,7 +37411,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
 
         $scope.continue = function () {
             if ($scope.vehicleForm.$invalid) {
-                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             } else {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
             }
@@ -37449,7 +37449,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
     });
     $scope.submit = function(noNavigate) {
         if ($scope.addendumForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#addendumForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37503,7 +37503,7 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
     });
     $scope.submit = function(noNavigate) {
         if ($scope.communicationForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#communicationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -37594,7 +37594,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
     };
     $scope.submit = function (noNavigate, callback) {
         if ($scope.decisionForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.menuPath, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.menuPath, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#decisionForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;
@@ -37801,7 +37801,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
     };
     $scope.submit = function (noNavigate, callback) {
         if ($scope.holidayForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.menuPath, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.menuPath, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#holidayForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;
@@ -38078,7 +38078,7 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
     });
     $scope.submit = function(noNavigate) {
         if ($scope.informationForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#informationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38132,7 +38132,7 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
     });
     $scope.submit = function(noNavigate) {
         if ($scope.privacyForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#privacyForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38186,7 +38186,7 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
     });
     $scope.submit = function(noNavigate) {
         if ($scope.responsibilityForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#responsibilityForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38258,7 +38258,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     });
     $scope.submit = function(noNavigate) {
         if ($scope.scheduleForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#scheduleForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38365,7 +38365,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     });
     $scope.submit = function () {
         if (!$scope.childCareForm || ($scope.childCareForm.ChildrenInvolved != "1" && $scope.childCareForm.ChildrenInvolved != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             return;
         }
         $scope.showErrors = false;
@@ -38383,7 +38383,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     };
     $scope.submitChildCare = function(callback) {
         if ($scope.childCareChildForm.$invalid || $scope.childCare === null) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#childCareChildForm');
             $.jStorage.set($scope.path, value);
             $scope.showErrors = true;
@@ -38481,7 +38481,7 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
     });
     $scope.submit = function(noNavigate) {
         if ($scope.childSupportForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#childSupportForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38545,7 +38545,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
         });
         $scope.submit = function (noNavigate) {
         if ($scope.deviationForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#deviationForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38614,7 +38614,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
     
     $scope.submit = function (noNavigate) {
         if (!$scope.extraExpenseForm || ($scope.extraExpenseForm.HasExtraExpenses != "1" && $scope.extraExpenseForm.HasExtraExpenses != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             return;
         }
         $scope.showErrors = false;
@@ -38632,7 +38632,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
     };
     $scope.submitExtraExpense = function (callback) {
         if ($scope.extraExpenseChildForm.$invalid) {
-            //menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            //menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#extraExpenseChildForm');
             $.jStorage.set($scope.path, value);
             if (callback)
@@ -38736,7 +38736,7 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
     });
     $scope.submit = function(noNavigate) {
         if ($scope.healthForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#healthForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38792,7 +38792,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     });
     $scope.submit = function(noNavigate) {
         if (!$scope.income || ($scope.income.HaveSalary != "1" && $scope.income.HaveSalary != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#incomeForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -38875,7 +38875,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
         $scope.submit = function (noNavigate) {
             var deferred = $q.defer();
             if ($scope.otherChildrenForm.$invalid) {
-                menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
                 var value = genericService.getFormInput('#otherChildrenForm');
                 $.jStorage.set($scope.path, value);
                 if (!noNavigate) {
@@ -38964,7 +38964,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     });
     $scope.submit = function (noNavigate) {
         if (!$scope.socialSecurity || ($scope.socialSecurity.ReceiveSocial != 1 && $scope.socialSecurity.ReceiveSocial != 2)) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             var value = genericService.getFormInput('#socialSecurityForm');
             $.jStorage.set($scope.path, value);
             if (!noNavigate)
@@ -39107,7 +39107,7 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
 
     $scope.submit = function (noNavigate) {
         if (!$scope.support || ($scope.support.Support != "1" && $scope.support.Support != "2")) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-pencil icon-red');
+            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
             return;
         }
         $scope.showErrors = false;
@@ -39246,7 +39246,7 @@ function ($scope, $routeParams, $rootScope, parentingService, menuService, gener
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
-            html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
+html.replace(/<input class="form-control".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('Parenting');
@@ -39287,7 +39287,7 @@ function ($scope, $routeParams, $rootScope, parentingService, menuService, gener
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
-            html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
+html.replace(/<input class="form-control".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('MediationAgreement');
@@ -39327,7 +39327,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
-            html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
+            html.replace(/<input class="form-control".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ScheduleA');
@@ -39377,7 +39377,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
-            html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
+html.replace(/<input class="form-control".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ScheduleB');
@@ -39413,7 +39413,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
-            html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
+html.replace(/<input class="form-control".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ScheduleD');
@@ -39449,7 +39449,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
-            html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
+            //html = html.replace(/<input.*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ScheduleE');
@@ -39485,7 +39485,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form.*>/, "");
-            html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
+            html.replace(/<input class="form-control".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ChildSupportWorksheet');
@@ -39520,7 +39520,6 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $timeout(function () {
             var html = $('.widget-content').html();
             html = html.replace(/<form[^>]*?>([\s\S]*)<\/form>/, "");
-            //html = html.replace(/<div class="col-lg-4"><input class="form-control".*>/g, "");
             html = html.replace(/<footer[^>]*?>([\s\S]*)<\/footer>/, "");
             $('.html').val(html);
             $('.name').val('ChildSupportAddendum');
@@ -40089,7 +40088,7 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route','$location', 'menuService
                 var item = service.menuItems[i];
                 subMenuItem = _.find(item.subMenuItems, function (subItem) {
                     //return subItem.itemClass === 'active';
-                    return subItem.iconClass === 'icon-blue icon-pencil';
+                    return subItem.iconClass === 'icon-white icon-pencil';
                 });
                 if (subMenuItem) {
                     var currentFormScope = $rootScope.$root.currentScope;
@@ -40135,7 +40134,7 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route','$location', 'menuService
                 menuGroup.menuItem.showSubMenu = true;
                 menuGroup.menuItem.itemClass = 'submenu active';
                 menuGroup.subMenuItem.itemClass = 'active';
-                menuGroup.subMenuItem.iconClass = 'icon-blue icon-pencil';
+                menuGroup.subMenuItem.iconClass = 'icon-white icon-pencil';
                 //Navigate to new path if we are not already there.
                 if ($location.path() !== menuGroup.subMenuItem.path)
                     $location.path(menuGroup.subMenuItem.path);
@@ -40429,24 +40428,28 @@ RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'
     };
     return service;
 }]);
-;var SurveyCtrl = ['$scope', '$routeParams', '$location', 'surveyService', 'menuService', 'genericService', '$rootScope', function($scope, $routeParams, $location, surveyService, menuService, genericService, $rootScope) {
-    $scope.path = $location.path();
-
-    $scope.submit = function(noNavigate) {
-        if ($scope.surveyForm.$invalid) {
-            var value = genericService.getFormInput('#surveyForm');
-            $.jStorage.set($scope.path, value);
-            return;
-        }
-        $scope.survey.UserId = $routeParams.userId;
-    };
-    genericService.refreshPage(function() {
+;var SurveyCtrl = ['$scope', '$routeParams', '$location', 'surveyService', 'menuService', 'headerService', '$rootScope', 'messageService', 'userService',
+    function ($scope, $routeParams, $location, surveyService, menuService, headerService, $rootScope, messageService, userService) {
+        $scope.path = $location.path();
+        userService.getCurrentUserSession().then(function(userSession) {
+            if (!userSession.IsAuthenticated)
+                messageService.showMessage("Please Login", "Please login before filling out the survey.");
+        });
+        $scope.submit = function (noNavigate) {
+        };
+        $scope.sendResult = function () {
+            surveyService.surveys.save(null, $scope.survey, function () {
+                $scope.surveyForm.$setPristine();
+                $scope.survey = '';
+                messageService.showMessage("Survey Sent!", "Your survey has been sent and is greatly appreciated!", Application.properties.messageType.Success);
+            });
+        };
         $rootScope.currentScope = $scope;
-    });
-}];
+        headerService.setTitle('Survey');
+    }];
 ;FormsApp.factory('surveyService', ['$resource', function($resource) {
     var service = {
-        surveys: $resource('/api/surveys/', {  },
+        surveys: $resource('/api/emails/survey', {  },
             {
             }),
     };
