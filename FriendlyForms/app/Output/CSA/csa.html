@@ -43,7 +43,7 @@ The specifics are as follows:
                         <ol class="bold">
                             <li>Gross Income
             <p>
-                The {{csa.ParentNames.Father}} gross monthly income (before taxes) is {{csa.GrossIncome.FatherAmount | dollarAmount}}; the {{csa.ParentNames.Mother}} gross monthly 
+                {{csa.ParentNames.Father}}'s gross monthly income (before taxes) is {{csa.GrossIncome.FatherAmount | dollarAmount}}; {{csa.ParentNames.Mother}}'s gross monthly 
                 income (before taxes) is {{csa.GrossIncome.MotherAmount  | dollarAmount}}.
             </p>
                             </li>
@@ -184,7 +184,7 @@ The specifics are as follows:
                             </li>
                             <li>Uninsured Health Care Expenses
             <p>
-                The {{csa.ParentNames.Father}} shall pay {{csa.HealthInsurance.FathersHealthPercentage| percentage}} and the {{csa.ParentNames.Father}} shall pay {{csa.HealthInsurance.MothersHealthPercentage| percentage}} of all expenses 
+                {{csa.ParentNames.Father}} shall pay {{csa.HealthInsurance.FathersHealthPercentage| percentage}} and the {{csa.ParentNames.Mother}} shall pay {{csa.HealthInsurance.MothersHealthPercentage| percentage}} of all expenses 
                 incurred for the children’s health care (including medical, dental, mental health, hospital and vision care) 
                 that are not covered by insurance. The party who incurs a health care expense for one of the children 
                 shall provide verification of the amount to the other party. That other party shall reimburse the incurring 
@@ -344,7 +344,7 @@ The specifics are as follows:
                             <div class="col-md-5 offset5">
                                 <hr />
                                 <p>JUDGE</p>
-                                <p>{{csa.County}} COUNTY SUPERIOR COURT</p>
+                                <p class="uppercase">{{csa.County}} COUNTY SUPERIOR COURT</p>
                             </div>
                         </div>
                     </div>
