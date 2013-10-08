@@ -137,6 +137,11 @@ ol {
     -moz-border-radius: 10px; /* Old Firefox */
 }
 
+.uppercase
+{
+text-transform: uppercase;
+}
+
 table {
     border: #000 1px solid;
     -moz-border-radius: 10px;
