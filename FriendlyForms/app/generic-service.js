@@ -9,7 +9,7 @@
         },
         iconSuccess: 'icon-green icon-ok',
         iconEdit: 'icon-white icon-pencil',
-        iconError: 'icon-red icon-pencil',
+        iconError: 'icon-red icon-exclamation',
         getFormInput: function(formName) {
             var model = {};
             $.each($(formName).serializeArray(), function (i, field) {

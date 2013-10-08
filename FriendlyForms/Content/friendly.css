@@ -5354,16 +5354,23 @@ td.visible-print {
   }
 }
 
+/*@brown: #232639;
+@greenDark: #2D335B;
+@green: #353C6C;
+@greenDarkest: #141528;
+@greenDarker: #19182D;
+@greenLight: #444C87;*/
 * {
   outline: none !important;
   -moz-outline: none !important;
 }
 /* Main */
-html {
-  overflow-x: hidden;
-}
+/*html {
+	overflow-x: hidden;
+}*/
 body {
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
+
   overflow-y: auto;
   margin-top: -20px;
 }
@@ -5453,7 +5460,7 @@ a:hover {
   line-height: 600px;
   overflow: hidden;
   position: relative;
-  top: 24px;
+  top: 16px;
   width: 191px;
 }
 #header h1 a {
@@ -5868,6 +5875,12 @@ a:hover {
   width: 250px !important;
 }
 
+/*@brown: #232639;
+@greenDark: #2D335B;
+@green: #353C6C;
+@greenDarkest: #141528;
+@greenDarker: #19182D;
+@greenLight: #444C87;*/
 /* Content */
 #content {
   background: none repeat scroll 0 0 #eceaf3;
@@ -5875,7 +5888,7 @@ a:hover {
   margin-right: 0;
   margin-top: -39px;
   position: relative;
-  min-height: 500px;
+  min-height: 600px;
   width: auto;
   -webkit-background-clip: padding-box;
   border-bottom-left-radius: 8px;
@@ -5920,7 +5933,7 @@ a:hover {
 }
 #content-header h1,
 #content-header > .btn-group {
-  margin-top: 10px;
+  margin-top: 30px;
 }
 #content-header > .btn-group {
   float: right;
@@ -7027,7 +7040,7 @@ form .form-group:last-child {
 .stats-plain {
   display: inline-block;
   list-style: none outside none;
-  margin: 20px 0 10px;
+  margin: 10px 0 10px;
   text-align: center;
   padding: 0;
 }
@@ -7067,7 +7080,7 @@ form .form-group:last-child {
   padding: 0 10px;
 }
 .quick-actions li {
-  min-width: 120px;
+  min-width: 70px;
 }
 .quick-actions li a {
   padding: 10px 30px;
@@ -7079,8 +7092,6 @@ form .form-group:last-child {
   background-position: 0 0;
   background-color: transparent;
   width: 32px;
-  height: 32px;
-  display: block;
   margin: 0 auto 5px;
 }
 .quick-actions i.icon-book {
@@ -9757,6 +9768,19 @@ a .icon-flip-vertical:before {
   #sidebar > ul ul:after {
     border-right: 6px solid #13152A;
   }
+}
+/*icons*/
+i.icon-white {
+  color: #EEE;
+  margin-right: 4px;
+}
+i.icon-green {
+  color: #29FF29;
+  margin-right: 4px;
+}
+i.icon-red {
+  color: #EF1919;
+  margin-right: 4px;
 }
 
 

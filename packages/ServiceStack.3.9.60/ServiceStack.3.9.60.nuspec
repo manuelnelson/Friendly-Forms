@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>ServiceStack</id>
-    <version>3.9.59</version>
+    <version>3.9.60</version>
     <title>ServiceStack webservice framework: Faster, Cleaner, Modern WCF alternative</title>
     <authors>Demis Bellot</authors>
     <owners>Demis Bellot</owners>
@@ -19,9 +19,9 @@
     <language>en-US</language>
     <tags>Fast JSON XML CSV HTML SOAP JSV REST Web Service Framework MONO ServiceStack</tags>
     <dependencies>
-      <dependency id="ServiceStack.Common" />
-      <dependency id="ServiceStack.Redis" />
-      <dependency id="ServiceStack.OrmLite.SqlServer" />
+      <dependency id="ServiceStack.Common" version="[3.0, 4.0)" />
+      <dependency id="ServiceStack.Redis" version="[3.0, 4.0)" />
+      <dependency id="ServiceStack.OrmLite.SqlServer" version="[3.0, 4.0)" />
     </dependencies>
   </metadata>
 </package>

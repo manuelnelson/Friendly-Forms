@@ -914,7 +914,7 @@ namespace FriendlyForms.RestService
             var deviation = new Deviation
                 {
                     HasDeviation = deviations.Deviation == 1,
-                    Amount = csw.FatherCsw.DeviationsAmount
+                    Amount = parentNames.NonCustodyIsFather ? csw.FatherCsw.PresumptiveAmount : csw.MotherCsw.FinalAmount
                 };
             var health = HealthService.GetByUserId(userId) as Health;
             var insuranceProvider = health.ProvideHealth == (int) DecisionMaker.Father
@@ -945,10 +945,9 @@ namespace FriendlyForms.RestService
                 PresumptiveAmount = deviations.Unjust,
                 BestInterest = deviations.BestInterest,
                 ImpairAbility = deviations.Impair,
-                AllowableFather =  highIncomeFather.TotalDeviations - lowIncome.ActualAmount + totalExpenses.DeviationFather,
+                AllowableFather = highIncomeAdjusted + highIncomeFather.TotalDeviations + totalExpenses.DeviationFather,
                 AllowableMother =  highIncomeMother.TotalDeviations + totalExpenses.DeviationMother, 
-            };
-            //; -totalExpenses.ExtraSpent,
+            };            
             if (parentNames.NonCustodyIsFather)
                 allowableDeviation.AllowableFather = allowableDeviation.AllowableFather - totalExpenses.ExtraSpent - lowIncome.ActualAmount;
             else
