@@ -201,7 +201,7 @@ ol.bold li {
     font-weight: bold;
 }
 
-    ol.bold li p {
+    ol.bold li p, ol.bold ol li   {
         font-weight: normal;
     }
 

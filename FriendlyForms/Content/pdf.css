@@ -1,4 +1,7 @@
-﻿.widget-content {
+﻿body {
+    background-color: white;
+}
+.widget-content {
     background-color: white;
     background-image: none;
     font-family: Times, "Times New Roman", Times, serif;

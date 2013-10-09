@@ -3,39 +3,42 @@
 
 /*--------test------*/   
 body {
-	background-color: @body-bg;     
+	background-color: @body-bg;        
 }
 
 #header {
     box-shadow: 0 1px 0 darken(@brown, 5%);
-	#gradient > .vertical(@headerHighlightColor, @headerBackgroundColor);
+	#gradient > .vertical(@headerHighlightColor, @headerBackgroundColor); 
     border-bottom: 1px solid lighten(@headerHighlightColor, 5%);      
 }
 
 #user-nav .btn-inverse { 
-    background-color: @navButtonColor; 
+    background-color: @navButtonColor;  
 	#gradient > .vertical(@navButtonColorHighlight, @navButtonColor);
 	border-top-color: @navButtonColor; 
 }
-#sidebar > ul {
+#sidebar > ul > li > a, #jPanelMenu-menu > ul > li > a {
+    color: #DDD;
+}
+#sidebar > ul, #jPanelMenu-menu > ul {
 	border-top: 1px solid @greenDark;
 	border-bottom: 1px solid @green;
 }
-#sidebar > ul > li {
-	border-top: 1px solid @green;
+#sidebar > ul > li, #jPanelMenu-menu > ul > li { 
+	border-top: 1px solid @green; 
 	border-bottom: 1px solid @greenDark;
 }
-#sidebar > ul > li.active {
+#sidebar > ul > li.active, #jPanelMenu-menu > ul > li.active {
 	#gradient > .vertical(@greenDarkest, @greenDarker);
 }
 
-#sidebar > ul > li.open.submenu > a {
+#sidebar > ul > li.open.submenu > a, #jPanelMenu-menu > ul > li.open.submenu > a {
+	border-bottom: 1px solid @greenDark; 
+}
+#sidebar > ul > li.open.active.submenu > a, #jPanelMenu-menu > ul > li.open.active.submenu > a{
 	border-bottom: 1px solid @greenDark;
 }
-#sidebar > ul > li.open.active.submenu > a {
-	border-bottom: 1px solid @greenDark;
-}
-#sidebar > ul > li > a > .label {
+#sidebar > ul > li > a > .label, #jPanelMenu-menu > ul > li > a > .label {
 	background-color: @greenDarkest;
 } 
 #sidebar > ul > li > a:hover {
@@ -43,15 +46,15 @@ body {
 }
 #sidebar > ul ul {
 	border-top: 1px solid @green;
-	background-color: @greenDarker; 
+	background-color: @greenDarker;    
 }
 #sidebar > ul ul li a {
-	border-top: 1px solid #414980;
+	border-top: 1px solid #748391;
 	/*border-bottom: 1px solid #3B4276;*/
 }
 #sidebar > ul ul li a:hover, #sidebar > ul ul li.active a {
 	color: #FFFFFF;
-	background-color: #414980;
+	background-color: #748391;
 }
 
 .dropdown-menu li a:hover, .dropdown-menu .active a, .dropdown-menu .active a:hover {

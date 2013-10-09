@@ -4,70 +4,81 @@
 @greenDarkest: #141528;
 @greenDarker: #19182D;
 @greenLight: #444C87;*/
+/*@greenDarker: #33475A;*/
 /*--------test------*/body {
-  background-color: #788ca1;
+  background-color: #8d9dad;
 }
 #header {
-  box-shadow: 0 1px 0 #384b5d;
-  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#4e6780), to(#42586d));
-  background-image: -webkit-linear-gradient(top, #4e6780, 0%, #42586d, 100%);
-  background-image: -moz-linear-gradient(top, #4e6780 0%, #42586d 100%);
-  background-image: linear-gradient(to bottom, #4e6780 0%, #42586d 100%);
+  box-shadow: 0 1px 0 #1d2e3f;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#32506c), to(#253b50));
+  background-image: -webkit-linear-gradient(top, #32506c, 0%, #253b50, 100%);
+  background-image: -moz-linear-gradient(top, #32506c 0%, #253b50 100%);
+  background-image: linear-gradient(to bottom, #32506c 0%, #253b50 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff4e6780', endColorstr='#ff42586d', GradientType=0);
-  border-bottom: 1px solid #577490;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff32506c', endColorstr='#ff253b50', GradientType=0);
+  border-bottom: 1px solid #3a5c7d;
 }
 #user-nav .btn-inverse {
-  background-color: #36495a;
-  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#42586d), to(#36495a));
-  background-image: -webkit-linear-gradient(top, #42586d, 0%, #36495a, 100%);
-  background-image: -moz-linear-gradient(top, #42586d 0%, #36495a 100%);
-  background-image: linear-gradient(to bottom, #42586d 0%, #36495a 100%);
+  background-color: #8d9dad;
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#97a4b1), to(#8d9dad));
+  background-image: -webkit-linear-gradient(top, #97a4b1, 0%, #8d9dad, 100%);
+  background-image: -moz-linear-gradient(top, #97a4b1 0%, #8d9dad 100%);
+  background-image: linear-gradient(to bottom, #97a4b1 0%, #8d9dad 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff42586d', endColorstr='#ff36495a', GradientType=0);
-  border-top-color: #36495a;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff97a4b1', endColorstr='#ff8d9dad', GradientType=0);
+  border-top-color: #8d9dad;
 }
-#sidebar > ul {
-  border-top: 1px solid #788ca1;
-  border-bottom: 1px solid #8399b0;
+#sidebar > ul > li > a,
+#jPanelMenu-menu > ul > li > a {
+  color: #DDD;
 }
-#sidebar > ul > li {
-  border-top: 1px solid #8399b0;
-  border-bottom: 1px solid #788ca1;
+#sidebar > ul,
+#jPanelMenu-menu > ul {
+  border-top: 1px solid #8d9dad;
+  border-bottom: 1px solid #8d9dad;
 }
-#sidebar > ul > li.active {
-  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#3a5065), to(#33475a));
-  background-image: -webkit-linear-gradient(top, #3a5065, 0%, #33475a, 100%);
-  background-image: -moz-linear-gradient(top, #3a5065 0%, #33475a 100%);
-  background-image: linear-gradient(to bottom, #3a5065 0%, #33475a 100%);
+#sidebar > ul > li,
+#jPanelMenu-menu > ul > li {
+  border-top: 1px solid #8d9dad;
+  border-bottom: 1px solid #8d9dad;
+}
+#sidebar > ul > li.active,
+#jPanelMenu-menu > ul > li.active {
+  background-image: -webkit-gradient(linear, left 0%, left 100%, from(#3a5065), to(#253b50));
+  background-image: -webkit-linear-gradient(top, #3a5065, 0%, #253b50, 100%);
+  background-image: -moz-linear-gradient(top, #3a5065 0%, #253b50 100%);
+  background-image: linear-gradient(to bottom, #3a5065 0%, #253b50 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3a5065', endColorstr='#ff33475a', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3a5065', endColorstr='#ff253b50', GradientType=0);
 }
-#sidebar > ul > li.open.submenu > a {
-  border-bottom: 1px solid #788ca1;
+#sidebar > ul > li.open.submenu > a,
+#jPanelMenu-menu > ul > li.open.submenu > a {
+  border-bottom: 1px solid #8d9dad;
 }
-#sidebar > ul > li.open.active.submenu > a {
-  border-bottom: 1px solid #788ca1;
+#sidebar > ul > li.open.active.submenu > a,
+#jPanelMenu-menu > ul > li.open.active.submenu > a {
+  border-bottom: 1px solid #8d9dad;
 }
-#sidebar > ul > li > a > .label {
+#sidebar > ul > li > a > .label,
+#jPanelMenu-menu > ul > li > a > .label {
   background-color: #3a5065;
 }
 #sidebar > ul > li > a:hover {
   background-color: #8da4bb;
 }
 #sidebar > ul ul {
-  border-top: 1px solid #8399b0;
-  background-color: #33475a;
+  border-top: 1px solid #8d9dad;
+  background-color: #253b50;
 }
 #sidebar > ul ul li a {
-  border-top: 1px solid #414980;
+  border-top: 1px solid #748391;
   /*border-bottom: 1px solid #3B4276;*/
 
 }
 #sidebar > ul ul li a:hover,
 #sidebar > ul ul li.active a {
   color: #FFFFFF;
-  background-color: #414980;
+  background-color: #748391;
 }
 .dropdown-menu li a:hover,
 .dropdown-menu .active a,
@@ -76,16 +87,16 @@
 }
 @media (max-width: 480px) {
   #sidebar > a {
-    background-image: -webkit-gradient(linear, left 0%, left 100%, from(#33475a), to(#3a5065));
-    background-image: -webkit-linear-gradient(top, #33475a, 0%, #3a5065, 100%);
-    background-image: -moz-linear-gradient(top, #33475a 0%, #3a5065 100%);
-    background-image: linear-gradient(to bottom, #33475a 0%, #3a5065 100%);
+    background-image: -webkit-gradient(linear, left 0%, left 100%, from(#253b50), to(#3a5065));
+    background-image: -webkit-linear-gradient(top, #253b50, 0%, #3a5065, 100%);
+    background-image: -moz-linear-gradient(top, #253b50 0%, #3a5065 100%);
+    background-image: linear-gradient(to bottom, #253b50 0%, #3a5065 100%);
     background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff33475a', endColorstr='#ff3a5065', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff253b50', endColorstr='#ff3a5065', GradientType=0);
     border-bottom: 1px solid #301616;
   }
   #sidebar > ul {
-    background-color: #788ca1;
+    background-color: #8d9dad;
   }
 }
 @media (min-width: 481px) and (max-width: 767px) {

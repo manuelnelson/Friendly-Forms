@@ -945,7 +945,7 @@ namespace FriendlyForms.RestService
                 PresumptiveAmount = deviations.Unjust,
                 BestInterest = deviations.BestInterest,
                 ImpairAbility = deviations.Impair,
-                AllowableFather = highIncomeAdjusted + highIncomeFather.TotalDeviations + totalExpenses.DeviationFather,
+                AllowableFather =  highIncomeFather.TotalDeviations + totalExpenses.DeviationFather,
                 AllowableMother =  highIncomeMother.TotalDeviations + totalExpenses.DeviationMother, 
             };            
             if (parentNames.NonCustodyIsFather)
@@ -1440,10 +1440,10 @@ namespace FriendlyForms.RestService
             var scheduleE = GetScheduleE(userId);
             var totalOtherChildren = scheduleBFather.OtherChildren.Count + scheduleBMother.OtherChildren.Count;
             cswTotal.SupportObligation = (int)BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, totalOtherChildren);
-            cswFather = FinishCsw(cswFather, cswTotal.SupportObligation, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
-            cswMother = FinishCsw(cswMother, cswTotal.SupportObligation, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
             cswFather.DeviationsAmount = scheduleE.AllowableDeviation.AllowableFather;
             cswMother.DeviationsAmount = scheduleE.AllowableDeviation.AllowableMother;
+            cswFather = FinishCsw(cswFather, cswTotal.SupportObligation, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
+            cswMother = FinishCsw(cswMother, cswTotal.SupportObligation, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
             return new CswDtoResp
                 {
                 FatherCsw = cswFather,
@@ -1529,7 +1529,6 @@ namespace FriendlyForms.RestService
             csw.AdjustedObligation = csw.ProRataObligation + csw.WorkRelatedExpenses;
             csw.AdjustedExpensesPaid = scheduleD.AdditionalExpenses;
             csw.PresumptiveAmount = csw.AdjustedObligation - csw.AdjustedExpensesPaid;
-            //csw.DeviationsAmount = 0; //TODO: comes from scheduleE
             csw.Subtotal = csw.PresumptiveAmount + csw.DeviationsAmount;
             csw.SocialSecurity = socialSecurity.Amount ?? 0.0;
             csw.FinalAmount = csw.SocialSecurity > csw.Subtotal

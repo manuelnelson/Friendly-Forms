@@ -12,5 +12,5 @@
             }
         });
     }, true);
-    loginMenuService.refresh();    
+    loginMenuService.refresh();
 }];

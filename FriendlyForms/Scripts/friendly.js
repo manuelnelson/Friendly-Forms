@@ -36435,7 +36435,7 @@ FormsApp.directive('integer', function () {
 ;FormsApp.filter('dollarAmount', function () {
     return function (input) {
         var isNegative = input < 0;
-        var dollarInput = Math.abs(input).toFixed(2);
+        var dollarInput = Math.abs(input).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return isNegative ? '-$' + dollarInput : '$' + dollarInput;
     };
 });
@@ -36456,7 +36456,7 @@ FormsApp.filter('percentage', function () {
         },
         iconSuccess: 'icon-green icon-ok',
         iconEdit: 'icon-white icon-pencil',
-        iconError: 'icon-red icon-pencil',
+        iconError: 'icon-red icon-exclamation',
         getFormInput: function(formName) {
             var model = {};
             $.each($(formName).serializeArray(), function (i, field) {
