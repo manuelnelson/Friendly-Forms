@@ -8,7 +8,9 @@
                         <h5>Income</h5>
                     </div>
                     <div class="widget-content">
-                        <label class="informative">You must answer the income questions below as they apply to the {{parent}}. Refer to the last question for a list of 'other sources of income', including a place to enter Imputed Income.</label>
+                        <div class="form-group row">
+                        <label class="informative col-lg-12">You must answer the income questions below as they apply to the {{parent}}. Refer to the last question for a list of 'other sources of income', including a place to enter Imputed Income.</label>
+                                </div>
                         <div class="form-group row">
                             <label class="col-md-4 form-question">
                                 Does the {{parent}} currently have any income, whether from a salary, self-employment, investments, benefits or any other source?</label>
@@ -22,7 +24,7 @@
                         </div>
                         <div ng-show="income.HaveSalary == 2">
                             <div class="form-group row">
-                                <label class="informative">
+                                <label class="informative col-lg-12">
                                     Where one parent states they have no income, the court will typically apply “imputed income” to that parent; that is, income equal to the salary one would receive if they were employed at minimum wage in a full time job. 
                                         In your county, that amount equals $1,248 per month in gross wages. This amount will be applied in your case. (Do not include means-tested public assistance.)</label>
                             </div>

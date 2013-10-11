@@ -8,8 +8,10 @@
                         <h5>Communication</h5>
                     </div>
                     <div class="widget-content">
-                        <label class="informative">
-                            Define how you will communicate with your child(ren) when they are with the other parent.</label>
+                        <div class="form-group row">
+                            <label class="informative col-lg-12">
+                                Define how you will communicate with your child(ren) when they are with the other parent.</label>
+                        </div>
                         <div class="form-group row">
                             <label class="form-question col-lg-12">
                                 When the child(ren) is/are with the other parent, will each of you want to be able to communicate with them while they are with the other parent?</label>
@@ -59,7 +61,8 @@
                             <label class="form-question col-lg-12">
                                 Define any limitations on communication</label>
                             <div class="col-lg-4">
-                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea></div>
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="communication.LimitationDetails" name="LimitationDetails" placeholder="Details" rows="2"></textarea>
+                            </div>
                             <div ng-show="communicationForm.LimitationDetails.$dirty && communicationForm.LimitationDetails.$invalid  || (showErrors && communicationForm.LimitationDetails.$invalid)">
                                 <span class="form-error" ng-show="communicationForm.LimitationDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
                             </div>

@@ -8,7 +8,7 @@
                 </div>
                 <div class="widget-content">
                     <form ng-submit="submit()" id="holidayForm" name="holidayForm" novalidate>
-                        <label class="informative">
+                        <label class="informative col-lg-12">
                             In this section, you will define scheduling holidays with your child(ren).</label>
                         <h3>{{childName}}</h3>
                         <br>
@@ -50,9 +50,9 @@
                         <div class="form-group row" ng-show="holiday.Thanksgiving == 1">
                             <label class="form-question col-lg-12">
                                 At the time of</label>
-                            <div class="col-lg-4">
+                            <div class="input-group col-lg-2 bootstrap-timepicker">
+                                <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
                                 <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ThanksgivingTime" name="ThanksgivingTime" placeholder="hh:mm am/pm" type="text" value="">
-                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             </div>
                             <div ng-show="showErrors && holidayForm.ThanksgivingTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ThanksgivingTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
@@ -96,10 +96,10 @@
                         <div class="form-group row" ng-show="holiday.Christmas == 2 || holiday.Christmas == 3 || holiday.Christmas == 4">
                             <label class="form-question col-lg-12">
                                 At the time of</label>
-                            <div class="col-lg-4">
+                            <div class="input-group col-lg-2 bootstrap-timepicker">
+                                <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
                                 <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="holiday.ChristmasTime" name="ChristmasTime" placeholder="hh:mm am/pm" type="text" value="">
                             </div>
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.ChristmasTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.ChristmasTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
                             </div>
@@ -146,18 +146,20 @@
                         </div>
                         <h4>Summer Break</h4>
                         <div class="form-group row">
-                            Summer vacation begins
-                            <div class="col-lg-4">
-                                <input class="form-control" class="input-mini inline" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
+                            <label class="form-question col-lg-12">Number of days after the last day of school at which summer vacation begins.</label>
+                            <div class="col-lg-2">
+                                <input class="form-control" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
                             </div>
-                            days after the last day of school at
-                            <div class="col-lg-4">
-                                <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value="">
-                            </div>
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.required">The field is required</span>
                                 <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.number">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-12">At the time of: </label>
+                            <div class="input-group col-lg-2 bootstrap-timepicker">
+                                <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
+                                <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerBeginTime" name="SummerBeginTime" placeholder="hh:mm am/pm" type="text" value="">
                             </div>
                             <div ng-show="showErrors && holidayForm.SummerBeginTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SummerBeginTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
@@ -165,18 +167,20 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            Summer vacation ends 
-                            <div class="col-lg-4">
-                                <input class="form-control" class="input-mini inline" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
+                            <label class="form-question col-lg-12">Number of days prior to the first day of school at which summer vacation ends.</label>
+                            <div class="col-lg-2">
+                                <input class="form-control" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
                             </div>
-                            days prior to the first day of school at
-                            <div class="col-lg-4">
-                                <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value="">
-                            </div>
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.required">The field is required</span>
                                 <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.number">This field must be a number.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-12">At the time of: </label>
+                            <div class="input-group col-lg-2 bootstrap-timepicker">
+                                <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
+                                <input class="form-control" ui-jq="timepicker" class="input-sm inline" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" required ng-model="holiday.SummerEndTime" name="SummerEndTime" placeholder="hh:mm am/pm" type="text" value="">
                             </div>
                             <div ng-show="showErrors && holidayForm.SummerEndTime.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SummerEndTime.$error.pattern">Time bust be in hh:mm am/pm format.</span>
@@ -627,17 +631,15 @@
                     <form ng-submit="addExtraHoliday()" id="extraHolidayForm" name="extraHolidayForm" novalidate>
                         <div class="form-group row">
                             <div class="col-md-2">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question">
                                     Holiday Name</label>
-                                <div class="col-lg-12">
-                                    <input class="form-control" class="col-md-12" required ng-model="extraHoliday.HolidayName" name="HolidayName" placeholder="Holiday Name" type="text" value="">
-                                </div>
+                                <input class="form-control" required ng-model="extraHoliday.HolidayName" name="HolidayName" placeholder="Holiday Name" type="text" value="">
                                 <div ng-show="extraHolidayForm.HolidayName.$dirty && extraHolidayForm.HolidayName.$invalid || (showExtraErrors && extraHolidayForm.HolidayName.$invalid)">
                                     <span class="form-error" ng-show="extraHolidayForm.HolidayName.$error.required">The field is required</span>
                                 </div>
                             </div>
                             <div class="input-group col-md-5">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question">
                                     Father</label><br />
                                 <label class="radio-inline">Odd<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayFather" name="HolidayFather" type="radio" value="1"></label>
                                 <label class="radio-inline">Even<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayFather" name="HolidayFather" type="radio" value="2"></label>
@@ -648,7 +650,7 @@
                                 </div>
                             </div>
                             <div class="input-group col-md-5">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question">
                                     Mother</label><br />
                                 <label class="radio-inline">Odd<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayMother" name="HolidayMother" type="radio" value="1"></label>
                                 <label class="radio-inline">Even<input class="inline" required ng-click="changeAdditionalHoliday($event)" ng-model="extraHoliday.HolidayMother" name="HolidayMother" type="radio" value="2"></label>
@@ -659,7 +661,11 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-default btn-primary">Add </button>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <button class="btn btn-default btn-primary">Add </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -671,7 +677,7 @@
                 <div class="alert alert-success"><a class="close">×</a><strong>Success!</strong> The decisions section have successfully been copied. You can continue to make changes by cycling through the children using the previous and continue buttons.             </div>
             </div>
         </div>
-        <label class="informative">
+        <label class="informative col-lg-12">
             To aid you in completing this section for the remaining child(ren), we suggest you use this copy button to copy your choices for your other child(ren), especially if all choices are the 
             same. You will still have the opportunity to make changes to any of your selections on the page(s) that follow this one. Please note that this will overwrite any existing data you may have entered for other 
             children.

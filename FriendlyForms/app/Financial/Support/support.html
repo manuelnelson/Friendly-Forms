@@ -49,7 +49,6 @@
                                     <tr ng-repeat="courtAdded in courts">
                                         <td>
                                             <button class="btn btn-default btn-primary" ng-click="showChildren(courtAdded)">Children</button></td>
-                                        </td>
                                         <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.CourtName}}</td>
                                         <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.CaseNumber}}</td>
                                         <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}</td>
@@ -137,7 +136,9 @@
                                     <span class="form-error" ng-show="courtForm.Monthly.$error.pattern">This field must be a number.</span>
                                 </div>
                             </div>
-                            <label class="informative">After clicking the "Add" button below, you must go to the Preexisting Child Support case just created, and click on the "Add Children" button to enter the names of children associated with that Preexisting Child Support case.</label>
+                            <div class="form-group row">
+                                <label class="informative col-md-12">After clicking the "Add" button below, you must go to the Preexisting Child Support case just created, and click on the "Add Children" button to enter the names of children associated with that Preexisting Child Support case.</label>
+                            </div>
                         </form>
                         <div ng-show="showAddChild">
                             <form id="childForm" name="childForm" novalidate>
@@ -168,9 +169,13 @@
                                 <button class="btn btn-default btn-primary" ng-show="showAddChild" ng-click="addChild()" value="Add">Add </button>
                                 <button class="btn btn-default btn-primary" ng-show="children.length > 0 && showAddChild" ng-click="hideAddChild()" value="Done">Done </button>
                                 <button class="btn btn-default btn-primary" ng-show="children.length === 0 && showAddChild" ng-click="hideAddChild()" value="Cancel">Cancel </button>
-                                <button class="btn btn-default btn-primary" ng-click="continue()">Continue <i class="icon-arrow-right icon-white"></i></button>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-12">
+                        <button class="btn btn-default btn-primary" ng-click="continue()">Continue <i class="icon-arrow-right icon-white"></i></button>
                     </div>
                 </div>
             </div>

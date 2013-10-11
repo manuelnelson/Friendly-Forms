@@ -1184,6 +1184,7 @@
     <Content Include="Content\font\glyphiconshalflings-regular.ttf" />
     <Content Include="Content\font\glyphiconshalflings-regular.woff" />
     <Content Include="Content\less\font-awesome.less" />
+    <Content Include="Content\less\timepicker.less" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap-affix.js" />
     <Content Include="Scripts\bootstrap-alert.js" />

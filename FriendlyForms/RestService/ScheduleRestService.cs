@@ -21,7 +21,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public int DetermineBeginDate { get; set; }
         [DataMember]
-        public string BeginDate { get; set; }
+        public DateTime BeginDate { get; set; }
         [DataMember]
         public string CustodianWeekendOther { get; set; }
         [DataMember]
