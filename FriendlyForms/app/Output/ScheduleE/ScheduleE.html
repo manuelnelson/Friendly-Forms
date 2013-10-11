@@ -13,7 +13,7 @@
                         <h2>CHILD SUPPORT SCHEDULE E</h2>
                         <h2>Deviation (Special Circumstances)</h2>
                     </div>
-                    <table class="page-break">
+                    <table>
                         <thead>
                             <tr>
                                 <th colspan="3">DEVIATION FOR LOW INCOME</th>
@@ -247,7 +247,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table class="page-break">
+                    <table>
                         <thead>
                             <tr>
                                 <th colspan="4">Total Allowable Deviation</th>
@@ -308,7 +308,7 @@
                                 <td>{{item.Mother | dollarAmount}}</td>
                                 <td>{{item.NonParent | dollarAmount}}</td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.TuitionTotal.Father | dollarAmount}}</td>
                                 <td>{{scheduleE.Extraordinaries.TuitionTotal.Mother | dollarAmount}}</td>
@@ -326,7 +326,7 @@
                                 <td>{{item.Mother | dollarAmount}}</td>
                                 <td>{{item.NonParent | dollarAmount}}</td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.EducationTotal.Father | dollarAmount}}</td>
                                 <td>{{scheduleE.Extraordinaries.EducationTotal.Mother | dollarAmount}}</td>
@@ -342,7 +342,7 @@
                                 <td>{{item.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">COMBINED TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.YearlyEducationTotal.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
@@ -357,7 +357,7 @@
                                 <td>{{item.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">COMBINED TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.MonthlyEducationTotal.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
@@ -386,13 +386,13 @@
                                 <td>{{item.Mother | dollarAmount}}</td>
                                 <td>{{item.NonParent | dollarAmount}}</td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.MedicalTotal.Father | dollarAmount}}</td>
                                 <td>{{scheduleE.Extraordinaries.MedicalTotal.Mother | dollarAmount}}</td>
                                 <td>{{scheduleE.Extraordinaries.MedicalTotal.NonParent | dollarAmount}}</td>
                             </tr>
-                            <tr id="yearly-medical">
+                            <tr>
                                 <td>6. Yearly Expenditure for Extraordinary Medical Expenses</td>
                                 <td>TOTAL</td>
                                 <td colspan="2"></td>
@@ -402,7 +402,7 @@
                                 <td>{{item.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">COMBINED TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.YearlyMedicalTotal.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
@@ -417,7 +417,7 @@
                                 <td>{{item.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">COMBINED TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.MonthlyMedicalTotal.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
@@ -437,7 +437,7 @@
                                 <td>{{item.Mother | dollarAmount}}</td>
                                 <td>{{item.NonParent | dollarAmount}}</td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.RearingTotal.Father | dollarAmount}}</td>
                                 <td>{{scheduleE.Extraordinaries.RearingTotal.Mother | dollarAmount}}</td>
@@ -453,7 +453,7 @@
                                 <td>{{item.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">COMBINED TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.YearlyRearingTotal.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
@@ -468,7 +468,7 @@
                                 <td>{{item.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>
                             </tr>
-                            <tr>
+                            <tr class="bold">
                                 <td style="text-align: right;">COMBINED TOTAL</td>
                                 <td>{{scheduleE.Extraordinaries.MonthlyRearingTotal.Total | dollarAmount}}</td>
                                 <td colspan="2"></td>

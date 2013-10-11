@@ -31,7 +31,7 @@
                             <label class="form-question col-lg-12">
                                 Parenting schedule begins on:</label>
                             <div class="col-lg-4">
-                                <input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="schedule.BeginDate" name="BeginDate" placeholder="MM/DD/YYYY" type="text" value="{{schedule.BeginDate|date:'MM/dd/yyyy'}}">
+                                <input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="schedule.BeginDate" name="BeginDate" placeholder="MM/DD/YYYY" type="text" data-date="{{schedule.BeginDate | date:'MM/dd/yyyy'}}" value="09/10/2001">
                                 <div ng-show="scheduleForm.BeginDate.$dirty && scheduleForm.BeginDate.$invalid || (showErrors && scheduleForm.BeginDate.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.BeginDate.$error.pattern">This field must be a valid date.</span>
                                 </div>
@@ -43,7 +43,7 @@
                             <label class="form-question col-lg-12">
                                 What day and time will the child(ren) be picked up on weekends?</label>
                             <div class="col-lg-4">
-                                <select required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekendDayStart" name="WeekendDayStart">
+                                <select class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekendDayStart" name="WeekendDayStart">
                                     <option disabled selected value="">- Select Day - </option>
                                     <option value="Sunday">Sunday</option>
                                     <option value="Monday">Monday</option>
@@ -54,10 +54,10 @@
                                     <option value="Saturday">Saturday</option>
                                 </select>
                             </div>
-                            <div class="col-lg-1">
-                                <input class="form-control" ui-jq="timepicker" class="input-sm" required ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.PickedUp" name="PickedUp" placeholder="hh:mm am/pm" type="text" value="">
+                            <div class="input-group col-lg-2 bootstrap-timepicker">
+                                <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
+                                <input class="form-control" ui-jq="timepicker" required ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.PickedUp" name="PickedUp" placeholder="hh:mm am/pm" type="text" value="">
                             </div>
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="scheduleForm.WeekendDayStart.$dirty && scheduleForm.WeekendDayStart.$invalid || (showErrors && scheduleForm.WeekendDayStart.$invalid)">
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayStart.$error.required">This field is required</span>
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayStart.$error.pattern">This field may only contain numbers, letters and dashes.</span>
@@ -82,7 +82,7 @@
                             <label class="form-question col-lg-12">
                                 What day and time will the child(ren) be dropped off on weekends?</label>
                             <div class="col-lg-4">
-                                <select required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekendDayEnd" name="WeekendDayEnd">
+                                <select class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekendDayEnd" name="WeekendDayEnd">
                                     <option disabled selected value="">- Select Day - </option>
                                     <option value="Sunday">Sunday</option>
                                     <option value="Monday">Monday</option>
@@ -93,10 +93,10 @@
                                     <option value="Saturday">Saturday</option>
                                 </select>
                             </div>
-                            <div class="col-lg-1">
+                            <div class="input-group col-lg-2 bootstrap-timepicker">
+                                <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
                                 <input class="form-control" ui-jq="timepicker" class="input-sm" required ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.DroppedOff" name="DroppedOff" placeholder="hh:mm am/pm" type="text" value="">
                             </div>
-                            <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                             <div ng-show="scheduleForm.WeekendDayEnd.$dirty && scheduleForm.WeekendDayEnd.$invalid || (showErrors && scheduleForm.WeekendDayEnd.$invalid)">
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayEnd.$error.required">This field is required</span>
                                 <span class="form-error" ng-show="scheduleForm.WeekendDayEnd.$error.pattern">This field may only contain numbers, letters and dashes.</span>
@@ -228,10 +228,10 @@
                                     When would {{nonCustodialParent}} like to have your regular parenting time with the child(ren) on weekdays?</label>
                                 <label class="form-question col-lg-12">
                                     What time will the child(ren) be picked up on weekdays?</label>
-                                <div class="col-lg-4">
+                                <div class="input-group bootstrap-timepicker col-lg-2">
+                                <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayPickup" name="WeekdayPickup" placeholder="hh:mm am/pm" type="text" value="">
                                 </div>
-                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 <div ng-show="scheduleForm.WeekdayPickup.$dirty && scheduleForm.WeekdayPickup.$invalid || (showErrors && scheduleForm.WeekdayPickup.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.WeekdayPickup.$error.pattern">This field must be a valid time.</span>
                                 </div>
@@ -249,10 +249,10 @@
                             <div class="form-group row">
                                 <label class="form-question col-lg-12">
                                     What time will the child(ren) be dropped off on weekdays?</label>
-                                <div class="col-lg-4">
+                                <div class="input-group bootstrap-timepicker col-lg-2">
+                                    <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ui-jq="timepicker" class="input-sm" ng-pattern="/^(1[012]|0?[1-9]):[0-5][0-9](\s)?(am|pm|AM|PM)$/" ng-model="schedule.WeekdayDropoff" name="WeekdayDropoff" placeholder="hh:mm am/pm" type="text" value="">
                                 </div>
-                                <i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
                                 <div ng-show="scheduleForm.WeekdayDropoff.$dirty && scheduleForm.WeekdayDropoff.$invalid || (showErrors && scheduleForm.WeekdayDropoff.$invalid)">
                                     <span class="form-error" ng-show="scheduleForm.WeekdayDropoff.$error.pattern">This field must be a valid time.</span>
                                 </div>

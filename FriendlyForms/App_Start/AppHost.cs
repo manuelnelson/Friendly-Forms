@@ -273,7 +273,7 @@ namespace FriendlyForms.App_Start
             container.Register<ISocialSecurityService>(c => new SocialSecurityService(c.Resolve<ISocialSecurityRepository>()));
             container.Register<IPreexistingSupportChildService>(c => new PreexistingSupportChildService(c.Resolve<IPreexistingSupportChildRepository>()));
             container.Register<IPreexistingSupportService>(c => new PreexistingSupportService(c.Resolve<IPreexistingSupportRepository>()));
-            container.Register<IOtherChildrenService>(c => new OtherChildrenService(c.Resolve<IOtherChildrenRepository>()));
+            container.Register<IOtherChildrenService>(c => new OtherChildrenService(c.Resolve<IOtherChildrenRepository>(), c.Resolve<IOtherChildRepository>()));
             container.Register<IDeviationsService>(c => new DeviationsService(c.Resolve<IDeviationsRepository>()));
             container.Register<IOtherChildService>(c => new OtherChildService(c.Resolve<IOtherChildRepository>()));
             container.Register<IVehicleFormService>(c => new VehicleFormService(c.Resolve<IVehicleFormRepository>()));
@@ -286,7 +286,7 @@ namespace FriendlyForms.App_Start
             container.Register<IPreexistingSupportFormService>(c => new PreexistingSupportFormService(c.Resolve<IPreexistingSupportFormRepository>()));
             container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>()));
             container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>()));
-            container.Register<IMenuService>(c => new MenuService(c.Resolve<IChildService>(), c.Resolve<IChildFormService>(), c.Resolve<ICourtService>(), c.Resolve<IOutputService>()));
+            container.Register<IMenuService>(c => new MenuService(c.Resolve<IChildService>(), c.Resolve<IChildFormService>(), c.Resolve<ICourtService>(), c.Resolve<IOutputService>(), c.Resolve<IDeviationsService>(), c.Resolve<IPreexistingSupportFormService>(), c.Resolve<IOtherChildrenService>(), c.Resolve<IIncomeService>()));
             container.Register<IBcsoService>(c => new BcsoService(c.Resolve<IBcsoRepository>()));
             container.Register<ILawFirmService>(c => new LawFirmService(c.Resolve<ILawFirmRepository>()));
             container.Register<IAttorneyPageService>(c => new AttorneyPageService(c.Resolve<IAttorneyPageRepository>()));
@@ -325,7 +325,6 @@ namespace FriendlyForms.App_Start
             authRepo.CreateMissingTables();
 
 		}
-		
 
 		public static void Start()
 		{

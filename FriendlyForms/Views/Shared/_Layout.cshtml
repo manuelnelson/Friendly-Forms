@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @(HttpContext.Current.IsDebuggingEnabled ? Html.RenderCssBundle("~/Content/friendly.css.bundle", BundleOptions.Normal) : Html.RenderCssBundle("~/Content/friendly.css.bundle", BundleOptions.MinifiedAndCombined))
     @RenderSection("Styles", required: false)
+    <link rel="shortcut icon" href="../../Content/images/Logo-Favicon-Master-16.ico">
+    <!--[if IE]><link rel="SHORTCUT ICON" href="../../Content/images/Favicon.ico"/><![endif]-->
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

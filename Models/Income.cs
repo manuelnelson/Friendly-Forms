@@ -6,13 +6,16 @@ using ServiceStack.DataAnnotations;
 namespace Models
 {
     [Alias("Incomes")]
-    public class Income : IEntity, IFormEntity
+    public class Income : IFormEntity
     {
         [AutoIncrement]
         public long Id { get; set; }
+
         public long UserId { get; set; }
+
         [Ignore]
         public virtual User User { get; set; }
+
         public bool IsOtherParent { get; set; }
         public int HaveSalary { get; set; }
         public string OtherIncome { get; set; }
@@ -41,7 +44,7 @@ namespace Models
         public int? Fringe { get; set; }
         public int? Other { get; set; }
         public string OtherDetails { get; set; }
-        
+
         public bool IsValid()
         {
             return UserId > 0;
@@ -50,38 +53,17 @@ namespace Models
         public void Update(IFormEntity entity)
         {
             throw new NotImplementedException();
-            //var updatedEntity = (Income) entity;
-            //this
-            //IsOtherParent = updatedEntity.IsOtherParent;
-            //UserId = updatedEntity.UserId;
-            //Employed = updatedEntity.Employed;
-            //Salary = updatedEntity.Salary;
-            //SelfEmployed = updatedEntity.SelfEmployed;
-            //SelfIncome = updatedEntity.SelfIncome;
-            //SelfTax = updatedEntity.SelfTax;
-            //SelfTaxAmount = updatedEntity.SelfTaxAmount;
-            //OtherSources = updatedEntity.OtherSources;
-            //Commisions = updatedEntity.Commisions;
-            //Bonuses = updatedEntity.Bonuses;
-            //Overtime = updatedEntity.Overtime;
-            //Severance = updatedEntity.Severance;
-            //Retirement = updatedEntity.Retirement;
-            //Interest = updatedEntity.Interest;
-            //Dividends = updatedEntity.Dividends;
-            //Trust = updatedEntity.Trust;
-            //Annuities = updatedEntity.Annuities;
-            //Capital = updatedEntity.Capital;
-            //SocialSecurity = updatedEntity.SocialSecurity;
-            //Compensation = updatedEntity.Compensation;
-            //Unemployment = updatedEntity.Unemployment;
-            //CivilCase = updatedEntity.CivilCase;
-            //Gifts = updatedEntity.Gifts;
-            //Prizes = updatedEntity.Prizes;
-            //Alimony = updatedEntity.Alimony;
-            //Assets = updatedEntity.Assets;
-            //Fringe = updatedEntity.Fringe;
-            //Other = updatedEntity.Other;
-            //OtherDetails = updatedEntity.OtherDetails;            
+        }
+
+        public bool HasNonW2Income()
+        {
+            return SelfIncome > 0 || Commisions > 0 || Bonuses > 0 ||
+                Overtime > 0 || Severance  > 0 || Interest > 0 || Dividends > 0 || Trust > 0 || Annuities > 0 || Capital > 0 ||
+                SocialSecurity > 0 || Compensation > 0 || Unemployment > 0 || CivilCase > 0 || Gifts > 0 || Prizes > 0 ||
+                Alimony > 0 || Assets > 0 || Fringe > 0 || Other > 0;
+
+            //SelfIncomeNoDeductions not used currently
+
         }
     }
 }

@@ -18,9 +18,13 @@
         };
         $scope.subMenuClick = function (subMenuItem) {
             if (subMenuItem.disabled)
-                return;
+                return;            
             $scope.isSubMenuClick = true;
-            menuService.setActive(subMenuItem.path);
+            if(subMenuItem.hasLink)
+                menuService.setActive(subMenuItem.path, false);
+            else 
+                menuService.setActive(subMenuItem.path);
+            
         };
         $scope.enableFilter = function (item) {
             return item.disabled === false;

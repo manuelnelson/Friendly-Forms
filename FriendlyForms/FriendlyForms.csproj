@@ -109,18 +109,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Pechkin.Synchronized.0.5.8.1\lib\net40\Pechkin.Synchronized.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack, Version=3.9.60.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.3.9.60\lib\net35\ServiceStack.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Authentication.OpenId">
-      <HintPath>Lib\ServiceStack.Authentication.OpenId.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.3.9.59\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Common.3.9.59\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.FluentValidation.Mvc3">
+    <Reference Include="ServiceStack.FluentValidation.Mvc3, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Mvc.3.9.59\lib\net40\ServiceStack.FluentValidation.Mvc3.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
@@ -141,9 +139,9 @@
     <Reference Include="ServiceStack.Redis">
       <HintPath>..\packages\ServiceStack.Redis.3.9.59\lib\net35\ServiceStack.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack.ServiceInterface, Version=3.9.60.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ServiceStack.ServiceInterface, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.3.9.60\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.3.9.59\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -269,6 +267,7 @@
     <Compile Include="RestService\VehicleFormRestService.cs" />
     <Compile Include="RestService\VehicleRestService.cs" />
     <Compile Include="WebRole.cs" />
+    <Compile Include="WebServiceExamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\Account\Login\login-controller.js" />
@@ -770,6 +769,8 @@
     <Content Include="Content\friendly.min.css" />
     <Content Include="Content\images\breadcrumb.png" />
     <Content Include="Content\images\chosen-sprite.png" />
+    <Content Include="Content\images\Favicon.ico" />
+    <Content Include="Content\images\Front-Page-Image.jpg" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\gritter-light.png" />
     <Content Include="Content\images\gritter-long.png" />
@@ -823,6 +824,8 @@
     <Content Include="Content\images\ie-spacer.gif" />
     <Content Include="Content\images\larrow.png" />
     <Content Include="Content\images\line.png" />
+    <Content Include="Content\images\Logo-Favicon-Master-16.ico" />
+    <Content Include="Content\images\Logo-Favicon-Master-32.ico" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\menu-active.png" />
     <Content Include="Content\images\rarrow.png" />

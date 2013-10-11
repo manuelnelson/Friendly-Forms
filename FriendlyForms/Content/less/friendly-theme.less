@@ -7,10 +7,6 @@
  * Diablo9983 -> diablo9983@gmail.com
 **/
 
-body {
-	background-color: #8399b0;
-}
-
 #header {
     box-shadow: 0 1px 0 #2d4358;
 	background-color: #4b6176;
@@ -20,7 +16,6 @@ body {
 	background-image: -ms-linear-gradient(top, #4b6176 0%, #243a4f 100%);
 	background-image: -o-linear-gradient(top, #4b6176 0%, #243a4f 100%);
 	background-image: linear-gradient(top, #4b6176 0%, #243a4f 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4b6176', endColorstr='#243a4f',GradientType=0 ); /* IE6-9 */
     border-bottom: 1px solid #8da4bb;
 }
 .flat #header {
@@ -30,19 +25,7 @@ body {
 	border-right: 1px solid rgba(255,255,255,0.05);
 	box-shadow: 1px 0 0 0 rgba(0,0,0,0.2);
 }
-#search input[type=text], #search button {
-    color: #8699ad;
-	background-color: #415466;
-}
-#search input[type=text] {
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.16) inset, 0 1px 0 rgba(255,255,255,0.2); 
-}
-#search button {
-    box-shadow: -3px 3px 3px rgba(0,0,0,0.16) inset, 0 1px 0 rgba(255,255,255,0.2);
-}
-#search input[type=text]:focus {
-	color: #c1ccd8;
-}
+
 #user-nav > ul {
 	border-right: 1px solid rgba(255,255,255,0.1);
     border-left: 1px solid rgba(0,0,0,0.2);
@@ -107,7 +90,7 @@ body {
 }
 
 @media (max-width: 480px) {
-	#user-nav > ul, #user-nav > ul > li {
+	#user-nav > ul, #user-nav > ul > li { 
 		border: 0;
 	}
 	#sidebar > a {

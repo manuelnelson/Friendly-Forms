@@ -4,15 +4,21 @@
 @greenDarkest: #141528;
 @greenDarker: #19182D;
 @greenLight: #444C87;*/
-/*@greenDarker: #33475A;*/
+/*@brown: #253b50;
+@greenDark: #8d9dad;
+@green: #8d9dad; 
+@greenDarkest: #3A5065;
+@greenDarker: #253b50;
+
+@greenLight: #8DA4BB;
+@blueDark: #3A5065;*/
+/*@headerHighlightColor:	lighten(@brown, 8%);
+@headerBackgroundColor: @brown;*/
 /**
  * Unicorn Admin Template
  * Version 2.1.0
  * Diablo9983 -> diablo9983@gmail.com
 **/
-body {
-  background-color: #8399b0;
-}
 #header {
   box-shadow: 0 1px 0 #2d4358;
   background-color: #4b6176;
@@ -22,9 +28,6 @@ body {
   background-image: -ms-linear-gradient(top, #4b6176 0%, #243a4f 100%);
   background-image: -o-linear-gradient(top, #4b6176 0%, #243a4f 100%);
   background-image: linear-gradient(top, #4b6176 0%, #243a4f 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4b6176', endColorstr='#243a4f', GradientType=0);
-  /* IE6-9 */
-
   border-bottom: 1px solid #8da4bb;
 }
 .flat #header {
@@ -34,20 +37,6 @@ body {
 .fixed.flat #menu-trigger {
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.2);
-}
-#search input[type=text],
-#search button {
-  color: #8699ad;
-  background-color: #415466;
-}
-#search input[type=text] {
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.16) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-#search button {
-  box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.16) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-#search input[type=text]:focus {
-  color: #c1ccd8;
 }
 #user-nav > ul {
   border-right: 1px solid rgba(255, 255, 255, 0.1);

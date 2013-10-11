@@ -427,9 +427,6 @@ fieldset[disabled] .btn-yellow.active {
 .modal-footer {
   margin-top: 0;
 }
-.input-group {
-  padding: 10px 0;
-}
 .input-group-addon {
   background-color: #f3f0f6;
 }

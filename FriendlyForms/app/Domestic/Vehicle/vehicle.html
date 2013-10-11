@@ -25,16 +25,16 @@
                                     <td ng-show="!(editing && editVehicleId==vehicleAdded.Id)">{{vehicleAdded.Year}}</td>
                                     <td ng-show="!(editing  && editVehicleId==vehicleAdded.Id)">{{vehicleAdded.Owner}}</td>
                                     <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
-                                            <input class="form-control" type="text" ng-model="vehicleAdded.Make" />
+                                        <input class="form-control" type="text" ng-model="vehicleAdded.Make" />
                                     </td>
                                     <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
-                                            <input class="form-control" type="text" ng-model="vehicleAdded.Model" />
+                                        <input class="form-control" type="text" ng-model="vehicleAdded.Model" />
                                     </td>
                                     <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
-                                            <input class="form-control" type="text" ng-model="vehicleAdded.Year" />
+                                        <input class="form-control" type="text" ng-model="vehicleAdded.Year" />
                                     </td>
                                     <td ng-show="editing  && editVehicleId==vehicleAdded.Id">
-                                            <input class="form-control" type="text" ng-model="vehicleAdded.Owner" />
+                                        <input class="form-control" type="text" ng-model="vehicleAdded.Owner" />
                                     </td>
                                     <td>
                                         <button class="btn btn-default-small btn-primary btn" ng-show="!(editing && editVehicleId==vehicleAdded.Id)" title="Edit" ng-click="editVehicle(vehicleAdded)"><i class="icon-white icon-edit"></i></button>
@@ -122,15 +122,15 @@
                         <div ng-show="vehicle.Refinanced == 1">
                             <div class="form-group row">
                                 <label class="form-question col-lg-12">In whose name will the vehicle be refinanced?</label>
-                                <select ng-model="vehicle.Name" name="Name" ng-options="custodian for custodian in custodianNames">
-                                </select>
+                                <div class="col-lg-4">
+                                    <select class="form-control" ng-model="vehicle.Name" name="Name" ng-options="custodian for custodian in custodianNames">
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-12">By what date will the vehicle be refinanced?</label>
                                 <div class="col-lg-4">
-                                    <div class="col-lg-4">
-                                        <input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="vehicle.RefinanceDate" name="RefinanceDate" placeholder="MM/DD/YYYY" type="text" value="">
-                                    </div>
+                                    <input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="vehicle.RefinanceDate" name="RefinanceDate" placeholder="MM/DD/YYYY" type="text" value="">
                                 </div>
                                 <div ng-show="addVehicleForm.RefinanceDate.$dirty && addVehicleForm.RefinanceDate.$invalid || (showErrors && addVehicleForm.RefinanceDate.$invalid)">
                                     <span class="form-error" ng-show="addVehicleForm.RefinanceDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>

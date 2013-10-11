@@ -4,6 +4,7 @@ using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using BusinessLogic.Properties;
 using Models;
+using Models.ViewModels;
 
 namespace BusinessLogic
 {
@@ -13,16 +14,24 @@ namespace BusinessLogic
         private IChildFormService ChildFormService { get; set; }
         private ICourtService CourtService { get; set; }
         private IOutputService OutputService { get; set; }
+        private IDeviationsService DeviationsService { get; set; }
+        private IPreexistingSupportFormService PreexistingSupportFormService { get; set; }
+        private IOtherChildrenService OtherChildrenService { get; set; }
+        private IIncomeService IncomeService { get; set; }
         private const string ParentingText = "Parenting Plan";
         private const string SuccessIcon = "icon-ok icon-green";
         private const string FinancialText = "Financial Form";
         private const string DomesticText = "Mediation Agreement";
-        public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService, IOutputService outputService)
+        public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService, IOutputService outputService, IDeviationsService deviationsService, IPreexistingSupportFormService preexistingSupportFormService, IOtherChildrenService otherChildrenService, IIncomeService incomeService)
         {
             ChildService = childService;
             ChildFormService = childFormService;
             CourtService = courtService;
             OutputService = outputService;
+            DeviationsService = deviationsService;
+            PreexistingSupportFormService = preexistingSupportFormService;
+            OtherChildrenService = otherChildrenService;
+            IncomeService = incomeService;
         }
 
         public List<MenuItem> Get(string route, long userId, bool showAdminMenu, bool showAttorneyMenu, bool isAuthenticated = false)
@@ -40,6 +49,15 @@ namespace BusinessLogic
                 };
             if (!isAuthenticated || userId == 0)
             {
+                menuList.Add(new MenuItem()
+                    {
+                        itemClass = "",
+                        path = "#/Account/Login",
+                        iconClass = "icon icon-signin",
+                        text = "Login"
+                    });
+                var registerMenu = GetRegisterMenu();
+                menuList.Add(registerMenu);
                 return menuList;
             }
             if (showAdminMenu)
@@ -80,6 +98,43 @@ namespace BusinessLogic
             return menuList;
         }
 
+        private MenuItem GetRegisterMenu()
+        {
+            var menuList = new List<FormMenuItem>
+                {
+                    new FormMenuItem
+                        {
+                            formName = "",
+                            text = "Register User",
+                            iconClass = "",
+                            path = "/Account/Register/",
+                            pathIdentifier = "Parenting",
+                            itemClass = "",
+                            hasLink = true,
+                        },
+                    new FormMenuItem
+                        {
+                            formName = "",
+                            text = "Register Law Firm",
+                            iconClass = "",
+                            path = "/Administrator/Pricing/",
+                            pathIdentifier = "Property",
+                            itemClass = "",
+                            hasLink = true,
+                        },
+                };
+            return new MenuItem
+            {
+                itemClass = "submenu",
+                path = "",
+                pathIdentifier = "Register",
+                iconClass = "icon icon-th-list",
+                text = "Register",
+                showSubMenu = false,
+                subMenuItems = menuList
+            }; 
+        }
+
         private MenuItem GetAttorneyMenu(long userId)
         {
             return new MenuItem
@@ -98,6 +153,8 @@ namespace BusinessLogic
             var parentDisabled = IsOutputDisabled(ParentingText, mainList);
             var domesticDisabled = IsOutputDisabled(DomesticText, mainList);
             var financialDisabled = IsOutputDisabled(FinancialText, mainList);
+            var scheduleEDisabled = !HasScheduleE(userId); 
+            var scheduleBDisabled = !HasScheduleB(userId);
             var menuList = new List<FormMenuItem>
                 {
                     new FormMenuItem
@@ -138,7 +195,7 @@ namespace BusinessLogic
                             path = "/Output/ScheduleB/User/" + userId,
                             pathIdentifier = "ScheduleB",
                             itemClass = "",
-                            disabled = financialDisabled
+                            disabled = scheduleBDisabled || financialDisabled
                         },
                     new FormMenuItem
                         {
@@ -158,7 +215,7 @@ namespace BusinessLogic
                             path = "/Output/ScheduleE/User/" + userId,
                             pathIdentifier = "ScheduleE",
                             itemClass = "",
-                            disabled = financialDisabled
+                            disabled = scheduleEDisabled || financialDisabled
                         },
                     new FormMenuItem
                         {
@@ -191,6 +248,25 @@ namespace BusinessLogic
                 showSubMenu = false,
                 subMenuItems = menuList
             };
+        }
+
+        public bool HasScheduleE(long userId)
+        {
+            var deviations = DeviationsService.GetByUserId(userId) as Deviations;
+            return (deviations != null && deviations.Deviation == (int)YesNo.Yes);
+        }
+
+        public bool HasScheduleB(long userId)
+        {
+            var preexistingForm = PreexistingSupportFormService.GetByUserId(userId);
+            if (preexistingForm.Support == (int) YesNo.Yes)
+                return true;
+            var otherPreexistingForm = PreexistingSupportFormService.GetByUserId(userId, isOtherParent: true);            
+            if (otherPreexistingForm.Support == (int)YesNo.Yes)
+                return true;
+            if (IncomeService.HasNonW2Income(userId))
+                return true;
+            return OtherChildrenService.HasOtherChildren(userId);
         }
 
         /// <summary>

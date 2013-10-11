@@ -1,23 +1,24 @@
-﻿@import "variables.less"; 
-@import "mixins.less";    
-@import "variables.less"; 
+﻿@import "variables.less";
+@import "mixins.less";
+@import "variables.less";
 /*-----------------friendly-specific------------*/
 /*.btn-continue{
     margin-left:
 }*/
 .informative {
-border: 1px solid #CDCDCD; 
-padding: 3px;
-background: white;
-font-weight: bold; 
-border-radius: 3px;
+    border: 1px solid #CDCDCD;
+    padding: 3px;
+    background: white;
+    font-weight: bold;
+    border-radius: 3px;
 }
-.form-question{
-	font-weight:bold;
+
+.form-question {
+    font-weight: bold;
 }
-#loading
-{
-    background-color: @blueDark;
+
+#loading {
+    background-color: @secondary;
     border-radius: @border-radius-base;
     color: @white;
     font-weight: bold;
@@ -27,62 +28,66 @@ border-radius: 3px;
     padding: 4px 8px;
     position: fixed;
     right: 4px;
- 	@shadow: 0 1px rgba(0, 0, 0, 0.4);
-	.box-shadow(@shadow);	    
+    @shadow: 0 1px rgba(0, 0, 0, 0.4);
+    .box-shadow(@shadow);
     bottom: 4px;
     z-index: 19;
 }
 
 //Forms
-.form-error, input.ng-invalid.ng-dirty{
-	color: @brand-danger;
-	font-weight:bold;
-	display:inline
+.form-error, input.ng-invalid.ng-dirty {
+    color: @brand-danger;
+    font-weight: bold;
+    display: inline;
 }
 
 
 //Affix
 .bs-docs-sidenav {
-  width: 228px;
-  margin: 30px 0 0;
-  padding: 0;
-  background-color: #fff;
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-          box-shadow: 0 1px 4px rgba(0,0,0,.065);
-}
-.bs-docs-sidenav > li > a {
-  display: block;
-  *width: 190px;
-  margin: 0 0 -1px;
-  padding: 8px 14px;
-  border: 1px solid #e5e5e5;
-}
-.bs-docs-sidenav > li:first-child > a {
-  -webkit-border-radius: 6px 6px 0 0;
-     -moz-border-radius: 6px 6px 0 0;
-          border-radius: 6px 6px 0 0;
-}
-.bs-docs-sidenav > li:last-child > a {
-  -webkit-border-radius: 0 0 6px 6px;
-     -moz-border-radius: 0 0 6px 6px;
-          border-radius: 0 0 6px 6px;
-}
-.bs-docs-sidenav > .active > a {
-  position: relative;
-  z-index: 2;
-  padding: 9px 15px;
-  border: 0;
-  text-shadow: 0 1px 0 rgba(0,0,0,.15);
-  -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-     -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-          box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+    width: 228px;
+    margin: 30px 0 0;
+    padding: 0;
+    background-color: #fff;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,.065);
 }
 
- .bootstrap-timepicker {
+    .bs-docs-sidenav > li > a {
+        display: block;
+        *width: 190px;
+        margin: 0 0 -1px;
+        padding: 8px 14px;
+        border: 1px solid #e5e5e5;
+    }
+
+    .bs-docs-sidenav > li:first-child > a {
+        -webkit-border-radius: 6px 6px 0 0;
+        -moz-border-radius: 6px 6px 0 0;
+        border-radius: 6px 6px 0 0;
+    }
+
+    .bs-docs-sidenav > li:last-child > a {
+        -webkit-border-radius: 0 0 6px 6px;
+        -moz-border-radius: 0 0 6px 6px;
+        border-radius: 0 0 6px 6px;
+    }
+
+    .bs-docs-sidenav > .active > a {
+        position: relative;
+        z-index: 2;
+        padding: 9px 15px;
+        border: 0;
+        text-shadow: 0 1px 0 rgba(0,0,0,.15);
+        -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+        -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+        box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+    }
+
+.bootstrap-timepicker {
     &.dropdown-menu {
         top: 0;
         left: 0;
@@ -121,10 +126,10 @@ border-radius: 3px;
     }
 
     &.modal {
-        top: 30%; 
-        margin-top: 0; 
-        width: 200px; 
-        margin-left: -100px; 
+        top: 30%;
+        margin-top: 0;
+        width: 200px;
+        margin-left: -100px;
 
         .modal-content {
             padding: 0;
@@ -135,7 +140,7 @@ border-radius: 3px;
         width: 100%;
         margin: 0;
 
-        td { 
+        td {
             text-align: center;
             height: 30px;
             margin: 0;
@@ -146,6 +151,7 @@ border-radius: 3px;
             span {
                 width: 100%;
             }
+
             a {
                 border: 1px transparent solid;
                 width: 3em;
@@ -166,81 +172,126 @@ border-radius: 3px;
                     margin-top: 2px;
                 }
             }
+
             input {
                 width: 25px;
                 margin: 0;
                 text-align: center;
             }
-
         }
     }
 }
+
 .bootstrap-timepicker-component {
-    .add-on { 
+    .add-on {
         cursor: pointer;
+
         i {
-           display: block;
-           width: 16px;
-           height: 16px;
+            display: block;
+            width: 16px;
+            height: 16px;
         }
     }
 }
 
 /* Chevrons */
 .bs-docs-sidenav .icon-chevron-right {
-  float: right;
-  margin-top: 2px;
-  margin-right: -6px;
-  opacity: .25;
-}
-.bs-docs-sidenav > li > a:hover {
-  background-color: #f5f5f5;
-}
-.bs-docs-sidenav a:hover .icon-chevron-right {
-  opacity: .5;
-}
-.bs-docs-sidenav .active .icon-chevron-right,
-.bs-docs-sidenav .active a:hover .icon-chevron-right {
-  background-image: url("@{icon-font-path}");
-  opacity: 1;
-}
-.bs-docs-sidenav.affix {
-  top: 40px;
-}
-.bs-docs-sidenav.affix-bottom {
-  position: absolute;
-  top: auto;
-  bottom: 270px;
+    float: right;
+    margin-top: 2px;
+    margin-right: -6px;
+    opacity: .25;
 }
 
-#decisions{
-	margin:0;
+.bs-docs-sidenav > li > a:hover {
+    background-color: #f5f5f5;
 }
-.dropdown-menu li a{
-	text-align:left;
+
+.bs-docs-sidenav a:hover .icon-chevron-right {
+    opacity: .5;
 }
-.copy-button{
-	margin:4px 2px 0 0; 
-	padding:0;
+
+.bs-docs-sidenav .active .icon-chevron-right,
+.bs-docs-sidenav .active a:hover .icon-chevron-right {
+    background-image: url("@{image-path}");
+    opacity: 1;
 }
+
+.bs-docs-sidenav.affix {
+    top: 40px;
+}
+
+.bs-docs-sidenav.affix-bottom {
+    position: absolute;
+    top: auto;
+    bottom: 270px;
+}
+
+#decisions {
+    margin: 0;
+}
+
+.dropdown-menu li a {
+    text-align: left;
+}
+
+.copy-button {
+    margin: 4px 2px 0 0;
+    padding: 0;
+}
+
 .dropdown-toggle {
-	display:block;
-	padding: 4px 10px;
+    display: block;
+    padding: 4px 10px;
 }
-#main-content hr{
-	border-color:black;
+
+#main-content hr {
+    border-color: black;
 }
-#nav-menu a.btn{
-    float:left;
+
+#nav-menu a.btn {
+    float: left;
     padding: 4px 10px;
 }
 /*List changes*/
-ul.no-style li, ol.no-style li{
-    list-style-type:none;
+ul.no-style li, ol.no-style li {
+    list-style-type: none;
 }
+
 .ng-cloak, .x-ng-cloak {
-  display: none !important;
+    display: none !important;
 }
-#content-header{
+
+#content-header {
     height: 70px;
 }
+
+/*Home page*/
+.popout {
+    padding: 15px;
+    background-color: #fcfcfc;
+    border: 1px solid #ccc;
+    .box-shadow(5px 5px 3px 2px rgba(0,0,0,.25));
+}
+.popout p:first-child{
+    font-weight:bold;
+}
+img.popout {
+    padding: 0;
+}
+
+.jumbotron h2 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-family: Arvo;
+    color: #555;
+    font-size: 28px;
+}
+/*.home-table {
+    display:table;
+}
+
+.home-table .row {
+    display:table-row;
+}*/
+
+

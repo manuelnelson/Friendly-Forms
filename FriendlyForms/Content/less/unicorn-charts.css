@@ -1,4 +1,4 @@
-/* Chart styles */
+﻿/* Chart styles */
 .chart,
 .pie,
 .bars {
@@ -41,11 +41,11 @@
   transition: all 0.3s ease-in-out;
 }
 .site-stats li:hover .cc {
-  -webkit-transform: translatex(10px);
-  -moz-transform: translatex(10px);
-  -ms-transform: translatex(10px);
-  -o-transform: translatex(10px);
-  transform: translatex(10px);
+  -webkit-transform: translateX(10px);
+  -moz-transform: translateX(10px);
+  -ms-transform: translateX(10px);
+  -o-transform: translateX(10px);
+  transform: translateX(10px);
 }
 .site-stats li.divider {
   padding: 0;

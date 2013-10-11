@@ -12,5 +12,6 @@
         public long userId { get; set; }
         public bool hasChildren { get; set; }
         public bool isComplete { get; set; }
+        public bool hasLink { get; set; }
     }
 }
