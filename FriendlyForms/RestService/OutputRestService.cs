@@ -948,10 +948,14 @@ namespace FriendlyForms.RestService
                 AllowableFather = highIncomeFather.TotalDeviations + totalExpenses.DeviationFather,
                 AllowableMother = highIncomeMother.TotalDeviations + totalExpenses.DeviationMother,
             };
+            var lesserAmount = lowIncome.DeviationAmount > lowIncome.CalculatedAmount
+                                   ? lowIncome.CalculatedAmount
+                                   : lowIncome.DeviationAmount;
+
             if (parentNames.NonCustodyIsFather)
-                allowableDeviation.AllowableFather = allowableDeviation.AllowableFather - totalExpenses.ExtraSpent - lowIncome.ActualAmount;
+                allowableDeviation.AllowableFather = allowableDeviation.AllowableFather - totalExpenses.ExtraSpent - lesserAmount;
             else
-                allowableDeviation.AllowableMother = allowableDeviation.AllowableMother - totalExpenses.ExtraSpent - lowIncome.ActualAmount;
+                allowableDeviation.AllowableMother = allowableDeviation.AllowableMother - totalExpenses.ExtraSpent - lesserAmount;
             return allowableDeviation;
         }
 
@@ -960,7 +964,7 @@ namespace FriendlyForms.RestService
         {
             var totalExpenses = new ExtraExpenses
                 {
-                    ExtraSpent = extraExpenses.Sum(x => x.ExtraSpent),
+                    ExtraSpent = extraExpenses.Select(x=>x.ToMonthly()).Sum(x => x.ExtraSpent),
                     EducationFather = extraordinaries.AllEducationTotalMonthly.Father,
                     EducationMother = extraordinaries.AllEducationTotalMonthly.Mother,
                     EducationNonParent = extraordinaries.AllEducationTotalMonthly.NonParent,
@@ -1142,7 +1146,7 @@ namespace FriendlyForms.RestService
                 });
                 yearlyRearingCombinedTotal.Total += yearlyRearingTotal;
             }
-            var monthlyExpenses = enumerable.Select(extraExpense => extraExpense.ToMonthly()).ToList();
+            var monthlyExpenses = enumerable.Select(extraExpense => extraExpense.ToMonthly()).ToList();            
             foreach (var extraExpense in monthlyExpenses)
             {
                 var child = children.First(x => x.Id == extraExpense.ChildId);
