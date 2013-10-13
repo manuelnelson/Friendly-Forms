@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Case Number</label>
+                            <label class="form-question col-lg-12">Case Number <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="The Case Number is located in the Petition for Divorce document." popover-title="Case Number"></i></label>
                             <div class="col-lg-4">
                                 <input class="form-control" name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number" type="text" value="" required>
                             </div>
@@ -33,8 +33,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12" ui-jq="popover" data-content="Was this plan prepared by a judge, or by the parties involved?">
-                                Who is the author of this plan?
+                            <label class="form-question col-lg-12">
+                                Who is the author of this plan? <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="Is this plan prepared by both parties involved or by one party for a judge's approval?" popover-title="Author"></i>
                             </label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -53,8 +53,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12" ui-jq="popover" data-content="This plan has either been in force prior to this action or it is a new plan being enforced for the first time.">
-                                Is this a new plan or an existing plan?
+                            <label class="form-question col-lg-12">
+                                Is this a new plan or an existing plan? <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="This plan has either been in force prior to this action or it is a new plan being enforced for the first time." popover-title="Plan"></i>
                             </label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -72,9 +72,9 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="court.PlanType==2 || court.PlanType==3">
-                            <label class="form-question col-lg-12">Case Number</label>
+                            <label class="form-question col-lg-12">Case Number <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="Refer to your prior order or plan for this information." popover-title="Other Case Number"></i></label>
                             <div class="col-lg-4">
-                                <input class="form-control" ng-model="court.ExistCaseNumber" ui-jq="popover" data-content="Your case number can be found XXXX." placeholder="Case Number" type="text" ng-pattern="/^[0-9a-zA-Z\s-]*$/">
+                                <input class="form-control" ng-model="court.ExistCaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/">
                                 <div ng-show="court.ExistCaseNumber.$dirty && court.ExistCaseNumber.$invalid || (showErrors && courtForm.ExistCaseNumber.$invalid)">
                                     <span class="form-error" ng-show="court.ExistCaseNumber.$error.pattern">Case Number may only contain numbers, letters and dashes.</span>
                                 </div>
