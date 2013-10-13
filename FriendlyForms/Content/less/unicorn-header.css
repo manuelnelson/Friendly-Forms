@@ -6,7 +6,7 @@
   z-index: -9;
 }
 #header h1 {
-  background: url("../images/logo.png") no-repeat scroll 0 0 transparent;
+  background: url("../Content/images/logo.png") no-repeat scroll 0 0 transparent;
   height: 45px;
   left: 15px;
   line-height: 600px;

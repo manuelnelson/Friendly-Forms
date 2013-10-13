@@ -35,8 +35,12 @@ namespace BusinessLogic
             try
             {
                 var primaryForm = FormRepository.GetByUserId(userId);
-                var children = OtherChildRepository.GetFiltered(c => c.OtherChildrenId == primaryForm.Id);
+                if (primaryForm == null)
+                    return false;
                 var otherForm = FormRepository.GetFiltered(m => m.UserId == userId && m.IsOtherParent).FirstOrDefault();
+                if (otherForm == null)
+                    return false;
+                var children = OtherChildRepository.GetFiltered(c => c.OtherChildrenId == primaryForm.Id);
                 var otherChildren = OtherChildRepository.GetFiltered(c => c.OtherChildrenId == otherForm.Id);
                 return children.Any() || otherChildren.Any();
             }

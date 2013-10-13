@@ -259,10 +259,10 @@ namespace BusinessLogic
         public bool HasScheduleB(long userId)
         {
             var preexistingForm = PreexistingSupportFormService.GetByUserId(userId);
-            if (preexistingForm.Support == (int) YesNo.Yes)
+            if (preexistingForm != null && preexistingForm.Support == (int)YesNo.Yes)
                 return true;
-            var otherPreexistingForm = PreexistingSupportFormService.GetByUserId(userId, isOtherParent: true);            
-            if (otherPreexistingForm.Support == (int)YesNo.Yes)
+            var otherPreexistingForm = PreexistingSupportFormService.GetByUserId(userId, isOtherParent: true);
+            if (otherPreexistingForm != null && otherPreexistingForm.Support == (int)YesNo.Yes)
                 return true;
             if (IncomeService.HasNonW2Income(userId))
                 return true;
