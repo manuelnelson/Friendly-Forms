@@ -82,6 +82,7 @@
     <Compile Include="ISocialSecurityRepository.cs" />
     <Compile Include="IDeviationsRepository.cs" />
     <Compile Include="ISpousalRepository.cs" />
+    <Compile Include="IStateRepository.cs" />
     <Compile Include="ITaxRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="IUserRepository.cs" />

@@ -113,6 +113,7 @@
     <Compile Include="SocialSecurity.cs" />
     <Compile Include="Deviations.cs" />
     <Compile Include="SpousalSupport.cs" />
+    <Compile Include="State.cs" />
     <Compile Include="Tax.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Vehicle.cs" />

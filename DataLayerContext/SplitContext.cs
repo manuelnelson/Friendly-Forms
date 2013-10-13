@@ -54,6 +54,7 @@ namespace DataLayerContext
         public DbSet<AttorneyPage> AttorneyPages { get; set; }
         public DbSet<AttorneyPageUser> AttorneyPageUsers { get; set; }
         public DbSet<AttorneyClient> AttorneyClients { get; set; }
+        public DbSet<State> States { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             SetupCourtMapping(modelBuilder);
@@ -101,8 +102,18 @@ namespace DataLayerContext
             SetupAttorneyPageEntity(modelBuilder);
             SetupAttorneyPageUsersEntity(modelBuilder);
             SetupAttorneyClientsEntity(modelBuilder);
+            SetupStateEntity(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetupStateEntity(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<State>().HasKey(t => new { t.Id });
+            modelBuilder.Entity<State>().Property(t => t.Id)
+                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<State>().Property(t => t.Name).HasMaxLength(50);
+            modelBuilder.Entity<State>().Property(t => t.Abbreviation).HasMaxLength(5);
         }
 
         private void SetupAttorneyClientsEntity(DbModelBuilder modelBuilder)

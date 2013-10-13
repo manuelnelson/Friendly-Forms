@@ -261,6 +261,7 @@
     <Compile Include="RestService\SocialSecurityRestService.cs" />
     <Compile Include="RestService\DeviationsRestService.cs" />
     <Compile Include="RestService\SpousalRestService.cs" />
+    <Compile Include="RestService\StateRestService.cs" />
     <Compile Include="RestService\TaxRestService.cs" />
     <Compile Include="RestService\UserAuthRestService.cs" />
     <Compile Include="RestService\UserRestService.cs" />

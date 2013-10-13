@@ -492,7 +492,9 @@
                 date = this.isInput ? this.element.val() : this.element.data('date') || this.element.find('input').val();
                 if (date === "") {
                     date = this.element[0].defaultValue;
-                    fromArgs = true;
+                    if (date !== "") {
+                        fromArgs = true;
+                    }
                 }                    
                 delete this.element.data().date;                
             }

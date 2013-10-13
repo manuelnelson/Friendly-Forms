@@ -15,6 +15,10 @@
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
             }),
+        states: $resource('/api/States/:Id', { Id: '@Id' },
+            {
+                getList: { method: 'GET', isArray:true, params: { format: 'json' } },
+            }),
     };
     return service;
 }]);

@@ -18,6 +18,9 @@ namespace Models
         public virtual User User { get; set; }
         public virtual int Support { get; set; }
         public virtual string CourtName { get; set; }
+        public virtual long StateId { get; set; }
+        [Ignore]
+        public virtual State State { get; set; }
         public virtual string CaseNumber { get; set; }
         public virtual DateTime OrderDate { get; set; }
         public virtual int Monthly { get; set; }

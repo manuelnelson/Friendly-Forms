@@ -236,7 +236,8 @@ img.popout {
 .jumbotron h2 {
   text-align: center;
   margin: 0 0 20px 0;
-  font-family: Arvo;
+  /*font-family: Arvo;*/
+
   color: #555;
   font-size: 28px;
 }

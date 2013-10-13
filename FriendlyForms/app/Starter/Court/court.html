@@ -14,7 +14,7 @@
                         <div class="form-group row">
                             <label class="form-question col-lg-12">County</label>
                             <div class="col-lg-4">
-                                <select ng-model="court.CountyId" name="CountyId" ng-options="county.Id as county.CountyName for county in counties" required>
+                                <select ng-model="court.CountyId" class="form-control" name="CountyId" ng-options="county.Id as county.CountyName for county in counties" required>
                                     <option ng-show="!court.CountyId > 0" disabled selected value="">-- Select County --</option>
                                 </select>
                                 <div ng-show="courtForm.CountyId.$dirty && courtForm.CountyId.$invalid || (showErrors && courtForm.CountyId.$invalid)">

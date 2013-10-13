@@ -141,6 +141,18 @@
     <Compile Include="Migrations\201309181443273_ModifyNotifications.Designer.cs">
       <DependentUpon>201309181443273_ModifyNotifications.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201310120041488_AddStateEntity.cs" />
+    <Compile Include="Migrations\201310120041488_AddStateEntity.Designer.cs">
+      <DependentUpon>201310120041488_AddStateEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201310120052250_AddStateIdToPreexistingSupport.cs" />
+    <Compile Include="Migrations\201310120052250_AddStateIdToPreexistingSupport.Designer.cs">
+      <DependentUpon>201310120052250_AddStateIdToPreexistingSupport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201310120053502_AddStateIdForeignKeyLogic.cs" />
+    <Compile Include="Migrations\201310120053502_AddStateIdForeignKeyLogic.Designer.cs">
+      <DependentUpon>201310120053502_AddStateIdForeignKeyLogic.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AttorneyClientOrmLiteRepository.cs" />
@@ -185,6 +197,7 @@
     <Compile Include="OrmLiteRepositories\ScheduleOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\SocialSecurityOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\SpousalOrmLiteRepository.cs" />
+    <Compile Include="OrmLiteRepositories\StateOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\TaxOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\UserOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\VehicleFormOrmLiteRepository.cs" />
@@ -203,6 +216,7 @@
     <Compile Include="Repositories\HeathRepository.cs" />
     <Compile Include="Repositories\LawFirmRepository.cs" />
     <Compile Include="Repositories\PreexistingSupportFormRepository.cs" />
+    <Compile Include="Repositories\StateRepository.cs" />
     <Compile Include="Repositories\VehicleFormRepository.cs" />
     <Compile Include="SplitContext.cs" />
     <Compile Include="Repositories\ExtraHolidayRepository.cs" />
@@ -304,6 +318,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201309181443273_ModifyNotifications.resx">
       <DependentUpon>201309181443273_ModifyNotifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310120041488_AddStateEntity.resx">
+      <DependentUpon>201310120041488_AddStateEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310120052250_AddStateIdToPreexistingSupport.resx">
+      <DependentUpon>201310120052250_AddStateIdToPreexistingSupport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310120053502_AddStateIdForeignKeyLogic.resx">
+      <DependentUpon>201310120053502_AddStateIdForeignKeyLogic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

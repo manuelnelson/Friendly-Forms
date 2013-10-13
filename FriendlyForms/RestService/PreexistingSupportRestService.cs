@@ -24,6 +24,8 @@ namespace FriendlyForms.RestService
         [DataMember]
         public string CourtName { get; set; }
         [DataMember]
+        public string StateId { get; set; }
+        [DataMember]
         public string CaseNumber { get; set; }
         [DataMember]
         public string OrderDate { get; set; }

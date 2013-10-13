@@ -39,6 +39,7 @@
                                     <tr>
                                         <th></th>
                                         <th>Court Name</th>
+                                        <th>State</th>
                                         <th>Case Number</th>
                                         <th>Date</th>
                                         <th>Monthly Amount</th>
@@ -50,17 +51,22 @@
                                         <td>
                                             <button class="btn btn-default btn-primary" ng-click="showChildren(courtAdded)">Children</button></td>
                                         <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.CourtName}}</td>
+                                        <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.State}}</td>
                                         <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.CaseNumber}}</td>
                                         <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}</td>
                                         <td ng-show="!(courtEditing && editCourtId==courtAdded.Id)">${{courtAdded.Monthly}}</td>
                                         <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
-                                            <input type="text" ng-model="courtAdded.CourtName" /></td>
+                                            <input type="text" class="form-control" ng-model="courtAdded.CourtName" /></td>
                                         <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
-                                            <input type="text" ng-model="courtAdded.CaseNumber" /></td>
+                                            <select ng-model="courtAdded.StateId" class="form-control" ng-change="getState(courtAdded)" name="StateId" ng-options="state.Id as state.Abbreviation for state in states" required>
+                                                <option ng-show="!courtAdded.StateId > 0" disabled selected value="">-- Select State --</option>
+                                            </select></td>
                                         <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
-                                            <input ui-jq="datepicker" data-date="{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="courtAdded.OrderDate" name="OrderDate" placeholder="MM/DD/YYYY" type="text" value="{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}">
+                                            <input type="text" class="form-control" ng-model="courtAdded.CaseNumber" /></td>
                                         <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
-                                            <input type="text" ng-model="courtAdded.Monthly" /></td>
+                                            <input ui-jq="datepicker" class="form-control" data-date="{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="courtAdded.OrderDate" name="OrderDate" placeholder="MM/DD/YYYY" type="text" value="{{courtAdded.OrderDate | date:'MM/dd/yyyy'}}">
+                                        <td ng-show="courtEditing  && editCourtId==courtAdded.Id">
+                                            <input type="text" class="form-control" ng-model="courtAdded.Monthly" /></td>
                                         <td>
                                             <button class="btn-small btn-primary btn" ng-show="!(courtEditing && editCourtId==courtAdded.Id)" title="Edit" ng-click="editCourt(courtAdded)"><i class="icon-white icon-edit"></i></button>
                                             <button class="btn-small btn-primary btn" ng-show="!(courtEditing && editCourtId==courtAdded.Id)" title="Delete" ng-click="deleteCourt(courtAdded)"><i class="icon-white icon-trash"></i></button>
@@ -110,6 +116,17 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="form-question col-lg-4">State</label>
+                                <div class="col-lg-4">
+                                    <select ng-model="court.StateId" class="form-control" name="StateId" ng-options="state.Id as state.Name for state in states" required>
+                                        <option ng-show="!court.StateId > 0" disabled selected value="">-- Select State --</option>
+                                    </select>
+                                    <div ng-show="courtForm.StateId.$dirty && courtForm.StateId.$invalid">
+                                        <span class="form-error" ng-show="courtForm.StateId.$error.required">Please select a state</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-md-4 form-question">Civil Action Case Number</label>
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-model="court.CaseNumber" name="court.CaseNumber" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Case Number" type="text" value="">
@@ -120,8 +137,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Date of initial child support order</label>
-                                <div class="col-lg-4">
-                                    <input class="form-control" ng-model="court.OrderDate" name="court.OrderDate" ui-jq="datepicker" data-date="08/17/2013" data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" placeholder="Date" type="text" value="">
+                                <div class="col-lg-4 date">
+                                    <input class="form-control" ng-model="court.OrderDate" name="court.OrderDate" ui-jq="datepicker" data-date="{{court.OrderDate | date:'MM/dd/yyyy'}}" data-val-regex="Date must be in mm/dd/yyyy format" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" placeholder="Date" type="text" value="">
                                 </div>
                                 <div ng-show="courtForm.OrderDate.$dirty && courtForm.OrderDate.$invalid">
                                     <span class="form-error" ng-show="courtForm.OrderDate.$error.pattern">Date must be in mm/dd/yyyy format.</span>

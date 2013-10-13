@@ -3,6 +3,23 @@
     $scope.showAddChild = false;
     $scope.showErrors = false;
     $scope.isLoaded = false;
+    supportService.states.getList({}, function (data) {
+        $scope.states = data;
+        supportService.courts.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (result) {
+            if (result.PreexistingSupports.length == 0)
+                $scope.courts = [];
+            else {
+                $scope.courts = result.PreexistingSupports;
+                _.each($scope.courts, function (item) {
+                    var courtState = _.find($scope.states, function (state) {
+                        return state.Id == item.StateId;
+                    });
+                    item.State = courtState.Name;
+                });
+            }
+        });
+    });
+
     $scope.support = supportService.supports.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function () {
         $scope.isLoaded = true;
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
@@ -16,12 +33,13 @@
             }
         }
     });
-    supportService.courts.get({ UserId: $routeParams.userId, IsOtherParent: $routeParams.isOtherParent }, function (result) {
-        if (result.PreexistingSupports.length == 0)
-            $scope.courts = [];
-        else
-            $scope.courts = result.PreexistingSupports;
-    });
+    $scope.getState = function(courtAdded) {
+        var courtState = _.find($scope.states, function (state) {
+            return state.Id == courtAdded.StateId;
+        });
+        courtAdded.State = courtState.Name;
+    };
+
     $scope.addCourt = function() {
         $scope.court.UserId = $routeParams.userId;
         $scope.court.IsOtherParent = $routeParams.isOtherParent;

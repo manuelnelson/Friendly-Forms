@@ -184,6 +184,7 @@ namespace FriendlyForms.App_Start
             container.Register<IAttorneyPageRepository>(c => new AttorneyPageRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IAttorneyPageUserRepository>(c => new AttorneyPageUserRepository(c.Resolve<IUnitOfWork>()));
             container.Register<IAttorneyClientRepository>(c => new AttorneyClientRepository(c.Resolve<IUnitOfWork>()));
+            container.Register<IStateRepository>(c => new StateRepository(c.Resolve<IUnitOfWork>()));
         }
 
         private void SetupOrmLiteRepositories(Container container)
@@ -240,6 +241,7 @@ namespace FriendlyForms.App_Start
             container.Register<IAttorneyPageRepository>(c => new AttorneyPageOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
             container.Register<IAttorneyPageUserRepository>(c => new AttorneyPageUserOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
             container.Register<IAttorneyClientRepository>(c => new AttorneyClientOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
+            container.Register<IStateRepository>(c => new StateOrmLiteRepository(c.Resolve<IDbConnectionFactory>()));
         }
 
         private void SetupServices(Container container)
@@ -292,6 +294,7 @@ namespace FriendlyForms.App_Start
             container.Register<IAttorneyPageService>(c => new AttorneyPageService(c.Resolve<IAttorneyPageRepository>()));
             container.Register<IAttorneyPageUserService>(c => new AttorneyPageUserService(c.Resolve<IAttorneyPageUserRepository>()));
             container.Register<IAttorneyClientService>(c => new AttorneyClientService(c.Resolve<IAttorneyClientRepository>()));
+            container.Register<IStateService>(c => new StateService(c.Resolve<IStateRepository>()));
 
             container.Register<IOutputService>(c => new OutputService(c.Resolve<IIncomeService>(), c.Resolve<IPreexistingSupportFormService>(), c.Resolve<IOtherChildService>(), c.Resolve<IPreexistingSupportChildService>(), c.Resolve<IOtherChildrenService>(),
                 c.Resolve<ICourtService>(), c.Resolve<IParticipantService>(), c.Resolve<IChildService>(), c.Resolve<IPrivacyService>(), c.Resolve<IInformationService>(), c.Resolve<IDecisionsService>(), c.Resolve<IExtraDecisionsService>(), c.Resolve<IHolidayService>(),
