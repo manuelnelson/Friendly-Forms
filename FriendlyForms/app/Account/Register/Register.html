@@ -5,21 +5,21 @@
                 <fieldset>
                     <legend>Account Information</legend>
                     <div class="form-group row">
-                        <label class="col-lg-12">
-                            Please enter a name to identify your case. The name supplied will appear in the upper right corner of your screen on each page of the form. We suggest using a descriptive name (for example: John Smith vs. Jane Smith). This name will not be used for log in purposes.
-                        </label>
                         <div class="col-lg-8">
                             <input class="form-control" id="DisplayName" name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
                         </div>
+                        <div class="col-lg-4">
+                              <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Your name will appear in the top right corner of the form." popover-title="Tip"></i>
+                        </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-12">
-                            The email address you enter will be your user name. Enter an email address where we can send your password, should you forget it.
-                        </label>
-                    </div>
+                        </div>
                     <div class="form-group row">
                         <div class="col-lg-8">
                             <input class="form-control" id="Email" name="Email" ng-model="user.Email" placeholder="Email*" type="text" value="">
+                        </div>
+                        <div class="col-lg-4">
+                              <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Your email address will be used for login purposes." popover-title="Tip"></i>
                         </div>
                     </div>
                     <div class="form-group row">
