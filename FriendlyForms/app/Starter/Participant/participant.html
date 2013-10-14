@@ -11,7 +11,7 @@
                             <div class="form-group row">
                                 <div class="col-lg-4">
                                     <h4>Plaintiff</h4>
-                                    <input class="form-control" ng-model="participant.PlaintiffsName" name="PlaintiffsName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Plaintiff's Name" type="text" data-original-title="">
+                                    <input class="form-control" ng-model="participant.PlaintiffsName" name="PlaintiffsName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Plaintiff's Full Name" type="text" data-original-title="">
                                     <div ng-show="participantForm.PlaintiffsName.$dirty && participantForm.PlaintiffsName.$invalid || (showErrors && participantForm.DefendantsName.$invalid)">
                                         <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.required">This field is required</span>
                                         <span class="form-error" ng-show="participantForm.PlaintiffsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <h4>Defendant</h4>
-                                    <input class="form-control" ui-jq="popover" data-content="Enter the defendants's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="DefendantsName" ng-model="participant.DefendantsName" placeholder="Defendant's Name" type="text" data-original-title="">
+                                    <input class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="DefendantsName" ng-model="participant.DefendantsName" placeholder="Defendant's Full Name" type="text" data-original-title="">
                                     <div ng-show="(participantForm.DefendantsName.$dirty && participantForm.DefendantsName.$invalid) || (showErrors && participantForm.DefendantsName.$invalid)">
                                         <span class="form-error" ng-show="participantForm.DefendantsName.$error.required">This field is required</span>
                                         <span class="form-error" ng-show="participantForm.DefendantsName.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Plaintiff 
+                                            Plaintiff <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Only check this box in cases of same-sex unions" popover-title="Plaintiff"></i>
                                             <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="3"></label>
                                     </div>
                                     <div ng-show="participantForm.PlaintiffRelationship.$dirty && participantForm.PlaintiffRelationship.$invalid || (showErrors && participantForm.PlaintiffRelationship.$invalid)">
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Defendant 
+                                            Defendant <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Only check this box in cases of same-sex unions" popover-title="Defendant"></i>
                                             <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="4"></label>
                                     </div>
                                     <div ng-show="participantForm.DefendantRelationship.$dirty && participantForm.DefendantRelationship.$invalid || (showErrors && participantForm.DefendantRelationship.$invalid)">
@@ -106,12 +106,12 @@
                                 <div class="col-lg-4">
                                     <div class="radio">
                                         <label>
-                                            Primary Physical Custodial Parent
+                                            Primary Physical Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Primary Physical Custodian"></i>
                                             <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="1"></label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Non Primary Physical Custodial Parent
+                                            Non Primary Physical Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Non Primary Physical Custodian"></i>
                                             <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="2"></label>
                                     </div>
                                     <div ng-show="participantForm.PlaintiffCustodialParent.$dirty && participantForm.PlaintiffCustodialParent.$invalid || (showErrors && participantForm.PlaintiffCustodialParent.$invalid)">
@@ -121,12 +121,12 @@
                                 <div class="col-lg-4">
                                     <div class="radio">
                                         <label>
-                                            Primary Custodial Parent
+                                            Primary Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Primary Physical Custodian"></i>
                                             <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="1"></label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Non Custodial Parent
+                                            Non Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Non Primary Physical Custodian"></i>
                                             <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="2"></label>
                                     </div>
                                     <div ng-show="participantForm.DefendantCustodialParent.$dirty && participantForm.DefendantCustodialParent.$invalid || (showErrors && participantForm.DefendantCustodialParent.$invalid)">
