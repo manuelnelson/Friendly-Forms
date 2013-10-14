@@ -1,4 +1,6 @@
-﻿/* Header */
+﻿/*@icon-font-path:          "../Content/font/";
+@image-path:          "../Content/images/";*/
+/* Header */
 #header {
   height: 77px;
   position: relative;
@@ -6,7 +8,7 @@
   z-index: -9;
 }
 #header h1 {
-  background: url("../Content/images/logo.png") no-repeat scroll 0 0 transparent;
+  background: url("../images/logo.png") no-repeat scroll 0 0 transparent;
   height: 45px;
   left: 15px;
   line-height: 600px;

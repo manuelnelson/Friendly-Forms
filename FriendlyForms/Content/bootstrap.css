@@ -2764,7 +2764,7 @@ input[type="submit"].btn.btn-xs {
   color: #468847;
 }
 .alert-danger,
-.alert-error {
+.alert-danger {
   background-color: #f2dede;
   border-color: #eed3d7;
   color: #b94a48;

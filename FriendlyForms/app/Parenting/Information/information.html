@@ -36,9 +36,10 @@
                             <label class="form-question col-lg-12">
                                 How should access to the rights of information for either parent be restricted?</label>
                             <div class="col-lg-4">
-                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain any restrictions for each parent" rows="2"></textarea></div>
-                            <div ng-show="informationForm.AccessOfRightsDetails.$dirty && informationForm.AccessOfRightsDetails.$invalid  || (showErrors && informationForm.AccessOfRightsDetails.$invalid)">
-                                <span class="form-error" ng-show="informationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
+                                <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="information.AccessOfRightsDetails" name="AccessOfRightsDetails" placeholder="Explain any restrictions for each parent" rows="2"></textarea>
+                                <div ng-show="informationForm.AccessOfRightsDetails.$dirty && informationForm.AccessOfRightsDetails.$invalid  || (showErrors && informationForm.AccessOfRightsDetails.$invalid)">
+                                    <span class="form-error" ng-show="informationForm.AccessOfRightsDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">

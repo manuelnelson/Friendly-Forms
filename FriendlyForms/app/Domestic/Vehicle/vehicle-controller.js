@@ -35,9 +35,9 @@
 
         //#region event handlers
         $scope.submit = function () {
-            if ($scope.vehicleForm.$invalid) {
+            if ($scope.vehicleFormForm.$invalid) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
-                var value = genericService.getFormInput('#vehicleForm');
+                var value = genericService.getFormInput('#vehicleFormForm');
                 $.jStorage.set($scope.path, value);
                 return;
             }
@@ -54,6 +54,11 @@
             }
         };
         $scope.addVehicle = function () {
+            if ($scope.addVehicleForm.$invalid) {
+                $scope.showAddVehicleErrors = true;
+                return;
+            }
+            $scope.showAddVehicleErrors = false;
             $scope.vehicle.UserId = $routeParams.userId;
             $scope.vehicle.vehicleFormId = $scope.vehicleForm.Id;
             vehicleService.vehicles.save(null, $scope.vehicle, function (data) {

@@ -4,7 +4,7 @@ Application.properties = {
     messageType: {
         Warning: '',
         Success: 'alert-success',
-        Error: 'alert-error'
+        Error: 'alert-danger'
     },
     defaultMessage: 'Loading...'
 };

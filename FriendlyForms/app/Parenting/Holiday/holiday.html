@@ -42,9 +42,9 @@
                                 Define your Thanksgiving Holiday schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ThanksgivingOther" name="ThanksgivingOther" rows="2"></textarea>
-                            </div>
-                            <div ng-show="showErrors && holidayForm.ThanksgivingOther.$invalid">
-                                <span class="form-error" ng-show="holidayForm.ThanksgivingOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <div ng-show="showErrors && holidayForm.ThanksgivingOther.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ThanksgivingOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.Thanksgiving == 1">
@@ -109,9 +109,9 @@
                                 Define your Winter Break schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ChristmasOther" name="ChristmasOther" rows="2"></textarea>
-                            </div>
-                            <div ng-show="showErrors && holidayForm.ChristmasOther.$invalid">
-                                <span class="form-error" ng-show="holidayForm.ChristmasOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <div ng-show="showErrors && holidayForm.ChristmasOther.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.ChristmasOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
                             </div>
                         </div>
                         <h4>Spring Break</h4>
@@ -139,9 +139,9 @@
                                 Define your Spring Break schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SpringOther" name="SpringOther" rows="2"></textarea>
-                            </div>
-                            <div ng-show="showErrors && holidayForm.SpringOther.$invalid">
-                                <span class="form-error" ng-show="holidayForm.SpringOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                <div ng-show="showErrors && holidayForm.SpringOther.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.SpringOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                                </div>
                             </div>
                         </div>
                         <h4>Summer Break</h4>
@@ -149,10 +149,10 @@
                             <label class="form-question col-lg-12">Number of days after the last day of school at which summer vacation begins.</label>
                             <div class="col-lg-2">
                                 <input class="form-control" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
-                            </div>
-                            <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
-                                <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.required">The field is required</span>
-                                <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.number">This field must be a number.</span>
+                                <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.required">The field is required</span>
+                                    <span class="form-error" ng-show="holidayForm.SummerBeginDays.$error.number">This field must be a number.</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -170,10 +170,10 @@
                             <label class="form-question col-lg-12">Number of days prior to the first day of school at which summer vacation ends.</label>
                             <div class="col-lg-2">
                                 <input class="form-control" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
-                            </div>
-                            <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
-                                <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.required">The field is required</span>
-                                <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.number">This field must be a number.</span>
+                                <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
+                                    <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.required">The field is required</span>
+                                    <span class="form-error" ng-show="holidayForm.SummerEndDays.$error.number">This field must be a number.</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -192,9 +192,9 @@
                                 How will each of you spend time with the child(ren) during summer vacation.</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SummerDetails" name="SummerDetails" rows="2"></textarea>
-                            </div>
                             <div ng-show="showErrors && holidayForm.SummerDetails.$invalid">
                                 <span class="form-error" ng-show="holidayForm.SummerDetails.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
                             </div>
                         </div>
                         <h4>Fall Break</h4>
@@ -222,9 +222,9 @@
                                 Define your Fall Break schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.FallOther" name="FallOther" rows="2"></textarea>
-                            </div>
                             <div ng-show="showErrors && holidayForm.FallOther.$invalid">
                                 <span class="form-error" ng-show="holidayForm.FallOther.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            </div>
                             </div>
                         </div>
                         <h4>Other Holidays</h4>

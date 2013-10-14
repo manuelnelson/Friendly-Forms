@@ -23,9 +23,9 @@
                             <label class="col-md-4 form-question">Amount per month</label>
                             <div class="col-lg-4">
                                 <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="socialSecurity.Amount" name="Amount" placeholder="Monthly Amount" type="text" value="">
-                            </div>
-                            <div ng-show="socialSecurityForm.Amount.$dirty && socialSecurityForm.Amount.$invalid || (showErrors && socialSecurityForm.Amount.$invalid)">
-                                <span class="form-error" ng-show="socialSecurityForm.Amount.$error.pattern">This field must be a number.</span>
+                                <div ng-show="socialSecurityForm.Amount.$dirty && socialSecurityForm.Amount.$invalid || (showErrors && socialSecurityForm.Amount.$invalid)">
+                                    <span class="form-error" ng-show="socialSecurityForm.Amount.$error.pattern">This field must be a number.</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
