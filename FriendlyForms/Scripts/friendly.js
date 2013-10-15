@@ -37558,6 +37558,11 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
         }
     };
     $scope.addChild = function () {
+        if ($scope.addChildForm.$invalid) {
+            $scope.showAddChildErrors = true;
+            return;
+        }
+        $scope.showAddChildErrors = false;
         $scope.child.UserId = $routeParams.userId;
         $scope.child.ChildFormId = $scope.childForm.Id;
         childService.child.save(null, $scope.child, function (data) {
@@ -38075,9 +38080,9 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
 
         //#region event handlers
         $scope.submit = function () {
-            if ($scope.vehicleForm.$invalid) {
+            if ($scope.vehicleFormForm.$invalid) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
-                var value = genericService.getFormInput('#vehicleForm');
+                var value = genericService.getFormInput('#vehicleFormForm');
                 $.jStorage.set($scope.path, value);
                 return;
             }
@@ -38094,6 +38099,11 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
             }
         };
         $scope.addVehicle = function () {
+            if ($scope.addVehicleForm.$invalid) {
+                $scope.showAddVehicleErrors = true;
+                return;
+            }
+            $scope.showAddVehicleErrors = false;
             $scope.vehicle.UserId = $routeParams.userId;
             $scope.vehicle.vehicleFormId = $scope.vehicleForm.Id;
             vehicleService.vehicles.save(null, $scope.vehicle, function (data) {
