@@ -50,7 +50,7 @@
                         <div class="form-group row">
                             <label class="col-md-2">Name</label>
                             <div class="col-lg-4">
-                                <input class="form-control" ui-jq="popover" data-content="Enter the child's full name here." required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="child.Name" name="Name" placeholder="Name" type="text" value="" data-original-title="">
+                                <input class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="child.Name" name="Name" placeholder="Child's full name" type="text" value="" data-original-title="">
                                 <div ng-show="addChildForm.Name.$dirty && addChildForm.Name.$invalid">
                                     <span class="form-error" ng-show="addChildForm.Name.$error.required">The Name field is required</span>
                                     <span class="form-error" ng-show="addChildForm.Name.$error.pattern">Only alpha-numeric characters and []@$&amp;#39;()!~:#&amp;amp;_,/-?\% are allowed.</span>
