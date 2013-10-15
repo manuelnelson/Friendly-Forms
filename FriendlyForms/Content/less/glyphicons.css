@@ -1,7 +1,9 @@
-﻿@font-face {
+﻿/*@icon-font-path:          "../Content/font/";
+@image-path:          "../Content/images/";*/
+@font-face {
   font-family: 'icons Halflings';
-  src: url('../font/icons-halflings-regular.eot');
-  src: url('../font/icons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../font/icons-halflings-regular.woff') format('woff'), url('../font/icons-halflings-regular.ttf') format('truetype'), url('../font/icons-halflings-regular.svg#icons-halflingsregular') format('svg');
+  src: url('../font/glyphicons-halflings-regular.eot');
+  src: url('../font/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../font/glyphicons-halflings-regular.woff') format('woff'), url('../font/glyphicons-halflings-regular.ttf') format('truetype'), url('../font/glyphicons-halflings-regular.svg#icons-halflingsregular') format('svg');
 }
 .icon {
   position: relative;

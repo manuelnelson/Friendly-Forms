@@ -30,9 +30,9 @@
                         <div class="form-group row" ng-show="addendum.HasAddendum == 1">
                             <div class="col-lg-4">
                                 <textarea class="form-control input-xxlarge" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="addendum.AddendumDetails" name="AddendumDetails" placeholder="Details" rows="2"></textarea>
-                            </div>
-                            <div ng-show="addendumForm.AddendumDetails.$dirty && addendumForm.AddendumDetails.$invalid || (showErrors && addendumForm.HasAddendum.$invalid)">
-                                <span class="form-error" ng-show="addendumForm.AddendumDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
+                                <div ng-show="addendumForm.AddendumDetails.$dirty && addendumForm.AddendumDetails.$invalid || (showErrors && addendumForm.HasAddendum.$invalid)">
+                                    <span class="form-error" ng-show="addendumForm.AddendumDetails.$error.pattern">This field may only contain numbers, letters and dashes.</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">

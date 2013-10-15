@@ -27,7 +27,7 @@ FormsApp.factory('messageService', ['$location', function ($location) {
                 case 401://unauthorized 
                     //go to unauthorized page
                     if ($location.path() === '/Account/Login/') {
-                        service.showMessage("Invalid Credentials", "Either the e-mail or password you entered is incorrect.");
+                        service.showMessage("Invalid Credentials", "Either the e-mail or password you entered is incorrect.", Application.properties.messageType.Error);
                         return false;
                     }
                     $location.path('/Account/Unauthorized');

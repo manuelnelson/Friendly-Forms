@@ -12,8 +12,7 @@
                     <hr style="border-top: 1px solid #ccc; border-bottom: 0;" />
                     <h5>Basic Information</h5>
                     <div class="row">
-                        <span class="col-md-1">Email Identifier</span><span class="col-md-3">{{userAuth.Email}}</span>
-                        <span class="col-md-1">Client Email</span><span class="col-md-3">{{userAuth.PrimaryEmail}}</span>
+                        <span class="col-md-2">Email Identifier</span><span class="col-md-3">{{userAuth.Email}}</span>
                     </div>
                     <div class="row">
                         <br/>
@@ -32,10 +31,10 @@
                 </div>
                 <div class="widget-content">
                     <p>Who will receive notification of changes to the form?</p>
-                    <label class="checkbox-inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<div class="col-lg-4"><input class="form-control" ng-model="person.ChangeNotification" class="inline" type="checkbox" ng-click="notify(person)" />
+                    <label class="checkbox-inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<input ng-model="person.ChangeNotification" type="checkbox" ng-click="notify(person)" />
                     </label>
                     <p style="margin-top: 15px;">Who will receive print notification of a form? This notification fires when the client prints a form. This is an indicator that the client may have completed that particular form.</p>
-                    <label class="checkbox-inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<div class="col-lg-4"><input class="form-control" ng-model="person.PrintNotification" class="inline" type="checkbox" ng-click="notify(person)" />
+                    <label class="checkbox-inline" ng-repeat="person in authorizedPeople">{{person.AttorneyName}}<input ng-model="person.PrintNotification" type="checkbox" ng-click="notify(person)" />
                     </label>
                 </div>
             </div>
@@ -49,9 +48,9 @@
                 <div class="widget-content">
                     <p>Who has access to this client?</p>
                     <ul class="no-style">
-                        <li ng-repeat="user in lawFirmUsers">
-                            <span class="checkbox">
-                                <div class="col-lg-4"><input class="form-control" ng-model="user.hasAccess" type="checkbox" ng-click="allowAccess(user)" />{{user.DisplayName}}</span>
+                        <li ng-repeat="user in lawFirmUsers" style="margin:8px 0">
+                            <label class="checkbox-inline">
+                                <input  ng-model="user.hasAccess" type="checkbox" ng-click="allowAccess(user)" />{{user.DisplayName}}</label>
                         </li>
                     </ul>
                 </div>

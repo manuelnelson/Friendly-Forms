@@ -49,6 +49,11 @@
         }
     };
     $scope.addChild = function () {
+        if ($scope.addChildForm.$invalid) {
+            $scope.showAddChildErrors = true;
+            return;
+        }
+        $scope.showAddChildErrors = false;
         $scope.child.UserId = $routeParams.userId;
         $scope.child.ChildFormId = $scope.childForm.Id;
         childService.child.save(null, $scope.child, function (data) {

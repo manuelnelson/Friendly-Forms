@@ -324,8 +324,8 @@ namespace FriendlyForms.App_Start
             container.Register<IDbConnectionFactory>(c => new OrmLiteConnectionFactory(connectionString, SqlServerOrmLiteDialectProvider.Instance));
             container.Register<IUserAuthRepository>(c => new CustomOrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
 
-            var authRepo = (CustomOrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();
-            authRepo.CreateMissingTables();
+            //var authRepo = (CustomOrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();
+            //authRepo.CreateMissingTables();
 
 		}
 

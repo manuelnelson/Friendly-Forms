@@ -1,0 +1,199 @@
+﻿<div class="form-vertical wrapper" style="display: none" ng-show="isLoaded">
+    <form ng-submit="submit()" ng-controller="HealthCtrl" id="healthForm" name="healthForm" novalidate>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-signal"></i></span>
+                        <h5>Health Insurance Information</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="form-group row">
+                            <label class="informative col-lg-12">In this section you will define health insurance premiums paid to provide coverage for the child(ren) in this action.</label>
+                        </div>
+                        <div class="form-group row">
+                            <label class="form-question col-lg-12">
+                                Which parent will provide health insurance for the child(ren)?</label>
+                            <div class="col-lg-12">
+                                <div class="radio">
+                                    <label>
+                                        Father
+                                <input required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="1"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Mother
+                                <input required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="2"></label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        Neither
+                                <input required ng-model="health.ProvideHealth" name="ProvideHealth" type="radio" value="3"></label>
+                                </div>
+                                <div ng-show="healthForm.ProvideHealth.$dirty && healthForm.ProvideHealth.$invalid || (showErrors && healthForm.ProvideHealth.$invalid)">
+                                    <span class="form-error" ng-show="healthForm.ProvideHealth.$error.required">This field is required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="health.ProvideHealth == 1 || health.ProvideHealth == 2">
+                            <div class="form-group row">
+                                <label class="form-question col-lg-12">
+                                    Check whichever forms of insurance will be made available for the child(ren).</label>
+                                <div class="col-lg-12">
+                                    <label class="checkbox">
+                                        Health (medical, mental health and hospitalization)<input ng-model="health.HealthInsurance" name="FathersHealth" type="checkbox" value="False">
+                                    </label>
+                                    <label class="checkbox ">
+                                        Dental<input ng-model="health.DentalInsurance" name="MothersHealth" type="checkbox" value="False">
+                                    </label>
+                                    <label class="checkbox">
+                                        Vision
+                                        <input ng-model="health.VisionInsurance" name="NonCustodialHealth" type="checkbox" value="False">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-12">
+                                    Are any other health insurance beneficiaries included in the cost of premiums other than the child(ren) in this action?</label>
+                                <div class="col-lg-12">
+                                    <div class="radio">
+                                        <label>
+                                            Yes
+                                            <input ng-model="health.Prorate" name="Prorate" type="radio" value="1"></label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            No
+                                            <input ng-model="health.Prorate" name="Prorate" type="radio" value="2"></label>
+                                    </div>
+                                    <div ng-show="healthForm.Prorate.$dirty && healthForm.Prorate.$invalid  || (showErrors && healthForm.Prorate.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.Prorate.$error.required">This field is required</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row" ng-show="health.Prorate == 1">
+                                <label class="form-question col-lg-12">
+                                    Other than the child(ren), who is also covered in the insurance policy?</label>
+                                <div class="col-lg-12">
+                                    <label class="checkbox">
+                                        The father's portion of health insurance is currently included in health insurance premiums.
+                                        <input ng-model="health.FathersHealth" name="FathersHealth" type="checkbox" value="False">
+                                    </label>
+                                    <label class="checkbox ">
+                                        The mother's portion of health insurance is currently included in health insurance premiums.
+                                        <input ng-model="health.MothersHealth" name="MothersHealth" type="checkbox" value="False">
+                                    </label>
+                                    <label class="checkbox">
+                                        The nonparent custodian's portion of health insurance is currently included in health insurance premiums.
+                                        <input ng-model="health.NonCustodialHealth" name="NonCustodialHealth" type="checkbox" value="False">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="informative col-lg-12">
+                                    Please enter the amount each parent, or the non-parent custodian, contributes toward the total monthly cost for health insurance.</label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-3">Father</label>
+                                <div class="col-lg-4">
+<<<<<<< HEAD
+                                    <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.FathersHealthAmount" name="FathersHealthAmount" placeholder="Monthly Amount" type="text" value="">
+                                </div>
+                                <div ng-show="healthForm.FathersHealthAmount.$dirty && healthForm.FathersHealthAmount.$invalid  || (showErrors && healthForm.FathersHealthAmount.$invalid)">
+                                    <span class="form-error" ng-show="healthForm.FathersHealthAmount.$error.pattern">This field must be a number.</span>
+=======
+                                    <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.FathersHealthAmount" name="FathersHealthAmount" placeholder="Amount" type="text" value="">
+                                    <div ng-show="healthForm.FathersHealthAmount.$dirty && healthForm.FathersHealthAmount.$invalid  || (showErrors && healthForm.FathersHealthAmount.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.FathersHealthAmount.$error.pattern">This field must be a number.</span>
+                                    </div>
+>>>>>>> 7e5acd005f47841a333e09501dd219fc6b013dcc
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-3">Mother</label>
+                                <div class="col-lg-4">
+<<<<<<< HEAD
+                                    <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.MothersHealthAmount" name="MothersHealthAmount" placeholder="Monthly Amount" type="text" value="">
+                                </div>
+                                <div ng-show="healthForm.MothersHealthAmount.$dirty && healthForm.MothersHealthAmount.$invalid  || (showErrors && healthForm.MothersHealthAmount.$invalid)">
+                                    <span class="form-error" ng-show="healthForm.MothersHealthAmount.$error.pattern">This field must be a number.</span>
+=======
+                                    <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.MothersHealthAmount" name="MothersHealthAmount" placeholder="Amount" type="text" value="">
+                                    <div ng-show="healthForm.MothersHealthAmount.$dirty && healthForm.MothersHealthAmount.$invalid  || (showErrors && healthForm.MothersHealthAmount.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.MothersHealthAmount.$error.pattern">This field must be a number.</span>
+                                    </div>
+>>>>>>> 7e5acd005f47841a333e09501dd219fc6b013dcc
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-3">Nonparent Custodian</label>
+                                <div class="col-lg-4">
+<<<<<<< HEAD
+                                    <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.NonCustodialHealthAmount" name="NonCustodialHealthAmount" placeholder="Monthly Amount" type="text" value="">
+                                </div>
+                                <div ng-show="healthForm.NonCustodialHealthAmount.$dirty && healthForm.NonCustodialHealthAmount.$invalid  || (showErrors && healthForm.NonCustodialHealthAmount.$invalid)">
+                                    <span class="form-error" ng-show="healthForm.NonCustodialHealthAmount.$error.pattern">This field must be a number.</span>
+=======
+                                    <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.NonCustodialHealthAmount" name="NonCustodialHealthAmount" placeholder="Amount" type="text" value="">
+                                    <div ng-show="healthForm.NonCustodialHealthAmount.$dirty && healthForm.NonCustodialHealthAmount.$invalid  || (showErrors && healthForm.NonCustodialHealthAmount.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.NonCustodialHealthAmount.$error.pattern">This field must be a number.</span>
+                                    </div>
+>>>>>>> 7e5acd005f47841a333e09501dd219fc6b013dcc
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="informative col-lg-12">
+                                    What percentage will each party pay of healthcare expenses not covered by insurance (eg. deductibles, co-pays, prescriptions, Emergency Room)? The total percentage must equal 100%.</label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-3">Father</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" class="percent" ng-pattern="/^[0-9]*$/" min="0" max="100" ng-change="CalculatePercentage('Father')" ng-model="health.FathersHealthPercentage" name="FathersHealthPercentage" placeholder="Percent" type="text" value="">
+                                    <div ng-show="healthForm.FathersHealthPercentage.$dirty && healthForm.FathersHealthPercentage.$invalid  || (showErrors && healthForm.FathersHealthPercentage.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.FathersHealthPercentage.$error.max || healthForm.FathersHealthPercentage.$error.min">This field is must be between 0-100</span>
+                                        <span class="form-error" ng-show="healthForm.FathersHealthPercentage.$error.pattern">This field must be a number.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-3">Mother</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" class="percent" ng-pattern="/^[0-9]*$/" min="0" max="100" ng-change="CalculatePercentage('Mother')" ng-model="health.MothersHealthPercentage" name="MothersHealthPercentage" placeholder="Percent" type="text" value="">
+                                    <div ng-show="healthForm.MothersHealthPercentage.$dirty && healthForm.MothersHealthPercentage.$invalid  || (showErrors && healthForm.MothersHealthPercentage.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.MothersHealthPercentage.$error.max || healthForm.MothersHealthPercentage.$error.min">This field is must be between 0-100</span>
+                                        <span class="form-error" ng-show="healthForm.MothersHealthPercentage.$error.pattern">This field must be a number.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-3">Nonparent Custodian</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" class="percent" ng-pattern="/^[0-9]*$/" min="0" max="100" ng-change="CalculatePercentage('NonParent')" ng-model="health.NonCustodialHealthPercentage" name="NonCustodialHealthPercentage" placeholder="Percent" type="text" value="">
+                                    <div ng-show="healthForm.NonCustodialHealthPercentage.$dirty && healthForm.NonCustodialHealthPercentage.$invalid  || (showErrors && healthForm.NonCustodialHealthPercentage.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.NonCustodialHealthPercentage.$error.max || healthForm.NonCustodialHealthPercentage.$error.min">This field is must be between 0-100</span>
+                                        <span class="form-error" ng-show="healthForm.NonCustodialHealthPercentage.$error.pattern">This field must be a number.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-question col-lg-3">After receiving verification of a particular uninsured health care expense, what is the maximum number of days the other party might expect to wait for reimbursement?</label>
+                                <div class="col-lg-4">
+                                    <input class="form-control" class="percent" ng-pattern="/^[0-9]*$/" ng-model="health.MaximumDays" name="MaximumDays" placeholder="Days" type="text" value="">
+                                    <div ng-show="healthForm.MaximumDays.$dirty && healthForm.MaximumDays.$invalid  || (showErrors && healthForm.MaximumDays.$invalid)">
+                                        <span class="form-error" ng-show="healthForm.NonCustodialHealthPercentage.$error.pattern">This field must be a number.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-default btn-primary" value="Continue">Continue <i class="icon-arrow-right icon-white"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
