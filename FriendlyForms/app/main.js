@@ -53,12 +53,12 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Administrator/Register/LawFirm/:lawFirmId', { caseInsensitiveMatch: true, controller: RegisterAdminCtrl, templateUrl: '/app/Administrator/Register/RegisterAdmin.html' }).
         when('/Administrator/RegisterFirm/Subscription/:subscription', { caseInsensitiveMatch: true, controller: RegisterFirmCtrl, templateUrl: '/app/Administrator/RegisterFirm/RegisterFirm.html' }).
         when('/Administrator/Pricing', { caseInsensitiveMatch: true, controller: PricingCtrl, templateUrl: '/app/Administrator/Pricing/Pricing.html' }).
-        when('/Administrator/Payment/User/:userId', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
-        when('/Administrator/Agreement/User/:userId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
-        when('/Administrator/CreateAttorney/User/:userId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
-        when('/Administrator/ClientCases/User/:userId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
-        when('/Attorney/AttorneyPage/Attorney/:userId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
-        when('/Attorney/CreateClient/Attorney/:userId', { caseInsensitiveMatch: true, controller: CreateClientCtrl, templateUrl: '/app/Attorney/CreateClient/CreateClient.html' }).
+        when('/Administrator/Payment/Admin/:adminId', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
+        when('/Administrator/Agreement/Admin/:adminId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
+        when('/Administrator/CreateAttorney/Admin/:adminId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
+        when('/Administrator/ClientCases/Admin/:adminId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
+        when('/Attorney/AttorneyPage/Attorney/:attorneyId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
+        when('/Attorney/CreateClient/Attorney/:attorneyId', { caseInsensitiveMatch: true, controller: CreateClientCtrl, templateUrl: '/app/Attorney/CreateClient/CreateClient.html' }).
         when('/Attorney/Client/:userId', { caseInsensitiveMatch: true, controller: ClientCtrl, templateUrl: '/app/Attorney/Client/Client.html' }).
         when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).

@@ -5873,12 +5873,8 @@ a:hover {
   width: 250px !important;
 }
 
-/*@brown: #232639;
-@greenDark: #2D335B;
-@green: #353C6C;
-@greenDarkest: #141528;
-@greenDarker: #19182D;
-@greenLight: #444C87;*/
+/*@icon-font-path:          "../Content/font/";
+@image-path:          "../Content/images/";*/
 /* Content */
 #content {
   background: none repeat scroll 0 0 #eeeeee;
@@ -5928,6 +5924,9 @@ a:hover {
   font-weight: normal;
   text-shadow: 0 1px 0 #ffffff;
   margin-left: 20px;
+}
+#content-header h4 {
+  margin: 0 0 0 20px;
 }
 #content-header h1,
 #content-header > .btn-group {

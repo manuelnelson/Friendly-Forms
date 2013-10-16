@@ -52,7 +52,7 @@ namespace BusinessLogic
                 menuList.Add(new MenuItem()
                     {
                         itemClass = "",
-                        path = "#/Account/Login",
+                        path = "/#/Account/Login",
                         iconClass = "icon icon-signin",
                         text = "Login"
                     });
@@ -91,7 +91,7 @@ namespace BusinessLogic
             menuList.Add(new MenuItem
                 {
                     itemClass = "",
-                    path = "#/Account/Logoff",
+                    path = "/#/Account/Logoff",
                     iconClass = "icon icon-share-alt",
                     text = "Log out",
                 });
@@ -689,7 +689,7 @@ namespace BusinessLogic
             return new MenuItem
             {
                 itemClass = "",
-                path = "/#/Administrator/ClientCases/User/" + userId,
+                path = "/#/Administrator/ClientCases/Admin/" + userId,
                 pathIdentifier = "Administrator",
                 iconClass = "icon icon-user",
                 text = "Administration",

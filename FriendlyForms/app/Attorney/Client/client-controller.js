@@ -1,9 +1,9 @@
 ﻿var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'constantsService',
 function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, constantsService) {
     //#region Init
+    headerService.setTitle('Client Profile');
     userService.getUserAuth($routeParams.userId).then(function (userAuth) {
          $scope.userAuth = userAuth;
-         headerService.setTitle(userAuth.DisplayName);
      });
     userService.getUserData($routeParams.userId).then(function(user) {
         $scope.user = user;        
