@@ -30,11 +30,11 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">Secondary Address</label>
+                                <label class="form-question col-lg-12">Unit Number</label>
                                 <div class="col-lg-4">
                                     <input class="form-control" maxlength="100" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.SecondaryAddress" name="SecondaryAddress" placeholder="Secondary Address" type="text" value="">
                                 </div>
-                                <div ng-show="houseForm.SecondaryAddress.$dirty && houseForm.SecondaryAddress.$invalid || (showErrors && houseForm.SecondaryAddress.$invalid)">
+                               <div ng-show="houseForm.SecondaryAddress.$dirty && houseForm.SecondaryAddress.$invalid || (showErrors && houseForm.SecondaryAddress.$invalid)">
                                     <span class="form-error" ng-show="houseForm.SecondaryAddress.$error.maxLength">This field cannot be longer than 100 characters.</span>
                                     <span class="form-error" ng-show="houseForm.SecondaryAddress.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                 </div>
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately:</label>
+                                <label class="form-question col-lg-12">After subtracting estimated real estate commissions and other sale related expenses, the equity in the property is approximately: <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Negative values are acceptable here. Simply include a minus sign &quot; - &quot whenever there is negative equity in the marital home." popover-title="Tip"></i></label>
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-pattern="/^-?[0-9]*$/" ng-model="house.Equity" name="Equity" placeholder="Equity in Dollars" type="text" value="" maxlength="19" autocomplete="off">
                                 </div>
@@ -101,7 +101,7 @@
                             <div class="form-group row">
                                 <label class="form-question col-lg-12">How will you divide the marital home?</label>
                                 <div class="col-lg-4">
-                                    <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Divide" name="Divide" placeholder="Describe how assets and liabilities related to the marital home will be divided. Keep in mind how issues like the amount necessary to pay off the existing mortgage, current equity in the home, and the costs to maintain the home, or any need for the mortgage to be refinanced will be addressed." rows="2"></textarea>
+                                    <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="house.Divide" name="Divide" placeholder="Describe how the physical asset of the marital home will be divided," rows="2"></textarea>
                                 </div>
                                 <div ng-show="houseForm.Divide.$dirty && houseForm.Divide.$invalid || (showErrors && houseForm.Divide.$invalid)">
                                     <span class="form-error" ng-show="houseForm.Divide.$error.maxLength">This field cannot be longer than 100 characters.</span>
