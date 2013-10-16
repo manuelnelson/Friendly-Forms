@@ -1,16 +1,16 @@
 ﻿var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
     function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService, loginMenuService) {
         $scope.clients = [];
-        $scope.userId = $routeParams.userId;
+        $scope.adminId = $routeParams.adminId;
         $scope.isLoaded = false;
-        userService.getUserData($routeParams.userId).then(function(data) {
+        userService.getUserData($routeParams.adminId).then(function(data) {
             $scope.admin = data;
             userService.getLawFirmUsers(data.LawFirmId).then(function(lawFirmUsers) {
                 $scope.attorneys = lawFirmUsers;
                 $scope.isLoaded = true;
             });
         });
-        clientService.getClients($routeParams.userId).then(function(clients) {
+        clientService.getClients($routeParams.adminId).then(function(clients) {
             $scope.clients = clients;
         });
         $scope.openClient = function (client) {
@@ -23,5 +23,5 @@
             $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
         };
         headerService.setTitle("Administrator");
-        loginMenuService.refresh();
+        loginMenuService.refresh($routeParams.adminId);
     }];

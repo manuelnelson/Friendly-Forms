@@ -1,4 +1,4 @@
-﻿FormsApp.factory('menuService', ['$location', '$rootScope', '$resource', '$routeParams', '$q', function ($location, $rootScope, $resource, $routeParams, $q) {
+﻿FormsApp.factory('menuService', ['$location', '$rootScope', '$resource', '$route', '$q', function ($location, $rootScope, $resource, $route, $q) {
     var service = {
         //#region Props
         menuItems: [],
@@ -32,14 +32,13 @@
         },
         getMenu: function (userId) {
             var deferred = $q.defer();
-            if(!userId)
-                userId = service.userId;
-            else 
+            if(userId)
                 service.userId = userId;
             
-            if (typeof userId === 'undefined')
-                userId = 0;
-            service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {
+            if (service.userId === 0 && typeof $route.current.params.userId != 'undefined') {
+                service.userId = $route.current.params.userId;
+            }               
+            service.menu.getList({ Route: $location.path(), UserId: service.userId }, function (menuItems) {
                 service.setItems(menuItems);
                 service.isInitialized = true;
                 deferred.resolve(menuItems);
@@ -83,6 +82,15 @@
             });
             if (menuItem)
                 $location.path(menuItem.subMenuItems[0].path);
+            else {
+                if (typeof service.menuItems[1] != 'undefined') {
+                    //href has hashbang...remove this
+                    $location.path(service.menuItems[1].path.replace("/#",""));
+                } else {
+                    //just go home man...you're drunk
+                    $location.path('/');
+                }
+            }
         },
         enableMenu: function(path) {
             var menuGroup = service.getMenuGroupByPath(path);
@@ -107,13 +115,12 @@
             //if we are at the last menu item, go to the form completion page
             if (ndx == menuGroup.menuItem.subMenuItems.length - 1) {
                 //go to form complete page
-                var path = '/Output/FormComplete/' + menuGroup.menuItem.text.replace(' ', '') + '/user/' + $routeParams.userId;
+                var path = '/Output/FormComplete/' + menuGroup.menuItem.text.replace(' ', '') + '/user/' + $route.current.params.userId;
                 $location.path(path);
                 return;
             }
             var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx + 1];
             ////whenever nextMenu is called, the form is already saved.  Let's set next menu active without saving form.
-            //service.setActive(nextSubMenu.path, false);
             $location.path(nextSubMenu.path);
         },
         previousMenu: function () {
@@ -122,7 +129,6 @@
             var ndx = _.indexOf(_.pluck(menuGroup.menuItem.subMenuItems, 'path'), menuGroup.subMenuItem.path);
             var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx - 1];
             ////whenever previousMenu is called, the form is already saved.  Let's set next menu active without saving form.
-            //service.setActive(nextSubMenu.path, false);
             $location.path(nextSubMenu.path);
         },
         saveCurrentForm: function () {
@@ -145,7 +151,7 @@
             if (typeof saveForm === 'undefined') {
                 saveForm = true;
             }
-            if (!service.isInitialized) {
+            if (!service.isInitialized) {                
                 service.getMenu().then(function () {
                     //never save the form if menu isn't initialized...doesn't make sense
                     service.setActiveCallback(path, false);

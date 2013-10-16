@@ -37327,7 +37327,7 @@ FormsApp.factory('messageService', ['$location', function ($location) {
                 case 401://unauthorized 
                     //go to unauthorized page
                     if ($location.path() === '/Account/Login/') {
-                        service.showMessage("Invalid Credentials", "Either the e-mail or password you entered is incorrect.");
+                        service.showMessage("Invalid Credentials", "Either the e-mail or password you entered is incorrect.", Application.properties.messageType.Error);
                         return false;
                     }
                     $location.path('/Account/Unauthorized');
@@ -40911,6 +40911,9 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
     $scope.$watch(function () { return headerService.Title; }, function () {
         $scope.PageTitle = headerService.Title;
     }, true);
+    $scope.$watch(function () { return headerService.SecondaryTitle; }, function () {
+        $scope.SecondaryTitle = headerService.SecondaryTitle;
+    }, true);
     $scope.$watch(function () { return headerService.levels; }, function () {
         $scope.levels = headerService.levels;
     }, true);
@@ -40938,13 +40941,13 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
     };
 };
 HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'messageService', '$rootScope'];
-;FormsApp.factory('headerService', ['menuService', '$location', '$resource', function (menuService, $location, $resource) {
+;FormsApp.factory('headerService', ['menuService', '$location', '$resource', 'userService', 'constantsService', function (menuService, $location, $resource, userService, constantsService) {
     var service = {
         menuGroup: null,
         hide: function() {
             service.showFeedbackHeader = false;
             service.showOutput = false;
-        },        
+        },
         show: function () {
             service.showFeedbackHeader = true;
             service.showOutput = false;
@@ -40976,6 +40979,10 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
             else if(service.menuGroup){
                 service.Title = service.menuGroup.subMenuItem ? service.menuGroup.subMenuItem.text : service.menuGroup.menuItem.text;
             }
+            userService.getCurrentUserSession().then(function(userData) {
+                if (_.indexOf(userData.Roles, constantsService.constants.AdminRole) > -1 || _.indexOf(userData.Roles, constantsService.constants.AttorneyRole) > -1)
+                    service.SecondaryTitle = "me vs you";
+            });            
             service.showFeedbackHeader = true;
             service.showOutput = false;
         },

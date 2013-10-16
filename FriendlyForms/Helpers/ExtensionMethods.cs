@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using BusinessLogic.Contracts;
@@ -23,9 +22,12 @@ namespace FriendlyForms.Helpers
             if (courtService == null)
                 courtService = EndpointHost.AppHost.TryResolve<ICourtService>();
             var court = courtService.GetByUserId(attorneyClient.ClientUserId) as Court;
+            var caseNumber = "";
+            if(court!= null)
+                caseNumber = court.CaseNumber;
             var attorneyClientDto = new AttorneyClientRestService.ClientDto
             {
-                CaseNumber = court.CaseNumber,
+                CaseNumber = caseNumber,
                 ClientUserId = attorneyClient.ClientUserId,
                 Id = attorneyClient.Id,
                 UserId = attorneyClient.UserId,

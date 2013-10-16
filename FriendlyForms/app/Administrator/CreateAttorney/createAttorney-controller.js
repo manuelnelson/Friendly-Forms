@@ -6,7 +6,7 @@
             }
             $scope.user.UserName = $scope.user.Email;
             userService.register.save(null, $scope.user, function (userAuth) {
-                userService.getUserData($routeParams.userId).then(function (userData) {
+                userService.getUserData($routeParams.adminId).then(function (userData) {
                     //Create Attorney Page
                     attorneyPageService.attorneyPages.save(null, {
                         UserId: userAuth.UserId,

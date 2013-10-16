@@ -3,6 +3,9 @@
     $scope.$watch(function () { return headerService.Title; }, function () {
         $scope.PageTitle = headerService.Title;
     }, true);
+    $scope.$watch(function () { return headerService.SecondaryTitle; }, function () {
+        $scope.SecondaryTitle = headerService.SecondaryTitle;
+    }, true);
     $scope.$watch(function () { return headerService.levels; }, function () {
         $scope.levels = headerService.levels;
     }, true);

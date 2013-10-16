@@ -7,13 +7,12 @@
             }
             var adminRole = constantsService.constants.AdminRole;
             var attorneyRole = constantsService.constants.AttorneyRole;
-            var userId = $routeParams.userId;
             userService.getCurrentUserSession().then(function (userData) {
                 userService.roles.save(null, {
                     UserName: userData.UserName,
                     Roles: [adminRole, attorneyRole],
                 }, function () {
-                    $location.path('/Administrator/ClientCases/User/' + userId);
+                    $location.path('/Administrator/ClientCases/Admin/' + $routeParams.adminId);
                 });
             });
         };
