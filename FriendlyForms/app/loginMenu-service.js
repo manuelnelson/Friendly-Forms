@@ -1,5 +1,5 @@
-﻿FormsApp.factory('loginMenuService', ['$resource', 'menuService', 'userService', '$q', '$route',
-   function ($resource, menuService, userService, $q, $route) {
+﻿FormsApp.factory('loginMenuService', ['$resource', 'menuService', 'userService', '$q', '$route','$location',
+   function ($resource, menuService, userService, $q, $route, $location) {
        var service = {
            auth: $resource('/api/auth/logout', {},
                {

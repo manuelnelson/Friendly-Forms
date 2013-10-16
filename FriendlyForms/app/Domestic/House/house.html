@@ -71,7 +71,7 @@
                             <div class="form-group row">
                                 <label class="form-question col-lg-12">Amount of money still owed on the house</label>
                                 <div class="col-lg-4">
-                                    <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="house.MoneyOwed" name="MoneyOwed" placeholder="Dollars owed" type="text" value="" maxlength="19" autocomplete="off">
+                                    <input class="form-control" ng-pattern="/^-?[0-9]*$/" ng-model="house.MoneyOwed" name="MoneyOwed" placeholder="Dollars owed" type="text" value="" maxlength="19" autocomplete="off">
                                 </div>
                                 <div ng-show="houseForm.MoneyOwed.$dirty && houseForm.MoneyOwed.$invalid || (showErrors && houseForm.MoneyOwed.$invalid)">
                                     <span class="form-error" ng-show="houseForm.MoneyOwed.$error.maxLength">This field cannot be longer than 19 characters.</span>

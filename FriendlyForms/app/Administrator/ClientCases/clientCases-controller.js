@@ -23,5 +23,11 @@
             $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
         };
         headerService.setTitle("Administrator");
-        loginMenuService.refresh($routeParams.adminId);
+        loginMenuService.refresh($routeParams.adminId).then(function() {
+            //TODO: we really need a way of getting location.path to equal hrefs
+            var path = $location.path();
+            if (path.indexOf('/#') == -1)
+                path = "/#" + path;
+            menuService.setActive(path, false);
+        });
     }];
