@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Plaintiff <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Only check this box in cases of same-sex unions" popover-title="Plaintiff"></i>
+                                            Plaintiff <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Only check this box in cases of same-sex unions" popover-title="Tip"></i>
                                             <input required ng-model="participant.PlaintiffRelationship" ng-click="changeRelationship('Plaintiff')" name="PlaintiffRelationship" type="radio" value="3"></label>
                                     </div>
                                     <div ng-show="participantForm.PlaintiffRelationship.$dirty && participantForm.PlaintiffRelationship.$invalid || (showErrors && participantForm.PlaintiffRelationship.$invalid)">
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Defendant <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Only check this box in cases of same-sex unions" popover-title="Defendant"></i>
+                                            Defendant <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Only check this box in cases of same-sex unions" popover-title="Tip"></i>
                                             <input required ng-model="participant.DefendantRelationship" ng-click="changeRelationship('Defendant')" name="DefendantRelationship" type="radio" value="4"></label>
                                     </div>
                                     <div ng-show="participantForm.DefendantRelationship.$dirty && participantForm.DefendantRelationship.$invalid || (showErrors && participantForm.DefendantRelationship.$invalid)">
@@ -106,12 +106,12 @@
                                 <div class="col-lg-4">
                                     <div class="radio">
                                         <label>
-                                            Primary Physical Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Primary Physical Custodian"></i>
+                                            Primary Physical Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Tip"></i>
                                             <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="1"></label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Non Primary Physical Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Non Primary Physical Custodian"></i>
+                                            Non Primary Physical Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Tip"></i>
                                             <input required ng-model="participant.PlaintiffCustodialParent" ng-click="changeCustody('Plaintiff')" name="PlaintiffCustodialParent" type="radio" value="2"></label>
                                     </div>
                                     <div ng-show="participantForm.PlaintiffCustodialParent.$dirty && participantForm.PlaintiffCustodialParent.$invalid || (showErrors && participantForm.PlaintiffCustodialParent.$invalid)">
@@ -121,12 +121,12 @@
                                 <div class="col-lg-4">
                                     <div class="radio">
                                         <label>
-                                            Primary Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Primary Physical Custodian"></i>
+                                            Primary Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Tip"></i>
                                             <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="1"></label>
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            Non Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Non Primary Physical Custodian"></i>
+                                            Non Custodial Parent <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Although you may file for joint custody, you are required to select custodial and non-custodial parents for child support calculation purposes." popover-title="Tip"></i>
                                             <input required ng-model="participant.DefendantCustodialParent" ng-click="changeCustody('Defendant')" name="DefendantCustodialParent" type="radio" value="2"></label>
                                     </div>
                                     <div ng-show="participantForm.DefendantCustodialParent.$dirty && participantForm.DefendantCustodialParent.$invalid || (showErrors && participantForm.DefendantCustodialParent.$invalid)">
