@@ -13,7 +13,7 @@
                                 In this section you will define some of the responsibilities of single parenting.</label>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Who will be responsible to pick up or drop off the child at the beginning of visitation?</label>
                             <div class="col-lg-12">
                                 <label class="radio-inline">Father<input ng-model="responsibility.BeginningVisitation" class="inline" required name="BeginningVisitation" type="radio" value="1"></label>
@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Who will be responsible to pick up or drop off the child at the end of visitation?</label>
                             <div class="col-lg-12">
                                 <label class="radio-inline">Father<input ng-model="responsibility.EndVisitation" class="inline" required name="EndVisitation" type="radio" value="1"></label>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Will each of you pay your own portion of the costs to pick up or drop off the child, or will each of you be responsible to pay a percentage of the costs of transportation?</label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -65,7 +65,7 @@
                         </div>
                         <div ng-show="responsibility.TransportationCosts == 3">
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     Father's percentage</label>
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-model="responsibility.FatherPercentage" ng-change="CalculatePercentage('Father')" class="input-mini" ng-pattern="/^[0-9]*$/" name="FatherPercentage" placeholder="%" type="text" value="0">
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     Mother's percentage</label>
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-model="responsibility.MotherPercentage" ng-change="CalculatePercentage('Mother')" class="input-mini" ng-pattern="/^[0-9]*$/" name="MotherPercentage" placeholder="%" type="text" value="0">
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="responsibility.TransportationCosts == 4">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 The parties agree that visitation-related expenses will be paid as follows:</label>
                             <div class="col-lg-4">
                                 <textarea ng-model="responsibility.OtherDetails" class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" name="OtherDetails" placeholder="Description" rows="2"></textarea>

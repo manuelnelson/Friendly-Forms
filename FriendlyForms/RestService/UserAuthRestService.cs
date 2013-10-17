@@ -229,11 +229,15 @@ namespace FriendlyForms.RestService
         [Authenticate]
         public object Put(UserRoles request)
         {
+            var roles = new List<string>(request.Roles);
             AssignRolesService.Post(new AssignRoles
             {
                 UserName = request.UserName,
-                Roles = new List<string>(request.Roles)
+                Roles = roles
             });
+            //Update the session roles as well!                        
+            UserSession.Roles = roles;
+
             return null;
         }
         #endregion
@@ -246,11 +250,14 @@ namespace FriendlyForms.RestService
             //var user = UserService.Get(request.UserId);
             //if(user.HasPaid)
             //else throw 403 Forbidden error
+            var roles = new List<string>(request.Roles);
             AssignRolesService.Post(new AssignRoles
             {
                 UserName = request.UserName,
                 Roles = new List<string>(request.Roles)
             });
+            //Update the session roles as well!            
+            UserSession.Roles = roles;
             return null;
         }
         [Authenticate]

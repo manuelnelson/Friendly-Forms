@@ -5452,7 +5452,7 @@ a:hover {
   z-index: -9;
 }
 #header h1 {
-  background: url("../images/logo.png") no-repeat scroll 0 0 transparent;
+  background: url("../Content/images/logo.png") no-repeat scroll 0 0 transparent;
   height: 45px;
   left: 15px;
   line-height: 600px;
@@ -5924,13 +5924,14 @@ a:hover {
   font-weight: normal;
   text-shadow: 0 1px 0 #ffffff;
   margin-left: 20px;
+  margin-bottom: 0;
 }
 #content-header h4 {
   margin: 0 0 0 20px;
 }
 #content-header h1,
 #content-header > .btn-group {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 #content-header > .btn-group {
   float: right;
@@ -8262,8 +8263,8 @@ fieldset[disabled] .btn-yellow.active {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../font/fontawesome-webfont.eot?v=3.2.1');
-  src: url('../font/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../font/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../font/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../font/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
+  src: url('../Content/font/fontawesome-webfont.eot?v=3.2.1');
+  src: url('../Content/font/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../Content/font/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../Content/font/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../Content/font/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
   font-weight: normal;
   font-style: normal;
 }

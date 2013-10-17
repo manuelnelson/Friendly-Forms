@@ -9,7 +9,7 @@
                     </div>
                     <div class="widget-content">
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 On what date would you like the general parenting schedule to begin?</label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="schedule.DetermineBeginDate == 2">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Parenting schedule begins on:</label>
                             <div class="col-lg-4 date">
                                 <input class="form-control" data-date="{{schedule.BeginDate | date: 'MM/dd/yyyy'}}" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="schedule.BeginDate" name="BeginDate" placeholder="MM/DD/YYYY" type="text" value="{{schedule.BeginDate | date: 'MM/dd/yyyy'}}">
@@ -38,9 +38,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 When would {{nonCustodialParent}} like to have regular parenting time with the child(ren) on weekends?</label>
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 What day and time will the child(ren) be picked up on weekends?</label>
                             <div class="col-lg-4">
                                 <select class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekendDayStart" name="WeekendDayStart">
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 In the box below, finish the following sentence: The child(ren) will be picked up...</label>
                             <div class="col-lg-4">
                                 <input class="form-control" class="input-xxlarge" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.PickupLocation" name="PickupLocation" placeholder="Location" type="text" value="">
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 What day and time will the child(ren) be dropped off on weekends?</label>
                             <div class="col-lg-4">
                                 <select class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekendDayEnd" name="WeekendDayEnd">
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 In the box below, finish the following sentence: The child(ren) will be dropped off...</label>
                             <div class="col-lg-4">
                                 <input class="form-control" class="input-xxlarge" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.DropOffLocation" name="DropOffLocation" placeholder="Location" type="text" value="">
@@ -118,11 +118,11 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 On what weekends during the month would {{nonCustodialParent}} prefer to parent your child(ren)?</label>
                             <div class="col-md-4">
                                 <div class="form-group row">
-                                    <label class="form-question col-lg-12">{{nonCustodialParent}}</label>
+                                    <label class="form-question col-xs-12">{{nonCustodialParent}}</label>
                                     <div class="col-md-12">
                                         <div class="radio">
                                             <label>
@@ -157,7 +157,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group row">
-                                    <label class="form-question col-lg-12">{{custodialParent}}</label>
+                                    <label class="form-question col-xs-12">{{custodialParent}}</label>
                                     <div class="col-md-12">
                                         <div class="radio">
                                             <label>
@@ -191,7 +191,7 @@
                                 </div>
                             </div>
                             <div class="form-group row" ng-show="schedule.NonCustodianWeekend == 5 || schedule.CustodianWeekend == 5">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     Describe in detail the weekend days visitation schedule:
                                 </label>
                                 <div class="col-lg-4">
@@ -204,7 +204,7 @@
                         </div>
                         <h4>Weekday Visitation</h4>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Will {{nonCustodialParent}} spend time with the child(ren) during weekdays?</label>
                             <div class="col-md-12">
                                 <div class="radio">
@@ -224,9 +224,9 @@
                         </div>
                         <div ng-show="schedule.Weekdays == 1">
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     When would {{nonCustodialParent}} like to have your regular parenting time with the child(ren) on weekdays?</label>
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     What time will the child(ren) be picked up on weekdays?</label>
                                 <div class="input-group bootstrap-timepicker col-lg-2">
                                     <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
@@ -237,7 +237,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     In the box below, finish the following sentence: The child(ren) will be picked up...</label>
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekdayPickupLocation" name="WeekdayPickupLocation" placeholder="Location" type="text" value="">
@@ -247,7 +247,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     What time will the child(ren) be dropped off on weekdays?</label>
                                 <div class="input-group bootstrap-timepicker col-lg-2">
                                     <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
@@ -258,7 +258,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     In the box below, finish the following sentence: The child(ren) will be dropped off...</label>
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="schedule.WeekdayDropoffLocation" name="WeekdayDropoffLocation" placeholder="Location" type="text" value="">
@@ -268,7 +268,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     On what weekdays will {{nonCustodialParent}} excercise parenting/visitation of your child(ren)?</label>
                                 <div class="col-md-8">
                                     <label class="checkbox-inline">
@@ -295,7 +295,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     In addition to the above weekday visitation with regard to the children, are there any additional provisions which will apply?</label>
                                 <div class="col-md-12">
                                     <div class="radio">

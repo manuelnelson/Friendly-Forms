@@ -43,6 +43,8 @@ namespace FriendlyForms.RestService
                     var users = UserService.GetFiltered(x => x.LawFirmId == request.LawFirmId);
                     return users.Select(x => x.ToUserDto()).ToList();
                 }
+                //var cardSafeClient = new CardSafe.CardSafeSoapClient()
+
                 throw new HttpError(HttpStatusCode.BadRequest, "Invalid arguments supplied.");
             }
 

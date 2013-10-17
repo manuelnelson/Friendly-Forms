@@ -33977,6 +33977,565 @@ angular.module('ngResource', ['ng']).
 })(window, window.angular);
 
 ;/**
+ * @license AngularJS v1.1.5
+ * (c) 2010-2012 Google, Inc. http://angularjs.org
+ * License: MIT
+ */
+(function(window, angular, undefined) {
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name ngSanitize
+ * @description
+ */
+
+/*
+ * HTML Parser By Misko Hevery (misko@hevery.com)
+ * based on:  HTML Parser By John Resig (ejohn.org)
+ * Original code by Erik Arvidsson, Mozilla Public License
+ * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+ *
+ * // Use like so:
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
+ */
+
+
+/**
+ * @ngdoc service
+ * @name ngSanitize.$sanitize
+ * @function
+ *
+ * @description
+ *   The input is sanitized by parsing the html into tokens. All safe tokens (from a whitelist) are
+ *   then serialized back to properly escaped html string. This means that no unsafe input can make
+ *   it into the returned string, however, since our parser is more strict than a typical browser
+ *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
+ *   browser, won't make it through the sanitizer.
+ *
+ * @param {string} html Html input.
+ * @returns {string} Sanitized html.
+ *
+ * @example
+   <doc:example module="ngSanitize">
+     <doc:source>
+       <script>
+         function Ctrl($scope) {
+           $scope.snippet =
+             '<p style="color:blue">an html\n' +
+             '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+             'snippet</p>';
+         }
+       </script>
+       <div ng-controller="Ctrl">
+          Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+           <table>
+             <tr>
+               <td>Filter</td>
+               <td>Source</td>
+               <td>Rendered</td>
+             </tr>
+             <tr id="html-filter">
+               <td>html filter</td>
+               <td>
+                 <pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre>
+               </td>
+               <td>
+                 <div ng-bind-html="snippet"></div>
+               </td>
+             </tr>
+             <tr id="escaped-html">
+               <td>no filter</td>
+               <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+               <td><div ng-bind="snippet"></div></td>
+             </tr>
+             <tr id="html-unsafe-filter">
+               <td>unsafe html filter</td>
+               <td><pre>&lt;div ng-bind-html-unsafe="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+               <td><div ng-bind-html-unsafe="snippet"></div></td>
+             </tr>
+           </table>
+         </div>
+     </doc:source>
+     <doc:scenario>
+       it('should sanitize the html snippet ', function() {
+         expect(using('#html-filter').element('div').html()).
+           toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+       });
+
+       it('should escape snippet without any filter', function() {
+         expect(using('#escaped-html').element('div').html()).
+           toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+                "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+                "snippet&lt;/p&gt;");
+       });
+
+       it('should inline raw snippet if filtered as unsafe', function() {
+         expect(using('#html-unsafe-filter').element("div").html()).
+           toBe("<p style=\"color:blue\">an html\n" +
+                "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+                "snippet</p>");
+       });
+
+       it('should update', function() {
+         input('snippet').enter('new <b>text</b>');
+         expect(using('#html-filter').binding('snippet')).toBe('new <b>text</b>');
+         expect(using('#escaped-html').element('div').html()).toBe("new &lt;b&gt;text&lt;/b&gt;");
+         expect(using('#html-unsafe-filter').binding("snippet")).toBe('new <b>text</b>');
+       });
+     </doc:scenario>
+   </doc:example>
+ */
+var $sanitize = function(html) {
+  var buf = [];
+    htmlParser(html, htmlSanitizeWriter(buf));
+    return buf.join('');
+};
+
+
+// Regular Expressions for parsing tags and attributes
+var START_TAG_REGEXP = /^<\s*([\w:-]+)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*>/,
+  END_TAG_REGEXP = /^<\s*\/\s*([\w:-]+)[^>]*>/,
+  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+  BEGIN_TAG_REGEXP = /^</,
+  BEGING_END_TAGE_REGEXP = /^<\s*\//,
+  COMMENT_REGEXP = /<!--(.*?)-->/g,
+  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+  URI_REGEXP = /^((ftp|https?):\/\/|mailto:|tel:|#)/,
+  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g; // Match everything outside of normal chars and " (quote character)
+
+
+// Good source of info about elements and attributes
+// http://dev.w3.org/html5/spec/Overview.html#semantics
+// http://simon.html5.org/html-elements
+
+// Safe Void Elements - HTML5
+// http://dev.w3.org/html5/spec/Overview.html#void-elements
+var voidElements = makeMap("area,br,col,hr,img,wbr");
+
+// Elements that you can, intentionally, leave open (and which close themselves)
+// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+    optionalEndTagInlineElements = makeMap("rp,rt"),
+    optionalEndTagElements = angular.extend({}, optionalEndTagInlineElements, optionalEndTagBlockElements);
+
+// Safe Block Elements - HTML5
+var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article,aside," +
+        "blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,h6," +
+        "header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+
+// Inline Elements - HTML5
+var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b,bdi,bdo," +
+        "big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s,samp,small," +
+        "span,strike,strong,sub,sup,time,tt,u,var"));
+
+
+// Special Elements (can contain anything)
+var specialElements = makeMap("script,style");
+
+var validElements = angular.extend({}, voidElements, blockElements, inlineElements, optionalEndTagElements);
+
+//Attributes that have href and hence need to be sanitized
+var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap");
+var validAttrs = angular.extend({}, uriAttrs, makeMap(
+    'abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
+    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
+    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
+    'scope,scrolling,shape,span,start,summary,target,title,type,'+
+    'valign,value,vspace,width'));
+
+function makeMap(str) {
+  var obj = {}, items = str.split(','), i;
+  for (i = 0; i < items.length; i++) obj[items[i]] = true;
+  return obj;
+}
+
+
+/**
+ * @example
+ * htmlParser(htmlString, {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * });
+ *
+ * @param {string} html string
+ * @param {object} handler
+ */
+function htmlParser( html, handler ) {
+  var index, chars, match, stack = [], last = html;
+  stack.last = function() { return stack[ stack.length - 1 ]; };
+
+  while ( html ) {
+    chars = true;
+
+    // Make sure we're not in a script or style element
+    if ( !stack.last() || !specialElements[ stack.last() ] ) {
+
+      // Comment
+      if ( html.indexOf("<!--") === 0 ) {
+        index = html.indexOf("-->");
+
+        if ( index >= 0 ) {
+          if (handler.comment) handler.comment( html.substring( 4, index ) );
+          html = html.substring( index + 3 );
+          chars = false;
+        }
+
+      // end tag
+      } else if ( BEGING_END_TAGE_REGEXP.test(html) ) {
+        match = html.match( END_TAG_REGEXP );
+
+        if ( match ) {
+          html = html.substring( match[0].length );
+          match[0].replace( END_TAG_REGEXP, parseEndTag );
+          chars = false;
+        }
+
+      // start tag
+      } else if ( BEGIN_TAG_REGEXP.test(html) ) {
+        match = html.match( START_TAG_REGEXP );
+
+        if ( match ) {
+          html = html.substring( match[0].length );
+          match[0].replace( START_TAG_REGEXP, parseStartTag );
+          chars = false;
+        }
+      }
+
+      if ( chars ) {
+        index = html.indexOf("<");
+
+        var text = index < 0 ? html : html.substring( 0, index );
+        html = index < 0 ? "" : html.substring( index );
+
+        if (handler.chars) handler.chars( decodeEntities(text) );
+      }
+
+    } else {
+      html = html.replace(new RegExp("(.*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'), function(all, text){
+        text = text.
+          replace(COMMENT_REGEXP, "$1").
+          replace(CDATA_REGEXP, "$1");
+
+        if (handler.chars) handler.chars( decodeEntities(text) );
+
+        return "";
+      });
+
+      parseEndTag( "", stack.last() );
+    }
+
+    if ( html == last ) {
+      throw "Parse Error: " + html;
+    }
+    last = html;
+  }
+
+  // Clean up any remaining tags
+  parseEndTag();
+
+  function parseStartTag( tag, tagName, rest, unary ) {
+    tagName = angular.lowercase(tagName);
+    if ( blockElements[ tagName ] ) {
+      while ( stack.last() && inlineElements[ stack.last() ] ) {
+        parseEndTag( "", stack.last() );
+      }
+    }
+
+    if ( optionalEndTagElements[ tagName ] && stack.last() == tagName ) {
+      parseEndTag( "", tagName );
+    }
+
+    unary = voidElements[ tagName ] || !!unary;
+
+    if ( !unary )
+      stack.push( tagName );
+
+    var attrs = {};
+
+    rest.replace(ATTR_REGEXP, function(match, name, doubleQuotedValue, singleQoutedValue, unqoutedValue) {
+      var value = doubleQuotedValue
+        || singleQoutedValue
+        || unqoutedValue
+        || '';
+
+      attrs[name] = decodeEntities(value);
+    });
+    if (handler.start) handler.start( tagName, attrs, unary );
+  }
+
+  function parseEndTag( tag, tagName ) {
+    var pos = 0, i;
+    tagName = angular.lowercase(tagName);
+    if ( tagName )
+      // Find the closest opened tag of the same type
+      for ( pos = stack.length - 1; pos >= 0; pos-- )
+        if ( stack[ pos ] == tagName )
+          break;
+
+    if ( pos >= 0 ) {
+      // Close all the open elements, up the stack
+      for ( i = stack.length - 1; i >= pos; i-- )
+        if (handler.end) handler.end( stack[ i ] );
+
+      // Remove the open elements from the stack
+      stack.length = pos;
+    }
+  }
+}
+
+/**
+ * decodes all entities into regular string
+ * @param value
+ * @returns {string} A string with decoded entities.
+ */
+var hiddenPre=document.createElement("pre");
+function decodeEntities(value) {
+  hiddenPre.innerHTML=value.replace(/</g,"&lt;");
+  return hiddenPre.innerText || hiddenPre.textContent || '';
+}
+
+/**
+ * Escapes all potentially dangerous characters, so that the
+ * resulting string can be safely inserted into attribute or
+ * element text.
+ * @param value
+ * @returns escaped text
+ */
+function encodeEntities(value) {
+  return value.
+    replace(/&/g, '&amp;').
+    replace(NON_ALPHANUMERIC_REGEXP, function(value){
+      return '&#' + value.charCodeAt(0) + ';';
+    }).
+    replace(/</g, '&lt;').
+    replace(/>/g, '&gt;');
+}
+
+/**
+ * create an HTML/XML writer which writes to buffer
+ * @param {Array} buf use buf.jain('') to get out sanitized html string
+ * @returns {object} in the form of {
+ *     start: function(tag, attrs, unary) {},
+ *     end: function(tag) {},
+ *     chars: function(text) {},
+ *     comment: function(text) {}
+ * }
+ */
+function htmlSanitizeWriter(buf){
+  var ignore = false;
+  var out = angular.bind(buf, buf.push);
+  return {
+    start: function(tag, attrs, unary){
+      tag = angular.lowercase(tag);
+      if (!ignore && specialElements[tag]) {
+        ignore = tag;
+      }
+      if (!ignore && validElements[tag] == true) {
+        out('<');
+        out(tag);
+        angular.forEach(attrs, function(value, key){
+          var lkey=angular.lowercase(key);
+          if (validAttrs[lkey]==true && (uriAttrs[lkey]!==true || value.match(URI_REGEXP))) {
+            out(' ');
+            out(key);
+            out('="');
+            out(encodeEntities(value));
+            out('"');
+          }
+        });
+        out(unary ? '/>' : '>');
+      }
+    },
+    end: function(tag){
+        tag = angular.lowercase(tag);
+        if (!ignore && validElements[tag] == true) {
+          out('</');
+          out(tag);
+          out('>');
+        }
+        if (tag == ignore) {
+          ignore = false;
+        }
+      },
+    chars: function(chars){
+        if (!ignore) {
+          out(encodeEntities(chars));
+        }
+      }
+  };
+}
+
+
+// define ngSanitize module and register $sanitize service
+angular.module('ngSanitize', []).value('$sanitize', $sanitize);
+
+/**
+ * @ngdoc directive
+ * @name ngSanitize.directive:ngBindHtml
+ *
+ * @description
+ * Creates a binding that will sanitize the result of evaluating the `expression` with the
+ * {@link ngSanitize.$sanitize $sanitize} service and innerHTML the result into the current element.
+ *
+ * See {@link ngSanitize.$sanitize $sanitize} docs for examples.
+ *
+ * @element ANY
+ * @param {expression} ngBindHtml {@link guide/expression Expression} to evaluate.
+ */
+angular.module('ngSanitize').directive('ngBindHtml', ['$sanitize', function($sanitize) {
+  return function(scope, element, attr) {
+    element.addClass('ng-binding').data('$binding', attr.ngBindHtml);
+    scope.$watch(attr.ngBindHtml, function ngBindHtmlWatchAction(value) {
+      value = $sanitize(value);
+      element.html(value || '');
+    });
+  };
+}]);
+
+/**
+ * @ngdoc filter
+ * @name ngSanitize.filter:linky
+ * @function
+ *
+ * @description
+ *   Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
+ *   plain email address links.
+ *
+ * @param {string} text Input text.
+ * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
+ * @returns {string} Html-linkified text.
+ *
+ * @usage
+   <span ng-bind-html="linky_expression | linky"></span>
+ *
+ * @example
+   <doc:example module="ngSanitize">
+     <doc:source>
+       <script>
+         function Ctrl($scope) {
+           $scope.snippet =
+             'Pretty text with some links:\n'+
+             'http://angularjs.org/,\n'+
+             'mailto:us@somewhere.org,\n'+
+             'another@somewhere.org,\n'+
+             'and one more: ftp://127.0.0.1/.';
+           $scope.snippetWithTarget = 'http://angularjs.org/';
+         }
+       </script>
+       <div ng-controller="Ctrl">
+       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+       <table>
+         <tr>
+           <td>Filter</td>
+           <td>Source</td>
+           <td>Rendered</td>
+         </tr>
+         <tr id="linky-filter">
+           <td>linky filter</td>
+           <td>
+             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+           </td>
+           <td>
+             <div ng-bind-html="snippet | linky"></div>
+           </td>
+         </tr>
+         <tr id="linky-target">
+          <td>linky target</td>
+          <td>
+            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
+          </td>
+          <td>
+            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
+          </td>
+         </tr>
+         <tr id="escaped-html">
+           <td>no filter</td>
+           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+           <td><div ng-bind="snippet"></div></td>
+         </tr>
+       </table>
+     </doc:source>
+     <doc:scenario>
+       it('should linkify the snippet with urls', function() {
+         expect(using('#linky-filter').binding('snippet | linky')).
+           toBe('Pretty text with some links:&#10;' +
+                '<a href="http://angularjs.org/">http://angularjs.org/</a>,&#10;' +
+                '<a href="mailto:us@somewhere.org">us@somewhere.org</a>,&#10;' +
+                '<a href="mailto:another@somewhere.org">another@somewhere.org</a>,&#10;' +
+                'and one more: <a href="ftp://127.0.0.1/">ftp://127.0.0.1/</a>.');
+       });
+
+       it ('should not linkify snippet without the linky filter', function() {
+         expect(using('#escaped-html').binding('snippet')).
+           toBe("Pretty text with some links:\n" +
+                "http://angularjs.org/,\n" +
+                "mailto:us@somewhere.org,\n" +
+                "another@somewhere.org,\n" +
+                "and one more: ftp://127.0.0.1/.");
+       });
+
+       it('should update', function() {
+         input('snippet').enter('new http://link.');
+         expect(using('#linky-filter').binding('snippet | linky')).
+           toBe('new <a href="http://link">http://link</a>.');
+         expect(using('#escaped-html').binding('snippet')).toBe('new http://link.');
+       });
+
+       it('should work with the target property', function() {
+        expect(using('#linky-target').binding("snippetWithTarget | linky:'_blank'")).
+          toBe('<a target="_blank" href="http://angularjs.org/">http://angularjs.org/</a>');
+       });
+     </doc:scenario>
+   </doc:example>
+ */
+angular.module('ngSanitize').filter('linky', function() {
+  var LINKY_URL_REGEXP = /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s\.\;\,\(\)\{\}\<\>]/,
+      MAILTO_REGEXP = /^mailto:/;
+
+  return function(text, target) {
+    if (!text) return text;
+    var match;
+    var raw = text;
+    var html = [];
+    // TODO(vojta): use $sanitize instead
+    var writer = htmlSanitizeWriter(html);
+    var url;
+    var i;
+    var properties = {};
+    if (angular.isDefined(target)) {
+      properties.target = target;
+    }
+    while ((match = raw.match(LINKY_URL_REGEXP))) {
+      // We can not end in these as they are sometimes found at the end of the sentence
+      url = match[0];
+      // if we did not match ftp/http/mailto then assume mailto
+      if (match[2] == match[3]) url = 'mailto:' + url;
+      i = match.index;
+      writer.chars(raw.substr(0, i));
+      properties.href = url;
+      writer.start('a', properties);
+      writer.chars(match[0].replace(MAILTO_REGEXP, ''));
+      writer.end('a');
+      raw = raw.substring(i + match[0].length);
+    }
+    writer.chars(raw);
+    return html.join('');
+  };
+});
+
+
+})(window, window.angular);
+
+;/**
  * AngularUI - The companion suite for AngularJS
  * @version v0.4.0 - 2013-02-15
  * @link http://angular-ui.github.com
@@ -37043,7 +37602,7 @@ Application.properties = {
     defaultMessage: 'Loading...'
 };
 
-var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], ["$routeProvider", function ($routeProvider) {
+var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "ngSanitize"], ["$routeProvider", function ($routeProvider) {
     $routeProvider.
         when('/Starter/Court/user/:userId', { caseInsensitiveMatch: true, controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
         when('/Starter/Participant/user/:userId', { caseInsensitiveMatch: true, controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).
@@ -37087,12 +37646,12 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap"], 
         when('/Administrator/Register/LawFirm/:lawFirmId', { caseInsensitiveMatch: true, controller: RegisterAdminCtrl, templateUrl: '/app/Administrator/Register/RegisterAdmin.html' }).
         when('/Administrator/RegisterFirm/Subscription/:subscription', { caseInsensitiveMatch: true, controller: RegisterFirmCtrl, templateUrl: '/app/Administrator/RegisterFirm/RegisterFirm.html' }).
         when('/Administrator/Pricing', { caseInsensitiveMatch: true, controller: PricingCtrl, templateUrl: '/app/Administrator/Pricing/Pricing.html' }).
-        when('/Administrator/Payment/User/:userId', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
-        when('/Administrator/Agreement/User/:userId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
-        when('/Administrator/CreateAttorney/User/:userId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
-        when('/Administrator/ClientCases/User/:userId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
-        when('/Attorney/AttorneyPage/Attorney/:userId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
-        when('/Attorney/CreateClient/Attorney/:userId', { caseInsensitiveMatch: true, controller: CreateClientCtrl, templateUrl: '/app/Attorney/CreateClient/CreateClient.html' }).
+        when('/Administrator/Payment/Admin/:adminId', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
+        when('/Administrator/Agreement/Admin/:adminId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
+        when('/Administrator/CreateAttorney/Admin/:adminId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
+        when('/Administrator/ClientCases/Admin/:adminId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
+        when('/Attorney/AttorneyPage/Attorney/:attorneyId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
+        when('/Attorney/CreateClient/Attorney/:attorneyId', { caseInsensitiveMatch: true, controller: CreateClientCtrl, templateUrl: '/app/Attorney/CreateClient/CreateClient.html' }).
         when('/Attorney/Client/:userId', { caseInsensitiveMatch: true, controller: ClientCtrl, templateUrl: '/app/Attorney/Client/Client.html' }).
         when('/Account/Login/', { caseInsensitiveMatch: true, controller: LoginCtrl, templateUrl: '/app/Account/Login/Login.html' }).
         when('/Account/Logoff/', { caseInsensitiveMatch: true, controller: LogoffCtrl, templateUrl: '/app/Account/Logoff/Logoff.html' }).
@@ -40305,7 +40864,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
                     LawFirmId: $routeParams.lawFirmId,
                     Position: 'Administrator'
                 }, function() {
-                    $location.path('/Administrator/Agreement/User/' + userData.CustomId);
+                    $location.path('/Administrator/Agreement/Admin/' + userData.CustomId);
                 });
                 
             });
@@ -40381,13 +40940,12 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
             }
             var adminRole = constantsService.constants.AdminRole;
             var attorneyRole = constantsService.constants.AttorneyRole;
-            var userId = $routeParams.userId;
             userService.getCurrentUserSession().then(function (userData) {
                 userService.roles.save(null, {
                     UserName: userData.UserName,
                     Roles: [adminRole, attorneyRole],
                 }, function () {
-                    $location.path('/Administrator/ClientCases/User/' + userId);
+                    $location.path('/Administrator/ClientCases/Admin/' + $routeParams.adminId);
                 });
             });
         };
@@ -40402,7 +40960,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
         if ($scope.agreementForm.$invalid) {
             return;
         }        
-        $location.path('/Administrator/Payment/User/' + $routeParams.userId);
+        $location.path('/Administrator/Payment/Admin/' + $routeParams.adminId);
         
     };
     headerService.setTitle('Agreement');
@@ -40415,7 +40973,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
             }
             $scope.user.UserName = $scope.user.Email;
             userService.register.save(null, $scope.user, function (userAuth) {
-                userService.getUserData($routeParams.userId).then(function (userData) {
+                userService.getUserData($routeParams.adminId).then(function (userData) {
                     //Create Attorney Page
                     attorneyPageService.attorneyPages.save(null, {
                         UserId: userAuth.UserId,
@@ -40458,16 +41016,16 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
 ;var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
     function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService, loginMenuService) {
         $scope.clients = [];
-        $scope.userId = $routeParams.userId;
+        $scope.adminId = $routeParams.adminId;
         $scope.isLoaded = false;
-        userService.getUserData($routeParams.userId).then(function(data) {
+        userService.getUserData($routeParams.adminId).then(function(data) {
             $scope.admin = data;
             userService.getLawFirmUsers(data.LawFirmId).then(function(lawFirmUsers) {
                 $scope.attorneys = lawFirmUsers;
                 $scope.isLoaded = true;
             });
         });
-        clientService.getClients($routeParams.userId).then(function(clients) {
+        clientService.getClients($routeParams.adminId).then(function(clients) {
             $scope.clients = clients;
         });
         $scope.openClient = function (client) {
@@ -40480,7 +41038,13 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
             $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
         };
         headerService.setTitle("Administrator");
-        loginMenuService.refresh();
+        loginMenuService.refresh($routeParams.adminId).then(function() {
+            //TODO: we really need a way of getting location.path to equal hrefs
+            var path = $location.path();
+            if (path.indexOf('/#') == -1)
+                path = "/#" + path;
+            menuService.setActive(path, false);
+        });
     }];
 ;FormsApp.factory('attorneyPageService', ['$resource', function ($resource) {
     var service = {
@@ -40495,8 +41059,8 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
 ;var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'menuService', 'headerService', 'clientService', 'loginMenuService',
     function ($scope, $routeParams, $location, attorneyPageService, userService, menuService, headerService, clientService, loginMenuService) {
         $scope.clients = [];
-        $scope.userId = $routeParams.userId;
-        clientService.getClients($routeParams.userId).then(function (clients) {
+        $scope.attorneyId = $routeParams.attorneyId;
+        clientService.getClients($routeParams.attorneyId).then(function (clients) {
             $scope.clients = clients;
         });
 
@@ -40523,32 +41087,29 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                 return;
             }
             var email = $scope.user.Email;
-            if (email.indexOf('@' < 0))
-                email = $scope.user.Email + '@ourlawfirm.com';
             userService.register.save(null, {
                 DisplayName: $scope.user.DisplayName,
                 Email: email,
                 Password: $scope.user.Password,
                 ConfirmPassword: $scope.user.ConfirmPassword,
-                PrimaryEmail: $scope.user.PrimaryEmail,
             }, function (userAuth) {
-                var court = {
-                    UserId: userAuth.UserId,
-                    County: 0,
-                    CaseNumber: $scope.court.CaseNumber,
-                    AuthorOfPlan: 1,
-                    PlanType: 1
+                //link client to attorney
+                var clientAttorney = {
+                    UserId: $routeParams.attorneyId,
+                    ClientUserId: userAuth.UserId
                 };
-                courtService.courts.save(null, court, function () {
-                    var clientAttorney = {
-                        UserId: $routeParams.userId,
-                        ClientUserId: userAuth.UserId
+                clientService.clients.save(null, clientAttorney, function () {
+                    var court = {
+                        UserId: userAuth.UserId,
+                        County: 0,
+                        CaseNumber: $scope.court.CaseNumber,
+                        AuthorOfPlan: 1,
+                        PlanType: 1
                     };
-                    clientService.clients.save(null, clientAttorney, function () {
+                    courtService.courts.save(null, court, function () {
                         $location.path('/Attorney/Client/' + clientAttorney.ClientUserId);
                     });
                 });
-                //link client to attorney
             });
         };
         headerService.setTitle('Create A Client');
@@ -40598,9 +41159,9 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
 ;var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'constantsService',
 function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, constantsService) {
     //#region Init
+    headerService.setTitle('Client Profile');
     userService.getUserAuth($routeParams.userId).then(function (userAuth) {
          $scope.userAuth = userAuth;
-         headerService.setTitle(userAuth.DisplayName);
      });
     userService.getUserData($routeParams.userId).then(function(user) {
         $scope.user = user;        
@@ -40668,18 +41229,33 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
     //#endregion
     $rootScope.currentScope = $scope;
 }];
-;var HomeCtrl = function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
-    menuService.setActive($location.path(), false);
-    headerService.refresh();
-    //TODO: uggghh...had to do with Jquery
-    var boxes = $('.slide-panel .popout');
-    var maxItem = _.max(boxes, function (item) {
-        return $(item).height();
-    });
-    boxes.height($(maxItem).height());
-    headerService.setTitle('Split Solutions: The Divorce Solution for Georgia Residents')
-};
-HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuService', 'genericService', 'headerService'];
+;var HomeCtrl = ['$scope', '$routeParams', '$route', '$location', 'menuService', 'genericService', 'headerService',
+    function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
+        menuService.setActive($location.path(), false);
+        headerService.refresh();
+        $scope.showMore = function (boxNumber) {
+            switch (boxNumber) {
+                case 3:
+                    $scope.content = '<div class="popout"><p>Don’t be deceived by "Get a Divorce in 1 Hour" claims. Here’s why "Get a divorce in an hour" is just so much hype. </p>' +
+                        '<p>Any website which makes such claims of "getting a divorce in an hour" is, to put it bluntly, misleading you. Depending on the complexity of your assets, debts, children and other factors, ' +
+                        'simply entering all the data necessary to get a divorce can take anywhere from an hour to several hours. But that is not the same as getting a divorce. There are very few legal shortcuts to getting a divorce. In a best case scenario; one where both parties are in absolute agreement on every issue and are working together to get through the divorce as quickly as possible, we calculate the divorce will take approximately 44 days from the date of filing the Petition for Divorce. Split Solutions is dedicated to getting your documentation in order and providing as much information as we can to help you.</p>' +
+                        '<p><a href ng-click="showMore(0)">Back</a><p></div>';
+                    break;
+                default:
+                    $scope.content = '<img style="margin: 0 auto;" src="../../Content/images/Front-Page-Image.jpg" class="img-responsive popout" />';
+                    break;
+            }
+        };
+        $scope.showMore(0);
+        //TODO: uggghh...had to do with Jquery
+        var boxes = $('.slide-panel .popout');
+        var maxItem = _.max(boxes, function (item) {
+            return $(item).height();
+        });
+        boxes.height($(maxItem).height());
+        headerService.setTitle('Split Solutions: The Divorce Solution for Georgia Residents');
+    }];
+
 ;var MenuCtrl = ['$scope', '$routeParams', '$location', 'menuService', '$filter',
     function ($scope, $routeParams, $location, menuService, $filter) {
         $scope.$watch(function () { return menuService.menuItems; }, function () {
@@ -40713,7 +41289,7 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
         };
     }];
 
-;FormsApp.factory('menuService', ['$location', '$rootScope', '$resource', '$routeParams', '$q', function ($location, $rootScope, $resource, $routeParams, $q) {
+;FormsApp.factory('menuService', ['$location', '$rootScope', '$resource', '$route', '$q', function ($location, $rootScope, $resource, $route, $q) {
     var service = {
         //#region Props
         menuItems: [],
@@ -40747,14 +41323,13 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
         },
         getMenu: function (userId) {
             var deferred = $q.defer();
-            if(!userId)
-                userId = service.userId;
-            else 
+            if(userId)
                 service.userId = userId;
             
-            if (typeof userId === 'undefined')
-                userId = 0;
-            service.menu.getList({ Route: $location.path(), UserId: userId }, function (menuItems) {
+            if (service.userId === 0 && typeof $route.current.params.userId != 'undefined') {
+                service.userId = $route.current.params.userId;
+            }               
+            service.menu.getList({ Route: $location.path(), UserId: service.userId }, function (menuItems) {
                 service.setItems(menuItems);
                 service.isInitialized = true;
                 deferred.resolve(menuItems);
@@ -40798,6 +41373,15 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
             });
             if (menuItem)
                 $location.path(menuItem.subMenuItems[0].path);
+            else {
+                if (typeof service.menuItems[1] != 'undefined') {
+                    //href has hashbang...remove this
+                    $location.path(service.menuItems[1].path.replace("/#",""));
+                } else {
+                    //just go home man...you're drunk
+                    $location.path('/');
+                }
+            }
         },
         enableMenu: function(path) {
             var menuGroup = service.getMenuGroupByPath(path);
@@ -40822,13 +41406,12 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
             //if we are at the last menu item, go to the form completion page
             if (ndx == menuGroup.menuItem.subMenuItems.length - 1) {
                 //go to form complete page
-                var path = '/Output/FormComplete/' + menuGroup.menuItem.text.replace(' ', '') + '/user/' + $routeParams.userId;
+                var path = '/Output/FormComplete/' + menuGroup.menuItem.text.replace(' ', '') + '/user/' + $route.current.params.userId;
                 $location.path(path);
                 return;
             }
             var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx + 1];
             ////whenever nextMenu is called, the form is already saved.  Let's set next menu active without saving form.
-            //service.setActive(nextSubMenu.path, false);
             $location.path(nextSubMenu.path);
         },
         previousMenu: function () {
@@ -40837,7 +41420,6 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
             var ndx = _.indexOf(_.pluck(menuGroup.menuItem.subMenuItems, 'path'), menuGroup.subMenuItem.path);
             var nextSubMenu = menuGroup.menuItem.subMenuItems[ndx - 1];
             ////whenever previousMenu is called, the form is already saved.  Let's set next menu active without saving form.
-            //service.setActive(nextSubMenu.path, false);
             $location.path(nextSubMenu.path);
         },
         saveCurrentForm: function () {
@@ -40860,7 +41442,7 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
             if (typeof saveForm === 'undefined') {
                 saveForm = true;
             }
-            if (!service.isInitialized) {
+            if (!service.isInitialized) {                
                 service.getMenu().then(function () {
                     //never save the form if menu isn't initialized...doesn't make sense
                     service.setActiveCallback(path, false);
@@ -40941,7 +41523,8 @@ HomeCtrl.$inject = ['$scope', '$routeParams', '$route', '$location', 'menuServic
     };
 };
 HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'messageService', '$rootScope'];
-;FormsApp.factory('headerService', ['menuService', '$location', '$resource', 'userService', 'constantsService', function (menuService, $location, $resource, userService, constantsService) {
+;FormsApp.factory('headerService', ['menuService', '$location', '$resource', 'userService', 'constantsService', '$routeParams', 'participantService',
+    function (menuService, $location, $resource, userService, constantsService, $routeParams, participantService) {
     var service = {
         menuGroup: null,
         hide: function() {
@@ -40980,8 +41563,17 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
                 service.Title = service.menuGroup.subMenuItem ? service.menuGroup.subMenuItem.text : service.menuGroup.menuItem.text;
             }
             userService.getCurrentUserSession().then(function(userData) {
-                if (_.indexOf(userData.Roles, constantsService.constants.AdminRole) > -1 || _.indexOf(userData.Roles, constantsService.constants.AttorneyRole) > -1)
-                    service.SecondaryTitle = "me vs you";
+                if (_.indexOf(userData.Roles, constantsService.constants.AdminRole) > -1 || _.indexOf(userData.Roles, constantsService.constants.AttorneyRole) > -1) {
+                    if (typeof $routeParams.userId != 'undefined' && $routeParams.userId != userData.CustomId) {
+                        //If we're on a page that isn't our own, let's display the case information
+                        participantService.participant.get({ UserId: $routeParams.userId }, function(data) {
+                            if (data.DefendantsName != null && data.DefendantsName != "")
+                                service.SecondaryTitle = data.PlaintiffsName + " vs. " + data.DefendantsName;
+                        });
+                    } else {
+                        service.SecondaryTitle = '';
+                    }
+                }
             });            
             service.showFeedbackHeader = true;
             service.showOutput = false;
@@ -41085,25 +41677,25 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
     loginMenuService.refresh();
 }];
 
-;FormsApp.factory('loginMenuService', ['$resource', 'menuService', 'userService', '$q',
-   function ($resource, menuService, userService, $q) {
+;FormsApp.factory('loginMenuService', ['$resource', 'menuService', 'userService', '$q', '$route','$location',
+   function ($resource, menuService, userService, $q, $route, $location) {
        var service = {
            auth: $resource('/api/auth/logout', {},
                {
                    get: { method: 'GET', params: { format: 'json' } },
                }),
-           refresh: function () {
+           refresh: function (userId) {
                var deferred = $q.defer();
                userService.getCurrentUserSession().then(function (userData) {
                    if (userData != null && userData.IsAuthenticated) {
                        service.authUser = userData;
-                       menuService.userId = service.authUser.CustomId;
-                       menuService.getMenu().then(function () {
+                       if (typeof $route.current.params.userId == 'undefined' && !userId)
+                           userId = userData.CustomId;
+                       menuService.getMenu(userId).then(function () {
                            deferred.resolve();
                        });
                    } else {
                        service.authUser = null;
-                       menuService.userId = 0;
                        menuService.getMenu().then(function () {
                            deferred.resolve();
                        });

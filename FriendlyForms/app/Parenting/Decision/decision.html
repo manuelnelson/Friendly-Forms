@@ -12,7 +12,7 @@
                         <br>
                         <div id="radio-decisions">
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     Educational Decisions</label>
                                 <div class="col-lg-12">
                                     <label class="radio-inline">Father<input class="inline" required ng-model="decision.Education" name="Education" type="radio" value="1"></label>
@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     Non-Emergency Healthcare</label>
                                 <div class="col-lg-12">
                                     <label class="radio-inline">Father<input class="inline" required ng-model="decision.HealthCare" name="HealthCare" type="radio" value="1"></label>
@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     Religious Upbringing</label>
                                 <div class="col-lg-12">
                                     <label class="radio-inline">Father<input class="inline" required ng-model="decision.Religion" name="Religion" type="radio" value="1"></label>
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     Extracurricular Activities</label>
                                 <div class="col-lg-12">
                                     <label class="radio-inline">Father<input class="inline" required ng-model="decision.ExtraCurricular" name="ExtraCurricular" type="radio" value="1"></label>
@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                             <div class="form-group row" ng-repeat="otherDecision in extraDecisions">
-                                <label class="form-question col-lg-12">
+                                <label class="form-question col-xs-12">
                                     {{otherDecision.Description}}</label>
                                 <div class="col-lg-12">
                                     <label class="radio-inline">Father<input class="inline" required ng-model="otherDecision.DecisionMaker" type="radio" value="1"></label>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="decision.Education == 3 || decision.HealthCare == 3 || decision.Religion == 3 || decision.ExtraCurricular == 3">
-                            <label class="form-question col-lg-12">You have indicated that both parents have the authroity to make certain decisions. However, in case of disagreement, how will disagreements be resolved.</label>
+                            <label class="form-question col-xs-12">You have indicated that both parents have the authroity to make certain decisions. However, in case of disagreement, how will disagreements be resolved.</label>
                             <textarea class="form-control input-xxlarge valid" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="decision.BothResolve" name="BothResolve" placeholder="Details" rows="2"></textarea>
                             <div ng-show="decisionForm.BothResolve.$dirty && decisionForm.BothResolve.$invalid">
                                 <span class="form-error" ng-show="decisionForm.BothResolve.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Other Decisions</label>
                             <div class="col-lg-12">
                                 <label class="radio-inline">Father<input class="inline" required ng-model="extraDecision.DecisionMaker" name="DecisionMaker" type="radio" value="1"></label>

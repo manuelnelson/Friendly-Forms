@@ -12,7 +12,7 @@
                             <label class="informative col-lg-12">Fill in the information regarding your circumstances below.</label>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">County</label>
+                            <label class="form-question col-xs-12">County</label>
                             <div class="col-lg-4">
                                 <select ng-model="court.CountyId" class="form-control" name="CountyId" ng-options="county.Id as county.CountyName for county in counties" required>
                                     <option ng-show="!court.CountyId > 0" disabled selected value="">-- Select County --</option>
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Case Number <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="The Case Number is located in the Petition for Divorce document." popover-title="Tip"></i></label>
+                            <label class="form-question col-xs-12">Case Number <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="The Case Number is located in the Petition for Divorce document." popover-title="Tip"></i></label>
                             <div class="row">
                                 <div class="col-lg-4">
                                     <input class="form-control" name="CaseNumber" ng-model="court.CaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/" placeholder="Case Number" type="text" value="" required>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Who is the author of this plan? <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="Is this plan prepared by both parties involved or by one party for a judge's approval?" popover-title="Tip"></i>
                             </label>
                             <div class="col-lg-12">
@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Is this a new plan or an existing plan? <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="This plan has either been in force prior to this action or it is a new plan being enforced for the first time." popover-title="Tip"></i>
                             </label>
                             <div class="col-lg-12">
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="court.PlanType==2 || court.PlanType==3">
-                            <label class="form-question col-lg-12">Case Number <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="Refer to your prior order or plan for this information." popover-title="Other Case Number"></i></label>
+                            <label class="form-question col-xs-12">Case Number <i class="icon icon-question-sign" popover-trigger="mouseenter" popover-animation="true" popover-placement="right" popover="Refer to your prior order or plan for this information." popover-title="Other Case Number"></i></label>
                             <div class="col-lg-4">
                                 <input class="form-control" ng-model="court.ExistCaseNumber" ng-pattern="/^[0-9a-zA-Z\s-]*$/">
                                 <div ng-show="courtForm.ExistCaseNumber.$dirty && courtForm.ExistCaseNumber.$invalid || (showErrors && courtForm.ExistCaseNumber.$invalid)">

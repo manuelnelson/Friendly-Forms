@@ -12,6 +12,7 @@
                     UserName: userData.UserName,
                     Roles: [adminRole, attorneyRole],
                 }, function () {
+                    //need to update usersession as well
                     $location.path('/Administrator/ClientCases/Admin/' + $routeParams.adminId);
                 });
             });

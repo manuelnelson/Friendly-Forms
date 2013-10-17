@@ -8,7 +8,7 @@
                         <label class="col-lg-12">
                             Please create the administrators login credentials. This is the person who will have administrative privileges over all attorneys.
                         </label>
-                        <div class="col-lg-4">
+                        <div class="col-lg-8">
                             <input class="form-control" name="DisplayName" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.DisplayName" placeholder="Name*" type="text" value="">
                         </div>
                         <div ng-show="registerAdminForm.DisplayName.$dirty && registerAdminForm.DisplayName.$invalid">
@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-8">
                             <input class="form-control" name="Email" ng-model="user.Email" placeholder="Email*" type="email" value="">
                         </div>
                         <div ng-show="registerAdminForm.Email.$dirty && registerAdminForm.Email.$invalid">
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-8">
                             <input class="form-control" name="Password" ng-model="user.Password" ng-minlength="6" placeholder="Password*" type="password">
                         </div>
                         <div ng-show="registerAdminForm.Password.$dirty && registerAdminForm.Password.$invalid">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-8">
                             <input class="form-control" name="ConfirmPassword" ng-model="user.ConfirmPassword" placeholder="Confirm Password*" type="password">
                         </div>
                         <div ng-show="registerAdminForm.ConfirmPassword.$dirty && registerAdminForm.ConfirmPassword.$invalid">

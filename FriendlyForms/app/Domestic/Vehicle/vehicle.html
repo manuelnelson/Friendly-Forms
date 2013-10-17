@@ -47,7 +47,7 @@
                     </div>
                     <form id="vehicleFormForm" name="vehicleFormForm" novalidate>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Is the ownership of any vehicle(s) at issue in this case?</label>
+                            <label class="form-question col-xs-12">Is the ownership of any vehicle(s) at issue in this case?</label>
                             <div class="col-lg-12">
                                 <label class="radio-inline">Yes<input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="1"></label>
                                 <label class="radio-inline">No<input class="inline" ng-change="submit()" required ng-model="vehicleForm.VehiclesInvolved" name="VehiclesInvolved" type="radio" value="2"></label>
@@ -62,7 +62,7 @@
                             <label class="informative col-lg-12">
                                 List each vehicle under consideration in this agreement.
                             </label>
-                            <label class="form-question col-lg-12">Manufacturer</label>
+                            <label class="form-question col-xs-12">Manufacturer</label>
                             <div class="col-lg-4">
                                 <input class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="vehicle.Make" name="Make" placeholder="Manufacturer" type="text" value="">
                                 <div ng-show="addVehicleForm.Make.$dirty && addVehicleForm.Make.$invalid || (showAddVehicleErrors && addVehicleForm.Make.$invalid)">
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Model</label>
+                            <label class="form-question col-xs-12">Model</label>
                             <div class="col-lg-4">
                                 <input class="form-control" required ng-model="vehicle.Model" name="Model" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" placeholder="Model" type="text" value="">
                                 <div ng-show="addVehicleForm.Model.$dirty && addVehicleForm.Model.$invalid || (showAddVehicleErrors && addVehicleForm.Model.$invalid)">
@@ -82,7 +82,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Year</label>
+                            <label class="form-question col-xs-12">Year</label>
                             <div class="col-lg-4">
                                 <input class="form-control" required ng-pattern="/^[0-9]{4}$/" ng-model="vehicle.Year" name="Year" placeholder="Year" type="text" value="">
                                 <div ng-show="addVehicleForm.Year.$dirty && addVehicleForm.Year.$invalid || (showAddVehicleErrors && addVehicleForm.Year.$invalid)">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Who will have possession of the vehicle</label>
+                            <label class="form-question col-xs-12">Who will have possession of the vehicle</label>
                             <div class="col-lg-4">
                                 <input class="form-control" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="vehicle.Owner" name="Owner" placeholder="Owner" type="text" value="">
                                 <div ng-show="addVehicleForm.Owner.$dirty && addVehicleForm.Owner.$invalid || (showAddVehicleErrors && addVehicleForm.Owner.$invalid)">
@@ -102,7 +102,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Will this vehicle be refinanced?</label>
+                            <label class="form-question col-xs-12">Will this vehicle be refinanced?</label>
                             <div class="col-lg-12">
                                 <div class="radio">
                                     <label>
@@ -121,14 +121,14 @@
                         </div>
                         <div ng-show="vehicle.Refinanced == 1">
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">In whose name will the vehicle be refinanced?</label>
+                                <label class="form-question col-xs-12">In whose name will the vehicle be refinanced?</label>
                                 <div class="col-lg-4">
                                     <select class="form-control" ng-model="vehicle.Name" name="Name" ng-options="custodian for custodian in custodianNames">
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="form-question col-lg-12">By what date will the vehicle be refinanced?</label>
+                                <label class="form-question col-xs-12">By what date will the vehicle be refinanced?</label>
                                 <div class="col-lg-4">
                                     <input class="form-control" ui-jq="datepicker" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="vehicle.RefinanceDate" name="RefinanceDate" placeholder="MM/DD/YYYY" type="text" value="">
                                 </div>

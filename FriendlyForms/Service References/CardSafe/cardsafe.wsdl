@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://pmn.payment-gate.net/ws/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://pmn.payment-gate.net/ws/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://pmn.payment-gate.net/ws/">
+      <s:element name="StoreCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TokenMode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExpDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NameOnCard" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StoreCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StoreCardResult" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Response">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Result" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RespMSG" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PNRef" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostURL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReceiptURL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetAVSResult" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetAVSResultTXT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetStreetMatchTXT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetZipMatchTXT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetCVResult" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetCVResultTXT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetGetOrigResult" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetCommercialCard" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WorkingKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="KeyPointer" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ProcessCreditCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TokenMode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InvNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PNRef" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessCreditCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessCreditCardResult" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Response" nillable="true" type="tns:Response" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="StoreCardSoapIn">
+    <wsdl:part name="parameters" element="tns:StoreCard" />
+  </wsdl:message>
+  <wsdl:message name="StoreCardSoapOut">
+    <wsdl:part name="parameters" element="tns:StoreCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessCreditCard" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessCreditCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="StoreCardHttpGetIn">
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TokenMode" type="s:string" />
+    <wsdl:part name="CardNum" type="s:string" />
+    <wsdl:part name="ExpDate" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="NameOnCard" type="s:string" />
+    <wsdl:part name="Street" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="StoreCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:Response" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpGetIn">
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="TokenMode" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="InvNum" type="s:string" />
+    <wsdl:part name="PNRef" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:Response" />
+  </wsdl:message>
+  <wsdl:message name="StoreCardHttpPostIn">
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TokenMode" type="s:string" />
+    <wsdl:part name="CardNum" type="s:string" />
+    <wsdl:part name="ExpDate" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="NameOnCard" type="s:string" />
+    <wsdl:part name="Street" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="StoreCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:Response" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpPostIn">
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="TokenMode" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="InvNum" type="s:string" />
+    <wsdl:part name="PNRef" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:Response" />
+  </wsdl:message>
+  <wsdl:portType name="CardSafeSoap">
+    <wsdl:operation name="StoreCard">
+      <wsdl:input message="tns:StoreCardSoapIn" />
+      <wsdl:output message="tns:StoreCardSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <wsdl:input message="tns:ProcessCreditCardSoapIn" />
+      <wsdl:output message="tns:ProcessCreditCardSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="CardSafeHttpGet">
+    <wsdl:operation name="StoreCard">
+      <wsdl:input message="tns:StoreCardHttpGetIn" />
+      <wsdl:output message="tns:StoreCardHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <wsdl:input message="tns:ProcessCreditCardHttpGetIn" />
+      <wsdl:output message="tns:ProcessCreditCardHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="CardSafeHttpPost">
+    <wsdl:operation name="StoreCard">
+      <wsdl:input message="tns:StoreCardHttpPostIn" />
+      <wsdl:output message="tns:StoreCardHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <wsdl:input message="tns:ProcessCreditCardHttpPostIn" />
+      <wsdl:output message="tns:ProcessCreditCardHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CardSafeSoap" type="tns:CardSafeSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="StoreCard">
+      <soap:operation soapAction="http://pmn.payment-gate.net/ws/StoreCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <soap:operation soapAction="http://pmn.payment-gate.net/ws/ProcessCreditCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CardSafeSoap12" type="tns:CardSafeSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="StoreCard">
+      <soap12:operation soapAction="http://pmn.payment-gate.net/ws/StoreCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <soap12:operation soapAction="http://pmn.payment-gate.net/ws/ProcessCreditCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CardSafeHttpGet" type="tns:CardSafeHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="StoreCard">
+      <http:operation location="/StoreCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <http:operation location="/ProcessCreditCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CardSafeHttpPost" type="tns:CardSafeHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="StoreCard">
+      <http:operation location="/StoreCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <http:operation location="/ProcessCreditCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CardSafe">
+    <wsdl:port name="CardSafeSoap" binding="tns:CardSafeSoap">
+      <soap:address location="https://depot.payment-gate.net/ws/cardsafe.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CardSafeSoap12" binding="tns:CardSafeSoap12">
+      <soap12:address location="https://depot.payment-gate.net/ws/cardsafe.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CardSafeHttpGet" binding="tns:CardSafeHttpGet">
+      <http:address location="http://depot.payment-gate.net/ws/cardsafe.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CardSafeHttpPost" binding="tns:CardSafeHttpPost">
+      <http:address location="http://depot.payment-gate.net/ws/cardsafe.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

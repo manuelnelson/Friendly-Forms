@@ -153,6 +153,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
@@ -267,6 +268,11 @@
     <Compile Include="RestService\UserRestService.cs" />
     <Compile Include="RestService\VehicleFormRestService.cs" />
     <Compile Include="RestService\VehicleRestService.cs" />
+    <Compile Include="Service References\CardSafe\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="WebRole.cs" />
     <Compile Include="WebServiceExamples.cs" />
   </ItemGroup>
@@ -1201,6 +1207,15 @@
     <Content Include="Scripts\bootstrap-transition.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Service References\CardSafe\configuration91.svcinfo" />
+    <Content Include="Service References\CardSafe\configuration.svcinfo" />
+    <Content Include="Service References\CardSafe\FriendlyForms.CardSafe.Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\CardSafe\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
     <Content Include="ssleay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1556,6 +1571,7 @@
     <Content Include="Scripts\jquery-1.9.1.min.js.map">
       <DependentUpon>jquery-1.9.1.js</DependentUpon>
     </Content>
+    <Content Include="Service References\CardSafe\cardsafe.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\Client\" />
@@ -1602,6 +1618,12 @@
       <Project>{161FD438-470C-4ACA-BC77-3D8405A36D9C}</Project>
       <Name>Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\CardSafe\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

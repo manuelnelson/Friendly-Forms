@@ -14,7 +14,7 @@
                         <br>
                         <h4>Thanksgiving Break</h4>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 How would you like to manage Thanksgiving Break? From the time school is dismissed on the last day prior to the holiday until:</label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.Thanksgiving == 3">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Define your Thanksgiving Holiday schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ThanksgivingOther" name="ThanksgivingOther" rows="2"></textarea>
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.Thanksgiving == 1">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 At the time of</label>
                             <div class="input-group col-lg-2 bootstrap-timepicker">
                                 <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
@@ -60,7 +60,7 @@
                         </div>
                         <h4>Winter Break</h4>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 How would you like to manage Winter Break? From the time school is dismissed on the last day prior to the holiday</label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.Christmas == 2 || holiday.Christmas == 3 || holiday.Christmas == 4">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 At the time of</label>
                             <div class="input-group col-lg-2 bootstrap-timepicker">
                                 <span class="input-group-addon add-on"><i class="icon-time" style="pointer-events: none;"></i></span>
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.Christmas == 5">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Define your Winter Break schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.ChristmasOther" name="ChristmasOther" rows="2"></textarea>
@@ -116,7 +116,7 @@
                         </div>
                         <h4>Spring Break</h4>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 How would you like to manage the start of Spring Break?  From the time school is dismissed on the last day prior to the break until:</label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.SpringBreak == 2">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Define your Spring Break schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SpringOther" name="SpringOther" rows="2"></textarea>
@@ -146,7 +146,7 @@
                         </div>
                         <h4>Summer Break</h4>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Number of days after the last day of school at which summer vacation begins.</label>
+                            <label class="form-question col-xs-12">Number of days after the last day of school at which summer vacation begins.</label>
                             <div class="col-lg-2">
                                 <input class="form-control" required ng-model="holiday.SummerBeginDays" name="SummerBeginDays" placeholder="#" type="text" value="0">
                                 <div ng-show="showErrors && holidayForm.SummerBeginDays.$invalid">
@@ -167,7 +167,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">Number of days prior to the first day of school at which summer vacation ends.</label>
+                            <label class="form-question col-xs-12">Number of days prior to the first day of school at which summer vacation ends.</label>
                             <div class="col-lg-2">
                                 <input class="form-control" required ng-model="holiday.SummerEndDays" name="SummerEndDays" placeholder="#" type="text" value="0">
                                 <div ng-show="showErrors && holidayForm.SummerEndDays.$invalid">
@@ -188,7 +188,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 How will each of you spend time with the child(ren) during summer vacation.</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.SummerDetails" name="SummerDetails" rows="2"></textarea>
@@ -199,7 +199,7 @@
                         </div>
                         <h4>Fall Break</h4>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 How would you like to manage the start of fall break?  From the time school is dismissed on the last day prior to the break until:</label>
                             <div class="col-lg-12">
                                 <div class="radio">
@@ -218,7 +218,7 @@
                             </div>
                         </div>
                         <div class="form-group row" ng-show="holiday.FallBreak == 2">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 Define your Fall Break schedule</label>
                             <div class="col-lg-4">
                                 <textarea class="form-control" cols="20" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="holiday.FallOther" name="FallOther" rows="2"></textarea>
@@ -229,7 +229,7 @@
                         </div>
                         <h4>Other Holidays</h4>
                         <div class="form-group row">
-                            <label class="form-question col-lg-12">
+                            <label class="form-question col-xs-12">
                                 When a holiday falls on Friday or Monday, should the holiday visitation include the weekend immediately before or after that holiday?</label>
                             <div class="col-lg-12">
                                 <label class="checkbox">
@@ -243,7 +243,7 @@
                                 </div>
                             </div>
                         </div>
-                        <label class="form-question col-lg-12">Many people define holiday parenting time as the children being with one parent during a holiday when it falls in even-numbered years, and the other parent during that same holiday when it falls in odd-numbered years. Others are able to see that it would be to everyone’s advantage for one parent to have the children on a specific holiday every year while some people do not want to specify the parenting time for a holiday.</label>
+                        <label class="form-question col-xs-12">Many people define holiday parenting time as the children being with one parent during a holiday when it falls in even-numbered years, and the other parent during that same holiday when it falls in odd-numbered years. Others are able to see that it would be to everyone’s advantage for one parent to have the children on a specific holiday every year while some people do not want to specify the parenting time for a holiday.</label>
                         <div class="form-group row">
                             <div class="col-md-2">&nbsp;</div>
                             <div class="col-md-5">Father</div>

@@ -23,15 +23,15 @@
                         <div class="col-lg-3 col-lg-offset-1 popout">
                             <p>Don't be decieved by "Get a Divorce in 1 Hour" claims.</p>
                             <p>Any website which makes such claims of “getting a divorce in an hour” is, to put it bluntly, misleading you...</p>
-                            <a class="pull-right">...learn more!</a>
+                            <a class="pull-right" ng-click="showMore(3)" href>...learn more!</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row" style="margin: 15px 0">
                 <div class="col-lg-11">
-                    <div class="thumbnail">
-                        <img style="margin: 0 auto;" src="../../Content/images/Front-Page-Image.jpg" class="img-responsive popout" />
+                    <div class="thumbnail" ng-bind-html-unsafe="content">
+                        
                     </div>
                 </div>
             </div>

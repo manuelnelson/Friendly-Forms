@@ -4,7 +4,6 @@
         $scope.user.AutoLogin = true;
         $scope.user.UserName = $scope.user.Email;
         registerService.register.save(null, $scope.user, function () {
-            loginMenuService.refresh();
             userService.getCurrentUserSession().then(function(userData) {
                 //Tie law firm Id
                 registerService.users.update(null, {
