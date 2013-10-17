@@ -172,8 +172,8 @@ records.
                         <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">the parents will alfternate weekends for visitation.</span>
                         <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">For purposes of this parenting plan, the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
 
-                        A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up at {{parenting.ScheduleViewModel.PickupLocation}}. The weekend ends on 
-    {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off at {{parenting.ScheduleViewModel.DropOffLocation}}.
+                        A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.PickupLocation}}. The weekend ends on 
+    {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}.
                     </p>
                     <div ng-show="parenting.ScheduleViewModel.Weekdays == 1">
                         <p class="indented">
@@ -191,11 +191,12 @@ records.
                     <p class="indented">
                         The parenting schedule will begin
     <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate == 1">on the date of the Court's Order.</span>
-                        <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDate | date:'longDate'}}</span>
+                        <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDate | date:'longDate'}}.</span>
                     </p>
                     <div class="row">
-                        <p ng-show="parenting.ScheduleViewModel.AdditionalProvisions.length > 0" class="indented">Additionally, the following provisions regarding weekday visitation will apply to the children: {{parenting.ScheduleViewModel.AdditionalProvisions}}</p>
+                        <p ng-show="parenting.ScheduleViewModel.AdditionalProvisions.length > 0" class="indented">Additionally, the following provisions regarding weekday visitation will apply to the child(ren): {{parenting.ScheduleViewModel.AdditionalProvisions}}</p>
                     </div>
+                    <div class="page-break"></div>
                     <h2>Major Holidays and Vacation Periods</h2>
                     <div ng-repeat="childHoliday in parenting.ChildHolidays">
                         <h2 class="indented">{{childHoliday.Child.Name}}</h2>
