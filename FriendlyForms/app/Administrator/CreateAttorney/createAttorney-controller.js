@@ -32,5 +32,5 @@
                 });
             });
         };
-        headerService.setTitle('Add Attorneys');
+        headerService.setTitle('Add Attorneys and Coworkers');
     }];
