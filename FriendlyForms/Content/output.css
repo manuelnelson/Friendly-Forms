@@ -197,6 +197,13 @@ table tr.bold {
     font-weight: bold;
 }
 
+table tr.top-border-none, table .top-border-none td {
+    border-top: 0;
+}
+table tr.bottom-border-none, table .bottom-border-none td {
+    border-bottom: 0;
+}
+
 ol.bold li {
     font-weight: bold;
 }

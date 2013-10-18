@@ -283,6 +283,8 @@
                 return 4;
             case 4:
                 return 3;
+            case 5:
+                return 5;
         }
         return 0;
     };
