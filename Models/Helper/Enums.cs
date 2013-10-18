@@ -96,7 +96,8 @@
         Odd = 1,
         Even,
         Every,
-        Never
+        Never,
+        NA
     };
 
 
