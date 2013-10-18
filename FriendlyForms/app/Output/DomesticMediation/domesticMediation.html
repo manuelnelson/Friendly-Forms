@@ -24,18 +24,18 @@
                             The marital house is located at {{domesticMediation.HouseViewModel.Address}}, {{domesticMediation.HouseViewModel.SecondaryAddress | commaIfNotEmpty}} {{domesticMediation.HouseViewModel.CityState}} {{domesticMediation.HouseViewModel.ZipCode}}. {{domesticMediation.HouseViewModel.MortgageOwner}} is the mortgage owner. The home has an estimated value of {{domesticMediation.HouseViewModel.RetailValue | dollarAmount}}, with {{domesticMediation.HouseViewModel.MoneyOwed | dollarAmount}} still outstanding.  After subtracting estimated real estate commissions and other sale related expenses, 
             the value of the equity in the property is approximately {{domesticMediation.HouseViewModel.Equity | dollarAmount}}.        
                         </p>
-                        <p class="indented">The parties have agreed that issues related to the marital home will be handled in the following manner: {{domesticMediation.HouseViewModel.Divide}}</p>
+                        <p class="indented">The parties have agreed that issues related to the marital home will be handled in the following manner: {{domesticMediation.HouseViewModel.Divide | addPeriod}}</p>
                     </div>
                     <!-- Property -->
                     <h2>Other Real Estate</h2>
                     <p ng-show="domesticMediation.PropertyViewModel.RealEstate==2" class="indented">There are no other real estate properties for consideration in this case.</p>
                     <p ng-show="domesticMediation.PropertyViewModel.RealEstate==1" class="indented">
-                        The parties agree that issues regarding real property, other than the marital home, will be handled in the following manner: {{domesticMediation.PropertyViewModel.RealEstateDescription}}
+                        The parties agree that issues regarding real property, other than the marital home, will be handled in the following manner: {{domesticMediation.PropertyViewModel.RealEstateDescription | addPeriod}}
                     </p>
                     <h2>Furnishings and Personal Property</h2>
                     <p ng-show="domesticMediation.PropertyViewModel.PersonalProperty==1" class="indented">The parties have already divided household furnishings and other personal property to their satisfaction.  All furnishings and personal property in the possession of each respective party shall be each party’s exclusive property, effective immediately, or on the effective date of the agreement as stated herein.</p>
                     <p ng-show="domesticMediation.PropertyViewModel.PersonalProperty==2" class="indented">The division of the parties’ personal property and household furnishings is left for the determination of the court.</p>
-                    <p ng-show="domesticMediation.PropertyViewModel.PersonalProperty==3" class="indented">The parties have determined that their household furnishings and personal property will be divided as follows.  All furnishings and/or property not mentioned expressly here  will become the exclusive property of the holder of that property, effective immediately, or on the effective date of the agreement as stated herein: {{domesticMediation.PropertyViewModel.DividingProperty}}</p>
+                    <p ng-show="domesticMediation.PropertyViewModel.PersonalProperty==3" class="indented">The parties have determined that their household furnishings and personal property will be divided as follows.  All furnishings and/or property not mentioned expressly here  will become the exclusive property of the holder of that property, effective immediately, or on the effective date of the agreement as stated herein: {{domesticMediation.PropertyViewModel.DividingProperty | addPeriod}}</p>
                     <!-- Vehicles -->
                     <div class="page-break">
                         <h2>Vehicles</h2>
@@ -56,7 +56,7 @@
                     <p ng-show="domesticMediation.DebtViewModel.MaritalDebt!=2" class="indented">
                         Division of debt will occur as follows:
         <br />
-                        {{domesticMediation.DebtViewModel.DebtDivision}}
+                        {{domesticMediation.DebtViewModel.DebtDivision | addPeriod}}
                     </p>
                     <!-- Assets -->
                     <h2>Retirement Assets</h2>
@@ -64,26 +64,26 @@
                     <p ng-show="domesticMediation.AssetViewModel.Retirement!=2" class="indented">
                         Division of retirement assets will occur as follows:
         <br />
-                        {{domesticMediation.AssetViewModel.RetirementDescription}}
+                        {{domesticMediation.AssetViewModel.RetirementDescription | addPeriod}}
                     </p>
                     <h2>Non-Retirement Assets</h2>
                     <p ng-show="domesticMediation.AssetViewModel.NonRetirement==2" class="indented">There are no non-retirement assets to be considered in this case.  All non-retirement assets held in either party’s name will be the exclusive property of the party in whose name those assets are held.</p>
                     <p ng-show="domesticMediation.AssetViewModel.NonRetirement!=2" class="indented">
                         Division of non-retirement assets will occur as follows:
         <br />
-                        {{domesticMediation.AssetViewModel.NonRetirementDescription}}
+                        {{domesticMediation.AssetViewModel.NonRetirementDescription | addPeriod}}
                     </p>
                     <h2>Business Assets and Liabilities</h2>
                     <p ng-show="domesticMediation.AssetViewModel.Business==2" class="indented">There are no business assets or liabilities to be considered in this case.  All business assets and/or liabilities held in either party’s name will be the exclusive property property or responsibility of the party in whose name those assets or liabilities are held.</p>
                     <p ng-show="domesticMediation.AssetViewModel.Business!=2" class="indented">
                         Division of business assets and liabilities will occur as follows:
         <br />
-                        {{domesticMediation.AssetViewModel.BusinessDescription}}
+                        {{domesticMediation.AssetViewModel.BusinessDescription | addPeriod}}
                     </p>
                     <p ng-show="domesticMediation.AssetViewModel.AdditionalAssets.length>0" class="indented">
                         Other assets or liabilities will be divided in the following manner:
         <br />
-                        {{domesticMediation.AssetViewModel.AdditionalAssets}}
+                        {{domesticMediation.AssetViewModel.AdditionalAssets | addPeriod}}
                     </p>
                     <!-- Health Insurance -->
                     <h2>Health Insurance/COBRA</h2>
@@ -91,7 +91,7 @@
                     <p ng-show="domesticMediation.HealthInsuranceViewModel.Health != 1" class="indented">
                         Health insurance/COBRA will occur as follows:
         <br />
-                        {{domesticMediation.HealthInsuranceViewModel.HealthDescription}}
+                        {{domesticMediation.HealthInsuranceViewModel.HealthDescription | addPeriod}}
                     </p>
                     <!-- Spousal Support -->
                     <h2>Spousal Support</h2>
@@ -99,7 +99,7 @@
                     <p ng-show="domesticMediation.SpousalViewModel.Spousal!=2" class="indented">
                         Provision of spousal support will occur as follows:
         <br />
-                        {{domesticMediation.SpousalViewModel.SpousalDescription}}
+                        {{domesticMediation.SpousalViewModel.SpousalDescription | addPeriod}}
                     </p>
                     <!-- Taxes -->
                     <div class="page-break">
@@ -107,7 +107,7 @@
                         <p ng-show="domesticMediation.TaxViewModel.Taxes==2" class="indented">
                             The parties agree that tax returns, allowances, deductions and refunds will occur as follows:
         <br>
-                            {{domesticMediation.TaxViewModel.TaxDescription}}
+                            {{domesticMediation.TaxViewModel.TaxDescription | addPeriod}}
                         </p>
                         <p ng-show="domesticMediation.TaxViewModel.Taxes!=2" class="indented">Each party is entitled to tax deductions, allowances, credits and refunds based solely on his or her individual filing circumstances once the divorce is final.</p>
                     </div>
