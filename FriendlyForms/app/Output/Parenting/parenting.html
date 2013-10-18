@@ -78,9 +78,9 @@
                     </div>-->
                     <div ng-show="parenting.PrivacyViewModel.NeedSupervision == 1">
                         <h2>Supervision</h2>
-                        <p class="indented">Supervised parenting time shall apply during the day-to-day schedule as follows: {{parenting.PrivacyViewModel.SupervisionHow}}</p>
-                        <p class="indented">Supervised parenting shall take place at: {{parenting.PrivacyViewModel.SupervisionWhere}}.</p>
-                        <p class="indented">Parenting time will be supervised by: {{parenting.PrivacyViewModel.SupervisionWho}}.</p>
+                        <p class="indented">Supervised parenting time shall apply during the day-to-day schedule as follows: {{parenting.PrivacyViewModel.SupervisionHow | addPeriod}}</p>
+                        <p class="indented">Supervised parenting shall take place at: {{parenting.PrivacyViewModel.SupervisionWhere | addPeriod}}</p>
+                        <p class="indented">Parenting time will be supervised by: {{parenting.PrivacyViewModel.SupervisionWho | addPeriod}}</p>
                         <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 1" class="indented">The cost of supervision will be the responsibility of the Father.</p>
                         <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 2" class="indented">The cost of supervision will be the responsibility of the Mother.</p>
                         <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 3" class="indented">The cost of supervision will be shared equally.</p>
