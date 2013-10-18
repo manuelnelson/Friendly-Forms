@@ -11,3 +11,10 @@ FormsApp.filter('percentage', function () {
         return percent + '%';
     };
 });
+FormsApp.filter('commaIfNotEmpty', function () {
+    return function (input) {
+        if (typeof input != 'undefined' && input.length > 0)
+            input = input + ", ";        
+        return input;
+    };
+});

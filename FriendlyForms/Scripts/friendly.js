@@ -37705,12 +37705,12 @@ FormsApp.directive('integer', function () {
         }
     };
 });
-FormsApp.directive('matchesPassword', function () {
+FormsApp.directive('match', function () {
     return {
         require: 'ngModel',
         link: function(scope, elm, attrs, ctrl) {
-            ctrl.$parsers.unshift(function(viewValue, $scope) {
-                var noMatch = viewValue != scope.userForm.password.$viewValue;
+            ctrl.$parsers.unshift(function(viewValue) {
+                var noMatch = viewValue != scope.userForm.Password.$viewValue;
                 ctrl.$setValidity('noMatch', !noMatch);
             });
         }
@@ -37730,6 +37730,13 @@ FormsApp.filter('percentage', function () {
     return function (input) {
         var percent = Math.abs(input).toFixed(2);
         return percent + '%';
+    };
+});
+FormsApp.filter('commaIfNotEmpty', function () {
+    return function (input) {
+        if (typeof input != 'undefined' && input.length > 0)
+            input = input + ", ";        
+        return input;
     };
 });
 ;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', '$q', function (menuService, headerService, $location, $q) {
@@ -41772,6 +41779,32 @@ LogoffCtrl.$inject = ['$scope', '$routeParams', '$location', 'logoffService', 'h
     };
     return service;
 }]);
+;var ForgotPasswordCtrl = ['$scope', '$routeParams', '$location', 'forgotPasswordService', 'messageService',
+    function ($scope, $routeParams, $location, forgotPasswordService, messageService) {
+
+    $scope.submit = function() {
+        if ($scope.forgotPasswordForm.$invalid) {
+            return;
+        }
+        forgotPasswordService.forgotPasswords.post(null, $scope.forgotPassword, function () {
+            $scope.forgotPasswordForm.$setPristine();
+            $scope.forgotPassword = '';
+            messageService.showMessage("E-mail Sent", "An e-mail has been sent to your address with instructions to reset your password.", Application.properties.messageType.Success);
+        });
+
+    };
+
+}];
+;FormsApp.factory('forgotPasswordService', ['$resource', function ($resource) {
+    var service = {
+        forgotPasswords: $resource('/api/passwordreset/', {},
+            {
+                update: { method: 'PUT', params: { format: 'json' } },
+                post: { method: 'POST', params: { format: 'json' } }
+}),
+    };
+    return service;
+}]);
 ;var UnauthorizedCtrl = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'headerService','$rootScope',
 function ($scope, $routeParams, $location, unauthorizedService, headerService, $rootScope) {
     $rootScope.currentScope = $scope;
@@ -41843,42 +41876,17 @@ RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'
     };
     return service;
 }]);
-;var ForgotPasswordCtrl = ['$scope', '$routeParams', '$location', 'forgotPasswordService', 'messageService',
-    function ($scope, $routeParams, $location, forgotPasswordService, messageService ) {
-
-    $scope.submit = function() {
-        if ($scope.forgotPasswordForm.$invalid) {
-            return;
-        }
-        forgotPasswordService.forgotPassword.post(null, $scope.forgotPassword, function () {
-            $scope.forgotPasswordForm.$setPristine();
-            $scope.forgotPassword = '';
-            messageService.showMessage("E-mail Sent", "An e-mail has been sent to your address with instructions to reset your password.", Application.properties.messageType.Success);
-        });
-
-    };
-
-}];
-;FormsApp.factory('forgotPasswordService', ['$resource', function($resource) {
-    var service = {
-        forgotPasswords: $resource('/api/passwordreset/', {  },
-            {
-                update: { method: 'PUT', params: { format: 'json' } }
-            }),
-    };
-    return service;
-}]);
 ;var PasswordResetCtrl = ['$scope', '$route', '$location', 'passwordResetService', 'headerService', 'menuService', 'forgotPasswordService', 'loginService',
     function ($scope, $route, $location, passwordResetService, headerService, menuService, forgotPasswordService, loginService) {
         $scope.submit = function () {
-            $scope.user.Id = $route.current.params.Id;
-            forgotPasswordService.forgotPassword.update(null, $scope.user, function (data) {
-                loginService.login({ UserName: data.Email, Password: $scope.Password });
+            $scope.user.Id = $route.current.params.id;
+            forgotPasswordService.forgotPasswords.update(null, $scope.user, function (data) {
+                loginService.login({ UserName: data.Email, Password: $scope.user.Password });
             });
         };
         headerService.setTitle('Reset Password');
     }];
-;FormsApp.factory('forgotPasswordService', ['$resource',function ($resource) {
+;FormsApp.factory('passwordResetService', ['$resource',function ($resource) {
     var service = {
 
     };
