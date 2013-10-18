@@ -37739,6 +37739,15 @@ FormsApp.filter('commaIfNotEmpty', function () {
         return input;
     };
 });
+FormsApp.filter('addPeriod', function () {
+    return function (input) {
+        if (typeof input != 'undefined' && input.length > 0) {
+            if (input[input.length - 1] !== '.')
+                input = input + '.';
+        }
+        return input;
+    };
+});
 ;FormsApp.factory('genericService', ['menuService', 'headerService', '$location', '$q', function (menuService, headerService, $location, $q) {
     var service = {
         calculateRemainingPercentage: function(val1, val2) {

@@ -28,7 +28,8 @@
                             <label class="form-question col-xs-12">Total yearly amount during school year</label>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Father</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="childCare.SchoolFather" name="SchoolFather" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="childCareChildForm.SchoolFather.$dirty && childCareChildForm.SchoolFather.$invalid">
                                         <span class="form-error" ng-show="childCareChildForm.SchoolFather.$error.pattern">This field must be a number.</span>
