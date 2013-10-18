@@ -251,6 +251,7 @@
     <Compile Include="RestService\AddendumRestService.cs" />
     <Compile Include="RestService\OutputRestService.cs" />
     <Compile Include="RestService\ParticipantRestService.cs" />
+    <Compile Include="RestService\PasswordResetRestService.cs" />
     <Compile Include="RestService\PreexistingSupportChildRestService.cs" />
     <Compile Include="RestService\PreexistingSupportFormRestService.cs" />
     <Compile Include="RestService\PreexistingSupportRestService.cs" />
@@ -277,12 +278,18 @@
     <Compile Include="WebServiceExamples.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\Account\ForgotPassword\forgotPassword-service.js" />
+    <Content Include="app\Account\ForgotPassword\ForgotPassword.html" />
+    <Content Include="app\Account\ForgotPassword\forgotPassword-controller.js" />
     <Content Include="app\Account\Login\login-controller.js" />
     <Content Include="app\Account\Login\login-service.js" />
     <Content Include="app\Account\Login\Login.html" />
     <Content Include="app\Account\Logoff\logoff-controller.js" />
     <Content Include="app\Account\Logoff\logoff-service.js" />
     <Content Include="app\Account\Logoff\logoff.html" />
+    <Content Include="app\Account\PasswordReset\passwordReset-controller.js" />
+    <Content Include="app\Account\PasswordReset\passwordReset-service.js" />
+    <Content Include="app\Account\PasswordReset\PasswordReset.html" />
     <Content Include="app\Account\Register\register-controller.js" />
     <Content Include="app\Account\Register\register-service.js" />
     <Content Include="app\Account\Register\Register.html" />

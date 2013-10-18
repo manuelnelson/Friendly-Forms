@@ -65,6 +65,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
         when('/Account/Register/', { caseInsensitiveMatch: true, controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
         when('/Account/Survey/', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
+        when('/Account/ForgotPassword/', { caseInsensitiveMatch: true, controller: ForgotPasswordCtrl, templateUrl: '/app/Account/ForgotPassword/ForgotPassword.html' }).
+        when('/Account/PasswordReset/', { caseInsensitiveMatch: true, controller: PasswordResetCtrl, templateUrl: '/app/Account/PasswordReset/PasswordReset.html' }).
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
@@ -110,4 +112,16 @@ FormsApp.directive('integer', function () {
         }
     };
 });
+FormsApp.directive('match', function () {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            ctrl.$parsers.unshift(function(viewValue) {
+                var noMatch = viewValue != scope.userForm.Password.$viewValue;
+                ctrl.$setValidity('noMatch', !noMatch);
+            });
+        }
+    };
+});
+
 

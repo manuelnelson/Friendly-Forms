@@ -133,9 +133,13 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Account/Login/login-service.js
 ../app/Account/Logoff/logoff-controller.js
 ../app/Account/Logoff/logoff-service.js
+../app/Account/ForgotPassword/ForgotPassword-controller.js
+../app/Account/ForgotPassword/ForgotPassword-service.js
 ../app/Account/Unauthorized/Unauthorized-controller.js
 ../app/Account/Unauthorized/Unauthorized-service.js
 ../app/Account/Register/register-controller.js
 ../app/Account/Register/register-service.js
 ../app/Account/Survey/Survey-controller.js
 ../app/Account/Survey/Survey-service.js
+../app/Account/PasswordReset/PasswordReset-controller.js
+../app/Account/PasswordReset/PasswordReset-service.js

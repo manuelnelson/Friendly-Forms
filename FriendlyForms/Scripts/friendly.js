@@ -37658,6 +37658,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "
         when('/Account/Unauthorized/', { caseInsensitiveMatch: true, controller: UnauthorizedCtrl, templateUrl: '/app/Account/Unauthorized/Unauthorized.html' }).
         when('/Account/Register/', { caseInsensitiveMatch: true, controller: RegisterCtrl, templateUrl: '/app/Account/Register/Register.html' }).
         when('/Account/Survey/', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
+        when('/Account/ForgotPassword/', { caseInsensitiveMatch: true, controller: ForgotPasswordCtrl, templateUrl: '/app/Account/ForgotPassword/ForgotPassword.html' }).
+        when('/Account/PasswordReset/', { caseInsensitiveMatch: true, controller: PasswordResetCtrl, templateUrl: '/app/Account/PasswordReset/PasswordReset.html' }).
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
@@ -37703,6 +37705,18 @@ FormsApp.directive('integer', function () {
         }
     };
 });
+FormsApp.directive('matchesPassword', function () {
+    return {
+        require: 'ngModel',
+        link: function(scope, elm, attrs, ctrl) {
+            ctrl.$parsers.unshift(function(viewValue, $scope) {
+                var noMatch = viewValue != scope.userForm.password.$viewValue;
+                ctrl.$setValidity('noMatch', !noMatch);
+            });
+        }
+    };
+});
+
 
 
 ;FormsApp.filter('dollarAmount', function () {
@@ -40855,7 +40869,6 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         $scope.user.AutoLogin = true;
         $scope.user.UserName = $scope.user.Email;
         registerService.register.save(null, $scope.user, function () {
-            loginMenuService.refresh();
             userService.getCurrentUserSession().then(function(userData) {
                 //Tie law firm Id
                 registerService.users.update(null, {
@@ -40945,6 +40958,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                     UserName: userData.UserName,
                     Roles: [adminRole, attorneyRole],
                 }, function () {
+                    //need to update usersession as well
                     $location.path('/Administrator/ClientCases/Admin/' + $routeParams.adminId);
                 });
             });
@@ -40999,7 +41013,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                 });
             });
         };
-        headerService.setTitle('Add Attorneys');
+        headerService.setTitle('Add Attorneys and Coworkers');
     }];
 ;FormsApp.factory('createAttorneyService', ['$resource', function($resource) {
     var service = {
@@ -41713,26 +41727,30 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
        };
        return service;
    }]);
-;var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService', 'loginMenuService', 'menuService',
-    function ($scope, $routeParams, $location, loginService, headerService, loginMenuService, menuService) {
+;var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService',
+    function ($scope, $routeParams, $location, loginService, headerService) {
         $scope.submit = function () {
-            loginService.login.post(null, $scope.login, function () {
-                loginMenuService.refresh().then(function() {
-                    menuService.goToFirstFormMenu();
-                });
-            }, function() {
-                $scope.loginForm.$setPristine();
-                $scope.login = '';
+            loginService.login($scope.login, function() {
+                    $scope.loginForm.$setPristine();
+                    $scope.login = '';
             });
-        };
+        }; 
         headerService.setTitle('Login');
     }];
-;FormsApp.factory('loginService', ['$resource',function ($resource) {
+;FormsApp.factory('loginService', ['$resource','loginMenuService', 'menuService', 
+    function ($resource, loginMenuService, menuService) {
     var service = {
-        login: $resource('/api/auth/credentials/', {},
+        logins: $resource('/api/auth/credentials/', {},
             {
                 post: { method: 'POST', params: { format: 'json' } },
             }),
+        login: function(login, errorCallback) {
+            service.logins.post(null, login, function () {
+                loginMenuService.refresh().then(function () {
+                    menuService.goToFirstFormMenu();
+                });
+            }, errorCallback);
+        },
         authUser: null,
     };
     return service;
@@ -41770,13 +41788,15 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
 });
 ;var RegisterCtrl = function ($scope, $routeParams, $location, registerService, headerService, loginMenuService) {
     $scope.submit = function () {
-        $scope.user.AutoLogin = true;
-
-        $scope.user.UserName = $scope.user.Email;
-        registerService.register.save(null, $scope.user, function () {
-            loginMenuService.refresh();
-            $location.path('/');
-        });
+		if ($scope.userForm.$invalid) {
+			return;
+		}
+		$scope.user.AutoLogin = true;
+		$scope.user.UserName = $scope.user.Email;		
+		registerService.register.save(null, $scope.user, function () {
+			loginMenuService.refresh();
+			$location.path('/');
+		});
     };
     headerService.setTitle('Register');
 };
@@ -41820,6 +41840,47 @@ RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'
         surveys: $resource('/api/emails/survey', {  },
             {
             }),
+    };
+    return service;
+}]);
+;var ForgotPasswordCtrl = ['$scope', '$routeParams', '$location', 'forgotPasswordService', 'messageService',
+    function ($scope, $routeParams, $location, forgotPasswordService, messageService ) {
+
+    $scope.submit = function() {
+        if ($scope.forgotPasswordForm.$invalid) {
+            return;
+        }
+        forgotPasswordService.forgotPassword.post(null, $scope.forgotPassword, function () {
+            $scope.forgotPasswordForm.$setPristine();
+            $scope.forgotPassword = '';
+            messageService.showMessage("E-mail Sent", "An e-mail has been sent to your address with instructions to reset your password.", Application.properties.messageType.Success);
+        });
+
+    };
+
+}];
+;FormsApp.factory('forgotPasswordService', ['$resource', function($resource) {
+    var service = {
+        forgotPasswords: $resource('/api/passwordreset/', {  },
+            {
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+    };
+    return service;
+}]);
+;var PasswordResetCtrl = ['$scope', '$route', '$location', 'passwordResetService', 'headerService', 'menuService', 'forgotPasswordService', 'loginService',
+    function ($scope, $route, $location, passwordResetService, headerService, menuService, forgotPasswordService, loginService) {
+        $scope.submit = function () {
+            $scope.user.Id = $route.current.params.Id;
+            forgotPasswordService.forgotPassword.update(null, $scope.user, function (data) {
+                loginService.login({ UserName: data.Email, Password: $scope.Password });
+            });
+        };
+        headerService.setTitle('Reset Password');
+    }];
+;FormsApp.factory('forgotPasswordService', ['$resource',function ($resource) {
+    var service = {
+
     };
     return service;
 }]);

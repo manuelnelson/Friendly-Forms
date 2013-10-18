@@ -227,30 +227,30 @@
                                 <td></td>
                                 <td></td>
                             </tr>
+							<tr class="bold">
+                                <td colspan="2">Parenting Time Deviation for Noncustodial Parent</td>
+                                <td colspan="3">{{scheduleE.ParentNames.NonCustodialParent}}</td>
+							</tr>
+							<tr>
+                                <td colspan="2">13. Monthly Excessive Parenting Time Deviation</td>
+                                <td colspan="3">{{scheduleE.TotalExpenses.ExtraSpent | dollarAmount}}</td>
                         </tbody>
                     </table>
                     <table>
                         <thead>
                             <tr>
-                                <th>Parenting Time Deviation for Noncustodial Parent</th>
-                                <th></th>
-                                <th>{{scheduleE.ParentNames.NonCustodialParent}}</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>13. Monthly Excessive Parenting Time Deviation</td>
-                                <td></td>
-                                <td>{{scheduleE.TotalExpenses.ExtraSpent | dollarAmount}}</td>
-                                <td></td>
+
                             </tr>
                         </tbody>
                     </table>
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="4">Total Allowable Deviation</th>
+                                <th colspan="3">Total Allowable Deviation</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -258,31 +258,29 @@
                                 <td></td>
                                 <td>{{scheduleE.ParentNames.Father}}</td>
                                 <td>{{scheduleE.ParentNames.Mother}}</td>
-                                <td></td>
                             </tr>
                             <tr>
                                 <td>14. Total Allowable Deviations</td>
                                 <td>{{scheduleE.AllowableDeviation.AllowableFather | dollarAmount}}</td>
-                                <td>{{scheduleE.AllowableDeviation.AllowableMother | dollarAmount}}</td>
-                                <td></td>
+                                <td>{{scheduleE.AllowableDeviation.AllowableMother | dollarAmount}}</td>                                
                             </tr>
                             <tr>
-                                <td colspan="4">B. Would the presumptive amount be unjust or inappropriate?</td>
+                                <td colspan="3">B. Would the presumptive amount be unjust or inappropriate?</td>
                             </tr>
                             <tr>
-                                <td colspan="4">{{scheduleE.AllowableDeviation.PresumptiveAmount}}</td>
+                                <td colspan="3">{{scheduleE.AllowableDeviation.PresumptiveAmount}}</td>
                             </tr>
                             <tr>
-                                <td colspan="4">C. Would deviation serve the best interests of the children for whom support is being determined?</td>
+                                <td colspan="3">C. Would deviation serve the best interests of the children for whom support is being determined?</td>
                             </tr>
                             <tr>
-                                <td colspan="4">{{scheduleE.AllowableDeviation.BestInterest}}</td>
+                                <td colspan="3">{{scheduleE.AllowableDeviation.BestInterest}}</td>
                             </tr>
                             <tr>
-                                <td colspan="4">D. Would deviation seriously impair the ability of the Custodial Parent or Nonparent Custodian to maintain minimally adequate housing, food and clothing for the children being supported by the order and to provide other basic necessities?</td>
+                                <td colspan="3">D. Would deviation seriously impair the ability of the Custodial Parent or Nonparent Custodian to maintain minimally adequate housing, food and clothing for the children being supported by the order and to provide other basic necessities?</td>
                             </tr>
                             <tr>
-                                <td colspan="4">{{scheduleE.AllowableDeviation.ImpairAbility}}</td>
+                                <td colspan="3">{{scheduleE.AllowableDeviation.ImpairAbility}}</td>
                             </tr>
                         </tbody>
                     </table>
