@@ -93,7 +93,7 @@ Designation as a non-custodial parent does not affect a parent’s right to equa
 records.
                    
                     </p>
-                    <p ng-show="parenting.InformationViewModel.InformationAccess == 1 || parenting.InformationViewModel.InformationAccess == 2" class="indented">The following limitations on access rights applies: {{parenting.InformationViewModel.AccessOfRightsDetails}}.</p>
+                    <p ng-show="parenting.InformationViewModel.InformationAccess == 1 || parenting.InformationViewModel.InformationAccess == 2" class="indented">The following limitations on access rights applies: {{parenting.InformationViewModel.AccessOfRightsDetails | addPeriod}}</p>
                     <div class="row">
                         <h2>Day-To-Day Decisions</h2>
                         <p class="indented">
