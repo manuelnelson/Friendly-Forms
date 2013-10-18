@@ -78,7 +78,7 @@
                     </div>-->
                     <div ng-show="parenting.PrivacyViewModel.NeedSupervision == 1">
                         <h2>Supervision</h2>
-                        <p class="indented">Supervised parenting time shall apply during the day-to-day schedule as follows: {{parenting.PrivacyViewModel.SupervisionHow}}.</p>
+                        <p class="indented">Supervised parenting time shall apply during the day-to-day schedule as follows: {{parenting.PrivacyViewModel.SupervisionHow}}</p>
                         <p class="indented">Supervised parenting shall take place at: {{parenting.PrivacyViewModel.SupervisionWhere}}.</p>
                         <p class="indented">Parenting time will be supervised by: {{parenting.PrivacyViewModel.SupervisionWho}}.</p>
                         <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 1" class="indented">The cost of supervision will be the responsibility of the Father.</p>
@@ -98,10 +98,11 @@ records.
                         <h2>Day-To-Day Decisions</h2>
                         <p class="indented">
                             Each parent shall make decisions regarding the day-to-day care of a child while the child is residing with that 
-        parent, including any emergency decisions affecting the health or safety of a child.
+                            parent, including any emergency decisions affecting the health or safety of a child.
                        
                         </p>
                     </div>
+                    <div class="page-break"></div>
                     <div class="row">
                         <h2>Major Decisions</h2>
                         <p class="indented">
@@ -191,6 +192,7 @@ records.
                    
                     </p>
                     <h2>Communication</h2>
+                    Parenting Time/Visitation Schedules
                     <p ng-show="parenting.CommunicationViewModel.AllowCommunication == 1" class="indented">
                         When the child or children are in the physical custody of one parent, the other parent will have the right
     to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase}}.
@@ -210,6 +212,7 @@ records.
                    
                     </p>
                     <p ng-show="parenting.CommunicationViewModel.Notification ==1">Each parent shall promptly notify the other parent of a change of address, phone number or cell phone number. A parent changing residence must give at least 30 days notice of the change and provide the full address of the new residence.</p>
+                    <div class="page-break"></div>
                     <h2>Parenting Time/Visitation Schedules</h2>
                     <p class="indented">During the term of this parenting plan, {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation:</p>
                     <p class="indented">
@@ -555,7 +558,7 @@ records.
                        
                         </p>
                     </div>
-                    <div class="page-break"></div>
+                    
                     <h2>Modification of Plan or Disagreements</h2>
                     <p class="indented">
                         Parties may, by mutual agreement, vary the parenting time/visitation; however, such agreement 
@@ -567,7 +570,7 @@ records.
                         faith effort to resolve the issue between them.
                    
                     </p>
-                    <div class="page-break"></div>
+                    
                     <h2>Parents’ Consent</h2>
                     <p class="indented">Please review the following and initial:</p>
                     <p class="indented">
