@@ -26,18 +26,22 @@
                     <table style="width: 95%">
                         <thead>
                             <tr>
-                                <th><h3>Child's Name</h3></th>
-                                <th><h3>Date of Birth</h3></th>                                
+                                <th>
+                                    <h3>Child's Name</h3>
+                                </th>
+                                <th>
+                                    <h3>Date of Birth</h3>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="child in parenting.Children">
-                                <td>{{child.Name}}</td>   
-                                <td>{{child.DateOfBirth | date: 'mediumDate'}}</td> 
-                            </tr>                            
+                                <td>{{child.Name}}</td>
+                                <td>{{child.DateOfBirth | date: 'mediumDate'}}</td>
+                            </tr>
                         </tbody>
                     </table>
-<!--                    <div class="borderBox">
+                    <!--                    <div class="borderBox">
                         <div class="row">
                             <h2 class="col-xs-6 indented" style="display: inline-block">Child's Name</h2>
                             <h2 class="col-xs-6" style="display: inline-block">Date of Birth</h2>
@@ -57,18 +61,22 @@
                     <table style="width: 95%">
                         <thead>
                             <tr>
-                                <th><h3>Child's Name</h3></th>
-                                <th><h3>Primary Custodian</h3></th>                                
+                                <th>
+                                    <h3>Child's Name</h3>
+                                </th>
+                                <th>
+                                    <h3>Primary Custodian</h3>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="child in parenting.Children">
-                                <td>{{child.Name}}</td>   
-                                <td>{{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}}</td> 
-                            </tr>                            
+                                <td>{{child.Name}}</td>
+                                <td>{{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}}</td>
+                            </tr>
                         </tbody>
                     </table>
-<!--                    <div class="row">
+                    <!--                    <div class="row">
                         <h2 class="col-xs-6 indented" style="display: inline-block">Child's Name</h2>
                         <h2 class="col-xs-6" style="display: inline-block">Primary Custodian</h2>
                     </div>
@@ -183,13 +191,11 @@ records.
                         will be responsible to pick up or drop off child(ren) at the end of scheduled visitation periods.
                    
                     </p>
-                    <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 2" class="indented">Each party will be responsible to pay 1/2 of the total expenses accrued between the parties, in regard to compliance with the visitation schedule.</p>
-                    <p ng-show="parenting.ResponsibilityViewModel.Own == 1" class="indented">Each party will be responsible to absorb all expenses related to complying with the visitation schedule.</p>
-                    <p ng-show="parenting.ResponsibilityViewModel.Own == 3" class="indented">The Mother shall pay {{parenting.ResponsibilityViewModel.MotherPercentage%, and the Father shall pay {{parenting.ResponsibilityViewModel.FatherPercentage% of expenses related to compliance with the visitation schedule.</p>
-                    <p ng-show="parenting.ResponsibilityViewModel.Own == 4" class="indented">
-                        Visitation related expenses will be paid as follows:<br />
-                        {{parenting.ResponsibilityViewModel.OtherDetails}}
-                   
+                    <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 1" class="indented">Each parent will pay their own transportation expenses regarding exchange of the child(ren).</p>
+                    <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 2" class="indented">The parents will share the cost of transportation for exchanging the child(ren) equally.</p>
+                    <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 3" class="indented">The Mother shall pay {{parenting.ResponsibilityViewModel.MotherPercentage | percentage}}, and the Father shall pay {{parenting.ResponsibilityViewModel.FatherPercentage | percentage}} of expenses related to compliance with the visitation schedule.</p>
+                    <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 4" class="indented">
+                        Transportation costs for exchanging the child(ren) will be determined thusly: {{parenting.ResponsibilityViewModel.OtherDetails}}                   
                     </p>
                     <h2>Communication</h2>
                     Parenting Time/Visitation Schedules
@@ -255,91 +261,95 @@ records.
                     <h2>Major Holidays and Vacation Periods</h2>
                     <div ng-repeat="childHoliday in parenting.ChildHolidays" class="page-break">
                         <h2 class="indented">{{childHoliday.Child.Name}}</h2>
-                        <h3 class="indented">Thanksgiving</h3>
-                        <p class="indented">
-                            For Thanksgiving, the Father  
-       
+                        <div ng-hide="((parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.ThanksgivingFather == 4)|| (!parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.ThanksgivingMother == 4))">
+                            <h3 class="indented">Thanksgiving</h3>
+                            <p class="indented" ng-hide="">
+                                For Thanksgiving, the Father         
                             <span ng-show="childHoliday.Holiday.ThanksgivingFather == 1">will have visitation in odd years, the</span>
-                            <span ng-show="childHoliday.Holiday.ThanksgivingFather == 2">will have visitation in even years, the</span>
-                            <span ng-show="childHoliday.Holiday.ThanksgivingFather == 3">will have visitation every year, the</span>
-                            <span ng-show="childHoliday.Holiday.ThanksgivingFather == 4">will never have visitation, the</span>
-                            Mother 
+                                <span ng-show="childHoliday.Holiday.ThanksgivingFather == 2">will have visitation in even years, the</span>
+                                <span ng-show="childHoliday.Holiday.ThanksgivingFather == 3">will have visitation every year, the</span>
+                                <span ng-show="childHoliday.Holiday.ThanksgivingFather == 4">will never have visitation, the</span>
+                                Mother 
        
                             <span ng-show="childHoliday.Holiday.ThanksgivingMother == 1">will have visitation in odd years.</span>
-                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 2">will have visitation in even years.</span>
-                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 3">will have visitation every year.</span>
-                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 4">will never have visitation.</span>
-                            Visitation will begin at the time the school day ends on the last school day prior to the holiday break, and end at {{childHoliday.Holiday.ThanksgivingTime}}
+                                <span ng-show="childHoliday.Holiday.ThanksgivingMother == 2">will have visitation in even years.</span>
+                                <span ng-show="childHoliday.Holiday.ThanksgivingMother == 3">will have visitation every year.</span>
+                                <span ng-show="childHoliday.Holiday.ThanksgivingMother == 4">will never have visitation.</span>
+                                Visitation will begin at the time the school day ends on the last school day prior to the holiday break, and end at {{childHoliday.Holiday.ThanksgivingTime}}
        
                             <span ng-show="childHoliday.Holiday.Thanksgiving == 1">on the day before returning to school.</span>
-                            <span ng-show="childHoliday.Holiday.Thanksgiving == 2">on the first day of school after the holiday.</span>
-                            <span ng-show="childHoliday.Holiday.Thanksgiving == 3">. Visitation will be conducted in the following manner: {{childHoliday.Holiday.ThanksgivingOther}}</span>
-                        </p>
-                        <h3 class="indented">Winter Break</h3>
-                        <p class="indented">
-                            For Winter Break, the Father  
+                                <span ng-show="childHoliday.Holiday.Thanksgiving == 2">on the first day of school after the holiday.</span>
+                                <span ng-show="childHoliday.Holiday.Thanksgiving == 3">. Visitation will be conducted in the following manner: {{childHoliday.Holiday.ThanksgivingOther}}</span>
+                            </p>
+                        </div>
+                        <div ng-hide="((parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.ChristmasFather == 4) || (!parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.ChristmasMother == 4))">
+                            <h3 class="indented">Winter Break</h3>
+                            <p class="indented">
+                                For Winter Break, the Father  
        
                             <span ng-show="childHoliday.Holiday.ChristmasFather == 1">will have visitation in odd years, the</span>
-                            <span ng-show="childHoliday.Holiday.ChristmasFather == 2">will have visitation in even years, the</span>
-                            <span ng-show="childHoliday.Holiday.ChristmasFather == 3">will have visitation every year, the</span>
-                            <span ng-show="childHoliday.Holiday.ChristmasFather == 4">will never have visitation, the</span>
-                            Mother 
+                                <span ng-show="childHoliday.Holiday.ChristmasFather == 2">will have visitation in even years, the</span>
+                                <span ng-show="childHoliday.Holiday.ChristmasFather == 3">will have visitation every year, the</span>
+                                <span ng-show="childHoliday.Holiday.ChristmasFather == 4">will never have visitation, the</span>
+                                Mother 
        
                             <span ng-show="childHoliday.Holiday.ChristmasMother == 1">will have visitation in odd years.</span>
-                            <span ng-show="childHoliday.Holiday.ChristmasMother == 2">will have visitation in even years.</span>
-                            <span ng-show="childHoliday.Holiday.ChristmasMother == 3">will have visitation every year.</span>
-                            <span ng-show="childHoliday.Holiday.ChristmasMother == 4">will never have visitation.</span>
-                            Visitation will begin at the time the school day ends on the last
+                                <span ng-show="childHoliday.Holiday.ChristmasMother == 2">will have visitation in even years.</span>
+                                <span ng-show="childHoliday.Holiday.ChristmasMother == 3">will have visitation every year.</span>
+                                <span ng-show="childHoliday.Holiday.ChristmasMother == 4">will never have visitation.</span>
+                                Visitation will begin at the time the school day ends on the last
         school day prior to the holiday break, and end 
        
                             <span ng-show="childHoliday.Holiday.Christmas == 1">at the beginning of the school day after Winter Break.</span>
-                            <span ng-show="childHoliday.Holiday.Christmas == 2">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Eve.</span>
-                            <span ng-show="childHoliday.Holiday.Christmas == 3">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Day.</span>
-                            <span ng-show="childHoliday.Holiday.Christmas == 4">at {{childHoliday.Holiday.ChristmasTime}} on the day after Christmas.</span>
-                            <span ng-show="childHoliday.Holiday.Christmas == 5">in the following manner: {{childHoliday.Holiday.ChristmasOther}}</span>
-                        </p>
-                        <h3 class="indented">Spring Break</h3>
-                        <p class="indented">
-                            For Spring Break, the Father  
+                                <span ng-show="childHoliday.Holiday.Christmas == 2">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Eve.</span>
+                                <span ng-show="childHoliday.Holiday.Christmas == 3">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Day.</span>
+                                <span ng-show="childHoliday.Holiday.Christmas == 4">at {{childHoliday.Holiday.ChristmasTime}} on the day after Christmas.</span>
+                                <span ng-show="childHoliday.Holiday.Christmas == 5">in the following manner: {{childHoliday.Holiday.ChristmasOther}}</span>
+                            </p>
+                        </div>
+                        <div ng-hide="((parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.SpringBreakFather == 4) || (!parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.SpringBreakMother == 4))">
+                            <h3 class="indented">Spring Break</h3>
+                            <p class="indented">
+                                For Spring Break, the Father  
        
                             <span ng-show="childHoliday.Holiday.SpringBreakFather == 1">will have visitation in odd years, the</span>
-                            <span ng-show="childHoliday.Holiday.SpringBreakFather == 2">will have visitation in even years, the</span>
-                            <span ng-show="childHoliday.Holiday.SpringBreakFather == 3">will have visitation every year, the</span>
-                            <span ng-show="childHoliday.Holiday.SpringBreakFather == 4">will never have visitation, the</span>
-                            Mother 
+                                <span ng-show="childHoliday.Holiday.SpringBreakFather == 2">will have visitation in even years, the</span>
+                                <span ng-show="childHoliday.Holiday.SpringBreakFather == 3">will have visitation every year, the</span>
+                                <span ng-show="childHoliday.Holiday.SpringBreakFather == 4">will never have visitation, the</span>
+                                Mother 
        
                             <span ng-show="childHoliday.Holiday.SpringBreakMother == 1">will have visitation in odd years.</span>
-                            <span ng-show="childHoliday.Holiday.SpringBreakMother == 2">will have visitation in even years.</span>
-                            <span ng-show="childHoliday.Holiday.SpringBreakMother == 3">will have visitation every year.</span>
-                            <span ng-show="childHoliday.Holiday.SpringBreakMother == 4">will never have visitation.</span>
-                            Visitation will begin at the time the school day ends on the last school day prior to the spring holiday break, and end
+                                <span ng-show="childHoliday.Holiday.SpringBreakMother == 2">will have visitation in even years.</span>
+                                <span ng-show="childHoliday.Holiday.SpringBreakMother == 3">will have visitation every year.</span>
+                                <span ng-show="childHoliday.Holiday.SpringBreakMother == 4">will never have visitation.</span>
+                                Visitation will begin at the time the school day ends on the last school day prior to the spring holiday break, and end
        
                             <span ng-show="childHoliday.Holiday.SpringBreak == 1">at the conclusion of Spring Break.</span>
-                            <span ng-show="childHoliday.Holiday.SpringBreak != 1">in the following manner: {{childHoliday.Holiday.SpringOther}}</span>
-                        </p>
-                        <h3 class="indented">Summer Break</h3>
-                        <p class="indented">The parties agree that Summer Break begins {{childHoliday.Holiday.SummerBeginDays}} day(s) after the last day of school at {{childHoliday.Holiday.SummerBeginTime}}.</p>
-                        <p class="indented">The parties agree that Summer Break ends {{childHoliday.Holiday.SummerEndDays}} day(s) before the first day of school at {{childHoliday.Holiday.SummerEndTime}}.</p>
-                        <p class="indented">The parties will manage Summer Break visitation as follows: {{childHoliday.Holiday.SummerDetails}}.</p>
-                        <h3 class="indented">Fall Break</h3>
-                        <p class="indented">
-                            For Fall Break, the Father  
-       
+                                <span ng-show="childHoliday.Holiday.SpringBreak != 1">in the following manner: {{childHoliday.Holiday.SpringOther}}</span>
+                            </p>
+                        </div>
+                        <div ng-hide="((parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.SpringBreakFather == 4) || (!parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.SpringBreakMother == 4))">
+                            <h3 class="indented">Summer Break</h3>
+                            <p class="indented">The parties agree that Summer Break begins {{childHoliday.Holiday.SummerBeginDays}} day(s) after the last day of school at {{childHoliday.Holiday.SummerBeginTime}}.</p>
+                            <p class="indented">The parties agree that Summer Break ends {{childHoliday.Holiday.SummerEndDays}} day(s) before the first day of school at {{childHoliday.Holiday.SummerEndTime}}.</p>
+                            <p class="indented">The parties will manage Summer Break visitation as follows: {{childHoliday.Holiday.SummerDetails}}.</p>
+                            <h3 class="indented">Fall Break</h3>
+                            <p class="indented">
+                                For Fall Break, the Father         
                             <span ng-show="childHoliday.Holiday.FallBreakFather == 1">will have visitation in odd years, the</span>
-                            <span ng-show="childHoliday.Holiday.FallBreakFather == 2">will have visitation in even years, the</span>
-                            <span ng-show="childHoliday.Holiday.FallBreakFather == 3">will have visitation every year, the</span>
-                            <span ng-show="childHoliday.Holiday.FallBreakFather == 4">will never have visitation, the</span>
-                            Mother 
-       
+                                <span ng-show="childHoliday.Holiday.FallBreakFather == 2">will have visitation in even years, the</span>
+                                <span ng-show="childHoliday.Holiday.FallBreakFather == 3">will have visitation every year, the</span>
+                                <span ng-show="childHoliday.Holiday.FallBreakFather == 4">will never have visitation, the</span>
+                                Mother        
                             <span ng-show="childHoliday.Holiday.FallBreakMother == 1">will have visitation in odd years.</span>
-                            <span ng-show="childHoliday.Holiday.FallBreakMother == 2">will have visitation in even years.</span>
-                            <span ng-show="childHoliday.Holiday.FallBreakMother == 3">will have visitation every year.</span>
-                            <span ng-show="childHoliday.Holiday.FallBreakMother == 4">will never have visitation.</span>
-                            Visitation will begin at the time the school day ends on the last school day prior to the fall holiday break, and end
-       
+                                <span ng-show="childHoliday.Holiday.FallBreakMother == 2">will have visitation in even years.</span>
+                                <span ng-show="childHoliday.Holiday.FallBreakMother == 3">will have visitation every year.</span>
+                                <span ng-show="childHoliday.Holiday.FallBreakMother == 4">will never have visitation.</span>
+                                Visitation will begin at the time the school day ends on the last school day prior to the fall holiday break, and end       
                             <span ng-show="childHoliday.Holiday.FallBreak == 1">at the conclusion of fall break.</span>
-                            <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther}}</span>
-                        </p>
+                                <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther}}</span>
+                            </p>
+                        </div>
                         <h3 class="indented">Other Holidays</h3>
                         <p class="indented">The parties agree that all other holidays will be managed in accordance with the following:</p>
                         <div class="row">
@@ -584,7 +594,7 @@ records.
                        
                         </p>
                     </div>
-                    
+
                     <h2>Modification of Plan or Disagreements</h2>
                     <p class="indented">
                         Parties may, by mutual agreement, vary the parenting time/visitation; however, such agreement 
@@ -596,7 +606,7 @@ records.
                         faith effort to resolve the issue between them.
                    
                     </p>
-                    
+
                     <h2>Parents’ Consent</h2>
                     <p class="indented">Please review the following and initial:</p>
                     <p class="indented">

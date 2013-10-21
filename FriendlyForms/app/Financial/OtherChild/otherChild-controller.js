@@ -86,13 +86,25 @@
                 });
             });
         };
-        $scope.deleteOtherChild = function (otherChild) {
-            otherChildService.otherChild.delete({ Id: otherChild.Id }, function () {
+        $scope.deleteOtherChild = function (child) {
+            otherChildService.otherChild.delete({ Id: child.Id }, function () {
                 $scope.children = _.reject($scope.children, function (item) {
-                    return item.Id == otherChild.Id;
+                    return item.Id == child.Id;
                 });
             });
         };
+        $scope.editing = false;
+        $scope.editOtherChild = function (child) {
+            $scope.editing = true;
+            $scope.editChildId = child.Id;
+        };
+        $scope.doneEdit = function (child) {
+            $scope.editing = false;
+            $scope.editChildId = 0;
+            otherChildService.otherChild.update({}, child, function () {
+            });
+        };
+
         //#endregion    
 
         genericService.refreshPage(function () {

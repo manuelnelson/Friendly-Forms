@@ -1386,14 +1386,13 @@ namespace FriendlyForms.RestService
             var scheduleD = GetScheduleD(userId);
             //If there are other children, use the PreexistingOrder amount, otherwise just use Adjusted Support
             var presumptiveAmounts = GetPresumptiveAmounts(scheduleD.FatherScheduleD, scheduleD.MotherScheduleD, scheduleBFather,
-                                                           scheduleBMother);
+                                                           scheduleBMother, children);
             var lowIncome = CalculateLowIncomeDeviation(deviations, custodyInformation, children, presumptiveAmounts);
             var highIncomeFather = CalculateHighIncomeFatherDeviation(deviations);
             var highIncomeMother = CalculateHighIncomeMotherDeviation(deviations);
             var parentNames = GetParentNames(userId);
             var extraordinaries = CalculateExtraordinaries(extraExpenses, children);
-            var totalOtherChildren = scheduleBFather.OtherChildren.Count + scheduleBMother.OtherChildren.Count;
-            var supportObligation = (int)BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, totalOtherChildren);
+            var supportObligation = (int)BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, children.Count);
             var totalExpenses = CalculateTotalExpenses(extraExpenses, extraordinaries, supportObligation, totalIncomes);
 
             var allowableDeviation = CalculateAllowableDeviation(deviations, lowIncome, highIncomeFather, highIncomeMother, highIncomeAdjusted,
@@ -1442,10 +1441,9 @@ namespace FriendlyForms.RestService
                 };
             var children = ChildService.GetByUserId(userId);
             var scheduleE = GetScheduleE(userId);
-            var totalOtherChildren = scheduleBFather.OtherChildren.Count + scheduleBMother.OtherChildren.Count;
-            cswTotal.SupportObligation = (int)BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, totalOtherChildren);
-            cswFather.DeviationsAmount = scheduleE.AllowableDeviation.AllowableFather;
-            cswMother.DeviationsAmount = scheduleE.AllowableDeviation.AllowableMother;
+            cswTotal.SupportObligation = (int)BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, children.Count);
+            cswFather.DeviationsAmount = double.IsNaN(scheduleE.AllowableDeviation.AllowableFather) ? 0 : scheduleE.AllowableDeviation.AllowableFather;
+            cswMother.DeviationsAmount = double.IsNaN(scheduleE.AllowableDeviation.AllowableMother) ? 0 : scheduleE.AllowableDeviation.AllowableMother;
             cswFather = FinishCsw(cswFather, cswTotal.SupportObligation, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
             cswMother = FinishCsw(cswMother, cswTotal.SupportObligation, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
             var validSchedules = new List<string>
@@ -1508,11 +1506,11 @@ namespace FriendlyForms.RestService
             public double Mother { get; set; }
         }
 
-        private PresumptiveAmounts GetPresumptiveAmounts(ScheduleD scheduleDFather, ScheduleD scheduleDMother, ScheduleB scheduleBFather, ScheduleB scheduleBMother)
+        private PresumptiveAmounts GetPresumptiveAmounts(ScheduleD scheduleDFather, ScheduleD scheduleDMother, ScheduleB scheduleBFather, ScheduleB scheduleBMother, List<Child> children)
         {
             var totalIncomes = GetTotalIncomes(scheduleBFather, scheduleBMother);
-            var totalOtherChildren = scheduleBFather.OtherChildren.Count + scheduleBMother.OtherChildren.Count;
-            var supportObligation = BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, totalOtherChildren);
+            //var totalOtherChildren = scheduleBFather.OtherChildren.Count + scheduleBMother.OtherChildren.Count;
+            var supportObligation = BcsoService.GetAmount(totalIncomes.TotalIncomeTotal, children.Count);
             //calculate father
             var proRataObligationFather = totalIncomes.ProRataFather * supportObligation;
             var workRelatedExpensesFather = scheduleDFather.ProRataAdditional;
