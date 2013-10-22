@@ -43,7 +43,8 @@
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">
                                     What is your income for which you received a W-2 tax form for your job?</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.W2Income" name="W2Income" placeholder="Annual Income" type="text" value="">
                                     <div ng-show="incomeForm.W2Income.$dirty && incomeForm.W2Income.$invalid || (showErrors && incomeForm.W2Income.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.W2Income.$error.pattern">This field must be a number.</span>
@@ -61,7 +62,8 @@
                             <div ng-show="income.NonW2Income == 1">
                                 <div class="form-group row">
                                     <label class="col-md-4 form-question">Gross annual self employment income, minus expenses. (FICA and Medicare taxes will be calculated)</label>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                         <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.SelfIncome" name="SelfIncome" placeholder="Annual Amount" type="text" value="">
                                         <div ng-show="incomeForm.SelfIncome.$dirty && incomeForm.SelfIncome.$invalid || (showErrors && incomeForm.SelfIncome.$invalid)">
                                             <span class="form-error" ng-show="incomeForm.SelfIncome.$error.pattern">This field must be a number.</span>
@@ -80,7 +82,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Commissions, Fees, Tips</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Commisions" name="Commisions" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Commisions.$dirty && incomeForm.Commisions.$invalid || (showErrors && incomeForm.Commisions.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Commisions.$error.pattern">This field must be a number.</span>
@@ -89,7 +92,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Bonuses</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Bonuses" name="Bonuses" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Bonuses.$dirty && incomeForm.Bonuses.$invalid || (showErrors && incomeForm.Bonuses.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Bonuses.$error.pattern">This field must be a number.</span>
@@ -98,7 +102,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Overtime Payments</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Overtime" name="Overtime" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Overtime.$dirty && incomeForm.Overtime.$invalid || (showErrors && incomeForm.Overtime.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Overtime.$error.pattern">This field must be a number.</span>
@@ -107,7 +112,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Severance Pay</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Severance" name="Severance" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Severance.$dirty && incomeForm.Severance.$invalid || (showErrors && incomeForm.Severance.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Severance.$error.pattern">This field must be a number.</span>
@@ -116,7 +122,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Recurring Income from Pensions or Retirement Plans</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Retirement" name="Retirement" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Retirement.$dirty && incomeForm.Retirement.$invalid || (showErrors && incomeForm.Retirement.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Retirement.$error.pattern">This field must be a number.</span>
@@ -125,7 +132,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Interest Income</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Interest" name="Interest" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Interest.$dirty && incomeForm.Interest.$invalid || (showErrors && incomeForm.Interest.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Interest.$error.pattern">This field must be a number.</span>
@@ -134,7 +142,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Income from Dividends</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Dividends" name="Dividends" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Dividends.$dirty && incomeForm.Dividends.$invalid || (showErrors && incomeForm.Dividends.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Dividends.$error.pattern">This field must be a number.</span>
@@ -143,7 +152,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Trust Income</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Trust" name="Trust" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Trust.$dirty && incomeForm.Trust.$invalid || (showErrors && incomeForm.Trust.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Trust.$error.pattern">This field must be a number.</span>
@@ -152,7 +162,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Income from Annuities</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Annuities" name="Annuities" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Annuities.$dirty && incomeForm.Annuities.$invalid || (showErrors && incomeForm.Annuities.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Annuities.$error.pattern">This field must be a number.</span>
@@ -161,7 +172,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Capital Gains</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Capital" name="Capital" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Capital.$dirty && incomeForm.Capital.$invalid || (showErrors && incomeForm.Capital.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Capital.$error.pattern">This field must be a number.</span>
@@ -170,7 +182,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Social Security Disability or Retirement Benefits</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.SocialSecurity" name="SocialSecurity" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.SocialSecurity.$dirty && incomeForm.SocialSecurity.$invalid || (showErrors && incomeForm.SocialSecurity.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.SocialSecurity.$error.pattern">This field must be a number.</span>
@@ -179,7 +192,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Worker's Compensation Benefits</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Compensation" name="Compensation" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Compensation.$dirty && incomeForm.Compensation.$invalid || (showErrors && incomeForm.Compensation.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.W2Income.$error.pattern">This field must be a number.</span>
@@ -188,7 +202,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Unemployment Benefits</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Unemployment" name="Unemployment" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Unemployment.$dirty && incomeForm.Unemployment.$invalid || (showErrors && incomeForm.Unemployment.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Unemployment.$error.pattern">This field must be a number.</span>
@@ -197,7 +212,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Judgments from Personal Injury or Other Civil Cases</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.CivilCase" name="CivilCase" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.CivilCase.$dirty && incomeForm.CivilCase.$invalid || (showErrors && incomeForm.CivilCase.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.CivilCase.$error.pattern">This field must be a number.</span>
@@ -206,7 +222,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Gifts (cash or other gifts that can be converted to cash)</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Gifts" name="Gifts" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Gifts.$dirty && incomeForm.Gifts.$invalid || (showErrors && incomeForm.Gifts.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Gifts.$error.pattern">This field must be a number.</span>
@@ -215,7 +232,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Prizes/Lottery Winnings</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Prizes" name="Prizes" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Prizes.$dirty && incomeForm.Prizes.$invalid || (showErrors && incomeForm.Prizes.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Prizes.$error.pattern">This field must be a number.</span>
@@ -224,7 +242,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Alimony &amp; maintenance from persons not in this case</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Alimony" name="Alimony" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Alimony.$dirty && incomeForm.Alimony.$invalid || (showErrors && incomeForm.Alimony.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Alimony.$error.pattern">This field must be a number.</span>
@@ -233,7 +252,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Assets which are used for support of family</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Assets" name="Assets" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Assets.$dirty && incomeForm.Assets.$invalid || (showErrors && incomeForm.Assets.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Assets.$error.pattern">This field must be a number.</span>
@@ -242,7 +262,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Fringe Benefits (if significantly reduce living expenses)</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Fringe" name="Fringe" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Fringe.$dirty && incomeForm.Fringe.$invalid || (showErrors && incomeForm.Fringe.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Fringe.$error.pattern">This field must be a number.</span>
@@ -251,7 +272,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Any Other Income, including Imputed Income (Do not include means-tested public assistance, such as TANF or food stamps.)</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="income.Other" name="Other" placeholder="Annual Amount" type="text" value="">
                                     <div ng-show="incomeForm.Other.$dirty && incomeForm.Other.$invalid || (showErrors && incomeForm.Other.$invalid)">
                                         <span class="form-error" ng-show="incomeForm.Other.$error.pattern">This field must be a number.</span>

@@ -165,7 +165,7 @@ records.
                         <h2>Disagreements</h2>
                         <div class="row">
                             <p class="indented">
-                                Where parents have elected joint decision making in the Major Decisions section above, disagreements will be resolved in the following manner: {{parenting.Disagreement}}
+                                Where parents have elected joint decision making in the Major Decisions section above, disagreements will be resolved in the following manner: {{parenting.Disagreement | addPeriod}}
                            
                             </p>
                         </div>
@@ -201,7 +201,7 @@ records.
                     Parenting Time/Visitation Schedules
                     <p ng-show="parenting.CommunicationViewModel.AllowCommunication == 1" class="indented">
                         When the child or children are in the physical custody of one parent, the other parent will have the right
-    to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase}}.
+    to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase | addPeriod}}
                    
                     </p>
                     <p class="indented" ng-show="parenting.CommunicationViewModel.AllowCommunication != 1">
@@ -209,7 +209,7 @@ records.
             right to contact the child or children.
                    
                     </p>
-                    <p ng-show="parenting.CommunicationViewModel.Limitations == 1" class="indented">The following limitations apply to contact with the child(ren): {{parenting.CommunicationViewModel.LimitationDetails}}</p>
+                    <p ng-show="parenting.CommunicationViewModel.Limitations == 1" class="indented">The following limitations apply to contact with the child(ren): {{parenting.CommunicationViewModel.LimitationDetails | addPeriod}}</p>
                     <p ng-show="parenting.CommunicationViewModel.Limitations == 2" class="indented">There are no limitations regarding communication with the child(ren).</p>
                     <p ng-show="parenting.PrivacyViewModel.NeedPrivacy == 1" class="indented">
                         Due to prior act of family violence, the address of the child(ren) and victim of family violence shall be
@@ -255,7 +255,7 @@ records.
                         <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDate | date:'longDate'}}.</span>
                     </p>
                     <div class="row">
-                        <p ng-show="parenting.ScheduleViewModel.AdditionalProvisions.length > 0" class="indented">Additionally, the following provisions regarding weekday visitation will apply to the child(ren): {{parenting.ScheduleViewModel.AdditionalProvisions}}</p>
+                        <p ng-show="parenting.ScheduleViewModel.AdditionalProvisions.length > 0" class="indented">Additionally, the following provisions regarding weekday visitation will apply to the child(ren): {{parenting.ScheduleViewModel.AdditionalProvisions | addPeriod}}</p>
                     </div>
                     <div class="page-break"></div>
                     <h2>Major Holidays and Vacation Periods</h2>
@@ -272,6 +272,19 @@ records.
                                 Mother 
        
                             <span ng-show="childHoliday.Holiday.ThanksgivingMother == 1">will have visitation in odd years.</span>
+<<<<<<< HEAD
+                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 2">will have visitation in even years.</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 3">will have visitation every year.</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 4">will never have visitation.</span>
+                            Visitation will begin at the time the school day ends on the last school day prior to the holiday break, and end at {{childHoliday.Holiday.ThanksgivingTime}}.
+                            <span ng-show="childHoliday.Holiday.Thanksgiving == 1">on the day before returning to school.</span>
+                            <span ng-show="childHoliday.Holiday.Thanksgiving == 2">on the first day of school after the holiday.</span>
+                            <span ng-show="childHoliday.Holiday.Thanksgiving == 3">Visitation will be conducted in the following manner: {{childHoliday.Holiday.ThanksgivingOther | addPeriod}}</span>
+                        </p>
+                        <h3 class="indented">Winter Break</h3>
+                        <p class="indented">
+                            For Winter Break, the Father  
+=======
                                 <span ng-show="childHoliday.Holiday.ThanksgivingMother == 2">will have visitation in even years.</span>
                                 <span ng-show="childHoliday.Holiday.ThanksgivingMother == 3">will have visitation every year.</span>
                                 <span ng-show="childHoliday.Holiday.ThanksgivingMother == 4">will never have visitation.</span>
@@ -286,6 +299,7 @@ records.
                             <h3 class="indented">Winter Break</h3>
                             <p class="indented">
                                 For Winter Break, the Father  
+>>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
        
                             <span ng-show="childHoliday.Holiday.ChristmasFather == 1">will have visitation in odd years, the</span>
                                 <span ng-show="childHoliday.Holiday.ChristmasFather == 2">will have visitation in even years, the</span>
@@ -294,6 +308,21 @@ records.
                                 Mother 
        
                             <span ng-show="childHoliday.Holiday.ChristmasMother == 1">will have visitation in odd years.</span>
+<<<<<<< HEAD
+                            <span ng-show="childHoliday.Holiday.ChristmasMother == 2">will have visitation in even years.</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasMother == 3">will have visitation every year.</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasMother == 4">will never have visitation.</span>
+                            Visitation will begin at the time the school day ends on the last school day prior to the holiday break, and end 
+                            <span ng-show="childHoliday.Holiday.Christmas == 1">at the beginning of the school day after Winter Break.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 2">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Eve.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 3">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Day.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 4">at {{childHoliday.Holiday.ChristmasTime}} on the day after Christmas.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 5">in the following manner: {{childHoliday.Holiday.ChristmasOther | addPeriod}}</span>
+                        </p>
+                        <h3 class="indented">Spring Break</h3>
+                        <p class="indented">
+                            For Spring Break, the Father  
+=======
                                 <span ng-show="childHoliday.Holiday.ChristmasMother == 2">will have visitation in even years.</span>
                                 <span ng-show="childHoliday.Holiday.ChristmasMother == 3">will have visitation every year.</span>
                                 <span ng-show="childHoliday.Holiday.ChristmasMother == 4">will never have visitation.</span>
@@ -311,6 +340,7 @@ records.
                             <h3 class="indented">Spring Break</h3>
                             <p class="indented">
                                 For Spring Break, the Father  
+>>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
        
                             <span ng-show="childHoliday.Holiday.SpringBreakFather == 1">will have visitation in odd years, the</span>
                                 <span ng-show="childHoliday.Holiday.SpringBreakFather == 2">will have visitation in even years, the</span>
@@ -325,6 +355,18 @@ records.
                                 Visitation will begin at the time the school day ends on the last school day prior to the spring holiday break, and end
        
                             <span ng-show="childHoliday.Holiday.SpringBreak == 1">at the conclusion of Spring Break.</span>
+<<<<<<< HEAD
+                            <span ng-show="childHoliday.Holiday.SpringBreak != 1">in the following manner: {{childHoliday.Holiday.SpringOther | addPeriod}}</span>
+                        </p>
+                        <h3 class="indented">Summer Break</h3>
+                        <p class="indented">The parties agree that Summer Break begins {{childHoliday.Holiday.SummerBeginDays}} day(s) after the last day of school at {{childHoliday.Holiday.SummerBeginTime}}.</p>
+                        <p class="indented">The parties agree that Summer Break ends {{childHoliday.Holiday.SummerEndDays}} day(s) before the first day of school at {{childHoliday.Holiday.SummerEndTime}}.</p>
+                        <p class="indented">The parties will manage Summer Break visitation as follows: {{childHoliday.Holiday.SummerDetails | addPeriod}}</p>
+                        <h3 class="indented">Fall Break</h3>
+                        <p class="indented">
+                            For Fall Break, the Father  
+       
+=======
                                 <span ng-show="childHoliday.Holiday.SpringBreak != 1">in the following manner: {{childHoliday.Holiday.SpringOther}}</span>
                             </p>
                         </div>
@@ -336,6 +378,7 @@ records.
                             <h3 class="indented">Fall Break</h3>
                             <p class="indented">
                                 For Fall Break, the Father         
+>>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
                             <span ng-show="childHoliday.Holiday.FallBreakFather == 1">will have visitation in odd years, the</span>
                                 <span ng-show="childHoliday.Holiday.FallBreakFather == 2">will have visitation in even years, the</span>
                                 <span ng-show="childHoliday.Holiday.FallBreakFather == 3">will have visitation every year, the</span>
@@ -347,9 +390,14 @@ records.
                                 <span ng-show="childHoliday.Holiday.FallBreakMother == 4">will never have visitation.</span>
                                 Visitation will begin at the time the school day ends on the last school day prior to the fall holiday break, and end       
                             <span ng-show="childHoliday.Holiday.FallBreak == 1">at the conclusion of fall break.</span>
+<<<<<<< HEAD
+                            <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther | addPeriod}}</span>
+                        </p>
+=======
                                 <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther}}</span>
                             </p>
                         </div>
+>>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
                         <h3 class="indented">Other Holidays</h3>
                         <p class="indented">The parties agree that all other holidays will be managed in accordance with the following:</p>
                         <div class="row">

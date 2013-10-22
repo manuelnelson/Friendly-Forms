@@ -95,7 +95,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-3">Father</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.FathersHealthAmount" name="FathersHealthAmount" placeholder="Monthly Amount" type="text" value="">
                                     <div ng-show="healthForm.FathersHealthAmount.$dirty && healthForm.FathersHealthAmount.$invalid  || (showErrors && healthForm.FathersHealthAmount.$invalid)">
                                         <span class="form-error" ng-show="healthForm.FathersHealthAmount.$error.pattern">This field must be a number.</span>
@@ -104,7 +105,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-3">Mother</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.MothersHealthAmount" name="MothersHealthAmount" placeholder="Monthly Amount" type="text" value="">
                                     <div ng-show="healthForm.MothersHealthAmount.$dirty && healthForm.MothersHealthAmount.$invalid  || (showErrors && healthForm.MothersHealthAmount.$invalid)">
                                         <span class="form-error" ng-show="healthForm.MothersHealthAmount.$error.pattern">This field must be a number.</span>
@@ -113,7 +115,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-3">Nonparent Custodian</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" ng-pattern="/^[0-9]*$/" ng-model="health.NonCustodialHealthAmount" name="NonCustodialHealthAmount" placeholder="Monthly Amount" type="text" value="">
                                     <div ng-show="healthForm.NonCustodialHealthAmount.$dirty && healthForm.NonCustodialHealthAmount.$invalid  || (showErrors && healthForm.NonCustodialHealthAmount.$invalid)">
                                         <span class="form-error" ng-show="healthForm.NonCustodialHealthAmount.$error.pattern">This field must be a number.</span>
@@ -126,7 +129,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-3">Father</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" class="percent" ng-pattern="/^[0-9]*$/" min="0" max="100" ng-change="CalculatePercentage('Father')" ng-model="health.FathersHealthPercentage" name="FathersHealthPercentage" placeholder="Percent" type="text" value="">
                                     <div ng-show="healthForm.FathersHealthPercentage.$dirty && healthForm.FathersHealthPercentage.$invalid  || (showErrors && healthForm.FathersHealthPercentage.$invalid)">
                                         <span class="form-error" ng-show="healthForm.FathersHealthPercentage.$error.max || healthForm.FathersHealthPercentage.$error.min">This field is must be between 0-100</span>
@@ -136,7 +140,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-3">Mother</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" class="percent" ng-pattern="/^[0-9]*$/" min="0" max="100" ng-change="CalculatePercentage('Mother')" ng-model="health.MothersHealthPercentage" name="MothersHealthPercentage" placeholder="Percent" type="text" value="">
                                     <div ng-show="healthForm.MothersHealthPercentage.$dirty && healthForm.MothersHealthPercentage.$invalid  || (showErrors && healthForm.MothersHealthPercentage.$invalid)">
                                         <span class="form-error" ng-show="healthForm.MothersHealthPercentage.$error.max || healthForm.MothersHealthPercentage.$error.min">This field is must be between 0-100</span>
@@ -146,7 +151,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="form-question col-lg-3">Nonparent Custodian</label>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 input-group">
+                                    <span class="input-group-addon add-on"><i class="icon-dollar" style="pointer-events: none;"></i></span>
                                     <input class="form-control" class="percent" ng-pattern="/^[0-9]*$/" min="0" max="100" ng-change="CalculatePercentage('NonParent')" ng-model="health.NonCustodialHealthPercentage" name="NonCustodialHealthPercentage" placeholder="Percent" type="text" value="">
                                     <div ng-show="healthForm.NonCustodialHealthPercentage.$dirty && healthForm.NonCustodialHealthPercentage.$invalid  || (showErrors && healthForm.NonCustodialHealthPercentage.$invalid)">
                                         <span class="form-error" ng-show="healthForm.NonCustodialHealthPercentage.$error.max || healthForm.NonCustodialHealthPercentage.$error.min">This field is must be between 0-100</span>
