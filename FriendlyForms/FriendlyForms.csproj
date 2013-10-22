@@ -252,6 +252,7 @@
     <Compile Include="RestService\OutputRestService.cs" />
     <Compile Include="RestService\ParticipantRestService.cs" />
     <Compile Include="RestService\PasswordResetRestService.cs" />
+    <Compile Include="RestService\PaymentRestService.cs" />
     <Compile Include="RestService\PreexistingSupportChildRestService.cs" />
     <Compile Include="RestService\PreexistingSupportFormRestService.cs" />
     <Compile Include="RestService\PreexistingSupportRestService.cs" />
@@ -270,6 +271,11 @@
     <Compile Include="RestService\VehicleFormRestService.cs" />
     <Compile Include="RestService\VehicleRestService.cs" />
     <Compile Include="Service References\CardSafe\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\Transaction\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -1223,6 +1229,15 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </Content>
+    <None Include="Service References\Transaction\configuration91.svcinfo" />
+    <None Include="Service References\Transaction\configuration.svcinfo" />
+    <Content Include="Service References\Transaction\FriendlyForms.Transaction.Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\Transaction\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ssleay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1579,6 +1594,7 @@
       <DependentUpon>jquery-1.9.1.js</DependentUpon>
     </Content>
     <Content Include="Service References\CardSafe\cardsafe.wsdl" />
+    <None Include="Service References\Transaction\transact.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\Client\" />
@@ -1631,6 +1647,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CardSafe\" />
+    <WCFMetadataStorage Include="Service References\Transaction\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
