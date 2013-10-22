@@ -77,11 +77,12 @@
                     <p ng-show="domesticMediation.AssetViewModel.Business==2" class="indented">There are no business assets or liabilities to be considered in this case.  All business assets and/or liabilities held in either party’s name will be the exclusive property property or responsibility of the party in whose name those assets or liabilities are held.</p>
                     <p ng-show="domesticMediation.AssetViewModel.Business!=2" class="indented">
                         Division of business assets and liabilities will occur as follows:
-        <br />
+                        <br />
                         {{domesticMediation.AssetViewModel.BusinessDescription | addPeriod}}
                     </p>
-                    <p ng-show="domesticMediation.AssetViewModel.AdditionalAssets.length>0" class="indented">
-                        Other assets or liabilities will be divided in the following manner:
+
+                    <p ng-show="domesticMediation.AssetViewModel.AdditionalAssets==1 && domesticMediation.AssetViewModel.AdditionalAssetsDescription.length>0" class="indented">
+                        Division of business assets and liabilities will occur as follows:
         <br />
                         {{domesticMediation.AssetViewModel.AdditionalAssets | addPeriod}}
                     </p>

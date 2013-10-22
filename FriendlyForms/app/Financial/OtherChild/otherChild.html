@@ -102,14 +102,18 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="child in children">
-                                        <td>{{child.Name}}</td>
-                                        <td>{{child.DateOfBirth | date:'MM/dd/yyyy'}}</td>
-                                        <td>
-                                            <!--                                        <button class="btn btn-default-small btn-primary btn childEdit" title="Edit"><i class="icon-white icon-edit"></i></button>-->
-                                            <button class="btn btn-default-small btn-primary btn" title="Delete" ng-click="deleteOtherChild(child)"><i class="icon-white icon-trash"></i></button>
-                                            <!--                                        <button class="btn btn-default-small btn-primary btn childDone hide" data-id="1" title="Done"><i class="icon-white icon-ok"></i>Done</button>-->
+                                        <td ng-show="!(editing && editChildId==child.Id)">{{child.Name}}</td>
+                                        <td ng-show="!(editing && editChildId==child.Id)">{{child.DateOfBirth | date:'MM/dd/yyyy'}}</td>
+                                        <td ng-show="editing  && editChildId==child.Id">
+                                            <input class="form-control" type="text" ng-model="child.Name" /></td>
+                                        <td ng-show="editing && editChildId==child.Id">
+                                            <input class="form-control" ui-jq="datepicker" data-date="{{child.DateOfBirth | date:'MM/dd/yyyy'}}" ng-pattern="/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/" ng-model="child.DateOfBirth" name="DateOfBirth" placeholder="MM/DD/YYYY" type="text" value="{{child.DateOfBirth | date:'MM/dd/yyyy'}}">
                                         </td>
-
+                                        <td>
+                                            <button class="btn btn-default-small btn-primary btn" ng-show="!(editing && editChildId==child.Id)" title="Edit" ng-click="editOtherChild(child)"><i class="icon-white icon-edit"></i></button>
+                                            <button class="btn btn-default-small btn-primary btn" ng-show="!(editing && editChildId==child.Id)" title="Delete" ng-click="deleteOtherChild(child)"><i class="icon-white icon-trash"></i></button>
+                                            <button class="btn btn-default-small btn-primary btn" ng-show="editing && editChildId==child.Id" title="Done" ng-click="doneEdit(child)"><i class="icon-white icon-ok"></i>Done</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

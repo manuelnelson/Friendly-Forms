@@ -1,0 +1,684 @@
+﻿<link href="../../../Content/output.css" rel="stylesheet" />
+<div class="form-vertical wrapper">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Parenting Preview</h5>
+                </div>
+                <div class="widget-content" style="display: none" ng-show="isLoaded">
+                    <div class="row" style="text-align: center;">
+                        <h1>PARENTING PLAN</h1>
+                    </div>
+                    <div class="row">
+                        <p ng-show="parenting.CourtViewModel.AuthorOfPlan == 2">
+                            The parties have agreed to the terms of this plan and this information has been furnished by both 
+                            parties to meet the requirements of OCGA Section 19-9-1. The parties agree on the terms of the plan and 
+                            afﬁrm the accuracy of the information provided, as shown by their signatures at the end of this order.
+                       
+                        </p>
+                        <p ng-show="parenting.CourtViewModel.AuthorOfPlan != 2">This plan has been preparded by the judge.</p>
+                        <p ng-show="parenting.CourtViewModel.PlanType == 1">This plan is a new plan.</p>
+                        <p ng-show="parenting.CourtViewModel.PlanType == 2">This plan modiﬁes an existing Parenting Plan: Case number {{parenting.CourtViewModel.ExistCaseNumber}}</p>
+                        <p ng-show="parenting.CourtViewModel.PlanType == 3">This plan modiﬁes an existing Order: Case Number {{parenting.CourtViewModel.ExistCaseNumber}}</p>
+                    </div>
+                    <table style="width: 95%">
+                        <thead>
+                            <tr>
+                                <th><h3>Child's Name</h3></th>
+                                <th><h3>Date of Birth</h3></th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="child in parenting.Children">
+                                <td>{{child.Name}}</td>   
+                                <td>{{child.DateOfBirth | date: 'mediumDate'}}</td> 
+                            </tr>                            
+                        </tbody>
+                    </table>
+<!--                    <div class="borderBox">
+                        <div class="row">
+                            <h2 class="col-xs-6 indented" style="display: inline-block">Child's Name</h2>
+                            <h2 class="col-xs-6" style="display: inline-block">Date of Birth</h2>
+                        </div>
+                        <div class="row" ng-repeat="child in parenting.Children">
+                            <div class="col-xs-6 indented">{{child.Name}}</div>
+                            <div class="col-xs-6">{{child.DateOfBirth | date: 'mediumDate'}}</div>
+                        </div>
+                    </div>-->
+                    <br />
+                    <div class="row">
+                        <h2>Custody and Decision Making</h2>
+                        <p class="indented">{{parenting.PpOutputFormHelper.CustodyInformation.LegalCustodyPhrase}}</p>
+                    </div>
+                    <h2>Primary Physical Custody</h2>
+                    <p class="indented">For each of the children named below, the primary physical custodian shall be:</p>
+                    <table style="width: 95%">
+                        <thead>
+                            <tr>
+                                <th><h3>Child's Name</h3></th>
+                                <th><h3>Primary Custodian</h3></th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="child in parenting.Children">
+                                <td>{{child.Name}}</td>   
+                                <td>{{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}}</td> 
+                            </tr>                            
+                        </tbody>
+                    </table>
+<!--                    <div class="row">
+                        <h2 class="col-xs-6 indented" style="display: inline-block">Child's Name</h2>
+                        <h2 class="col-xs-6" style="display: inline-block">Primary Custodian</h2>
+                    </div>
+                    <div class="row" ng-repeat="child in parenting.Children">
+                        <div class="col-xs-6 indented">{{child.Name}}</div>
+                        <div class="col-xs-6">{{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}}</div>
+                    </div>-->
+                    <div ng-show="parenting.PrivacyViewModel.NeedSupervision == 1">
+                        <h2>Supervision</h2>
+                        <p class="indented">Supervised parenting time shall apply during the day-to-day schedule as follows: {{parenting.PrivacyViewModel.SupervisionHow | addPeriod}}</p>
+                        <p class="indented">Supervised parenting shall take place at: {{parenting.PrivacyViewModel.SupervisionWhere | addPeriod}}</p>
+                        <p class="indented">Parenting time will be supervised by: {{parenting.PrivacyViewModel.SupervisionWho | addPeriod}}</p>
+                        <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 1" class="indented">The cost of supervision will be the responsibility of the Father.</p>
+                        <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 2" class="indented">The cost of supervision will be the responsibility of the Mother.</p>
+                        <p ng-show="parenting.PrivacyViewModel.SupervisionCost == 3" class="indented">The cost of supervision will be shared equally.</p>
+                    </div>
+                    <h2>Access to Records and Information</h2>
+                    <p ng-show="parenting.InformationViewModel.InformationAccess == 3" class="indented">
+                        Both parents are entitled to access to all of the child(ren)’s records and information, including, but 
+not limited to, education, health, extracurricular activities, and religious communications. 
+Designation as a non-custodial parent does not affect a parent’s right to equal access to these 
+records.
+                   
+                    </p>
+                    <p ng-show="parenting.InformationViewModel.InformationAccess == 1 || parenting.InformationViewModel.InformationAccess == 2" class="indented">The following limitations on access rights applies: {{parenting.InformationViewModel.AccessOfRightsDetails | addPeriod}}</p>
+                    <div class="row">
+                        <h2>Day-To-Day Decisions</h2>
+                        <p class="indented">
+                            Each parent shall make decisions regarding the day-to-day care of a child while the child is residing with that 
+                            parent, including any emergency decisions affecting the health or safety of a child.
+                       
+                        </p>
+                    </div>
+                    <div class="page-break"></div>
+                    <div class="row">
+                        <h2>Major Decisions</h2>
+                        <p class="indented">
+                            The parties must confer with one another prior to any decision related to non-emergency health care, education, religion, or extra-curricular activities.  The listing below indicates who will
+        be the primary decision maker when there is disagreement regarding the most appropriate decision. 
+                       
+                        </p>
+                        <div ng-repeat="childDecision in parenting.ChildDecisions">
+                            <h3 class="indented">{{childDecision.Child.Name}}</h3>
+                            <p class="indented">
+                                Educational Decisions: 
+           
+                                <span ng-show="childDecision.Decisions.Education == 1">Father</span>
+                                <span ng-show="childDecision.Decisions.Education == 2">Mother</span>
+                                <span ng-show="childDecision.Decisions.Education == 3">Both</span>
+                                <span ng-show="childDecision.Decisions.Education == 4">N/A</span>
+                                <br />
+                                Non-emergency Healthcare:
+           
+                                <span ng-show="childDecision.Decisions.HealthCare == 1">Father</span>
+                                <span ng-show="childDecision.Decisions.HealthCare == 2">Mother</span>
+                                <span ng-show="childDecision.Decisions.HealthCare == 3">Both</span>
+                                <span ng-show="childDecision.Decisions.HealthCare == 4">N/A</span>
+                                <br />
+                                Religious Upbringing:
+           
+                                <span ng-show="childDecision.Decisions.Religion == 1">Father</span>
+                                <span ng-show="childDecision.Decisions.Religion == 2">Mother</span>
+                                <span ng-show="childDecision.Decisions.Religion == 3">Both</span>
+                                <span ng-show="childDecision.Decisions.Religion == 4">N/A</span>
+                                <br />
+                                Extracurricular Activities:
+           
+                                <span ng-show="childDecision.Decisions.ExtraCurricular == 1">Father</span>
+                                <span ng-show="childDecision.Decisions.ExtraCurricular == 2">Mother</span>
+                                <span ng-show="childDecision.Decisions.ExtraCurricular == 3">Both</span>
+                                <span ng-show="childDecision.Decisions.ExtraCurricular == 4">N/A</span>
+                                <br />
+                                <span ng-repeat="extraDecision in childDecision.ExtraDecisions">{{extraDecision.Description}}:  
+               
+                                    <span ng-show="extraDecision.DecisionMaker == 1">Father</span>
+                                    <span ng-show="extraDecision.DecisionMaker == 2">Mother</span>
+                                    <span ng-show="extraDecision.DecisionMaker == 3">Both</span>
+                                    <span ng-show="extraDecision.DecisionMaker == 4">N/A</span>
+                                    <br />
+                                </span>
+                            </p>
+                            <hr />
+                        </div>
+                    </div>
+                    <div ng-show="parenting.Disagreement.length > 0">
+                        <h2>Disagreements</h2>
+                        <div class="row">
+                            <p class="indented">
+                                Where parents have elected joint decision making in the Major Decisions section above, disagreements will be resolved in the following manner: {{parenting.Disagreement}}
+                           
+                            </p>
+                        </div>
+                    </div>
+                    <h2>Exchange of Children</h2>
+                    <p class="indented">
+                        The             
+   
+                        <span ng-show="parenting.ResponsibilityViewModel.BeginningVisitation == 1">Father</span>
+                        <span ng-show="parenting.ResponsibilityViewModel.BeginningVisitation == 2">Mother</span>
+                        <span ng-show="parenting.ResponsibilityViewModel.BeginningVisitation == 3">Both</span>
+                        <span ng-show="parenting.ResponsibilityViewModel.BeginningVisitation == 4">N/A</span>
+                        will be responsible to pick up or drop off child(ren) at the beginning of scheduled visitation periods.
+                   
+                    </p>
+                    <p class="indented">
+                        The     
+   
+                        <span ng-show="parenting.ResponsibilityViewModel.EndVisitation == 1">Father</span>
+                        <span ng-show="parenting.ResponsibilityViewModel.EndVisitation == 2">Mother</span>
+                        <span ng-show="parenting.ResponsibilityViewModel.EndVisitation == 3">Both</span>
+                        <span ng-show="parenting.ResponsibilityViewModel.EndVisitation == 4">N/A</span>
+                        will be responsible to pick up or drop off child(ren) at the end of scheduled visitation periods.
+                   
+                    </p>
+                    <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 2" class="indented">Each party will be responsible to pay 1/2 of the total expenses accrued between the parties, in regard to compliance with the visitation schedule.</p>
+                    <p ng-show="parenting.ResponsibilityViewModel.Own == 1" class="indented">Each party will be responsible to absorb all expenses related to complying with the visitation schedule.</p>
+                    <p ng-show="parenting.ResponsibilityViewModel.Own == 3" class="indented">The Mother shall pay {{parenting.ResponsibilityViewModel.MotherPercentage%, and the Father shall pay {{parenting.ResponsibilityViewModel.FatherPercentage% of expenses related to compliance with the visitation schedule.</p>
+                    <p ng-show="parenting.ResponsibilityViewModel.Own == 4" class="indented">
+                        Visitation related expenses will be paid as follows:<br />
+                        {{parenting.ResponsibilityViewModel.OtherDetails}}
+                   
+                    </p>
+                    <h2>Communication</h2>
+                    Parenting Time/Visitation Schedules
+                    <p ng-show="parenting.CommunicationViewModel.AllowCommunication == 1" class="indented">
+                        When the child or children are in the physical custody of one parent, the other parent will have the right
+    to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase}}.
+                   
+                    </p>
+                    <p class="indented" ng-show="parenting.CommunicationViewModel.AllowCommunication != 1">
+                        When the child or children are in the physical custody of one parent, the other parent will not have the
+            right to contact the child or children.
+                   
+                    </p>
+                    <p ng-show="parenting.CommunicationViewModel.Limitations == 1" class="indented">The following limitations apply to contact with the child(ren): {{parenting.CommunicationViewModel.LimitationDetails}}</p>
+                    <p ng-show="parenting.CommunicationViewModel.Limitations == 2" class="indented">There are no limitations regarding communication with the child(ren).</p>
+                    <p ng-show="parenting.PrivacyViewModel.NeedPrivacy == 1" class="indented">
+                        Due to prior act of family violence, the address of the child(ren) and victim of family violence shall be
+    kept confidential. The protected parent shall promptly notify the other parent, through a third party, of
+    any change in contact information necessary to conduct visitation.
+                   
+                    </p>
+                    <p ng-show="parenting.CommunicationViewModel.Notification ==1">Each parent shall promptly notify the other parent of a change of address, phone number or cell phone number. A parent changing residence must give at least 30 days notice of the change and provide the full address of the new residence.</p>
+                    <div class="page-break"></div>
+                    <h2>Parenting Time/Visitation Schedules</h2>
+                    <p class="indented">During the term of this parenting plan, {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation:</p>
+                    <p class="indented">
+                        For purposes of this parenting plan, 
+       
+                        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==2">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the first and third weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the second, fourth and fifth weekend of each month.</span>
+                        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==3">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the first, third and fifth weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the second and fourth weekend of each month.</span>
+                        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==4">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the second and fourth weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the first, third and fifth weekend of each month.</span>
+                        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">the parents will alfternate weekends for visitation.</span>
+                        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">For purposes of this parenting plan, the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
+
+                        A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.PickupLocation}}. The weekend ends on 
+    {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}.
+                   
+                    </p>
+                    <div ng-show="parenting.ScheduleViewModel.Weekdays == 1">
+                        <p class="indented">
+                            {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation on weekdays, which will 
+            begin at {{parenting.ScheduleViewModel.WeekdayPickup}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.WeekdayPickupLocation}}. Weekday visitation will end at {{parenting.ScheduleViewModel.WeekdayDropoff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}. This shall apply for the following day(s):
+                       
+                        </p>
+                        <p ng-show="parenting.ScheduleViewModel.MondayParent" class="linehtless50">Monday</p>
+                        <p ng-show="parenting.ScheduleViewModel.TuesdayParent" class="linehtless50">Tuesday</p>
+                        <p ng-show="parenting.ScheduleViewModel.WednesdayParent" class="linehtless50">Wednesday</p>
+                        <p ng-show="parenting.ScheduleViewModel.ThursdayParent" class="linehtless50">Thursday</p>
+                        <p ng-show="parenting.ScheduleViewModel.FridayParent" class="linehtless50">Friday</p>
+                        <p ng-show="parenting.ScheduleViewModel.SaturdayParent" class="linehtless50">Saturday</p>
+                        <p ng-show="parenting.ScheduleViewModel.SundayParent" class="linehtless50">Sunday</p>
+                    </div>
+                    <p class="indented">
+                        The parenting schedule will begin
+   
+                        <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate == 1">on the date of the Court's Order.</span>
+                        <span ng-show="parenting.ScheduleViewModel.DetermineBeginDate != 1">on {{parenting.ScheduleViewModel.BeginDate | date:'longDate'}}.</span>
+                    </p>
+                    <div class="row">
+                        <p ng-show="parenting.ScheduleViewModel.AdditionalProvisions.length > 0" class="indented">Additionally, the following provisions regarding weekday visitation will apply to the child(ren): {{parenting.ScheduleViewModel.AdditionalProvisions}}</p>
+                    </div>
+                    <div class="page-break"></div>
+                    <h2>Major Holidays and Vacation Periods</h2>
+                    <div ng-repeat="childHoliday in parenting.ChildHolidays" class="page-break">
+                        <h2 class="indented">{{childHoliday.Child.Name}}</h2>
+                        <h3 class="indented">Thanksgiving</h3>
+                        <p class="indented">
+                            For Thanksgiving, the Father  
+       
+                            <span ng-show="childHoliday.Holiday.ThanksgivingFather == 1">will have visitation in odd years, the</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingFather == 2">will have visitation in even years, the</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingFather == 3">will have visitation every year, the</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingFather == 4">will never have visitation, the</span>
+                            Mother 
+       
+                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 1">will have visitation in odd years.</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 2">will have visitation in even years.</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 3">will have visitation every year.</span>
+                            <span ng-show="childHoliday.Holiday.ThanksgivingMother == 4">will never have visitation.</span>
+                            Visitation will begin at the time the school day ends on the last school day prior to the holiday break, and end at {{childHoliday.Holiday.ThanksgivingTime}}
+       
+                            <span ng-show="childHoliday.Holiday.Thanksgiving == 1">on the day before returning to school.</span>
+                            <span ng-show="childHoliday.Holiday.Thanksgiving == 2">on the first day of school after the holiday.</span>
+                            <span ng-show="childHoliday.Holiday.Thanksgiving == 3">. Visitation will be conducted in the following manner: {{childHoliday.Holiday.ThanksgivingOther}}</span>
+                        </p>
+                        <h3 class="indented">Winter Break</h3>
+                        <p class="indented">
+                            For Winter Break, the Father  
+       
+                            <span ng-show="childHoliday.Holiday.ChristmasFather == 1">will have visitation in odd years, the</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasFather == 2">will have visitation in even years, the</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasFather == 3">will have visitation every year, the</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasFather == 4">will never have visitation, the</span>
+                            Mother 
+       
+                            <span ng-show="childHoliday.Holiday.ChristmasMother == 1">will have visitation in odd years.</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasMother == 2">will have visitation in even years.</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasMother == 3">will have visitation every year.</span>
+                            <span ng-show="childHoliday.Holiday.ChristmasMother == 4">will never have visitation.</span>
+                            Visitation will begin at the time the school day ends on the last
+        school day prior to the holiday break, and end 
+       
+                            <span ng-show="childHoliday.Holiday.Christmas == 1">at the beginning of the school day after Winter Break.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 2">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Eve.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 3">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Day.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 4">at {{childHoliday.Holiday.ChristmasTime}} on the day after Christmas.</span>
+                            <span ng-show="childHoliday.Holiday.Christmas == 5">in the following manner: {{childHoliday.Holiday.ChristmasOther}}</span>
+                        </p>
+                        <h3 class="indented">Spring Break</h3>
+                        <p class="indented">
+                            For Spring Break, the Father  
+       
+                            <span ng-show="childHoliday.Holiday.SpringBreakFather == 1">will have visitation in odd years, the</span>
+                            <span ng-show="childHoliday.Holiday.SpringBreakFather == 2">will have visitation in even years, the</span>
+                            <span ng-show="childHoliday.Holiday.SpringBreakFather == 3">will have visitation every year, the</span>
+                            <span ng-show="childHoliday.Holiday.SpringBreakFather == 4">will never have visitation, the</span>
+                            Mother 
+       
+                            <span ng-show="childHoliday.Holiday.SpringBreakMother == 1">will have visitation in odd years.</span>
+                            <span ng-show="childHoliday.Holiday.SpringBreakMother == 2">will have visitation in even years.</span>
+                            <span ng-show="childHoliday.Holiday.SpringBreakMother == 3">will have visitation every year.</span>
+                            <span ng-show="childHoliday.Holiday.SpringBreakMother == 4">will never have visitation.</span>
+                            Visitation will begin at the time the school day ends on the last school day prior to the spring holiday break, and end
+       
+                            <span ng-show="childHoliday.Holiday.SpringBreak == 1">at the conclusion of Spring Break.</span>
+                            <span ng-show="childHoliday.Holiday.SpringBreak != 1">in the following manner: {{childHoliday.Holiday.SpringOther}}</span>
+                        </p>
+                        <h3 class="indented">Summer Break</h3>
+                        <p class="indented">The parties agree that Summer Break begins {{childHoliday.Holiday.SummerBeginDays}} day(s) after the last day of school at {{childHoliday.Holiday.SummerBeginTime}}.</p>
+                        <p class="indented">The parties agree that Summer Break ends {{childHoliday.Holiday.SummerEndDays}} day(s) before the first day of school at {{childHoliday.Holiday.SummerEndTime}}.</p>
+                        <p class="indented">The parties will manage Summer Break visitation as follows: {{childHoliday.Holiday.SummerDetails}}.</p>
+                        <h3 class="indented">Fall Break</h3>
+                        <p class="indented">
+                            For Fall Break, the Father  
+       
+                            <span ng-show="childHoliday.Holiday.FallBreakFather == 1">will have visitation in odd years, the</span>
+                            <span ng-show="childHoliday.Holiday.FallBreakFather == 2">will have visitation in even years, the</span>
+                            <span ng-show="childHoliday.Holiday.FallBreakFather == 3">will have visitation every year, the</span>
+                            <span ng-show="childHoliday.Holiday.FallBreakFather == 4">will never have visitation, the</span>
+                            Mother 
+       
+                            <span ng-show="childHoliday.Holiday.FallBreakMother == 1">will have visitation in odd years.</span>
+                            <span ng-show="childHoliday.Holiday.FallBreakMother == 2">will have visitation in even years.</span>
+                            <span ng-show="childHoliday.Holiday.FallBreakMother == 3">will have visitation every year.</span>
+                            <span ng-show="childHoliday.Holiday.FallBreakMother == 4">will never have visitation.</span>
+                            Visitation will begin at the time the school day ends on the last school day prior to the fall holiday break, and end
+       
+                            <span ng-show="childHoliday.Holiday.FallBreak == 1">at the conclusion of fall break.</span>
+                            <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther}}</span>
+                        </p>
+                        <h3 class="indented">Other Holidays</h3>
+                        <p class="indented">The parties agree that all other holidays will be managed in accordance with the following:</p>
+                        <div class="row">
+                            <div class="col-xs-4 indented">
+                                <h3>Holiday</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <h3>Mother</h3>
+                            </div>
+                            <div class="col-xs-1">
+                                <h3>Father</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">MLK Day</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MlkMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MlkMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MlkMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MlkMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MlkMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MlkFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MlkFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MlkFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MlkFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MlkFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">President's Day</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.PresidentsMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.PresidentsFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.PresidentsFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Mother's Day</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MothersMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MothersMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MothersMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MothersMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MothersMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MothersFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MothersFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MothersFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MothersFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MothersFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Memorial Day</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MemorialMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MemorialMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MemorialMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MemorialMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MemorialMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MemorialFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MemorialFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MemorialFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MemorialFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MemorialFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Father's Day</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.FathersMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.FathersMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.FathersMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.FathersMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.FathersMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.FathersFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.FathersFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.FathersFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.FathersFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.FathersFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Independance Day</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.IndependenceMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.IndependenceFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.IndependenceFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Labor Day</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.LaborMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.LaborMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.LaborMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.LaborMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.LaborMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.LaborFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.LaborFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.LaborFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.LaborFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.LaborFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Halloween</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.HalloweenMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.HalloweenFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.HalloweenFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Child(ren)'s Birthdays</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.ChildrensMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.ChildrensFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.ChildrensFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Father's Birthdays</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.FathersBdayMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.FathersBdayFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.FathersBdayFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Mother's Birthdays</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MothersBdayMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.MothersBdayFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.MothersBdayFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 indented">Religious Holidays</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.ReligiousMother == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousMother == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousMother == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousMother == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="childHoliday.Holiday.ReligiousFather == 1">Odd</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousFather == 2">Even</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousFather == 3">Every</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousFather == 4">Never</span>
+                                <span ng-show="childHoliday.Holiday.ReligiousFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <div class="row" ng-repeat="extra in childHoliday.ExtraHolidays">
+                            <div class="col-xs-4 indented">{{extra.HolidayName}}</div>
+                            <div class="col-xs-2 indentedTiny">
+                                <span ng-show="extra.HolidayMother == 1">Odd</span>
+                                <span ng-show="extra.HolidayMother == 2">Even</span>
+                                <span ng-show="extra.HolidayMother == 3">Every</span>
+                                <span ng-show="extra.HolidayMother == 4">Never</span>
+                                <span ng-show="extra.HolidayMother == 5">N/A</span>
+                            </div>
+                            <div class="col-xs-1 indentedTiny">
+                                <span ng-show="extra.HolidayFather == 1">Odd</span>
+                                <span ng-show="extra.HolidayFather == 2">Even</span>
+                                <span ng-show="extra.HolidayFather == 3">Every</span>
+                                <span ng-show="extra.HolidayFather == 4">Never</span>
+                                <span ng-show="extra.HolidayFather == 5">N/A</span>
+                            </div>
+                        </div>
+                        <p></p>
+                        <p ng-show="childHoliday.FridayHoliday" class="indented">
+                            The parties agree that holiday visitation will include the following Monday, when the holiday falls on Friday.
+                       
+                        </p>
+                        <p ng-show="childHoliday.MondayHoliday" class="indented">
+                            The parties agree that holiday visitation will include the preceding Friday, when the holiday falls on Monday.
+                       
+                        </p>
+                    </div>
+                    
+                    <h2>Modification of Plan or Disagreements</h2>
+                    <p class="indented">
+                        Parties may, by mutual agreement, vary the parenting time/visitation; however, such agreement 
+    shall not be a binding court order. Custody shall only be modified by court order.
+                   
+                    </p>
+                    <p class="indented">
+                        Should the parents disagree about this parenting plan or wish to modify it, they must make a good 
+                        faith effort to resolve the issue between them.
+                   
+                    </p>
+                    
+                    <h2>Parents’ Consent</h2>
+                    <p class="indented">Please review the following and initial:</p>
+                    <p class="indented">
+                        1. We recognize that a close and continuing parent-child relationship and continuity in the child’s 
+    life is in the child’s best interest. 
+                   
+                    </p>
+                    <div class="row">
+                        <p class="col-xs-5">{{parenting.ParticipantViewModel.PlaintiffsName}} Initials_______</p>
+                        <p class="col-xs-5">{{parenting.ParticipantViewModel.DefendantsName}} Initials_______</p>
+                    </div>
+                    <p class="indented">
+                        2.  We recognize that our child’s needs will change and grow as the child matures; we have 
+    made a good faith effort to take these changing needs into account so that the need for future 
+    modifications to the parenting plan are minimized.
+                   
+                    </p>
+                    <div class="row">
+                        <p class="col-xs-5">{{parenting.ParticipantViewModel.PlaintiffsName}} Initials_______</p>
+                        <p class="col-xs-5">{{parenting.ParticipantViewModel.DefendantsName}} Initials_______</p>
+                    </div>
+                    <p class="indented">
+                        3. We recognize that the parent with physical custody will make the day-to-day decisions and 
+emergency decisions while the child is residing with such parent.
+                   
+                    </p>
+                    <div class="row">
+                        <p class="col-xs-5">{{parenting.ParticipantViewModel.PlaintiffsName}} Initials_______</p>
+                        <p class="col-xs-5">{{parenting.ParticipantViewModel.DefendantsName}} Initials_______</p>
+                    </div>
+                    <p class="indented">
+                        4. We knowingly and voluntarily agree on the terms of this Parenting Plan. Each of us affirms 
+    that the information we have provided in this Plan is true and correct.
+                   
+                    </p>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <hr />
+                            <span>Plaintiff: {{parenting.ParticipantViewModel.PlaintiffsName}}</span>
+                            <br />
+                            <br />
+                        </div>
+                        <div class="col-xs-5 offset1">
+                            <hr />
+                            <span>Defendant: {{parenting.ParticipantViewModel.DefendantsName}}</span>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align: center;">
+                        <br />
+                        <br />
+                        <br />
+                        <h2>ORDER</h2>
+                        <br />
+                    </div>
+                    <p>
+                        The Court has reviewed the foregoing Parenting Plan, and it is hereby made the order of this 
+    Court.
+                   
+                    </p>
+                    <p>This Order entered on _____________________________________, 20 _____ . </p>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-5 col-lg-offset-5">
+                            <hr />
+                            <p>JUDGE</p>
+                            <p>{{parenting.County}} COUNTY SUPERIOR COURT</p>
+                        </div>
+                    </div>
+                    <div class=" form-group row">
+                        <div class="col-xs-12">
+                            <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
+                                <input type="hidden" class="html" name="html" />
+                                <input type="hidden" class="name" name="name" />
+                                <input type="submit" style="margin-left: 50px;" class="btn btn-default btn-primary printForm" value="Print to PDF">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
