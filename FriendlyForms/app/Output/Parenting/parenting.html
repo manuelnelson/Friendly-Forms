@@ -195,7 +195,7 @@ records.
                     <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 2" class="indented">The parents will share the cost of transportation for exchanging the child(ren) equally.</p>
                     <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 3" class="indented">The Mother shall pay {{parenting.ResponsibilityViewModel.MotherPercentage | percentage}}, and the Father shall pay {{parenting.ResponsibilityViewModel.FatherPercentage | percentage}} of expenses related to compliance with the visitation schedule.</p>
                     <p ng-show="parenting.ResponsibilityViewModel.TransportationCosts == 4" class="indented">
-                        Transportation costs for exchanging the child(ren) will be determined thusly: {{parenting.ResponsibilityViewModel.OtherDetails}}                   
+                        Transportation costs for exchanging the child(ren) will be determined thusly: {{parenting.ResponsibilityViewModel.OtherDetails | addPeriod}}                   
                     </p>
                     <h2>Communication</h2>
                     Parenting Time/Visitation Schedules
@@ -218,7 +218,6 @@ records.
                    
                     </p>
                     <p ng-show="parenting.CommunicationViewModel.Notification ==1">Each parent shall promptly notify the other parent of a change of address, phone number or cell phone number. A parent changing residence must give at least 30 days notice of the change and provide the full address of the new residence.</p>
-                    <div class="page-break"></div>
                     <h2>Parenting Time/Visitation Schedules</h2>
                     <p class="indented">During the term of this parenting plan, {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation:</p>
                     <p class="indented">
