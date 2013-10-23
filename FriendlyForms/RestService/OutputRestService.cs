@@ -980,9 +980,9 @@ namespace FriendlyForms.RestService
                                      ? extraordinaries.RearingTotalMonthly.Total - percentSupportObl
                                      : 0;
 
-            totalExpenses.SpecialFather = (extraordinaries.RearingTotal.Father / extraordinaries.RearingTotal.Total) * expensesFactor;
-            totalExpenses.SpecialMother = (extraordinaries.RearingTotal.Mother / extraordinaries.RearingTotal.Total) * expensesFactor;
-            totalExpenses.SpecialNonParent = (extraordinaries.RearingTotal.NonParent / extraordinaries.RearingTotal.Total) * expensesFactor;
+            totalExpenses.SpecialFather = extraordinaries.RearingTotal.Total == 0 ? 0 : (extraordinaries.RearingTotal.Father / extraordinaries.RearingTotal.Total) * expensesFactor;
+            totalExpenses.SpecialMother = extraordinaries.RearingTotal.Total == 0 ? 0 : (extraordinaries.RearingTotal.Mother / extraordinaries.RearingTotal.Total) * expensesFactor;
+            totalExpenses.SpecialNonParent = extraordinaries.RearingTotal.Total == 0 ? 0 : (extraordinaries.RearingTotal.NonParent / extraordinaries.RearingTotal.Total) * expensesFactor;
             totalExpenses.SpecialTotal = totalExpenses.SpecialFather + totalExpenses.SpecialMother +
                                          totalExpenses.SpecialNonParent;
             totalExpenses.TotalFather = extraordinaries.AllEducationTotalMonthly.Father + extraordinaries.MedicalTotalMonthly.Father + totalExpenses.SpecialFather;

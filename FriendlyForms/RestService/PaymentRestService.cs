@@ -48,12 +48,12 @@ namespace FriendlyForms.RestService
             //    PaymentService.Update(PaymentEntity);
             //    return PaymentEntity;
             //}
-            private const string UserName = "";
-            private const string Password = "";
+            private const string UserName = "spli3537";
+            private const string Password = "TglEeLW1";
             private const string TransactionType = "Sale";
             public void Post(PaymentDto request)
             {
-                var transact = new Transaction.SmartPaymentsSoapClient("https://depot.payment-gate.net/ws/transact.asmx");
+                var transact = new Transaction.SmartPaymentsSoapClient("SmartPaymentsSoap");
                 var date = request.ExpMonth.ToString() + request.ExpYear.ToString();
                 var response = transact.ProcessCreditCard(UserName, Password, TransactionType, request.CardNum, date, null,
                                            request.FullName, request.Amount.ToString(), null, null, request.ZipCode.ToString(), null,
