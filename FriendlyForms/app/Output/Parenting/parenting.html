@@ -96,10 +96,8 @@
                     <h2>Access to Records and Information</h2>
                     <p ng-show="parenting.InformationViewModel.InformationAccess == 3" class="indented">
                         Both parents are entitled to access to all of the child(ren)’s records and information, including, but 
-not limited to, education, health, extracurricular activities, and religious communications. 
-Designation as a non-custodial parent does not affect a parent’s right to equal access to these 
-records.
-                   
+                        not limited to, education, health, extracurricular activities, and religious communications. 
+                        Designation as a non-custodial parent does not affect a parent’s right to equal access to these records.               
                     </p>
                     <p ng-show="parenting.InformationViewModel.InformationAccess == 1 || parenting.InformationViewModel.InformationAccess == 2" class="indented">The following limitations on access rights applies: {{parenting.InformationViewModel.AccessOfRightsDetails | addPeriod}}</p>
                     <div class="row">
@@ -115,7 +113,7 @@ records.
                         <h2>Major Decisions</h2>
                         <p class="indented">
                             The parties must confer with one another prior to any decision related to non-emergency health care, education, religion, or extra-curricular activities.  The listing below indicates who will
-        be the primary decision maker when there is disagreement regarding the most appropriate decision. 
+                            be the primary decision maker when there is disagreement regarding the most appropriate decision. 
                        
                         </p>
                         <div ng-repeat="childDecision in parenting.ChildDecisions">
@@ -198,26 +196,26 @@ records.
                         Transportation costs for exchanging the child(ren) will be determined thusly: {{parenting.ResponsibilityViewModel.OtherDetails | addPeriod}}                   
                     </p>
                     <h2>Communication</h2>
-                    Parenting Time/Visitation Schedules
                     <p ng-show="parenting.CommunicationViewModel.AllowCommunication == 1" class="indented">
                         When the child or children are in the physical custody of one parent, the other parent will have the right
-    to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase | addPeriod}}
+                        to contact the child or children as follows: {{parenting.PpOutputFormHelper.CommunicationTypePhrase | addPeriod}}
                    
                     </p>
                     <p class="indented" ng-show="parenting.CommunicationViewModel.AllowCommunication != 1">
                         When the child or children are in the physical custody of one parent, the other parent will not have the
-            right to contact the child or children.
+                        right to contact the child or children.
                    
                     </p>
                     <p ng-show="parenting.CommunicationViewModel.Limitations == 1" class="indented">The following limitations apply to contact with the child(ren): {{parenting.CommunicationViewModel.LimitationDetails | addPeriod}}</p>
                     <p ng-show="parenting.CommunicationViewModel.Limitations == 2" class="indented">There are no limitations regarding communication with the child(ren).</p>
                     <p ng-show="parenting.PrivacyViewModel.NeedPrivacy == 1" class="indented">
                         Due to prior act of family violence, the address of the child(ren) and victim of family violence shall be
-    kept confidential. The protected parent shall promptly notify the other parent, through a third party, of
-    any change in contact information necessary to conduct visitation.
+                        kept confidential. The protected parent shall promptly notify the other parent, through a third party, of
+                        any change in contact information necessary to conduct visitation.
                    
                     </p>
                     <p ng-show="parenting.CommunicationViewModel.Notification ==1">Each parent shall promptly notify the other parent of a change of address, phone number or cell phone number. A parent changing residence must give at least 30 days notice of the change and provide the full address of the new residence.</p>
+                    <div class="page-break"></div>
                     <h2>Parenting Time/Visitation Schedules</h2>
                     <p class="indented">During the term of this parenting plan, {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation:</p>
                     <p class="indented">
@@ -227,16 +225,16 @@ records.
                         <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==3">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the first, third and fifth weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the second and fourth weekend of each month.</span>
                         <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==4">{{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}} will have the second and fourth weekend of each month for visitation. {{parenting.PpOutputFormHelper.CustodyInformation.CustodyParentName}} will have the first, third and fifth weekend of each month.</span>
                         <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==1">the parents will alfternate weekends for visitation.</span>
-                        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5">For purposes of this parenting plan, the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
+                        <span ng-show="parenting.ScheduleViewModel.NonCustodianWeekend==5"> the following describes weekend visitation: {{parenting.ScheduleViewModel.NonCustodianWeekendOther}}.</span>
 
                         A weekend will begin on {{parenting.ScheduleViewModel.WeekendDayStart}} at {{parenting.ScheduleViewModel.PickedUp}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.PickupLocation}}. The weekend ends on 
-    {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}.
+                        {{parenting.ScheduleViewModel.WeekendDayEnd}} at {{parenting.ScheduleViewModel.DroppedOff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}.
                    
                     </p>
                     <div ng-show="parenting.ScheduleViewModel.Weekdays == 1">
                         <p class="indented">
                             {{parenting.PpOutputFormHelper.CustodyInformation.NonCustodyParentName}}, as the non-custodial parent, shall have at a minimum the following rights of parenting time/visitation on weekdays, which will 
-            begin at {{parenting.ScheduleViewModel.WeekdayPickup}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.WeekdayPickupLocation}}. Weekday visitation will end at {{parenting.ScheduleViewModel.WeekdayDropoff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}. This shall apply for the following day(s):
+                            begin at {{parenting.ScheduleViewModel.WeekdayPickup}}. The child(ren) will be picked up {{parenting.ScheduleViewModel.WeekdayPickupLocation}}. Weekday visitation will end at {{parenting.ScheduleViewModel.WeekdayDropoff}}. The child(ren) will be dropped off {{parenting.ScheduleViewModel.DropOffLocation}}. This shall apply for the following day(s):
                        
                         </p>
                         <p ng-show="parenting.ScheduleViewModel.MondayParent" class="linehtless50">Monday</p>
@@ -271,7 +269,6 @@ records.
                                 Mother 
        
                             <span ng-show="childHoliday.Holiday.ThanksgivingMother == 1">will have visitation in odd years.</span>
-<<<<<<< HEAD
                             <span ng-show="childHoliday.Holiday.ThanksgivingMother == 2">will have visitation in even years.</span>
                             <span ng-show="childHoliday.Holiday.ThanksgivingMother == 3">will have visitation every year.</span>
                             <span ng-show="childHoliday.Holiday.ThanksgivingMother == 4">will never have visitation.</span>
@@ -283,7 +280,6 @@ records.
                         <h3 class="indented">Winter Break</h3>
                         <p class="indented">
                             For Winter Break, the Father  
-=======
                                 <span ng-show="childHoliday.Holiday.ThanksgivingMother == 2">will have visitation in even years.</span>
                                 <span ng-show="childHoliday.Holiday.ThanksgivingMother == 3">will have visitation every year.</span>
                                 <span ng-show="childHoliday.Holiday.ThanksgivingMother == 4">will never have visitation.</span>
@@ -298,8 +294,6 @@ records.
                             <h3 class="indented">Winter Break</h3>
                             <p class="indented">
                                 For Winter Break, the Father  
->>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
-       
                             <span ng-show="childHoliday.Holiday.ChristmasFather == 1">will have visitation in odd years, the</span>
                                 <span ng-show="childHoliday.Holiday.ChristmasFather == 2">will have visitation in even years, the</span>
                                 <span ng-show="childHoliday.Holiday.ChristmasFather == 3">will have visitation every year, the</span>
@@ -307,7 +301,6 @@ records.
                                 Mother 
        
                             <span ng-show="childHoliday.Holiday.ChristmasMother == 1">will have visitation in odd years.</span>
-<<<<<<< HEAD
                             <span ng-show="childHoliday.Holiday.ChristmasMother == 2">will have visitation in even years.</span>
                             <span ng-show="childHoliday.Holiday.ChristmasMother == 3">will have visitation every year.</span>
                             <span ng-show="childHoliday.Holiday.ChristmasMother == 4">will never have visitation.</span>
@@ -321,12 +314,11 @@ records.
                         <h3 class="indented">Spring Break</h3>
                         <p class="indented">
                             For Spring Break, the Father  
-=======
                                 <span ng-show="childHoliday.Holiday.ChristmasMother == 2">will have visitation in even years.</span>
                                 <span ng-show="childHoliday.Holiday.ChristmasMother == 3">will have visitation every year.</span>
                                 <span ng-show="childHoliday.Holiday.ChristmasMother == 4">will never have visitation.</span>
                                 Visitation will begin at the time the school day ends on the last
-        school day prior to the holiday break, and end 
+                                school day prior to the holiday break, and end 
        
                             <span ng-show="childHoliday.Holiday.Christmas == 1">at the beginning of the school day after Winter Break.</span>
                                 <span ng-show="childHoliday.Holiday.Christmas == 2">at {{childHoliday.Holiday.ChristmasTime}} on Christmas Eve.</span>
@@ -339,8 +331,6 @@ records.
                             <h3 class="indented">Spring Break</h3>
                             <p class="indented">
                                 For Spring Break, the Father  
->>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
-       
                             <span ng-show="childHoliday.Holiday.SpringBreakFather == 1">will have visitation in odd years, the</span>
                                 <span ng-show="childHoliday.Holiday.SpringBreakFather == 2">will have visitation in even years, the</span>
                                 <span ng-show="childHoliday.Holiday.SpringBreakFather == 3">will have visitation every year, the</span>
@@ -354,7 +344,6 @@ records.
                                 Visitation will begin at the time the school day ends on the last school day prior to the spring holiday break, and end
        
                             <span ng-show="childHoliday.Holiday.SpringBreak == 1">at the conclusion of Spring Break.</span>
-<<<<<<< HEAD
                             <span ng-show="childHoliday.Holiday.SpringBreak != 1">in the following manner: {{childHoliday.Holiday.SpringOther | addPeriod}}</span>
                         </p>
                         <h3 class="indented">Summer Break</h3>
@@ -364,8 +353,6 @@ records.
                         <h3 class="indented">Fall Break</h3>
                         <p class="indented">
                             For Fall Break, the Father  
-       
-=======
                                 <span ng-show="childHoliday.Holiday.SpringBreak != 1">in the following manner: {{childHoliday.Holiday.SpringOther}}</span>
                             </p>
                         </div>
@@ -377,7 +364,6 @@ records.
                             <h3 class="indented">Fall Break</h3>
                             <p class="indented">
                                 For Fall Break, the Father         
->>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
                             <span ng-show="childHoliday.Holiday.FallBreakFather == 1">will have visitation in odd years, the</span>
                                 <span ng-show="childHoliday.Holiday.FallBreakFather == 2">will have visitation in even years, the</span>
                                 <span ng-show="childHoliday.Holiday.FallBreakFather == 3">will have visitation every year, the</span>
@@ -389,14 +375,11 @@ records.
                                 <span ng-show="childHoliday.Holiday.FallBreakMother == 4">will never have visitation.</span>
                                 Visitation will begin at the time the school day ends on the last school day prior to the fall holiday break, and end       
                             <span ng-show="childHoliday.Holiday.FallBreak == 1">at the conclusion of fall break.</span>
-<<<<<<< HEAD
                             <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther | addPeriod}}</span>
                         </p>
-=======
-                                <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther}}</span>
+                            <span ng-show="childHoliday.Holiday.FallBreak != 1">in the following manner: {{childHoliday.Holiday.FallOther}}</span>
                             </p>
                         </div>
->>>>>>> 54c1a11ab50b17a36d22443d2590dae34ec9b4ee
                         <h3 class="indented">Other Holidays</h3>
                         <p class="indented">The parties agree that all other holidays will be managed in accordance with the following:</p>
                         <div class="row">
@@ -645,7 +628,7 @@ records.
                     <h2>Modification of Plan or Disagreements</h2>
                     <p class="indented">
                         Parties may, by mutual agreement, vary the parenting time/visitation; however, such agreement 
-    shall not be a binding court order. Custody shall only be modified by court order.
+                        shall not be a binding court order. Custody shall only be modified by court order.
                    
                     </p>
                     <p class="indented">
@@ -658,7 +641,7 @@ records.
                     <p class="indented">Please review the following and initial:</p>
                     <p class="indented">
                         1. We recognize that a close and continuing parent-child relationship and continuity in the child’s 
-    life is in the child’s best interest. 
+                        life is in the child’s best interest. 
                    
                     </p>
                     <div class="row">
@@ -667,8 +650,8 @@ records.
                     </div>
                     <p class="indented">
                         2.  We recognize that our child’s needs will change and grow as the child matures; we have 
-    made a good faith effort to take these changing needs into account so that the need for future 
-    modifications to the parenting plan are minimized.
+                        made a good faith effort to take these changing needs into account so that the need for future 
+                         modifications to the parenting plan are minimized.
                    
                     </p>
                     <div class="row">
@@ -677,7 +660,7 @@ records.
                     </div>
                     <p class="indented">
                         3. We recognize that the parent with physical custody will make the day-to-day decisions and 
-emergency decisions while the child is residing with such parent.
+                        emergency decisions while the child is residing with such parent.
                    
                     </p>
                     <div class="row">
@@ -686,7 +669,7 @@ emergency decisions while the child is residing with such parent.
                     </div>
                     <p class="indented">
                         4. We knowingly and voluntarily agree on the terms of this Parenting Plan. Each of us affirms 
-    that the information we have provided in this Plan is true and correct.
+                        that the information we have provided in this Plan is true and correct.
                    
                     </p>
                     <br />
@@ -712,7 +695,7 @@ emergency decisions while the child is residing with such parent.
                     </div>
                     <p>
                         The Court has reviewed the foregoing Parenting Plan, and it is hereby made the order of this 
-    Court.
+                        Court.
                    
                     </p>
                     <p>This Order entered on _____________________________________, 20 _____ . </p>
