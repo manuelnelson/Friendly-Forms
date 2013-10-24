@@ -11,6 +11,13 @@ namespace FriendlyForms.Helpers
 {
     public static class ExtensionMethods
     {
+        public static string PrependZero(this string number)
+        {
+            if (number.Length == 1)
+                number = "0" + number;
+            return number;
+        }
+
         public static List<AttorneyClientRestService.ClientDto> ToClientDto(this List<AttorneyClient> attorneyClients)
         {
             var courtService = EndpointHost.AppHost.TryResolve<ICourtService>();

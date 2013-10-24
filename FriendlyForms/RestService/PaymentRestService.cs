@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using FriendlyForms.Helpers;
 using ServiceStack.Common;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
@@ -48,16 +49,16 @@ namespace FriendlyForms.RestService
             //    PaymentService.Update(PaymentEntity);
             //    return PaymentEntity;
             //}
-            private const string UserName = "spli3537";
-            private const string Password = "TglEeLW1";
-            private const string TransactionType = "Sale";
+            private const string UserName = "spli8523";
+            private const string Password = "091BL6rX";
+            private const string TransactionType = "Sale";//"Sale";
             public void Post(PaymentDto request)
             {
                 var transact = new Transaction.SmartPaymentsSoapClient("SmartPaymentsSoap");
-                var date = request.ExpMonth.ToString() + request.ExpYear.ToString();
-                var response = transact.ProcessCreditCard(UserName, Password, TransactionType, request.CardNum, date, null,
-                                           request.FullName, request.Amount.ToString(), null, null, request.ZipCode.ToString(), null,
-                                           request.CvCode.ToString(), null);
+                var date = request.ExpMonth.ToString().PrependZero() + request.ExpYear.ToString().PrependZero();
+                var response = transact.ProcessCreditCard(UserName, Password, TransactionType, request.CardNum, date, "",
+                                           request.FullName, request.Amount.ToString(), "", "", request.ZipCode.ToString(), "",
+                                           request.CvCode.ToString(), "");
                 Console.Write(response);                
             }
 
@@ -69,7 +70,6 @@ namespace FriendlyForms.RestService
             //        PaymentService.Delete(request.Id);
             //}
         }
-
     }
 
 }
