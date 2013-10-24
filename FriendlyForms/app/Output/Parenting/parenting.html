@@ -269,7 +269,7 @@
                             <span ng-hide="((parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.ThanksgivingFather == 4)|| (!parenting.PpOutputFormHelper.CustodyInformation.NonCustodyIsFather && childHoliday.Holiday.ThanksgivingMother == 4))">Visitation will begin at the time the school day ends on the last school day prior to the holiday break, and end at {{childHoliday.Holiday.ThanksgivingTime}}
                                 <span ng-show="childHoliday.Holiday.Thanksgiving == 1">on the day before returning to school.</span>
                                 <span ng-show="childHoliday.Holiday.Thanksgiving == 2">on the first day of school after the holiday.</span>
-                                <span ng-show="childHoliday.Holiday.Thanksgiving == 3">. Visitation will be conducted in the following manner: {{childHoliday.Holiday.ThanksgivingOther | addPeriod}}</span>
+                                <span ng-show="childHoliday.Holiday.Thanksgiving == 3">Visitation will be conducted in the following manner: {{childHoliday.Holiday.ThanksgivingOther | addPeriod}}</span>
                             </span>
                         </p>
                         <h3 class="indented">Winter Break</h3>
