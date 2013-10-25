@@ -81,10 +81,11 @@
                         {{domesticMediation.AssetViewModel.BusinessDescription | addPeriod}}
                     </p>
 
+                    <h2 ng-show="domesticMediation.AssetViewModel.AdditionalAssets==1 && domesticMediation.AssetViewModel.AdditionalAssetsDescription.length>0">Other Assets</h2>
                     <p ng-show="domesticMediation.AssetViewModel.AdditionalAssets==1 && domesticMediation.AssetViewModel.AdditionalAssetsDescription.length>0" class="indented">
-                        Division of business assets and liabilities will occur as follows:
+                        Division of other assets and liabilities will occur as follows:
         <br />
-                        {{domesticMediation.AssetViewModel.AdditionalAssets | addPeriod}}
+                        {{domesticMediation.AssetViewModel.AdditionalAssetsDescription | addPeriod}}
                     </p>
                     <!-- Health Insurance -->
                     <h2>Health Insurance/COBRA</h2>

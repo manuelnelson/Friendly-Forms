@@ -56,9 +56,12 @@ namespace FriendlyForms.RestService
             {
                 var transact = new Transaction.SmartPaymentsSoapClient("SmartPaymentsSoap");
                 var date = request.ExpMonth.ToString().PrependZero() + request.ExpYear.ToString().PrependZero();
+                //var response = transact.ProcessCreditCard(UserName, Password, TransactionType, request.CardNum, date, null,
+                //                           request.FullName, request.Amount.ToString(), null, null, null, null,
+                //                           null, null);
                 var response = transact.ProcessCreditCard(UserName, Password, TransactionType, request.CardNum, date, "",
-                                           request.FullName, request.Amount.ToString(), "", "", request.ZipCode.ToString(), "",
-                                           request.CvCode.ToString(), "");
+                                           request.FullName, request.Amount.ToString(), "", "", "", "", "", "");
+                //transact.ProcessCreditCard()
                 Console.Write(response);                
             }
 

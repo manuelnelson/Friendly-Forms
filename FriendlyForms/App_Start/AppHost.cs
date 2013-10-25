@@ -288,7 +288,7 @@ namespace FriendlyForms.App_Start
             container.Register<IPreexistingSupportFormService>(c => new PreexistingSupportFormService(c.Resolve<IPreexistingSupportFormRepository>()));
             container.Register<IExtraExpenseFormService>(c => new ExtraExpenseFormService(c.Resolve<IExtraExpenseFormRepository>()));
             container.Register<IExtraExpenseService>(c => new ExtraExpenseService(c.Resolve<IExtraExpenseRepository>()));
-            container.Register<IMenuService>(c => new MenuService(c.Resolve<IChildService>(), c.Resolve<IChildFormService>(), c.Resolve<ICourtService>(), c.Resolve<IOutputService>(), c.Resolve<IDeviationsService>(), c.Resolve<IPreexistingSupportFormService>(), c.Resolve<IOtherChildrenService>(), c.Resolve<IIncomeService>()));
+            container.Register<IMenuService>(c => new MenuService(c.Resolve<IChildService>(), c.Resolve<IChildFormService>(), c.Resolve<ICourtService>(), c.Resolve<IOutputService>(), c.Resolve<IDeviationsService>(), c.Resolve<IPreexistingSupportFormService>(), c.Resolve<IOtherChildrenService>(), c.Resolve<IIncomeService>(), c.Resolve<IExtraExpenseFormService>()));
             container.Register<IBcsoService>(c => new BcsoService(c.Resolve<IBcsoRepository>()));
             container.Register<ILawFirmService>(c => new LawFirmService(c.Resolve<ILawFirmRepository>()));
             container.Register<IAttorneyPageService>(c => new AttorneyPageService(c.Resolve<IAttorneyPageRepository>()));
