@@ -17,12 +17,14 @@ namespace BusinessLogic
         private IDeviationsService DeviationsService { get; set; }
         private IPreexistingSupportFormService PreexistingSupportFormService { get; set; }
         private IOtherChildrenService OtherChildrenService { get; set; }
+        private IExtraExpenseFormService ExtraExpenseFormService { get; set; }
         private IIncomeService IncomeService { get; set; }
         private const string ParentingText = "Parenting Plan";
         private const string SuccessIcon = "icon-ok icon-green";
         private const string FinancialText = "Financial Form";
         private const string DomesticText = "Mediation Agreement";
-        public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService, IOutputService outputService, IDeviationsService deviationsService, IPreexistingSupportFormService preexistingSupportFormService, IOtherChildrenService otherChildrenService, IIncomeService incomeService)
+        public MenuService(IChildService childService, IChildFormService childFormService, ICourtService courtService, IOutputService outputService, IDeviationsService deviationsService, IPreexistingSupportFormService preexistingSupportFormService, IOtherChildrenService otherChildrenService, IIncomeService incomeService,
+            IExtraExpenseFormService extraExpenseFormService)
         {
             ChildService = childService;
             ChildFormService = childFormService;
@@ -32,6 +34,7 @@ namespace BusinessLogic
             PreexistingSupportFormService = preexistingSupportFormService;
             OtherChildrenService = otherChildrenService;
             IncomeService = incomeService;
+            ExtraExpenseFormService = extraExpenseFormService;
         }
 
         public List<MenuItem> Get(string route, long userId, bool showAdminMenu, bool showAttorneyMenu, bool isAuthenticated = false)
@@ -253,7 +256,8 @@ namespace BusinessLogic
         public bool HasScheduleE(long userId)
         {
             var deviations = DeviationsService.GetByUserId(userId) as Deviations;
-            return (deviations != null && deviations.Deviation == (int)YesNo.Yes);
+            var extraExpenses = ExtraExpenseFormService.GetByUserId(userId) as ExtraExpenseForm;            
+            return (deviations != null && deviations.Deviation == (int)YesNo.Yes && extraExpenses != null && extraExpenses.HasExtraExpenses == (int)YesNo.Yes);
         }
 
         public bool HasScheduleB(long userId)

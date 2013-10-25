@@ -6,7 +6,7 @@
         if (!data.Income.OtherDetails)
             data.Income.OtherDetails = 'There is no reason for having other income.';
         if (!data.OtherIncome.OtherDetails)
-            data.Income.OtherDetails = 'There is no reason for having other income.';
+            data.OtherIncome.OtherDetails = 'There is no reason for having other income.';
         $scope.scheduleA = data;
         $scope.isLoaded = true;
         $timeout(function () {

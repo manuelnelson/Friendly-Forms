@@ -1,15 +1,62 @@
-﻿<div class="form-vertical wrapper" ng-controller="PaymentCtrl">
+﻿<div ng-controller="PaymentCtrl">
     <div class="row">
         <div class="col-lg-6">
             <form class="well form-vertical" name="paymentForm" ng-submit="submit()">
                 <fieldset>
                     <legend>Payment</legend>
                     <div class="form-group row">
-                        <label class="informative col-lg-12">
-                            This will be the payment page.  Temporary info here until for flow sake, but hit the next button, and go to the admin page!
+                        <label class="col-lg-12">
+                            Please enter your billing information.
                         </label>
-                        <div class="col-lg-12">
-                            <input type="submit" class="btn btn-default btn-primary" value="Submit" />
+                        <div class="col-lg-8">
+                            <input class="form-control" name="FullName" required ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="user.FullName" placeholder="Full Name*" type="text" value="">
+                        </div>
+                        <div ng-show="paymentForm.FullName.$dirty && paymentForm.FullName.$invalid">
+                            <span class="form-error" ng-show="paymentForm.FullName.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
+                            <span class="form-error" ng-show="paymentForm.FullName.$error.required">This field is required.</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <input class="form-control" name="CardNum" required ng-pattern="/^[0-9/s]*$/" ng-model="user.CardNum" placeholder="Card Number*" type="text" value="">
+                        </div>
+                        <div ng-show="paymentForm.CardNum.$dirty && paymentForm.CardNum.$invalid">
+                            <span class="form-error" ng-show="paymentForm.CardNum.$error.pattern">Only numbers allowed.</span>
+                            <span class="form-error" ng-show="paymentForm.CardNum.$error.required">This field is required.</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-3">
+                            <input class="form-control" required name="ExpMonth" ng-pattern="/^[0-9]{1,2}$/" ng-model="user.ExpMonth" placeholder="Expiration Month (MM)*" type="text" value="">
+                        </div>
+                        <div class="col-lg-3">
+                            <input class="form-control" required name="ExpYear" ng-pattern="/^[0-9]{1,2}$/" ng-model="user.ExpYear" placeholder="Expiration Year (YY)*" type="text" value="">
+                        </div>
+                        <div ng-show="paymentForm.ExpMonth.$dirty && paymentForm.ExpMonth.$invalid">
+                            <span class="form-error" ng-show="paymentForm.ExpMonth.$error.pattern">Only numbers allowed.</span>
+                            <span class="form-error" ng-show="paymentForm.ExpMonth.$error.required">This field is required.</span>
+                        </div>
+                        <div ng-show="paymentForm.ExpYear.$dirty && paymentForm.ExpYear.$invalid">
+                            <span class="form-error" ng-show="paymentForm.ExpYear.$error.pattern">Only numbers allowed.</span>
+                            <span class="form-error" ng-show="paymentForm.ExpYear.$error.required">This field is required.</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <input class="form-control" required name="ZipCode" ng-pattern="/^[0-9/s]*$/" ng-model="user.ZipCode" placeholder="Zip Code*" type="text" value="">
+                        </div>
+                        <div ng-show="paymentForm.CardNum.$dirty && paymentForm.CardNum.$invalid">
+                            <span class="form-error" ng-show="paymentForm.CardNum.$error.pattern">Only numbers allowed.</span>
+                            <span class="form-error" ng-show="paymentForm.CardNum.$error.required">This field is required.</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <input class="form-control" required name="CvCode" ng-pattern="/^[0-9/s]*$/" ng-model="user.CvCode" placeholder="Cv Code*" type="text" value="">
+                        </div>
+                        <div ng-show="paymentForm.CvCode.$dirty && paymentForm.CvCode.$invalid">
+                            <span class="form-error" ng-show="paymentForm.CardNum.$error.pattern">Only numbers allowed.</span>
+                            <span class="form-error" ng-show="paymentForm.CardNum.$error.required">This field is required.</span>
                         </div>
                     </div>
                 </fieldset>

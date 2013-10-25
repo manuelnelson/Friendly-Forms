@@ -168,7 +168,7 @@
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-model="deviation.VisitationFather" name="VisitationFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                                     <div ng-show="deviationForm.VisitationFather.$dirty && deviationForm.VisitationFather.$invalid || (showErrors && deviationForm.VisitationFather.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                                        <span class="form-error" ng-show="deviationForm.VisitationFather.$error.pattern">This field must be a number.</span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -192,13 +192,13 @@
                                 <div class="col-lg-4">
                                     <input class="form-control" ng-model="deviation.AlimonyPaidFather" name="AlimonyPaidFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                                     <div ng-show="deviationForm.AlimonyPaidFather.$dirty && deviationForm.AlimonyPaidFather.$invalid || (showErrors && deviationForm.AlimonyPaidFather.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                                        <span class="form-error" ng-show="deviationForm.AlimonyPaidFather.$error.pattern">This field must be a number.</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-offset-1">
                                     <input class="form-control" ng-model="deviation.AlimonyPaidMother" name="AlimonyPaidMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                                     <div ng-show="deviationForm.AlimonyPaidMother.$dirty && deviationForm.AlimonyPaidMother.$invalid || (showErrors && deviationForm.AlimonyPaidMother.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                                        <span class="form-error" ng-show="deviationForm.AlimonyPaidMother.$error.pattern">This field must be a number.</span>
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +220,7 @@
                                 <div class="col-lg-4 col-md-offset-1">
                                     <input class="form-control" ng-model="deviation.MortgageMother" name="MortgageMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
                                     <div ng-show="deviationForm.MortgageMother.$dirty && deviationForm.MortgageMother.$invalid || (showErrors && deviationForm.MortgageMother.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                                        <span class="form-error" ng-show="deviationForm.MortgageMother.$error.pattern">This field must be a number.</span>
                                     </div>
                                 </div>
                             </div>
@@ -291,9 +291,9 @@
                             <div class="form-group row">
                                 <label class="col-md-4 form-question">Explain why the noncustodial parent should be granted a Low Income Deviation.</label>
                                 <div class="col-lg-4">
-                                    <textarea cols="20" placeholder="Explain" class="form-control" ng-model="deviation.WhyLow" name="WhyLow" rows="2"></textarea>
-                                    <div ng-show="deviationForm.HealthFather.$dirty && deviationForm.HealthFather.$invalid || (showErrors && deviationForm.HealthFather.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.HealthFather.$error.pattern">This field must be a number.</span>
+                                    <textarea cols="20" placeholder="Explain" class="form-control" ng-pattern="/^(?!.*--)[A-Za-z0-9\.\?=\+\s.[\]@$'()!~:#/&amp;_\-,\%]*$/" ng-model="deviation.WhyLow" name="WhyLow" rows="2"></textarea>
+                                    <div ng-show="deviationForm.WhyLow.$dirty && deviationForm.WhyLow.$invalid || (showErrors && deviationForm.WhyLow.$invalid)">
+                                        <span class="form-error" ng-show="deviationForm.WhyLow.$error.pattern">Only alpha-numeric characters and []@$'()!~:#&amp;_,/-?\% are allowed.</span>
                                     </div>
                                 </div>
                             </div>

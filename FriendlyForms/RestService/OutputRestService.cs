@@ -12,6 +12,7 @@ using BusinessLogic.Properties;
 using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Models;
+using Models.Contract;
 using Models.ViewModels;
 using Pechkin;
 using Pechkin.Synchronized;
@@ -273,6 +274,9 @@ namespace FriendlyForms.RestService
         public List<ChildCareWithTotals> ChildCare { get; set; }
         [DataMember]
         public ParentNames ParentNames { get; set; }
+        [DataMember]
+        public ChildCareForm ChildCareForm { get; set; }
+
         //[DataMember]
         //public string Father { get; set; }
         //[DataMember]
@@ -652,6 +656,7 @@ namespace FriendlyForms.RestService
         public IVehicleFormService VehicleFormService { get; set; }
         public IVehicleService VehicleService { get; set; }
         public IMenuService MenuService { get; set; }
+        public IChildCareFormService ChildCareFormService { get; set; }
 
 
 
@@ -1282,8 +1287,6 @@ namespace FriendlyForms.RestService
         private ScheduleDDtoResp GetScheduleD(long userId)
         {
             var health = HealthService.GetByUserId(userId) as Health;
-            var childCares = ChildCareService.GetAllByUserId(userId);
-            var childCaresWithTotals = childCares.Select(childCare => childCare.TranslateTo<ChildCareWithTotals>()).ToList();
 
             var schedule = new ScheduleD
             {
@@ -1302,6 +1305,9 @@ namespace FriendlyForms.RestService
                 HealthInsurance = health.NonCustodialHealthAmount ?? 0
             };
 
+            var childCareForm = ChildCareFormService.GetByUserId(userId) as ChildCareForm;
+            var childCares = ChildCareService.GetAllByUserId(userId);
+            var childCaresWithTotals = childCares.Select(childCare => childCare.TranslateTo<ChildCareWithTotals>()).ToList();
             for (var i = 0; i < childCares.Count; i++)
             {
                 var childCareWithTotal = childCaresWithTotals[i];
@@ -1336,7 +1342,6 @@ namespace FriendlyForms.RestService
             schedule.TotalMonthly = (double)schedule.TotalYearly / 12;
             otherSchedule.TotalMonthly = (double)otherSchedule.TotalYearly / 12;
             nonParentSchedule.TotalMonthly = (double)nonParentSchedule.TotalYearly / 12;
-
             schedule.WorkRelated = schedule.TotalMonthly;
             otherSchedule.WorkRelated = otherSchedule.TotalMonthly;
             nonParentSchedule.WorkRelated = nonParentSchedule.TotalMonthly;
@@ -1368,6 +1373,7 @@ namespace FriendlyForms.RestService
                     NonParentScheduleD = nonParentSchedule,
                     TotalScheduleD = totalScheduleD,
                     ChildCare = childCaresWithTotals,
+                    ChildCareForm = childCareForm,
                 };
         }
 

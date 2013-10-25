@@ -188,11 +188,6 @@
                         </tbody>
                     </table>
                     <br />
-                    <!--The children are mine by a previous marriage-->
-                    <div class="borderBox centered" style="width: 90%;" ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0 || scheduleB.ScheduleB.IncomeDetails.length > 0">
-                        <p ng-show="scheduleB.ScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Father}} is based upon:</span> {{scheduleB.ScheduleB.IncomeDetails}}</p>
-                        <p ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.IncomeDetails}}</p>
-                    </div>
                     <div class=" form-group row">
                         <div class="col-lg-12">
                             <form action="/output/pdf" id="bottomPrintButton" method="post" target="_blank">
