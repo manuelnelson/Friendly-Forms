@@ -16,8 +16,8 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>{{scheduleB.Father}}</th>
-                                <th>{{scheduleB.Mother}}</th>
+                                <th>{{scheduleB.ParentNames.Father}}</th>
+                                <th>{{scheduleB.ParentNames.Mother}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,8 +68,8 @@
                                 <td>Court Name</td>
                                 <td>Case #</td>
                                 <td>Order Date</td>
-                                <td>{{scheduleB.Father}}</td>
-                                <td>{{scheduleB.Mother}}</td>
+                                <td>{{scheduleB.ParentNames.Father}}</td>
+                                <td>{{scheduleB.ParentNames.Mother}}</td>
                             </tr>
                             <tr ng-repeat="court in scheduleB.ScheduleB.PreexistingSupport">
                                 <td>
@@ -150,8 +150,8 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <p ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Mother}} is based upon: {{scheduleB.OtherScheduleB.OtherChildrenDescription}}</p>
-                                    <p ng-show="scheduleB.ScheduleB.OtherChildrenDescription.length > 0">The addition of Qualified Children for {{scheduleB.Father}} is based upon: {{scheduleB.ScheduleB.OtherChildrenDescription}}</p>
+                                    <p ng-show="scheduleB.OtherScheduleB.OtherChildrenDescription.length > 0">{{scheduleB.ParentNames.Mother}} is including an Other Qualified Child because: {{scheduleB.OtherScheduleB.OtherChildrenDescription}}</p>
+                                    <p ng-show="scheduleB.ScheduleB.OtherChildrenDescription.length > 0">{{scheduleB.ParentNames.Father}} is including an Other Qualified Child because: {{scheduleB.ScheduleB.OtherChildrenDescription}}</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -160,8 +160,8 @@
                         <tbody>
                             <tr>
                                 <td></td>
-                                <td>{{scheduleB.Father}}</td>
-                                <td>{{scheduleB.Mother}}</td>
+                                <td>{{scheduleB.ParentNames.Father}}</td>
+                                <td>{{scheduleB.ParentNames.Mother}}</td>
                             </tr>
                             <tr>
                                 <td>11. Subtotal</td>

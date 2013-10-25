@@ -251,9 +251,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ScheduleB OtherScheduleB { get; set; }
         [DataMember]
-        public string Father { get; set; }
-        [DataMember]
-        public string Mother { get; set; }
+        public ParentNames ParentNames { get; set; }
     }
     #endregion
 
@@ -814,8 +812,7 @@ namespace FriendlyForms.RestService
             {
                 ScheduleB = schedule,
                 OtherScheduleB = scheduleOther,
-                Father = parentNames.Father,
-                Mother = parentNames.Mother
+                ParentNames = parentNames,
             };
         }
 

@@ -163,14 +163,14 @@
                         </tbody>
                     </table>
                     <br />
-                    <div class="borderBox centered" style="width: 90%;">
-                        <p><span style="font-weight: bold">Other income for {{scheduleA.Father}} is based upon:</span> {{scheduleA.Income.OtherDetails}}</p>
-                        <p><span style="font-weight: bold">Other income for {{scheduleA.Mother}} is based upon:</span> {{scheduleA.OtherIncome.OtherDetails}}</p>
-                    </div>
                     <!--The children are mine by a previous marriage-->
-                    <div class="borderBox centered" style="width: 90%;" ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0 || scheduleB.ScheduleB.IncomeDetails.length > 0">
-                        <p ng-show="scheduleB.ScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Father}} is based upon:</span> {{scheduleB.ScheduleB.IncomeDetails}}</p>
-                        <p ng-show="scheduleB.OtherScheduleB.IncomeDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleB.Mother}} is based upon:</span> {{scheduleB.OtherScheduleB.IncomeDetails}}</p>
+                    <div class="borderBox centered" style="width: 90%;" ng-show="scheduleA.Income.OtherDetails.length > 0 || scheduleA.OtherIncome.OtherDetails.length > 0">
+                        <p ng-show="scheduleA.Income.OtherDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleA.Father}} is based upon:</span> {{scheduleA.Income.OtherDetails}}</p>
+                        <p ng-show="scheduleA.OtherIncome.OtherDetails.length > 0"><span style="font-weight: bold">Other income for {{scheduleA.Mother}} is based upon:</span> {{scheduleA.OtherIncome.OtherDetails}}</p>
+                    </div>
+                    <div class="borderBox centered" style="width: 90%;" ng-show="scheduleA.Income.OtherDetails.length == 0 && scheduleA.OtherIncome.OtherDetails.length == 0 && (scheduleA.OtherIncome.OtherIncome.length > 0 || scheduleA.Income.OtherIncome.length > 0)">
+                        <p ng-show="scheduleA.OtherIncome.OtherIncome.length > 0"><span style="font-weight: bold">Other income for {{scheduleA.Father}} is based upon:</span> {{scheduleA.Income.OtherIncome}}</p>
+                        <p ng-show="scheduleA.OtherIncome.OtherIncome.length > 0"><span style="font-weight: bold">Other income for {{scheduleA.Mother}} is based upon:</span> {{scheduleA.OtherIncome.OtherIncome}}</p>
                     </div>
 
                     <div class=" form-group row">

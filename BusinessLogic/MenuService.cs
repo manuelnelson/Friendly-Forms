@@ -268,7 +268,7 @@ namespace BusinessLogic
             var otherPreexistingForm = PreexistingSupportFormService.GetByUserId(userId, isOtherParent: true);
             if (otherPreexistingForm != null && otherPreexistingForm.Support == (int)YesNo.Yes)
                 return true;
-            if (IncomeService.HasNonW2Income(userId))
+            if (IncomeService.HasSelfIncome(userId))
                 return true;
             return OtherChildrenService.HasOtherChildren(userId);
         }

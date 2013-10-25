@@ -61,7 +61,6 @@ namespace FriendlyForms.RestService
                 //                           null, null);
                 var response = transact.ProcessCreditCard(UserName, Password, TransactionType, request.CardNum, date, "",
                                            request.FullName, request.Amount.ToString(), "", "", "", "", "", "");
-                //transact.ProcessCreditCard()
                 Console.Write(response);                
             }
 
