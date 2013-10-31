@@ -19,6 +19,7 @@ namespace FriendlyForms.RestService
         {
             public long Id { get; set; }
             public long[] Ids { get; set; }
+            public int AmountId { get; set; }
             public string CardNum { get; set; }
             public int ExpMonth { get; set; }
             public int ExpYear { get; set; }
@@ -55,7 +56,7 @@ namespace FriendlyForms.RestService
             {
                 var transact = new Transaction.SmartPaymentsSoapClient("SmartPaymentsSoap");
                 var date = request.ExpMonth.ToString().PrependZero() + request.ExpYear.ToString().PrependZero();
-                const string amount = "500";
+                var amount = request.AmountId == 1 ? "150" : "250";                
                 var response = transact.ProcessCreditCard(UserName, Password, TransactionType, request.CardNum, date, "",
                                            request.FullName, amount, "", "", "", "", "", "");
                 if (response.RespMSG == "Approved")

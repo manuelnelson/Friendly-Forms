@@ -67,7 +67,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "
         when('/Account/Survey/', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
         when('/Account/ForgotPassword/', { caseInsensitiveMatch: true, controller: ForgotPasswordCtrl, templateUrl: '/app/Account/ForgotPassword/ForgotPassword.html' }).
         when('/Account/PasswordReset/', { caseInsensitiveMatch: true, controller: PasswordResetCtrl, templateUrl: '/app/Account/PasswordReset/PasswordReset.html' }).
-        when('/Account/Payment/User/:userId', { caseInsensitiveMatch: true, controller: UserPaymentCtrl, templateUrl: '/app/Account/UserPayment/UserPayment.html' }).
+        when('/Account/Payment/User/:userId/Amount/:amountId', { caseInsensitiveMatch: true, controller: UserPaymentCtrl, templateUrl: '/app/Account/UserPayment/UserPayment.html' }).
+        when('/Account/Pricing/User/:userId/', { caseInsensitiveMatch: true, controller: UserPricingCtrl, templateUrl: '/app/Account/UserPricing/UserPricing.html' }).
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);

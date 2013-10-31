@@ -307,6 +307,8 @@
     <Content Include="app\Account\Unauthorized\unauthorized-controller.js" />
     <Content Include="app\Account\Unauthorized\unauthorized-service.js" />
     <Content Include="app\Account\Unauthorized\Unauthorized.html" />
+    <Content Include="app\Account\UserPricing\userPricing-controller.js" />
+    <Content Include="app\Account\UserPricing\userPricing.html" />
     <Content Include="app\Administrator\Agreement\agreement-controller.js" />
     <Content Include="app\Administrator\Agreement\agreement-service.js" />
     <Content Include="app\Administrator\ClientCases\clientCases-controller.js" />

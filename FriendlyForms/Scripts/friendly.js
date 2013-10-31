@@ -37660,7 +37660,8 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "
         when('/Account/Survey/', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
         when('/Account/ForgotPassword/', { caseInsensitiveMatch: true, controller: ForgotPasswordCtrl, templateUrl: '/app/Account/ForgotPassword/ForgotPassword.html' }).
         when('/Account/PasswordReset/', { caseInsensitiveMatch: true, controller: PasswordResetCtrl, templateUrl: '/app/Account/PasswordReset/PasswordReset.html' }).
-        when('/Account/Payment/User/:userId', { caseInsensitiveMatch: true, controller: UserPaymentCtrl, templateUrl: '/app/Account/UserPayment/UserPayment.html' }).
+        when('/Account/Payment/User/:userId/Amount/:amountId', { caseInsensitiveMatch: true, controller: UserPaymentCtrl, templateUrl: '/app/Account/UserPayment/UserPayment.html' }).
+        when('/Account/Pricing/User/:userId/', { caseInsensitiveMatch: true, controller: UserPricingCtrl, templateUrl: '/app/Account/UserPricing/UserPricing.html' }).
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
@@ -41111,6 +41112,9 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
         clientService.getClients($routeParams.attorneyId).then(function (clients) {
             $scope.clients = clients;
         });
+        userService.getUserAuth($routeParams.attorneyId).then(function (userAuth) {
+            $scope.userAuth = userAuth;
+        });
 
         $scope.openClient = function (client) {
             $location.path('/Attorney/Client/' + client.ClientUserId);
@@ -41145,7 +41149,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                     Id: userAuth.UserId,
                     UserAuthId: userAuth.UserAuthId,
                     Paid: true,
-                    DisplayName: scope.user.DisplayName,
+                    DisplayName: $scope.user.DisplayName,
                 };
                 //make sure user here is "Paid"
                 userService.users.update(null, user, function() {
@@ -41432,7 +41436,7 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
             if (menuItem)
                 $location.path(menuItem.subMenuItems[0].path);
             else {
-                if (typeof service.menuItems[1] != 'undefined') {
+                if (typeof service.menuItems[1] != 'undefined' && service.menuItems[1].text != 'Log out') {
                     //href has hashbang...remove this
                     $location.path(service.menuItems[1].path.replace("/#",""));
                 } else {
@@ -41454,8 +41458,8 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
             return false;
         },
         menu: $resource('/api/menus/:userId', { userId: '@userId' },
-            {
-                getList: { method: 'GET', isArray: true, params: { format: 'json' } },
+            {   //DateTime is specifically used as a cache breaker for IE.  cache false doesn't appear to work.
+                getList: { method: 'GET', cache: false, isArray: true, params: { format: 'json', DateTime: new Date().getTime() } },
             }),
         nextMenu: function () {
             //Get current menu from the current path
@@ -41675,8 +41679,8 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
             getList: { method: 'GET', isArray: true, params: { format: 'json' } },
         }),
         userSession: $resource('/api/usersession/', {},
-        {
-            get: { method: 'GET', params: { format: 'json' } },
+        {//DateTime used as a cache-breaker
+            get: { method: 'GET', cache:false, params: { format: 'json', DateTime: new Date().getTime() } },
         }),
         getCurrentUserSession: function () {
             var deferred = $q.defer();
@@ -41740,7 +41744,7 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
        var service = {
            auth: $resource('/api/auth/logout', {},
                {
-                   get: { method: 'GET', params: { format: 'json' } },
+                   get: { method: 'GET', cache:false, params: { format: 'json' } },
                }),
            refresh: function (userId) {
                var deferred = $q.defer();
@@ -41763,7 +41767,7 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
            },
            logoff: function () {
                var deferred = $q.defer();
-               service.auth.get({}, function (data) {
+               service.auth.save(null, {}, function (data) {
                    return deferred.resolve(data);
                });
                return deferred.promise;
@@ -41809,7 +41813,7 @@ LogoffCtrl.$inject = ['$scope', '$routeParams', '$location', 'logoffService', 'h
         logout: function () {
             loginMenuService.logoff().then(function () {
                 loginMenuService.refresh();
-                menuService.getMenu();
+                //menuService.getMenu();
                 $location.path('/');
             });
         }
@@ -41866,7 +41870,7 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
 		$scope.user.UserName = $scope.user.Email;		
 		registerService.register.save(null, $scope.user, function () {
 		    userService.getCurrentUserSession().then(function(userData) {
-		        $location.path('/Account/Payment/User/' + userData.CustomId);
+		        $location.path('/Account/Pricing/User/' + userData.CustomId);
 		    });
 		});
     };
@@ -41944,3 +41948,15 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
     };
     return service;
 }]);
+;var UserPricingCtrl = ['$scope', '$routeParams', '$location', 'userService', 'menuService', 'headerService',
+    function ($scope, $routeParams, $location, userService, menuService, headerService) {
+        $scope.showErrors = false;
+        $scope.submit = function () {
+            if ($scope.pricingForm.$invalid) {
+                $scope.showErrors = true;
+                return;
+            }
+            $location.path('/Account/Payment/User/' + $routeParams.userId + '/Amount/' + $scope.pricing.AmountId);
+        };
+        headerService.setTitle("Pricing");
+    }];

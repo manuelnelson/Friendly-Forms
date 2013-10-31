@@ -1,0 +1,36 @@
+﻿<div class="form-vertical wrapper">
+    <div class="row">
+        <div class="col-lg-6">
+            <form class="well form-vertical" ng-submit="submit()" name="pricingForm" id="pricingForm">
+                <fieldset>
+                    <legend>Pricing</legend>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <label class="informative col-lg-12">
+                                There are two pricing levels available, depeding on if children are involved in the case.  Please select one of the two options below.
+                            </label>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="radio">
+                                <label>
+                                    No Children Inolved: $150
+                                    <input required ng-model="pricing.AmountId" name="AmountId" type="radio" value="1"></label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    Children Involved: $250
+                                    <input required ng-model="pricing.AmountId" name="AmountId" type="radio" value="2"></label>
+                            </div>
+                            <div ng-show="showErrors && pricingForm.AmountId.$invalid">
+                                <span class="form-error" ng-show="pricingForm.AmountId.$error.required">The field is required</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <button class="btn btn-default btn-primary">Next</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

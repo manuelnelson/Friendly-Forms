@@ -51,6 +51,15 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-8">
+                        <input class="form-control" required name="ZipCode" ng-pattern="/^[0-9/s]*$/" ng-model="payment.ZipCode" placeholder="Zip Code*" type="text" value="">
+                    </div>
+                    <div ng-show="paymentForm.ZipCode.$dirty && paymentForm.ZipCode.$invalid">
+                        <span class="form-error" ng-show="paymentForm.ZipCode.$error.pattern">Only numbers allowed.</span>
+                        <span class="form-error" ng-show="paymentForm.ZipCode.$error.required">This field is required.</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-8">
                         <input type="submit" id="submit" ng-click="submit()" class="btn btn-default btn-primary" value="Submit Payment">
                     </div>
                 </div>

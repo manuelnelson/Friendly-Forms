@@ -5,6 +5,7 @@
         if ($scope.paymentForm.$invalid) {
             return;
         }
+        $scope.payment.AmountId = $routeParams.amountId;
         paymentService.oneTime.save(null, $scope.payment, function () {            
             loginMenuService.refresh();
             $location.path('/');

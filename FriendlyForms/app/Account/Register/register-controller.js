@@ -8,7 +8,7 @@
 		$scope.user.UserName = $scope.user.Email;		
 		registerService.register.save(null, $scope.user, function () {
 		    userService.getCurrentUserSession().then(function(userData) {
-		        $location.path('/Account/Payment/User/' + userData.CustomId);
+		        $location.path('/Account/Pricing/User/' + userData.CustomId);
 		    });
 		});
     };

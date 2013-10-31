@@ -144,3 +144,4 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Account/UserPayment/UserPayment-controller.js
 ../app/Account/PasswordReset/PasswordReset-controller.js
 ../app/Account/PasswordReset/PasswordReset-service.js
+../app/Account/UserPricing/UserPricing-controller.js
