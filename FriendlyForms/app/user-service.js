@@ -19,8 +19,8 @@
             getList: { method: 'GET', isArray: true, params: { format: 'json' } },
         }),
         userSession: $resource('/api/usersession/', {},
-        {
-            get: { method: 'GET', params: { format: 'json' } },
+        {//DateTime used as a cache-breaker
+            get: { method: 'GET', cache:false, params: { format: 'json', DateTime: new Date().getTime() } },
         }),
         getCurrentUserSession: function () {
             var deferred = $q.defer();

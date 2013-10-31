@@ -12,7 +12,7 @@
                     LawFirmId: $routeParams.lawFirmId,
                     Position: 'Administrator'
                 }, function() {
-                    $location.path('/Administrator/Agreement/Admin/' + userData.CustomId);
+                    $location.path('/Administrator/Agreement/Admin/' + userData.CustomId + '/Subscription/' + $routeParams.subscription);
                 });
                 
             });

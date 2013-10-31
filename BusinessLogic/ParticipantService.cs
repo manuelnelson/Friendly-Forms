@@ -4,7 +4,7 @@ using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using DataInterface;
 using Models;
-using Models.ViewModels;
+using Models.Helper;
 
 namespace BusinessLogic
 {

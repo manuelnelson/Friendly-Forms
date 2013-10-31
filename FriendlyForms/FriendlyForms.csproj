@@ -270,7 +270,7 @@
     <Compile Include="RestService\UserRestService.cs" />
     <Compile Include="RestService\VehicleFormRestService.cs" />
     <Compile Include="RestService\VehicleRestService.cs" />
-    <Compile Include="Service References\CardSafe\Reference.cs">
+    <Compile Include="Service References\Recurring\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -296,6 +296,8 @@
     <Content Include="app\Account\PasswordReset\passwordReset-controller.js" />
     <Content Include="app\Account\PasswordReset\passwordReset-service.js" />
     <Content Include="app\Account\PasswordReset\PasswordReset.html" />
+    <Content Include="app\Account\UserPayment\userPayment-controller.js" />
+    <Content Include="app\Account\UserPayment\userPayment.html" />
     <Content Include="app\Account\Register\register-controller.js" />
     <Content Include="app\Account\Register\register-service.js" />
     <Content Include="app\Account\Register\Register.html" />
@@ -1220,17 +1222,18 @@
     <Content Include="Scripts\bootstrap-transition.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <Content Include="Service References\CardSafe\configuration91.svcinfo" />
-    <Content Include="Service References\CardSafe\configuration.svcinfo" />
-    <Content Include="Service References\CardSafe\FriendlyForms.CardSafe.Response.datasource">
+    <Content Include="Service References\Recurring\FriendlyForms.Recurring.RecurringResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\CardSafe\Reference.svcmap">
+    <Content Include="Service References\Recurring\recurring.wsdl" />
+    <None Include="Service References\Transaction\configuration91.svcinfo" />
+    <None Include="Service References\Transaction\configuration.svcinfo" />
+    <Content Include="Service References\Recurring\configuration91.svcinfo" />
+    <Content Include="Service References\Recurring\configuration.svcinfo" />
+    <Content Include="Service References\Recurring\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </Content>
-    <None Include="Service References\Transaction\configuration91.svcinfo" />
-    <None Include="Service References\Transaction\configuration.svcinfo" />
     <Content Include="Service References\Transaction\FriendlyForms.Transaction.Response.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -1593,7 +1596,6 @@
     <Content Include="Scripts\jquery-1.9.1.min.js.map">
       <DependentUpon>jquery-1.9.1.js</DependentUpon>
     </Content>
-    <Content Include="Service References\CardSafe\cardsafe.wsdl" />
     <None Include="Service References\Transaction\transact.wsdl" />
   </ItemGroup>
   <ItemGroup>
@@ -1646,7 +1648,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\CardSafe\" />
+    <WCFMetadataStorage Include="Service References\Recurring\" />
     <WCFMetadataStorage Include="Service References\Transaction\" />
   </ItemGroup>
   <PropertyGroup>
@@ -1671,7 +1673,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>58028</DevelopmentServerPort>
+          <DevelopmentServerPort>53007</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

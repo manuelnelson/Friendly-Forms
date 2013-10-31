@@ -6,7 +6,7 @@ using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using Models;
 using Models.Contract;
-using Models.ViewModels;
+using Models.Helper;
 using ServiceStack.Common;
 
 namespace BusinessLogic
@@ -448,16 +448,7 @@ namespace BusinessLogic
             var court = CourtService.GetByUserId(userId);
             var participants = ParticipantService.GetByUserId(userId);
             var childForm = ChildFormService.GetByUserId(userId);
-            var user = UserService.Get(userId);
             var incompleteForms = new List<IncompleteForm>();
-            if (user == null || !user.Verified)
-            {
-                incompleteForms.Add(new IncompleteForm
-                {
-                    Name = "Beta Agreement",
-                    Path = "/Starter/BetaAgreement/User/" + userId
-                });                                
-            }
             if (court == null || !court.IsValid())
             {
                 incompleteForms.Add(new IncompleteForm

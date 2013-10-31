@@ -76,7 +76,7 @@ namespace FriendlyForms.Helpers
                 Id = user.Id,
                 LawFirmId = user.LawFirmId,
                 DisplayName = userAuth.DisplayName,
-                Verified = user.Verified,
+                Paid = user.Paid,
                 Position = user.Position,
                 UserAuthId = user.UserAuthId
             };

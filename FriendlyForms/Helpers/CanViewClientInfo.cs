@@ -23,7 +23,7 @@ namespace FriendlyForms.Helpers
                 throw new HttpError(HttpStatusCode.Unauthorized, "You are not logged in.");
             var authUserId = Convert.ToInt64(((CustomUserSession)session).CustomId);
             var clientUserId = ((IHasUser)requestDto).UserId;
-            if (authUserId == clientUserId)
+            if (authUserId == clientUserId && ((CustomUserSession)session).Paid)
                 return;
             var attorneyClientService = AppHostBase.Resolve<IAttorneyClientService>();
             if (attorneyClientService.GetFiltered(x => x.ClientUserId == clientUserId && x.UserId == authUserId).Any())

@@ -23,7 +23,7 @@ namespace FriendlyForms.Models
         }
 
         public string CustomId { get; set; }
-
+        public bool Paid { get; set; }
         public override void OnAuthenticated(IServiceBase authService, IAuthSession session, IOAuthTokens tokens, Dictionary<string, string> authInfo)
         {
             base.OnAuthenticated(authService, session, tokens, authInfo);
@@ -45,7 +45,7 @@ namespace FriendlyForms.Models
             //Resolve the DbFactory from the IOC and persist the user info
             var newUser = UserService.CreateOrUpdate(user);
             ((CustomUserSession)session).CustomId = newUser.Id.ToString();
-
+            ((CustomUserSession)session).Paid = newUser.Paid;
             authService.SaveSession(session, TimeSpan.FromDays(7 * 2));
         }
 

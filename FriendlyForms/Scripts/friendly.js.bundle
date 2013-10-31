@@ -141,5 +141,6 @@ ui-bootstrap-custom-tpls-0.5.0.js
 ../app/Account/Register/register-service.js
 ../app/Account/Survey/Survey-controller.js
 ../app/Account/Survey/Survey-service.js
+../app/Account/UserPayment/UserPayment-controller.js
 ../app/Account/PasswordReset/PasswordReset-controller.js
 ../app/Account/PasswordReset/PasswordReset-service.js

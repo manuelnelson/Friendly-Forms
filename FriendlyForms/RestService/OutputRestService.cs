@@ -13,7 +13,7 @@ using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Models;
 using Models.Contract;
-using Models.ViewModels;
+using Models.Helper;
 using Pechkin;
 using Pechkin.Synchronized;
 using ServiceStack.Common;

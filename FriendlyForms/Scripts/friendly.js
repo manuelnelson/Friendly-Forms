@@ -37643,11 +37643,11 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "
         when('/Output/ScheduleE/User/:userId', { caseInsensitiveMatch: true, controller: ScheduleECtrl, templateUrl: '/app/Output/ScheduleE/ScheduleE.html' }).
         when('/Output/ChildSupport/User/:userId', { caseInsensitiveMatch: true, controller: ChildSupportOutputCtrl, templateUrl: '/app/Output/ChildSupport/ChildSupport.html' }).
         when('/Output/CSA/User/:userId', { caseInsensitiveMatch: true, controller: CSACtrl, templateUrl: '/app/Output/CSA/CSA.html' }).
-        when('/Administrator/Register/LawFirm/:lawFirmId', { caseInsensitiveMatch: true, controller: RegisterAdminCtrl, templateUrl: '/app/Administrator/Register/RegisterAdmin.html' }).
+        when('/Administrator/Register/LawFirm/:lawFirmId/Subscription/:subscription', { caseInsensitiveMatch: true, controller: RegisterAdminCtrl, templateUrl: '/app/Administrator/Register/RegisterAdmin.html' }).
         when('/Administrator/RegisterFirm/Subscription/:subscription', { caseInsensitiveMatch: true, controller: RegisterFirmCtrl, templateUrl: '/app/Administrator/RegisterFirm/RegisterFirm.html' }).
         when('/Administrator/Pricing', { caseInsensitiveMatch: true, controller: PricingCtrl, templateUrl: '/app/Administrator/Pricing/Pricing.html' }).
-        when('/Administrator/Payment/Admin/:adminId', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
-        when('/Administrator/Agreement/Admin/:adminId', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
+        when('/Administrator/Payment/Admin/:adminId/Subscription/:subscription', { caseInsensitiveMatch: true, controller: PaymentCtrl, templateUrl: '/app/Administrator/Payment/Payment.html' }).
+        when('/Administrator/Agreement/Admin/:adminId/Subscription/:subscription', { caseInsensitiveMatch: true, controller: AgreementCtrl, templateUrl: '/app/Administrator/Agreement/Agreement.html' }).
         when('/Administrator/CreateAttorney/Admin/:adminId', { caseInsensitiveMatch: true, controller: CreateAttorneyCtrl, templateUrl: '/app/Administrator/CreateAttorney/CreateAttorney.html' }).
         when('/Administrator/ClientCases/Admin/:adminId', { caseInsensitiveMatch: true, controller: ClientCasesCtrl, templateUrl: '/app/Administrator/ClientCases/ClientCases.html' }).
         when('/Attorney/AttorneyPage/Attorney/:attorneyId', { caseInsensitiveMatch: true, controller: AttorneyPageCtrl, templateUrl: '/app/Attorney/AttorneyPage/AttorneyPage.html' }).
@@ -37660,6 +37660,7 @@ var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "
         when('/Account/Survey/', { caseInsensitiveMatch: true, controller: SurveyCtrl, templateUrl: '/app/Account/Survey/Survey.html' }).
         when('/Account/ForgotPassword/', { caseInsensitiveMatch: true, controller: ForgotPasswordCtrl, templateUrl: '/app/Account/ForgotPassword/ForgotPassword.html' }).
         when('/Account/PasswordReset/', { caseInsensitiveMatch: true, controller: PasswordResetCtrl, templateUrl: '/app/Account/PasswordReset/PasswordReset.html' }).
+        when('/Account/Payment/User/:userId', { caseInsensitiveMatch: true, controller: UserPaymentCtrl, templateUrl: '/app/Account/UserPayment/UserPayment.html' }).
         when('/', { caseInsensitiveMatch: true, controller: HomeCtrl, templateUrl: '/app/Home/home.html' }).
         otherwise({ redirectTo: '/' });
 }]);
@@ -40234,13 +40235,25 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
                 });
             });
         };
-        $scope.deleteOtherChild = function (otherChild) {
-            otherChildService.otherChild.delete({ Id: otherChild.Id }, function () {
+        $scope.deleteOtherChild = function (child) {
+            otherChildService.otherChild.delete({ Id: child.Id }, function () {
                 $scope.children = _.reject($scope.children, function (item) {
-                    return item.Id == otherChild.Id;
+                    return item.Id == child.Id;
                 });
             });
         };
+        $scope.editing = false;
+        $scope.editOtherChild = function (child) {
+            $scope.editing = true;
+            $scope.editChildId = child.Id;
+        };
+        $scope.doneEdit = function (child) {
+            $scope.editing = false;
+            $scope.editChildId = 0;
+            otherChildService.otherChild.update({}, child, function () {
+            });
+        };
+
         //#endregion    
 
         genericService.refreshPage(function () {
@@ -40655,10 +40668,6 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     $scope.showPrintButton = false;
     $scope.isLoaded = false;
     scheduleAService.scheduleAs.get({ UserId: $routeParams.userId }, function (data) {
-        if (!data.Income.OtherDetails)
-            data.Income.OtherDetails = 'There is no reason for having other income.';
-        if (!data.OtherIncome.OtherDetails)
-            data.Income.OtherDetails = 'There is no reason for having other income.';
         $scope.scheduleA = data;
         $scope.isLoaded = true;
         $timeout(function () {
@@ -40895,7 +40904,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
                     LawFirmId: $routeParams.lawFirmId,
                     Position: 'Administrator'
                 }, function() {
-                    $location.path('/Administrator/Agreement/Admin/' + userData.CustomId);
+                    $location.path('/Administrator/Agreement/Admin/' + userData.CustomId + '/Subscription/' + $routeParams.subscription);
                 });
                 
             });
@@ -40920,7 +40929,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
         }
         $scope.lawFirm.Subscription = $routeParams.subscription;
         lawFirmService.lawFirms.save(null, $scope.lawFirm, function(data) {
-            $location.path('/Administrator/Register/LawFirm/' + data.Id);
+            $location.path('/Administrator/Register/LawFirm/' + data.Id + '/Subscription/' + $routeParams.subscription);
         });
     };
     $scope.cities = function (cityName) {
@@ -40954,7 +40963,12 @@ RegisterFirmCtrl.$inject = ['$scope', '$routeParams', '$location', 'lawFirmServi
 PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 'menuService', 'headerService', '$rootScope'];
 ;FormsApp.factory('paymentService', function($resource) {
     var service = {
-        payments: $resource('/api/payments/:userId', { userId: '@userId' },
+        oneTime: $resource('/api/payments/onetime', { },
+            {
+                get: { method: 'GET', params: { format: 'json' } },
+                update: { method: 'PUT', params: { format: 'json' } }
+            }),
+        recurring: $resource('/api/payments/recurring', {},
             {
                 get: { method: 'GET', params: { format: 'json' } },
                 update: { method: 'PUT', params: { format: 'json' } }
@@ -40969,15 +40983,18 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
             if ($scope.paymentForm.$invalid) {
                 return;
             }
-            var adminRole = constantsService.constants.AdminRole;
-            var attorneyRole = constantsService.constants.AttorneyRole;
-            userService.getCurrentUserSession().then(function (userData) {
-                userService.roles.save(null, {
-                    UserName: userData.UserName,
-                    Roles: [adminRole, attorneyRole],
-                }, function () {
-                    //need to update usersession as well
-                    $location.path('/Administrator/ClientCases/Admin/' + $routeParams.adminId);
+            $scope.AmountId = $routeParams.subscription;
+            paymentService.recurring.save(null, $scope.payment, function () {
+                var adminRole = constantsService.constants.AdminRole;
+                var attorneyRole = constantsService.constants.AttorneyRole;
+                userService.getCurrentUserSession().then(function(userData) {
+                    userService.roles.save(null, {
+                            UserName: userData.UserName,
+                            Roles: [adminRole, attorneyRole],
+                        }, function() {
+                            //need to update usersession as well
+                            $location.path('/Administrator/ClientCases/Admin/' + $routeParams.adminId);
+                        });
                 });
             });
         };
@@ -40992,8 +41009,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
         if ($scope.agreementForm.$invalid) {
             return;
         }        
-        $location.path('/Administrator/Payment/Admin/' + $routeParams.adminId);
-        
+        $location.path('/Administrator/Payment/Admin/' + $routeParams.adminId + '/Subscription/' + $routeParams.subscription);
     };
     headerService.setTitle('Agreement');
 }];
@@ -41125,6 +41141,16 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                 Password: $scope.user.Password,
                 ConfirmPassword: $scope.user.ConfirmPassword,
             }, function (userAuth) {
+                var user = {
+                    Id: userAuth.UserId,
+                    UserAuthId: userAuth.UserAuthId,
+                    Paid: true,
+                    DisplayName: scope.user.DisplayName,
+                };
+                //make sure user here is "Paid"
+                userService.users.update(null, user, function() {
+                });
+
                 //link client to attorney
                 var clientAttorney = {
                     UserId: $routeParams.attorneyId,
@@ -41830,7 +41856,8 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
     };
     return service;
 });
-;var RegisterCtrl = function ($scope, $routeParams, $location, registerService, headerService, loginMenuService) {
+;var RegisterCtrl = ['$scope', '$routeParams', '$location', 'registerService', 'headerService', 'userService', 
+    function ($scope, $routeParams, $location, registerService, headerService, userService) {
     $scope.submit = function () {
 		if ($scope.userForm.$invalid) {
 			return;
@@ -41838,13 +41865,14 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
 		$scope.user.AutoLogin = true;
 		$scope.user.UserName = $scope.user.Email;		
 		registerService.register.save(null, $scope.user, function () {
-			loginMenuService.refresh();
-			$location.path('/');
+		    userService.getCurrentUserSession().then(function(userData) {
+		        $location.path('/Account/Payment/User/' + userData.CustomId);
+		    });
 		});
     };
     headerService.setTitle('Register');
-};
-RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService', 'headerService', 'loginMenuService'];
+}];
+
 ;FormsApp.factory('registerService', ['$resource',function ($resource) {
     var service = {
         register: $resource('/api/register/', {},
@@ -41887,6 +41915,19 @@ RegisterCtrl.$inject = ['$scope', '$routeParams', '$location', 'registerService'
     };
     return service;
 }]);
+;var UserPaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'genericService', 'headerService', 'loginMenuService',
+    function ($scope, $routeParams, $location, paymentService, menuService, genericService, headerService, loginMenuService) {
+    headerService.setTitle('Payment');
+    $scope.submit = function () {
+        if ($scope.paymentForm.$invalid) {
+            return;
+        }
+        paymentService.oneTime.save(null, $scope.payment, function () {            
+            loginMenuService.refresh();
+            $location.path('/');
+        });
+    };
+}];
 ;var PasswordResetCtrl = ['$scope', '$route', '$location', 'passwordResetService', 'headerService', 'menuService', 'forgotPasswordService', 'loginService',
     function ($scope, $route, $location, passwordResetService, headerService, menuService, forgotPasswordService, loginService) {
         $scope.submit = function () {

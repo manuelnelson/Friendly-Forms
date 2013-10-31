@@ -3,7 +3,7 @@
        var service = {
            auth: $resource('/api/auth/logout', {},
                {
-                   get: { method: 'GET', params: { format: 'json' } },
+                   get: { method: 'GET', cache:false, params: { format: 'json' } },
                }),
            refresh: function (userId) {
                var deferred = $q.defer();
@@ -26,7 +26,7 @@
            },
            logoff: function () {
                var deferred = $q.defer();
-               service.auth.get({}, function (data) {
+               service.auth.save(null, {}, function (data) {
                    return deferred.resolve(data);
                });
                return deferred.promise;

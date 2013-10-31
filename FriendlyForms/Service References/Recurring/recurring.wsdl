@@ -1,0 +1,1453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.tpisoft.com/Admin/ws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.tpisoft.com/Admin/ws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This Web Service provides methods that can manage recurring billing.</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.tpisoft.com/Admin/ws">
+      <s:element name="AddRecurringCreditCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Department" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CountryID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DayPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NightPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TaxAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TotalAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EndDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillingPeriod" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillingInterval" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MaxFailures" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FailureInterval" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCustomer" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailMerchant" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCustomerFailure" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailMerchantFailure" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcAccountNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcExpDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcNameOnCard" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcStreet" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddRecurringCreditCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddRecurringCreditCardResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RecurringResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CustomerKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContractKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CcInfoKey" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CheckInfoKey" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="tns:ResultCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="error" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Partner" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PNRef" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ResultCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="OK" />
+          <s:enumeration value="Unknown_Error" />
+          <s:enumeration value="Access_Denied" />
+          <s:enumeration value="Invalid_Login" />
+          <s:enumeration value="Invalid_User_Status" />
+          <s:enumeration value="Invalid_User" />
+          <s:enumeration value="User_Not_Found" />
+          <s:enumeration value="Username_Already_In_Use" />
+          <s:enumeration value="Username_Has_Invalid_Characters" />
+          <s:enumeration value="Not_Enough_Privilege" />
+          <s:enumeration value="Invalid_PartnerID" />
+          <s:enumeration value="Invalid_VendorID" />
+          <s:enumeration value="Invalid_Argument" />
+          <s:enumeration value="Invalid_Record" />
+          <s:enumeration value="Transaction_Type_Not_Supported_By_Host" />
+          <s:enumeration value="Internal_Error" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="AddRecurringCheck">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Department" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CountryID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DayPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NightPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TaxAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TotalAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EndDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillingPeriod" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillingInterval" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MaxFailures" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FailureInterval" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCustomer" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailMerchant" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCustomerFailure" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailMerchantFailure" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CheckType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CheckNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MICR" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransitNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SS" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DOB" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BranchCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DL" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NameOnCheck" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddRecurringCheckResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddRecurringCheckResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessCheck">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CheckInfoKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InvNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessCheckResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessCheckResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessCreditCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcInfoKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InvNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessCreditCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessCreditCardResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageCheckInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CheckInfoKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CheckType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CheckNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MICR" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AccountNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransitNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="RawMICR" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SS" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DOB" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BranchCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DL" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NameOnCheck" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DayPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CountryID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageCheckInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageCheckInfoResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageCreditCardInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardInfoKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcAccountNum" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcExpDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcNameOnCard" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcStreet" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CcZip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageCreditCardInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageCreditCardInfoResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageContractAddDaysToNextBillDt">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NumOfDays" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageContractAddDaysToNextBillDtResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageContractAddDaysToNextBillDtResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageContract">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PaymentInfoKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PaymentType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Department" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CountryID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DayPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NightPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ContractName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TaxAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TotalAmt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EndDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NextBillDt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillingPeriod" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="BillingInterval" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MaxFailures" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FailureInterval" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCustomer" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailMerchant" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailCustomerFailure" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailMerchantFailure" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageContractResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageContractResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageCustomer">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Vendor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerKey" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Department" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Street3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="StateID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Zip" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CountryID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DayPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NightPhone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Fax" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ExtData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ManageCustomerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ManageCustomerResult" type="tns:RecurringResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RecurringResult" nillable="true" type="tns:RecurringResult" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AddRecurringCreditCardSoapIn">
+    <wsdl:part name="parameters" element="tns:AddRecurringCreditCard" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCreditCardSoapOut">
+    <wsdl:part name="parameters" element="tns:AddRecurringCreditCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCheckSoapIn">
+    <wsdl:part name="parameters" element="tns:AddRecurringCheck" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCheckSoapOut">
+    <wsdl:part name="parameters" element="tns:AddRecurringCheckResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCheckSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessCheck" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCheckSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessCheckResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessCreditCard" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessCreditCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageCheckInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageCheckInfo" />
+  </wsdl:message>
+  <wsdl:message name="ManageCheckInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageCheckInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageCreditCardInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageCreditCardInfo" />
+  </wsdl:message>
+  <wsdl:message name="ManageCreditCardInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageCreditCardInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractAddDaysToNextBillDtSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageContractAddDaysToNextBillDt" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractAddDaysToNextBillDtSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageContractAddDaysToNextBillDtResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageContract" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageContractResponse" />
+  </wsdl:message>
+  <wsdl:message name="ManageCustomerSoapIn">
+    <wsdl:part name="parameters" element="tns:ManageCustomer" />
+  </wsdl:message>
+  <wsdl:message name="ManageCustomerSoapOut">
+    <wsdl:part name="parameters" element="tns:ManageCustomerResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCreditCardHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="ContractID" type="s:string" />
+    <wsdl:part name="ContractName" type="s:string" />
+    <wsdl:part name="BillAmt" type="s:string" />
+    <wsdl:part name="TaxAmt" type="s:string" />
+    <wsdl:part name="TotalAmt" type="s:string" />
+    <wsdl:part name="StartDate" type="s:string" />
+    <wsdl:part name="EndDate" type="s:string" />
+    <wsdl:part name="BillingPeriod" type="s:string" />
+    <wsdl:part name="BillingInterval" type="s:string" />
+    <wsdl:part name="MaxFailures" type="s:string" />
+    <wsdl:part name="FailureInterval" type="s:string" />
+    <wsdl:part name="EmailCustomer" type="s:string" />
+    <wsdl:part name="EmailMerchant" type="s:string" />
+    <wsdl:part name="EmailCustomerFailure" type="s:string" />
+    <wsdl:part name="EmailMerchantFailure" type="s:string" />
+    <wsdl:part name="CcAccountNum" type="s:string" />
+    <wsdl:part name="CcExpDate" type="s:string" />
+    <wsdl:part name="CcNameOnCard" type="s:string" />
+    <wsdl:part name="CcStreet" type="s:string" />
+    <wsdl:part name="CcZip" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCreditCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCheckHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="PostalCode" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="ContractID" type="s:string" />
+    <wsdl:part name="ContractName" type="s:string" />
+    <wsdl:part name="BillAmt" type="s:string" />
+    <wsdl:part name="TaxAmt" type="s:string" />
+    <wsdl:part name="TotalAmt" type="s:string" />
+    <wsdl:part name="StartDate" type="s:string" />
+    <wsdl:part name="EndDate" type="s:string" />
+    <wsdl:part name="BillingPeriod" type="s:string" />
+    <wsdl:part name="BillingInterval" type="s:string" />
+    <wsdl:part name="MaxFailures" type="s:string" />
+    <wsdl:part name="FailureInterval" type="s:string" />
+    <wsdl:part name="EmailCustomer" type="s:string" />
+    <wsdl:part name="EmailMerchant" type="s:string" />
+    <wsdl:part name="EmailCustomerFailure" type="s:string" />
+    <wsdl:part name="EmailMerchantFailure" type="s:string" />
+    <wsdl:part name="CheckType" type="s:string" />
+    <wsdl:part name="AccountType" type="s:string" />
+    <wsdl:part name="CheckNum" type="s:string" />
+    <wsdl:part name="MICR" type="s:string" />
+    <wsdl:part name="AccountNum" type="s:string" />
+    <wsdl:part name="TransitNum" type="s:string" />
+    <wsdl:part name="SS" type="s:string" />
+    <wsdl:part name="DOB" type="s:string" />
+    <wsdl:part name="BranchCity" type="s:string" />
+    <wsdl:part name="DL" type="s:string" />
+    <wsdl:part name="StateCode" type="s:string" />
+    <wsdl:part name="NameOnCheck" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCheckHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCheckHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CheckInfoKey" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="InvNum" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCheckHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CcInfoKey" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="InvNum" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageCheckInfoHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="CheckInfoKey" type="s:string" />
+    <wsdl:part name="CheckType" type="s:string" />
+    <wsdl:part name="AccountType" type="s:string" />
+    <wsdl:part name="CheckNum" type="s:string" />
+    <wsdl:part name="MICR" type="s:string" />
+    <wsdl:part name="AccountNum" type="s:string" />
+    <wsdl:part name="TransitNum" type="s:string" />
+    <wsdl:part name="RawMICR" type="s:string" />
+    <wsdl:part name="SS" type="s:string" />
+    <wsdl:part name="DOB" type="s:string" />
+    <wsdl:part name="BranchCity" type="s:string" />
+    <wsdl:part name="DL" type="s:string" />
+    <wsdl:part name="StateCode" type="s:string" />
+    <wsdl:part name="NameOnCheck" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="PostalCode" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageCheckInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageCreditCardInfoHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="CardInfoKey" type="s:string" />
+    <wsdl:part name="CcAccountNum" type="s:string" />
+    <wsdl:part name="CcExpDate" type="s:string" />
+    <wsdl:part name="CcNameOnCard" type="s:string" />
+    <wsdl:part name="CcStreet" type="s:string" />
+    <wsdl:part name="CcZip" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageCreditCardInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractAddDaysToNextBillDtHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="ContractKey" type="s:string" />
+    <wsdl:part name="NumOfDays" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractAddDaysToNextBillDtHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="ContractKey" type="s:string" />
+    <wsdl:part name="PaymentInfoKey" type="s:string" />
+    <wsdl:part name="PaymentType" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="ContractID" type="s:string" />
+    <wsdl:part name="ContractName" type="s:string" />
+    <wsdl:part name="BillAmt" type="s:string" />
+    <wsdl:part name="TaxAmt" type="s:string" />
+    <wsdl:part name="TotalAmt" type="s:string" />
+    <wsdl:part name="StartDate" type="s:string" />
+    <wsdl:part name="EndDate" type="s:string" />
+    <wsdl:part name="NextBillDt" type="s:string" />
+    <wsdl:part name="BillingPeriod" type="s:string" />
+    <wsdl:part name="BillingInterval" type="s:string" />
+    <wsdl:part name="MaxFailures" type="s:string" />
+    <wsdl:part name="FailureInterval" type="s:string" />
+    <wsdl:part name="EmailCustomer" type="s:string" />
+    <wsdl:part name="EmailMerchant" type="s:string" />
+    <wsdl:part name="EmailCustomerFailure" type="s:string" />
+    <wsdl:part name="EmailMerchantFailure" type="s:string" />
+    <wsdl:part name="Status" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageCustomerHttpGetIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="Status" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageCustomerHttpGetOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCreditCardHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="ContractID" type="s:string" />
+    <wsdl:part name="ContractName" type="s:string" />
+    <wsdl:part name="BillAmt" type="s:string" />
+    <wsdl:part name="TaxAmt" type="s:string" />
+    <wsdl:part name="TotalAmt" type="s:string" />
+    <wsdl:part name="StartDate" type="s:string" />
+    <wsdl:part name="EndDate" type="s:string" />
+    <wsdl:part name="BillingPeriod" type="s:string" />
+    <wsdl:part name="BillingInterval" type="s:string" />
+    <wsdl:part name="MaxFailures" type="s:string" />
+    <wsdl:part name="FailureInterval" type="s:string" />
+    <wsdl:part name="EmailCustomer" type="s:string" />
+    <wsdl:part name="EmailMerchant" type="s:string" />
+    <wsdl:part name="EmailCustomerFailure" type="s:string" />
+    <wsdl:part name="EmailMerchantFailure" type="s:string" />
+    <wsdl:part name="CcAccountNum" type="s:string" />
+    <wsdl:part name="CcExpDate" type="s:string" />
+    <wsdl:part name="CcNameOnCard" type="s:string" />
+    <wsdl:part name="CcStreet" type="s:string" />
+    <wsdl:part name="CcZip" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCreditCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCheckHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="PostalCode" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="ContractID" type="s:string" />
+    <wsdl:part name="ContractName" type="s:string" />
+    <wsdl:part name="BillAmt" type="s:string" />
+    <wsdl:part name="TaxAmt" type="s:string" />
+    <wsdl:part name="TotalAmt" type="s:string" />
+    <wsdl:part name="StartDate" type="s:string" />
+    <wsdl:part name="EndDate" type="s:string" />
+    <wsdl:part name="BillingPeriod" type="s:string" />
+    <wsdl:part name="BillingInterval" type="s:string" />
+    <wsdl:part name="MaxFailures" type="s:string" />
+    <wsdl:part name="FailureInterval" type="s:string" />
+    <wsdl:part name="EmailCustomer" type="s:string" />
+    <wsdl:part name="EmailMerchant" type="s:string" />
+    <wsdl:part name="EmailCustomerFailure" type="s:string" />
+    <wsdl:part name="EmailMerchantFailure" type="s:string" />
+    <wsdl:part name="CheckType" type="s:string" />
+    <wsdl:part name="AccountType" type="s:string" />
+    <wsdl:part name="CheckNum" type="s:string" />
+    <wsdl:part name="MICR" type="s:string" />
+    <wsdl:part name="AccountNum" type="s:string" />
+    <wsdl:part name="TransitNum" type="s:string" />
+    <wsdl:part name="SS" type="s:string" />
+    <wsdl:part name="DOB" type="s:string" />
+    <wsdl:part name="BranchCity" type="s:string" />
+    <wsdl:part name="DL" type="s:string" />
+    <wsdl:part name="StateCode" type="s:string" />
+    <wsdl:part name="NameOnCheck" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddRecurringCheckHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCheckHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CheckInfoKey" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="InvNum" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCheckHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CcInfoKey" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="InvNum" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ProcessCreditCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageCheckInfoHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="CheckInfoKey" type="s:string" />
+    <wsdl:part name="CheckType" type="s:string" />
+    <wsdl:part name="AccountType" type="s:string" />
+    <wsdl:part name="CheckNum" type="s:string" />
+    <wsdl:part name="MICR" type="s:string" />
+    <wsdl:part name="AccountNum" type="s:string" />
+    <wsdl:part name="TransitNum" type="s:string" />
+    <wsdl:part name="RawMICR" type="s:string" />
+    <wsdl:part name="SS" type="s:string" />
+    <wsdl:part name="DOB" type="s:string" />
+    <wsdl:part name="BranchCity" type="s:string" />
+    <wsdl:part name="DL" type="s:string" />
+    <wsdl:part name="StateCode" type="s:string" />
+    <wsdl:part name="NameOnCheck" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="PostalCode" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageCheckInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageCreditCardInfoHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="CardInfoKey" type="s:string" />
+    <wsdl:part name="CcAccountNum" type="s:string" />
+    <wsdl:part name="CcExpDate" type="s:string" />
+    <wsdl:part name="CcNameOnCard" type="s:string" />
+    <wsdl:part name="CcStreet" type="s:string" />
+    <wsdl:part name="CcZip" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageCreditCardInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractAddDaysToNextBillDtHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="ContractKey" type="s:string" />
+    <wsdl:part name="NumOfDays" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractAddDaysToNextBillDtHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="ContractKey" type="s:string" />
+    <wsdl:part name="PaymentInfoKey" type="s:string" />
+    <wsdl:part name="PaymentType" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="ContractID" type="s:string" />
+    <wsdl:part name="ContractName" type="s:string" />
+    <wsdl:part name="BillAmt" type="s:string" />
+    <wsdl:part name="TaxAmt" type="s:string" />
+    <wsdl:part name="TotalAmt" type="s:string" />
+    <wsdl:part name="StartDate" type="s:string" />
+    <wsdl:part name="EndDate" type="s:string" />
+    <wsdl:part name="NextBillDt" type="s:string" />
+    <wsdl:part name="BillingPeriod" type="s:string" />
+    <wsdl:part name="BillingInterval" type="s:string" />
+    <wsdl:part name="MaxFailures" type="s:string" />
+    <wsdl:part name="FailureInterval" type="s:string" />
+    <wsdl:part name="EmailCustomer" type="s:string" />
+    <wsdl:part name="EmailMerchant" type="s:string" />
+    <wsdl:part name="EmailCustomerFailure" type="s:string" />
+    <wsdl:part name="EmailMerchantFailure" type="s:string" />
+    <wsdl:part name="Status" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageContractHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:message name="ManageCustomerHttpPostIn">
+    <wsdl:part name="Username" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="TransType" type="s:string" />
+    <wsdl:part name="Vendor" type="s:string" />
+    <wsdl:part name="CustomerKey" type="s:string" />
+    <wsdl:part name="CustomerID" type="s:string" />
+    <wsdl:part name="CustomerName" type="s:string" />
+    <wsdl:part name="FirstName" type="s:string" />
+    <wsdl:part name="LastName" type="s:string" />
+    <wsdl:part name="Title" type="s:string" />
+    <wsdl:part name="Department" type="s:string" />
+    <wsdl:part name="Street1" type="s:string" />
+    <wsdl:part name="Street2" type="s:string" />
+    <wsdl:part name="Street3" type="s:string" />
+    <wsdl:part name="City" type="s:string" />
+    <wsdl:part name="StateID" type="s:string" />
+    <wsdl:part name="Province" type="s:string" />
+    <wsdl:part name="Zip" type="s:string" />
+    <wsdl:part name="CountryID" type="s:string" />
+    <wsdl:part name="Email" type="s:string" />
+    <wsdl:part name="DayPhone" type="s:string" />
+    <wsdl:part name="NightPhone" type="s:string" />
+    <wsdl:part name="Fax" type="s:string" />
+    <wsdl:part name="Mobile" type="s:string" />
+    <wsdl:part name="Status" type="s:string" />
+    <wsdl:part name="ExtData" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ManageCustomerHttpPostOut">
+    <wsdl:part name="Body" element="tns:RecurringResult" />
+  </wsdl:message>
+  <wsdl:portType name="RecurringSoap">
+    <wsdl:operation name="AddRecurringCreditCard">
+      <wsdl:input message="tns:AddRecurringCreditCardSoapIn" />
+      <wsdl:output message="tns:AddRecurringCreditCardSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddRecurringCheck">
+      <wsdl:input message="tns:AddRecurringCheckSoapIn" />
+      <wsdl:output message="tns:AddRecurringCheckSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCheck">
+      <wsdl:input message="tns:ProcessCheckSoapIn" />
+      <wsdl:output message="tns:ProcessCheckSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <wsdl:input message="tns:ProcessCreditCardSoapIn" />
+      <wsdl:output message="tns:ProcessCreditCardSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCheckInfo">
+      <wsdl:input message="tns:ManageCheckInfoSoapIn" />
+      <wsdl:output message="tns:ManageCheckInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCreditCardInfo">
+      <wsdl:input message="tns:ManageCreditCardInfoSoapIn" />
+      <wsdl:output message="tns:ManageCreditCardInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageContractAddDaysToNextBillDt">
+      <wsdl:input message="tns:ManageContractAddDaysToNextBillDtSoapIn" />
+      <wsdl:output message="tns:ManageContractAddDaysToNextBillDtSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageContract">
+      <wsdl:input message="tns:ManageContractSoapIn" />
+      <wsdl:output message="tns:ManageContractSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCustomer">
+      <wsdl:input message="tns:ManageCustomerSoapIn" />
+      <wsdl:output message="tns:ManageCustomerSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="RecurringHttpGet">
+    <wsdl:operation name="AddRecurringCreditCard">
+      <wsdl:input message="tns:AddRecurringCreditCardHttpGetIn" />
+      <wsdl:output message="tns:AddRecurringCreditCardHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddRecurringCheck">
+      <wsdl:input message="tns:AddRecurringCheckHttpGetIn" />
+      <wsdl:output message="tns:AddRecurringCheckHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCheck">
+      <wsdl:input message="tns:ProcessCheckHttpGetIn" />
+      <wsdl:output message="tns:ProcessCheckHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <wsdl:input message="tns:ProcessCreditCardHttpGetIn" />
+      <wsdl:output message="tns:ProcessCreditCardHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCheckInfo">
+      <wsdl:input message="tns:ManageCheckInfoHttpGetIn" />
+      <wsdl:output message="tns:ManageCheckInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCreditCardInfo">
+      <wsdl:input message="tns:ManageCreditCardInfoHttpGetIn" />
+      <wsdl:output message="tns:ManageCreditCardInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageContractAddDaysToNextBillDt">
+      <wsdl:input message="tns:ManageContractAddDaysToNextBillDtHttpGetIn" />
+      <wsdl:output message="tns:ManageContractAddDaysToNextBillDtHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageContract">
+      <wsdl:input message="tns:ManageContractHttpGetIn" />
+      <wsdl:output message="tns:ManageContractHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCustomer">
+      <wsdl:input message="tns:ManageCustomerHttpGetIn" />
+      <wsdl:output message="tns:ManageCustomerHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="RecurringHttpPost">
+    <wsdl:operation name="AddRecurringCreditCard">
+      <wsdl:input message="tns:AddRecurringCreditCardHttpPostIn" />
+      <wsdl:output message="tns:AddRecurringCreditCardHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddRecurringCheck">
+      <wsdl:input message="tns:AddRecurringCheckHttpPostIn" />
+      <wsdl:output message="tns:AddRecurringCheckHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCheck">
+      <wsdl:input message="tns:ProcessCheckHttpPostIn" />
+      <wsdl:output message="tns:ProcessCheckHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <wsdl:input message="tns:ProcessCreditCardHttpPostIn" />
+      <wsdl:output message="tns:ProcessCreditCardHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCheckInfo">
+      <wsdl:input message="tns:ManageCheckInfoHttpPostIn" />
+      <wsdl:output message="tns:ManageCheckInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCreditCardInfo">
+      <wsdl:input message="tns:ManageCreditCardInfoHttpPostIn" />
+      <wsdl:output message="tns:ManageCreditCardInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageContractAddDaysToNextBillDt">
+      <wsdl:input message="tns:ManageContractAddDaysToNextBillDtHttpPostIn" />
+      <wsdl:output message="tns:ManageContractAddDaysToNextBillDtHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageContract">
+      <wsdl:input message="tns:ManageContractHttpPostIn" />
+      <wsdl:output message="tns:ManageContractHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ManageCustomer">
+      <wsdl:input message="tns:ManageCustomerHttpPostIn" />
+      <wsdl:output message="tns:ManageCustomerHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RecurringSoap" type="tns:RecurringSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddRecurringCreditCard">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/AddRecurringCreditCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRecurringCheck">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/AddRecurringCheck" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCheck">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/ProcessCheck" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/ProcessCreditCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCheckInfo">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageCheckInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCreditCardInfo">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageCreditCardInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContractAddDaysToNextBillDt">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageContractAddDaysToNextBillDt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContract">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageContract" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCustomer">
+      <soap:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageCustomer" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RecurringSoap12" type="tns:RecurringSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddRecurringCreditCard">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/AddRecurringCreditCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRecurringCheck">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/AddRecurringCheck" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCheck">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/ProcessCheck" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/ProcessCreditCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCheckInfo">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageCheckInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCreditCardInfo">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageCreditCardInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContractAddDaysToNextBillDt">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageContractAddDaysToNextBillDt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContract">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageContract" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCustomer">
+      <soap12:operation soapAction="http://www.tpisoft.com/Admin/ws/ManageCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RecurringHttpGet" type="tns:RecurringHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="AddRecurringCreditCard">
+      <http:operation location="/AddRecurringCreditCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRecurringCheck">
+      <http:operation location="/AddRecurringCheck" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCheck">
+      <http:operation location="/ProcessCheck" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <http:operation location="/ProcessCreditCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCheckInfo">
+      <http:operation location="/ManageCheckInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCreditCardInfo">
+      <http:operation location="/ManageCreditCardInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContractAddDaysToNextBillDt">
+      <http:operation location="/ManageContractAddDaysToNextBillDt" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContract">
+      <http:operation location="/ManageContract" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCustomer">
+      <http:operation location="/ManageCustomer" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RecurringHttpPost" type="tns:RecurringHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="AddRecurringCreditCard">
+      <http:operation location="/AddRecurringCreditCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRecurringCheck">
+      <http:operation location="/AddRecurringCheck" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCheck">
+      <http:operation location="/ProcessCheck" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessCreditCard">
+      <http:operation location="/ProcessCreditCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCheckInfo">
+      <http:operation location="/ManageCheckInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCreditCardInfo">
+      <http:operation location="/ManageCreditCardInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContractAddDaysToNextBillDt">
+      <http:operation location="/ManageContractAddDaysToNextBillDt" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageContract">
+      <http:operation location="/ManageContract" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManageCustomer">
+      <http:operation location="/ManageCustomer" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Recurring">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This Web Service provides methods that can manage recurring billing.</wsdl:documentation>
+    <wsdl:port name="RecurringSoap" binding="tns:RecurringSoap">
+      <soap:address location="http://depot.payment-gate.net/paygate/ws/recurring.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RecurringSoap12" binding="tns:RecurringSoap12">
+      <soap12:address location="http://depot.payment-gate.net/paygate/ws/recurring.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RecurringHttpGet" binding="tns:RecurringHttpGet">
+      <http:address location="http://depot.payment-gate.net/paygate/ws/recurring.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RecurringHttpPost" binding="tns:RecurringHttpPost">
+      <http:address location="http://depot.payment-gate.net/paygate/ws/recurring.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

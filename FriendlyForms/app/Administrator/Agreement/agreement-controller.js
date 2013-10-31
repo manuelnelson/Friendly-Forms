@@ -3,8 +3,7 @@
         if ($scope.agreementForm.$invalid) {
             return;
         }        
-        $location.path('/Administrator/Payment/Admin/' + $routeParams.adminId);
-        
+        $location.path('/Administrator/Payment/Admin/' + $routeParams.adminId + '/Subscription/' + $routeParams.subscription);
     };
     headerService.setTitle('Agreement');
 }];

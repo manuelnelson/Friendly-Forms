@@ -153,6 +153,14 @@
     <Compile Include="Migrations\201310120053502_AddStateIdForeignKeyLogic.Designer.cs">
       <DependentUpon>201310120053502_AddStateIdForeignKeyLogic.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201310291505358_CreditCardUserInformation.cs" />
+    <Compile Include="Migrations\201310291505358_CreditCardUserInformation.Designer.cs">
+      <DependentUpon>201310291505358_CreditCardUserInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201310291908132_ChangeUserVerifiedToPaid.cs" />
+    <Compile Include="Migrations\201310291908132_ChangeUserVerifiedToPaid.Designer.cs">
+      <DependentUpon>201310291908132_ChangeUserVerifiedToPaid.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AttorneyClientOrmLiteRepository.cs" />
@@ -327,6 +335,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201310120053502_AddStateIdForeignKeyLogic.resx">
       <DependentUpon>201310120053502_AddStateIdForeignKeyLogic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310291505358_CreditCardUserInformation.resx">
+      <DependentUpon>201310291505358_CreditCardUserInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310291908132_ChangeUserVerifiedToPaid.resx">
+      <DependentUpon>201310291908132_ChangeUserVerifiedToPaid.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
