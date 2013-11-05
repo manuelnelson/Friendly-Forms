@@ -5,7 +5,7 @@
         }
         $scope.lawFirm.Subscription = $routeParams.subscription;
         lawFirmService.lawFirms.save(null, $scope.lawFirm, function(data) {
-            $location.path('/Administrator/Register/LawFirm/' + data.Id);
+            $location.path('/Administrator/Register/LawFirm/' + data.Id + '/Subscription/' + $routeParams.subscription);
         });
     };
     $scope.cities = function (cityName) {

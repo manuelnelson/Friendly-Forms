@@ -7,5 +7,6 @@ namespace BusinessLogic.Contracts
     {
         Income GetByUserId(long userId, bool isOtherParent = false);
         bool HasNonW2Income(long userId);
+        bool HasSelfIncome(long userId);
     }
 }

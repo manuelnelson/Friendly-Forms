@@ -13,7 +13,7 @@ using FriendlyForms.Helpers;
 using FriendlyForms.Models;
 using Models;
 using Models.Contract;
-using Models.ViewModels;
+using Models.Helper;
 using Pechkin;
 using Pechkin.Synchronized;
 using ServiceStack.Common;
@@ -251,9 +251,7 @@ namespace FriendlyForms.RestService
         [DataMember]
         public ScheduleB OtherScheduleB { get; set; }
         [DataMember]
-        public string Father { get; set; }
-        [DataMember]
-        public string Mother { get; set; }
+        public ParentNames ParentNames { get; set; }
     }
     #endregion
 
@@ -814,8 +812,7 @@ namespace FriendlyForms.RestService
             {
                 ScheduleB = schedule,
                 OtherScheduleB = scheduleOther,
-                Father = parentNames.Father,
-                Mother = parentNames.Mother
+                ParentNames = parentNames,
             };
         }
 

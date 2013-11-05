@@ -1,4 +1,26 @@
 ﻿<div class="form-vertical wrapper">
+        <div class="row">
+        <div class="col-md-12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-signal"></i></span>
+                    <h5>Attorney  Information</h5>
+                </div>
+                <div class="widget-content">
+                    <span style="font-size: 18px; float: left">{{userAuth.DisplayName}}</span>
+                    <hr style="border-top: 1px solid #ccc; border-bottom: 0;" />
+                    <h5>Basic Information</h5>
+                    <div class="row">
+                        <span class="col-md-2">Email Identifier</span><span class="col-md-3">{{userAuth.Email}}</span>
+                    </div>
+                    <div class="row">
+                        <br/>
+                        <button ng-click="viewCase()" class="btn btn-default btn-primary">View Case</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="widget-box">
@@ -9,8 +31,9 @@
                 <div class="widget-content">
                     <div class="row">
                         <a href="/#/Attorney/CreateClient/Attorney/{{attorneyId}}" class="btn btn-default btn-primary pull-left">Add a New Client</a>
-                        <button class="btn btn-default btn-primary pull-right">View Archived Cases</button>
-                    </div><br/>
+                        <!--<button class="btn btn-default btn-primary pull-right">View Archived Cases</button>-->
+                    </div>
+                    <br />
                     <div class="row">
                         <div ng-show="clients.length==0">
                             <h5>No Clients Here :(</h5>
@@ -23,16 +46,18 @@
                                     <th>Name</th>
                                     <th>Civil Case No.</th>
                                     <th>Form Date</th>
-                                    <th></th>
+<!--                                    <th></th>-->
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="client in clients">
-                                    <td><button class="btn btn-default btn-primary" ng-click="openClient(client)">Open</button></td>
+                                    <td>
+                                        <button class="btn btn-default btn-primary" ng-click="openClient(client)">Open</button></td>
                                     <td>{{client.Name}}</td>
                                     <td>{{client.CaseNumber}}</td>
                                     <td>{{client.CreatedDate | date:'mediumDate'}}</td>
-                                    <td><button class="btn btn-default btn-primary" ng-click="archiveClient(client)">Archive</button></td>
+<!--                                    <td>
+                                        <button class="btn btn-default btn-primary" ng-click="archiveClient(client)">Archive</button></td>-->
                                 </tr>
                             </tbody>
                         </table>

@@ -12,6 +12,16 @@
                 Password: $scope.user.Password,
                 ConfirmPassword: $scope.user.ConfirmPassword,
             }, function (userAuth) {
+                var user = {
+                    Id: userAuth.UserId,
+                    UserAuthId: userAuth.UserAuthId,
+                    Paid: true,
+                    DisplayName: $scope.user.DisplayName,
+                };
+                //make sure user here is "Paid"
+                userService.users.update(null, user, function() {
+                });
+
                 //link client to attorney
                 var clientAttorney = {
                     UserId: $routeParams.attorneyId,

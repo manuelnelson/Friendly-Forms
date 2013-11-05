@@ -83,7 +83,7 @@
             if (menuItem)
                 $location.path(menuItem.subMenuItems[0].path);
             else {
-                if (typeof service.menuItems[1] != 'undefined') {
+                if (typeof service.menuItems[1] != 'undefined' && service.menuItems[1].text != 'Log out') {
                     //href has hashbang...remove this
                     $location.path(service.menuItems[1].path.replace("/#",""));
                 } else {
@@ -105,8 +105,8 @@
             return false;
         },
         menu: $resource('/api/menus/:userId', { userId: '@userId' },
-            {
-                getList: { method: 'GET', isArray: true, params: { format: 'json' } },
+            {   //DateTime is specifically used as a cache breaker for IE.  cache false doesn't appear to work.
+                getList: { method: 'GET', cache: false, isArray: true, params: { format: 'json', DateTime: new Date().getTime() } },
             }),
         nextMenu: function () {
             //Get current menu from the current path

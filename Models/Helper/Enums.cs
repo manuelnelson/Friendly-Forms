@@ -1,5 +1,12 @@
-﻿namespace Models.ViewModels
+﻿namespace Models.Helper
 {
+    public enum PaymentOptions
+    {
+        Silver = 1,
+        Gold,
+        Premiere
+    }
+
     public enum Survey
     {
         StronglyDisagree=1,

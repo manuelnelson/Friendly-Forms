@@ -1,6 +1,7 @@
 ﻿using System;
 using BusinessLogic.Contracts;
 using BusinessLogic.Properties;
+using FriendlyForms.Models;
 using ServiceStack.ServiceHost;
 
 namespace FriendlyForms.RestService
@@ -25,9 +26,9 @@ namespace FriendlyForms.RestService
                                     UserSession.HasRole(Resources.AdminRole);
                 var showAttorneyMenu = request.UserId == Convert.ToInt64(UserSession.CustomId) &&
                                        UserSession.HasRole(Resources.AttorneyRole);
-
+                var hasPaid = ((CustomUserSession) UserSession).Paid;
                 return MenuService.Get(request.Route, request.UserId, showAdminMenu, showAttorneyMenu,
-                                       isAuthenticated: UserSession.IsAuthenticated);
+                                       hasPaid, isAuthenticated: UserSession.IsAuthenticated);
             }
 
         }

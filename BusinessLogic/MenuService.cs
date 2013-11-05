@@ -4,7 +4,7 @@ using BusinessLogic.Contracts;
 using BusinessLogic.Models;
 using BusinessLogic.Properties;
 using Models;
-using Models.ViewModels;
+using Models.Helper;
 
 namespace BusinessLogic
 {
@@ -37,7 +37,7 @@ namespace BusinessLogic
             ExtraExpenseFormService = extraExpenseFormService;
         }
 
-        public List<MenuItem> Get(string route, long userId, bool showAdminMenu, bool showAttorneyMenu, bool isAuthenticated = false)
+        public List<MenuItem> Get(string route, long userId, bool showAdminMenu, bool showAttorneyMenu, bool hasPaid, bool isAuthenticated = false)
         {
             //Always has Home Link
             var menuList = new List<MenuItem>
@@ -63,34 +63,36 @@ namespace BusinessLogic
                 menuList.Add(registerMenu);
                 return menuList;
             }
-            if (showAdminMenu)
+            if (hasPaid)
             {
-                var adminMenu = GetAdminMenu(userId);
-                menuList.Add(adminMenu);
-            } 
-            else if (showAttorneyMenu)
-            {
-                var attorneyMenu = GetAttorneyMenu(userId);
-                menuList.Add(attorneyMenu);                
-            }
-            else if (UserIsAtStarterStage(userId))
-            {
-                var starterMenu = GetStarterMenu(userId);
-                //Get Completed Status of forms for the menu
-                menuList.Add(starterMenu);
-            }
-            else
-            {
-                menuList.Add(GetMediationMenu(userId));
-                var children = ChildService.GetByUserId(userId);
-                if (children.Count > 0)
+                if (showAdminMenu)
                 {
-                    menuList.Add(GetParentingPlanMenu(userId, children[0]));
-                    menuList.Add(GetFinancialFormMenu(userId, children[0]));
+                    var adminMenu = GetAdminMenu(userId);
+                    menuList.Add(adminMenu);
                 }
-                menuList.Add(GetOutputMenu(userId, menuList));
+                else if (showAttorneyMenu)
+                {
+                    var attorneyMenu = GetAttorneyMenu(userId);
+                    menuList.Add(attorneyMenu);
+                }
+                else if (UserIsAtStarterStage(userId))
+                {
+                    var starterMenu = GetStarterMenu(userId);
+                    //Get Completed Status of forms for the menu
+                    menuList.Add(starterMenu);
+                }
+                else
+                {
+                    menuList.Add(GetMediationMenu(userId));
+                    var children = ChildService.GetByUserId(userId);
+                    if (children.Count > 0)
+                    {
+                        menuList.Add(GetParentingPlanMenu(userId, children[0]));
+                        menuList.Add(GetFinancialFormMenu(userId, children[0]));
+                    }
+                    menuList.Add(GetOutputMenu(userId, menuList));
+                }                
             }
-
             menuList.Add(new MenuItem
                 {
                     itemClass = "",
@@ -268,7 +270,7 @@ namespace BusinessLogic
             var otherPreexistingForm = PreexistingSupportFormService.GetByUserId(userId, isOtherParent: true);
             if (otherPreexistingForm != null && otherPreexistingForm.Support == (int)YesNo.Yes)
                 return true;
-            if (IncomeService.HasNonW2Income(userId))
+            if (IncomeService.HasSelfIncome(userId))
                 return true;
             return OtherChildrenService.HasOtherChildren(userId);
         }
@@ -311,15 +313,6 @@ namespace BusinessLogic
         {
             var menuList = new List<FormMenuItem>
                 {
-                    new FormMenuItem
-                    {
-                        formName = "BetaAgreement",
-                        text = "Beta Agreement",
-                        iconClass = "",
-                        path = "/Starter/BetaAgreement/User/" + userId,     
-                        pathIdentifier = "BetaAgreement",
-                        itemClass = ""
-                    },
                     new FormMenuItem
                     {
                         formName = "Introduction",

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using BusinessLogic.Contracts;
 using FriendlyForms.Helpers;
-using Models.ViewModels;
+using Models.Helper;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;

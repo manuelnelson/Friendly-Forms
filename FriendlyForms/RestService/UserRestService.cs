@@ -22,7 +22,7 @@ namespace FriendlyForms.RestService
             public long Id { get; set; }
             public long[] Ids { get; set; }
             public int UserAuthId { get; set; }
-            public bool Verified { get; set; }
+            public bool Paid { get; set; }
             public string DisplayName { get; set; }
             public int? LawFirmId { get; set; }
             public string Position { get; set; }

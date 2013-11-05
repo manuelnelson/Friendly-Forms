@@ -3,7 +3,7 @@
         logout: function () {
             loginMenuService.logoff().then(function () {
                 loginMenuService.refresh();
-                menuService.getMenu();
+                //menuService.getMenu();
                 $location.path('/');
             });
         }
