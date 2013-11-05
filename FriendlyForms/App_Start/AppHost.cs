@@ -72,7 +72,7 @@ namespace FriendlyForms.App_Start
         public AppHost() //Tell ServiceStack the name and where to find your web services
 			: base("Split Solution Api", typeof(RestService.CourtRestService).Assembly) { }
 
-		public override void Configure(Funq.Container container)
+		public override void Configure(Container container)
 		{
 			//Set JSON web services to return idiomatic JSON camelCase properties
 			JsConfig.EmitCamelCaseNames = false;

@@ -2,8 +2,9 @@
 {
     public enum PaymentOptions
     {
-        Silver = 1,
-        Gold,
+        Bronze = 10,
+        Silver = 11,
+        Gold = 12,
         Premiere
     }
 

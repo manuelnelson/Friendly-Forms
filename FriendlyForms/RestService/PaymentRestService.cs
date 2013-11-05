@@ -46,6 +46,7 @@ namespace FriendlyForms.RestService
         {
             //public IPaymentService PaymentService { get; set; } //Injected by IOC
             public IUserService UserService { get; set; }
+            public IPaymentService PaymentService { get; set; }
             private const string UserName = "spli8523";
             private const string Password = "091BL6rX";
             private const string Vendor = "7866";
@@ -64,6 +65,7 @@ namespace FriendlyForms.RestService
                 {
                     //update Paid field
                     var user = UserService.Get(Convert.ToInt64(UserSession.CustomId));
+                    user.AmountId = request.AmountId;
                     user.Paid = true;
                     UserSession.Paid = true;
                     UserService.Update(user);
@@ -78,7 +80,7 @@ namespace FriendlyForms.RestService
                 var user = UserService.Get(Convert.ToInt64(UserSession.CustomId));
                 var recurringSoapClient = new RecurringSoapClient("RecurringSoap");
                 var date = request.ExpMonth.ToString().PrependZero() + request.ExpYear.ToString().PrependZero();
-                var amount = GetAmount(request.AmountId);
+                var amount = PaymentService.GetAmount(request.AmountId);
                 var customerResponse = recurringSoapClient.ManageCustomer(UserName, Password, "ADD", Vendor, "",
                                                                           user.Id.ToString(), request.FullName, "", "",
                                                                           "", "", "", "", "", "", "", "",
@@ -92,28 +94,15 @@ namespace FriendlyForms.RestService
                     user.CustomerKey = customerResponse.CustomerKey;
                     user.RecurringDateStart = DateTime.UtcNow;
                     user.Paid = true;
+                    user.AmountId = request.AmountId;
                     UserSession.Paid = true;
                     UserService.Update(user);
-                    response= recurringSoapClient.ProcessCreditCard(UserName, Password, Vendor, user.CcInfoKey, amount, "", "");
+                    response= recurringSoapClient.ProcessCreditCard(UserName, Password, Vendor, user.CcInfoKey, amount.ToString(), "", "");
                     if(response.code == ResultCode.OK)
                         return;
                     throw new HttpError(HttpStatusCode.BadRequest, response.error);
                 }
                 throw new HttpError(HttpStatusCode.BadRequest, customerResponse.error);
-            }
-            private string GetAmount(int amountId)
-            {
-                switch (amountId)
-                {
-                    case (int)PaymentOptions.Silver:
-                        return "315";
-                    case (int)PaymentOptions.Gold:
-                        return "500";
-                    case (int)PaymentOptions.Premiere:
-                        return "750";
-                    default:
-                        return "315";
-                }
             }
 
             //public void Delete(PaymentDto request)

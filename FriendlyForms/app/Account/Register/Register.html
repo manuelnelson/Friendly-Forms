@@ -7,41 +7,37 @@
                     <div class="form-group row">
                         <div class="col-lg-8">
                             <input class="form-control" id="DisplayName" name="DisplayName" ng-model="user.DisplayName" placeholder="Name*" required type="text" value="">
-							<div ng-show="userForm.DisplayName.$dirty && userForm.DisplayName.$invalid">								
-								<span class="form-error" ng-show="userForm.DisplayName.$error.required">This field is required.</span>
-							</div>
+                            <div ng-show="userForm.DisplayName.$dirty && userForm.DisplayName.$invalid">
+                                <span class="form-error" ng-show="userForm.DisplayName.$error.required">This field is required.</span>
+                            </div>
                         </div>
-                        <div class="col-lg-4">
-                              <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Your name will appear in the top right corner of the form." popover-title="Tip"></i>
-                        </div>
+                        <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Your name will appear in the top right corner of the form." popover-title="Tip"></i>
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-8">
                             <input class="form-control" id="Email" name="Email" ng-model="user.Email" required placeholder="Email*" type="text" value="">
-							<div ng-show="userForm.Email.$dirty && userForm.Email.$invalid">
-								<span class="form-error" ng-show="userForm.Email.$error.email">Not a valid e-mail address.</span>
-								<span class="form-error" ng-show="userForm.Email.$error.required">This field is required.</span>
-							</div>
+                            <div ng-show="userForm.Email.$dirty && userForm.Email.$invalid">
+                                <span class="form-error" ng-show="userForm.Email.$error.email">Not a valid e-mail address.</span>
+                                <span class="form-error" ng-show="userForm.Email.$error.required">This field is required.</span>
+                            </div>
                         </div>
-                        <div class="col-lg-4">
-                              <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Your email address will be used for login purposes." popover-title="Tip"></i>
-                        </div>
+                        <i class="icon icon-question-sign" popover-placement="right" popover-trigger="mouseenter" popover="Your email address will be used for login purposes." popover-title="Tip"></i>
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-8">
                             <input class="form-control" id="Password" name="Password" ng-model="user.Password" required placeholder="Password*" type="password">
-							<div ng-show="userForm.Password.$dirty && userForm.Password.$invalid">
-								<span class="form-error" ng-show="userForm.Password.$error.required">This field is required.</span>
-							</div>
+                            <div ng-show="userForm.Password.$dirty && userForm.Password.$invalid">
+                                <span class="form-error" ng-show="userForm.Password.$error.required">This field is required.</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-8">
                             <input class="form-control" id="ConfirmPassword" name="ConfirmPassword" ng-model="user.ConfirmPassword" required matches-password placeholder="Confirm Password*" type="password">
-							<div ng-show="userForm.ConfirmPassword.$dirty && userForm.ConfirmPassword.$invalid">
-								<span class="form-error" ng-show="userForm.ConfirmPassword.$error.noMatch">Passwords do not match.</span>
-								<span class="form-error" ng-show="userForm.ConfirmPassword.$error.required">This field is required.</span>
-							</div>
+                            <div ng-show="userForm.ConfirmPassword.$dirty && userForm.ConfirmPassword.$invalid">
+                                <span class="form-error" ng-show="userForm.ConfirmPassword.$error.noMatch">Passwords do not match.</span>
+                                <span class="form-error" ng-show="userForm.ConfirmPassword.$error.required">This field is required.</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">

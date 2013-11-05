@@ -24,7 +24,7 @@ namespace FriendlyForms.RestService
             public int UserAuthId { get; set; }
             public bool Paid { get; set; }
             public string DisplayName { get; set; }
-            public int? LawFirmId { get; set; }
+            public long? LawFirmId { get; set; }
             public string Position { get; set; }
         }
         

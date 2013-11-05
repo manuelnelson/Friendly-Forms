@@ -14,18 +14,18 @@
                         <div class="col-lg-12">
                             <div class="radio">
                                 <label>
-                                    Silver Plan: $315/month.  Seven forms per month. Each additional form is $55
-                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="1"></label>
+                                    Bronze Plan: $315/month.  Seven forms per month. Each additional form is $55
+                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="10"></label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    Gold Plan: $500/month.  Fifteen forms per month. Each additional form is $50
-                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="2"></label>
+                                    Silver Plan: $500/month.  Fifteen forms per month. Each additional form is $50
+                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="11"></label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    Premiere Plan: $750/month.  Thirty forms per month. Each additional form is $40
-                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="3"></label>
+                                    Gold Plan: $750/month.  Thirty forms per month. Each additional form is $40
+                                    <input required ng-model="pricing.Subscription" name="Subscription" type="radio" value="12"></label>
                             </div>
                             <div ng-show="showErrors && pricingForm.Subscription.$invalid">
                                 <span class="form-error" ng-show="pricingForm.Subscription.$error.required">The field is required</span>

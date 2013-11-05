@@ -94,6 +94,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Logging.Elmah.1.0.10.0\lib\net35\ServiceStack.Logging.Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.ServiceInterface, Version=3.9.59.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataLayerContext\bin\Debug\ServiceStack.ServiceInterface.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>..\packages\ServiceStack.Text.3.9.59\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -171,6 +175,7 @@
     <Compile Include="Contracts\IAddendumService.cs" />
     <Compile Include="Contracts\IOutputService.cs" />
     <Compile Include="Contracts\IParticipantService.cs" />
+    <Compile Include="Contracts\IPaymentService.cs" />
     <Compile Include="Contracts\IPreexistingSupportChildService.cs" />
     <Compile Include="Contracts\IPreexistingSupportFormService.cs" />
     <Compile Include="Contracts\IPreexistingSupportService.cs" />
@@ -228,6 +233,7 @@
     <Compile Include="AddendumService.cs" />
     <Compile Include="OutputService.cs" />
     <Compile Include="ParticipantService.cs" />
+    <Compile Include="PaymentService.cs" />
     <Compile Include="PreexistingSupportChildService.cs" />
     <Compile Include="PreexistingSupportFormService.cs" />
     <Compile Include="PreexistingSupportService.cs" />

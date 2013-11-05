@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayerContext", "DataLay
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SplitSolutionsAzure", "SplitSolutionsAzure\SplitSolutionsAzure.ccproj", "{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentService\PaymentService.csproj", "{FBC68825-44D9-4773-BC8E-4CC4F5244120}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B114AC98-C6F0-4CD5-AF4C-EA483A28F401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC68825-44D9-4773-BC8E-4CC4F5244120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC68825-44D9-4773-BC8E-4CC4F5244120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC68825-44D9-4773-BC8E-4CC4F5244120}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC68825-44D9-4773-BC8E-4CC4F5244120}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

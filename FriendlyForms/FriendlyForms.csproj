@@ -281,7 +281,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="WebRole.cs" />
-    <Compile Include="WebServiceExamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\Account\ForgotPassword\forgotPassword-service.js" />
