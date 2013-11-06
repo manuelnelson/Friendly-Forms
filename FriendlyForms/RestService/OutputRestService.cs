@@ -430,6 +430,8 @@ namespace FriendlyForms.RestService
     public class LowIncomeDeviation
     {
         [DataMember]
+        public bool HasLowIncomeDeviation { get; set; }
+        [DataMember]
         public double DeviationAmount { get; set; }
         [DataMember]
         public double CompareAmount { get; set; }
@@ -1490,6 +1492,7 @@ namespace FriendlyForms.RestService
             {
                 DeviationAmount = deviations.LowDeviation ?? 0,
             };
+            lowIncome.HasLowIncomeDeviation = deviations.HighLow == (int)HighLow.Low;
             var csw9 = custodyInformation.NonCustodyIsFather ? presumptiveAmounts.Father : presumptiveAmounts.Mother;
             lowIncome.CompareAmount = csw9 - lowIncome.DeviationAmount;
             var minChildSupportAmount = 50 + children.Count * 50;
