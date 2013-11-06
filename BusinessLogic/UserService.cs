@@ -9,14 +9,15 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace BusinessLogic
 {
-    public class UserService :  Service<IUserRepository, User>, IUserService
+    public class UserService : Service<IUserRepository, User>, IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IEmailService _emailService;        
-        public UserService(IUserRepository userRepository, IEmailService emailService) : base(userRepository)
-        {          
+        private readonly IEmailService _emailService;
+        public UserService(IUserRepository userRepository, IEmailService emailService)
+            : base(userRepository)
+        {
             _userRepository = userRepository;
-            _emailService = emailService;        
+            _emailService = emailService;
         }
 
         public User CreateOrUpdate(User user)
@@ -57,38 +58,29 @@ namespace BusinessLogic
         }
 
         private const int MaximumDaysInMonth = 31;
-        
+
         /// <summary>
         /// Gets all accounts that are a) active and b) same day as recurring start date
         /// </summary>
         /// <returns></returns>
         public List<User> GetTodaysActiveAccounts()
         {
-            try
-            {
-                var currentDate = DateTime.UtcNow;
-                var currentDay = currentDate.Day;
-                //current day users
-                var users = _userRepository.GetFiltered(x => x.RecurringActive && x.RecurringDateStart.Value.Day == currentDay).ToList();
-
-                var daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-                if (currentDay != daysInMonth || currentDay == MaximumDaysInMonth)
-                    return users;
-                //else we need to retrieve later possible days in month as well
-                var difference = MaximumDaysInMonth - currentDay;
-                for (var i = 0; i < difference; i++)
-                {
-                    var day = MaximumDaysInMonth - i;
-                    var laterMonthUsers = _userRepository.GetFiltered(x => x.RecurringActive && x.RecurringDateStart.Value.Day == day).ToList();
-                    users.AddRange(laterMonthUsers);
-                }
+            var currentDate = DateTime.UtcNow;
+            var currentDay = currentDate.Day;
+            //current day users
+            var users = _userRepository.GetFiltered(x => x.RecurringActive).ToList().Where(x=>x.RecurringDateStart != null && x.RecurringDateStart.Value.Day == currentDay).ToList();
+            var daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+            if (currentDay != daysInMonth || currentDay == MaximumDaysInMonth)
                 return users;
-            }
-            catch (Exception ex)
+            //else we need to retrieve later possible days in month as well
+            var difference = MaximumDaysInMonth - currentDay;
+            for (var i = 0; i < difference; i++)
             {
-                ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to retrieve today's active accounts", ex);                
+                var day = MaximumDaysInMonth - i;
+                var laterMonthUsers = _userRepository.GetFiltered(x => x.RecurringActive && x.RecurringDateStart.Value.Day == day).ToList();
+                users.AddRange(laterMonthUsers);
             }
+            return users;
         }
 
         public int GetNumberOfUsersAddedThisMonth(User adminUser)
@@ -101,15 +93,15 @@ namespace BusinessLogic
                 var clients = new List<UserAuth>();
                 foreach (var firmUser in firmUsers)
                 {
-                    var attorneyClients = _userRepository.GetAttorneysClients(firmUser.Id).ToList().Where(x=>x.CreatedDate >= monthAgo);
+                    var attorneyClients = _userRepository.GetAttorneysClients(firmUser.Id).ToList().Where(x => x.CreatedDate >= monthAgo);
                     clients.AddRange(attorneyClients);
                 }
                 return clients.Distinct().Count();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to retrieve number of clients", ex);                                
+                throw new Exception("Unable to retrieve number of clients", ex);
             }
         }
     }

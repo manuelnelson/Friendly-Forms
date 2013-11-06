@@ -119,8 +119,8 @@
                             </tr>
                             <tr class="bold">
                                 <td>13. Final Child Support Amount</td>
-                                <td>{{childSupport.FatherCsw.FinalAmount | dollarAmount}}</td>
-                                <td>{{childSupport.MotherCsw.FinalAmount | dollarAmount}}</td>
+                                <td>{{childSupport.FatherCsw.FinalAmount | roundToInteger | dollarAmount }}</td>
+                                <td>{{childSupport.MotherCsw.FinalAmount | roundToInteger | dollarAmount}}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -129,8 +129,8 @@
                             </tr>
                             <tr>
                                 <td>14. Uninsured Health Expenses</td>
-                                <td>{{childSupport.FatherCsw.UninsuredExpenses | dollarAmount}}</td>
-                                <td>{{childSupport.MotherCsw.UninsuredExpenses | dollarAmount}}</td>
+                                <td>{{childSupport.FatherCsw.UninsuredExpenses | percentage}}</td>
+                                <td>{{childSupport.MotherCsw.UninsuredExpenses | percentage}}</td>
                             </tr>
                         </tbody>
                     </table>

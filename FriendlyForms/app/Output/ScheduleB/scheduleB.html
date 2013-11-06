@@ -64,7 +64,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Child Name(s) and Date of Birth</td>                                
+                                <td>7. Child Name(s) and Date of Birth</td>                                
                                 <td>Court Name</td>
                                 <td>Case #</td>
                                 <td>Order Date</td>
@@ -73,9 +73,9 @@
                             </tr>
                             <tr ng-repeat="court in scheduleB.ScheduleB.PreexistingSupport">
                                 <td>
-                                    <ul class="list-unstyled">
+                                    <ul class="list-unstyled" style="margin:0;">
                                         <li ng-repeat="child in court.Children">
-                                            <span class="pull-left">{{child.Name}}</span><span class="pull-right">{{child.DateOfBirth | date:'shortDate'}}</span><br/>
+                                            <span class="pull-left" style="padding: 0 0 0 20px;">{{child.Name}}</span><span class="pull-right">{{child.DateOfBirth | date:'shortDate'}}</span><br/>
                                         </li>
                                     </ul>
                                 </td>

@@ -161,6 +161,10 @@
     <Compile Include="Migrations\201310291908132_ChangeUserVerifiedToPaid.Designer.cs">
       <DependentUpon>201310291908132_ChangeUserVerifiedToPaid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311052154399_UserPaymentModifications.cs" />
+    <Compile Include="Migrations\201311052154399_UserPaymentModifications.Designer.cs">
+      <DependentUpon>201311052154399_UserPaymentModifications.cs</DependentUpon>
+    </Compile>
     <Compile Include="OrmLiteRepositories\AddendumOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AssetOrmLiteRepository.cs" />
     <Compile Include="OrmLiteRepositories\AttorneyClientOrmLiteRepository.cs" />
@@ -341,6 +345,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201310291908132_ChangeUserVerifiedToPaid.resx">
       <DependentUpon>201310291908132_ChangeUserVerifiedToPaid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311052154399_UserPaymentModifications.resx">
+      <DependentUpon>201311052154399_UserPaymentModifications.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -259,7 +259,7 @@ namespace BusinessLogic
         {
             var deviations = DeviationsService.GetByUserId(userId) as Deviations;
             var extraExpenses = ExtraExpenseFormService.GetByUserId(userId) as ExtraExpenseForm;            
-            return (deviations != null && deviations.Deviation == (int)YesNo.Yes && extraExpenses != null && extraExpenses.HasExtraExpenses == (int)YesNo.Yes);
+            return ((deviations != null && deviations.Deviation == (int)YesNo.Yes) || (extraExpenses != null && extraExpenses.HasExtraExpenses == (int)YesNo.Yes));
         }
 
         public bool HasScheduleB(long userId)

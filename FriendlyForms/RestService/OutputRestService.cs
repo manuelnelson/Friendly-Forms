@@ -1448,7 +1448,7 @@ namespace FriendlyForms.RestService
             cswFather.DeviationsAmount = double.IsNaN(scheduleE.AllowableDeviation.AllowableFather) ? 0 : scheduleE.AllowableDeviation.AllowableFather;
             cswMother.DeviationsAmount = double.IsNaN(scheduleE.AllowableDeviation.AllowableMother) ? 0 : scheduleE.AllowableDeviation.AllowableMother;
             cswFather = FinishCsw(cswFather, cswTotal.SupportObligation, scheduleD.FatherScheduleD, socialSecurityFather, healthInsurance);
-            cswMother = FinishCsw(cswMother, cswTotal.SupportObligation, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance);
+            cswMother = FinishCsw(cswMother, cswTotal.SupportObligation, scheduleD.MotherScheduleD, socialSecurityMother, healthInsurance, isFather:false);
             var validSchedules = new List<string>
                 {
                     "Schedule A"

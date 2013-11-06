@@ -18,6 +18,11 @@ FormsApp.filter('commaIfNotEmpty', function () {
         return input;
     };
 });
+FormsApp.filter('roundToInteger', function () {
+    return function (input) {        
+        return Math.round(input);
+    };
+});
 FormsApp.filter('addPeriod', function () {
     return function (input) {
         if (typeof input != 'undefined' && input.length > 0) {
