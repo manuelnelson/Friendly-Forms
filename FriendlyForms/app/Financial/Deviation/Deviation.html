@@ -11,12 +11,16 @@
                         <div class="form-group">
                             <div class="informative col-lg-12">
                                 <p>
-                                    The Court or Jury has discretion to allow or not allow the noncustodial parent to receive a Low Income 
-                                or High Income Deviation that will decrease or increase the Presumptive Amount of Child Support.  If Low Income Deviation does not apply in this case, skip this section and go on to the next.
+                                    The Court or Jury has discretion to allow or not allow the noncustodial parent to receive General Deviations for extraordinary expenses. Or a Low Income 
+                                or High Income Deviation that will decrease or increase the Presumptive Amount of Child Support.  If deviations do not apply in this case, skip this section and go on to the next.
                                 </p>
                                 <p>
                                     This section pertains to what is acceptable to the recipient and affordable to whomever is paying. This typically pertains to parties who have either high or low income, or extraordinary expenses. 
-                                You may also apply other circumstances as both parties agree by using other non-specific deviations.
+                                    You may also apply other circumstances as both parties agree by using other non-specific deviations.
+                                </p>
+                                <h5>Deviations for Extraordinary Expenses</h5>
+                                <p>
+                                    You may request lowering or raising child support payments for extraordinary expenses to offset expenses paid by either party for such things as alimony, life insurance etc. 
                                 </p>
                                 <h5>High Income Deviation</h5>
                                 <p>
@@ -77,7 +81,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        
                         <div class="form-group row">
                             <div class="form-question col-xs-12">
                                 <p>
@@ -248,27 +252,28 @@
                             </div>
 
                         </div>
-                        <div class="form-group row">
-                            <label class="form-question col-xs-12">Other or Non-specific Deviations</label>
-                            <div class="row" style="margin-bottom: 0">
-                                <label class="col-md-4 form-question">Father</label>
-                                <label class="col-md-4 col-md-offset-1 form-question">Mother</label>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <input class="form-control" ng-model="deviation.NonSpecificFather" name="NonSpecificFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                    <div ng-show="deviationForm.NonSpecificFather.$dirty && deviationForm.NonSpecificFather.$invalid || (showErrors && deviationForm.NonSpecificFather.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.NonSpecificFather.$error.pattern">This field must be a number.</span>
+                            <div class="form-group row">
+                                <label class="form-question col-xs-12">Other or Non-specific Deviations</label>
+                                <div class="row" style="margin-bottom: 0">
+                                    <label class="col-md-4 form-question">Father</label>
+                                    <label class="col-md-4 col-md-offset-1 form-question">Mother</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <input class="form-control" ng-model="deviation.NonSpecificFather" name="NonSpecificFather" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                                        <div ng-show="deviationForm.NonSpecificFather.$dirty && deviationForm.NonSpecificFather.$invalid || (showErrors && deviationForm.NonSpecificFather.$invalid)">
+                                            <span class="form-error" ng-show="deviationForm.NonSpecificFather.$error.pattern">This field must be a number.</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-offset-1">
+                                        <input class="form-control" ng-model="deviation.NonSpecificMother" name="NonSpecificMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
+                                        <div ng-show="deviationForm.NonSpecificMother.$dirty && deviationForm.NonSpecificMother.$invalid || (showErrors && deviationForm.NonSpecificMother.$invalid)">
+                                            <span class="form-error" ng-show="deviationForm.NonSpecificMother.$error.pattern">This field must be a number.</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-offset-1">
-                                    <input class="form-control" ng-model="deviation.NonSpecificMother" name="NonSpecificMother" placeholder="Amount" ng-pattern="/^-?[0-9]*$/" type="text" value="">
-                                    <div ng-show="deviationForm.NonSpecificMother.$dirty && deviationForm.NonSpecificMother.$invalid || (showErrors && deviationForm.NonSpecificMother.$invalid)">
-                                        <span class="form-error" ng-show="deviationForm.NonSpecificMother.$error.pattern">This field must be a number.</span>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
+                         </div>
                         <div class="form-group row">
                             <label class="form-question col-xs-12">
                                 Do you wish to apply for a Low Income or High Income Deviation?</label>
