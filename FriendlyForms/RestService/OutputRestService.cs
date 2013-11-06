@@ -446,7 +446,11 @@ namespace FriendlyForms.RestService
     public class HighIncomeDeviation
     {
         [DataMember]
-        public int Deviation { get; set; }
+        public bool HasDeviation { get; set; }
+        [DataMember]
+        public bool HasHighDeviation { get; set; }
+        [DataMember]
+        public int HighDeviation { get; set; }
         [DataMember]
         public int OtherInsurance { get; set; }
         [DataMember]
@@ -1008,7 +1012,7 @@ namespace FriendlyForms.RestService
         {
             var highIncomeMother = new HighIncomeDeviation
             {
-                Deviation = deviations.HighDeviation ?? 0,
+                HighDeviation = deviations.HighDeviation ?? 0,
                 Alimony = deviations.AlimonyPaidMother ?? 0,
                 LifeInsurance = deviations.InsuranceMother ?? 0,
                 Mortgage = deviations.MortgageMother ?? 0,
@@ -1017,8 +1021,10 @@ namespace FriendlyForms.RestService
                 NonSpecific = deviations.NonSpecificMother ?? 0,
                 PermanancyPlan = deviations.PermanencyMother ?? 0,
                 VisitationExpense = deviations.VisitationMother ?? 0,
+                HasDeviation = deviations.Deviation == (int)YesNo.Yes,
+                HasHighDeviation = deviations.HighLow == (int)HighLow.High,
             };
-            highIncomeMother.TotalDeviations = highIncomeMother.Deviation + highIncomeMother.Alimony +
+            highIncomeMother.TotalDeviations = highIncomeMother.HighDeviation + highIncomeMother.Alimony +
                                                highIncomeMother.LifeInsurance + highIncomeMother.Mortgage +
                                                highIncomeMother.ChildTaxCredit + highIncomeMother.OtherInsurance +
                                                highIncomeMother.NonSpecific + highIncomeMother.PermanancyPlan +
@@ -1030,7 +1036,7 @@ namespace FriendlyForms.RestService
         {
             var highIncomeFather = new HighIncomeDeviation
             {
-                Deviation = deviations.HighDeviation ?? 0,
+                HighDeviation = deviations.HighDeviation ?? 0,
                 Alimony = deviations.AlimonyPaidFather ?? 0,
                 LifeInsurance = deviations.InsuranceFather ?? 0,
                 Mortgage = deviations.MortgageFather ?? 0,
@@ -1039,8 +1045,10 @@ namespace FriendlyForms.RestService
                 NonSpecific = deviations.NonSpecificFather ?? 0,
                 PermanancyPlan = deviations.PermanencyFather ?? 0,
                 VisitationExpense = deviations.VisitationFather ?? 0,
+                HasDeviation = deviations.Deviation == (int)YesNo.Yes,
+                HasHighDeviation = deviations.HighLow == (int)HighLow.High,
             };
-            highIncomeFather.TotalDeviations = highIncomeFather.Deviation + highIncomeFather.Alimony +
+            highIncomeFather.TotalDeviations = highIncomeFather.HighDeviation + highIncomeFather.Alimony +
                                                highIncomeFather.LifeInsurance + highIncomeFather.Mortgage +
                                                highIncomeFather.ChildTaxCredit + highIncomeFather.OtherInsurance +
                                                highIncomeFather.NonSpecific + highIncomeFather.PermanancyPlan +
