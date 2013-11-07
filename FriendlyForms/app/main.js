@@ -9,7 +9,7 @@ Application.properties = {
     defaultMessage: 'Loading...'
 };
 
-var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "ngSanitize"], ["$routeProvider", function ($routeProvider) {
+var FormsApp = angular.module("FormsApp", ["ngResource", "ui", "ui.bootstrap", "ngSanitize", "angulartics", "angulartics.google.analytics"], ["$routeProvider", function ($routeProvider) {
     $routeProvider.
         when('/Starter/Court/user/:userId', { caseInsensitiveMatch: true, controller: CourtCtrl, templateUrl: '/app/Starter/Court/court.html' }).
         when('/Starter/Participant/user/:userId', { caseInsensitiveMatch: true, controller: ParticipantCtrl, templateUrl: '/app/Starter/Participant/participant.html' }).

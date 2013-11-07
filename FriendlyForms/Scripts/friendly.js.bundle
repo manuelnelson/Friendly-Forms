@@ -16,6 +16,8 @@ angular.js
 angular-resource.js
 angular-sanitize.js
 angular-ui.js
+angulartics.js
+angulartics-google-analytics.js
 ui-bootstrap-custom-tpls-0.5.0.js
 ../app/main.js
 ../app/filters.js

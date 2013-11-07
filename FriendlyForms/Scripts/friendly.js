@@ -35995,6 +35995,171 @@ angular.module('ui.filters').filter('unique', function () {
         return items;
     };
 });
+;/**
+ * @license Angulartics v0.8.5
+ * (c) 2013 Luis Farzati http://luisfarzati.github.io/angulartics
+ * License: MIT
+ */
+(function(angular, analytics) {
+'use strict';
+
+var angulartics = window.angulartics || (window.angulartics = {});
+angulartics.waitForVendorApi = function (objectName, delay, registerFn) {
+  if (!Object.prototype.hasOwnProperty.call(window, objectName)) {
+    setTimeout(function () { angulartics.waitForVendorApi(objectName, delay, registerFn); }, delay);
+  }
+  else {
+    registerFn(window[objectName]);
+  }
+};
+
+/**
+ * @ngdoc overview
+ * @name angulartics
+ */
+angular.module('angulartics', [])
+.provider('$analytics', function () {
+  var settings = { 
+    pageTracking: { 
+      autoTrackFirstPage: true,
+      autoTrackVirtualPages: true,
+      basePath: '',
+      bufferFlushDelay: 1000 
+    },
+    eventTracking: {
+      bufferFlushDelay: 1000
+    } 
+  };
+
+  var cache = {
+    pageviews: [],
+    events: []
+  };
+
+  var bufferedPageTrack = function (path) {
+    cache.pageviews.push(path);
+  };
+  var bufferedEventTrack = function (event, properties) {
+    cache.events.push({name: event, properties: properties});
+  };
+
+  var api = {
+    settings: settings,
+    pageTrack: bufferedPageTrack,
+    eventTrack: bufferedEventTrack
+  };
+
+  var registerPageTrack = function (fn) {
+    api.pageTrack = fn;
+    angular.forEach(cache.pageviews, function (path, index) {
+      setTimeout(function () { api.pageTrack(path); }, index * settings.pageTracking.bufferFlushDelay);
+    });
+  };
+  var registerEventTrack = function (fn) {
+    api.eventTrack = fn;
+    angular.forEach(cache.events, function (event, index) {
+      setTimeout(function () { api.eventTrack(event.name, event.properties); }, index * settings.eventTracking.bufferFlushDelay);
+    });
+  };
+
+  return {
+    $get: function() { return api; },
+    settings: settings,
+    virtualPageviews: function (value) { this.settings.pageTracking.autoTrackVirtualPages = value; },
+    firstPageview: function (value) { this.settings.pageTracking.autoTrackFirstPage = value; },
+    withBase: function (value) { this.settings.pageTracking.basePath = (value) ? angular.element('base').attr('href').slice(0, -1) : ''; },
+    registerPageTrack: registerPageTrack,
+    registerEventTrack: registerEventTrack
+  };
+})
+
+.run(['$rootScope', '$location', '$analytics', function ($rootScope, $location, $analytics) {
+  if ($analytics.settings.pageTracking.autoTrackFirstPage) {
+    $analytics.pageTrack($location.absUrl());
+  }
+  if ($analytics.settings.pageTracking.autoTrackVirtualPages) {
+    $rootScope.$on('$routeChangeSuccess', function (event, current) {
+      if (current && (current.$$route||current).redirectTo) return;
+      var url = $analytics.settings.pageTracking.basePath + $location.url();
+      $analytics.pageTrack(url);
+    });
+  }
+}])
+
+.directive('analyticsOn', ['$analytics', function ($analytics) {
+  function isCommand(element) {
+    return ['a:','button:','button:button','button:submit','input:button','input:submit'].indexOf(
+      element.tagName.toLowerCase()+':'+(element.type||'')) >= 0;
+  }
+
+  function inferEventType(element) {
+    if (isCommand(element)) return 'click';
+    return 'click';
+  }
+
+  function inferEventName(element) {
+    if (isCommand(element)) return element.innerText || element.value;
+    return element.id || element.name || element.tagName;
+  }
+
+  function isProperty(name) {
+    return name.substr(0, 9) === 'analytics' && ['on', 'event'].indexOf(name.substr(10)) === -1;
+  }
+
+  return {
+    restrict: 'A',
+    scope: false,
+    link: function ($scope, $element, $attrs) {
+      var eventType = $attrs.analyticsOn || inferEventType($element[0]),
+          eventName = $attrs.analyticsEvent || inferEventName($element[0]);
+
+      var properties = {};
+      angular.forEach($attrs.$attr, function(attr, name) {
+        if (isProperty(attr)) {
+          properties[name.slice(9).toLowerCase()] = $attrs[name];
+        }
+      });
+
+      angular.element($element[0]).bind(eventType, function () {
+        $analytics.eventTrack(eventName, properties);
+      });
+    }
+  };
+}]);
+})(angular);
+
+;/**
+ * @license Angulartics v0.8.5
+ * (c) 2013 Luis Farzati http://luisfarzati.github.io/angulartics
+ * Universal Analytics update contributed by http://github.com/willmcclellan
+ * License: MIT
+ */
+(function(angular) {
+'use strict';
+
+/**
+ * @ngdoc overview
+ * @name angulartics.google.analytics
+ * Enables analytics support for Google Analytics (http://google.com/analytics)
+ */
+angular.module('angulartics.google.analytics', ['angulartics'])
+.config(['$analyticsProvider', function ($analyticsProvider) {
+
+  // GA already supports buffered invocations so we don't need
+  // to wrap these inside angulartics.waitForVendorApi
+
+  $analyticsProvider.registerPageTrack(function (path) {
+    if (window._gaq) _gaq.push(['_trackPageview', path]);
+    if (window.ga) ga('send', 'pageview', path);
+  });
+
+  $analyticsProvider.registerEventTrack(function (action, properties) {
+    if (window._gaq) _gaq.push(['_trackEvent', properties.category, action, properties.label, properties.value]);
+    if (window.ga) ga('send', 'event', properties.category, action, properties.label, properties.value);
+  });
+  
+}]);
+})(angular);
 ;angular.module("ui.bootstrap", ["ui.bootstrap.tpls", "ui.bootstrap.position", "ui.bootstrap.datepicker", "ui.bootstrap.dropdownToggle", "ui.bootstrap.tooltip", "ui.bootstrap.popover", "ui.bootstrap.timepicker", "ui.bootstrap.typeahead"]);
 angular.module("ui.bootstrap.tpls", ["template/datepicker/datepicker.html", "template/datepicker/popup.html", "template/tooltip/tooltip-html-unsafe-popup.html", "template/tooltip/tooltip-popup.html", "template/popover/popover.html", "template/timepicker/timepicker.html", "template/typeahead/typeahead-match.html", "template/typeahead/typeahead-popup.html"]);
 angular.module('ui.bootstrap.position', [])
@@ -37741,6 +37906,11 @@ FormsApp.filter('commaIfNotEmpty', function () {
         return input;
     };
 });
+FormsApp.filter('roundToInteger', function () {
+    return function (input) {        
+        return Math.round(input);
+    };
+});
 FormsApp.filter('addPeriod', function () {
     return function (input) {
         if (typeof input != 'undefined' && input.length > 0) {
@@ -37887,6 +38057,11 @@ FormsApp.config(['$httpProvider', function ($httpProvider) {
     $scope.close = function () {
         messageService.closeMessage();
     };
+    //close message on route change
+    $scope.$on("$locationChangeStart", function (event, nextLocation, currentLocation) {
+        // Logic goes here
+        $scope.close();
+    });
 };
 MessageCtrl.$inject = ['$scope', 'messageService'];
 ;////Message Service
@@ -37936,7 +38111,7 @@ FormsApp.factory('messageService', ['$location', function ($location) {
     };
     return service;
 }]);
-;var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, $rootScope) {
+;var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.court = courtService.courts.get({ UserId: $routeParams.userId }, function () {
@@ -37980,7 +38155,7 @@ FormsApp.factory('messageService', ['$location', function ($location) {
     });
 
 };
-CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService', '$rootScope'];
+CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;//Todoservice
 FormsApp.factory('courtService', ['$resource', function ($resource) {
     var service = {
@@ -37997,7 +38172,7 @@ FormsApp.factory('courtService', ['$resource', function ($resource) {
     };
     return service;
 }]);
-;var ParticipantCtrl = function ($scope, $routeParams, $location, participantService, menuService, genericService, $rootScope) {
+;var ParticipantCtrl = function ($scope, $routeParams, $location, participantService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.participant = participantService.participant.get({ UserId: $routeParams.userId }, function () {
@@ -38082,7 +38257,7 @@ FormsApp.factory('courtService', ['$resource', function ($resource) {
     });
 
 };
-ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', '$rootScope'];
+ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('participantService', ['$resource', function($resource) {
     var service = {
         participant: $resource('/api/participants/:userId', { userId: '@userId' },
@@ -38098,7 +38273,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     };
     return service;
 }]);
-;var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, $rootScope) {    
+;var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, userService, $rootScope) {    
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
@@ -38189,7 +38364,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
     };
     //#endregion    
 };
-ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', 'menuService', 'genericService', '$rootScope'];
+ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('childService', ['$resource', function ($resource) {
     var childrenService = {
         child: $resource('/api/child/', {},
@@ -38212,10 +38387,11 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
 }]);
 ;var IntroductionCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'genericService', '$rootScope', function ($scope, $routeParams, $location, menuService, genericService, $rootScope) {
     $scope.path = $location.path();
-    $scope.submit = function (noNavigate) {
+    $scope.submit = function () {
         menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
         menuService.nextMenu();
     };
+    $scope.disableAutomaticSubmit = true;
     genericService.refreshPage(function () {
         $rootScope.currentScope = $scope;
     });
@@ -38250,7 +38426,7 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
             $rootScope.currentScope = $scope;
         });
     }];
-;var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
+;var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38292,7 +38468,7 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
         $rootScope.currentScope = $scope;
     });
 };
-AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', '$rootScope'];
+AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('assetService', ['$resource',function($resource) {
     var service = {
         assets: $resource('/api/assets/:userId', { userId: '@userId' },
@@ -38303,49 +38479,49 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
     };
     return service;
 }]);
-;var DebtCtrl = function($scope, $routeParams, $location, debtService, menuService, genericService, $rootScope) {
-    $scope.path = $location.path();
-    $scope.showErrors = false;
-    $scope.isLoaded = false;
-    $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function () {
-        if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
-            //see if garlic has something stored            
-            $scope.debt = $.jStorage.get($scope.path);
-            if ($scope.debt)
-                $scope.showErrors = true;
-        }
-        $scope.isLoaded = true;
-    });
-    $scope.submit = function(noNavigate) {
-        if ($scope.debtForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
-            var value = genericService.getFormInput('#debtForm');
-            $.jStorage.set($scope.path, value);
-            if (!noNavigate)
-                menuService.nextMenu();
-            return;
-        }
-        $.jStorage.deleteKey($scope.path);
-        $scope.debt.UserId = userService.getFormUserId();
-        if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
-            debtService.debts.save(null, $scope.debt, function() {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+;var DebtCtrl = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope', 'userService',
+    function ($scope, $routeParams, $location, debtService, menuService, genericService, $rootScope, userService) {
+        $scope.path = $location.path();
+        $scope.showErrors = false;
+        $scope.isLoaded = false;
+        $scope.debt = debtService.debts.get({ UserId: $routeParams.userId }, function () {
+            if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
+                //see if garlic has something stored            
+                $scope.debt = $.jStorage.get($scope.path);
+                if ($scope.debt)
+                    $scope.showErrors = true;
+            }
+            $scope.isLoaded = true;
+        });
+        $scope.submit = function (noNavigate) {
+            if ($scope.debtForm.$invalid) {
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
+                var value = genericService.getFormInput('#debtForm');
+                $.jStorage.set($scope.path, value);
                 if (!noNavigate)
                     menuService.nextMenu();
-            });
-        } else {
-            debtService.debts.update({ Id: $scope.debt.Id }, $scope.debt, function() {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    menuService.nextMenu();
-            });
-        }
-    };
-    genericService.refreshPage(function () {
-        $rootScope.currentScope = $scope;
-    });
-};
-DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuService', 'genericService', '$rootScope'];
+                return;
+            }
+            $.jStorage.deleteKey($scope.path);
+            $scope.debt.UserId = userService.getFormUserId();
+            if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
+                debtService.debts.save(null, $scope.debt, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                    if (!noNavigate)
+                        menuService.nextMenu();
+                });
+            } else {
+                debtService.debts.update({ Id: $scope.debt.Id }, $scope.debt, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                    if (!noNavigate)
+                        menuService.nextMenu();
+                });
+            }
+        };
+        genericService.refreshPage(function () {
+            $rootScope.currentScope = $scope;
+        });
+    }];
 ;FormsApp.factory('debtService', ['$resource',function($resource) {
     var service = {
         debts: $resource('/api/debts/:userId', { userId: '@userId' },
@@ -38356,7 +38532,7 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
     };
     return service;
 }]);
-;var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, $rootScope) {
+;var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38398,7 +38574,7 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
         $rootScope.currentScope = $scope;
     });
 };
-HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', '$rootScope'];
+HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('healthInsuranceService', ['$resource',function($resource) {
     var service = {
         healthInsurances: $resource('/api/healthInsurances/:userId', { userId: '@userId' },
@@ -38409,7 +38585,7 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
     };
     return service;
 }]);
-;var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, limitToFilter, $http, $rootScope) {
+;var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, userService, limitToFilter, $http, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38461,7 +38637,7 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
     });
 
 };
-HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'limitToFilter', '$http', '$rootScope'];
+HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'userService', 'limitToFilter', '$http', '$rootScope'];
 ;FormsApp.factory('houseService', ['$resource', function($resource) {
     var service = {
         houses: $resource('/api/houses/:userId', { userId: '@userId' },
@@ -38472,7 +38648,7 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
     };
     return service;
 }]);
-;var PropertyCtrl = function($scope, $routeParams, $location, propertyService, menuService, genericService, $rootScope) {
+;var PropertyCtrl = function($scope, $routeParams, $location, propertyService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38515,7 +38691,7 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
     });
 
 };
-PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService', 'menuService', 'genericService', '$rootScope'];
+PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('propertyService', ['$resource',function($resource) {
     var service = {
         properties: $resource('/api/properties/:userId', { userId: '@userId' },
@@ -38526,7 +38702,7 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
     };
     return service;
 }]);
-;var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, $rootScope) {
+;var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38569,7 +38745,7 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
     });
 
 };
-SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', '$rootScope'];
+SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('spousalService', ['$resource', function($resource) {
     var service = {
         spousals: $resource('/api/spousals/:userId', { userId: '@userId' },
@@ -38580,7 +38756,7 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
     };
     return service;
 }]);
-;var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, $rootScope) {
+;var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38623,7 +38799,7 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
     });
 
 };
-TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', '$rootScope'];
+TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('taxService', ['$resource', function($resource) {
     var service = {
         taxes: $resource('/api/taxes/:userId', { userId: '@userId' },
@@ -38634,8 +38810,8 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
     };
     return service;
 }]);
-;var VehicleCtrl = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope', 'participantService',
-    function ($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope, participantService) {
+;var VehicleCtrl = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', 'userService', '$rootScope', 'participantService',
+    function ($scope, $routeParams, $location, vehicleService, menuService, genericService, userService, $rootScope, participantService) {
         //#region properties
         $scope.continuePressed = false;
         $scope.path = $location.path();
@@ -38749,7 +38925,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
     };
     return service;
 }]);
-;var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, $rootScope) {
+;var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38792,7 +38968,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
     });
 
 };
-AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', '$rootScope'];
+AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('addendumService', ['$resource', function($resource) {
     var service = {
         addendums: $resource('/api/addendums/:userId', { userId: '@userId' },
@@ -38803,7 +38979,7 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
     };
     return service;
 }]);
-;var CommunicationCtrl = function($scope, $routeParams, $location, communicationService, menuService, genericService, $rootScope) {
+;var CommunicationCtrl = function($scope, $routeParams, $location, communicationService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -38846,7 +39022,7 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
     });
 
 };
-CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', '$rootScope'];
+CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('communicationService', ['$resource',function($resource) {
     var service = {
         communications: $resource('/api/communication/:userId', { userId: '@userId' },
@@ -38857,7 +39033,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
     };
     return service;
 }]);
-;var DecisionCtrl = function ($scope, $routeParams, $location, decisionService, menuService, genericService, $rootScope) {
+;var DecisionCtrl = function ($scope, $routeParams, $location, decisionService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -39039,7 +39215,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
     });
 
 };
-DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', '$rootScope'];
+DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('decisionService', ['$resource',function ($resource) {
     var service = {
         decisions: $resource('/api/decisions/:childId', { childId: '@childId' },
@@ -39061,7 +39237,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
     };
     return service;
 }]);
-;var HolidayCtrl = function ($scope, $routeParams, $location, holidayService, menuService, genericService, $rootScope) {
+;var HolidayCtrl = function ($scope, $routeParams, $location, holidayService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -39358,7 +39534,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
         $rootScope.currentScope = $scope;
     });
 };
-HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', '$rootScope'];
+HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('holidayService', ['$resource', function($resource) {
     var service = {
         holidays: $resource('/api/holidays/:childId', { childId: '@childId' },
@@ -39380,7 +39556,7 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
     };
     return service;
 }]);
-;var InformationCtrl = function($scope, $routeParams, $location, informationService, menuService, genericService, $rootScope) {
+;var InformationCtrl = function($scope, $routeParams, $location, informationService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -39423,7 +39599,7 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
     });
 
 };
-InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationService', 'menuService', 'genericService', '$rootScope'];
+InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('informationService', ['$resource',function($resource) {
     var service = {
         information: $resource('/api/information/:userId', { userId: '@userId' },
@@ -39434,7 +39610,7 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
     };
     return service;
 }]);
-;var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, $rootScope) {
+;var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -39477,7 +39653,7 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
     });
 
 };
-PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', '$rootScope'];
+PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('privacyService', ['$resource',function($resource) {
     var service = {
         privacies: $resource('/api/privacies/:userId', { userId: '@userId' },
@@ -39488,7 +39664,7 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
     };
     return service;
 }]);
-;var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, $rootScope) {
+;var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -39538,7 +39714,7 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
     });
 
 };
-ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];
+ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('responsibilityService', ['$resource', function($resource) {
     var service = {
         responsibilities: $resource('/api/responsibilities/:userId', { userId: '@userId' },
@@ -39549,8 +39725,8 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     };
     return service;
 }]);
-;var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope', 'participantService',
-    function ($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope, participantService) {
+;var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', 'userService', '$rootScope', 'participantService',
+    function ($scope, $routeParams, $location, scheduleService, menuService, genericService, userService, $rootScope, participantService) {
     $scope.path = $location.path();
     $scope.isLoaded = false;
     $scope.showErrors = false;
@@ -39652,7 +39828,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
     };
     return service;
 }]);
-;var ChildCareCtrl = function ($scope, $routeParams, $location, childCareService, menuService, genericService, $rootScope) {
+;var ChildCareCtrl = function ($scope, $routeParams, $location, childCareService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -39762,7 +39938,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
         $rootScope.currentScope = $scope;
     });
 };
-ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareService', 'menuService', 'genericService', '$rootScope'];
+ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('childCareService', ['$resource',function ($resource) {
     var service = {
         childCares: $resource('/api/childCares/:childId', { childId: '@childId' },
@@ -39783,7 +39959,7 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
     };
     return service;
 }]);
-;var ChildSupportCtrl = function($scope, $routeParams, $location, childSupportService, menuService, genericService, $rootScope) {
+;var ChildSupportCtrl = function($scope, $routeParams, $location, childSupportService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -39832,7 +40008,7 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
     });
 
 };
-ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportService', 'menuService', 'genericService', '$rootScope'];
+ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupportService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('childSupportService', ['$resource',function($resource) {
     var service = {
         childSupports: $resource('/api/childSupports/:userId', { userId: '@userId' },
@@ -39843,53 +40019,71 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
     };
     return service;
 }]);
-;var DeviationCtrl = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope', 'scheduleBService',
-    function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope, scheduleBService) {
-    $scope.path = $location.path();
-    $scope.showErrors = false;
-    $scope.isLoaded = false;
-    $scope.deviation = deviationService.deviations.get({ UserId: $routeParams.userId }, function () {
-        if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
-            //see if garlic has something stored            
-            $scope.deviation = $.jStorage.get($scope.path);
-            if ($scope.deviation)
-                $scope.showErrors = true;
-        }
-        $scope.isLoaded = true;
-    });
-        scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function(data) {
+;var DeviationCtrl = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', 'userService', '$rootScope', 'scheduleBService',
+    function ($scope, $routeParams, $location, deviationService, menuService, genericService, userService, $rootScope, scheduleBService) {
+        $scope.path = $location.path();
+        $scope.showErrors = false;
+        $scope.isLoaded = false;
+        $scope.deviation = deviationService.deviations.get({ UserId: $routeParams.userId }, function () {
+            if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
+                //see if garlic has something stored            
+                $scope.deviation = $.jStorage.get($scope.path);
+                if ($scope.deviation)
+                    $scope.showErrors = true;
+            }
+            $scope.isLoaded = true;
+        });
+        scheduleBService.scheduleBs.get({ UserId: $routeParams.userId }, function (data) {
             $scope.IncomeHigherAmount = parseInt(data.ScheduleB.AdjustedSupport) - 30000;
         });
         $scope.submit = function (noNavigate) {
-        if ($scope.deviationForm.$invalid) {
-            menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
-            var value = genericService.getFormInput('#deviationForm');
-            $.jStorage.set($scope.path, value);
-            if (!noNavigate)
-                menuService.nextMenu();
-            return;
-        }
-        $.jStorage.deleteKey($scope.path);
-        $scope.deviation.UserId = userService.getFormUserId();
-        if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
-            deviationService.deviations.save(null, $scope.deviation, function () {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+            if ($scope.deviationForm.$invalid) {
+                menuService.setSubMenuIconClass($scope.path, 'icon-exclamation icon-red');
+                var value = genericService.getFormInput('#deviationForm');
+                $.jStorage.set($scope.path, value);
                 if (!noNavigate)
                     menuService.nextMenu();
-            });
-        } else {
-            deviationService.deviations.update({ Id: $scope.deviation.Id }, $scope.deviation, function () {
-                menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
-                if (!noNavigate)
-                    menuService.nextMenu();
-            });
-        }
-    };
-    genericService.refreshPage(function () {
-        $rootScope.currentScope = $scope;
-    });
+                return;
+            }
+            $.jStorage.deleteKey($scope.path);
+            $scope.deviation.UserId = userService.getFormUserId();
+            if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
+                deviationService.deviations.save(null, $scope.deviation, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                    if (!noNavigate)
+                        menuService.nextMenu();
+                });
+            } else {
+                deviationService.deviations.update({ Id: $scope.deviation.Id }, $scope.deviation, function () {
+                    menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
+                    if (!noNavigate)
+                        menuService.nextMenu();
+                });
+            }
+        };
+        $scope.clearDeviations = function() {
+            $scope.deviation.HealthFather = '';
+            $scope.deviation.HealthMother = '';
+            $scope.deviation.InsuranceFather = '';
+            $scope.deviation.InsuranceMother = '';
+            $scope.deviation.TaxCreditFather = '';
+            $scope.deviation.TaxCreditMother = '';
+            $scope.deviation.VisitationFather = '';
+            $scope.deviation.VisitationMother = '';
+            $scope.deviation.AlimonyPaidFather = '';
+            $scope.deviation.AlimonyPaidMother = '';
+            $scope.deviation.MortgageFather = '';
+            $scope.deviation.MortgageMother = '';
+            $scope.deviation.PermanencyFather = '';
+            $scope.deviation.PermanencyMother = '';
+            $scope.deviation.NonSpecificFather = '';
+            $scope.deviation.NonSpecificMother = '';
+        };
+        genericService.refreshPage(function () {
+            $rootScope.currentScope = $scope;
+        });
 
-}];
+    }];
 ;FormsApp.factory('deviationService', ['$resource',function($resource) {
     var service = {
         deviations: $resource('/api/deviations/:userId', { userId: '@userId' },
@@ -39900,7 +40094,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
     };
     return service;
 }]);
-;var ExtraExpenseCtrl = function ($scope, $routeParams, $location, extraExpenseService, menuService, genericService, $rootScope) {
+;var ExtraExpenseCtrl = function ($scope, $routeParams, $location, extraExpenseService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -40016,7 +40210,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
         $rootScope.currentScope = $scope;
     });
 };
-ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', '$rootScope'];
+ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('extraExpenseService', ['$resource', function($resource) {
     var service = {
         extraExpenses: $resource('/api/extraExpenses/:childId', { childId: '@childId' },
@@ -40038,7 +40232,7 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
     return service;
 
 }]);
-;var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, $rootScope) {
+;var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -40081,7 +40275,7 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
     });
 
 };
-HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', '$rootScope'];
+HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('healthService', ['$resource',function($resource) {
     var service = {
         healths: $resource('/api/healths/:userId', { userId: '@userId' },
@@ -40092,8 +40286,8 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     };
     return service;
 }]);
-;var IncomeCtrl = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope', 'participantService', 
-    function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope, participantService) {
+;var IncomeCtrl = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', 'userService', '$rootScope', 'participantService', 
+    function($scope, $routeParams, $location, incomeService, menuService, genericService, userService, $rootScope, participantService) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -40148,8 +40342,8 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     };
     return service;
 }]);
-;var OtherChildCtrl = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope', '$q',
-    function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope, $q) {
+;var OtherChildCtrl = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', 'userService', '$rootScope', '$q',
+    function ($scope, $routeParams, $location, otherChildService, menuService, genericService, userService, $rootScope, $q) {
         //#region properties
         $scope.continuePressed = false;
         $scope.path = $location.path();
@@ -40278,7 +40472,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     };
     return service;
 }]);
-;var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, $rootScope) {
+;var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -40322,7 +40516,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
     });
 
 };
-SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', '$rootScope'];
+SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', 'userService', '$rootScope'];
 ;FormsApp.factory('socialSecurityService', ['$resource',function($resource) {
     var service = {
         socialSecurities: $resource('/api/socialSecurities/:userId', { userId: '@userId' },
@@ -40333,7 +40527,7 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
     };
     return service;
 }]);
-;var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope, $q) {
+;var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, userService, $rootScope, $q) {
     $scope.path = $location.path();
     $scope.showAddChild = false;
     $scope.showErrors = false;
@@ -40478,7 +40672,7 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
     });
 
 };
-SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope', '$q'];
+SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', 'userService', '$rootScope', '$q'];
 ;FormsApp.factory('supportService', ['$resource', function($resource) {
     var service = {
         supports: $resource('/api/PreexistingSupportForms/:userId', { userId: '@userId' },
@@ -40573,8 +40767,9 @@ SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 
                 $location.path(formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId)[0]);
             }
         };
-        $rootScope.currentScope = $scope;
-        headerService.setTitle('Form Completed');
+        genericService.refreshPage(function() {
+            $rootScope.currentScope = $scope;
+        });
     }];
 
 ;FormsApp.factory('parentingService', ['$resource', function ($resource) {
@@ -40911,7 +41106,9 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
             });
         });
     };
-    headerService.setTitle('Register Administrator');
+    genericService.refreshPage(function() {
+        headerService.setTitle('Register Administrator');
+    });
 }];
 ;FormsApp.factory('lawFirmService', function($resource) {
     var service = {
@@ -40923,7 +41120,7 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
     };
     return service;
 });
-;var RegisterFirmCtrl = function ($scope, $routeParams, $location, lawFirmService, menuService, headerService, limitToFilter, $http) {
+;var RegisterFirmCtrl = function ($scope, $routeParams, $location, lawFirmService, menuService, headerService, limitToFilter, $http, genericService) {
     $scope.submit = function() {
         if ($scope.lawFirmForm.$invalid) {
             return;
@@ -40941,15 +41138,17 @@ DomesticMediationCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeou
             return limitToFilter(names, 8);
         });
     };
-    headerService.setTitle("Register Law Firm");
+    genericService.refreshPage(function() {
+        headerService.setTitle("Register Law Firm");
+    });
 };
-RegisterFirmCtrl.$inject = ['$scope', '$routeParams', '$location', 'lawFirmService', 'menuService', 'headerService', 'limitToFilter', '$http'];
+RegisterFirmCtrl.$inject = ['$scope', '$routeParams', '$location', 'lawFirmService', 'menuService', 'headerService', 'limitToFilter', '$http', 'genericService'];
 ;FormsApp.factory('pricingService', function($resource) {
     var service = {
     };
     return service;
 });
-;var PricingCtrl = function($scope, $routeParams, $location, pricingService, menuService, headerService, $rootScope) {
+;var PricingCtrl = function($scope, $routeParams, $location, pricingService, menuService, genericService, $rootScope) {
     $scope.showErrors = false;
     $scope.submit = function() {
         if ($scope.pricingForm.$invalid) {
@@ -40958,10 +41157,13 @@ RegisterFirmCtrl.$inject = ['$scope', '$routeParams', '$location', 'lawFirmServi
         }
         $location.path('/Administrator/RegisterFirm/Subscription/' + $scope.pricing.Subscription);
     };
-    $rootScope.currentScope = $scope;
-    headerService.setTitle("Pricing");
+    $scope.disableAutomaticSubmit = true;
+
+    genericService.refreshPage(function() {
+        $rootScope.currentScope = $scope;
+    });
 };
-PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 'menuService', 'headerService', '$rootScope'];
+PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 'menuService', 'genericService', '$rootScope'];
 ;FormsApp.factory('paymentService', function($resource) {
     var service = {
         oneTime: $resource('/api/payments/onetime', { },
@@ -40977,9 +41179,8 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 });
-;var PaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'headerService', 'userService', 'constantsService',
-    function ($scope, $routeParams, $location, paymentService, menuService, headerService, userService, constantsService) {
-        headerService.setTitle('Payment');
+;var PaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'genericService', 'userService', 'constantsService',
+    function ($scope, $routeParams, $location, paymentService, menuService, genericService, userService, constantsService) {
         $scope.submit = function () {
             if ($scope.paymentForm.$invalid) {
                 return;
@@ -40999,23 +41200,25 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                 });
             });
         };
+        genericService.refreshPage();
     }];
 ;FormsApp.factory('agreementService', ['$resource', function($resource) {
     var service = {
     };
     return service;
 }]);
-;var AgreementCtrl = ['$scope', '$routeParams', '$location', 'agreementService', 'menuService', 'headerService', function($scope, $routeParams, $location, agreementService, menuService, headerService) {
-    $scope.submit = function() {
-        if ($scope.agreementForm.$invalid) {
-            return;
-        }        
-        $location.path('/Administrator/Payment/Admin/' + $routeParams.adminId + '/Subscription/' + $routeParams.subscription);
-    };
-    headerService.setTitle('Agreement');
-}];
-;var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'registerService', 'userService', 'attorneyPageService',
-    function ($scope, $routeParams, $location, menuService, headerService, registerService, userService, attorneyPageService) {
+;var AgreementCtrl = ['$scope', '$routeParams', '$location', 'agreementService', 'menuService', 'genericService',
+    function ($scope, $routeParams, $location, agreementService, menuService, genericService) {
+        $scope.submit = function () {
+            if ($scope.agreementForm.$invalid) {
+                return;
+            }
+            $location.path('/Administrator/Payment/Admin/' + $routeParams.adminId + '/Subscription/' + $routeParams.subscription);
+        };
+        genericService.refreshPage();
+    }];
+;var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'genericService', 'registerService', 'userService', 'attorneyPageService',
+    function ($scope, $routeParams, $location, menuService, headerService, genericService,registerService, userService, attorneyPageService) {
         $scope.submit = function () {
             if ($scope.registerAttorneyForm.$invalid) {
                 return;
@@ -41048,7 +41251,9 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                 });
             });
         };
-        headerService.setTitle('Add Attorneys and Coworkers');
+        genericService.refreshPage(function() {
+            headerService.setTitle('Add Attorneys and Coworkers');
+        });
     }];
 ;FormsApp.factory('createAttorneyService', ['$resource', function($resource) {
     var service = {
@@ -41062,8 +41267,8 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 }]);
-;var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
-    function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService, loginMenuService) {
+;var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'genericService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
+    function ($scope, $routeParams, $location, clientCasesService, menuService, genericService, $rootScope, clientService, userService, loginMenuService) {
         $scope.clients = [];
         $scope.adminId = $routeParams.adminId;
         $scope.isLoaded = false;
@@ -41086,14 +41291,14 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
         $scope.openAttorney = function(attorney) {
             $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
         };
-        headerService.setTitle("Administrator");
-        loginMenuService.refresh($routeParams.adminId).then(function() {
+        loginMenuService.refresh($routeParams.adminId).then(function () {
             //TODO: we really need a way of getting location.path to equal hrefs
             var path = $location.path();
             if (path.indexOf('/#') == -1)
                 path = "/#" + path;
             menuService.setActive(path, false);
         });
+        genericService.refreshPage();
     }];
 ;FormsApp.factory('attorneyPageService', ['$resource', function ($resource) {
     var service = {
@@ -41105,8 +41310,8 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 }]);
-;var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'menuService', 'headerService', 'clientService', 'loginMenuService',
-    function ($scope, $routeParams, $location, attorneyPageService, userService, menuService, headerService, clientService, loginMenuService) {
+;var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'genericService', 'clientService', 'loginMenuService',
+    function ($scope, $routeParams, $location, attorneyPageService, userService, genericService, clientService, loginMenuService) {
         $scope.clients = [];
         $scope.attorneyId = $routeParams.attorneyId;
         clientService.getClients($routeParams.attorneyId).then(function (clients) {
@@ -41122,7 +41327,7 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
         $scope.archiveClient = function(client) {
 
         };
-        headerService.setTitle("Attorney Page");
+        genericService.refreshPage();
         loginMenuService.refresh();
 
     }];
@@ -41131,8 +41336,8 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 }]);
-;var CreateClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'courtService', 'headerService', 'userService',
-    function ($scope, $routeParams, $location, clientService, courtService, headerService, userService) {
+;var CreateClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'courtService', 'headerService', 'userService', 'genericService',
+    function ($scope, $routeParams, $location, clientService, courtService, headerService, userService, genericService) {
 
         $scope.submit = function () {
             if ($scope.createClientForm.$invalid) {
@@ -41174,7 +41379,9 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
                 });
             });
         };
-        headerService.setTitle('Create A Client');
+        genericService.refreshPage(function () {
+            headerService.setTitle('Create A Client');
+        });
     }];
 ;FormsApp.factory('clientService', ['$resource', 'userService', '$q', function($resource, userService,$q) {
     var service = {
@@ -41218,10 +41425,9 @@ PricingCtrl.$inject = ['$scope', '$routeParams', '$location', 'pricingService', 
     };
     return service;
 }]);
-;var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'constantsService',
-function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, constantsService) {
+;var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'genericService',
+function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, genericService) {
     //#region Init
-    headerService.setTitle('Client Profile');
     userService.getUserAuth($routeParams.userId).then(function (userAuth) {
          $scope.userAuth = userAuth;
      });
@@ -41244,6 +41450,10 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
                 });
             });
         }
+    });
+    genericService.refreshPage(function() {
+        headerService.setTitle('Client Profile');
+        $rootScope.currentScope = $scope;
     });
     //#endregion
 
@@ -41289,12 +41499,10 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
         });
     };
     //#endregion
-    $rootScope.currentScope = $scope;
 }];
 ;var HomeCtrl = ['$scope', '$routeParams', '$route', '$location', 'menuService', 'genericService', 'headerService',
     function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
         menuService.setActive($location.path(), false);
-        headerService.refresh();
         $scope.showMore = function (boxNumber) {
             switch (boxNumber) {
                 case 3:
@@ -41315,7 +41523,10 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
             return $(item).height();
         });
         boxes.height($(maxItem).height());
-        headerService.setTitle('Split Solutions: The Divorce Solution for Georgia Residents');
+        
+        genericService.refreshPage(function() {
+            headerService.setTitle('Split Solutions: The Divorce Solution for Georgia Residents');
+        });
     }];
 
 ;var MenuCtrl = ['$scope', '$routeParams', '$location', 'menuService', '$filter',
@@ -41452,7 +41663,7 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
         isActive: function (path) {
             if (service.isInitialized) {
                 var menuGroup = service.getMenuGroupByPath(path);
-                if (menuGroup.subMenuItem)
+                if (menuGroup && menuGroup.subMenuItem)
                     return menuGroup.subMenuItem.itemClass === 'active';
             }
             return false;
@@ -41495,7 +41706,9 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
                 });
                 if (subMenuItem) {
                     var currentFormScope = $rootScope.$root.currentScope;
-                    currentFormScope.submit(true); //true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
+                    if (!currentFormScope.disableAutomaticSubmit) { //Option to not submit form automatically when navigating away from page.  Needs to be set explicitly in controller
+                        currentFormScope.submit(true); //true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
+                    }
                     break;
                 }
             }
@@ -41534,13 +41747,15 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
             } else {
                 //Must be subMenu Level
                 var menuGroup = service.getMenuGroupByPath(path);
-                menuGroup.menuItem.showSubMenu = true;
-                menuGroup.menuItem.itemClass = 'submenu active';
-                menuGroup.subMenuItem.itemClass = 'active';
-                menuGroup.subMenuItem.iconClass = 'icon-white icon-pencil';
-                //Navigate to new path if we are not already there.
-                if ($location.path() !== menuGroup.subMenuItem.path)
-                    $location.path(menuGroup.subMenuItem.path);
+                if (menuGroup) {
+                    menuGroup.menuItem.showSubMenu = true;
+                    menuGroup.menuItem.itemClass = 'submenu active';
+                    menuGroup.subMenuItem.itemClass = 'active';
+                    menuGroup.subMenuItem.iconClass = 'icon-white icon-pencil';
+                    //Navigate to new path if we are not already there.
+                    if ($location.path() !== menuGroup.subMenuItem.path)
+                        $location.path(menuGroup.subMenuItem.path);
+                }
             }
         },
         //#endregion
@@ -41643,9 +41858,25 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
         setBreadCrumbs: function() {
             service.levels = [];
             if (service.menuGroup && service.menuGroup.menuItem) {
+                if (service.menuGroup.menuItem.text == 'Home')//ignore home since we're already there
+                    return;
                 service.levels.push(service.menuGroup.menuItem);
                 if (service.menuGroup.subMenuItem)
                     service.levels.push(service.menuGroup.subMenuItem);
+            } else {
+                //make own breadcrumbs using path
+                var path = service.path.split("/");
+                if (path.length > 2) {
+                    service.levels.push({
+                        text: path[1].replace(/([A-Z])/g, ' $1').replace(/^./, function (str) { return str.toUpperCase(); }),
+                        path: ''
+                    });
+                    service.Title = path[2].replace(/([A-Z])/g, ' $1').replace(/^./, function(str) { return str.toUpperCase(); });
+                    service.levels.push({
+                        text: service.Title,
+                        path: service.path.substring(1, service.path.length)
+                    });
+                }
             }
             service.showFeedbackHeader = true;
         },
@@ -41653,12 +41884,12 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
         refresh: function(path) {
             service.initialize(path);
             service.setTitle();
-            service.setBreadCrumbs();
+            service.setBreadCrumbs();            
         }
     };
     return service;
 }]);
-;FormsApp.factory('userService', ['$resource', '$q', function ($resource, $q) {
+;FormsApp.factory('userService', ['$resource', '$q', '$route', '$location', '$rootScope', function ($resource, $q, $route, $location,$rootScope) {
     var service = {
         userData: null,
         register: $resource('/api/userauths/register/', {},
@@ -41719,6 +41950,15 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
             });
             return deferred.promise;
         },
+        getFormUserId: function () {
+            var path = $rootScope.$root.currentScope.path;
+            if ($route.current.params.userId) {
+                return $route.current.params.userId;
+            } else if (path && path.indexOf('/User/') > -1) {
+                var regex = /\/(user|User)\/(\d*)/;
+                return path.match(regex)[2];
+            }
+        },
     };
     return service;
 }]);
@@ -41775,15 +42015,15 @@ HeaderCtrl.$inject = ['$scope', '$routeParams', '$location', 'headerService', 'm
        };
        return service;
    }]);
-;var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService',
-    function ($scope, $routeParams, $location, loginService, headerService) {
+;var LoginCtrl = ['$scope', '$routeParams', '$location', 'loginService', 'headerService', 'genericService',
+    function ($scope, $routeParams, $location, loginService, headerService, genericService) {
         $scope.submit = function () {
             loginService.login($scope.login, function() {
                     $scope.loginForm.$setPristine();
                     $scope.login = '';
             });
         }; 
-        headerService.setTitle('Login');
+        genericService.refreshPage();
     }];
 ;FormsApp.factory('loginService', ['$resource','loginMenuService', 'menuService', 
     function ($resource, loginMenuService, menuService) {
@@ -41820,8 +42060,8 @@ LogoffCtrl.$inject = ['$scope', '$routeParams', '$location', 'logoffService', 'h
     };
     return service;
 }]);
-;var ForgotPasswordCtrl = ['$scope', '$routeParams', '$location', 'forgotPasswordService', 'messageService',
-    function ($scope, $routeParams, $location, forgotPasswordService, messageService) {
+;var ForgotPasswordCtrl = ['$scope', '$routeParams', '$location', 'forgotPasswordService', 'messageService', 'genericService',
+    function ($scope, $routeParams, $location, forgotPasswordService, messageService, genericService) {
 
     $scope.submit = function() {
         if ($scope.forgotPasswordForm.$invalid) {
@@ -41834,6 +42074,7 @@ LogoffCtrl.$inject = ['$scope', '$routeParams', '$location', 'logoffService', 'h
         });
 
     };
+    genericService.refreshPage();
 
 }];
 ;FormsApp.factory('forgotPasswordService', ['$resource', function ($resource) {
@@ -41846,13 +42087,13 @@ LogoffCtrl.$inject = ['$scope', '$routeParams', '$location', 'logoffService', 'h
     };
     return service;
 }]);
-;var UnauthorizedCtrl = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'headerService','$rootScope',
-function ($scope, $routeParams, $location, unauthorizedService, headerService, $rootScope) {
+;var UnauthorizedCtrl = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'genericService','$rootScope',
+function ($scope, $routeParams, $location, unauthorizedService, genericService, $rootScope) {
     $rootScope.currentScope = $scope;
     $scope.submit = function() {
 
     };
-    headerService.setTitle('Unauthorized');
+    genericService.refreshPage();
 }];
 
 ;FormsApp.factory('unauthorizedService', function($resource) {
@@ -41860,8 +42101,8 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
     };
     return service;
 });
-;var RegisterCtrl = ['$scope', '$routeParams', '$location', 'registerService', 'headerService', 'userService', 
-    function ($scope, $routeParams, $location, registerService, headerService, userService) {
+;var RegisterCtrl = ['$scope', '$routeParams', '$location', 'registerService', 'genericService', 'userService', 
+    function ($scope, $routeParams, $location, registerService, genericService, userService) {
     $scope.submit = function () {
 		if ($scope.userForm.$invalid) {
 			return;
@@ -41874,7 +42115,7 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
 		    });
 		});
     };
-    headerService.setTitle('Register');
+    genericService.refreshPage();
 }];
 
 ;FormsApp.factory('registerService', ['$resource',function ($resource) {
@@ -41921,27 +42162,28 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
 }]);
 ;var UserPaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'genericService', 'headerService', 'loginMenuService',
     function ($scope, $routeParams, $location, paymentService, menuService, genericService, headerService, loginMenuService) {
-    headerService.setTitle('Payment');
-    $scope.submit = function () {
-        if ($scope.paymentForm.$invalid) {
-            return;
-        }
-        $scope.payment.AmountId = $routeParams.amountId;
-        paymentService.oneTime.save(null, $scope.payment, function () {            
-            loginMenuService.refresh();
-            $location.path('/');
-        });
-    };
-}];
-;var PasswordResetCtrl = ['$scope', '$route', '$location', 'passwordResetService', 'headerService', 'menuService', 'forgotPasswordService', 'loginService',
-    function ($scope, $route, $location, passwordResetService, headerService, menuService, forgotPasswordService, loginService) {
+        $scope.submit = function () {
+            if ($scope.paymentForm.$invalid) {
+                return;
+            }
+            $scope.payment.AmountId = $routeParams.amountId;
+            paymentService.oneTime.save(null, $scope.payment, function () {
+                loginMenuService.refresh();
+                $location.path('/');
+            });
+        };
+        genericService.refreshPage();
+
+    }];
+;var PasswordResetCtrl = ['$scope', '$route', '$location', 'passwordResetService', 'genericService', 'menuService', 'forgotPasswordService', 'loginService',
+    function ($scope, $route, $location, passwordResetService, genericService, menuService, forgotPasswordService, loginService) {
         $scope.submit = function () {
             $scope.user.Id = $route.current.params.id;
             forgotPasswordService.forgotPasswords.update(null, $scope.user, function (data) {
                 loginService.login({ UserName: data.Email, Password: $scope.user.Password });
             });
         };
-        headerService.setTitle('Reset Password');
+        genericService.refreshPage();
     }];
 ;FormsApp.factory('passwordResetService', ['$resource',function ($resource) {
     var service = {
@@ -41949,8 +42191,8 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
     };
     return service;
 }]);
-;var UserPricingCtrl = ['$scope', '$routeParams', '$location', 'userService', 'menuService', 'headerService',
-    function ($scope, $routeParams, $location, userService, menuService, headerService) {
+;var UserPricingCtrl = ['$scope', '$routeParams', '$location', 'genericService',
+    function ($scope, $routeParams, $location, genericService) {
         $scope.showErrors = false;
         $scope.submit = function () {
             if ($scope.pricingForm.$invalid) {
@@ -41959,5 +42201,5 @@ function ($scope, $routeParams, $location, unauthorizedService, headerService, $
             }
             $location.path('/Account/Payment/User/' + $routeParams.userId + '/Amount/' + $scope.pricing.AmountId);
         };
-        headerService.setTitle("Pricing");
+        genericService.refreshPage();
     }];
