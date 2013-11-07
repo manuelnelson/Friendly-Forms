@@ -1,4 +1,4 @@
-﻿var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, $rootScope) {
+﻿var ResponsibilityCtrl = function($scope, $routeParams, $location, responsibilityService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.responsibility.UserId = $routeParams.userId;
+        $scope.responsibility.UserId = userService.getFormUserId();
         if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
             responsibilityService.responsibilities.save(null, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -48,4 +48,4 @@
     });
 
 };
-ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', '$rootScope'];
+ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibilityService', 'menuService', 'genericService', 'userService', '$rootScope'];

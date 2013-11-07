@@ -1,7 +1,6 @@
-﻿var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'constantsService',
-function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, constantsService) {
+﻿var ClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'menuService', 'headerService', 'userService', 'courtService', '$rootScope', 'genericService',
+function ($scope, $routeParams, $location, clientService, menuService, headerService, userService, courtService, $rootScope, genericService) {
     //#region Init
-    headerService.setTitle('Client Profile');
     userService.getUserAuth($routeParams.userId).then(function (userAuth) {
          $scope.userAuth = userAuth;
      });
@@ -24,6 +23,10 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
                 });
             });
         }
+    });
+    genericService.refreshPage(function() {
+        headerService.setTitle('Client Profile');
+        $rootScope.currentScope = $scope;
     });
     //#endregion
 
@@ -69,5 +72,4 @@ function ($scope, $routeParams, $location, clientService, menuService, headerSer
         });
     };
     //#endregion
-    $rootScope.currentScope = $scope;
 }];

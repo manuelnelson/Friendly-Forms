@@ -1,4 +1,4 @@
-﻿var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, $rootScope) {
+﻿var HealthCtrl = function($scope, $routeParams, $location, healthService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.health.UserId = $routeParams.userId;
+        $scope.health.UserId = userService.getFormUserId();
         if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
             healthService.healths.save(null, $scope.health, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -41,4 +41,4 @@
     });
 
 };
-HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', '$rootScope'];
+HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'menuService', 'genericService', 'userService', '$rootScope'];

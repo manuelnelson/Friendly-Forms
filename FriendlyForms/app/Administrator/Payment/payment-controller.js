@@ -1,6 +1,5 @@
-﻿var PaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'headerService', 'userService', 'constantsService',
-    function ($scope, $routeParams, $location, paymentService, menuService, headerService, userService, constantsService) {
-        headerService.setTitle('Payment');
+﻿var PaymentCtrl = ['$scope', '$routeParams', '$location', 'paymentService', 'menuService', 'genericService', 'userService', 'constantsService',
+    function ($scope, $routeParams, $location, paymentService, menuService, genericService, userService, constantsService) {
         $scope.submit = function () {
             if ($scope.paymentForm.$invalid) {
                 return;
@@ -20,4 +19,5 @@
                 });
             });
         };
+        genericService.refreshPage();
     }];

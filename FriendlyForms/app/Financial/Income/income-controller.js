@@ -1,5 +1,5 @@
-﻿var IncomeCtrl = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', '$rootScope', 'participantService', 
-    function($scope, $routeParams, $location, incomeService, menuService, genericService, $rootScope, participantService) {
+﻿var IncomeCtrl = ['$scope', '$routeParams', '$location', 'incomeService', 'menuService', 'genericService', 'userService', '$rootScope', 'participantService', 
+    function($scope, $routeParams, $location, incomeService, menuService, genericService, userService, $rootScope, participantService) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -23,7 +23,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.income.UserId = $routeParams.userId;
+        $scope.income.UserId = userService.getFormUserId();
         $scope.income.isOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             incomeService.incomes.save(null, $scope.income, function() {

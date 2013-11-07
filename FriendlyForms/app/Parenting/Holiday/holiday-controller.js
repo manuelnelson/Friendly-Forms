@@ -1,4 +1,4 @@
-﻿var HolidayCtrl = function ($scope, $routeParams, $location, holidayService, menuService, genericService, $rootScope) {
+﻿var HolidayCtrl = function ($scope, $routeParams, $location, holidayService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -41,7 +41,7 @@
         }
         $scope.showExtraErrors = false;
         $scope.extraHoliday.ChildId = $routeParams.childId;
-        $scope.extraHoliday.UserId = $routeParams.userId
+        $scope.extraHoliday.UserId = userService.getFormUserId()
         holidayService.extraHolidays.save(null, $scope.extraHoliday, function (data) {
             $scope.extraHolidays.push(data);
             $scope.extraHoliday.HolidayName = '';
@@ -62,7 +62,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.holiday.UserId = $routeParams.userId;
+        $scope.holiday.UserId = userService.getFormUserId();
         $scope.holiday.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
             holidayService.holidays.save(null, $scope.holiday, function () {
@@ -161,7 +161,7 @@
             //Now...update holiday
             holidayService.holidays.get({ ChildId: childId }, function (holiday) {
                 var copyHoliday = angular.copy($scope.holiday);
-                copyHoliday.UserId = $routeParams.userId;
+                copyHoliday.UserId = userService.getFormUserId();
                 copyHoliday.ChildId = childId;
                 //update if holiday exists, post otherwise
                 if (typeof holiday.Id !== 'undefined') {
@@ -295,4 +295,4 @@
         $rootScope.currentScope = $scope;
     });
 };
-HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', '$rootScope'];
+HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 'menuService', 'genericService', 'userService', '$rootScope'];

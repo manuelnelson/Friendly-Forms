@@ -1,4 +1,4 @@
-﻿var DecisionCtrl = function ($scope, $routeParams, $location, decisionService, menuService, genericService, $rootScope) {
+﻿var DecisionCtrl = function ($scope, $routeParams, $location, decisionService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -39,7 +39,7 @@
         }
         $scope.showExtraErrors = false;
         $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;
-        $scope.extraDecision.UserId = $routeParams.userId;
+        $scope.extraDecision.UserId = userService.getFormUserId();
         decisionService.extraDecisions.save(null, $scope.extraDecision, function(data) {
             $scope.extraDecisions.push(data);
             $scope.extraDecision.DecisionMaker = -1;
@@ -57,7 +57,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.decision.UserId = $routeParams.userId;
+        $scope.decision.UserId = userService.getFormUserId();
         $scope.decision.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
             decisionService.decisions.save(null, $scope.decision, function () {
@@ -156,7 +156,7 @@
             //Now...update decision
             decisionService.decisions.get({ ChildId: childId }, function (decision) {
                 var copyDecision = angular.copy($scope.decision);
-                copyDecision.UserId = $routeParams.userId;
+                copyDecision.UserId = userService.getFormUserId();
                 copyDecision.ChildId = childId;
                 //update if decision exists, post otherwise
                 if (typeof decision.Id !== 'undefined') {
@@ -180,4 +180,4 @@
     });
 
 };
-DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', '$rootScope'];
+DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService', 'menuService', 'genericService', 'userService', '$rootScope'];

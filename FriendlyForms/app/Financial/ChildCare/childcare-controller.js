@@ -1,4 +1,4 @@
-﻿var ChildCareCtrl = function ($scope, $routeParams, $location, childCareService, menuService, genericService, $rootScope) {
+﻿var ChildCareCtrl = function ($scope, $routeParams, $location, childCareService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -32,7 +32,7 @@
             return;
         }
         $scope.showErrors = false;
-        $scope.childCareForm.UserId = $routeParams.userId;
+        $scope.childCareForm.UserId = userService.getFormUserId();
         if (typeof $scope.childCareForm.Id == 'undefined' || $scope.childCareForm.Id == 0) {
             childCareService.childCareForms.save(null, $scope.childCareForm, function (data) {
                 $scope.childCareForm.Id = data.Id;
@@ -55,7 +55,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.childCare.UserId = $routeParams.userId;
+        $scope.childCare.UserId = userService.getFormUserId();
         $scope.childCare.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
             childCareService.childCares.save(null, $scope.childCare, function () {
@@ -108,4 +108,4 @@
         $rootScope.currentScope = $scope;
     });
 };
-ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareService', 'menuService', 'genericService', '$rootScope'];
+ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareService', 'menuService', 'genericService', 'userService', '$rootScope'];

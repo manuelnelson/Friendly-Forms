@@ -1,4 +1,4 @@
-﻿var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, $rootScope) {
+﻿var PrivacyCtrl = function($scope, $routeParams, $location, privacyService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.privacy.UserId = $routeParams.userId;
+        $scope.privacy.UserId = userService.getFormUserId();
         if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
             privacyService.privacies.save(null, $scope.privacy, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -41,4 +41,4 @@
     });
 
 };
-PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', '$rootScope'];
+PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 'menuService', 'genericService', 'userService', '$rootScope'];

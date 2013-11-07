@@ -1,4 +1,4 @@
-﻿FormsApp.factory('userService', ['$resource', '$q', function ($resource, $q) {
+﻿FormsApp.factory('userService', ['$resource', '$q', '$route', '$location', '$rootScope', function ($resource, $q, $route, $location,$rootScope) {
     var service = {
         userData: null,
         register: $resource('/api/userauths/register/', {},
@@ -58,6 +58,15 @@
                 deferred.resolve(data);
             });
             return deferred.promise;
+        },
+        getFormUserId: function () {
+            var path = $rootScope.$root.currentScope.path;
+            if ($route.current.params.userId) {
+                return $route.current.params.userId;
+            } else if (path && path.indexOf('/User/') > -1) {
+                var regex = /\/(user|User)\/(\d*)/;
+                return path.match(regex)[2];
+            }
         },
     };
     return service;

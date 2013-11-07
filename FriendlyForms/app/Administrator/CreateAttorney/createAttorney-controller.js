@@ -1,5 +1,5 @@
-﻿var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'registerService', 'userService', 'attorneyPageService',
-    function ($scope, $routeParams, $location, menuService, headerService, registerService, userService, attorneyPageService) {
+﻿var CreateAttorneyCtrl = ['$scope', '$routeParams', '$location', 'menuService', 'headerService', 'genericService', 'registerService', 'userService', 'attorneyPageService',
+    function ($scope, $routeParams, $location, menuService, headerService, genericService,registerService, userService, attorneyPageService) {
         $scope.submit = function () {
             if ($scope.registerAttorneyForm.$invalid) {
                 return;
@@ -32,5 +32,7 @@
                 });
             });
         };
-        headerService.setTitle('Add Attorneys and Coworkers');
+        genericService.refreshPage(function() {
+            headerService.setTitle('Add Attorneys and Coworkers');
+        });
     }];

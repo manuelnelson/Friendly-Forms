@@ -8,5 +8,10 @@
     $scope.close = function () {
         messageService.closeMessage();
     };
+    //close message on route change
+    $scope.$on("$locationChangeStart", function (event, nextLocation, currentLocation) {
+        // Logic goes here
+        $scope.close();
+    });
 };
 MessageCtrl.$inject = ['$scope', 'messageService'];

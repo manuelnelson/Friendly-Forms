@@ -65,10 +65,10 @@ namespace BusinessLogic
         /// <returns></returns>
         public List<User> GetTodaysActiveAccounts()
         {
-            var currentDate = DateTime.UtcNow;
+            var currentDate = new DateTime(2013,11,30);
             var currentDay = currentDate.Day;
             //current day users
-            var users = _userRepository.GetFiltered(x => x.RecurringActive).ToList().Where(x=>x.RecurringDateStart != null && x.RecurringDateStart.Value.Day == currentDay).ToList();
+            var users = _userRepository.GetFiltered(x => x.RecurringActive).ToList().Where(x => x.RecurringDateStart != null && x.RecurringDateStart.Value.Day == currentDay).ToList();
             var daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
             if (currentDay != daysInMonth || currentDay == MaximumDaysInMonth)
                 return users;
@@ -77,7 +77,7 @@ namespace BusinessLogic
             for (var i = 0; i < difference; i++)
             {
                 var day = MaximumDaysInMonth - i;
-                var laterMonthUsers = _userRepository.GetFiltered(x => x.RecurringActive && x.RecurringDateStart.Value.Day == day).ToList();
+                var laterMonthUsers = _userRepository.GetFiltered(x => x.RecurringActive).ToList().Where(x => x.RecurringDateStart != null && x.RecurringDateStart.Value.Day == day).ToList();
                 users.AddRange(laterMonthUsers);
             }
             return users;
@@ -85,24 +85,16 @@ namespace BusinessLogic
 
         public int GetNumberOfUsersAddedThisMonth(User adminUser)
         {
-            try
+            var monthAgo = DateTime.UtcNow.AddMonths(-1);
+            //Get law firm attorneys
+            var firmUsers = _userRepository.GetFiltered(x => x.LawFirmId == adminUser.LawFirmId);
+            var clients = new List<UserAuth>();
+            foreach (var firmUser in firmUsers)
             {
-                var monthAgo = DateTime.UtcNow.AddMonths(-1);
-                //Get law firm attorneys
-                var firmUsers = _userRepository.GetFiltered(x => x.LawFirmId == adminUser.LawFirmId);
-                var clients = new List<UserAuth>();
-                foreach (var firmUser in firmUsers)
-                {
-                    var attorneyClients = _userRepository.GetAttorneysClients(firmUser.Id).ToList().Where(x => x.CreatedDate >= monthAgo);
-                    clients.AddRange(attorneyClients);
-                }
-                return clients.Distinct().Count();
+                var attorneyClients = _userRepository.GetAttorneysClients(firmUser.Id).ToList().Where(x => x.CreatedDate >= monthAgo);
+                clients.AddRange(attorneyClients);
             }
-            catch (Exception ex)
-            {
-                ErrorSignal.FromCurrentContext().Raise(ex);
-                throw new Exception("Unable to retrieve number of clients", ex);
-            }
+            return clients.Distinct().Count();
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿var VehicleCtrl = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', '$rootScope', 'participantService',
-    function ($scope, $routeParams, $location, vehicleService, menuService, genericService, $rootScope, participantService) {
+﻿var VehicleCtrl = ['$scope', '$routeParams', '$location', 'vehicleService', 'menuService', 'genericService', 'userService', '$rootScope', 'participantService',
+    function ($scope, $routeParams, $location, vehicleService, menuService, genericService, userService, $rootScope, participantService) {
         //#region properties
         $scope.continuePressed = false;
         $scope.path = $location.path();
@@ -42,7 +42,7 @@
                 return;
             }
             $.jStorage.deleteKey($scope.path);
-            $scope.vehicleForm.UserId = $routeParams.userId;
+            $scope.vehicleForm.UserId = userService.getFormUserId();
             if (typeof $scope.vehicleForm.Id == 'undefined' || $scope.vehicleForm.Id == 0) {
                 vehicleService.vehicleForm.save(null, $scope.vehicleForm, function () {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -59,7 +59,7 @@
                 return;
             }
             $scope.showAddVehicleErrors = false;
-            $scope.vehicle.UserId = $routeParams.userId;
+            $scope.vehicle.UserId = userService.getFormUserId();
             $scope.vehicle.vehicleFormId = $scope.vehicleForm.Id;
             vehicleService.vehicles.save(null, $scope.vehicle, function (data) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');

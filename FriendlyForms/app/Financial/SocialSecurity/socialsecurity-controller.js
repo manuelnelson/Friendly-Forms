@@ -1,4 +1,4 @@
-﻿var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, $rootScope) {
+﻿var SocialSecurityCtrl = function($scope, $routeParams, $location, socialSecurityService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.socialSecurity.UserId = $routeParams.userId;
+        $scope.socialSecurity.UserId = userService.getFormUserId();
         $scope.socialSecurity.IsOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
             socialSecurityService.socialSecurities.save(null, $scope.socialSecurity, function () {
@@ -42,4 +42,4 @@
     });
 
 };
-SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', '$rootScope'];
+SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecurityService', 'menuService', 'genericService', 'userService', '$rootScope'];

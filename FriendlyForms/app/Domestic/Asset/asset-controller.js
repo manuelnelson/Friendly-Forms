@@ -1,4 +1,4 @@
-﻿var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, $rootScope) {
+﻿var AssetCtrl = function($scope, $routeParams, $location, assetService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.asset.UserId = $routeParams.userId;
+        $scope.asset.UserId = userService.getFormUserId();
         if (typeof $scope.asset.Id == 'undefined' || $scope.asset.Id == 0) {
             assetService.assets.save(null, $scope.asset, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -40,4 +40,4 @@
         $rootScope.currentScope = $scope;
     });
 };
-AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', '$rootScope'];
+AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'menuService', 'genericService', 'userService', '$rootScope'];

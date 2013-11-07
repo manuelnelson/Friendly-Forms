@@ -99,7 +99,7 @@
         isActive: function (path) {
             if (service.isInitialized) {
                 var menuGroup = service.getMenuGroupByPath(path);
-                if (menuGroup.subMenuItem)
+                if (menuGroup && menuGroup.subMenuItem)
                     return menuGroup.subMenuItem.itemClass === 'active';
             }
             return false;
@@ -142,7 +142,9 @@
                 });
                 if (subMenuItem) {
                     var currentFormScope = $rootScope.$root.currentScope;
-                    currentFormScope.submit(true); //true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
+                    if (!currentFormScope.disableAutomaticSubmit) { //Option to not submit form automatically when navigating away from page.  Needs to be set explicitly in controller
+                        currentFormScope.submit(true); //true disables automatic navigation in controller. Navigation will be completed in the menuService setActive handler                    
+                    }
                     break;
                 }
             }
@@ -181,13 +183,15 @@
             } else {
                 //Must be subMenu Level
                 var menuGroup = service.getMenuGroupByPath(path);
-                menuGroup.menuItem.showSubMenu = true;
-                menuGroup.menuItem.itemClass = 'submenu active';
-                menuGroup.subMenuItem.itemClass = 'active';
-                menuGroup.subMenuItem.iconClass = 'icon-white icon-pencil';
-                //Navigate to new path if we are not already there.
-                if ($location.path() !== menuGroup.subMenuItem.path)
-                    $location.path(menuGroup.subMenuItem.path);
+                if (menuGroup) {
+                    menuGroup.menuItem.showSubMenu = true;
+                    menuGroup.menuItem.itemClass = 'submenu active';
+                    menuGroup.subMenuItem.itemClass = 'active';
+                    menuGroup.subMenuItem.iconClass = 'icon-white icon-pencil';
+                    //Navigate to new path if we are not already there.
+                    if ($location.path() !== menuGroup.subMenuItem.path)
+                        $location.path(menuGroup.subMenuItem.path);
+                }
             }
         },
         //#endregion

@@ -1,5 +1,5 @@
-﻿var CreateClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'courtService', 'headerService', 'userService',
-    function ($scope, $routeParams, $location, clientService, courtService, headerService, userService) {
+﻿var CreateClientCtrl = ['$scope', '$routeParams', '$location', 'clientService', 'courtService', 'headerService', 'userService', 'genericService',
+    function ($scope, $routeParams, $location, clientService, courtService, headerService, userService, genericService) {
 
         $scope.submit = function () {
             if ($scope.createClientForm.$invalid) {
@@ -41,5 +41,7 @@
                 });
             });
         };
-        headerService.setTitle('Create A Client');
+        genericService.refreshPage(function () {
+            headerService.setTitle('Create A Client');
+        });
     }];

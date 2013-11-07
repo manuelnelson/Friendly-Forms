@@ -118,7 +118,7 @@ namespace PaymentService
             {
                 return lawFirm.Name + " was successfully charged the amount of $" + amount;
             }
-            return lawFirm.Name + " was NOT charged the amount of $" + amount + " for the following reason: " + response.error + "; response code = " + response.code;
+            return lawFirm.Name + " was NOT charged the amount of $" + amount + " for the following reason: " + response.error + "; response code = " + response.code + "<br/>";
         }
 
         private double CalculateAmountOwed(User account)

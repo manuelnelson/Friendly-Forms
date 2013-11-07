@@ -1,5 +1,5 @@
-﻿var DeviationCtrl = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', '$rootScope', 'scheduleBService',
-    function ($scope, $routeParams, $location, deviationService, menuService, genericService, $rootScope, scheduleBService) {
+﻿var DeviationCtrl = ['$scope', '$routeParams', '$location', 'deviationService', 'menuService', 'genericService', 'userService', '$rootScope', 'scheduleBService',
+    function ($scope, $routeParams, $location, deviationService, menuService, genericService, userService, $rootScope, scheduleBService) {
         $scope.path = $location.path();
         $scope.showErrors = false;
         $scope.isLoaded = false;
@@ -25,7 +25,7 @@
                 return;
             }
             $.jStorage.deleteKey($scope.path);
-            $scope.deviation.UserId = $routeParams.userId;
+            $scope.deviation.UserId = userService.getFormUserId();
             if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
                 deviationService.deviations.save(null, $scope.deviation, function () {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');

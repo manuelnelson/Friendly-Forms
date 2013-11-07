@@ -36,6 +36,7 @@
                 $location.path(formCompleteService.getOutputPaths($routeParams.formName, $routeParams.userId)[0]);
             }
         };
-        $rootScope.currentScope = $scope;
-        headerService.setTitle('Form Completed');
+        genericService.refreshPage(function() {
+            $rootScope.currentScope = $scope;
+        });
     }];

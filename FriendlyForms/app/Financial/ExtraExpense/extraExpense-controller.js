@@ -1,4 +1,4 @@
-﻿var ExtraExpenseCtrl = function ($scope, $routeParams, $location, extraExpenseService, menuService, genericService, $rootScope) {
+﻿var ExtraExpenseCtrl = function ($scope, $routeParams, $location, extraExpenseService, menuService, genericService, userService, $rootScope) {
     //#region Intialize
     $scope.path = $location.path();
     $scope.showErrors = false;
@@ -33,7 +33,7 @@
             return;
         }
         $scope.showErrors = false;
-        $scope.extraExpenseForm.UserId = $routeParams.userId;
+        $scope.extraExpenseForm.UserId = userService.getFormUserId();
         if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
             extraExpenseService.extraExpenseForms.save(null, $scope.extraExpenseForm, function (data) {
                 $scope.extraExpenseForm.Id = data.Id;
@@ -57,7 +57,7 @@
         $.jStorage.deleteKey($scope.path);
         if (!$scope.extraExpense)
             $scope.extraExpense = {};
-        $scope.extraExpense.UserId = $routeParams.userId;
+        $scope.extraExpense.UserId = userService.getFormUserId();
         $scope.extraExpense.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
             extraExpenseService.extraExpenses.save(null, $scope.extraExpense, function () {
@@ -114,4 +114,4 @@
         $rootScope.currentScope = $scope;
     });
 };
-ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', '$rootScope'];
+ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpenseService', 'menuService', 'genericService', 'userService', '$rootScope'];

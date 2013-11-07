@@ -37960,7 +37960,7 @@ FormsApp.factory('messageService', ['$location', function ($location) {
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.court.UserId = $routeParams.userId;
+        $scope.court.UserId = userService.getFormUserId();
         if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
             courtService.courts.save(null, $scope.court, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38018,7 +38018,7 @@ FormsApp.factory('courtService', ['$resource', function ($resource) {
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.participant.UserId = $routeParams.userId;
+        $scope.participant.UserId = userService.getFormUserId();
         if (typeof $scope.participant.Id == 'undefined' || $scope.participant.Id == 0) {
             participantService.participant.save(null, $scope.participant, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38136,7 +38136,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.childForm.UserId = $routeParams.userId;
+        $scope.childForm.UserId = userService.getFormUserId();
         if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
             childService.childForm.save(null, $scope.childForm, function (data) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38154,7 +38154,7 @@ ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantSe
             return;
         }
         $scope.showAddChildErrors = false;
-        $scope.child.UserId = $routeParams.userId;
+        $scope.child.UserId = userService.getFormUserId();
         $scope.child.ChildFormId = $scope.childForm.Id;
         childService.child.save(null, $scope.child, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38273,7 +38273,7 @@ ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', '
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.asset.UserId = $routeParams.userId;
+        $scope.asset.UserId = userService.getFormUserId();
         if (typeof $scope.asset.Id == 'undefined' || $scope.asset.Id == 0) {
             assetService.assets.save(null, $scope.asset, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38326,7 +38326,7 @@ AssetCtrl.$inject = ['$scope', '$routeParams', '$location', 'assetService', 'men
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.debt.UserId = $routeParams.userId;
+        $scope.debt.UserId = userService.getFormUserId();
         if (typeof $scope.debt.Id == 'undefined' || $scope.debt.Id == 0) {
             debtService.debts.save(null, $scope.debt, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38379,7 +38379,7 @@ DebtCtrl.$inject = ['$scope', '$routeParams', '$location', 'debtService', 'menuS
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.healthInsurance.UserId = $routeParams.userId;
+        $scope.healthInsurance.UserId = userService.getFormUserId();
         if (typeof $scope.healthInsurance.Id == 'undefined' || $scope.healthInsurance.Id == 0) {
             healthInsuranceService.healthInsurances.save(null, $scope.healthInsurance, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38432,7 +38432,7 @@ HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthIns
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.house.UserId = $routeParams.userId;
+        $scope.house.UserId = userService.getFormUserId();
         if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
             houseService.houses.save(null, $scope.house, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38495,7 +38495,7 @@ HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'men
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.property.UserId = $routeParams.userId;
+        $scope.property.UserId = userService.getFormUserId();
         if (typeof $scope.property.Id == 'undefined' || $scope.property.Id == 0) {
             propertyService.properties.save(null, $scope.property, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38549,7 +38549,7 @@ PropertyCtrl.$inject = ['$scope', '$routeParams', '$location', 'propertyService'
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.spousal.UserId = $routeParams.userId;
+        $scope.spousal.UserId = userService.getFormUserId();
         if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
             spousalService.spousals.save(null, $scope.spousal, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38603,7 +38603,7 @@ SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.tax.UserId = $routeParams.userId;
+        $scope.tax.UserId = userService.getFormUserId();
         if (typeof $scope.tax.Id == 'undefined' || $scope.tax.Id == 0) {
             taxService.taxes.save(null, $scope.tax, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38678,7 +38678,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
                 return;
             }
             $.jStorage.deleteKey($scope.path);
-            $scope.vehicleForm.UserId = $routeParams.userId;
+            $scope.vehicleForm.UserId = userService.getFormUserId();
             if (typeof $scope.vehicleForm.Id == 'undefined' || $scope.vehicleForm.Id == 0) {
                 vehicleService.vehicleForm.save(null, $scope.vehicleForm, function () {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38695,7 +38695,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
                 return;
             }
             $scope.showAddVehicleErrors = false;
-            $scope.vehicle.UserId = $routeParams.userId;
+            $scope.vehicle.UserId = userService.getFormUserId();
             $scope.vehicle.vehicleFormId = $scope.vehicleForm.Id;
             vehicleService.vehicles.save(null, $scope.vehicle, function (data) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38772,7 +38772,7 @@ TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuSer
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.addendum.UserId = $routeParams.userId;
+        $scope.addendum.UserId = userService.getFormUserId();
         if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
             addendumService.addendums.save(null, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38826,7 +38826,7 @@ AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService'
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.communication.UserId = $routeParams.userId;
+        $scope.communication.UserId = userService.getFormUserId();
         if (typeof $scope.communication.Id == 'undefined' || $scope.communication.Id == 0) {
             communicationService.communications.save(null, $scope.communication, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -38898,7 +38898,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
         }
         $scope.showExtraErrors = false;
         $scope.extraDecision.ChildId = $scope.children[$scope.childNdx].Id;
-        $scope.extraDecision.UserId = $routeParams.userId;
+        $scope.extraDecision.UserId = userService.getFormUserId();
         decisionService.extraDecisions.save(null, $scope.extraDecision, function(data) {
             $scope.extraDecisions.push(data);
             $scope.extraDecision.DecisionMaker = -1;
@@ -38916,7 +38916,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.decision.UserId = $routeParams.userId;
+        $scope.decision.UserId = userService.getFormUserId();
         $scope.decision.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.decision.Id == 'undefined' || $scope.decision.Id == 0) {
             decisionService.decisions.save(null, $scope.decision, function () {
@@ -39015,7 +39015,7 @@ CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicati
             //Now...update decision
             decisionService.decisions.get({ ChildId: childId }, function (decision) {
                 var copyDecision = angular.copy($scope.decision);
-                copyDecision.UserId = $routeParams.userId;
+                copyDecision.UserId = userService.getFormUserId();
                 copyDecision.ChildId = childId;
                 //update if decision exists, post otherwise
                 if (typeof decision.Id !== 'undefined') {
@@ -39104,7 +39104,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
         }
         $scope.showExtraErrors = false;
         $scope.extraHoliday.ChildId = $routeParams.childId;
-        $scope.extraHoliday.UserId = $routeParams.userId
+        $scope.extraHoliday.UserId = userService.getFormUserId()
         holidayService.extraHolidays.save(null, $scope.extraHoliday, function (data) {
             $scope.extraHolidays.push(data);
             $scope.extraHoliday.HolidayName = '';
@@ -39125,7 +39125,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.holiday.UserId = $routeParams.userId;
+        $scope.holiday.UserId = userService.getFormUserId();
         $scope.holiday.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.holiday.Id == 'undefined' || $scope.holiday.Id == 0) {
             holidayService.holidays.save(null, $scope.holiday, function () {
@@ -39224,7 +39224,7 @@ DecisionCtrl.$inject = ['$scope', '$routeParams', '$location', 'decisionService'
             //Now...update holiday
             holidayService.holidays.get({ ChildId: childId }, function (holiday) {
                 var copyHoliday = angular.copy($scope.holiday);
-                copyHoliday.UserId = $routeParams.userId;
+                copyHoliday.UserId = userService.getFormUserId();
                 copyHoliday.ChildId = childId;
                 //update if holiday exists, post otherwise
                 if (typeof holiday.Id !== 'undefined') {
@@ -39403,7 +39403,7 @@ HolidayCtrl.$inject = ['$scope', '$routeParams', '$location', 'holidayService', 
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.information.UserId = $routeParams.userId;
+        $scope.information.UserId = userService.getFormUserId();
         if (typeof $scope.information.Id == 'undefined' || $scope.information.Id == 0) {
             informationService.information.save(null, $scope.information, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -39457,7 +39457,7 @@ InformationCtrl.$inject = ['$scope', '$routeParams', '$location', 'informationSe
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.privacy.UserId = $routeParams.userId;
+        $scope.privacy.UserId = userService.getFormUserId();
         if (typeof $scope.privacy.Id == 'undefined' || $scope.privacy.Id == 0) {
             privacyService.privacies.save(null, $scope.privacy, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -39511,7 +39511,7 @@ PrivacyCtrl.$inject = ['$scope', '$routeParams', '$location', 'privacyService', 
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.responsibility.UserId = $routeParams.userId;
+        $scope.responsibility.UserId = userService.getFormUserId();
         if (typeof $scope.responsibility.Id == 'undefined' || $scope.responsibility.Id == 0) {
             responsibilityService.responsibilities.save(null, $scope.responsibility, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -39583,7 +39583,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.schedule.UserId = $routeParams.userId;
+        $scope.schedule.UserId = userService.getFormUserId();
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
             scheduleService.schedules.save(null, $scope.schedule, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -39686,7 +39686,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
             return;
         }
         $scope.showErrors = false;
-        $scope.childCareForm.UserId = $routeParams.userId;
+        $scope.childCareForm.UserId = userService.getFormUserId();
         if (typeof $scope.childCareForm.Id == 'undefined' || $scope.childCareForm.Id == 0) {
             childCareService.childCareForms.save(null, $scope.childCareForm, function (data) {
                 $scope.childCareForm.Id = data.Id;
@@ -39709,7 +39709,7 @@ ResponsibilityCtrl.$inject = ['$scope', '$routeParams', '$location', 'responsibi
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.childCare.UserId = $routeParams.userId;
+        $scope.childCare.UserId = userService.getFormUserId();
         $scope.childCare.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.childCare.Id == 'undefined' || $scope.childCare.Id == 0) {
             childCareService.childCares.save(null, $scope.childCare, function () {
@@ -39806,7 +39806,7 @@ ChildCareCtrl.$inject = ['$scope', '$routeParams', '$location', 'childCareServic
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.childSupport.UserId = $routeParams.userId;
+        $scope.childSupport.UserId = userService.getFormUserId();
         if (typeof $scope.childSupport.Id == 'undefined' || $scope.childSupport.Id == 0) {
             childSupportService.childSupports.save(null, $scope.childSupport, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -39870,7 +39870,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.deviation.UserId = $routeParams.userId;
+        $scope.deviation.UserId = userService.getFormUserId();
         if (typeof $scope.deviation.Id == 'undefined' || $scope.deviation.Id == 0) {
             deviationService.deviations.save(null, $scope.deviation, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -39935,7 +39935,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
             return;
         }
         $scope.showErrors = false;
-        $scope.extraExpenseForm.UserId = $routeParams.userId;
+        $scope.extraExpenseForm.UserId = userService.getFormUserId();
         if (typeof $scope.extraExpenseForm.Id == 'undefined' || $scope.extraExpenseForm.Id == 0) {
             extraExpenseService.extraExpenseForms.save(null, $scope.extraExpenseForm, function (data) {
                 $scope.extraExpenseForm.Id = data.Id;
@@ -39959,7 +39959,7 @@ ChildSupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'childSupport
         $.jStorage.deleteKey($scope.path);
         if (!$scope.extraExpense)
             $scope.extraExpense = {};
-        $scope.extraExpense.UserId = $routeParams.userId;
+        $scope.extraExpense.UserId = userService.getFormUserId();
         $scope.extraExpense.ChildId = $scope.children[$scope.childNdx].Id;
         if (typeof $scope.extraExpense.Id == 'undefined' || $scope.extraExpense.Id == 0) {
             extraExpenseService.extraExpenses.save(null, $scope.extraExpense, function () {
@@ -40061,7 +40061,7 @@ ExtraExpenseCtrl.$inject = ['$scope', '$routeParams', '$location', 'extraExpense
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.health.UserId = $routeParams.userId;
+        $scope.health.UserId = userService.getFormUserId();
         if (typeof $scope.health.Id == 'undefined' || $scope.health.Id == 0) {
             healthService.healths.save(null, $scope.health, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -40117,7 +40117,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.income.UserId = $routeParams.userId;
+        $scope.income.UserId = userService.getFormUserId();
         $scope.income.isOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.income.Id == 'undefined' || $scope.income.Id == 0) {
             incomeService.incomes.save(null, $scope.income, function() {
@@ -40201,7 +40201,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
                 return deferred.promise;
             }
             $.jStorage.deleteKey($scope.path);
-            $scope.otherChildren.UserId = $routeParams.userId;
+            $scope.otherChildren.UserId = userService.getFormUserId();
             $scope.otherChildren.IsOtherParent = $routeParams.isOtherParent;
             if (typeof $scope.otherChildren.Id == 'undefined' || $scope.otherChildren.Id == 0) {
                 otherChildService.otherChildren.save(null, $scope.otherChildren, function (otherChildren) {
@@ -40227,7 +40227,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
             //Check if there's been a submit yet. 
             $scope.submit(true).then(function () {
                 $scope.otherChild.OtherChildrenId = $scope.otherChildren.Id;
-                $scope.otherChild.UserId = $routeParams.userId;
+                $scope.otherChild.UserId = userService.getFormUserId();
                 otherChildService.otherChild.save(null, $scope.otherChild, function (data) {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                     $scope.children.push(data.OtherChild);
@@ -40301,7 +40301,7 @@ HealthCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthService', 'm
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.socialSecurity.UserId = $routeParams.userId;
+        $scope.socialSecurity.UserId = userService.getFormUserId();
         $scope.socialSecurity.IsOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.socialSecurity.Id == 'undefined' || $scope.socialSecurity.Id == 0) {
             socialSecurityService.socialSecurities.save(null, $scope.socialSecurity, function () {
@@ -40376,7 +40376,7 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
     };
 
     $scope.addCourt = function() {
-        $scope.court.UserId = $routeParams.userId;
+        $scope.court.UserId = userService.getFormUserId();
         $scope.court.IsOtherParent = $routeParams.isOtherParent;
         supportService.courts.save(null, $scope.court, function (data) {
             $scope.courts.push(data);
@@ -40421,7 +40421,7 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
         $scope.showAddChild = false;
     };    
     $scope.addChild = function() {
-        $scope.child.UserId = $routeParams.userId;
+        $scope.child.UserId = userService.getFormUserId();
         $scope.child.PreexistingSupportId = $scope.PreexistingSupportId;
         supportService.children.save(null, $scope.child, function (data) {
             $scope.children.push(data.Child);
@@ -40458,7 +40458,7 @@ SocialSecurityCtrl.$inject = ['$scope', '$routeParams', '$location', 'socialSecu
             return;
         }
         $scope.showErrors = false;
-        $scope.support.UserId = $routeParams.userId;
+        $scope.support.UserId = userService.getFormUserId();
         $scope.support.IsOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             supportService.supports.save(null, $scope.support, function() {

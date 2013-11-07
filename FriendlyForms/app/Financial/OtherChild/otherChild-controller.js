@@ -1,5 +1,5 @@
-﻿var OtherChildCtrl = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', '$rootScope', '$q',
-    function ($scope, $routeParams, $location, otherChildService, menuService, genericService, $rootScope, $q) {
+﻿var OtherChildCtrl = ['$scope', '$routeParams', '$location', 'otherChildService', 'menuService', 'genericService', 'userService', '$rootScope', '$q',
+    function ($scope, $routeParams, $location, otherChildService, menuService, genericService, userService, $rootScope, $q) {
         //#region properties
         $scope.continuePressed = false;
         $scope.path = $location.path();
@@ -51,7 +51,7 @@
                 return deferred.promise;
             }
             $.jStorage.deleteKey($scope.path);
-            $scope.otherChildren.UserId = $routeParams.userId;
+            $scope.otherChildren.UserId = userService.getFormUserId();
             $scope.otherChildren.IsOtherParent = $routeParams.isOtherParent;
             if (typeof $scope.otherChildren.Id == 'undefined' || $scope.otherChildren.Id == 0) {
                 otherChildService.otherChildren.save(null, $scope.otherChildren, function (otherChildren) {
@@ -77,7 +77,7 @@
             //Check if there's been a submit yet. 
             $scope.submit(true).then(function () {
                 $scope.otherChild.OtherChildrenId = $scope.otherChildren.Id;
-                $scope.otherChild.UserId = $routeParams.userId;
+                $scope.otherChild.UserId = userService.getFormUserId();
                 otherChildService.otherChild.save(null, $scope.otherChild, function (data) {
                     menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
                     $scope.children.push(data.OtherChild);

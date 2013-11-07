@@ -1,5 +1,5 @@
-﻿var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'headerService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
-    function ($scope, $routeParams, $location, clientCasesService, menuService, headerService, $rootScope, clientService, userService, loginMenuService) {
+﻿var ClientCasesCtrl = ['$scope', '$routeParams', '$location', 'clientCasesService', 'menuService', 'genericService', '$rootScope', 'clientService', 'userService', 'loginMenuService',
+    function ($scope, $routeParams, $location, clientCasesService, menuService, genericService, $rootScope, clientService, userService, loginMenuService) {
         $scope.clients = [];
         $scope.adminId = $routeParams.adminId;
         $scope.isLoaded = false;
@@ -22,12 +22,12 @@
         $scope.openAttorney = function(attorney) {
             $location.path('/Attorney/AttorneyPage/Attorney/' + attorney.Id);
         };
-        headerService.setTitle("Administrator");
-        loginMenuService.refresh($routeParams.adminId).then(function() {
+        loginMenuService.refresh($routeParams.adminId).then(function () {
             //TODO: we really need a way of getting location.path to equal hrefs
             var path = $location.path();
             if (path.indexOf('/#') == -1)
                 path = "/#" + path;
             menuService.setActive(path, false);
         });
+        genericService.refreshPage();
     }];

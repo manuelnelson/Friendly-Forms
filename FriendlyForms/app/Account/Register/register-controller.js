@@ -1,5 +1,5 @@
-﻿var RegisterCtrl = ['$scope', '$routeParams', '$location', 'registerService', 'headerService', 'userService', 
-    function ($scope, $routeParams, $location, registerService, headerService, userService) {
+﻿var RegisterCtrl = ['$scope', '$routeParams', '$location', 'registerService', 'genericService', 'userService', 
+    function ($scope, $routeParams, $location, registerService, genericService, userService) {
     $scope.submit = function () {
 		if ($scope.userForm.$invalid) {
 			return;
@@ -12,5 +12,5 @@
 		    });
 		});
     };
-    headerService.setTitle('Register');
+    genericService.refreshPage();
 }];

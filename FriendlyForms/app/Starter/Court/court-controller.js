@@ -1,4 +1,4 @@
-﻿var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, $rootScope) {
+﻿var CourtCtrl = function ($scope, $routeParams, $location, courtService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.court = courtService.courts.get({ UserId: $routeParams.userId }, function () {
@@ -22,7 +22,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.court.UserId = $routeParams.userId;
+        $scope.court.UserId = userService.getFormUserId();
         if (typeof $scope.court.Id == 'undefined' || $scope.court.Id == 0) {
             courtService.courts.save(null, $scope.court, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -42,4 +42,4 @@
     });
 
 };
-CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService', '$rootScope'];
+CourtCtrl.$inject = ['$scope', '$routeParams', '$location', 'courtService', 'menuService', 'genericService', 'userService', '$rootScope'];

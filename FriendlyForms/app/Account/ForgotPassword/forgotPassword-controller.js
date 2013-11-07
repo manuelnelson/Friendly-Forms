@@ -1,5 +1,5 @@
-﻿var ForgotPasswordCtrl = ['$scope', '$routeParams', '$location', 'forgotPasswordService', 'messageService',
-    function ($scope, $routeParams, $location, forgotPasswordService, messageService) {
+﻿var ForgotPasswordCtrl = ['$scope', '$routeParams', '$location', 'forgotPasswordService', 'messageService', 'genericService',
+    function ($scope, $routeParams, $location, forgotPasswordService, messageService, genericService) {
 
     $scope.submit = function() {
         if ($scope.forgotPasswordForm.$invalid) {
@@ -12,5 +12,6 @@
         });
 
     };
+    genericService.refreshPage();
 
 }];

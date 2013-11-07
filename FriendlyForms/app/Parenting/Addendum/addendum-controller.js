@@ -1,4 +1,4 @@
-﻿var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, $rootScope) {
+﻿var AddendumCtrl = function($scope, $routeParams, $location, addendumService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.addendum.UserId = $routeParams.userId;
+        $scope.addendum.UserId = userService.getFormUserId();
         if (typeof $scope.addendum.Id == 'undefined' || $scope.addendum.Id == 0) {
             addendumService.addendums.save(null, $scope.addendum, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -41,4 +41,4 @@
     });
 
 };
-AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', '$rootScope'];
+AddendumCtrl.$inject = ['$scope', '$routeParams', '$location', 'addendumService', 'menuService', 'genericService', 'userService', '$rootScope'];

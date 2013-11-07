@@ -1,4 +1,4 @@
-﻿var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, $rootScope) {
+﻿var SpousalCtrl = function($scope, $routeParams, $location, spousalService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.spousal.UserId = $routeParams.userId;
+        $scope.spousal.UserId = userService.getFormUserId();
         if (typeof $scope.spousal.Id == 'undefined' || $scope.spousal.Id == 0) {
             spousalService.spousals.save(null, $scope.spousal, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -41,4 +41,4 @@
     });
 
 };
-SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', '$rootScope'];
+SpousalCtrl.$inject = ['$scope', '$routeParams', '$location', 'spousalService', 'menuService', 'genericService', 'userService', '$rootScope'];

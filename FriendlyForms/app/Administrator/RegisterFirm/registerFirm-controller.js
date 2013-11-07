@@ -1,4 +1,4 @@
-﻿var RegisterFirmCtrl = function ($scope, $routeParams, $location, lawFirmService, menuService, headerService, limitToFilter, $http) {
+﻿var RegisterFirmCtrl = function ($scope, $routeParams, $location, lawFirmService, menuService, headerService, limitToFilter, $http, genericService) {
     $scope.submit = function() {
         if ($scope.lawFirmForm.$invalid) {
             return;
@@ -16,6 +16,8 @@
             return limitToFilter(names, 8);
         });
     };
-    headerService.setTitle("Register Law Firm");
+    genericService.refreshPage(function() {
+        headerService.setTitle("Register Law Firm");
+    });
 };
-RegisterFirmCtrl.$inject = ['$scope', '$routeParams', '$location', 'lawFirmService', 'menuService', 'headerService', 'limitToFilter', '$http'];
+RegisterFirmCtrl.$inject = ['$scope', '$routeParams', '$location', 'lawFirmService', 'menuService', 'headerService', 'limitToFilter', '$http', 'genericService'];

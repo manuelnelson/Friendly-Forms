@@ -1,4 +1,4 @@
-﻿var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, $rootScope) {
+﻿var TaxCtrl = function($scope, $routeParams, $location, taxService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.tax.UserId = $routeParams.userId;
+        $scope.tax.UserId = userService.getFormUserId();
         if (typeof $scope.tax.Id == 'undefined' || $scope.tax.Id == 0) {
             taxService.taxes.save(null, $scope.tax, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -41,4 +41,4 @@
     });
 
 };
-TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', '$rootScope'];
+TaxCtrl.$inject = ['$scope', '$routeParams', '$location', 'taxService', 'menuService', 'genericService', 'userService', '$rootScope'];

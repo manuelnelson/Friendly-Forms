@@ -1,4 +1,4 @@
-﻿var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, $rootScope) {    
+﻿var ChildrenCtrl = function ($scope, $routeParams, $location, childService, menuService, genericService, userService, $rootScope) {    
     //#region properties
     $scope.continuePressed = false;
     $scope.path = $location.path();
@@ -36,7 +36,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.childForm.UserId = $routeParams.userId;
+        $scope.childForm.UserId = userService.getFormUserId();
         if (typeof $scope.childForm.Id == 'undefined' || $scope.childForm.Id == 0) {
             childService.childForm.save(null, $scope.childForm, function (data) {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -54,7 +54,7 @@
             return;
         }
         $scope.showAddChildErrors = false;
-        $scope.child.UserId = $routeParams.userId;
+        $scope.child.UserId = userService.getFormUserId();
         $scope.child.ChildFormId = $scope.childForm.Id;
         childService.child.save(null, $scope.child, function (data) {
             menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -89,4 +89,4 @@
     };
     //#endregion    
 };
-ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', 'menuService', 'genericService', '$rootScope'];
+ChildrenCtrl.$inject = ['$scope', '$routeParams', '$location', 'childService', 'menuService', 'genericService', 'userService', '$rootScope'];

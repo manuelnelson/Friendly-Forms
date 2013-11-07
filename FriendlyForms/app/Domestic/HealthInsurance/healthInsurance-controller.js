@@ -1,4 +1,4 @@
-﻿var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, $rootScope) {
+﻿var HealthInsuranceCtrl = function($scope, $routeParams, $location, healthInsuranceService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.healthInsurance.UserId = $routeParams.userId;
+        $scope.healthInsurance.UserId = userService.getFormUserId();
         if (typeof $scope.healthInsurance.Id == 'undefined' || $scope.healthInsurance.Id == 0) {
             healthInsuranceService.healthInsurances.save(null, $scope.healthInsurance, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -40,4 +40,4 @@
         $rootScope.currentScope = $scope;
     });
 };
-HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', '$rootScope'];
+HealthInsuranceCtrl.$inject = ['$scope', '$routeParams', '$location', 'healthInsuranceService', 'menuService', 'genericService', 'userService', '$rootScope'];

@@ -1,4 +1,4 @@
-﻿var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, $rootScope, $q) {
+﻿var SupportCtrl = function($scope, $routeParams, $location, supportService, menuService, genericService, userService, $rootScope, $q) {
     $scope.path = $location.path();
     $scope.showAddChild = false;
     $scope.showErrors = false;
@@ -41,7 +41,7 @@
     };
 
     $scope.addCourt = function() {
-        $scope.court.UserId = $routeParams.userId;
+        $scope.court.UserId = userService.getFormUserId();
         $scope.court.IsOtherParent = $routeParams.isOtherParent;
         supportService.courts.save(null, $scope.court, function (data) {
             $scope.courts.push(data);
@@ -86,7 +86,7 @@
         $scope.showAddChild = false;
     };    
     $scope.addChild = function() {
-        $scope.child.UserId = $routeParams.userId;
+        $scope.child.UserId = userService.getFormUserId();
         $scope.child.PreexistingSupportId = $scope.PreexistingSupportId;
         supportService.children.save(null, $scope.child, function (data) {
             $scope.children.push(data.Child);
@@ -123,7 +123,7 @@
             return;
         }
         $scope.showErrors = false;
-        $scope.support.UserId = $routeParams.userId;
+        $scope.support.UserId = userService.getFormUserId();
         $scope.support.IsOtherParent = $routeParams.isOtherParent;
         if (typeof $scope.support.Id == 'undefined' || $scope.support.Id == 0) {
             supportService.supports.save(null, $scope.support, function() {
@@ -143,4 +143,4 @@
     });
 
 };
-SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', '$rootScope', '$q'];
+SupportCtrl.$inject = ['$scope', '$routeParams', '$location', 'supportService', 'menuService', 'genericService', 'userService', '$rootScope', '$q'];

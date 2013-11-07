@@ -1,4 +1,4 @@
-﻿var ParticipantCtrl = function ($scope, $routeParams, $location, participantService, menuService, genericService, $rootScope) {
+﻿var ParticipantCtrl = function ($scope, $routeParams, $location, participantService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.participant = participantService.participant.get({ UserId: $routeParams.userId }, function () {
@@ -19,7 +19,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.participant.UserId = $routeParams.userId;
+        $scope.participant.UserId = userService.getFormUserId();
         if (typeof $scope.participant.Id == 'undefined' || $scope.participant.Id == 0) {
             participantService.participant.save(null, $scope.participant, function () {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -83,4 +83,4 @@
     });
 
 };
-ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', '$rootScope'];
+ParticipantCtrl.$inject = ['$scope', '$routeParams', '$location', 'participantService', 'menuService', 'genericService', 'userService', '$rootScope'];

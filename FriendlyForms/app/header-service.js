@@ -56,9 +56,25 @@
         setBreadCrumbs: function() {
             service.levels = [];
             if (service.menuGroup && service.menuGroup.menuItem) {
+                if (service.menuGroup.menuItem.text == 'Home')//ignore home since we're already there
+                    return;
                 service.levels.push(service.menuGroup.menuItem);
                 if (service.menuGroup.subMenuItem)
                     service.levels.push(service.menuGroup.subMenuItem);
+            } else {
+                //make own breadcrumbs using path
+                var path = service.path.split("/");
+                if (path.length > 2) {
+                    service.levels.push({
+                        text: path[1].replace(/([A-Z])/g, ' $1').replace(/^./, function (str) { return str.toUpperCase(); }),
+                        path: ''
+                    });
+                    service.Title = path[2].replace(/([A-Z])/g, ' $1').replace(/^./, function(str) { return str.toUpperCase(); });
+                    service.levels.push({
+                        text: service.Title,
+                        path: service.path.substring(1, service.path.length)
+                    });
+                }
             }
             service.showFeedbackHeader = true;
         },
@@ -66,7 +82,7 @@
         refresh: function(path) {
             service.initialize(path);
             service.setTitle();
-            service.setBreadCrumbs();
+            service.setBreadCrumbs();            
         }
     };
     return service;

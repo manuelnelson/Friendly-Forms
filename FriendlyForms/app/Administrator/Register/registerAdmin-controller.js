@@ -18,5 +18,7 @@
             });
         });
     };
-    headerService.setTitle('Register Administrator');
+    genericService.refreshPage(function() {
+        headerService.setTitle('Register Administrator');
+    });
 }];

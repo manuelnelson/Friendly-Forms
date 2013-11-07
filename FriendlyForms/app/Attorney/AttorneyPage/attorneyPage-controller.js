@@ -1,5 +1,5 @@
-﻿var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'menuService', 'headerService', 'clientService', 'loginMenuService',
-    function ($scope, $routeParams, $location, attorneyPageService, userService, menuService, headerService, clientService, loginMenuService) {
+﻿var AttorneyPageCtrl = ['$scope', '$routeParams', '$location', 'attorneyPageService', 'userService', 'genericService', 'clientService', 'loginMenuService',
+    function ($scope, $routeParams, $location, attorneyPageService, userService, genericService, clientService, loginMenuService) {
         $scope.clients = [];
         $scope.attorneyId = $routeParams.attorneyId;
         clientService.getClients($routeParams.attorneyId).then(function (clients) {
@@ -15,7 +15,7 @@
         $scope.archiveClient = function(client) {
 
         };
-        headerService.setTitle("Attorney Page");
+        genericService.refreshPage();
         loginMenuService.refresh();
 
     }];

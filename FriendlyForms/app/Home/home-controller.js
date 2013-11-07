@@ -1,7 +1,6 @@
 ﻿var HomeCtrl = ['$scope', '$routeParams', '$route', '$location', 'menuService', 'genericService', 'headerService',
     function ($scope, $routeParams, $route, $location, menuService, genericService, headerService) {
         menuService.setActive($location.path(), false);
-        headerService.refresh();
         $scope.showMore = function (boxNumber) {
             switch (boxNumber) {
                 case 3:
@@ -22,5 +21,8 @@
             return $(item).height();
         });
         boxes.height($(maxItem).height());
-        headerService.setTitle('Split Solutions: The Divorce Solution for Georgia Residents');
+        
+        genericService.refreshPage(function() {
+            headerService.setTitle('Split Solutions: The Divorce Solution for Georgia Residents');
+        });
     }];

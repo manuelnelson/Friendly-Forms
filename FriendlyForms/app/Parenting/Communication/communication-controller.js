@@ -1,4 +1,4 @@
-﻿var CommunicationCtrl = function($scope, $routeParams, $location, communicationService, menuService, genericService, $rootScope) {
+﻿var CommunicationCtrl = function($scope, $routeParams, $location, communicationService, menuService, genericService, userService, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.communication.UserId = $routeParams.userId;
+        $scope.communication.UserId = userService.getFormUserId();
         if (typeof $scope.communication.Id == 'undefined' || $scope.communication.Id == 0) {
             communicationService.communications.save(null, $scope.communication, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -41,4 +41,4 @@
     });
 
 };
-CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', '$rootScope'];
+CommunicationCtrl.$inject = ['$scope', '$routeParams', '$location', 'communicationService', 'menuService', 'genericService', 'userService', '$rootScope'];

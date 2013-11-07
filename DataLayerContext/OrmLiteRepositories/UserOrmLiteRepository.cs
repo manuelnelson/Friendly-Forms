@@ -25,7 +25,7 @@ namespace DataLayerContext.OrmLiteRepositories
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.GetList<UserAuth>(string.Format(@"select * from UserAuth where Id in (select UserAuthId from Users where Id in (Select ClientUserId from AttorneyClients where UserId = {0})", id));
+                return db.GetList<UserAuth>(string.Format(@"select * from UserAuth where Id in (select UserAuthId from Users where Id in (Select ClientUserId from AttorneyClients where UserId = {0}))", id));
             }
         }
     }

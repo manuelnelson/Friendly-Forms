@@ -1,8 +1,8 @@
-﻿var UnauthorizedCtrl = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'headerService','$rootScope',
-function ($scope, $routeParams, $location, unauthorizedService, headerService, $rootScope) {
+﻿var UnauthorizedCtrl = ['$scope', '$routeParams', '$location', 'unauthorizedService', 'genericService','$rootScope',
+function ($scope, $routeParams, $location, unauthorizedService, genericService, $rootScope) {
     $rootScope.currentScope = $scope;
     $scope.submit = function() {
 
     };
-    headerService.setTitle('Unauthorized');
+    genericService.refreshPage();
 }];

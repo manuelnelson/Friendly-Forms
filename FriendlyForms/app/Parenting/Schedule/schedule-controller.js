@@ -1,5 +1,5 @@
-﻿var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', '$rootScope', 'participantService',
-    function ($scope, $routeParams, $location, scheduleService, menuService, genericService, $rootScope, participantService) {
+﻿var ScheduleCtrl = ['$scope', '$routeParams', '$location', 'scheduleService', 'menuService', 'genericService', 'userService', '$rootScope', 'participantService',
+    function ($scope, $routeParams, $location, scheduleService, menuService, genericService, userService, $rootScope, participantService) {
     $scope.path = $location.path();
     $scope.isLoaded = false;
     $scope.showErrors = false;
@@ -32,7 +32,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.schedule.UserId = $routeParams.userId;
+        $scope.schedule.UserId = userService.getFormUserId();
         if (typeof $scope.schedule.Id == 'undefined' || $scope.schedule.Id == 0) {
             scheduleService.schedules.save(null, $scope.schedule, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');

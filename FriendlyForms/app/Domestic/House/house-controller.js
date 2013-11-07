@@ -1,4 +1,4 @@
-﻿var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, limitToFilter, $http, $rootScope) {
+﻿var HouseCtrl = function($scope, $routeParams, $location, houseService, menuService, genericService, userService, limitToFilter, $http, $rootScope) {
     $scope.path = $location.path();
     $scope.showErrors = false;
     $scope.isLoaded = false;
@@ -21,7 +21,7 @@
             return;
         }
         $.jStorage.deleteKey($scope.path);
-        $scope.house.UserId = $routeParams.userId;
+        $scope.house.UserId = userService.getFormUserId();
         if (typeof $scope.house.Id == 'undefined' || $scope.house.Id == 0) {
             houseService.houses.save(null, $scope.house, function() {
                 menuService.setSubMenuIconClass($scope.path, 'icon-ok icon-green');
@@ -50,4 +50,4 @@
     });
 
 };
-HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'limitToFilter', '$http', '$rootScope'];
+HouseCtrl.$inject = ['$scope', '$routeParams', '$location', 'houseService', 'menuService', 'genericService', 'userService', 'limitToFilter', '$http', '$rootScope'];
